@@ -1,5 +1,3 @@
 'use strict';
 
-module.exports = function(Membergroup) {
-
-};
+module.exports = function(Membergroup) {};

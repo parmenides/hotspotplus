@@ -2,7 +2,7 @@ version: '3.6'
 services:
   hotspotplusapi:
     build:
-      context: ./api
+      context: ${PWD}/api
     user: '${UID:-1000}:${GID:-1000}'
     command: npm run start:dev
     depends_on:
@@ -21,18 +21,33 @@ services:
       - hotspotplusgate
   logworker:
     build:
-      context: ./log-worker
+      context: ${PWD}/log-worker
     user: '${UID:-1000}:${GID:-1000}'
+    env_file:
+      - ${PWD}/log-worker/.env
     command: npm start
     volumes:
-      - ${PWD}/log-service/modules/:/usr/src/app/modules/
+      - ${PWD}/log-worker/modules/:/usr/src/app/modules/
       - ${PWD}/log-worker/index.js:/usr/src/app/index.js
       - ${PWD}/log-worker/logs:/logs
     networks:
       - hotspotplusgate
+  logaggregator:
+    build:
+      context: ${PWD}/log-aggregator
+    user: '${UID:-1000}:${GID:-1000}'
+    command: npm start
+    env_file:
+      - ${PWD}/log-aggregator/.env
+    volumes:
+      - ${PWD}/log-aggregator/modules/:/usr/src/app/modules/
+      - ${PWD}/log-aggregator/index.js:/usr/src/app/index.js
+      - ${PWD}/log-aggregator/logs:/logs
+    networks:
+      - hotspotplusgate
   dashboard:
     build:
-      context: ./dashboard
+      context: ${PWD}/dashboard
     user: '${UID:-1000}:${GID:-1000}'
     ports:
       - 8080:8080
@@ -46,7 +61,7 @@ services:
       - hotspotplusgate
   cordinator:
     build:
-      context: ./cordinator
+      context: ${PWD}/cordinator
     user: '${UID:-1000}:${GID:-1000}'
     depends_on:
       - redis

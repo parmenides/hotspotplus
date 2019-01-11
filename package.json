@@ -4,7 +4,13 @@
   "description": "hotspotplus",
   "scripts": {
     "start": "docker-compose down; docker-compose up",
-    "preinstall": "node bin/preinstall"
+    "preinstall": "node bin/preinstall",
+    "prettier": "prettier '{api/server,api/common,dashboard/src,hotspot/app,log-aggregator/modules,log-worker/modules}/**/*.js'  --write"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "arrowParens": "always",
+    "trailingComma": "all"
   },
   "author": "",
   "license": "ISC",

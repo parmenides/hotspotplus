@@ -1,5 +1,7 @@
-angular.module('app')
-  .directive('uiScrollTo', ['$location', '$anchorScroll', function($location, $anchorScroll) {
+angular.module('app').directive('uiScrollTo', [
+  '$location',
+  '$anchorScroll',
+  function($location, $anchorScroll) {
     return {
       restrict: 'AC',
       link: function(scope, el, attr) {
@@ -7,6 +9,7 @@ angular.module('app')
           $location.hash(attr.uiScrollTo);
           $anchorScroll();
         });
-      }
+      },
     };
-  }]);
+  },
+]);

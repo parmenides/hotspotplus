@@ -2,12 +2,12 @@ app.controller('MDAutocompleteCtrl', function($scope, $timeout, $q) {
   var self = this;
 
   // list of `state` value/display objects
-  self.states        = loadAll();
-  self.selectedItem  = null;
-  self.searchText    = null;
-  self.querySearch   = querySearch;
+  self.states = loadAll();
+  self.selectedItem = null;
+  self.searchText = null;
+  self.querySearch = querySearch;
   self.simulateQuery = false;
-  self.isDisabled    = false;
+  self.isDisabled = false;
 
   // ******************************
   // Internal methods
@@ -17,12 +17,18 @@ app.controller('MDAutocompleteCtrl', function($scope, $timeout, $q) {
    * Search for states... use $timeout to simulate
    * remote dataservice call.
    */
-  function querySearch (query) {
-    var results = query ? self.states.filter( createFilterFor(query) ) : [],
-        deferred;
+  function querySearch(query) {
+    var results = query ? self.states.filter(createFilterFor(query)) : [],
+      deferred;
     if (self.simulateQuery) {
       deferred = $q.defer();
-      $timeout(function () { deferred.resolve( results ); }, Math.random() * 1000, false);
+      $timeout(
+        function() {
+          deferred.resolve(results);
+        },
+        Math.random() * 1000,
+        false,
+      );
       return deferred.promise;
     } else {
       return results;
@@ -33,7 +39,8 @@ app.controller('MDAutocompleteCtrl', function($scope, $timeout, $q) {
    * Build `states` list of key/value pairs
    */
   function loadAll() {
-    var allStates = 'Alabama, Alaska, Arizona, Arkansas, California, Colorado, Connecticut, Delaware,\
+    var allStates =
+      'Alabama, Alaska, Arizona, Arkansas, California, Colorado, Connecticut, Delaware,\
             Florida, Georgia, Hawaii, Idaho, Illinois, Indiana, Iowa, Kansas, Kentucky, Louisiana,\
             Maine, Maryland, Massachusetts, Michigan, Minnesota, Mississippi, Missouri, Montana,\
             Nebraska, Nevada, New Hampshire, New Jersey, New Mexico, New York, North Carolina,\
@@ -41,10 +48,10 @@ app.controller('MDAutocompleteCtrl', function($scope, $timeout, $q) {
             South Dakota, Tennessee, Texas, Utah, Vermont, Virginia, Washington, West Virginia,\
             Wisconsin, Wyoming';
 
-    return allStates.split(/, +/g).map( function (state) {
+    return allStates.split(/, +/g).map(function(state) {
       return {
         value: state.toLowerCase(),
-        display: state
+        display: state,
       };
     });
   }
@@ -56,41 +63,42 @@ app.controller('MDAutocompleteCtrl', function($scope, $timeout, $q) {
     var lowercaseQuery = angular.lowercase(query);
 
     return function filterFn(state) {
-      return (state.value.indexOf(lowercaseQuery) === 0);
+      return state.value.indexOf(lowercaseQuery) === 0;
     };
-
   }
 });
-
 
 app.controller('MDBottomSheetCtrl', function($scope, $timeout, $mdBottomSheet) {
   $scope.alert = '';
 
   $scope.showListBottomSheet = function($event) {
     $scope.alert = '';
-    $mdBottomSheet.show({
-      templateUrl: 'bottom-sheet-list-template.html',
-      controller: 'ListBottomSheetCtrl',
-      targetEvent: $event
-    }).then(function(clickedItem) {
-      $scope.alert = clickedItem.name + ' clicked!';
-    });
+    $mdBottomSheet
+      .show({
+        templateUrl: 'bottom-sheet-list-template.html',
+        controller: 'ListBottomSheetCtrl',
+        targetEvent: $event,
+      })
+      .then(function(clickedItem) {
+        $scope.alert = clickedItem.name + ' clicked!';
+      });
   };
 
   $scope.showGridBottomSheet = function($event) {
     $scope.alert = '';
-    $mdBottomSheet.show({
-      templateUrl: 'bottom-sheet-grid-template.html',
-      controller: 'GridBottomSheetCtrl',
-      targetEvent: $event
-    }).then(function(clickedItem) {
-      $scope.alert = clickedItem.name + ' clicked!';
-    });
+    $mdBottomSheet
+      .show({
+        templateUrl: 'bottom-sheet-grid-template.html',
+        controller: 'GridBottomSheetCtrl',
+        targetEvent: $event,
+      })
+      .then(function(clickedItem) {
+        $scope.alert = clickedItem.name + ' clicked!';
+      });
   };
 });
 
 app.controller('MDListBottomSheetCtrl', function($scope, $mdBottomSheet) {
-
   $scope.items = [
     { name: 'Share', icon: 'share' },
     { name: 'Upload', icon: 'upload' },
@@ -105,7 +113,6 @@ app.controller('MDListBottomSheetCtrl', function($scope, $mdBottomSheet) {
 });
 
 app.controller('MDGridBottomSheetCtrl', function($scope, $mdBottomSheet) {
-
   $scope.items = [
     { name: 'Hangout', icon: 'hangout' },
     { name: 'Mail', icon: 'mail' },
@@ -122,69 +129,68 @@ app.controller('MDGridBottomSheetCtrl', function($scope, $mdBottomSheet) {
 });
 
 app.controller('MDCheckboxCtrl', function($scope) {
-
   $scope.data = {};
   $scope.data.cb1 = true;
   $scope.data.cb2 = false;
   $scope.data.cb3 = false;
   $scope.data.cb4 = false;
   $scope.data.cb5 = false;
-
 });
 
 app.controller('MDRadioCtrl', function($scope) {
+  $scope.data = {
+    group1: 'Banana',
+    group2: '2',
+    group3: 'avatar-1',
+  };
 
-    $scope.data = {
-      group1 : 'Banana',
-      group2 : '2',
-      group3 : 'avatar-1'
-    };
+  $scope.avatarData = [
+    {
+      id: 'svg-1',
+      title: 'avatar 1',
+      value: 'avatar-1',
+    },
+    {
+      id: 'svg-2',
+      title: 'avatar 2',
+      value: 'avatar-2',
+    },
+    {
+      id: 'svg-3',
+      title: 'avatar 3',
+      value: 'avatar-3',
+    },
+  ];
 
-    $scope.avatarData = [{
-        id: "svg-1",
-        title: 'avatar 1',
-        value: 'avatar-1'
-      },{
-        id: "svg-2",
-        title: 'avatar 2',
-        value: 'avatar-2'
-      },{
-        id: "svg-3",
-        title: 'avatar 3',
-        value: 'avatar-3'
-    }];
+  $scope.radioData = [
+    { label: '1', value: 1 },
+    { label: '2', value: 2 },
+    { label: '3', value: '3', isDisabled: true },
+    { label: '4', value: '4' },
+  ];
 
-    $scope.radioData = [
-      { label: '1', value: 1 },
-      { label: '2', value: 2 },
-      { label: '3', value: '3', isDisabled: true },
-      { label: '4', value: '4' }
-    ];
+  $scope.submit = function() {
+    alert('submit');
+  };
 
+  $scope.addItem = function() {
+    var r = Math.ceil(Math.random() * 1000);
+    $scope.radioData.push({ label: r, value: r });
+  };
 
-    $scope.submit = function() {
-      alert('submit');
-    };
-
-    $scope.addItem = function() {
-      var r = Math.ceil(Math.random() * 1000);
-      $scope.radioData.push({ label: r, value: r });
-    };
-
-    $scope.removeItem = function() {
-      $scope.radioData.pop();
-    };
-
+  $scope.removeItem = function() {
+    $scope.radioData.pop();
+  };
 });
 
 app.controller('MDSwitchCtrl', function($scope) {
   $scope.data = {
     cb1: true,
-    cb4: true
+    cb4: true,
   };
-  
-  $scope.onChange = function(cbState){
-     $scope.message = "The switch is now: " + cbState;
+
+  $scope.onChange = function(cbState) {
+    $scope.message = 'The switch is now: ' + cbState;
   };
 });
 
@@ -193,17 +199,19 @@ app.controller('MDDialogCtrl', function($scope, $mdDialog) {
 
   $scope.showAlert = function(ev) {
     $mdDialog.show(
-      $mdDialog.alert()
+      $mdDialog
+        .alert()
         .title('This is an alert title')
         .content('You can specify some description text in here.')
         .ariaLabel('Password notification')
         .ok('Got it!')
-        .targetEvent(ev)
+        .targetEvent(ev),
     );
   };
 
   $scope.showConfirm = function(ev) {
-    var confirm = $mdDialog.confirm()
+    var confirm = $mdDialog
+      .confirm()
       .title('Would you like to delete your debt?')
       .content('All of the banks have agreed to forgive you your debts.')
       .ariaLabel('Lucky day')
@@ -211,24 +219,31 @@ app.controller('MDDialogCtrl', function($scope, $mdDialog) {
       .cancel('Sounds like a scam')
       .targetEvent(ev);
 
-    $mdDialog.show(confirm).then(function() {
-      $scope.alert = 'You decided to get rid of your debt.';
-    }, function() {
-      $scope.alert = 'You decided to keep your debt.';
-    });
+    $mdDialog.show(confirm).then(
+      function() {
+        $scope.alert = 'You decided to get rid of your debt.';
+      },
+      function() {
+        $scope.alert = 'You decided to keep your debt.';
+      },
+    );
   };
 
   $scope.showAdvanced = function(ev) {
-    $mdDialog.show({
-      controller: DialogController,
-      templateUrl: 'tpl/material/dialog.tmpl.html',
-      targetEvent: ev,
-    })
-    .then(function(answer) {
-      $scope.alert = 'You said the information was "' + answer + '".';
-    }, function() {
-      $scope.alert = 'You cancelled the dialog.';
-    });
+    $mdDialog
+      .show({
+        controller: DialogController,
+        templateUrl: 'tpl/material/dialog.tmpl.html',
+        targetEvent: ev,
+      })
+      .then(
+        function(answer) {
+          $scope.alert = 'You said the information was "' + answer + '".';
+        },
+        function() {
+          $scope.alert = 'You cancelled the dialog.';
+        },
+      );
   };
 });
 
@@ -244,14 +259,13 @@ function DialogController($scope, $mdDialog) {
   $scope.answer = function(answer) {
     $mdDialog.hide(answer);
   };
-};
+}
 
 app.controller('MDSliderCtrl', function($scope) {
-
   $scope.color = {
     red: Math.floor(Math.random() * 255),
     green: Math.floor(Math.random() * 255),
-    blue: Math.floor(Math.random() * 255)
+    blue: Math.floor(Math.random() * 255),
   };
 
   $scope.rating1 = 3;
@@ -260,19 +274,27 @@ app.controller('MDSliderCtrl', function($scope) {
 
   $scope.disabled1 = 0;
   $scope.disabled2 = 70;
-
 });
 
-
-
 app.controller('MDSelectCtrl', function($timeout, $scope) {
-
   $scope.userState = '';
-  $scope.states = ('AL AK AZ AR CA CO CT DE FL GA HI ID IL IN IA KS KY LA ME MD MA MI MN MS ' +
-      'MO MT NE NV NH NJ NM NY NC ND OH OK OR PA RI SC SD TN TX UT VT VA WA WV WI ' +
-      'WY').split(' ').map(function (state) { return { abbrev: state }; });
-  
-  $scope.neighborhoods = ['Chelsea', 'Financial District', 'Midtown', 'West Village', 'Williamsburg'];
+  $scope.states = (
+    'AL AK AZ AR CA CO CT DE FL GA HI ID IL IN IA KS KY LA ME MD MA MI MN MS ' +
+    'MO MT NE NV NH NJ NM NY NC ND OH OK OR PA RI SC SD TN TX UT VT VA WA WV WI ' +
+    'WY'
+  )
+    .split(' ')
+    .map(function(state) {
+      return { abbrev: state };
+    });
+
+  $scope.neighborhoods = [
+    'Chelsea',
+    'Financial District',
+    'Midtown',
+    'West Village',
+    'Williamsburg',
+  ];
 
   $scope.toppings = [
     { category: 'meat', name: 'Pepperoni' },
@@ -305,210 +327,266 @@ app.controller('MDInputCtrl', function($scope) {
     title: 'Developer',
     email: 'ipsum@lorem.com',
     firstName: '',
-    lastName: '' ,
-    company: 'Google' ,
-    address: '1600 Amphitheatre Pkwy' ,
-    city: 'Mountain View' ,
-    state: 'CA' ,
-    biography: 'Loves kittens, snowboarding, and can type at 130 WPM.\n\nAnd rumor has it she bouldered up Castle Craig!',
-    postalCode : '94043'
+    lastName: '',
+    company: 'Google',
+    address: '1600 Amphitheatre Pkwy',
+    city: 'Mountain View',
+    state: 'CA',
+    biography:
+      'Loves kittens, snowboarding, and can type at 130 WPM.\n\nAnd rumor has it she bouldered up Castle Craig!',
+    postalCode: '94043',
   };
   $scope.project = {
     description: 'Nuclear Missile Defense System',
     clientName: 'Bill Clinton',
-    rate: 500
+    rate: 500,
   };
 });
 
-app.controller('MDProgressCtrl', ['$scope', '$interval', function($scope, $interval) {
+app.controller('MDProgressCtrl', [
+  '$scope',
+  '$interval',
+  function($scope, $interval) {
     $scope.mode = 'query';
     $scope.determinateValue = 30;
     $scope.determinateValue2 = 30;
 
-    $interval(function() {
-      $scope.determinateValue += 1;
-      $scope.determinateValue2 += 1.5;
-      if ($scope.determinateValue > 100) {
-        $scope.determinateValue = 30;
-        $scope.determinateValue2 = 30;
-      }
-    }, 100, 0, true);
+    $interval(
+      function() {
+        $scope.determinateValue += 1;
+        $scope.determinateValue2 += 1.5;
+        if ($scope.determinateValue > 100) {
+          $scope.determinateValue = 30;
+          $scope.determinateValue2 = 30;
+        }
+      },
+      100,
+      0,
+      true,
+    );
 
-    $interval(function() {
-      $scope.mode = ($scope.mode == 'query' ? 'determinate' : 'query');
-    }, 7200, 0, true);
-}]);
+    $interval(
+      function() {
+        $scope.mode = $scope.mode == 'query' ? 'determinate' : 'query';
+      },
+      7200,
+      0,
+      true,
+    );
+  },
+]);
 
 app.controller('MDSidenavCtrl', function($scope, $timeout, $mdSidenav, $log) {
   $scope.toggleLeft = function() {
-    $mdSidenav('left').toggle()
-                      .then(function(){
-                          $log.debug("toggle left is done");
-                      });
+    $mdSidenav('left')
+      .toggle()
+      .then(function() {
+        $log.debug('toggle left is done');
+      });
   };
   $scope.toggleRight = function() {
-    $mdSidenav('right').toggle()
-                        .then(function(){
-                          $log.debug("toggle RIGHT is done");
-                        });
+    $mdSidenav('right')
+      .toggle()
+      .then(function() {
+        $log.debug('toggle RIGHT is done');
+      });
   };
   $scope.closeLeft = function() {
-    $mdSidenav('left').close()
-                      .then(function(){
-                        $log.debug("close LEFT is done");
-                      });
-
+    $mdSidenav('left')
+      .close()
+      .then(function() {
+        $log.debug('close LEFT is done');
+      });
   };
   $scope.closeRight = function() {
-    $mdSidenav('right').close()
-                        .then(function(){
-                          $log.debug("close RIGHT is done");
-                        });
+    $mdSidenav('right')
+      .close()
+      .then(function() {
+        $log.debug('close RIGHT is done');
+      });
   };
 });
 
 app.controller('MDSubheaderCtrl', function($scope) {
-    $scope.messages = [
-      {
-        face : 'img/a0.jpg',
-        what: 'Brunch this weekend?',
-        who: 'Min Li Chan',
-        when: '3:08PM',
-        notes: " I'll be in your neighborhood doing errands"
-      },
-      {
-        face : 'img/a1.jpg',
-        what: 'Brunch this weekend?',
-        who: 'Min Li Chan',
-        when: '3:08PM',
-        notes: " I'll be in your neighborhood doing errands"
-      },
-      {
-        face : 'img/a2.jpg',
-        what: 'Brunch this weekend?',
-        who: 'Min Li Chan',
-        when: '3:08PM',
-        notes: " I'll be in your neighborhood doing errands"
-      },
-      {
-        face : 'img/a3.jpg',
-        what: 'Brunch this weekend?',
-        who: 'Min Li Chan',
-        when: '3:08PM',
-        notes: " I'll be in your neighborhood doing errands"
-      },
-      {
-        face : 'img/a4.jpg',
-        what: 'Brunch this weekend?',
-        who: 'Min Li Chan',
-        when: '3:08PM',
-        notes: " I'll be in your neighborhood doing errands"
-      },
-      {
-        face : 'img/a5.jpg',
-        what: 'Brunch this weekend?',
-        who: 'Min Li Chan',
-        when: '3:08PM',
-        notes: " I'll be in your neighborhood doing errands"
-      },
-      {
-        face : 'img/a6.jpg',
-        what: 'Brunch this weekend?',
-        who: 'Min Li Chan',
-        when: '3:08PM',
-        notes: " I'll be in your neighborhood doing errands"
-      },
-      {
-        face : 'img/a7.jpg',
-        what: 'Brunch this weekend?',
-        who: 'Min Li Chan',
-        when: '3:08PM',
-        notes: " I'll be in your neighborhood doing errands"
-      },
-      {
-        face : 'img/a8.jpg',
-        what: 'Brunch this weekend?',
-        who: 'Min Li Chan',
-        when: '3:08PM',
-        notes: " I'll be in your neighborhood doing errands"
-      },
-      {
-        face : 'img/a9.jpg',
-        what: 'Brunch this weekend?',
-        who: 'Min Li Chan',
-        when: '3:08PM',
-        notes: " I'll be in your neighborhood doing errands"
-      },
-      {
-        face : 'img/a0.jpg',
-        what: 'Brunch this weekend?',
-        who: 'Min Li Chan',
-        when: '3:08PM',
-        notes: " I'll be in your neighborhood doing errands"
-      },
-    ];
+  $scope.messages = [
+    {
+      face: 'img/a0.jpg',
+      what: 'Brunch this weekend?',
+      who: 'Min Li Chan',
+      when: '3:08PM',
+      notes: " I'll be in your neighborhood doing errands",
+    },
+    {
+      face: 'img/a1.jpg',
+      what: 'Brunch this weekend?',
+      who: 'Min Li Chan',
+      when: '3:08PM',
+      notes: " I'll be in your neighborhood doing errands",
+    },
+    {
+      face: 'img/a2.jpg',
+      what: 'Brunch this weekend?',
+      who: 'Min Li Chan',
+      when: '3:08PM',
+      notes: " I'll be in your neighborhood doing errands",
+    },
+    {
+      face: 'img/a3.jpg',
+      what: 'Brunch this weekend?',
+      who: 'Min Li Chan',
+      when: '3:08PM',
+      notes: " I'll be in your neighborhood doing errands",
+    },
+    {
+      face: 'img/a4.jpg',
+      what: 'Brunch this weekend?',
+      who: 'Min Li Chan',
+      when: '3:08PM',
+      notes: " I'll be in your neighborhood doing errands",
+    },
+    {
+      face: 'img/a5.jpg',
+      what: 'Brunch this weekend?',
+      who: 'Min Li Chan',
+      when: '3:08PM',
+      notes: " I'll be in your neighborhood doing errands",
+    },
+    {
+      face: 'img/a6.jpg',
+      what: 'Brunch this weekend?',
+      who: 'Min Li Chan',
+      when: '3:08PM',
+      notes: " I'll be in your neighborhood doing errands",
+    },
+    {
+      face: 'img/a7.jpg',
+      what: 'Brunch this weekend?',
+      who: 'Min Li Chan',
+      when: '3:08PM',
+      notes: " I'll be in your neighborhood doing errands",
+    },
+    {
+      face: 'img/a8.jpg',
+      what: 'Brunch this weekend?',
+      who: 'Min Li Chan',
+      when: '3:08PM',
+      notes: " I'll be in your neighborhood doing errands",
+    },
+    {
+      face: 'img/a9.jpg',
+      what: 'Brunch this weekend?',
+      who: 'Min Li Chan',
+      when: '3:08PM',
+      notes: " I'll be in your neighborhood doing errands",
+    },
+    {
+      face: 'img/a0.jpg',
+      what: 'Brunch this weekend?',
+      who: 'Min Li Chan',
+      when: '3:08PM',
+      notes: " I'll be in your neighborhood doing errands",
+    },
+  ];
 });
 
-app.controller('MDTabCtrl', function( $scope ) {
+app.controller('MDTabCtrl', function($scope) {
+  $scope.data = {
+    selectedIndex: 0,
+    secondLocked: true,
+    secondLabel: 'Item Two',
+  };
 
-    $scope.data = {
-      selectedIndex : 0,
-      secondLocked : true,
-      secondLabel : "Item Two"
-    };
+  $scope.next = function() {
+    $scope.data.selectedIndex = Math.min($scope.data.selectedIndex + 1, 2);
+  };
 
-    $scope.next = function() {
-      $scope.data.selectedIndex = Math.min($scope.data.selectedIndex + 1, 2) ;
-    };
+  $scope.previous = function() {
+    $scope.data.selectedIndex = Math.max($scope.data.selectedIndex - 1, 0);
+  };
 
-    $scope.previous = function() {
-      $scope.data.selectedIndex = Math.max($scope.data.selectedIndex - 1, 0);
-    };
+  var tabs = [
+    {
+      title: 'One',
+      content:
+        "Tabs will become paginated if there isn't enough room for them.",
+    },
+    {
+      title: 'Two',
+      content:
+        'You can swipe left and right on a mobile device to change tabs.',
+    },
+    {
+      title: 'Three',
+      content:
+        'You can bind the selected tab via the selected attribute on the md-tabs element.',
+    },
+    {
+      title: 'Four',
+      content:
+        'If you set the selected tab binding to -1, it will leave no tab selected.',
+    },
+    {
+      title: 'Five',
+      content: 'If you remove a tab, it will try to select a new one.',
+    },
+    {
+      title: 'Six',
+      content:
+        "There's an ink bar that follows the selected tab, you can turn it off if you want.",
+    },
+    {
+      title: 'Seven',
+      content:
+        'If you set ng-disabled on a tab, it becomes unselectable. If the currently selected tab becomes disabled, it will try to select the next tab.',
+    },
+    {
+      title: 'Eight',
+      content:
+        "If you look at the source, you're using tabs to look at a demo for tabs. Recursion!",
+    },
+    {
+      title: 'Nine',
+      content:
+        'If you set md-theme="green" on the md-tabs element, you\'ll get green tabs.',
+    },
+    {
+      title: 'Ten',
+      content:
+        "If you're still reading this, you should just go check out the API docs for tabs!",
+    },
+  ];
 
-    var tabs = [
-      { title: 'One', content: "Tabs will become paginated if there isn't enough room for them."},
-      { title: 'Two', content: "You can swipe left and right on a mobile device to change tabs."},
-      { title: 'Three', content: "You can bind the selected tab via the selected attribute on the md-tabs element."},
-      { title: 'Four', content: "If you set the selected tab binding to -1, it will leave no tab selected."},
-      { title: 'Five', content: "If you remove a tab, it will try to select a new one."},
-      { title: 'Six', content: "There's an ink bar that follows the selected tab, you can turn it off if you want."},
-      { title: 'Seven', content: "If you set ng-disabled on a tab, it becomes unselectable. If the currently selected tab becomes disabled, it will try to select the next tab."},
-      { title: 'Eight', content: "If you look at the source, you're using tabs to look at a demo for tabs. Recursion!"},
-      { title: 'Nine', content: "If you set md-theme=\"green\" on the md-tabs element, you'll get green tabs."},
-      { title: 'Ten', content: "If you're still reading this, you should just go check out the API docs for tabs!"}
-    ];
+  $scope.tabs = tabs;
+  $scope.selectedIndex = 2;
 
-    $scope.tabs = tabs;
-    $scope.selectedIndex = 2;
+  $scope.addTab = function(title, view) {
+    view = view || title + ' Content View';
+    tabs.push({ title: title, content: view, disabled: false });
+  };
 
-    $scope.addTab = function (title, view) {
-      view = view || title + " Content View";
-      tabs.push({ title: title, content: view, disabled: false});
-    };
-
-    $scope.removeTab = function (tab) {
-      for (var j = 0; j < tabs.length; j++) {
-        if (tab.title == tabs[j].title) {
-          $scope.tabs.splice(j, 1);
-          break;
-        }
+  $scope.removeTab = function(tab) {
+    for (var j = 0; j < tabs.length; j++) {
+      if (tab.title == tabs[j].title) {
+        $scope.tabs.splice(j, 1);
+        break;
       }
-    };
-    
+    }
+  };
 });
 
 app.controller('MDToastCtrl', function($scope, $mdToast, $animate) {
-
   $scope.toastPosition = {
     bottom: false,
     top: true,
     left: false,
-    right: true
+    right: true,
   };
 
   $scope.getToastPosition = function() {
     return Object.keys($scope.toastPosition)
-      .filter(function(pos) { return $scope.toastPosition[pos]; })
+      .filter(function(pos) {
+        return $scope.toastPosition[pos];
+      })
       .join(' ');
   };
 
@@ -517,33 +595,34 @@ app.controller('MDToastCtrl', function($scope, $mdToast, $animate) {
       controller: 'ToastCtrl',
       templateUrl: 'tpl/material/toast.tmpl.html',
       hideDelay: 6000,
-      parent:'#toast',
-      position: $scope.getToastPosition()
+      parent: '#toast',
+      position: $scope.getToastPosition(),
     });
   };
 
   $scope.showSimpleToast = function() {
     $mdToast.show(
-      $mdToast.simple()
+      $mdToast
+        .simple()
         .content('Simple Toast!')
         .position($scope.getToastPosition())
-        .hideDelay(3000)
+        .hideDelay(3000),
     );
   };
 
   $scope.showActionToast = function() {
-    var toast = $mdToast.simple()
-          .content('Action Toast!')
-          .action('OK')
-          .highlightAction(false)
-          .position($scope.getToastPosition());
+    var toast = $mdToast
+      .simple()
+      .content('Action Toast!')
+      .action('OK')
+      .highlightAction(false)
+      .position($scope.getToastPosition());
 
     $mdToast.show(toast).then(function() {
-      alert('You clicked \'OK\'.');
+      alert("You clicked 'OK'.");
     });
   };
-
-})
+});
 
 app.controller('ToastCtrl', function($scope, $mdToast) {
   $scope.closeToast = function() {
