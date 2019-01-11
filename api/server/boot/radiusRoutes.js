@@ -1,12 +1,9 @@
-/**
- * Created by payamyousefi on 5/11/15.
- */
-var RadiusAdaptor = require('../modules/radiusAdaptor');
-var logger = require('hotspotplus-common').logger;
-var log = logger.createLogger(process.env.APP_NAME, process.env.LOG_DIR);
+import RadiusAdaptor from '../modules/radiusAdaptor';
+import logger from '../modules/logger';
+const log = logger.createLogger();
 
 module.exports = function(app) {
-  var router = app.loopback.Router();
+  const router = app.loopback.Router();
 
   router.post('/echo/:id', function(req, res) {
     log.debug('Echo: ', req.params);

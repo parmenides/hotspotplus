@@ -1,4 +1,5 @@
-var config = require('../../server/modules/config');
+import config from '../../server/modules/config';
+
 module.exports = function(Coupon) {
   Coupon.validatesUniquenessOf('uniqueCouponId');
 

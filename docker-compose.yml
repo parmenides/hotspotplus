@@ -4,6 +4,8 @@ services:
     build:
       context: ${PWD}/api
     user: '${UID:-1000}:${GID:-1000}'
+    restart: always
+    container_name: apihotspotplus
     command: npm run start:dev
     depends_on:
       - mongodb
@@ -23,9 +25,13 @@ services:
     build:
       context: ${PWD}/log-worker
     user: '${UID:-1000}:${GID:-1000}'
+    restart: always
     env_file:
       - ${PWD}/log-worker/.env
     command: npm start
+    depends_on:
+      - kafka
+      - redis
     volumes:
       - ${PWD}/log-worker/modules/:/usr/src/app/modules/
       - ${PWD}/log-worker/index.js:/usr/src/app/index.js
@@ -36,7 +42,11 @@ services:
     build:
       context: ${PWD}/log-aggregator
     user: '${UID:-1000}:${GID:-1000}'
+    restart: always
     command: npm start
+    depends_on:
+      - elasticsearch
+      - redis
     env_file:
       - ${PWD}/log-aggregator/.env
     volumes:
@@ -49,6 +59,7 @@ services:
     build:
       context: ${PWD}/dashboard
     user: '${UID:-1000}:${GID:-1000}'
+    restart: always
     ports:
       - 8080:8080
     command: npm start
@@ -63,6 +74,7 @@ services:
     build:
       context: ${PWD}/cordinator
     user: '${UID:-1000}:${GID:-1000}'
+    restart: always
     depends_on:
       - redis
     environment:
@@ -81,6 +93,7 @@ services:
   mongodb:
     container_name: hsp_mongodb
     image: bitnami/mongodb:3.6.8-ol-7-r100
+    restart: always
     volumes:
       - hsp_mongodb:/bitnami
     environment:
@@ -90,6 +103,7 @@ services:
   redis:
     image: bitnami/redis:4.0.12-debian-9-r11
     container_name: hsp_redis
+    restart: always
     volumes:
       - hsp_redis:/bitnami/redis/data
     environment:
@@ -107,6 +121,48 @@ services:
       - hsp_elasticsearch:/bitnami/elasticsearch
     networks:
       - hotspotplusgate
+  zookeeper:
+    image: 'bitnami/zookeeper:latest'
+    restart: always
+    container_name: 'hsp_zookeeper'
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    expose:
+      - '2181'
+    networks:
+      - hotspotplusgate
+  kafka:
+    image: 'bitnami/kafka:latest'
+    restart: always
+    container_name: 'hsp_kafka'
+    depends_on:
+      - zookeeper
+    environment:
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://hsp_kafka:9092
+      - KAFKA_LOG_RETENTION_HOURS=72
+      - ALLOW_ANONYMOUS_LOGIN=yes
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_ZOOKEEPER_CONNECT=hsp_zookeeper:2181
+    expose:
+      - '9092'
+    volumes:
+      - hsp_kafka:/bitnami/kafka
+    networks:
+      - hotspotplusgate
+  radius:
+    image: 'registry.gitlab.com/parmenides/hspfreeradius/production:3.3'
+    restart: always
+    env_file:
+      .env
+    container_name: "hsp_radius_production"
+    networks:
+      - hotspotplusgate
+    expose:
+      - "1812"
+      - "1813"
+    ports:
+      - "$RADIUS_AUTH_PORT:1812/udp"
+      - "$RADIUS_ACC_PORT:1813/udp"
 
 volumes:
   hsp_mongodb:
@@ -114,6 +170,8 @@ volumes:
   hsp_redis:
     driver: local
   hsp_elasticsearch:
+    driver: local
+  hsp_kafka:
     driver: local
 
 networks:

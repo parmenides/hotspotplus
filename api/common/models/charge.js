@@ -1,18 +1,18 @@
-var app = require('../../server/server');
-var utility = require('hotspotplus-common').utility;
-var Q = require('q');
-var config = require('../../server/modules/config.js');
-var smsModule = require('../../server/modules/sms');
-var logger = require('hotspotplus-common').logger;
-var needle = require('needle');
-var aggregate = require('hotspotplus-common').aggregates;
-var elasticURL =
+import app from '../../server/server';
+import utility from '../../server/modules/utility';
+import Q from 'q';
+import smsModule from '../../server/modules/sms';
+import logger from '../../server/modules/logger';
+import needle from 'needle';
+import aggregate from '../../server/modules/aggregates';
+
+const elasticURL =
   'http://' + process.env.ELASTIC_IP + ':' + process.env.ELASTIC_PORT;
-var ELASTIC_CHARGE_PATH =
+const ELASTIC_CHARGE_PATH =
   elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'charge/charge';
 
 module.exports = function(Charge) {
-  var log = logger.createLogger(process.env.APP_NAME, process.env.LOG_DIR);
+  const log = logger.createLogger();
 
   Charge.loadCharges = function(businessId, startDate, skip, limit) {
     return Q.Promise(function(resolve, reject) {

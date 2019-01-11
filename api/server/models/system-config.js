@@ -1,15 +1,12 @@
 'use strict';
-var app = require('../../server/server');
-var config = require('../modules/config');
-var utility = require('hotspotplus-common').utility;
-var Q = require('q');
-var redis = require('redis');
-var redisClient = redis.createClient(config.REDIS.PORT, config.REDIS.HOST);
-var logger = require('hotspotplus-common').logger;
-var authUtility = require('hotspotplus-common').auth;
+import redis from 'redis';
+import config from '../modules/config';
+import Q from 'q';
+import logger from '../modules/logger';
 
+const redisClient = redis.createClient(config.REDIS.PORT, config.REDIS.HOST);
 module.exports = function(Systemconfig) {
-  var log = logger.createLogger(process.env.APP_NAME, process.env.LOG_DIR);
+  const log = logger.createLogger();
 
   Systemconfig.isLocal = function() {
     return Systemconfig.getConfig().then(function(systemConfig) {

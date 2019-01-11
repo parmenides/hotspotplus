@@ -1,0 +1,53 @@
+version: '3'
+services:
+  rawnetflowlogstash:
+    image: 'docker.elastic.co/logstash/logstash:6.5.4'
+    restart: always
+    environment:
+      XPACK_MONITORING_ENABLED: 'false'
+    volumes:
+      - ./rawnetflow/:/usr/share/logstash/pipeline/
+      - ./config/jvm.options:/usr/share/logstash/config/jvm.options
+    network_mode: "host"
+  netflowlogstash:
+    image: 'docker.elastic.co/logstash/logstash:6.5.4'
+    restart: always
+    environment:
+      XPACK_MONITORING_ENABLED: 'false'
+    volumes:
+      - ./netflow/:/usr/share/logstash/pipeline/
+      - ./config/jvm.options:/usr/share/logstash/config/jvm.options
+    networks:
+      - hotspotplusgate
+  rawsysloglogstash:
+    image: 'docker.elastic.co/logstash/logstash:6.5.4'
+    restart: always
+    environment:
+      XPACK_MONITORING_ENABLED: 'false'
+    volumes:
+      - ./rawsyslog/:/usr/share/logstash/pipeline/
+      - ./config/jvm.options:/usr/share/logstash/config/jvm.options
+    network_mode: "host"
+  sysloglogstash:
+    image: 'docker.elastic.co/logstash/logstash:6.5.4'
+    restart: always
+    environment:
+      XPACK_MONITORING_ENABLED: 'false'
+    volumes:
+      - ./syslog/:/usr/share/logstash/pipeline/
+      - ./config/jvm.options:/usr/share/logstash/config/jvm.options
+    networks:
+      - hotspotplusgate
+  accountinglogstash:
+    image: 'docker.elastic.co/logstash/logstash:6.5.4'
+    restart: always
+    environment:
+      XPACK_MONITORING_ENABLED: 'false'
+    volumes:
+      - ./accounting/:/usr/share/logstash/pipeline/
+      - ./config/jvm.options:/usr/share/logstash/config/jvm.options
+    networks:
+      - hotspotplusgate
+networks:
+  hotspotplusgate:
+    external: true

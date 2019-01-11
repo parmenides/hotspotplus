@@ -1,17 +1,17 @@
-var loopback = require('loopback');
-var bodyParser = require('body-parser');
-var boot = require('loopback-boot');
-var config = require('./modules/config');
-var app = (module.exports = loopback());
-var logger = require('hotspotplus-common').logger;
-var log = logger.createLogger(process.env.APP_NAME, process.env.LOG_DIR);
+import utility from './modules/utility';
+import redis from 'redis';
+import cors from 'cors';
 require('date-utils');
-var cors = require('cors');
-var redis = require('redis');
-var redisClient = redis.createClient(config.REDIS.PORT, config.REDIS.HOST);
-var utility = require('hotspotplus-common').utility;
+import loopback from 'loopback';
+import bodyParser from 'body-parser';
+import boot from 'loopback-boot';
+import logger from './modules/logger';
 
-var dataSource = {
+const config = require('./modules/config');
+const app = (module.exports = loopback());
+const log = logger.createLogger();
+const redisClient = redis.createClient(config.REDIS.PORT, config.REDIS.HOST);
+const dataSource = {
   connector: require('loopback-connector-mongodb'),
   url:
     'mongodb://' +
@@ -21,7 +21,7 @@ var dataSource = {
     '?w=1&j=true',
   name: 'mongo',
 };
-var MongoClient = require('mongodb').MongoClient;
+const MongoClient = require('mongodb').MongoClient;
 MongoClient.connect(
   dataSource.url,
   function(error, db) {

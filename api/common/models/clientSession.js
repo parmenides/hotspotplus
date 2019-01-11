@@ -1,10 +1,9 @@
 'use strict';
-var logger = require('hotspotplus-common').logger;
-var app = require('../../server/server');
-var log = logger.createLogger(process.env.APP_NAME, process.env.LOG_DIR);
-var Q = require('q');
-var radiusPod = require('../../server/modules/radiusDisconnectService');
+import logger from '../../server/modules/logger';
+import app from '../../server/server';
+import radiusPod from '../../server/modules/radiusDisconnectService';
 
+const log = logger.createLogger();
 module.exports = function(ClientSession) {
   ClientSession.getOnlineUsers = function(
     startDate,

@@ -1,5 +1,5 @@
-var hotspotTemplates = require('../../server/modules/hotspotTemplates');
-var Q = require('q');
+import hotspotTemplates from '../../server/modules/hotspotTemplates';
+import Q from 'q';
 
 module.exports = function(Theme) {
   Theme.loadHotspotThemes = function() {

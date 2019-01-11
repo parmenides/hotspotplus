@@ -1,10 +1,9 @@
-var aggregate = require('hotspotplus-common').aggregates;
-var logger = require('hotspotplus-common').logger;
-var log = logger.createLogger(process.env.APP_NAME, process.env.LOG_DIR);
-var config = require('../../server/modules/config');
-var util = require('hotspotplus-common').utility;
-var app = require('../../server/server');
+import aggregate from '../../server/modules/aggregates';
+import logger from '../../server/modules/logger';
+import config from '../../server/modules/config';
+import app from '../../server/server';
 
+const log = logger.createLogger();
 module.exports = function(FootTraffic) {
   /* return array of new , return & total count of visitors base on interval date from aggregates.js
 	 startDate: number

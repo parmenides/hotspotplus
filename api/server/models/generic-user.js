@@ -1,12 +1,10 @@
-var logger = require('hotspotplus-common').logger;
-var Q = require('q');
-var loopback = require('loopback');
-var Generic = require('./generic');
+import logger from '../modules/logger';
+import Q from 'q';
+
 module.exports = function(GenericUser) {
   GenericUser.getLogger = function() {
-    return logger.createLogger(process.env.APP_NAME, process.env.LOG_DIR);
+    return logger.createLogger();
   };
-  var log = GenericUser.getLogger();
 
   GenericUser.getCurrentUserId = function(ctx) {
     const token = ctx && ctx.accessToken;

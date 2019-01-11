@@ -1,28 +1,27 @@
-var logger = require('hotspotplus-common').logger;
-var app = require('../../server/server');
-var config = require('../../server/modules/config');
-var utility = require('hotspotplus-common').utility;
-var aggregate = require('hotspotplus-common').aggregates;
-var Payment = require('hotspotplus-common').payment;
-var request = require('request');
-var Q = require('q');
-var smsModule = require('../../server/modules/sms');
-var serviceInfo = require('../../server/modules/serviceInfo.js');
-var auth = require('hotspotplus-common').auth;
-var needle = require('needle');
-var redis = require('redis');
-var redisInvoicePayed = redis.createClient(
+import logger from '../../server/modules/logger';
+import app from '../../server/server';
+import config from '../../server/modules/config';
+import utility from '../../server/modules/utility';
+import aggregate from '../../server/modules/aggregates';
+import Payment from '../../server/modules/payment';
+import request from 'request';
+import smsModule from '../../server/modules/sms';
+import serviceInfo from '../../server/modules/serviceInfo.js';
+import Q from 'q';
+import auth from '../../server/modules/auth';
+import needle from 'needle';
+import redis from 'redis';
+import underscore from 'underscore';
+import hotspotMessages from '../../server/modules/hotspotMessages';
+import hotspotTemplates from '../../server/modules/hotspotTemplates';
+import { _extend as extend } from 'util';
+
+const redisInvoicePayed = redis.createClient(
   config.REDIS.PORT,
   config.REDIS.HOST,
 );
-
-var underscore = require('underscore');
-var hotspotMessages = require('../../server/modules/hotspotMessages');
-var hotspotTemplates = require('../../server/modules/hotspotTemplates');
-var extend = require('util')._extend;
-
 module.exports = function(Business) {
-  var log = logger.createLogger(process.env.APP_NAME, process.env.LOG_DIR);
+  const log = logger.createLogger();
 
   Business.observe('before save', function(ctx, next) {
     if (ctx.instance) {
@@ -37,7 +36,7 @@ module.exports = function(Business) {
           utility.verifyAndTrimMobile(business.mobile),
         );
         if (!business.mobile) {
-          var error = new Error();
+          const error = new Error();
           error.message = hotspotMessages.invalidMobileNumber;
           error.status = 403;
           return next(error);

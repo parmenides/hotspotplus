@@ -1,18 +1,13 @@
-/**
- * Created by payamyousefi on 8/4/16.
- */
+import radius from 'radius';
+import Q from 'q';
+import app from '../server';
+import logger from './logger';
+import dgram from 'dgram';
 
-var Q = require('q');
-var app = require('../server');
-var logger = require('hotspotplus-common').logger;
-var log = logger.createLogger(process.env.APP_NAME, process.env.LOG_DIR);
-var utility = require('hotspotplus-common').utility;
-var common = require('hotspotplus-common').common;
-var radius = require('radius');
-var dgram = require('dgram');
+const log = logger.createLogger();
 
 log.debug('POD service started');
-exports.sendPod = function(clientSession) {
+const sendPod = function(clientSession) {
   return Q.Promise(function(resolve, reject) {
     log.debug('Going to dc ', clientSession);
     var Business = app.models.Business;
@@ -128,3 +123,5 @@ exports.sendPod = function(clientSession) {
       });
   });
 };
+
+export default { sendPod };

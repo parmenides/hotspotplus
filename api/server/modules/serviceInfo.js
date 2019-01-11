@@ -1,7 +1,3 @@
-/**
- * Created by payamyousefi on 4/20/17.
- */
-
 module.exports = {
   serviceTemplatesName: [
     'cafeAndRestaurant',

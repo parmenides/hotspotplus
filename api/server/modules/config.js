@@ -1,33 +1,30 @@
-/**
- * Created by payamyousefi on 4/13/15.
- */
+import path from 'path';
+import hotspotTemplates from './hotspotTemplates';
 
-var path = require('path');
-var templatesPath = path.join(__dirname, '/../../templates/');
-var setup_script_path = path.join(__dirname, '/routers/mikrotik/');
-var mikrotik_hotspot_script_path = path.join(
+const templatesPath = path.join(__dirname, '/../../templates/');
+const setup_script_path = path.join(__dirname, '/routers/mikrotik/');
+const mikrotik_hotspot_script_path = path.join(
   __dirname,
   '/routers/mikrotik/html',
 );
-var elasticURL =
+const elasticURL =
   'http://' + process.env.ELASTIC_IP + ':' + process.env.ELASTIC_PORT;
 // "7A706844375A7964785A3452317054583841535548413D3D";
 // "7A706844375A7964785A3452317054583841535548413D3D";
-var SMS_API_KEY = process.env.SMS_API_KEY;
-var mainPath = '/';
+const SMS_API_KEY = process.env.SMS_API_KEY;
+let mainPath = '/';
 if (process.env.APP_STATUS === 'dev') {
   mainPath = '/src/index.html';
 } else if (process.env.APP_STATUS === 'sandbox') {
   mainPath = '/index.html';
 }
-var hotspotTemplates = require('./hotspotTemplates');
-var DEFAULT_ACCOUNTING_UPDATE_INTERVAL_SECONDS =
+const DEFAULT_ACCOUNTING_UPDATE_INTERVAL_SECONDS =
   process.env.DEFAULT_ACCOUNTING_UPDATE_INTERVAL_SECONDS || 600;
-var FAST_ACCOUNTING_UPDATE_INTERVAL_SECONDS =
+const FAST_ACCOUNTING_UPDATE_INTERVAL_SECONDS =
   process.env.FAST_ACCOUNTING_UPDATE_INTERVAL_SECONDS || 600;
 
-var CONFIG_SERVER_URL = process.env.CONFIG_SERVER_URL;
-module.exports = {
+const CONFIG_SERVER_URL = process.env.CONFIG_SERVER_URL;
+export default (config = {
   VERSION: '1.3',
   SMS_SIGNATURE: process.env.SMS_SIGNATURE,
   PASSWORD_PREFIX: process.env.PASSWORD_PREFIX,
@@ -724,4 +721,4 @@ module.exports = {
   DROPBOX_APP_SECRET: function() {
     return process.env.DROPBOX_APP_SECRET;
   },
-};
+});

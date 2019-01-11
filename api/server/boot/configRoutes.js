@@ -1,14 +1,12 @@
-/**
- * Created by payamyousefi on 5/11/15.
- */
-var logger = require('hotspotplus-common').logger;
-var log = logger.createLogger(process.env.APP_NAME, process.env.LOG_DIR);
-var utility = require('hotspotplus-common').utility;
-var url = require('url');
-var underscore = require('underscore');
-var config = require('../modules/config');
+import logger from '../modules/logger';
+import utility from '../modules/utility';
+import url from 'url';
+import underscore from 'underscore';
+import config from '../modules/config';
+const log = logger.createLogger();
+
 module.exports = function(app) {
-  var router = app.loopback.Router();
+  const router = app.loopback.Router();
 
   router.post('/api/config/systemConfig', function(req, res) {
     var SystemConfig = app.models.SystemConfig;

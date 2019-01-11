@@ -1,11 +1,11 @@
 'use strict';
-var app = require('../../server/server');
-var Q = require('q');
-var config = require('../../server/modules/config.js');
-var logger = require('hotspotplus-common').logger;
-var log = logger.createLogger(process.env.APP_NAME, process.env.LOG_DIR);
-var smsModule = require('../../server/modules/sms');
+import app from '../../server/server';
+import Q from 'q';
+import config from '../../server/modules/config';
+import logger from '../../server/modules/logger';
+import smsModule from '../../server/modules/sms';
 
+const log = logger.createLogger();
 module.exports = function(Ticket) {
   Ticket.replyToTicket = function(ticketId, msg) {
     var Business = app.models.Business;

@@ -1,18 +1,13 @@
-/**
- * Created by payamyousefi on 12/6/16.
- */
+import app from '../server';
+import AVPS from './avps';
+import Q from 'q';
+import logger from './logger';
+import config from './config';
+import utility from './utility';
 
-var app = require('../server');
-var AVPS = require('./avps');
-var Q = require('q');
-var logger = require('hotspotplus-common').logger;
-var log = logger.createLogger(process.env.APP_NAME, process.env.LOG_DIR);
-var needle = require('needle');
-var config = require('./config');
-var utility = require('hotspotplus-common').utility;
-
+const log = logger.createLogger();
 module.exports.RadiusResponse = function(RadiusMessage) {
-  var data = {
+  const data = {
     message: {},
   };
 

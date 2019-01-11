@@ -1,19 +1,20 @@
-var config = require('../modules/config');
-var Q = require('q');
-var logger = require('hotspotplus-common').logger;
-var needle = require('needle');
-var utility = require('hotspotplus-common').utility;
-var redis = require('redis');
-var redisLicenseReload = redis.createClient(
+import config from '../modules/config';
+import Q from 'q';
+import logger from '../modules/logger';
+import needle from 'needle';
+import utility from '../modules/utility';
+import redis from 'redis';
+import date_utils from 'date-utils';
+
+const redisLicenseReload = redis.createClient(
   process.env.REDIS_PORT,
   process.env.REDIS_IP,
 );
 module.exports = function(app) {
-  var User = app.models.User;
-  var Business = app.models.Business;
-  var Role = app.models.Role;
-  var SystemConfig = app.models.SystemConfig;
-  var log = logger.createLogger(process.env.APP_NAME, process.env.LOG_DIR);
+  const User = app.models.User;
+  const Role = app.models.Role;
+  const SystemConfig = app.models.SystemConfig;
+  const log = logger.createLogger();
 
   SystemConfig.getConfig();
   addDefaultRolesAndUsers();
@@ -69,7 +70,7 @@ module.exports = function(app) {
             log.error(error);
             return;
           }
-          for (var i = 0; i < roles.length; i++) {
+          for (let i = 0; i < roles.length; i++) {
             var roleName = roles[i];
             Role.findOne({ where: { name: roleName } }, function(error, role) {
               if (error) {

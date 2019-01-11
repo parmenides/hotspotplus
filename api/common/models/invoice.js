@@ -1,14 +1,13 @@
 'use strict';
-var logger = require('hotspotplus-common').logger;
-var app = require('../../server/server');
-var config = require('../../server/modules/config');
-var utility = require('hotspotplus-common').utility;
-var Payment = require('hotspotplus-common').payment;
-var Q = require('q');
-var serviceInfo = require('../../server/modules/serviceInfo.js');
+import logger from '../../server/modules/logger';
+import app from '../../server/server';
+import config from '../../server/modules/config';
+import Payment from '../../server/modules/payment';
+import Q from 'q';
+import serviceInfo from '../../server/modules/serviceInfo.js';
 
 module.exports = function(Invoice) {
-  var log = logger.createLogger(process.env.APP_NAME, process.env.LOG_DIR);
+  const log = logger.createLogger();
 
   Invoice.verifyInvoice = function(invoiceId) {
     return Q.Promise(function(resolve, reject) {

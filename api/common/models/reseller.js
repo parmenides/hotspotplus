@@ -1,14 +1,14 @@
 'use strict';
-var logger = require('hotspotplus-common').logger;
-var app = require('../../server/server');
-var config = require('../../server/modules/config');
-var utility = require('hotspotplus-common').utility;
-var smsModule = require('../../server/modules/sms');
-var Q = require('q');
-var aggregate = require('hotspotplus-common').aggregates;
+import logger from '../../server/modules/logger';
+import app from '../../server/server';
+import config from '../../server/modules/config';
+import utility from '../../server/modules/utility';
+import smsModule from '../../server/modules/sms';
+import Q from 'q';
+import aggregate from '../../server/modules/aggregates';
 
 module.exports = function(Reseller) {
-  var log = logger.createLogger(process.env.APP_NAME, process.env.LOG_DIR);
+  const log = logger.createLogger();
 
   Reseller.addResellerCommission = function(resellerId, businessId, price) {
     return Q.Promise(function(resolve, reject) {

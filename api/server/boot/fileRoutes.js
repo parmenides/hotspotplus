@@ -1,13 +1,6 @@
-/**
- * Created by payamyousefi on 5/11/15.
- */
-var config = require('../modules/config');
-var logger = require('hotspotplus-common').logger;
-var log = logger.createLogger(process.env.APP_NAME, process.env.LOG_DIR);
-var multer = require('multer');
-var path = require('path');
+import multer from 'multer';
 
-var storage = multer.diskStorage({
+const storage = multer.diskStorage({
   storage: function(req, file, cb) {
     cb(null, './uploads');
   },
@@ -15,10 +8,10 @@ var storage = multer.diskStorage({
     cb(null, file.originalname);
   },
 });
-var upload = multer({ storage: storage });
+const upload = multer({ storage: storage });
 
 module.exports = function(app) {
-  var router = app.loopback.Router();
+  const router = app.loopback.Router();
 
   router.get('/api/file/download/:fileId', function(req, res) {
     var File = app.models.FileStorage;

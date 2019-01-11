@@ -1,9 +1,9 @@
 'use strict';
+import logger from '../../server/modules/logger';
+import fs from 'fs';
+import Q from 'q';
 
-var logger = require('hotspotplus-common').logger;
-var log = logger.createLogger(process.env.APP_NAME, process.env.LOG_DIR);
-var fs = require('fs');
-var Q = require('q');
+const log = logger.createLogger();
 module.exports = function(FileStorage) {
   FileStorage.addFile = function(businessId, filePath, mimeType, name, size) {
     return Q.Promise(function(resolve, reject) {

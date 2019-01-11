@@ -1,18 +1,19 @@
-var logger = require('hotspotplus-common').logger;
-var app = require('../../server/server');
-var utility = require('hotspotplus-common').utility;
-var temp = require('temp').track();
-var fs = require('fs');
-var config = require('../../server/modules/config');
-var Q = require('q');
-var redis = require('redis');
-var redisClient = redis.createClient(config.REDIS.PORT, config.REDIS.HOST);
-var hotspotMessages = require('../../server/modules/hotspotMessages');
-var hotspotTemplates = require('../../server/modules/hotspotTemplates');
+import logger from '../../server/modules/logger';
+import app from '../../server/server';
+import utility from '../../server/modules/utility';
+import { track } from 'temp';
+import config from '../../server/modules/config';
+import Q from 'q';
+import redis from 'redis';
+import hotspotMessages from '../../server/modules/hotspotMessages';
+import hotspotTemplates from '../../server/modules/hotspotTemplates';
+
+const temp = track();
+const redisClient = redis.createClient(config.REDIS.PORT, config.REDIS.HOST);
 
 module.exports = function(Nas) {
   Nas.validatesUniquenessOf('nasIpPortKey');
-  var log = logger.createLogger(process.env.APP_NAME, process.env.LOG_DIR);
+  const log = logger.createLogger();
 
   Nas.observe('loaded', function(ctx, next) {
     if (ctx.data) {

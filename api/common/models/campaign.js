@@ -1,10 +1,11 @@
-var app = require('../../server/server');
-var Q = require('q');
-var config = require('../../server/modules/config.js');
-var aggregate = require('hotspotplus-common').aggregates;
-var smsModule = require('../../server/modules/sms');
-var logger = require('hotspotplus-common').logger;
-var log = logger.createLogger(process.env.APP_NAME, process.env.LOG_DIR);
+import app from '../../server/server';
+import Q from 'q';
+import config from '../../server/modules/config';
+import aggregate from '../../server/modules/aggregates';
+import smsModule from '../../server/modules/sms';
+import logger from '../../server/modules/logger';
+
+const log = logger.createLogger();
 
 module.exports = function(Campaign) {
   Campaign.sendBulkMessages = function(campaignId) {

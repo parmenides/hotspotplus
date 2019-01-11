@@ -1,8 +1,6 @@
-/**
- * Created by payam on 12/14/16.
- */
-var logger = require('hotspotplus-common').logger;
-var log = logger.createLogger(process.env.APP_NAME, process.env.LOG_DIR);
+import logger from '../modules/logger';
+
+const log = logger.createLogger();
 
 module.exports = function(app) {
   var router = app.loopback.Router();

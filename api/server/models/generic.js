@@ -1,12 +1,11 @@
-var logger = require('hotspotplus-common').logger;
-var config = require('../modules/config');
-var Q = require('q');
+import logger from '../modules/logger';
+import config from '../modules/config';
 
 module.exports = function(Generic) {
   Generic.getLogger = function() {
-    return logger.createLogger(process.env.APP_NAME, process.env.LOG_DIR);
+    return logger.createLogger();
   };
-  var log = Generic.getLogger();
+  const log = Generic.getLogger();
 
   Generic.isMongoDbStorage = function() {
     return config.STORAGE === config.STORAGES.MONGODB;
