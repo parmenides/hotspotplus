@@ -1,0 +1,34 @@
+<div class="">
+    <div class="modal-header">
+        <h3 class="modal-title">{{ options.title |translate }}</h3>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col col-md-12 text-primary">
+                <h4 ng-if="!options.balanceEnough">{{ "business.chargeCreditTry" |translate }}</h4>
+                <h4 ng-if="options.receptorsLength == 0">{{ "business.noReceptor" |translate }}</h4>
+            </div>
+            <div class="col col-md-12">
+                {{"message.body"|translate}} : {{options.messageText}}
+            </div>
+            <div class="col col-md-12">
+                {{"message.numOfSmsToBeSend"|translate}} : {{options.receptorsLength|translateNumber}}
+            </div>
+            <div class="col col-md-12">
+                {{"message.sendPrice"|translate}} : <span class="badge bg-primary">{{options.totalCost|translateNumber}}&nbsp;{{"general.toman"|translate}}</span>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button ng-click="cancel()" class="btn btn-sm btn-default" ng-if="options.receptorsLength != 0">{{ options.cancelBtnLabel | translate }}</button>
+        <button ng-click="send()" class="btn btn-sm btn-primary" ng-if="options.balanceEnough && options.receptorsLength != 0">{{ "message.send" |
+            translate }}
+        </button>
+        <button ng-click="cancel()" class="btn btn-sm btn-primary" ng-if="options.receptorsLength == 0">{{ "message.ok" |
+            translate }}
+        </button>
+        <button ng-click="increaseCredit()" class="btn btn-sm btn-primary" ng-if="!options.balanceEnough">{{
+            "business.increaseCredit" | translate }}
+        </button>
+    </div>
+</div>

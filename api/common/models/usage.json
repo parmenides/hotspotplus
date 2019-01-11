@@ -1,0 +1,59 @@
+{
+  "name": "Usage",
+  "base": "Generic",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "replaceOnPUT": false,
+  "properties": {
+    "username": {
+      "type": "string",
+      "required": true
+    },
+    "creationDate": {
+      "type": "number",
+      "required": true
+    },
+    "accStatusType": {
+      "type": "number",
+      "required": true
+    },
+    "sessionId": {
+      "type": "string",
+      "required": true
+    },
+    "mac": {
+      "type": "string"
+    },
+    "download": {
+      "type": "number",
+      "required": true,
+      "default": 0
+    },
+    "upload": {
+      "type": "number",
+      "required": true,
+      "default": 0
+    },
+    "totalUsage": {
+      "type": "number",
+      "required": true,
+      "default": 0
+    },
+    "sessionTime": {
+      "type": "number",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "business": {
+      "type": "belongsTo",
+      "model": "Business",
+      "foreignKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

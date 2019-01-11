@@ -1,0 +1,4 @@
+Acct-Session-Id=80a00005
+User-Name=111
+Calling-Station-Id=A8:88:08:2F:DD:14
+Framed-IP-Address=10.10.10.3

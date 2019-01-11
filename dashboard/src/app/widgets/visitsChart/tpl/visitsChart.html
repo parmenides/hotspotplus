@@ -1,0 +1,14 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="row no-padder-v text-gray">
+            <h3 class="col-xs-10 panel-title">{{"dashboard.showVisitsHours" | translate}}</h3>
+            <loading></loading>
+        </div>
+    </div>
+    <div class="panel-body text-center">
+        <canvas id="line" class="chart chart-line" chart-data="data"
+                chart-labels="labels" chart-series="series" chart-options="options" chart-click="onClick"
+                chart-colors="colors">
+        </canvas>
+    </div>
+</div>

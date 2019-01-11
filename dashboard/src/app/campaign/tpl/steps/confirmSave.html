@@ -1,0 +1,64 @@
+<h1 class="wrapper-sm m-n h5">{{"campaign.pleaseConfirm&Save" | translate}}</h1>
+<ul class="list-group">
+    <li class="list-group-item">
+        <dl class="dl-horizontal">
+            <div class="wrapper-xs">
+                <dt>{{"campaign.name" | translate}}</dt>
+                <dd>{{campaign.title}}</dd>
+            </div>
+            <div class="wrapper-xs">
+                <dt>{{"campaign.type" | translate}}</dt>
+                <dd>{{"campaign."+campaign.type | translate}}</dd>
+            </div>
+            <div class="wrapper-xs">
+                <dt>{{"campaign.coupon" | translate}}</dt>
+                <dd ng-if="campaign.sendCoupon">{{"campaign.hasCoupon" | translate}}</dd>
+                <dd ng-if="!campaign.sendCoupon">{{"campaign.noCoupon" | translate}}</dd>
+            </div>
+            <div class="wrapper-xs" ng-if="campaign.sendCoupon">
+                <dt>{{"campaign.discountPercentage" | translate}}</dt>
+                <dd>{{campaign.discount.amount | translateNumber}} {{'general.'+campaign.discount.unit | translate}}
+                </dd>
+            </div>
+            <!--<div class="wrapper-xs" ng-if="campaign.sendCoupon">
+                <dt>{{"campaign.couponValidDays" |translate}}</dt>
+                <dd>
+                            <span ng-repeat="(dayName,day) in campaign.days" ng-if="day == true">
+                                {{ dayName | translate}}
+                                <span ng-hide="$last">{{"general.," | translate}} </span>
+                            </span>
+                </dd>
+            </div>
+            <div class="wrapper-xs" ng-if="campaign.sendCoupon">
+                <dt>{{"campaign.couponValidHours" |translate}}</dt>
+                <dd>
+                            <span ng-repeat="(hourName,hour) in campaign.hours" ng-if="hour == true">
+                                {{ hourName | translate}}
+                                <span ng-hide="$last">{{"general.," | translate}} </span>
+                            </span>
+                </dd>
+            </div>-->
+            <div class="wrapper-xs">
+                <dt>{{"campaign.startDate" | translate}}</dt>
+                <dd ng-if="campaign.limitedTime">{{campaign.start | persianDate : 'fullDate'|translateNumber}}</dd>
+                <dd ng-if="!campaign.limitedTime">{{"campaign.unlimited" | translate}}</dd>
+            </div>
+            <div class="wrapper-xs">
+                <dt>{{"campaign.endDate" | translate}}</dt>
+                <dd ng-if="campaign.limitedTime">{{campaign.end | persianDate : 'fullDate'|translateNumber}}</dd>
+                <dd ng-if="!campaign.limitedTime">{{"campaign.unlimited" | translate}}</dd>
+            </div>
+            <div class="wrapper-xs">
+                <dt>{{"campaign.message" | translate}}</dt>
+                <dd ng-if="campaign.messageBody">{{campaign.messageBody}}</dd>
+                <dd ng-if="campaign.sendCoupon">{{"campaign.yourCouponCode" | translate}}: XXXXX {{"coupon.value" |
+                    translate}}:
+                    &nbsp;{{campaign.discount.amount | translateNumber}} {{'general.'+campaign.discount.unit |
+                    translate}}
+                </dd>
+                <dd ng-if="!campaign.messageBody">-</dd>
+            </div>
+        </dl>
+    </li>
+</ul>
+

@@ -1,0 +1,13 @@
+image: docker:stable
+
+services:
+  - docker:dind
+stages:
+  - build
+before_script:
+  - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY_IMAGE
+deploy:
+  stage: build
+  script:
+    - apk add --no-cache jq curl bash git
+    - ./build.sh

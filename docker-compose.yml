@@ -1,0 +1,106 @@
+version: '3.6'
+services:
+  hotspotplusapi:
+    build:
+      context: ./api
+    user: '${UID:-1000}:${GID:-1000}'
+    command: npm run start:dev
+    depends_on:
+      - mongodb
+      - elasticsearch
+      - redis
+    env_file:
+      - api/.env
+    volumes:
+      - ${PWD}/systemId:/systemId
+      - ${PWD}/api/server/:/usr/src/app/server/
+      - ${PWD}/api/common:/usr/src/app/common/
+      - ${PWD}/api/logs:/logs
+      - ${PWD}/api/key:/key
+    networks:
+      - hotspotplusgate
+  logworker:
+    build:
+      context: ./log-worker
+    user: '${UID:-1000}:${GID:-1000}'
+    command: npm start
+    volumes:
+      - ${PWD}/log-service/modules/:/usr/src/app/modules/
+      - ${PWD}/log-worker/index.js:/usr/src/app/index.js
+      - ${PWD}/log-worker/logs:/logs
+    networks:
+      - hotspotplusgate
+  dashboard:
+    build:
+      context: ./dashboard
+    user: '${UID:-1000}:${GID:-1000}'
+    ports:
+      - 8080:8080
+    command: npm start
+    volumes:
+      - ${PWD}/dashboard/src:/usr/src/app/src
+      - ${PWD}/dashboard/libs:/usr/src/app/libs
+      - ${PWD}/dashboard/node_modules:/usr/src/app/node_modules
+      - ${PWD}/dashboard/logs:/logs
+    networks:
+      - hotspotplusgate
+  cordinator:
+    build:
+      context: ./cordinator
+    user: '${UID:-1000}:${GID:-1000}'
+    depends_on:
+      - redis
+    environment:
+      - APP_NAME=cordinator
+      - LOG_LEVEL=debug
+      - LOG_DIR=/logs
+      - REDIS_PORT=6379
+      - REDIS_HOST=hsp_redis
+      - REDIS_IP=hsp_redis
+    volumes:
+      - ${PWD}/cordinator/hotspotplus-cordinator:/app/hotspotplus-cordinator
+      - ${PWD}/cordinator/logs:/logs
+      - ${PWD}/systemId:/systemId
+    networks:
+      - hotspotplusgate
+  mongodb:
+    container_name: hsp_mongodb
+    image: bitnami/mongodb:3.6.8-ol-7-r100
+    volumes:
+      - hsp_mongodb:/bitnami
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    networks:
+      - hotspotplusgate
+  redis:
+    image: bitnami/redis:4.0.12-debian-9-r11
+    container_name: hsp_redis
+    volumes:
+      - hsp_redis:/bitnami/redis/data
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    networks:
+      - hotspotplusgate
+  elasticsearch:
+    container_name: hsp_elasticsearch
+    image: 'bitnami/elasticsearch:5.3.0-r0'
+    restart: always
+    expose:
+      - "9300"
+      - "9200"
+    volumes:
+      - hsp_elasticsearch:/bitnami/elasticsearch
+    networks:
+      - hotspotplusgate
+
+volumes:
+  hsp_mongodb:
+    driver: local
+  hsp_redis:
+    driver: local
+  hsp_elasticsearch:
+    driver: local
+
+networks:
+  hotspotplusgate:
+    external: true

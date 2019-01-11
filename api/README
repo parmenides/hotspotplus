@@ -1,0 +1,33 @@
+1- Elastic search preparation:[u]
+Add the following props to configuration file :
+/usr/local/etc/elasticsearch/elasticsearch.yml
+script.engine.groovy.inline.aggs: on
+script.engine.groovy.inline.search: on
+script.engine.groovy.inline.update: on
+
+2- Update Window.appDomain in main.js
+
+3- Call the following before build to change loopback services url
+$lb-ng server/server.js  ./client/src/js/lb-services.js  -u http://api.pintime.io/api
+
+4- install tshark
+sudo apt-get install tshark
+
+* - Mongodb restore comman
+$mongorestore pahtToDumpFolder
+
+* - Elastic search snapshot:
+    First register snapshot repository in Elasticsearch :
+        Following setting should be added to elasticsearch.yml file:
+            path.repo: ["/mount/backups", "/mount/longterm_backups"]
+        Register repository :
+        $ curl -XPUT 'http://localhost:9200/_snapshot/my_backup' -d '{"type": "fs", "settings": {"location": "/mount/backups/my_backup","compress": true}}'
+
+    Then create a snapshot by executing the following command:
+         $ curl -XPUT 'http://localhost:9200/_snapshot/my_backup/snapshot_1?wait_for_completion=true'
+
+* - Elastic search restore:
+         $ curl -XPOST 'http://localhost:9200/_snapshot/my_backup/snapshot_1/_restore'
+
+* - Set redis server to fire event for expire keys:
+        redis-cli config set notify-keyspace-events Ex

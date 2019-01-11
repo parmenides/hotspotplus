@@ -1,0 +1,138 @@
+{
+  "name": "Reseller",
+  "base": "GenericUser",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "replaceOnPUT": false,
+  "properties": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "fullName": {
+      "type": "string",
+      "required": true
+    },
+    "mobile": {
+      "type": "string",
+      "required": true
+    },
+    "email": {
+      "type": "string"
+    },
+    "username": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string",
+      "required": true
+    },
+    "allowedOnlineUsers": {
+      "type": "number",
+      "required": true
+    },
+    "subscriptionDate": {
+      "type": "number",
+      "required": true
+    },
+    "creationDate": {
+      "type": "number",
+      "required": true
+    },
+    "active": {
+      "type": "boolean",
+      "required": true
+    },
+    "website": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string"
+    },
+    "durationInMonths": {
+      "type": "number"
+    },
+    "planType": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "businesses": {
+      "type": "hasMany",
+      "model": "Business",
+      "foreignKey": ""
+    },
+    "invoices": {
+      "type": "hasMany",
+      "model": "Invoice",
+      "foreignKey": ""
+    }
+  },
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "admin",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "reseller",
+      "permission": "ALLOW",
+      "property": "createBusiness"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "reseller",
+      "permission": "ALLOW",
+      "property": "loadBusiness"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "reseller",
+      "permission": "ALLOW",
+      "property": "findBusiness"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "reseller",
+      "permission": "ALLOW",
+      "property": "getBalance"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "reseller",
+      "permission": "ALLOW",
+      "property": "removeBusiness"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "reseller",
+      "permission": "ALLOW",
+      "property": "countResellersActiveUsers"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "reseller",
+      "permission": "ALLOW",
+      "property": "updateBusiness"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "DENY"
+    }
+  ],
+  "methods": {}
+}

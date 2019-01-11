@@ -1,0 +1,18 @@
+<div ng-controller="baseCtrl">
+  <toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true, 'time-out': 60000}"></toaster-container>
+  <div class="div-logo">
+    <img ng-if="themeConfig.showLogo" class="logo-img" ng-src="{{logo.src}}" alt="{{logo.name}}">
+    <h5 class="wrapper-xs text-center alpha-header-text">
+      <span>{{logoFooter}}</span>
+    </h5>
+  </div>
+  <ui-view></ui-view>
+  <div class="text-center">
+    <a ng-click="goToSite()">
+      <small class="text-center alpha-footer-text">
+        {{"copyright"|translate}}
+      </small>
+    </a>
+  </div>
+</div>
+

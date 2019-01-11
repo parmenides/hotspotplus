@@ -1,0 +1,30 @@
+{
+  "_index": "spotioaccounting",
+  "_type": "usagereport",
+  "_id": "AWThojQjGnog_RY81XRR",
+  "_score": null,
+  "_source": {
+	"memberId": "5b56da13387d830012366736",
+	"nasId": "5b29069b30a87600114e6aea",
+	"creationDateObj": "2018-07-28T16:04:21.151Z",
+	"businessId": "5b29029130a87600114e6ae7",
+	"username": "9125886264",
+	"creationDate": 1532793861151,
+	"accStatusType": 3,
+	"sessionId": "528a1182bc29a14e23488685f236d1b5",
+	"mac": "24:09:95:64:74:27",
+	"download": 60101338,
+	"upload": 5658189,
+	"totalUsage": 65759527,
+	"sessionTime": 10978,
+	"timestamp": 1532793861154
+  },
+  "fields": {
+	"timestamp": [
+	  1532793861154
+	]
+  },
+  "sort": [
+	1532793861154
+  ]
+}

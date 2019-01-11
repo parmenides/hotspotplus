@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+export NETFLOW_REPORT_QUEUE="NETFLOW_REPORT_QUEUE"
+export REDIS_IP="127.0.0.1"
+export REDIS_PORT=6379
+export ENABLE_SENTRY=false
+export SENTRY_PREFIX=11
+export SENTRY_TOKEN=69b3ce360cbc437bb8c7531677258738:7feb066c12cd4f789d8c6b8eca2ee7bb
+export ELASTIC_IP="127.0.0.1"
+export ELASTIC_PORT=9200
+export ELASTIC_INDEX_PREFIX="/localspotio"
+export LOG_DIR="./log"
+export SERVICE_MAN_USERNAME='pinTimeServiceMan'
+export SERVICE_MAN_PASSWORD='#123aaa)'
+export PERSIAN_SMS_COST=19
+export ENGLISH_SMS_COST=46
+export DAY_MILLISECONDS=86400000
+export ZOOKEEPER_PORT=2181
+export ZOOKEEPER_IP=94.130.186.129
+export KAFKA_IP=94.130.186.129
+export KAFKA_PORT=9092
+export RAW_NETFLOW_TOPIC="rawnetflow"
+export NETFLOW_TOPIC="netflow"
+export MINUTE_MILLISECONDS=60000
+node index.js
+

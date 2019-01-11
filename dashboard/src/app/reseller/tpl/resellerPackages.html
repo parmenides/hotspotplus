@@ -1,0 +1,59 @@
+<div ng-controller="resellerPackages">
+    <div class="wrapper-md bg-light b-b">
+        <h1 class="m-n font-thin h3">{{"reseller.buyPackage"|translate}}</h1>
+    </div>
+    <div class="hbox hbox-auto-xs hbox-auto-sm">
+        <div class="col wrapper-md">
+            <div ng-repeat="package in packages">
+                <div ng-repeat="users in package.onlineUsers" class="col-sm-6 wrapper-xl">
+                    <div class="panel b-a">
+                        <div class="panel-heading wrapper-xs no-border"
+                             ng-class="{'bg-warning': package.type == 'monthly', 'bg-primary': package.type == 'annually'}">
+                            <h4 class="text-center">{{'general.'+package.type | translate}}</h4>
+                        </div>
+                        <div class="wrapper-xl text-center b-b b-light">
+                            <h3 class="m-t-none">
+                                <h3 class="wrapper-sm">
+                                    <span>{{users.number | translateNumber}} </span>
+                                    <span class="font-thin">{{'reseller.onlineUser' | translate}}</span>
+                                </h3>
+                                <span class="badge badge-lg" ng-class="{'bg-default': package.type == 'monthly', 'bg-primary lter': package.type == 'annually'}">
+                                    {{'general.NetLog' | translate}}
+                                </span>
+                                <span class="badge badge-lg" ng-class="{'bg-default': package.type == 'monthly', 'bg-primary lter': package.type == 'annually'}">
+                                    {{'general.URLReporting' | translate}}
+                                </span>
+                                <h3 class="font-thin">{{'general.'+package.type | translate}}</h3>
+                                <h4 class="text-lt" ng-if="users.discount">
+                                    <span class="text-l-t">{{users.cost |currency : "" : 0| translateNumber}} </span>
+                                    <span class="text-success">{{users.discount |currency : "" : 0| translateNumber}}</span>
+                                    <span class="font-thin">{{'general.toman' | translate}}</span>
+                                </h4>
+                                <h4 class="text-lt" ng-if="!users.discount">
+                                    <span>{{users.cost |currency : "" : 0| translateNumber}} </span>
+                                    <span class="font-thin">{{'general.toman' | translate}}</span>
+                                </h4>
+                                <h4 class="badge badge-lg text-lt bg-default" ng-if="users.discountPercentage">
+                                    <i class="fa fa-percent"></i>
+                                    <span>{{users.discountPercentage | translateNumber}} </span>
+                                    <span>{{'general.off' | translate}} </span>
+                                </h4>
+                            </h3>
+                        </div>
+                        <div class="panel-footer text-center">
+                            <button ng-click="selectPackage(package.durationInMonths,users.number,users.cost,users.discount)"
+                                    class="btn btn-rounded"
+                                    ng-class="{'btn-warning': package.type == 'monthly', 'btn-primary': package.type == 'annually'}">
+                                {{ 'reseller.selectPackage' | translate }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+

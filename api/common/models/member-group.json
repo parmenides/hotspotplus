@@ -1,0 +1,67 @@
+{
+  "name": "MemberGroup",
+  "base": "Generic",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "replaceOnPUT": false,
+  "properties": {
+    "groupIdentity": {
+      "type": "string",
+      "required": true
+    },
+    "groupIdentityType": {
+      "type": "string",
+      "required": true
+    },
+    "mobile": {
+      "type": "string"
+    },
+    "nationalCode": {
+      "type": "string"
+    },
+    "passportNumber": {
+      "type": "string"
+    },
+    "tourCode": {
+      "type": "string"
+    },
+    "reserveCode": {
+      "type": "string"
+    },
+    "creationDate": {
+      "type": "number",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "business": {
+      "type": "belongsTo",
+      "model": "Business",
+      "foreignKey": ""
+    }
+  },
+  "acls": [
+    {
+      "accessType": "READ",
+      "principalType": "ROLE",
+      "principalId": "$owner",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "WRITE",
+      "principalType": "ROLE",
+      "principalId": "$owner",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "DENY"
+    }
+  ],
+  "methods": {}
+}

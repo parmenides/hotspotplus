@@ -1,0 +1,35 @@
+{
+  "name": "master-hotspot",
+  "version": "1.0.0",
+  "dependencies": {
+    "angular": "^1.4.0",
+    "angular-resource": "^1.4.0",
+    "angular-route": "^1.4.0",
+    "angular-touch": "^1.4.0",
+    "angular-translate": "^2.15.1",
+    "bootstrap-rtl": "^3.4.0",
+    "persian-date": "^0.1.8",
+    "AngularJS-Toaster": "angularjs-toaster#^2.1.0",
+    "raven-js": "^3.17.0",
+    "angular-ui-router": "^1.0.10",
+    "nanoajax": "^0.4.3",
+    "fetch": "^2.0.3"
+  },
+  "devDependencies": {
+    "angular-mocks": "^1.4.0"
+  },
+  "appPath": "app",
+  "moduleName": "masterHotspotApp",
+  "overrides": {
+    "bootstrap": {
+      "main": [
+        "less/bootstrap.less",
+        "dist/css/bootstrap.css",
+        "dist/js/bootstrap.js"
+      ]
+    }
+  },
+  "resolutions": {
+    "angular-ui-router": "0.4.2"
+  }
+}

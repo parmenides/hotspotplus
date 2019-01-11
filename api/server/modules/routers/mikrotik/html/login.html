@@ -1,0 +1,4 @@
+$(if http-header == "Access-Control-Allow-Origin")*$(endif)
+$(if http-header == "Access-Control-Allow-Methods")"GET, POST, PUT"$(endif)
+$(if http-header == "Content-Type")"Application/json"$(endif)
+$(if error != ""){"ok":"false","message":"$(error)"}$(endif)
