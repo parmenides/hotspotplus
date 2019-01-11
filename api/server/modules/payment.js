@@ -1,8 +1,12 @@
-import Q from 'q';
-import logger from './logger';
-import Payir from 'payir';
+/**
+ * Created by payamyousefi on 3/31/17.
+ */
 
-const log = logger.createLogger();
+var Q = require('q');
+var logger = require('./logger');
+var log = logger.createLogger();
+var Payir = require('payir');
+
 module.exports.openPaymentGateway = function(
   api_key,
   price,

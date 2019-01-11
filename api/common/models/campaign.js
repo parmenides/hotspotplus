@@ -1,11 +1,10 @@
-import app from '../../server/server';
-import Q from 'q';
-import config from '../../server/modules/config';
-import aggregate from '../../server/modules/aggregates';
-import smsModule from '../../server/modules/sms';
-import logger from '../../server/modules/logger';
-
-const log = logger.createLogger();
+var app = require('../../server/server');
+var Q = require('q');
+var config = require('../../server/modules/config.js');
+var aggregate = require('../../server/modules/aggregates');
+var smsModule = require('../../server/modules/sms');
+var logger = require('../../server/modules/logger');
+var log = logger.createLogger();
 
 module.exports = function(Campaign) {
   Campaign.sendBulkMessages = function(campaignId) {

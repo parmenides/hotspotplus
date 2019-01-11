@@ -1,14 +1,14 @@
 'use strict';
-import logger from '../../server/modules/logger';
-import app from '../../server/server';
-import config from '../../server/modules/config';
-import utility from '../../server/modules/utility';
-import smsModule from '../../server/modules/sms';
-import Q from 'q';
-import aggregate from '../../server/modules/aggregates';
+var logger = require('../../server/modules/logger');
+var app = require('../../server/server');
+var config = require('../../server/modules/config');
+var utility = require('../../server/modules/utility');
+var smsModule = require('../../server/modules/sms');
+var Q = require('q');
+var aggregate = require('../../server/modules/aggregates');
 
 module.exports = function(Reseller) {
-  const log = logger.createLogger();
+  var log = logger.createLogger();
 
   Reseller.addResellerCommission = function(resellerId, businessId, price) {
     return Q.Promise(function(resolve, reject) {

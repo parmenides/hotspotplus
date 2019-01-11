@@ -1,12 +1,14 @@
 'use strict';
-import redis from 'redis';
-import config from '../modules/config';
-import Q from 'q';
-import logger from '../modules/logger';
+var app = require('../../server/server');
+var config = require('../modules/config');
+var utility = require('../modules/utility');
+var Q = require('q');
+var redis = require('redis');
+var redisClient = redis.createClient(config.REDIS.PORT, config.REDIS.HOST);
+var logger = require('../modules/logger');
 
-const redisClient = redis.createClient(config.REDIS.PORT, config.REDIS.HOST);
 module.exports = function(Systemconfig) {
-  const log = logger.createLogger();
+  var log = logger.createLogger();
 
   Systemconfig.isLocal = function() {
     return Systemconfig.getConfig().then(function(systemConfig) {

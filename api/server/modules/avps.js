@@ -1,4 +1,5 @@
 /**
+ * Created by payamyousefi on 4/13/15.
  *
  * https://github.com/coova/coova-chilli/blob/master/doc/attributes
  * https://github.com/FreeRADIUS/freeradius-server/blob/v4.0.x/share/dictionary.chillispot

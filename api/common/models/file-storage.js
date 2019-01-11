@@ -1,9 +1,9 @@
 'use strict';
-import logger from '../../server/modules/logger';
-import fs from 'fs';
-import Q from 'q';
 
-const log = logger.createLogger();
+var logger = require('../../server/modules/logger');
+var log = logger.createLogger();
+var fs = require('fs');
+var Q = require('q');
 module.exports = function(FileStorage) {
   FileStorage.addFile = function(businessId, filePath, mimeType, name, size) {
     return Q.Promise(function(resolve, reject) {

@@ -1,10 +1,12 @@
-import logger from '../modules/logger';
-import Q from 'q';
-
+var logger = require('../modules/logger');
+var Q = require('q');
+var loopback = require('loopback');
+var Generic = require('./generic');
 module.exports = function(GenericUser) {
   GenericUser.getLogger = function() {
     return logger.createLogger();
   };
+  var log = GenericUser.getLogger();
 
   GenericUser.getCurrentUserId = function(ctx) {
     const token = ctx && ctx.accessToken;

@@ -1,13 +1,17 @@
-import app from '../server';
-import AVPS from './avps';
-import Q from 'q';
-import logger from './logger';
-import config from './config';
-import utility from './utility';
+/**
+ * Created by payamyousefi on 12/6/16.
+ */
 
-const log = logger.createLogger();
+var app = require('../server');
+var AVPS = require('./avps');
+var Q = require('q');
+var logger = require('./logger');
+var log = logger.createLogger();
+var config = require('./config');
+var utility = require('./utility');
+
 module.exports.RadiusResponse = function(RadiusMessage) {
-  const data = {
+  var data = {
     message: {},
   };
 

@@ -1,7 +1,8 @@
-import needle from 'needle';
-import logger from './logger';
+require('date-utils');
+var needle = require('needle');
+var logger = require('./logger');
+var log = logger.createLogger('sms', process.env.LOG_DIR);
 
-const log = logger.createLogger();
 module.exports.sendMessageToKavehnegar = function(
   SMS_API_KEY,
   receptor,
@@ -12,9 +13,9 @@ module.exports.sendMessageToKavehnegar = function(
   template,
 ) {
   log.debug('@sendMessageToKavehnegar');
-  const LOOKUP_SMS_PROVIDER =
+  var LOOKUP_SMS_PROVIDER =
     'https://api.kavenegar.com/v1/' + SMS_API_KEY + '/verify/lookup.json';
-  const data = {};
+  var data = {};
   data.receptor = receptor;
   data.token = token;
   data.token2 = token2;

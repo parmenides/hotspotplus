@@ -17,12 +17,18 @@
   "dependencies": {
     "bull": "^3.3.6",
     "bunyan": "^1.8.1",
+    "redis": "^2.8.0",
     "cron": "^1.2.1",
     "date-utils": "^1.2.21",
+    "dropbox": "^2.5.12",
+    "keygenerator": "^1.0.4",
+    "easy-zip": "0.0.4",
+    "ndjson": "^1.5.0",
     "elasticsearch": "^15.2.0",
     "json2csv": "^4.0.2",
     "needle": "1.4.2",
     "q": "^1.4.1",
+    "jssha": "^2.2.0",
     "qs": "^6.5.1",
     "raven": "^2.2.1",
     "temp": "^0.8.3"

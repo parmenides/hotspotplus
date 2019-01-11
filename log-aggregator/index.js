@@ -2,8 +2,8 @@
  * Created by rezanazari on 11/25/17.
  */
 
-var utility = require ( "hotspotplus-common" ).utility;
-module.exports.archiveService = require ( "./modules/archiveService" );
-module.exports.accountingAggregator = require ( './modules/accountingAggregator' );
-module.exports.cleanner = require ( './modules/cleanner' );
+var utility = require ( "./src/modules/utility" );
+module.exports.archiveService = require ( "./src/archiveService" );
+module.exports.accountingAggregator = require ( './src/accountingAggregator' );
+module.exports.cleanner = require ( './src/cleanner' );
 utility.installRaven ();

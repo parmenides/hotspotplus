@@ -1,9 +1,8 @@
 const kafka = require('kafka-node');
 require('date-utils');
 const Q = require('q');
-const logger = require('hotspotplus-common').logger;
-const utility = require('hotspotplus-common').utility;
-const log = logger.createLogger('netflowConsumer', process.env.LOG_DIR);
+const logger = require('./modules/logger');
+const log = logger.createLogger();
 const redis = require('redis');
 const redisClient = redis.createClient(
   process.env.REDIS_PORT,

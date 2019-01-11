@@ -1,6 +1,13 @@
-import multer from 'multer';
+/**
+ * Created by payamyousefi on 5/11/15.
+ */
+var config = require('../modules/config');
+var logger = require('../modules/logger');
+var log = logger.createLogger();
+var multer = require('multer');
+var path = require('path');
 
-const storage = multer.diskStorage({
+var storage = multer.diskStorage({
   storage: function(req, file, cb) {
     cb(null, './uploads');
   },
@@ -8,10 +15,10 @@ const storage = multer.diskStorage({
     cb(null, file.originalname);
   },
 });
-const upload = multer({ storage: storage });
+var upload = multer({ storage: storage });
 
 module.exports = function(app) {
-  const router = app.loopback.Router();
+  var router = app.loopback.Router();
 
   router.get('/api/file/download/:fileId', function(req, res) {
     var File = app.models.FileStorage;

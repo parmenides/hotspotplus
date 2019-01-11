@@ -4,13 +4,15 @@
 
 require('date-utils');
 var Q = require('q');
-var logger = require('hotspotplus-common').logger;
+
+var logger = require('./modules/logger');
+var aggregates = require('./modules/aggregates');
+
 var log = logger.createLogger(
   'AccountingAggregatorService',
   process.env.LOG_DIR,
 );
 var CronJob = require('cron').CronJob;
-var aggregate = require('hotspotplus-common').aggregates;
 log.debug('Accounting Aggregator Service Is Up...');
 
 function mergeAll() {
@@ -74,7 +76,7 @@ function mergeAll() {
 function mergeAccounting(fromDate, toDate) {
   return Q.Promise(function(resolve, reject) {
     try {
-      aggregate
+      aggregates
         .getAllSessions(fromDate.getTime(), toDate.getTime())
         .then(function(allSessionsIds) {
           var aggregateUsageTasks = [];
@@ -83,15 +85,15 @@ function mergeAccounting(fromDate, toDate) {
             aggregateUsageTasks.push(
               (function(scopedSessionId) {
                 return function() {
-                  return aggregate
+                  return aggregates
                     .getAggregatedUsageBySessionId(scopedSessionId)
                     .then(function(result) {
                       var aggregatedResult = result.aggregatedResult;
                       var range = result.range;
-                      return aggregate
+                      return aggregates
                         .addAccountingDoc(aggregatedResult)
                         .then(function() {
-                          return aggregate.deleteBySessionId(
+                          return aggregates.deleteBySessionId(
                             range.fromDateInMs,
                             range.toDateInMs,
                             scopedSessionId,

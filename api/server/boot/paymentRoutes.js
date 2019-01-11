@@ -1,8 +1,11 @@
-import logger from '../modules/logger';
-const log = logger.createLogger();
+/**
+ * Created by rezanazari on 12/14/16.
+ */
+var logger = require('../modules/logger');
+var log = logger.createLogger();
 
 module.exports = function(app) {
-  const router = app.loopback.Router();
+  var router = app.loopback.Router();
 
   router.post('/api/payment/hotspot/return', function(req, res) {
     var invoiceId = req.query.invoiceId;

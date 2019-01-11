@@ -1,31 +1,37 @@
-import Q from 'q';
-import app from '../server';
-import redis from 'redis';
-import logger from './logger';
-import utility from './utility';
-import auth from './auth';
-import aggregate from '../../server/modules/aggregates';
-import needle from 'needle';
+/**
+ * Created by payamyousefi on 10/17/16.
+ */
 
-const REDIS_PORT = process.env.REDIS_PORT;
-const REDIS_HOST = process.env.REDIS_HOST;
-const redisClient = redis.createClient(REDIS_PORT, REDIS_HOST);
-const log = logger.createLogger();
-const CONFIG_SERVER_URL = process.env.CONFIG_SERVER_URL;
-const LICENSE_SERVER_SMS_API_URL =
+require('date-utils');
+var Q = require('q');
+var app = require('../server');
+var redis = require('redis');
+var REDIS_PORT = process.env.REDIS_PORT;
+var REDIS_HOST = process.env.REDIS_HOST;
+var redisClient = redis.createClient(REDIS_PORT, REDIS_HOST);
+var logger = require('./logger');
+var log = logger.createLogger();
+var utility = require('./utility');
+var auth = require('./auth');
+var aggregate = require('../../server/modules/aggregates');
+var CONFIG_SERVER_URL = process.env.CONFIG_SERVER_URL;
+var LICENSE_SERVER_SMS_API_URL =
   CONFIG_SERVER_URL + '/Sms/sendMessages?access_token={token}';
-const LICENSE_SERVER_GROUP_SMS_API_URL =
+var LICENSE_SERVER_GROUP_SMS_API_URL =
   CONFIG_SERVER_URL + '/Sms/sendGroupMessage?access_token={token}';
-const LICENSE_SERVER_LOGIN_URL = CONFIG_SERVER_URL + '/Licenses/login';
-const kavehnegar = require('./kavehnegar');
+var LICENSE_SERVER_LOGIN_URL = CONFIG_SERVER_URL + '/Licenses/login';
+var kavehnegar = require('./kavehnegar');
+
+var needle = require('needle');
 
 exports.send = function(data) {
   log.debug('Mobile data', data);
-  const SystemConfig = app.models.SystemConfig;
-  const Business = app.models.Business;
-  const businessId = data.businessId || 'service';
-  const mobilesList = data.mobiles;
-  const message = data.message;
+  var SystemConfig = app.models.SystemConfig;
+  var Business = app.models.Business;
+  var Charge = app.models.Charge;
+  var businessId = data.businessId || 'service';
+  var mobilesList = data.mobiles;
+  var message = data.message;
 
   return Q.Promise(function(resolve, reject) {
     if (mobilesList && message) {

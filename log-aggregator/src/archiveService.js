@@ -1,12 +1,15 @@
-/**
- * Created by rezanazari on 11/12/17.
- */
-
 var Q = require('q');
-var logger = require('hotspotplus-common').logger;
-var log = logger.createLogger('Archive Service', process.env.LOG_DIR);
-var util = require('hotspotplus-common').utility;
+var utility = require('./modules/utility');
 var CronJob = require('cron').CronJob;
+var needle = require('needle');
+var fs = require('fs');
+var theDropbox = require('./modules/dropbox');
+var auth = require('./modules/auth');
+var temp = require('temp').track();
+var Json2csvParser = require('json2csv').Parser;
+var logger = require('./modules/logger');
+
+var log = logger.createLogger();
 var elasticURL =
   'http://' + process.env.ELASTIC_IP + ':' + process.env.ELASTIC_PORT;
 var ELASTIC_NETFLOW_REPORT =
@@ -14,16 +17,10 @@ var ELASTIC_NETFLOW_REPORT =
 var ELASTIC_SYSLOG_REPORT =
   elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'syslog/report';
 var businessSize = process.env.BUSINESS_SIZE;
-var needle = require('needle');
-var fs = require('fs');
-var copyToDropbox = require('hotspotplus-common').copyToDropbox;
-var auth = require('hotspotplus-common').auth;
-var temp = require('temp').track();
-var API_ADDRESS = util.getApiAddress();
+var API_ADDRESS = utility.getApiAddress();
 var BUSINESS_GET_REST_API =
   API_ADDRESS + '/api/Businesses/{0}?access_token={1}';
 var fileRows = process.env.FILES_ROWS;
-var Json2csvParser = require('json2csv').Parser;
 
 function getBusinessList(options) {
   return Q.promise(function(resolve, reject) {
@@ -435,7 +432,7 @@ function transferToExternalStorage(logs, fileName, token) {
         if (create.status) {
           log.debug('Data written to file');
           log.debug('Sending ... ', create.path, fileName, token);
-          copyToDropbox
+          theDropbox
             .uploadFile(create.path, fileName, token)
             .then(function(upload) {
               result = { status: upload.status };

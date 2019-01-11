@@ -1,9 +1,10 @@
-import aggregate from '../../server/modules/aggregates';
-import logger from '../../server/modules/logger';
-import config from '../../server/modules/config';
-import app from '../../server/server';
+var aggregate = require('../../server/modules/aggregates');
+var logger = require('../../server/modules/logger');
+var log = logger.createLogger();
+var config = require('../../server/modules/config');
+var util = require('../../server/modules/utility');
+var app = require('../../server/server');
 
-const log = logger.createLogger();
 module.exports = function(FootTraffic) {
   /* return array of new , return & total count of visitors base on interval date from aggregates.js
 	 startDate: number

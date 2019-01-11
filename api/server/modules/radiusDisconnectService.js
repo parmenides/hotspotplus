@@ -1,13 +1,16 @@
-import radius from 'radius';
-import Q from 'q';
-import app from '../server';
-import logger from './logger';
-import dgram from 'dgram';
+/**
+ * Created by payamyousefi on 8/4/16.
+ */
 
-const log = logger.createLogger();
+var Q = require('q');
+var app = require('../server');
+var logger = require('./logger');
+var log = logger.createLogger();
+var radius = require('radius');
+var dgram = require('dgram');
 
 log.debug('POD service started');
-const sendPod = function(clientSession) {
+exports.sendPod = function(clientSession) {
   return Q.Promise(function(resolve, reject) {
     log.debug('Going to dc ', clientSession);
     var Business = app.models.Business;
@@ -123,5 +126,3 @@ const sendPod = function(clientSession) {
       });
   });
 };
-
-export default { sendPod };

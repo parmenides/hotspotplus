@@ -16,6 +16,7 @@ services:
     volumes:
       - ${PWD}/systemId:/systemId
       - ${PWD}/api/server/:/usr/src/app/server/
+      - ${PWD}/api/node_modules/:/usr/src/app/node_modules
       - ${PWD}/api/common:/usr/src/app/common/
       - ${PWD}/api/logs:/logs
       - ${PWD}/api/key:/key
@@ -33,8 +34,9 @@ services:
       - kafka
       - redis
     volumes:
-      - ${PWD}/log-worker/modules/:/usr/src/app/modules/
+      - ${PWD}/log-worker/src/:/usr/src/app/src/
       - ${PWD}/log-worker/index.js:/usr/src/app/index.js
+      - ${PWD}/log-worker/node_modules/:/usr/src/app/node_modules
       - ${PWD}/log-worker/logs:/logs
     networks:
       - hotspotplusgate
@@ -50,8 +52,9 @@ services:
     env_file:
       - ${PWD}/log-aggregator/.env
     volumes:
-      - ${PWD}/log-aggregator/modules/:/usr/src/app/modules/
+      - ${PWD}/log-aggregator/src/:/usr/src/app/src/
       - ${PWD}/log-aggregator/index.js:/usr/src/app/index.js
+      - ${PWD}/log-aggregator/node_modules/:/usr/src/app/node_modules/
       - ${PWD}/log-aggregator/logs:/logs
     networks:
       - hotspotplusgate
@@ -149,20 +152,20 @@ services:
       - hsp_kafka:/bitnami/kafka
     networks:
       - hotspotplusgate
-  radius:
-    image: 'registry.gitlab.com/parmenides/hspfreeradius/production:3.3'
-    restart: always
-    env_file:
-      .env
-    container_name: "hsp_radius_production"
-    networks:
-      - hotspotplusgate
-    expose:
-      - "1812"
-      - "1813"
-    ports:
-      - "$RADIUS_AUTH_PORT:1812/udp"
-      - "$RADIUS_ACC_PORT:1813/udp"
+#  radius:
+#    image: 'registry.gitlab.com/parmenides/hspfreeradius/production:3.3'
+#    restart: always
+#    env_file:
+#      .env
+#    container_name: "hsp_radius_production"
+#    networks:
+#      - hotspotplusgate
+#    expose:
+#      - "1812"
+#      - "1813"
+#    ports:
+#      - "$RADIUS_AUTH_PORT:1812/udp"
+#      - "$RADIUS_ACC_PORT:1813/udp"
 
 volumes:
   hsp_mongodb:

@@ -3,11 +3,10 @@
  */
 
 require('date-utils');
-var Q = require('q');
-var logger = require('hotspotplus-common').logger;
-var log = logger.createLogger('CleanupService', process.env.LOG_DIR);
+var logger = require('./modules/logger');
+var log = logger.createLogger();
 var CronJob = require('cron').CronJob;
-var aggregate = require('hotspotplus-common').aggregates;
+var aggregate = require('./modules/aggregates');
 log.debug('Doc Clean Up Service Is Up...');
 
 function cleanNetflowDoc() {

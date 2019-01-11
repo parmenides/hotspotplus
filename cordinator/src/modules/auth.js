@@ -5,7 +5,7 @@
 var Q = require('q');
 var needle = require('needle');
 var logger = require('./logger');
-var log = logger.createLogger('auth', process.env.LOG_DIR);
+var log = logger.createLogger();
 var utility = require('./utility');
 var API_ADDRESS = utility.getApiAddress();
 var LOGIN_REST_API = API_ADDRESS + '/api/Users/login';

@@ -1,17 +1,17 @@
 'use strict';
-import utility from '../../server/modules/utility';
-import Q from 'q';
-import kafka from 'kafka-node';
-import aggregate from '../../server/modules/aggregates';
-import config from '../../server/modules/config';
-import logger from '../../server/modules/logger';
-
-const log = logger.createLogger();
-
-const kafkaClient = new kafka.KafkaClient({
+var app = require('../../server/server');
+var utility = require('../../server/modules/utility');
+var Q = require('q');
+var kafka = require('kafka-node');
+var aggregate = require('../../server/modules/aggregates');
+var config = require('../../server/modules/config.js');
+var logger = require('../../server/modules/logger');
+var log = logger.createLogger();
+var _ = require('underscore');
+var kafkaClient = new kafka.KafkaClient({
   kafkaHost: process.env.KAFKA_IP + ':' + process.env.KAFKA_PORT,
 });
-const kafkaProducer = new kafka.Producer(kafkaClient, { partitionerType: 2 });
+var kafkaProducer = new kafka.Producer(kafkaClient, { partitionerType: 2 });
 
 kafkaProducer.on('ready', function() {
   log.warn('Producer ready...');

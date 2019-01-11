@@ -1,18 +1,18 @@
-import app from '../../server/server';
-import utility from '../../server/modules/utility';
-import Q from 'q';
-import smsModule from '../../server/modules/sms';
-import logger from '../../server/modules/logger';
-import needle from 'needle';
-import aggregate from '../../server/modules/aggregates';
-
-const elasticURL =
+var app = require('../../server/server');
+var utility = require('../../server/modules/utility');
+var Q = require('q');
+var config = require('../../server/modules/config.js');
+var smsModule = require('../../server/modules/sms');
+var logger = require('../../server/modules/logger');
+var needle = require('needle');
+var aggregate = require('../../server/modules/aggregates');
+var elasticURL =
   'http://' + process.env.ELASTIC_IP + ':' + process.env.ELASTIC_PORT;
-const ELASTIC_CHARGE_PATH =
+var ELASTIC_CHARGE_PATH =
   elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'charge/charge';
 
 module.exports = function(Charge) {
-  const log = logger.createLogger();
+  var log = logger.createLogger();
 
   Charge.loadCharges = function(businessId, startDate, skip, limit) {
     return Q.Promise(function(resolve, reject) {

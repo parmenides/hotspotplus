@@ -1,13 +1,15 @@
-import config from '../modules/config';
-import logger from '../modules/logger';
-import utility from '../modules/utility';
-import { track } from 'temp';
-import requestIp from 'request-ip';
-import date_utils from 'date-utils';
-import licenseFile from 'nodejs-license-file';
+/**
+ * Created by payamyousefi on 5/11/15.
+ */
+var config = require('../modules/config');
+var logger = require('../modules/logger');
+var log = logger.createLogger();
+var temp = require('temp').track();
+var utility = require('../modules/utility');
+var requestIp = require('request-ip');
+require('date-utils');
+var licenseFile = require('nodejs-license-file');
 
-const log = logger.createLogger();
-const temp = track();
 module.exports = function(app) {
   var router = app.loopback.Router();
 

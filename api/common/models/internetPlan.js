@@ -1,10 +1,11 @@
-import app from '../../server/server';
-import Q from 'q';
-import config from '../../server/modules/config';
-import logger from '../../server/modules/logger';
-import hotspotMessages from '../../server/modules/hotspotMessages';
+var app = require('../../server/server');
+var utility = require('../../server/modules/utility');
+var Q = require('q');
+var config = require('../../server/modules/config.js');
+var logger = require('../../server/modules/logger');
+var log = logger.createLogger();
+var hotspotMessages = require('../../server/modules/hotspotMessages');
 
-const log = logger.createLogger();
 module.exports = function(InternetPlan) {
   InternetPlan.observe('after save', function(ctx, next) {
     var Business = app.models.Business;

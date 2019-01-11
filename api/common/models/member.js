@@ -1,25 +1,29 @@
-import app from '../../server/server';
-import utility from '../../server/modules/utility';
-import Q from 'q';
-import config from '../../server/modules/config';
-import logger from '../../server/modules/logger';
-import Payment from '../../server/modules/payment';
-import redis from 'redis';
-import aggregate from '../../server/modules/aggregates';
-import smsModule from '../../server/modules/sms';
-import radiusAdaptor from '../../server/modules/radiusAdaptor';
-import Radius_Messages from '../../server/modules/radiusMessages';
-import _ from 'underscore';
-import querystring from 'querystring';
-import AVP from '../../server/modules/avps';
-import radiusPod from '../../server/modules/radiusDisconnectService';
-import dust from 'dustjs-helpers';
-import fs from 'fs';
-import hotspotMessages from '../../server/modules/hotspotMessages';
-import csvtojson from 'csvtojson';
+var app = require('../../server/server');
+var utility = require('../../server/modules/utility');
+var Q = require('q');
+var config = require('../../server/modules/config.js');
+var logger = require('../../server/modules/logger');
+var Payment = require('../../server/modules/payment');
+var redis = require('redis');
+var redisClient = redis.createClient(config.REDIS.PORT, config.REDIS.HOST);
+var log = logger.createLogger();
+var aggregate = require('../../server/modules/aggregates');
 
-const redisClient = redis.createClient(config.REDIS.PORT, config.REDIS.HOST);
-const log = logger.createLogger();
+var smsModule = require('../../server/modules/sms');
+
+var radiusAdaptor = require('../../server/modules/radiusAdaptor');
+var Radius_Messages = require('../../server/modules/radiusMessages');
+var _ = require('underscore');
+var querystring = require('querystring');
+var RadiusAdaptor = require('../../server/modules/radiusAdaptor');
+var AVP = require('../../server/modules/avps');
+var radiusPod = require('../../server/modules/radiusDisconnectService');
+var dust = require('dustjs-helpers');
+var fs = require('fs');
+
+var hotspotMessages = require('../../server/modules/hotspotMessages');
+var csvtojson = require('csvtojson');
+
 module.exports = function(Member) {
   Member.validatesUniquenessOf('uniqueUserId');
 
@@ -85,8 +89,7 @@ module.exports = function(Member) {
             };
             //supply mac in order for lock_by_mac functionality
             msg[AVP[routerType]['mac']] = { type: 'string', value: [mac] };
-            radiusAdaptor
-              .RadiusMessage(msg)
+            RadiusAdaptor.RadiusMessage(msg)
               .then(function(AccessRequest) {
                 Member.postAuth(AccessRequest, true)
                   .then(function(RadiusResponse) {

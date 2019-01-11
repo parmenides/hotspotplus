@@ -1,11 +1,12 @@
-import logger from '../modules/logger';
-import config from '../modules/config';
+var logger = require('../modules/logger');
+var config = require('../modules/config');
+var Q = require('q');
 
 module.exports = function(Generic) {
   Generic.getLogger = function() {
     return logger.createLogger();
   };
-  const log = Generic.getLogger();
+  var log = Generic.getLogger();
 
   Generic.isMongoDbStorage = function() {
     return config.STORAGE === config.STORAGES.MONGODB;

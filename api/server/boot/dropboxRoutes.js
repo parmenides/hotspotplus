@@ -1,6 +1,8 @@
-import logger from '../modules/logger';
-
-const log = logger.createLogger();
+/**
+ * Created by payam on 12/14/16.
+ */
+var logger = require('../modules/logger');
+var log = logger.createLogger();
 
 module.exports = function(app) {
   var router = app.loopback.Router();

@@ -1,13 +1,14 @@
 'use strict';
-import logger from '../../server/modules/logger';
-import app from '../../server/server';
-import config from '../../server/modules/config';
-import Payment from '../../server/modules/payment';
-import Q from 'q';
-import serviceInfo from '../../server/modules/serviceInfo.js';
+var logger = require('../../server/modules/logger');
+var app = require('../../server/server');
+var config = require('../../server/modules/config');
+var utility = require('../../server/modules/utility');
+var Payment = require('../../server/modules/payment');
+var Q = require('q');
+var serviceInfo = require('../../server/modules/serviceInfo.js');
 
 module.exports = function(Invoice) {
-  const log = logger.createLogger();
+  var log = logger.createLogger();
 
   Invoice.verifyInvoice = function(invoiceId) {
     return Q.Promise(function(resolve, reject) {

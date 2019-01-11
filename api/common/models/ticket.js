@@ -1,11 +1,11 @@
 'use strict';
-import app from '../../server/server';
-import Q from 'q';
-import config from '../../server/modules/config';
-import logger from '../../server/modules/logger';
-import smsModule from '../../server/modules/sms';
+var app = require('../../server/server');
+var Q = require('q');
+var config = require('../../server/modules/config.js');
+var logger = require('../../server/modules/logger');
+var log = logger.createLogger();
+var smsModule = require('../../server/modules/sms');
 
-const log = logger.createLogger();
 module.exports = function(Ticket) {
   Ticket.replyToTicket = function(ticketId, msg) {
     var Business = app.models.Business;

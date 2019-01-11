@@ -1,3 +1,7 @@
+/**
+ * Created by payamyousefi on 12/19/16.
+ */
+
 module.exports = {
   failedToSetIp: 'خطایی در اختصاص دادن آی‌پی به شما رخ داده است.',
   serviceBlocked: 'این سرویس مسدود شده است.',
