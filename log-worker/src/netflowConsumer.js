@@ -66,7 +66,7 @@ consumerGroup.on('message', function(message) {
       log.debug('@netflow invalid netflow packet', netFlowPkg);
       return;
     }
-    getIpSession(hostIp)
+    getNasSessionByIp(hostIp)
       .then(function(nasSession) {
         if (!nasSession || !nasSession.businessId || !nasSession.nasId) {
           log.debug('no session found for ', hostIp);
@@ -140,7 +140,7 @@ consumerGroup.on('message', function(message) {
   }
 });
 
-function getIpSession(nasIp) {
+function getNasSessionByIp(nasIp) {
   return Q.promise(function(resolve, reject) {
     if (!nasIp) {
       return reject('invalid nas ip', nasIp);

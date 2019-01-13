@@ -4,8 +4,43 @@ var app = require('../../server/server');
 var log = logger.createLogger();
 var Q = require('q');
 var radiusPod = require('../../server/modules/radiusDisconnectService');
+const kafkaClient = new kafka.KafkaClient({
+  kafkaHost: process.env.KAFKA_IP + ':' + process.env.KAFKA_PORT,
+});
+const kafkaProducer = new kafka.Producer(kafkaClient, {partitionerType: 2});
+
+kafkaProducer.on('ready', function() {
+  log.warn('Producer ready...');
+  kafkaClient.refreshMetadata([config.SESSION_TOPIC], function(error) {
+    log.debug('@refreshMetadata Error:', error);
+  });
+});
+
+kafkaProducer.on('error', function(error) {
+  log.error('Producer preparation failed:', error);
+});
+
 
 module.exports = function(ClientSession) {
+  
+  ClientSession.saveLogSession = function(session){
+    kafkaProducer.send(
+      [
+        {
+          topic: config.SESSION_TOPIC,
+          messages: JSON.stringify(session),
+        },
+      ],
+      function(error, data) {
+        if (error) {
+          log.error('Failed to add session to kafka: ', error);
+          return;
+        }
+        log.debug('session added:', data);
+      },
+    );
+  }
+  
   ClientSession.getOnlineUsers = function(
     startDate,
     businessId,

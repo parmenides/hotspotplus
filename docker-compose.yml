@@ -115,15 +115,29 @@ services:
       - hotspotplusgate
   elasticsearch:
     container_name: hsp_elasticsearch
-    image: 'bitnami/elasticsearch:5.3.0-r0'
+    image: 'bitnami/elasticsearch:6.5.4'
     restart: always
     expose:
       - "9300"
       - "9200"
+    ports:
+      - 9200:9200
     volumes:
       - hsp_elasticsearch:/bitnami/elasticsearch
     networks:
-      - hotspotplusgate
+      hotspotplusgate:
+        ipv4_address: 172.20.0.20
+  kibana:
+    image: 'bitnami/kibana:6.5.4'
+    ports:
+      - 5601:5601
+    environment:
+      - KIBANA_ELASTICSEARCH_URL=hsp_elasticsearch
+    volumes:
+      - 'hsp_kibana:/bitnami'
+    networks:
+      hotspotplusgate:
+        ipv4_address: 172.20.0.21
   zookeeper:
     image: 'bitnami/zookeeper:latest'
     restart: always
@@ -152,20 +166,20 @@ services:
       - hsp_kafka:/bitnami/kafka
     networks:
       - hotspotplusgate
-#  radius:
-#    image: 'registry.gitlab.com/parmenides/hspfreeradius/production:3.3'
-#    restart: always
-#    env_file:
-#      .env
-#    container_name: "hsp_radius_production"
-#    networks:
-#      - hotspotplusgate
-#    expose:
-#      - "1812"
-#      - "1813"
-#    ports:
-#      - "$RADIUS_AUTH_PORT:1812/udp"
-#      - "$RADIUS_ACC_PORT:1813/udp"
+  radius:
+    image: 'registry.gitlab.com/parmenides/hspfreeradius/production:3.3'
+    restart: always
+    env_file:
+      .env
+    container_name: "hsp_radius_production"
+    networks:
+      - hotspotplusgate
+    expose:
+      - "1812"
+      - "1813"
+    ports:
+      - "$RADIUS_AUTH_PORT:1812/udp"
+      - "$RADIUS_ACC_PORT:1813/udp"
 
 volumes:
   hsp_mongodb:
@@ -173,6 +187,8 @@ volumes:
   hsp_redis:
     driver: local
   hsp_elasticsearch:
+    driver: local
+  hsp_kibana:
     driver: local
   hsp_kafka:
     driver: local
