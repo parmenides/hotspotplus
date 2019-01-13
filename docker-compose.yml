@@ -29,7 +29,7 @@ services:
       context: ${PWD}/api-license
     user: '${UID:-1000}:${GID:-1000}'
     restart: always
-    container_name: apilicensehotspotplus
+    container_name: hotspotpluslicensapi
     command: npm run start:dev
     ports:
       - 3001:3000
