@@ -101,6 +101,8 @@ services:
     user: '${UID:-1000}:${GID:-1000}'
     command: npm start
     restart: always
+    env_file:
+      - ${PWD}/coordinator/.env
     depends_on:
       - redis
       - hotspotpluslicensapi
@@ -150,8 +152,7 @@ services:
     volumes:
       - hsp_elasticsearch:/bitnami/elasticsearch
     networks:
-      hotspotplusgate:
-        ipv4_address: 172.20.0.20
+      - hotspotplusgate
   kibana:
     image: 'bitnami/kibana:6.5.4'
     ports:
@@ -161,8 +162,7 @@ services:
     volumes:
       - 'hsp_kibana:/bitnami'
     networks:
-      hotspotplusgate:
-        ipv4_address: 172.20.0.21
+      - hotspotplusgate
   zookeeper:
     image: 'bitnami/zookeeper:latest'
     restart: always

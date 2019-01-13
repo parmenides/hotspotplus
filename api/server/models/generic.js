@@ -9,10 +9,10 @@ module.exports = function(Generic) {
   var log = Generic.getLogger();
 
   Generic.isMongoDbStorage = function() {
-    return config.STORAGE === config.STORAGES.MONGODB;
+    return false;
   };
   Generic.isElasticStorage = function() {
-    return config.STORAGE === config.STORAGES.ELASTICSEARCH;
+    return true;
   };
   Generic.getCurrentUserId = function(ctx) {
     const token = ctx && ctx.accessToken;
