@@ -1,0 +1,67 @@
+{
+  "_meta": {
+    "sources": [
+      "loopback/common/models",
+      "loopback/server/models",
+      "../common/models",
+      "./models"
+    ],
+    "mixins": [
+      "loopback/common/mixins",
+      "loopback/server/mixins",
+      "../common/mixins",
+      "./mixins"
+    ]
+  },
+  "User": {
+    "dataSource": "mongo",
+    "public": true
+  },
+  "AccessToken": {
+    "dataSource": "mongo",
+    "public": false
+  },
+  "ACL": {
+    "dataSource": "mongo",
+    "public": false
+  },
+  "RoleMapping": {
+    "dataSource": "mongo",
+    "public": true,
+    "options": {
+      "strictObjectIDCoercion": true
+    }
+  },
+  "Role": {
+    "dataSource": "mongo",
+    "public": true
+  },
+  "License": {
+    "dataSource": "mongo",
+    "public": true
+  },
+  "LicenseAudit": {
+    "dataSource": "mongo",
+    "public": true
+  },
+  "Invoice": {
+    "dataSource": "mongo",
+    "public": true
+  },
+  "Coupon": {
+    "dataSource": "mongo",
+    "public": true
+  },
+  "Sms": {
+    "dataSource": "db",
+    "public": true
+  },
+  "Generic": {
+    "dataSource": "db",
+    "public": false
+  },
+  "GenericUser": {
+    "dataSource": "db",
+    "public": false
+  }
+}

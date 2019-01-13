@@ -1,0 +1,4 @@
+Follow the steps bellow to generate lb-services.js
+0- cd "to this directory"
+1- chmod a+x ./update-lb-services.sh
+2- ./update-lb-services.sh

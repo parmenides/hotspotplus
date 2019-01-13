@@ -8,10 +8,7 @@ var Q = require('q');
 var logger = require('./modules/logger');
 var aggregates = require('./modules/aggregates');
 
-var log = logger.createLogger(
-  'AccountingAggregatorService',
-  process.env.LOG_DIR,
-);
+var log = logger.createLogger();
 var CronJob = require('cron').CronJob;
 log.debug('Accounting Aggregator Service Is Up...');
 

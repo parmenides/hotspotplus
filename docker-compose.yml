@@ -7,6 +7,8 @@ services:
     restart: always
     container_name: apihotspotplus
     command: npm run start:dev
+    ports:
+      - 3000:3000
     depends_on:
       - mongodb
       - elasticsearch
@@ -15,29 +17,34 @@ services:
       - api/.env
     volumes:
       - ${PWD}/systemId:/systemId
-      - ${PWD}/api/server/:/usr/src/app/server/
-      - ${PWD}/api/node_modules/:/usr/src/app/node_modules
+      - ${PWD}/api/server:/usr/src/app/server/
+      - ${PWD}/api/node_modules:/usr/src/app/node_modules
       - ${PWD}/api/common:/usr/src/app/common/
       - ${PWD}/api/logs:/logs
       - ${PWD}/api/key:/key
     networks:
       - hotspotplusgate
-  logworker:
+  hotspotpluslicensapi:
     build:
-      context: ${PWD}/log-worker
+      context: ${PWD}/api-license
     user: '${UID:-1000}:${GID:-1000}'
     restart: always
-    env_file:
-      - ${PWD}/log-worker/.env
-    command: npm start
+    container_name: apilicensehotspotplus
+    command: npm run start:dev
+    ports:
+      - 3001:3000
     depends_on:
-      - kafka
+      - mongodb
+      - elasticsearch
       - redis
+    env_file:
+      - api-license/.env
     volumes:
-      - ${PWD}/log-worker/src/:/usr/src/app/src/
-      - ${PWD}/log-worker/index.js:/usr/src/app/index.js
-      - ${PWD}/log-worker/node_modules/:/usr/src/app/node_modules
-      - ${PWD}/log-worker/logs:/logs
+      - ${PWD}/api/server:/usr/src/app/server/
+      - ${PWD}/api/node_modules:/usr/src/app/node_modules
+      - ${PWD}/api/common:/usr/src/app/common/
+      - ${PWD}/api/logs:/logs
+      - ${PWD}/api/key:/key
     networks:
       - hotspotplusgate
   logaggregator:
@@ -59,27 +66,44 @@ services:
     networks:
       - hotspotplusgate
   dashboard:
-    build:
-      context: ${PWD}/dashboard
-    user: '${UID:-1000}:${GID:-1000}'
+    image: 'bitnami/nginx:latest'
     restart: always
     ports:
-      - 8080:8080
-    command: npm start
+    - 8080:8080
     volumes:
-      - ${PWD}/dashboard/src:/usr/src/app/src
-      - ${PWD}/dashboard/libs:/usr/src/app/libs
-      - ${PWD}/dashboard/node_modules:/usr/src/app/node_modules
-      - ${PWD}/dashboard/logs:/logs
+      - ${PWD}/dashboard:/app
+    networks:
+      - hotspotplusgate
+  hotspot:
+    build:
+      context: ${PWD}/api
+    user: '${UID:-1000}:${GID:-1000}'
+    restart: always
+    command: npm start
+    ports:
+    - 8081:8070
+    volumes:
+    - ${PWD}/hotspot/:/usr/src/app/
+    networks:
+    - hotspotplusgate
+  licensedashboard:
+    image: 'bitnami/nginx:latest'
+    restart: always
+    ports:
+      - 8082:8080
+    volumes:
+      - ${PWD}/license-dashboard:/app
     networks:
       - hotspotplusgate
   cordinator:
     build:
       context: ${PWD}/cordinator
     user: '${UID:-1000}:${GID:-1000}'
+    command: npm start
     restart: always
     depends_on:
       - redis
+      - hotspotpluslicensapi
     environment:
       - APP_NAME=cordinator
       - LOG_LEVEL=debug
@@ -88,9 +112,9 @@ services:
       - REDIS_HOST=hsp_redis
       - REDIS_IP=hsp_redis
     volumes:
-      - ${PWD}/cordinator/hotspotplus-cordinator:/app/hotspotplus-cordinator
+      - ${PWD}/cordinator/src/:/usr/src/app/src/
+      - ${PWD}/cordinator/node_modules/:/usr/src/app/node_modules/
       - ${PWD}/cordinator/logs:/logs
-      - ${PWD}/systemId:/systemId
     networks:
       - hotspotplusgate
   mongodb:
@@ -169,17 +193,17 @@ services:
   radius:
     image: 'registry.gitlab.com/parmenides/hspfreeradius/production:3.3'
     restart: always
-    env_file:
-      .env
     container_name: "hsp_radius_production"
+    logging:
+      driver: none
     networks:
       - hotspotplusgate
     expose:
       - "1812"
       - "1813"
     ports:
-      - "$RADIUS_AUTH_PORT:1812/udp"
-      - "$RADIUS_ACC_PORT:1813/udp"
+      - "1812:1812/udp"
+      - "1813:1813/udp"
 
 volumes:
   hsp_mongodb:

@@ -4,10 +4,12 @@ var app = require('../../server/server');
 var log = logger.createLogger();
 var Q = require('q');
 var radiusPod = require('../../server/modules/radiusDisconnectService');
+var kafka = require('kafka-node');
+
 const kafkaClient = new kafka.KafkaClient({
   kafkaHost: process.env.KAFKA_IP + ':' + process.env.KAFKA_PORT,
 });
-const kafkaProducer = new kafka.Producer(kafkaClient, {partitionerType: 2});
+const kafkaProducer = new kafka.Producer(kafkaClient, { partitionerType: 2 });
 
 kafkaProducer.on('ready', function() {
   log.warn('Producer ready...');
@@ -20,10 +22,8 @@ kafkaProducer.on('error', function(error) {
   log.error('Producer preparation failed:', error);
 });
 
-
 module.exports = function(ClientSession) {
-  
-  ClientSession.saveLogSession = function(session){
+  ClientSession.saveLogSession = function(session) {
     kafkaProducer.send(
       [
         {
@@ -39,8 +39,8 @@ module.exports = function(ClientSession) {
         log.debug('session added:', data);
       },
     );
-  }
-  
+  };
+
   ClientSession.getOnlineUsers = function(
     startDate,
     businessId,

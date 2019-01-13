@@ -1,0 +1,36 @@
+{
+  "name": "Coupon",
+  "base": "Generic",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "code": {
+      "type": "string",
+      "required": true
+    },
+    "value": {
+      "type": "object",
+      "required": true
+    },
+    "used": {
+      "type": "number",
+      "required": true
+    },
+    "creationDate": {
+      "type": "number",
+      "required": true
+    },
+    "redeemDate": {
+      "type": "number"
+    },
+    "count": {
+      "type": "number"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

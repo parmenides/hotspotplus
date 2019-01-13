@@ -1,5 +1,5 @@
 {
-  "name": "hotspotplus",
+  "name": "hotspotplus-api",
   "version": "1.0.1",
   "main": "server/server.js",
   "bin": "server/server.js",

@@ -1,3 +1,5 @@
-FROM ubuntu:xenial
+FROM node:10-alpine
 
-CMD /app/hotspotplus-cordinator
+RUN mkdir /key
+WORKDIR /usr/src/app
+COPY package*.json ./

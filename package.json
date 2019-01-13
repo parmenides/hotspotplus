@@ -5,7 +5,7 @@
   "scripts": {
     "start": "docker-compose down; docker-compose up",
     "preinstall": "node bin/preinstall",
-    "prettier": "prettier '{cordinator/src,api/server,api/server/*,api/common/models}/**/*.js'  --write"
+    "prettier": "prettier '{api-license/server,api-license/common/models,cordinator/src,api/server,api/server/*,api/common/models}/**/*.js'  --write"
   },
   "prettier": {
     "singleQuote": true,

@@ -12,7 +12,7 @@ var redisClient = redis.createClient(
 var utility = require('./modules/utility');
 var authUtility = require('./modules/auth');
 var logger = require('./modules/logger');
-var log = logger.createLogger(process.env.APP_NAME, process.env.LOG_DIR);
+var log = logger.createLogger();
 var SYSTEM_ID_PATH = process.env.SYSTEM_ID_PATH;
 var redisLicenseRenew = redis.createClient(
   process.env.REDIS_PORT,

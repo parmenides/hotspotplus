@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./app.js",
-    "releaseSandbox": "pkg -t node8-linux-x64  app.js -o hotspotplus-cordinator;git commit -a -m 'sandbox:3.3';git tag -f release ;git push -u origin develop --tags --force",
-    "releaseProduction": "pkg -t node8-linux-x64  app.js -o hotspotplus-cordinator;git commit -a -m 'production:3.3';git tag -f release ;git push -u origin master --tags --force",
-    "releaseLocalProduction": "pkg -t node8-linux-x64  app.js -o hotspotplus-cordinator;git commit -a -m 'production:latest';git tag -f release ;git push -u origin master --tags --force"
+    "start": "node ./src/app.js",
+    "releaseSandbox": "pkg -t node8-linux-x64  src/app.js -o hotspotplus-cordinator;git commit -a -m 'sandbox:3.3';git tag -f release ;git push -u origin develop --tags --force",
+    "releaseProduction": "pkg -t node8-linux-x64  src/app.js -o hotspotplus-cordinator;git commit -a -m 'production:3.3';git tag -f release ;git push -u origin master --tags --force",
+    "releaseLocalProduction": "pkg -t node8-linux-x64  src/app.js -o hotspotplus-cordinator;git commit -a -m 'production:latest';git tag -f release ;git push -u origin master --tags --force"
   },
   "dependencies": {
     "cron": "^1.3.0",

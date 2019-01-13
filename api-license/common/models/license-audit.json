@@ -1,0 +1,39 @@
+{
+  "name":        "LicenseAudit",
+  "base":        "Generic",
+  "idInjection": true,
+  "options":     {
+    "validateUpsert": true
+  },
+  "properties":  {},
+  "validations": [],
+  "relations":   {
+    "license": {
+      "type":       "belongsTo",
+      "model":      "License",
+      "foreignKey": ""
+    }
+  },
+  "acls":        [
+    {
+      "accessType":    "EXECUTE",
+      "principalType": "ROLE",
+      "principalId":   "license",
+      "permission":    "ALLOW",
+      "property":      "ping"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "admin",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType":    "*",
+      "principalType": "ROLE",
+      "principalId":   "$everyone",
+      "permission":    "DENY"
+    }
+  ],
+  "methods":     {}
+}
