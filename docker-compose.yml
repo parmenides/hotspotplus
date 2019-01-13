@@ -40,11 +40,11 @@ services:
     env_file:
       - api-license/.env
     volumes:
-      - ${PWD}/api/server:/usr/src/app/server/
-      - ${PWD}/api/node_modules:/usr/src/app/node_modules
-      - ${PWD}/api/common:/usr/src/app/common/
-      - ${PWD}/api/logs:/logs
-      - ${PWD}/api/key:/key
+      - ${PWD}/api-license/server:/usr/src/app/server/
+      - ${PWD}/api-license/node_modules:/usr/src/app/node_modules
+      - ${PWD}/api-license/common:/usr/src/app/common/
+      - ${PWD}/api-license/logs:/logs
+      - ${PWD}/api-license/key:/key
     networks:
       - hotspotplusgate
   logaggregator:
@@ -95,9 +95,9 @@ services:
       - ${PWD}/license-dashboard:/app
     networks:
       - hotspotplusgate
-  cordinator:
+  coordinator:
     build:
-      context: ${PWD}/cordinator
+      context: ${PWD}/coordinator
     user: '${UID:-1000}:${GID:-1000}'
     command: npm start
     restart: always
@@ -105,16 +105,17 @@ services:
       - redis
       - hotspotpluslicensapi
     environment:
-      - APP_NAME=cordinator
+      - APP_NAME=coordinator
       - LOG_LEVEL=debug
       - LOG_DIR=/logs
       - REDIS_PORT=6379
       - REDIS_HOST=hsp_redis
       - REDIS_IP=hsp_redis
     volumes:
-      - ${PWD}/cordinator/src/:/usr/src/app/src/
-      - ${PWD}/cordinator/node_modules/:/usr/src/app/node_modules/
-      - ${PWD}/cordinator/logs:/logs
+      - ${PWD}/coordinator/src/:/usr/src/app/src/
+      - ${PWD}/coordinator/node_modules/:/usr/src/app/node_modules/
+      - ${PWD}/systemId:/systemId
+      - ${PWD}/coordinator/logs:/logs
     networks:
       - hotspotplusgate
   mongodb:

@@ -13,7 +13,6 @@ var fs = require('fs');
 var log = logger.createLogger();
 var ndjson = require('ndjson');
 var RAVEN_SERVER_ADDRESS = process.env.SENTRY_URL;
-process.env.STORAGE = process.env.STORAGE || 'elasticsearch';
 var elasticURL =
   'http://' + process.env.ELASTIC_IP + ':' + process.env.ELASTIC_PORT;
 
@@ -417,11 +416,11 @@ exports.sendMessage = function(error, options, moduleName) {
 };
 
 exports.isMongoDbStorage = function() {
-  return process.env.STORAGE.toLowerCase() === 'mongodb';
+  return false;
 };
 
 exports.isElasticStorage = function() {
-  return process.env.STORAGE.toLowerCase() === 'elasticsearch';
+  return true;
 };
 
 exports.printJobQueueStates = function(logger, thqQueue, queueName) {
