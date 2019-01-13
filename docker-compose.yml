@@ -117,6 +117,7 @@ services:
       - ${PWD}/coordinator/src/:/usr/src/app/src/
       - ${PWD}/coordinator/node_modules/:/usr/src/app/node_modules/
       - ${PWD}/systemId:/systemId
+      - ${PWD}/coordinator/key:/key
       - ${PWD}/coordinator/logs:/logs
     networks:
       - hotspotplusgate

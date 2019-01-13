@@ -74,7 +74,7 @@ function loadLicense() {
         utility
           .writeStringToFile(decryptedLc)
           .then(function(filePath) {
-            fs.unlink(lcPath);
+            fs.unlink(lcPath,()=>{});
             return resolve(filePath);
           })
           .fail(function(error) {
