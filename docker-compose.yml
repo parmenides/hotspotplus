@@ -11,7 +11,6 @@ services:
       - 3000:3000
     depends_on:
       - mongodb
-      - elasticsearch
       - redis
     env_file:
       - api/.env
@@ -35,7 +34,6 @@ services:
       - 3001:3000
     depends_on:
       - mongodb
-      - elasticsearch
       - redis
     env_file:
       - api-license/.env
@@ -47,24 +45,24 @@ services:
       - ${PWD}/api-license/key:/key
     networks:
       - hotspotplusgate
-  logaggregator:
-    build:
-      context: ${PWD}/log-aggregator
-    user: '${UID:-1000}:${GID:-1000}'
-    restart: always
-    command: npm start
-    depends_on:
-      - elasticsearch
-      - redis
-    env_file:
-      - ${PWD}/log-aggregator/.env
-    volumes:
-      - ${PWD}/log-aggregator/src/:/usr/src/app/src/
-      - ${PWD}/log-aggregator/index.js:/usr/src/app/index.js
-      - ${PWD}/log-aggregator/node_modules/:/usr/src/app/node_modules/
-      - ${PWD}/log-aggregator/logs:/logs
-    networks:
-      - hotspotplusgate
+#  logaggregator:
+#    build:
+#      context: ${PWD}/log-aggregator
+#    user: '${UID:-1000}:${GID:-1000}'
+#    restart: always
+#    command: npm start
+#    depends_on:
+#      - elasticsearch
+#      - redis
+#    env_file:
+#      - ${PWD}/log-aggregator/.env
+#    volumes:
+#      - ${PWD}/log-aggregator/src/:/usr/src/app/src/
+#      - ${PWD}/log-aggregator/index.js:/usr/src/app/index.js
+#      - ${PWD}/log-aggregator/node_modules/:/usr/src/app/node_modules/
+#      - ${PWD}/log-aggregator/logs:/logs
+#    networks:
+#      - hotspotplusgate
   dashboard:
     image: 'bitnami/nginx:latest'
     restart: always
@@ -74,18 +72,18 @@ services:
       - ${PWD}/dashboard:/app
     networks:
       - hotspotplusgate
-  hotspot:
-    build:
-      context: ${PWD}/api
-    user: '${UID:-1000}:${GID:-1000}'
-    restart: always
-    command: npm start
-    ports:
-    - 8081:8070
-    volumes:
-    - ${PWD}/hotspot/:/usr/src/app/
-    networks:
-    - hotspotplusgate
+#  hotspot:
+#    build:
+#      context: ${PWD}/api
+#    user: '${UID:-1000}:${GID:-1000}'
+#    restart: always
+#    command: npm start
+#    ports:
+#    - 8081:8070
+#    volumes:
+#    - ${PWD}/hotspot/:/usr/src/app/
+#    networks:
+#    - hotspotplusgate
   licensedashboard:
     image: 'bitnami/nginx:latest'
     restart: always
@@ -141,71 +139,71 @@ services:
       - ALLOW_EMPTY_PASSWORD=yes
     networks:
       - hotspotplusgate
-  elasticsearch:
-    container_name: hsp_elasticsearch
-    image: 'bitnami/elasticsearch:6.5.4'
-    restart: always
-    expose:
-      - "9300"
-      - "9200"
-    ports:
-      - 9200:9200
-    volumes:
-      - hsp_elasticsearch:/bitnami/elasticsearch
-    networks:
-      - hotspotplusgate
-  kibana:
-    image: 'bitnami/kibana:6.5.4'
-    ports:
-      - 5601:5601
-    environment:
-      - KIBANA_ELASTICSEARCH_URL=hsp_elasticsearch
-    volumes:
-      - 'hsp_kibana:/bitnami'
-    networks:
-      - hotspotplusgate
-  zookeeper:
-    image: 'bitnami/zookeeper:latest'
-    restart: always
-    container_name: 'hsp_zookeeper'
-    environment:
-      - ALLOW_ANONYMOUS_LOGIN=yes
-    expose:
-      - '2181'
-    networks:
-      - hotspotplusgate
-  kafka:
-    image: 'bitnami/kafka:latest'
-    restart: always
-    container_name: 'hsp_kafka'
-    depends_on:
-      - zookeeper
-    environment:
-      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://hsp_kafka:9092
-      - KAFKA_LOG_RETENTION_HOURS=72
-      - ALLOW_ANONYMOUS_LOGIN=yes
-      - ALLOW_PLAINTEXT_LISTENER=yes
-      - KAFKA_ZOOKEEPER_CONNECT=hsp_zookeeper:2181
-    expose:
-      - '9092'
-    volumes:
-      - hsp_kafka:/bitnami/kafka
-    networks:
-      - hotspotplusgate
-  radius:
-    image: 'registry.gitlab.com/parmenides/hspfreeradius/production:3.3'
-    restart: always
-    container_name: "hsp_radius_production"
-    logging:
-      driver: none
-    networks:
-      - hotspotplusgate
-    expose:
-      - "1812"
-      - "1813"
-    ports:
-      - "1812:1812/udp"
-      - "1813:1813/udp"
+#  elasticsearch:
+#    container_name: hsp_elasticsearch
+#    image: 'bitnami/elasticsearch:6.5.4'
+#    restart: always
+#    expose:
+#      - "9300"
+#      - "9200"
+#    ports:
+#      - 9200:9200
+#    volumes:
+#      - hsp_elasticsearch:/bitnami/elasticsearch
+#    networks:
+#      - hotspotplusgate
+#  kibana:
+#    image: 'bitnami/kibana:6.5.4'
+#    ports:
+#      - 5601:5601
+#    environment:
+#      - KIBANA_ELASTICSEARCH_URL=hsp_elasticsearch
+#    volumes:
+#      - 'hsp_kibana:/bitnami'
+#    networks:
+#      - hotspotplusgate
+#  zookeeper:
+#    image: 'bitnami/zookeeper:latest'
+#    restart: always
+#    container_name: 'hsp_zookeeper'
+#    environment:
+#      - ALLOW_ANONYMOUS_LOGIN=yes
+#    expose:
+#      - '2181'
+#    networks:
+#      - hotspotplusgate
+#  kafka:
+#    image: 'bitnami/kafka:latest'
+#    restart: always
+#    container_name: 'hsp_kafka'
+#    depends_on:
+#      - zookeeper
+#    environment:
+#      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://hsp_kafka:9092
+#      - KAFKA_LOG_RETENTION_HOURS=72
+#      - ALLOW_ANONYMOUS_LOGIN=yes
+#      - ALLOW_PLAINTEXT_LISTENER=yes
+#      - KAFKA_ZOOKEEPER_CONNECT=hsp_zookeeper:2181
+#    expose:
+#      - '9092'
+#    volumes:
+#      - hsp_kafka:/bitnami/kafka
+#    networks:
+#      - hotspotplusgate
+#  radius:
+#    image: 'registry.gitlab.com/parmenides/hspfreeradius/production:3.3'
+#    restart: always
+#    container_name: "hsp_radius_production"
+#    logging:
+#      driver: none
+#    networks:
+#      - hotspotplusgate
+#    expose:
+#      - "1812"
+#      - "1813"
+#    ports:
+#      - "1812:1812/udp"
+#      - "1813:1813/udp"
 
 volumes:
   hsp_mongodb:

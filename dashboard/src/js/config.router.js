@@ -249,6 +249,18 @@ app.config([
           PREFIX + 'app/member/planHistoryList.js',
         ]),
       })
+        .state('app.reports', {
+        url: '/report',
+        templateUrl: TEMPLATE_PREFIX + 'app/report/tpl/reportList.html',
+        resolve: load([
+          'ui.grid',
+          'ui.grid.pagination',
+          'ui.grid.selection',
+          'ui.grid.resizeColumns',
+          'ui.bootstrap.persian.datepicker',
+          PREFIX + 'app/report/reportList.js',
+        ]),
+      })
       .state('access.signUp', {
         url: '/signup',
         templateUrl: TEMPLATE_PREFIX + 'app/business/tpl/signUp.html',

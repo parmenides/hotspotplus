@@ -74,7 +74,7 @@ function loadLicense() {
         utility
           .writeStringToFile(decryptedLc)
           .then(function(filePath) {
-            fs.unlink(lcPath,()=>{});
+            fs.unlink(lcPath, () => {});
             return resolve(filePath);
           })
           .fail(function(error) {
@@ -102,8 +102,8 @@ function validateLicense() {
                 licenseFilePath: licensePath,
                 template: CONFIG_SERVER_LICENSE_TEMPLATE,
               });
-              fs.unlink(publicKeyPath);
-              fs.unlink(licensePath);
+              fs.unlink(publicKeyPath,function(){});
+              fs.unlink(licensePath,function(){});
               if (lcData.valid === true) {
                 log.debug('validated');
                 var oneWeekBefore = new Date().removeDays(7);
