@@ -127,5 +127,9 @@
   "SystemConfig": {
     "dataSource": "db",
     "public": false
+  },
+  "Report": {
+    "dataSource": "mongo",
+    "public": true
   }
 }

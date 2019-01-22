@@ -1,0 +1,41 @@
+{
+  "name": "Report",
+  "base": "Generic",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "from": {
+      "type": "number",
+      "required": true
+    },
+    "to": {
+      "type": "number",
+      "required": true
+    },
+    "status": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "member": {
+      "type": "belongsTo",
+      "model": "Member",
+      "foreignKey": ""
+    },
+    "fileStorages": {
+      "type": "hasOne",
+      "model": "FileStorage",
+      "foreignKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

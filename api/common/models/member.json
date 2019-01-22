@@ -139,6 +139,11 @@
       "type": "hasOne",
       "model": "Customer",
       "foreignKey": ""
+    },
+    "reports": {
+      "type": "hasMany",
+      "model": "Report",
+      "foreignKey": ""
     }
   },
   "acls": [

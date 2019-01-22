@@ -47,24 +47,24 @@ services:
       - ${PWD}/api-license/key:/key
     networks:
       - hotspotplusgate
-  logaggregator:
-    build:
-      context: ${PWD}/log-aggregator
-    user: '${UID:-1000}:${GID:-1000}'
-    restart: always
-    command: npm start
-    depends_on:
-      - elasticsearch
-      - redis
-    env_file:
-      - ${PWD}/log-aggregator/.env
-    volumes:
-      - ${PWD}/log-aggregator/src/:/usr/src/app/src/
-      - ${PWD}/log-aggregator/index.js:/usr/src/app/index.js
-      - ${PWD}/log-aggregator/node_modules/:/usr/src/app/node_modules/
-      - ${PWD}/log-aggregator/logs:/logs
-    networks:
-      - hotspotplusgate
+#  logaggregator:
+#    build:
+#      context: ${PWD}/log-aggregator
+#    user: '${UID:-1000}:${GID:-1000}'
+#    restart: always
+#    command: npm start
+#    depends_on:
+#      - elasticsearch
+#      - redis
+#    env_file:
+#      - ${PWD}/log-aggregator/.env
+#    volumes:
+#      - ${PWD}/log-aggregator/src/:/usr/src/app/src/
+#      - ${PWD}/log-aggregator/index.js:/usr/src/app/index.js
+#      - ${PWD}/log-aggregator/node_modules/:/usr/src/app/node_modules/
+#      - ${PWD}/log-aggregator/logs:/logs
+#    networks:
+#      - hotspotplusgate
   dashboard:
     image: 'bitnami/nginx:latest'
     restart: always
@@ -86,15 +86,15 @@ services:
     - ${PWD}/hotspot/:/usr/src/app/
     networks:
     - hotspotplusgate
-  licensedashboard:
-    image: 'bitnami/nginx:latest'
-    restart: always
-    ports:
-      - 8082:8080
-    volumes:
-      - ${PWD}/license-dashboard:/app
-    networks:
-      - hotspotplusgate
+#  licensedashboard:
+#    image: 'bitnami/nginx:latest'
+#    restart: always
+#    ports:
+#      - 8082:8080
+#    volumes:
+#      - ${PWD}/license-dashboard:/app
+#    networks:
+#      - hotspotplusgate
   coordinator:
     build:
       context: ${PWD}/coordinator

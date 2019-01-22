@@ -27,6 +27,15 @@ services:
       - ./accounting/:/usr/share/logstash/pipeline/
     networks:
       - hotspotplusgate
+  sessions:
+    image: 'docker.elastic.co/logstash/logstash:6.5.4'
+    restart: always
+    environment:
+      XPACK_MONITORING_ENABLED: 'false'
+    volumes:
+      - ./sessions/:/usr/share/logstash/pipeline/
+    networks:
+      - hotspotplusgate
 
 networks:
   hotspotplusgate:

@@ -391,6 +391,9 @@ exports.installRaven = function() {
 };
 
 exports.sendMessage = function(error, options, moduleName) {
+  if(process.env.ENABLE_SENTRY ==='false'){
+    return;
+  }
   log.debug(
     ' ################ Sending error to sentry ################ ',
     error,

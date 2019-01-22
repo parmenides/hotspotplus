@@ -74,7 +74,7 @@ function loadLicense() {
         utility
           .writeStringToFile(decryptedLc)
           .then(function(filePath) {
-            fs.unlink(lcPath,()=>{});
+            fs.unlink(lcPath, () => {});
             return resolve(filePath);
           })
           .fail(function(error) {
@@ -97,13 +97,18 @@ function validateLicense() {
           .writeStringToFile(pkString)
           .then(function(publicKeyPath) {
             try {
+              log.debug(lc);
               var lcData = lc.parse({
                 publicKeyPath: publicKeyPath,
                 licenseFilePath: licensePath,
                 template: CONFIG_SERVER_LICENSE_TEMPLATE,
               });
-              fs.unlink(publicKeyPath);
-              fs.unlink(licensePath);
+              fs.unlink(publicKeyPath,()=>{
+                log.debug('removed1');
+              });
+              fs.unlink(licensePath,()=>{
+                log.debug('removed2');
+              });
               if (lcData.valid === true) {
                 log.debug('validated');
                 var oneWeekBefore = new Date().removeDays(7);
@@ -196,6 +201,8 @@ function validateLicense() {
               }
             } catch (error) {
               log.error(error);
+              log.error(error.stack);
+              log.error(error.trace);
               return reject('error');
             }
           })

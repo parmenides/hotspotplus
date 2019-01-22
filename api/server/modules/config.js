@@ -148,7 +148,7 @@ module.exports = {
     OPTIONS: {},
   },
   ACCOUNTING_TOPIC: process.env.ACCOUNTING_TOPIC,
-  SESSION_TOPIC: process.env.SESSION_TOPIC || 'sessionTopic',
+  SESSION_TOPIC: 'sessionTopic',
   ELASTIC_BULK_INSERT: 'ELASTIC_BULK_INSERT',
   REPORT_GET_LOGS: 'REPORT_GET_LOGS',
   DEFAULT_AGGREGATION_SIZE: 10,
@@ -544,7 +544,7 @@ module.exports = {
   ],
   DEFAULT_HOTSPOT_HELP:
     'برای اتصال به اینترنت، به شبکه وای فای متصل شوید. سپس با مرورگر کروم به سایت wifi.ir وارد شوید. پس از باز شدن صفحه با نام کاربری و رمز زیر به هات اسپات لاگین کنید.',
-  ENABLE_SENTRY: process.env.ENABLE_SENTRY === 'true',
+  ENABLE_SENTRY: process.env.ENABLE_SENTRY === 'false',
   SENTRY_RELEASE_TOKEN: process.env.SENTRY_RELEASE_TOKEN,
   SENTRY_URL: process.env.SENTRY_URL,
   ENABLE_DASHBOARD_SENTRY: process.env.ENABLE_DASHBOARD_SENTRY === 'true',

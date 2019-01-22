@@ -1438,10 +1438,11 @@ module.exports = function(Member) {
       framedIpAddress: RadiusRequest.getAttribute('framedIpAddress'),
       businessId: businessId,
       memberId: memberId,
-      creationDate: new Date().getTime(),
+      creationDate: Date.now(),
     };
     ClientSession.saveLogSession(session);
   };
+
   Member.setSession = function(
     RadiusRequest,
     uniqueId,
