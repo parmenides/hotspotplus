@@ -1,8 +1,7 @@
 'use strict';
 
 module.exports = function(Report) {
-
-  Report.remoteMethod("downloadReport",{
+  Report.remoteMethod('downloadReport', {
     description: 'download report',
     accepts: [
       {
@@ -12,6 +11,5 @@ module.exports = function(Report) {
       },
     ],
     returns: { root: true },
-  })
-
+  });
 };

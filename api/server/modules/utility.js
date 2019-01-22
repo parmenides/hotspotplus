@@ -391,7 +391,7 @@ exports.installRaven = function() {
 };
 
 exports.sendMessage = function(error, options, moduleName) {
-  if(process.env.ENABLE_SENTRY ==='false'){
+  if (process.env.ENABLE_SENTRY === 'false') {
     return;
   }
   log.debug(

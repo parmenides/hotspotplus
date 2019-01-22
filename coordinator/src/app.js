@@ -103,10 +103,10 @@ function validateLicense() {
                 licenseFilePath: licensePath,
                 template: CONFIG_SERVER_LICENSE_TEMPLATE,
               });
-              fs.unlink(publicKeyPath,()=>{
+              fs.unlink(publicKeyPath, () => {
                 log.debug('removed1');
               });
-              fs.unlink(licensePath,()=>{
+              fs.unlink(licensePath, () => {
                 log.debug('removed2');
               });
               if (lcData.valid === true) {
