@@ -75,11 +75,8 @@ module.exports.getMemberTrafficUsageReport = function(
           bool: {
             must: [
               {
-                match: {
-                  businessId: {
-                    query: businessId,
-                    type: 'phrase',
-                  },
+                term: {
+                  businessId: businessId,
                 },
               },
               {
@@ -137,11 +134,17 @@ module.exports.getMemberTrafficUsageReport = function(
       function(error, response) {
         //log.debug ( '@getTrafficUsageReport status code', response.statusCode )
         if (error) {
-          log.error('Error@getTrafficUsageReport: ', error);
+          log.error('Error TrafficUsageReport: %j', error);
           return reject(error);
         }
+
+        if (response.statusCode !== 200) {
+          log.error('Error TrafficUsageReport: %j', response.statusCode);
+          log.error('Error TrafficUsageReport Body: %j', response.body);
+          return reject(response.body);
+        }
         if (!response.body.aggregations || !response.body.aggregations.usage) {
-          log.error('Error@getTrafficUsageReport: ', response.body);
+          log.error('Error TrafficUsageReport: ', response.body);
           return resolve({});
         }
         if (response.body.aggregations.usage.buckets) {
@@ -176,7 +179,8 @@ module.exports.getMemberTrafficUsageReport = function(
           }
           return resolve(result);
         } else {
-          return reject('Elastic Error');
+          log.debug(response.body);
+          return reject(response.body);
         }
       },
     );
@@ -210,19 +214,13 @@ module.exports.getMemberUsage = function(
               bool: {
                 must: [
                   {
-                    match: {
-                      businessId: {
-                        query: businessId,
-                        type: 'phrase',
-                      },
+                    term: {
+                      businessId: businessId,
                     },
                   },
                   {
-                    match: {
-                      memberId: {
-                        query: memberId,
-                        type: 'phrase',
-                      },
+                    term: {
+                      memberId: memberId,
                     },
                   },
                   {
@@ -321,17 +319,8 @@ module.exports.getLicenseBalance = function(licenseId) {
         ELASTIC_LICENS_CHARGE_SEARCH,
         {
           query: {
-            bool: {
-              must: [
-                {
-                  match: {
-                    licenseId: {
-                      query: licenseId,
-                      type: 'phrase',
-                    },
-                  },
-                },
-              ],
+            term: {
+              licenseId: licenseId,
             },
           },
           aggs: {
@@ -344,9 +333,20 @@ module.exports.getLicenseBalance = function(licenseId) {
         },
         { json: true },
         function(error, response) {
+          log.debug('Body: %j', response.body);
+          log.debug('StatusCode: %j', response.statusCode);
+          log.debug('StatusCode: %j', typeof response.statusCode);
+          log.debug('Status ', response.status);
+          log.debug('Status ', typeof response.status);
+          log.debug('Body: %j', error);
+
           if (error) {
             log.error('getProfileBalance:', error);
             return reject(error);
+          }
+          if (response.statusCode !== 200) {
+            log.error('Error %j', response.body);
+            return reject(response.body);
           }
           if (!response.body.aggregations) {
             return resolve({});
@@ -358,7 +358,8 @@ module.exports.getLicenseBalance = function(licenseId) {
               balance: balance,
             });
           } else {
-            return reject('Elastic Error');
+            log.debug(response.body);
+            return reject(response.body);
           }
         },
       );
@@ -378,17 +379,8 @@ module.exports.getProfileBalance = function(businessId) {
         ELASTIC_CHARGE_SEARCH,
         {
           query: {
-            bool: {
-              must: [
-                {
-                  match: {
-                    businessId: {
-                      query: businessId,
-                      type: 'phrase',
-                    },
-                  },
-                },
-              ],
+            term: {
+              businessId: businessId,
             },
           },
           aggs: {
@@ -401,6 +393,12 @@ module.exports.getProfileBalance = function(businessId) {
         },
         { json: true },
         function(error, response) {
+          log.debug('Body: %j', response.body);
+          log.debug('StatusCode: %j', response.statusCode);
+          log.debug('StatusCode: %j', typeof response.statusCode);
+          log.debug('Status ', response.status);
+          log.debug('Status ', typeof response.status);
+          log.debug('Body: %j', error);
           if (error) {
             log.error('getProfileBalance:', error);
             return reject(error);
@@ -417,7 +415,8 @@ module.exports.getProfileBalance = function(businessId) {
               balance: balance,
             });
           } else {
-            return reject('Elastic Error');
+            log.debug(response.body);
+            return reject(response.body);
           }
         },
       );
@@ -486,20 +485,10 @@ module.exports.getSessionsReport = function(fromDateInMs, memberId, sessionId) {
           bool: {
             must: [
               {
-                match: {
-                  memberId: {
-                    query: memberId,
-                    type: 'phrase',
-                  },
-                },
+                term: { memberId: memberId },
               },
               {
-                match: {
-                  sessionId: {
-                    query: sessionId,
-                    type: 'phrase',
-                  },
-                },
+                term: { sessionId: sessionId },
               },
               {
                 range: {
@@ -519,8 +508,12 @@ module.exports.getSessionsReport = function(fromDateInMs, memberId, sessionId) {
           log.error('@getSessionsReport: ', error);
           return reject(error);
         }
-        // no result for aggregation so return noReport
+        if (response.statusCode !== 200) {
+          log.error('Error %j', response.body);
+          return reject(response.body);
+        }
 
+        // no result for aggregation so return noReport
         if (!response.body.aggregations) {
           return resolve({
             fromDate: fromDateInMs,
@@ -836,19 +829,13 @@ module.exports.getMemberDailyUsage = function(businessId, memberId, startDate) {
           bool: {
             must: [
               {
-                match: {
-                  businessId: {
-                    query: businessId,
-                    type: 'phrase',
-                  },
+                term: {
+                  businessId: businessId,
                 },
               },
               {
-                match: {
-                  memberId: {
-                    query: memberId,
-                    type: 'phrase',
-                  },
+                term: {
+                  memberId: memberId,
                 },
               },
               {
@@ -923,98 +910,6 @@ module.exports.getMemberDailyUsage = function(businessId, memberId, startDate) {
         var result = response.body.aggregations.usage.buckets;
         //log.debug ( '@getMemberDailyUsage: ', result );
         return resolve(result);
-      },
-    );
-  });
-};
-
-/* Return Daily Appearance of Members
- businessId : string
- startDate, endDate : number
- */
-module.exports.memberAppearance = function(businessId, startDate, endDate) {
-  return Q.Promise(function(resolve, reject) {
-    //check parameters
-    if (!businessId) {
-      return reject('businessId is undefined');
-    }
-    if (!startDate) {
-      return reject('start date is undefined');
-    }
-    if (!endDate) {
-      return reject('end date is undefined');
-    }
-    if (startDate >= endDate) {
-      return reject('date is not correct');
-    }
-    //make interval and offset for creation histogram
-    var interval = process.env.DAY_MILLISECONDS;
-    var offset =
-      new Date(startDate).getTimezoneOffset() * process.env.MINUTE_MILLISECONDS;
-    //search elastic accounting/usagereport for daily member appearance base on businessId
-    needle.post(
-      ELASTIC_ACCOUNTING_USAGE_SEARCH.replace('{0}{1}', '_search'),
-      {
-        query: {
-          bool: {
-            must: [
-              {
-                match: {
-                  businessId: {
-                    query: businessId,
-                    type: 'phrase',
-                  },
-                },
-              },
-              {
-                range: {
-                  creationDate: {
-                    gte: startDate,
-                    lte: endDate,
-                  },
-                },
-              },
-            ],
-            must_not: [],
-          },
-        },
-        size: 0,
-        _source: {
-          excludes: [],
-        },
-        aggs: {
-          Members: {
-            terms: {
-              field: 'memberId',
-            },
-            aggs: {
-              Days: {
-                histogram: {
-                  field: 'creationDate',
-                  interval: interval,
-                  offset: offset,
-                },
-              },
-            },
-          },
-        },
-      },
-      { json: true },
-      function(error, response) {
-        if (error) {
-          log.error('@memberAppearance: ', error);
-          return reject(error);
-        }
-        log.debug(response.body);
-        // no result for aggregation so return null
-        if (
-          !response.body.aggregations &&
-          !response.body.aggregations.Members &&
-          !response.body.aggregations.Members.buckets
-        ) {
-          return resolve([]);
-        }
-        return resolve(response.body.aggregations.Members.buckets);
       },
     );
   });
@@ -1211,11 +1106,8 @@ module.exports.getUsageReportSessions = function(
           bool: {
             must: [
               {
-                match: {
-                  accStatusType: {
-                    query: accStatusType,
-                    type: 'phrase',
-                  },
+                term: {
+                  accStatusType: accStatusType,
                 },
               },
               {
@@ -1292,11 +1184,8 @@ module.exports.getUniqueSessionCount = function(
           bool: {
             must: [
               {
-                match: {
-                  businessId: {
-                    query: businessId,
-                    type: 'phrase',
-                  },
+                term: {
+                  businessId: businessId,
                 },
               },
               {
@@ -1397,712 +1286,6 @@ module.exports.getAllUniqueSessionCount = function(startDate, endDate) {
   });
 };
 
-/* Return Total Count of All Visits From FootTraffic Type
- startDate: Date
- endDate: Date
- businessId: String
- */
-module.exports.totalVisits = function(
-  startDate,
-  endDate,
-  minLogInterval,
-  maxLogInterval,
-  businessId,
-) {
-  return Q.Promise(function(resolve, reject) {
-    if (!businessId) {
-      return reject('business ID is undefined');
-    }
-    if (!startDate || !endDate) {
-      return reject('startDate or endDate is undefined');
-    }
-    if ((minLogInterval || maxLogInterval) == null) {
-      return reject('logInterval is undefined');
-    }
-
-    // Get All Visits from ElasticSearch based on startDate, endDate & BusinessId
-    needle.post(
-      FOOT_TRAFFIC_PATH.replace('{0}', '_search?search_type=count').replace(
-        '{1}',
-        '',
-      ),
-      {
-        query: {
-          bool: {
-            must: [
-              {
-                match: {
-                  businessId: {
-                    query: businessId,
-                    type: 'phrase',
-                  },
-                },
-              },
-              {
-                match: {
-                  deviceVendor: {
-                    query: DEVICE_VENDOR_NAME + DEVICE_VENDOR_PHRASE,
-                  },
-                },
-              },
-              {
-                range: {
-                  creationDate: {
-                    gte: startDate,
-                    lt: endDate,
-                  },
-                },
-              },
-              {
-                nested: {
-                  path: 'logs',
-                  query: {
-                    range: {
-                      'logs.diff': {
-                        gte: minLogInterval,
-                        lt: maxLogInterval,
-                      },
-                    },
-                  },
-                },
-              },
-              {
-                nested: {
-                  path: 'logs.log',
-                  query: {
-                    range: {
-                      'logs.log.signal': {
-                        gte: minSignal,
-                      },
-                    },
-                  },
-                },
-              },
-            ],
-          },
-        },
-        aggs: {
-          visits: {
-            value_count: {
-              field: 'deviceId',
-            },
-          },
-        },
-      },
-      { json: true },
-      function(error, response) {
-        if (error) {
-          log.error(error);
-          return reject(error);
-        }
-        if (!response.body.aggregations) {
-          log.error(response.body);
-          return resolve(0);
-        }
-        // log.debug("Total Visits: ", response.body.aggregations.visits.value);
-        return resolve(response.body.aggregations.visits.value);
-      },
-    );
-  });
-};
-
-/* Return Total Count of New Visitors From FootTraffic Type
- startDate: Date
- endDate: Date
- businessId: String
- */
-module.exports.newVisitors = function(
-  startDate,
-  endDate,
-  minLogInterval,
-  maxLogInterval,
-  businessId,
-) {
-  return Q.Promise(function(resolve, reject) {
-    if (!businessId) {
-      return reject('business ID is undefined');
-    }
-    if (!startDate || !endDate) {
-      return reject('startDate or endDate is undefined');
-    }
-    if (minLogInterval == null || maxLogInterval == null) {
-      return reject('logInterval is undefined');
-    }
-    var oneDay = process.env.DAY_MILLISECONDS;
-
-    // Get New Visitors from elasticsearch base on startDate, endDate & BusinessId
-    needle.post(
-      FOOT_TRAFFIC_PATH.replace('{0}', '_search?search_type=count').replace(
-        '{1}',
-        '',
-      ),
-      {
-        size: 0,
-        query: {
-          filtered: {
-            query: {
-              query_string: {
-                query: '*',
-                analyze_wildcard: true,
-              },
-            },
-            filter: {
-              bool: {
-                must: [
-                  {
-                    query: {
-                      bool: {
-                        must: [
-                          {
-                            match: {
-                              businessId: {
-                                query: businessId,
-                                type: 'phrase',
-                              },
-                            },
-                          },
-                          {
-                            match: {
-                              deviceVendor: {
-                                query:
-                                  DEVICE_VENDOR_NAME + DEVICE_VENDOR_PHRASE,
-                              },
-                            },
-                          },
-                          {
-                            range: {
-                              creationDate: {
-                                gte: startDate,
-                                lt: endDate,
-                              },
-                            },
-                          },
-                          {
-                            nested: {
-                              path: 'logs',
-                              query: {
-                                range: {
-                                  'logs.diff': {
-                                    gte: minLogInterval,
-                                    lt: maxLogInterval,
-                                  },
-                                },
-                              },
-                            },
-                          },
-                          {
-                            nested: {
-                              path: 'logs.log',
-                              query: {
-                                range: {
-                                  'logs.log.signal': {
-                                    gte: minSignal,
-                                  },
-                                },
-                              },
-                            },
-                          },
-                          {
-                            script: {
-                              script:
-                                "(doc['creationDate'].value % oneDay) <= (doc['deviceCreationDate'].value % oneDay)",
-                              params: { oneDay: oneDay },
-                            },
-                          },
-                        ],
-                      },
-                    },
-                  },
-                ],
-                must_not: [],
-              },
-            },
-          },
-        },
-        aggs: {
-          newVisitors: {
-            cardinality: {
-              field: 'deviceId',
-            },
-          },
-        },
-      },
-      { json: true },
-      function(error, response) {
-        if (error) {
-          log.error(error);
-          return reject(error);
-        }
-        if (!response.body.aggregations) {
-          log.error(response.body);
-          return resolve(0);
-        }
-        // log.debug("New Visitors : ", response.body.aggregations.newVisitors.value);
-        return resolve(response.body.aggregations.newVisitors.value);
-      },
-    );
-  });
-};
-
-/* Return Total Count of Returning & New Visitors Base on Interval From FootTraffic Type
- startDate: Date
- endDate: Date
- Interval: long
- businessId: String
- */
-module.exports.visitorsInterval = function(
-  startDate,
-  endDate,
-  interval,
-  minLogInterval,
-  maxLogInterval,
-  offset,
-  businessId,
-) {
-  return Q.Promise(function(resolve, reject) {
-    if (offset == null) {
-      return reject('offset is undefined');
-    }
-    if (interval == null) {
-      return reject('interval is undefined');
-    }
-    if (!businessId) {
-      return reject('business ID is undefined');
-    }
-    if (!startDate || !endDate) {
-      return reject('startDate or endDate is undefined');
-    }
-    if (minLogInterval == null || maxLogInterval == null) {
-      return reject('logInterval is undefined');
-    }
-    var oneDay = process.env.DAY_MILLISECONDS;
-
-    // Get Returning Visitors from elasticsearch base on startDate, endDate & BusinessId and categorised with creationDate interval
-    needle.post(
-      FOOT_TRAFFIC_PATH.replace('{0}', '_search?search_type=count').replace(
-        '{1}',
-        '',
-      ),
-      {
-        size: 0,
-        query: {
-          filtered: {
-            query: {
-              query_string: {
-                query: '*',
-                analyze_wildcard: true,
-              },
-            },
-            filter: {
-              bool: {
-                must: [
-                  {
-                    query: {
-                      bool: {
-                        must: [
-                          {
-                            match: {
-                              businessId: {
-                                query: businessId,
-                                type: 'phrase',
-                              },
-                            },
-                          },
-                          {
-                            match: {
-                              deviceVendor: {
-                                query:
-                                  DEVICE_VENDOR_NAME + DEVICE_VENDOR_PHRASE,
-                              },
-                            },
-                          },
-                          {
-                            range: {
-                              creationDate: {
-                                gte: startDate,
-                                lt: endDate,
-                              },
-                            },
-                          },
-                          {
-                            nested: {
-                              path: 'logs',
-                              query: {
-                                range: {
-                                  'logs.diff': {
-                                    gte: minLogInterval,
-                                    lt: maxLogInterval,
-                                  },
-                                },
-                              },
-                            },
-                          },
-                          {
-                            nested: {
-                              path: 'logs.log',
-                              query: {
-                                range: {
-                                  'logs.log.signal': {
-                                    gte: minSignal,
-                                  },
-                                },
-                              },
-                            },
-                          },
-                        ],
-                      },
-                    },
-                  },
-                ],
-                must_not: [],
-              },
-            },
-          },
-        },
-        aggs: {
-          visitors: {
-            histogram: {
-              field: 'creationDate',
-              interval: interval,
-              min_doc_count: 0,
-              extended_bounds: {
-                min: startDate,
-                max: endDate,
-              },
-              offset: offset,
-            },
-            aggs: {
-              newVisitors: {
-                filter: {
-                  script: {
-                    script:
-                      "(doc['creationDate'].value % oneDay) <= (doc['deviceCreationDate'].value % oneDay)",
-                    params: { oneDay: oneDay },
-                  },
-                },
-                aggs: {
-                  unic: {
-                    cardinality: {
-                      field: 'deviceId',
-                    },
-                  },
-                },
-              },
-              reVisitors: {
-                filter: {
-                  script: {
-                    script:
-                      "(doc['creationDate'].value % oneDay) > (doc['deviceCreationDate'].value % oneDay)",
-                    params: { oneDay: oneDay },
-                  },
-                },
-                aggs: {
-                  unic: {
-                    cardinality: {
-                      field: 'deviceId',
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-      { json: true },
-      function(error, response) {
-        if (error) {
-          log.error(error);
-          return reject(error);
-        }
-        if (!response.body.aggregations) {
-          log.error(response.body);
-          return resolve([]);
-        }
-        var result = [];
-        if (response.body.aggregations.visitors.buckets) {
-          var buckets = response.body.aggregations.visitors.buckets;
-          var result = [];
-          for (var doc in buckets) {
-            var res = {
-              key: buckets[doc].key,
-              reVisitors: buckets[doc].reVisitors.unic.value,
-              newVisitors: buckets[doc].newVisitors.unic.value,
-            };
-            result.push(res);
-          }
-          // log.debug("Visitors Interval : ", result);
-        }
-        return resolve(result);
-      },
-    );
-  });
-};
-
-/* Return Total Count of Walked by & Visits Base on Interval From FootTraffic Type
- startDate: Date
- endDate: Date
- Interval: long
- businessId: String
- */
-module.exports.visitsInterval = function(
-  startDate,
-  endDate,
-  timeInterval,
-  minLogInterval,
-  maxLogInterval,
-  offset,
-  businessId,
-) {
-  return Q.Promise(function(resolve, reject) {
-    if (offset == null) {
-      return reject('offset is undefined');
-    }
-    if (timeInterval == null) {
-      return reject('timeInterval is undefined');
-    }
-    if ((minLogInterval || maxLogInterval) == null) {
-      return reject('logInterval is undefined');
-    }
-    if (!businessId) {
-      return reject('businessId is undefined');
-    }
-    if (!startDate || !endDate) {
-      return reject('startDate or endDate is undefined');
-    }
-    needle.post(
-      FOOT_TRAFFIC_PATH.replace('{0}', '_search?search_type=count').replace(
-        '{1}',
-        '',
-      ),
-      {
-        size: 0,
-        query: {
-          filtered: {
-            query: {
-              query_string: {
-                query: '*',
-                analyze_wildcard: true,
-              },
-            },
-            filter: {
-              bool: {
-                must: [
-                  {
-                    query: {
-                      bool: {
-                        must: [
-                          {
-                            match: {
-                              businessId: {
-                                query: businessId,
-                                type: 'phrase',
-                              },
-                            },
-                          },
-                          {
-                            match: {
-                              deviceVendor: {
-                                query:
-                                  DEVICE_VENDOR_NAME + DEVICE_VENDOR_PHRASE,
-                              },
-                            },
-                          },
-                          {
-                            range: {
-                              creationDate: {
-                                gte: startDate,
-                                lt: endDate,
-                              },
-                            },
-                          },
-                          {
-                            nested: {
-                              path: 'logs',
-                              query: {
-                                range: {
-                                  'logs.diff': {
-                                    gte: minLogInterval,
-                                    lt: maxLogInterval,
-                                  },
-                                },
-                              },
-                            },
-                          },
-                          {
-                            nested: {
-                              path: 'logs.log',
-                              query: {
-                                range: {
-                                  'logs.log.signal': {
-                                    gte: minSignal,
-                                  },
-                                },
-                              },
-                            },
-                          },
-                        ],
-                      },
-                    },
-                  },
-                ],
-                must_not: [],
-              },
-            },
-          },
-        },
-        aggs: {
-          visits: {
-            histogram: {
-              field: 'creationDate',
-              interval: timeInterval,
-              min_doc_count: 0,
-              extended_bounds: {
-                min: startDate,
-                max: endDate,
-              },
-              offset: offset,
-            },
-          },
-        },
-      },
-      {
-        json: true,
-      },
-      function(error, response) {
-        if (error) {
-          log.error(error);
-          return reject(error);
-        }
-        if (!response.body.aggregations) {
-          log.error(response.body);
-          return resolve([]);
-        }
-        // log.debug("Visits Interval : ", response.body.aggregations.visits.buckets);
-        return resolve(response.body.aggregations.visits.buckets);
-      },
-    );
-  });
-};
-
-/* Return Total Count of New Members Verified & Failed Base on Interval From Member Type
- startDate: Date
- endDate: Date
- Interval: long
- businessId: String
- */
-module.exports.newMemberInterval = function(
-  startDate,
-  endDate,
-  offset,
-  interval,
-  businessId,
-) {
-  return Q.Promise(function(resolve, reject) {
-    if (offset == null) {
-      return reject('offset is undefined');
-    }
-    if (interval == null) {
-      return reject('interval is undefined');
-    }
-    if (!businessId) {
-      return reject('business ID is undefined');
-    }
-    if (!startDate || !endDate) {
-      return reject('startDate or endDate is undefined');
-    }
-    // Get New Members from elasticsearch base on startDate, endDate & BusinessId and categorised with creationDate interval
-    needle.post(
-      MEMBER_PATH.replace('{0}', '_search?search_type=count'),
-      {
-        query: {
-          filtered: {
-            query: {
-              match: {
-                businessId: businessId,
-              },
-            },
-            filter: {
-              bool: {
-                must: [
-                  {
-                    range: {
-                      creationDate: {
-                        gte: startDate,
-                        lt: endDate,
-                      },
-                    },
-                  },
-                ],
-              },
-            },
-          },
-        },
-        aggs: {
-          newMembers: {
-            histogram: {
-              field: 'creationDate',
-              interval: interval,
-              min_doc_count: 0,
-              extended_bounds: {
-                min: startDate,
-                max: endDate,
-              },
-              offset: offset,
-            },
-            aggs: {
-              members: {
-                filters: {
-                  filters: {
-                    verified: {
-                      term: {
-                        verified: true,
-                      },
-                    },
-                    failed: {
-                      term: {
-                        verified: false,
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-      { json: true },
-      function(error, response) {
-        if (error) {
-          log.error(error);
-          reject(error);
-        }
-        if (
-          !response.body.aggregations ||
-          !response.body.aggregations.newMembers ||
-          !response.body.aggregations.newMembers.buckets
-        ) {
-          log.error(response.body);
-          return resolve([]);
-        }
-        var result = [];
-        if (response.body.aggregations.newMembers.buckets) {
-          var buckets = response.body.aggregations.newMembers.buckets;
-          for (var doc in buckets) {
-            var res = {
-              key: buckets[doc].key,
-              verified: buckets[doc].members.buckets.verified.doc_count,
-              failed: buckets[doc].members.buckets.failed.doc_count,
-            };
-            result.push(res);
-          }
-          // log.debug(result);
-        }
-        return resolve(result);
-      },
-    );
-  });
-};
-
 module.exports.getCharges = function(businessId, startDate, skip, limit) {
   return Q.Promise(function(resolve, reject) {
     if (!businessId) {
@@ -2127,12 +1310,7 @@ module.exports.getCharges = function(businessId, startDate, skip, limit) {
             bool: {
               must: [
                 {
-                  match: {
-                    businessId: {
-                      query: businessId,
-                      type: 'phrase',
-                    },
-                  },
+                  term: { businessId: businessId },
                 },
                 {
                   range: {
@@ -2148,8 +1326,12 @@ module.exports.getCharges = function(businessId, startDate, skip, limit) {
         },
         { json: true },
         function(error, response) {
+          log.debug('status', response.statusCode);
+          log.debug('status', response.status);
+          log.debug('body: %j', response.body);
           if (error) {
-            log.error('getCharges', error);
+            log.error('Error', error);
+            log.error('body: %j', response.body);
             return reject(error);
           }
           log.debug('status code', response.statusCode);
@@ -2165,12 +1347,13 @@ module.exports.getCharges = function(businessId, startDate, skip, limit) {
               charges: result,
             });
           } else {
-            return reject('Elastic Error');
+            log.debug(response.body);
+            return reject(response.body);
           }
         },
       );
     } catch (error) {
-      log.error('getCharges', error);
+      log.error('getCharges %j', error);
       return reject(error);
     }
   });
@@ -2203,19 +1386,13 @@ module.exports.getMemberUniqueSessionCount = function(
           bool: {
             must: [
               {
-                match: {
-                  businessId: {
-                    query: businessId,
-                    type: 'phrase',
-                  },
+                term: {
+                  businessId: businessId,
                 },
               },
               {
-                match: {
-                  memberId: {
-                    query: memberId,
-                    type: 'phrase',
-                  },
+                term: {
+                  memberId: memberId,
                 },
               },
               {
@@ -2281,11 +1458,8 @@ module.exports.getUsageReportSessions = function(
           bool: {
             must: [
               {
-                match: {
-                  accStatusType: {
-                    query: accStatusType,
-                    type: 'phrase',
-                  },
+                term: {
+                  accStatusType: accStatusType,
                 },
               },
               {

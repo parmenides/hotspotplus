@@ -16,35 +16,16 @@ module.exports = function(Charge) {
 
   Charge.loadCharges = function(businessId, startDate, skip, limit) {
     return Q.Promise(function(resolve, reject) {
-      if (utility.isMongoDbStorage()) {
-        Charge.find(
-          {
-            limit: limit,
-            skip: skip,
-            where: {
-              and: [{ businessId: businessId }, { date: { gte: startDate } }],
-            },
-          },
-          function(error, result) {
-            if (error) {
-              log.error(error);
-              return reject(error);
-            }
-            return resolve({ charges: result });
-          },
-        );
-      } else {
-        aggregate
-          .getCharges(businessId, startDate, skip, limit)
-          .then(function(charges) {
-            //log.debug( '@getCharges', startDate, skip, limit )
-            return resolve(charges);
-          })
-          .fail(function(error) {
-            log.error('@getCharges', error);
-            return reject(error);
-          });
-      }
+      aggregate
+        .getCharges(businessId, startDate, skip, limit)
+        .then(function(charges) {
+          //log.debug( '@getCharges', startDate, skip, limit )
+          return resolve(charges);
+        })
+        .fail(function(error) {
+          log.error('@getCharges', error);
+          return reject(error);
+        });
     });
   };
 
