@@ -102,8 +102,8 @@ function validateLicense() {
                 licenseFilePath: licensePath,
                 template: CONFIG_SERVER_LICENSE_TEMPLATE,
               });
-              fs.unlink(publicKeyPath,function(){});
-              fs.unlink(licensePath,function(){});
+              fs.unlink(publicKeyPath, function() {});
+              fs.unlink(licensePath, function() {});
               if (lcData.valid === true) {
                 log.debug('validated');
                 var oneWeekBefore = new Date().removeDays(7);

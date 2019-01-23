@@ -5,6 +5,13 @@
     <div class="modal-body">
         <div class="row wrapper-md">
             <form class="form-horizontal" name="reportForm">
+                <div class="form-group" >
+                    <label class="col-sm-3 control-label">{{ "report.title" | translate }}</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" ng-model="report.title">
+                    </div>
+                </div>
+
                 <div class="form-group">
                     <label class="control-label col-sm-3">{{ "report.creationDate" | translate }}</label>
                     <div class="col-sm-8">
@@ -32,7 +39,7 @@
                 <div class="form-group" >
                     <label class="col-sm-3 control-label">{{ "report.username" | translate }}</label>
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" ng-model="report.username">
+                        <input type="text" ng-model="report.username" ng-model-options="modelOptions" uib-typeahead="username for username in usernames | filter:$viewValue | limitTo:8" class="form-control">
                     </div>
                 </div>
                 <div class="form-group">

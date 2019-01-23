@@ -51,6 +51,14 @@ app.controller ( 'reportList', [
 			minRowsToShow:            11,
 			columnDefs:               [
 				{
+					displayName:      'report.title',
+					field:            'title',
+					enableHiding:     false,
+					enableSorting:    false,
+					enableColumnMenu: false,
+					headerCellFilter: 'translate',
+				},
+				{
 					displayName:      'report.username',
 					field:            'username',
 					enableHiding:     false,
@@ -119,8 +127,37 @@ app.controller ( 'reportList', [
 					}
 					getPage ();
 				} );
-			},
+			}
 		};
+
+		var _selected;
+		$scope.ngModelOptionsSelected = function(value) {
+			if (arguments.length) {
+				_selected = value;
+			} else {
+				return _selected;
+			}
+		};
+
+		$scope.modelOptions = {
+			debounce: {
+				default: 500,
+				blur: 250
+			},
+			getterSetter: true
+		};
+
+		Business.loadMembersUsernames({businessId: businessId}).$promise.then(
+			function(members) {
+					$scope.members= members;
+					console.log($scope.members)
+			},
+			function(error) {
+				$log.error(error);
+			}
+		);
+
+
 		$scope.addReport = function ( param ) {
 			$scope.report = {
 				status:       'scheduled',
