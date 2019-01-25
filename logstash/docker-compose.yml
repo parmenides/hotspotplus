@@ -8,6 +8,7 @@ services:
     environment:
       XPACK_MONITORING_ENABLED: 'false'
     volumes:
+      - ./config/jvm.options:/usr/share/logstash/config/jvm.options
       - ./config/logstash.yml:/usr/share/logstash/config/logstash.yml
     networks:
       - hotspotplusgate
@@ -35,6 +36,7 @@ services:
 #    environment:
 #      XPACK_MONITORING_ENABLED: 'false'
 #    volumes:
+#      - ./config/jvm.options:/usr/share/logstash/config/jvm.options
 #      - ./sessions/:/usr/share/logstash/pipeline/
 #    networks:
 #      - hotspotplusgate

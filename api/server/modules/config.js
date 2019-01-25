@@ -147,7 +147,7 @@ module.exports = {
     PASS: null,
     OPTIONS: {},
   },
-  ACCOUNTING_TOPIC: process.env.ACCOUNTING_TOPIC,
+  ACCOUNTING_TOPIC: 'accountingTopic',
   SESSION_TOPIC: 'sessionTopic',
   ELASTIC_BULK_INSERT: 'ELASTIC_BULK_INSERT',
   REPORT_GET_LOGS: 'REPORT_GET_LOGS',
@@ -191,10 +191,10 @@ module.exports = {
   DEFAULT_RESELLER_ONLINE_USERS: 0,
   DEFAULT_RESELLER_DURATION_MONTHS: 0,
   DEFAULT_RESELLER_PLAN_TYPE: 'static',
-  ELASTIC_VISIT_REPORT_MAIN_CONTEXT:
-    elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'visit',
-  ELASTIC_VISIT_REPORT:
-    elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'visit/report',
+  ELASTIC_SESSION_REPORT_MAIN_CONTEXT:
+    elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'sessions',
+  ELASTIC_SESSION_REPORT:
+    elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'sessions/report',
   ELASTIC_CHARGE_MAIN_CONTEXT:
     elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'charge',
   ELASTIC_CHARGE_SEARCH:
@@ -723,4 +723,5 @@ module.exports = {
   DROPBOX_APP_SECRET: function() {
     return process.env.DROPBOX_APP_SECRET;
   },
+  LOG_WORKER_QUEUE: 'LOG_WORKER_QUEUE',
 };

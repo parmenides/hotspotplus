@@ -37,6 +37,7 @@
     "posttest": "nsp check"
   },
   "dependencies": {
+    "amqplib": "^0.5.3",
     "bcryptjs": "^2.4.0",
     "body-parser": "^1.18.3",
     "bunyan": "^2.0.2",

@@ -12,6 +12,7 @@ services:
     depends_on:
       - mongodb
       - elasticsearch
+      - rabbitmq
       - redis
     env_file:
       - api/.env
@@ -24,27 +25,56 @@ services:
       - ${PWD}/api/key:/key
     networks:
       - hotspotplusgate
-  hotspotpluslicensapi:
+#  hotspotpluslicensapi:
+#    build:
+#      context: ${PWD}/api-license
+#    user: '${UID:-1000}:${GID:-1000}'
+#    restart: always
+#    container_name: hotspotpluslicensapi
+#    command: npm run start:dev
+#    ports:
+#      - 3001:3000
+#    depends_on:
+#      - mongodb
+#      - elasticsearch
+#      - redis
+#    env_file:
+#      - api-license/.env
+#    volumes:
+#      - ${PWD}/api-license/server:/usr/src/app/server/
+#      - ${PWD}/api-license/node_modules:/usr/src/app/node_modules
+#      - ${PWD}/api-license/common:/usr/src/app/common/
+#      - ${PWD}/api-license/logs:/logs
+#      - ${PWD}/api-license/key:/key
+#    networks:
+#      - hotspotplusgate
+  logworker:
     build:
-      context: ${PWD}/api-license
+      context: ./log-worker
     user: '${UID:-1000}:${GID:-1000}'
-    restart: always
-    container_name: hotspotpluslicensapi
     command: npm run start:dev
-    ports:
-      - 3001:3000
     depends_on:
-      - mongodb
-      - elasticsearch
-      - redis
-    env_file:
-      - api-license/.env
+      - rabbitmq
+    environment:
+      - RABBITMQ_USERNAME=payam
+      - RABBITMQ_PASSWORD=123
+      - LOG_WORKER_QUEUE=LOG_WORKER_QUEUE
     volumes:
-      - ${PWD}/api-license/server:/usr/src/app/server/
-      - ${PWD}/api-license/node_modules:/usr/src/app/node_modules
-      - ${PWD}/api-license/common:/usr/src/app/common/
-      - ${PWD}/api-license/logs:/logs
-      - ${PWD}/api-license/key:/key
+      - ${PWD}/log-worker/dist/log.worker.js:/usr/src/app/log.worker.js
+      - ${PWD}/log-worker/node_modules:/usr/src/app/node_modules
+      - ${PWD}/log-worker/logs:/logs
+    networks:
+    - hotspotplusgate
+  rabbitmq:
+    image: 'bitnami/rabbitmq:3.7.10-ol-7-r2'
+    ports:
+      - 15672:15672
+    container_name: hsp_rabbitmq
+    environment:
+      - RABBITMQ_USERNAME=payam
+      - RABBITMQ_PASSWORD=123
+    volumes:
+      - hsp_rabbitmq:/bitnami
     networks:
       - hotspotplusgate
 #  logaggregator:
@@ -95,32 +125,32 @@ services:
 #      - ${PWD}/license-dashboard:/app
 #    networks:
 #      - hotspotplusgate
-  coordinator:
-    build:
-      context: ${PWD}/coordinator
-    user: '${UID:-1000}:${GID:-1000}'
-    command: npm start
-    restart: always
-    env_file:
-      - ${PWD}/coordinator/.env
-    depends_on:
-      - redis
-      - hotspotpluslicensapi
-    environment:
-      - APP_NAME=coordinator
-      - LOG_LEVEL=debug
-      - LOG_DIR=/logs
-      - REDIS_PORT=6379
-      - REDIS_HOST=hsp_redis
-      - REDIS_IP=hsp_redis
-    volumes:
-      - ${PWD}/coordinator/src/:/usr/src/app/src/
-      - ${PWD}/coordinator/node_modules/:/usr/src/app/node_modules/
-      - ${PWD}/systemId:/systemId
-      - ${PWD}/coordinator/key:/key
-      - ${PWD}/coordinator/logs:/logs
-    networks:
-      - hotspotplusgate
+#  coordinator:
+#    build:
+#      context: ${PWD}/coordinator
+#    user: '${UID:-1000}:${GID:-1000}'
+#    command: npm start
+#    restart: always
+#    env_file:
+#      - ${PWD}/coordinator/.env
+#    depends_on:
+#      - redis
+#      - hotspotpluslicensapi
+#    environment:
+#      - APP_NAME=coordinator
+#      - LOG_LEVEL=debug
+#      - LOG_DIR=/logs
+#      - REDIS_PORT=6379
+#      - REDIS_HOST=hsp_redis
+#      - REDIS_IP=hsp_redis
+#    volumes:
+#      - ${PWD}/coordinator/src/:/usr/src/app/src/
+#      - ${PWD}/coordinator/node_modules/:/usr/src/app/node_modules/
+#      - ${PWD}/systemId:/systemId
+#      - ${PWD}/coordinator/key:/key
+#      - ${PWD}/coordinator/logs:/logs
+#    networks:
+#      - hotspotplusgate
   mongodb:
     container_name: hsp_mongodb
     image: bitnami/mongodb:3.6.8-ol-7-r100
@@ -145,6 +175,8 @@ services:
     container_name: hsp_elasticsearch
     image: 'bitnami/elasticsearch:6.5.4'
     restart: always
+    environment:
+      - ELASTICSEARCH_HEAP_SIZE=1024m
     expose:
       - "9300"
       - "9200"
@@ -155,45 +187,46 @@ services:
     networks:
       hotspotplusgate:
          ipv4_address: 172.20.0.20
-  kibana:
-    image: 'bitnami/kibana:6.5.4'
-    ports:
-      - 5601:5601
+#  kibana:
+#    image: 'bitnami/kibana:6.5.4'
+#    ports:
+#      - 5601:5601
+#    environment:
+#      - KIBANA_ELASTICSEARCH_URL=hsp_elasticsearch
+#    volumes:
+#      - 'hsp_kibana:/bitnami'
+#    networks:
+#      hotspotplusgate:
+#       ipv4_address: 172.20.0.21
+  zookeeper:
+    image: 'bitnami/zookeeper:latest'
+    restart: always
+    container_name: 'hsp_zookeeper'
     environment:
-      - KIBANA_ELASTICSEARCH_URL=hsp_elasticsearch
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    expose:
+      - '2181'
+    networks:
+      - hotspotplusgate
+  kafka:
+    image: 'bitnami/kafka:latest'
+    restart: always
+    container_name: 'hsp_kafka'
+    depends_on:
+      - zookeeper
+    environment:
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://hsp_kafka:9092
+      - KAFKA_LOG_RETENTION_HOURS=72
+      - ALLOW_ANONYMOUS_LOGIN=yes
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_ZOOKEEPER_CONNECT=hsp_zookeeper:2181
+    expose:
+      - '9092'
     volumes:
-      - 'hsp_kibana:/bitnami'
+      - hsp_kafka:/bitnami/kafka
     networks:
       hotspotplusgate:
-       ipv4_address: 172.20.0.21
-#  zookeeper:
-#    image: 'bitnami/zookeeper:latest'
-#    restart: always
-#    container_name: 'hsp_zookeeper'
-#    environment:
-#      - ALLOW_ANONYMOUS_LOGIN=yes
-#    expose:
-#      - '2181'
-#    networks:
-#      - hotspotplusgate
-#  kafka:
-#    image: 'bitnami/kafka:latest'
-#    restart: always
-#    container_name: 'hsp_kafka'
-#    depends_on:
-#      - zookeeper
-#    environment:
-#      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://hsp_kafka:9092
-#      - KAFKA_LOG_RETENTION_HOURS=72
-#      - ALLOW_ANONYMOUS_LOGIN=yes
-#      - ALLOW_PLAINTEXT_LISTENER=yes
-#      - KAFKA_ZOOKEEPER_CONNECT=hsp_zookeeper:2181
-#    expose:
-#      - '9092'
-#    volumes:
-#      - hsp_kafka:/bitnami/kafka
-#    networks:
-#      - hotspotplusgate
+        ipv4_address: 172.20.0.80
   radius:
     image: 'registry.gitlab.com/parmenides/hspfreeradius/production:3.3'
     restart: always
@@ -210,6 +243,8 @@ services:
       - "1813:1813/udp"
 
 volumes:
+  hsp_rabbitmq:
+    driver: local
   hsp_mongodb:
     driver: local
   hsp_redis:

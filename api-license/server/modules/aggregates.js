@@ -10,9 +10,7 @@ var ELASTIC_ACCOUNTING_USAGE_SEARCH =
   process.env.ELASTIC_INDEX_PREFIX +
   'accounting/usagereport/{0}{1}'
 var ELASTIC_SESSION_LOG =
-  elasticURL +
-  process.env.ELASTIC_INDEX_PREFIX +
-  'session/{1}'
+  elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'sessions/report/{0}'
 var ELASTIC_ACCOUNTING_INDEX =
   elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'accounting/usagereport'
 
@@ -678,13 +676,16 @@ module.exports.getNetflowLog = function (options) {
   })
 }
 
-module.exports.getReports = function (fromDate, toDate, memberId) {
+module.exports.getReports = function (fromDate, toDate, memberId) {}
 
-}
-
-module.exports.getSessionLog = function (fromDate, toDate, memberId, businessId) {
+module.exports.getSessionLog = function (
+  fromDate,
+  toDate,
+  memberId,
+  businessId,
+) {
   needle.post(
-    ELASTIC_SESSION_LOG.replace('{0}{1}', '_search'),
+    ELASTIC_SESSION_LOG.replace('{0}', '_search'),
     {
       query: {
         bool: {
@@ -716,7 +717,7 @@ module.exports.getSessionLog = function (fromDate, toDate, memberId, businessId)
       //log.debug ( '@getTrafficUsageReport status code', response.statusCode )
       if (error) {
         log.error('Error TrafficUsageReport: %j', error)
-        return reject(error)
+        return reject(error);
       }
 
       if (response.statusCode !== 200) {
@@ -724,46 +725,48 @@ module.exports.getSessionLog = function (fromDate, toDate, memberId, businessId)
         log.error('Error TrafficUsageReport Body: %j', response.body)
         return reject(response.body)
       }
-      if (!response.body.aggregations || !response.body.aggregations.usage) {
-        log.error('Error : ', response.body)
-        return resolve({})
-      }
+      return resolve(response.body)
     },
   )
 }
 
-module.exports.getNetflowLogReports = function (fromDate, toDate, hostIps, lanIps) {
+module.exports.getNetflowLogReports = function (
+  fromDate,
+  toDate,
+  hostIps,
+  lanIps,
+) {
   var query = {
-    'query': {
-      'bool': {
-        'must': [
+    query: {
+      bool: {
+        must: [
           {
-            'terms': {
-              'host': hostIps || []
-            }
+            terms: {
+              host: hostIps || [],
+            },
           },
           {
-            'terms': {
-              'netflow.src_addr': lanIps || []
-            }
+            terms: {
+              'netflow.src_addr': lanIps || [],
+            },
           },
           {
-            'range': {
+            range: {
               '@timestamp': {
-                'gte': fromDate,
-                'lte': toDate
-              }
-            }
-          }
-        ]
-      }
-    }
+                gte: fromDate,
+                lte: toDate,
+              },
+            },
+          },
+        ],
+      },
+    },
   }
 
   log.debug('netflow query %j', query)
   needle.post(
     query,
-    ELASTIC_SESSION_LOG.replace('{0}{1}', '_search'),
+    ELASTIC_SESSION_LOG.replace('{0}', '_search'),
     {json: true},
     function (error, response) {
       //log.debug ( '@getTrafficUsageReport status code', response.statusCode )

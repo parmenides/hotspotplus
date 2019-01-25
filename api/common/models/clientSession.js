@@ -5,6 +5,7 @@ var log = logger.createLogger();
 var Q = require('q');
 var radiusPod = require('../../server/modules/radiusDisconnectService');
 var kafka = require('kafka-node');
+var config = require('../../server/modules/config');
 
 const kafkaClient = new kafka.KafkaClient({
   kafkaHost: process.env.KAFKA_IP + ':' + process.env.KAFKA_PORT,
