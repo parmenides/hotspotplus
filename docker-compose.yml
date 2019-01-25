@@ -153,7 +153,8 @@ services:
     volumes:
       - hsp_elasticsearch:/bitnami/elasticsearch
     networks:
-      - hotspotplusgate
+      hotspotplusgate:
+         ipv4_address: 172.20.0.20
   kibana:
     image: 'bitnami/kibana:6.5.4'
     ports:
@@ -163,35 +164,36 @@ services:
     volumes:
       - 'hsp_kibana:/bitnami'
     networks:
-      - hotspotplusgate
-  zookeeper:
-    image: 'bitnami/zookeeper:latest'
-    restart: always
-    container_name: 'hsp_zookeeper'
-    environment:
-      - ALLOW_ANONYMOUS_LOGIN=yes
-    expose:
-      - '2181'
-    networks:
-      - hotspotplusgate
-  kafka:
-    image: 'bitnami/kafka:latest'
-    restart: always
-    container_name: 'hsp_kafka'
-    depends_on:
-      - zookeeper
-    environment:
-      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://hsp_kafka:9092
-      - KAFKA_LOG_RETENTION_HOURS=72
-      - ALLOW_ANONYMOUS_LOGIN=yes
-      - ALLOW_PLAINTEXT_LISTENER=yes
-      - KAFKA_ZOOKEEPER_CONNECT=hsp_zookeeper:2181
-    expose:
-      - '9092'
-    volumes:
-      - hsp_kafka:/bitnami/kafka
-    networks:
-      - hotspotplusgate
+      hotspotplusgate:
+       ipv4_address: 172.20.0.21
+#  zookeeper:
+#    image: 'bitnami/zookeeper:latest'
+#    restart: always
+#    container_name: 'hsp_zookeeper'
+#    environment:
+#      - ALLOW_ANONYMOUS_LOGIN=yes
+#    expose:
+#      - '2181'
+#    networks:
+#      - hotspotplusgate
+#  kafka:
+#    image: 'bitnami/kafka:latest'
+#    restart: always
+#    container_name: 'hsp_kafka'
+#    depends_on:
+#      - zookeeper
+#    environment:
+#      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://hsp_kafka:9092
+#      - KAFKA_LOG_RETENTION_HOURS=72
+#      - ALLOW_ANONYMOUS_LOGIN=yes
+#      - ALLOW_PLAINTEXT_LISTENER=yes
+#      - KAFKA_ZOOKEEPER_CONNECT=hsp_zookeeper:2181
+#    expose:
+#      - '9092'
+#    volumes:
+#      - hsp_kafka:/bitnami/kafka
+#    networks:
+#      - hotspotplusgate
   radius:
     image: 'registry.gitlab.com/parmenides/hspfreeradius/production:3.3'
     restart: always
