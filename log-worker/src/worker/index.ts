@@ -52,8 +52,6 @@ const processLogRequest = async () => {
   );
 };
 
-
-
 export default {
   processLogRequest,
 };
