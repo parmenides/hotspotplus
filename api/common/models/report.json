@@ -30,6 +30,11 @@
       "model": "Member",
       "foreignKey": ""
     },
+    "business": {
+      "type": "belongsTo",
+      "model": "Business",
+      "foreignKey": ""
+    },
     "fileStorages": {
       "type": "hasOne",
       "model": "FileStorage",

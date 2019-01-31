@@ -147,6 +147,11 @@
       "type": "hasOne",
       "model": "Reseller",
       "foreignKey": ""
+    },
+    "reports": {
+      "type": "hasMany",
+      "model": "Report",
+      "foreignKey": ""
     }
   },
   "acls": [

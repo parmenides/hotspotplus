@@ -43,12 +43,12 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-3 control-label">{{"report.startDate" | translate}} </label>
+                    <label class="col-sm-3 control-label">{{"report.from" | translate}} </label>
                     <div class="col-sm-8">
                         <p class="input-group">
                             <input type="text" class="form-control text-center"
-                                   datepicker-popup-persian='{{dateFormat}}' ng-model="report.startDate"
-                                   placeholder="{{ 'report.startDate' | translate }}"
+                                   datepicker-popup-persian='{{dateFormat}}' ng-model="report.from"
+                                   placeholder="{{ 'report.from' | translate }}"
                                    is-open="startDateCalendarIsOpen" datepicker-options="dateOptions"
                                    date-disabled="disabled(date, mode)"
                                    close-text="{{ 'date.close' | translate }}"/>
@@ -63,12 +63,12 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-3 control-label">{{"report.endDate" | translate}} </label>
+                    <label class="col-sm-3 control-label">{{"report.to" | translate}} </label>
                     <div class="col-sm-8">
                         <p class="input-group">
                             <input type="text" class="form-control text-center"
-                                   datepicker-popup-persian='{{dateFormat}}' ng-model="report.endDate"
-                                   placeholder="{{ 'report.endDate' | translate }}"
+                                   datepicker-popup-persian='{{dateFormat}}' ng-model="report.to"
+                                   placeholder="{{ 'report.to' | translate }}"
                                    is-open="endDateCalendarIsOpen" datepicker-options="dateOptions"
                                    date-disabled="disabled(date, mode)"
                                    close-text="{{ 'date.close' | translate }}"/>

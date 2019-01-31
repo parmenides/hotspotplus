@@ -67,16 +67,16 @@ app.controller ( 'reportList', [
 					headerCellFilter: 'translate',
 				},
 				{
-					displayName:      'report.startDate',
-					field:            'startDate',
+					displayName:      'report.from',
+					field:            'from',
 					enableHiding:     false,
 					enableSorting:    false,
 					enableColumnMenu: false,
 					headerCellFilter: 'translate',
 				},
 				{
-					displayName:      'report.endDate',
-					field:            'endDate',
+					displayName:      'report.to',
+					field:            'to',
 					enableHiding:     false,
 					enableSorting:    false,
 					enableColumnMenu: false,
@@ -150,7 +150,6 @@ app.controller ( 'reportList', [
 		Business.loadMembersUsernames({businessId: businessId}).$promise.then(
 			function(members) {
 					$scope.members= members;
-					console.log($scope.members)
 			},
 			function(error) {
 				$log.error(error);
@@ -162,8 +161,8 @@ app.controller ( 'reportList', [
 			$scope.report = {
 				status:       'scheduled',
 				creationDate: new Date ().getTime (),
-				startDate:    new Date ().getTime (),
-				endDate:      new Date ().getTime (),
+				from:    new Date ().getTime (),
+				to:      new Date ().getTime (),
 				businessId:   businessId,
 			};
 			$uibModal.open ( {
@@ -216,13 +215,13 @@ app.controller ( 'reportList', [
 							$scope.endDateCalendarIsOpen = true;
 							$scope.startDateCalendarIsOpen = false;
 						};
-						//$scope.report.endDate = new Date ( $scope.report.startDate.getTime () + 7 * 24 * 60 * 60 * 1000 );
+						//$scope.report.to = new Date ( $scope.report.from.getTime () + 7 * 24 * 60 * 60 * 1000 );
 
 						// --> for calendar bug
-						$scope.$watch ( 'report.startDate', function ( newValue, oldValue ) {
+						$scope.$watch ( 'report.from', function ( newValue, oldValue ) {
 							$scope.startDateCalendarIsOpen = false;
 						} );
-						$scope.$watch ( 'report.endDate', function ( newValue, oldValue ) {
+						$scope.$watch ( 'report.to', function ( newValue, oldValue ) {
 							$scope.endDateCalendarIsOpen = false;
 						} );
 						$scope.resetCalendar = function () {
@@ -232,14 +231,17 @@ app.controller ( 'reportList', [
 						$scope.cancel = function () {
 							$uibModalInstance.close ();
 						};
-						$scope.save = function ( sendMessage ) {
-							if ( $scope.report.startDate ) {
-								var startDate = new Date ( $scope.report.startDate );
-								$scope.report.startDate = startDate.getTime ();
+						$scope.save = function ( ) {
+							if ( $scope.report.username){
+								Business.member.find
 							}
-							if ( $scope.report.endDate ) {
-								var endDate = new Date ( $scope.report.endDate );
-								$scope.report.endDate = endDate.getTime ();
+							if ( $scope.report.from ) {
+								var from = new Date ( $scope.report.from );
+								$scope.report.from = from.getTime ();
+							}
+							if ( $scope.report.to ) {
+								var to = new Date ( $scope.report.to );
+								$scope.report.to = to.getTime ();
 							}
 							Member.reports
 								.create ( { id: memberId }, $scope.report )

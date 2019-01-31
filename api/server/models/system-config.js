@@ -48,7 +48,7 @@ module.exports = function(Systemconfig) {
 
           redisClient.get('numberOfAllowedBusiness', function(
             error,
-            numberOfAllowedBusiness
+            numberOfAllowedBusiness,
           ) {
             if (error) {
               log.error(error);
