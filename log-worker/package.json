@@ -10,12 +10,14 @@
     "amqplib": "^0.5.3",
     "axios": "0.18.0",
     "bunyan": "^1.8.12",
+    "date-utils": "^1.2.21",
     "deposit-iban": "1.0.5",
     "dotenv": "^6.1.0",
     "elasticsearch": "^15.3.1",
     "express": "^4.16.4",
     "express-promise-router": "^3.0.3",
     "http-errors": "^1.7.1",
+    "moment-timezone": "^0.5.23",
     "needle": "^2.2.4",
     "raven": "^2.6.2",
     "redis": "^2.8.0",
@@ -36,6 +38,7 @@
     "@types/http-errors": "^1.6.1",
     "@types/mocha": "^5.2.5",
     "@types/moment": "^2.13.0",
+    "@types/moment-timezone": "^0.5.10",
     "@types/node": "^10.12.10",
     "@types/soap": "^0.21.0",
     "@types/uuid": "^3.4.4",
@@ -81,8 +84,7 @@
     "trailingComma": "all"
   },
   "husky": {
-    "hooks": {
-    }
+    "hooks": {}
   },
   "keywords": [],
   "author": "",

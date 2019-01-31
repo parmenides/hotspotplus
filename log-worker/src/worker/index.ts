@@ -1,9 +1,11 @@
 import logger from '../utils/logger';
 import { getRabbitMqChannel } from '../utils/rabbitmq';
 import elasticClient from '../utils/elastic';
+import moment from 'moment-timezone';
+import { Moment } from 'moment';
 
 const SESSION_LOG_INDEX = `${process.env.ELASTIC_INDEX_PREFIX}sessions`;
-const NETFLOW_LOG_INDEX = `netflow-`;
+const NETFLOW_LOG_INDEX_PREFIX = `netflow-`;
 
 const LOG_WORKER_QUEUE = process.env.LOG_WORKER_QUEUE;
 const log = logger.createLogger();
@@ -62,44 +64,164 @@ const getSessions = async (reportRequestTask: ReportRequestTask) => {
   const countResponse = await countSessions(reportRequestTask);
   const totalSessions = countResponse.count;
   const maxResultSize = 500;
+  log.debug(Math.ceil(totalSessions / maxResultSize));
   const partsLen =
     totalSessions > maxResultSize
       ? Math.ceil(totalSessions / maxResultSize)
       : 1;
+
   const parts = new Array(partsLen);
   let from = 0;
   let result: Array<{ _source: any }> = [];
   for (const i of parts) {
-    const queryResult = await querySessions(
-      from,
-      maxResultSize,
-      reportRequestTask,
-    );
-    result = result.concat(queryResult.hits.hits);
-    from = from + maxResultSize;
+    try {
+      const queryResult = await querySessions(
+        from,
+        maxResultSize,
+        reportRequestTask,
+      );
+      if (queryResult.hits) {
+        result = result.concat(queryResult.hits.hits);
+      } else {
+        log.warn(queryResult);
+      }
+      from = from + maxResultSize;
+    } catch (error) {
+      log.error(error);
+      throw error;
+    }
   }
 
-  const localIp = new Set();
-  const nasIp = new Set();
+  const clientIpList = new Set();
+  const nasIpList = new Set();
   result.map((item) => {
-    localIp.add((item._source as IP_DATA).framedIpAddress);
-    nasIp.add((item._source as IP_DATA).nasIp);
+    clientIpList.add((item._source as IP_DATA).framedIpAddress);
+    nasIpList.add((item._source as IP_DATA).nasIp);
   });
 
-  log.debug(Array.from(localIp));
-  log.debug(Array.from(nasIp));
+  log.debug(Array.from(clientIpList));
+  log.debug(Array.from(nasIpList));
   return {
-    localIpList: Array.from(localIp),
-    nasIpList: Array.from(nasIp),
+    clientIpList: Array.from(clientIpList),
+    nasIpList: Array.from(nasIpList),
   };
+};
+
+interface NetflowIpQueryData {
+  clientIpList: string[];
+  nasIpList: string[];
+}
+
+const getNetflowReports = async (
+  from: number,
+  to: number,
+  netflowIpQueryData: NetflowIpQueryData,
+) => {
+  const fromDate = moment.tz(from, 'Europe/London');
+  const toDate = moment.tz(to, 'Europe/London');
+
+  const daysBetweenInMs = toDate.diff(fromDate);
+  const days = Math.ceil(daysBetweenInMs / 86400000);
+
+  const indexNames = [createNetflowIndexName(fromDate)];
+  for (let i = 0; i < days; i++) {
+    fromDate.add(1, 'days');
+    indexNames.push(createNetflowIndexName(fromDate));
+  }
+
+  const data = [];
+  log.debug('INDEXES', indexNames);
+  for (const indexName of indexNames) {
+    try {
+      const result = await getNetflowsByIndex(
+        indexName,
+        from,
+        to,
+        netflowIpQueryData,
+      );
+      data.push(result);
+    } catch (error) {
+      if (error.status === 404) {
+        log.warn(`${indexName} index not found`);
+      } else {
+        log.error(error.status);
+        throw error;
+      }
+    }
+  }
+  //log.debug(data);
+};
+
+const createNetflowIndexName = (fromDate: Moment) => {
+  return `${NETFLOW_LOG_INDEX_PREFIX}${fromDate.format('YYYY.MM.DD')}`;
+};
+
+const getNetflowsByIndex = async (
+  netflowIndex: string,
+  fromDate: number,
+  toDate: number,
+  netflowIpQueryData: NetflowIpQueryData,
+) => {
+  const countResponse = await countNetflowReportByIndex(
+    netflowIndex,
+    fromDate,
+    toDate,
+    netflowIpQueryData,
+  );
+
+  const totalLogs = countResponse.count;
+  log.debug(totalLogs);
+  const maxResultSize = 500;
+  log.debug(Math.ceil(totalLogs / maxResultSize));
+  const partsLen =
+    totalLogs > maxResultSize ? Math.ceil(totalLogs / maxResultSize) : 1;
+
+  const parts = new Array(partsLen);
+  let from = 0;
+  let result: Array<{ _source: any }> = [];
+  for (const i of parts) {
+    try {
+      const queryResult = await queryNetflowReports(
+        netflowIndex,
+        from,
+        maxResultSize,
+        fromDate,
+        toDate,
+        netflowIpQueryData,
+      );
+      log.warn(queryResult);
+      if (queryResult.hits) {
+        result = result.concat(queryResult.hits.hits);
+      } else {
+        log.warn(queryResult);
+      }
+      from = from + maxResultSize;
+    } catch (error) {
+      log.error(error);
+      throw error;
+    }
+  }
+  return result;
+};
+
+const countNetflowReportByIndex = async (
+  indexName: string,
+  fromDate: number,
+  toDate: number,
+  netflowIpQueryData: NetflowIpQueryData,
+) => {
+  const result = await elasticClient.count({
+    index: indexName,
+    body: createNetflowQuery(fromDate, toDate, netflowIpQueryData),
+  });
+  return result;
 };
 
 const countSessions = async (reportTask: ReportRequestTask) => {
   const result = await elasticClient.count({
-    index: [SESSION_LOG_INDEX],
+    index: SESSION_LOG_INDEX,
     body: createSearchSessionQuery(reportTask),
   });
-  log.debug(result);
   return result;
 };
 
@@ -108,8 +230,8 @@ const querySessions = async (
   size: number,
   reportTask: ReportRequestTask,
 ) => {
+  log.debug(createSearchSessionQuery(reportTask));
   const result = await elasticClient.search({
-    scroll: '1m',
     index: SESSION_LOG_INDEX,
     from,
     size,
@@ -120,15 +242,29 @@ const querySessions = async (
     body: createSearchSessionQuery(reportTask),
   });
 
-  log.debug(result);
+  return result;
+};
+const queryNetflowReports = async (
+  indexName: string,
+  fromIndex: number,
+  size: number,
+  fromDate: number,
+  toDate: number,
+  netflowIpQueryData: NetflowIpQueryData,
+) => {
+  const result = await elasticClient.search({
+    index: indexName,
+    from: fromIndex,
+    size,
+    body: createNetflowQuery(fromDate, toDate, netflowIpQueryData),
+  });
   return result;
 };
 
 const createNetflowQuery = (
   fromDate: number,
   toDate: number,
-  hostIps: string[],
-  lanIps: string[],
+  netflowIpQueryData: NetflowIpQueryData,
 ) => {
   return {
     query: {
@@ -136,12 +272,12 @@ const createNetflowQuery = (
         must: [
           {
             terms: {
-              host: hostIps || [],
+              host: netflowIpQueryData.nasIpList,
             },
           },
           {
             terms: {
-              'netflow.src_addr': lanIps || [],
+              'netflow.src_addr': netflowIpQueryData.clientIpList,
             },
           },
           {
@@ -188,6 +324,8 @@ const createSearchSessionQuery = (reportTask: ReportRequestTask) => {
 };
 
 export default {
+  getNetflowsByIndex,
   getSessions,
   processLogRequest,
+  getNetflowReports,
 };

@@ -10,13 +10,7 @@
       "never-prefix"
     ],
     "comment-format": false,
-    "variable-name": [
-      true,
-      "ban-keywords",
-      "check-format"
-    ],
     "only-arrow-functions": true,
-    "class-name": true,
     "file-name-casing": [true, "camel-case"],
     "ordered-imports": false,
     "member-ordering": false,

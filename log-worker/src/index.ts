@@ -4,6 +4,8 @@ import router from '../src/routes';
 import errorHandler from './utils/errorHandler';
 import logger from './utils/logger';
 import services from './worker';
+
+//require('date-utils');
 const log = logger.createLogger();
 
 //hey you
@@ -32,11 +34,33 @@ app.listen(app.get('port'), () => {
 });
 
 //services.processPaymentRequests();
+
+const from = new Date('2019-01-21T00:00:00+03:30').getTime();
+const to = new Date('2019-01-29T23:59:59+03:30').getTime();
+
+/*
+
 services.getSessions({
   businessId: '5c46c8694f9e8400d37c66b4',
   memberId: '5c472bc538a573001cb1ae2d',
-  fromDate: new Date('2019-01-24T11:20:44.380Z').getTime(),
-  toDate: new Date('2019-01-26T11:20:44.380Z').getTime(),
+  fromDate: from,
+  toDate: to,
+});
+*/
+
+/*
+services.getNetflowsByIndex(
+  'netflow-2019.01.25',
+  from,
+  to,
+  ['192.168.2.254'],
+  ['172.20.0.1'],
+);
+*/
+
+services.getNetflowReports(from, to, {
+  clientIpList: ['192.168.2.254'],
+  nasIpList: ['172.20.0.1'],
 });
 
 process.on('uncaughtException', function(error) {
