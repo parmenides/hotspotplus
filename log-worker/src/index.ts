@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import router from '../src/routes';
 import errorHandler from './utils/errorHandler';
 import logger from './utils/logger';
-import services from './modules';
+import services from './worker';
 const log = logger.createLogger();
 
 //hey you
@@ -31,7 +31,13 @@ app.listen(app.get('port'), () => {
   log.info(` App is running at http://localhost:${app.get('port')}`);
 });
 
-services.processPaymentRequests();
+//services.processPaymentRequests();
+services.getSessions({
+  businessId: '5c46c8694f9e8400d37c66b4',
+  memberId: '5c472bc538a573001cb1ae2d',
+  fromDate: new Date('2019-01-24T11:20:44.380Z').getTime(),
+  toDate: new Date('2019-01-26T11:20:44.380Z').getTime(),
+});
 
 process.on('uncaughtException', function(error) {
   console.error('Something bad happened here....');

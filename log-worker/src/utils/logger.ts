@@ -7,12 +7,11 @@ export const createLogger = () => {
     streams = [
       {
         path: process.env.LOG_PATH,
-        period: '1d', // daily rotation
       },
     ];
   }
   return bunyan.createLogger({
-    name: 'log-workerV3',
+    name: 'log-worker',
     streams,
     level,
   });

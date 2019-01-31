@@ -684,45 +684,45 @@ module.exports.getSessionLog = function (
   memberId,
   businessId,
 ) {
-  needle.post(
-    ELASTIC_SESSION_LOG.replace('{0}', '_search'),
-    {
-      query: {
-        bool: {
-          must: [
-            {
-              term: {
-                memberId: memberId,
+
+  const query = {
+    query: {
+      bool: {
+        must: [
+          {
+            term: {
+              memberId: memberId,
+            },
+          },
+          {
+            term: {
+              businessId: businessId,
+            },
+          },
+          {
+            range: {
+              creationDate: {
+                gte: startDate,
+                lte: endDate,
               },
             },
-            {
-              term: {
-                businessId: businessId,
-              },
-            },
-            {
-              range: {
-                creationDate: {
-                  gte: startDate,
-                  lte: endDate,
-                },
-              },
-            },
-          ],
-        },
+          },
+        ],
       },
     },
+  }
+  needle.post(
+    ELASTIC_SESSION_LOG.replace('{0}', '_search'),
+    query,
     {json: true},
     function (error, response) {
-      //log.debug ( '@getTrafficUsageReport status code', response.statusCode )
       if (error) {
-        log.error('Error TrafficUsageReport: %j', error)
-        return reject(error);
+        log.error('Error Session Log Query: %j', error)
+        return reject(error)
       }
 
       if (response.statusCode !== 200) {
-        log.error('Error TrafficUsageReport: %j', response.statusCode)
-        log.error('Error TrafficUsageReport Body: %j', response.body)
+        log.error('Error Session Logs: %j %j', response.statusCode, response.body)
         return reject(response.body)
       }
       return resolve(response.body)
@@ -776,14 +776,10 @@ module.exports.getNetflowLogReports = function (
       }
 
       if (response.statusCode !== 200) {
-        log.error('Error TrafficUsageReport: %j', response.statusCode)
-        log.error('Error TrafficUsageReport Body: %j', response.body)
+        log.error('Error TrafficUsageReport: %j %j', response.statusCode, response.body)
         return reject(response.body)
       }
-      if (!response.body.aggregations || !response.body.aggregations.usage) {
-        log.error('Error : ', response.body)
-        return resolve({})
-      }
+      return resolve(response.body)
     },
   )
 }

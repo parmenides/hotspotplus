@@ -7,19 +7,20 @@
     "type": "git"
   },
   "dependencies": {
-    "ajv": "^6.5.5",
-    "ajv-errors": "^1.0.0",
     "amqplib": "^0.5.3",
     "axios": "0.18.0",
     "bunyan": "^1.8.12",
     "deposit-iban": "1.0.5",
     "dotenv": "^6.1.0",
+    "elasticsearch": "^15.3.1",
     "express": "^4.16.4",
     "express-promise-router": "^3.0.3",
     "http-errors": "^1.7.1",
-    "moment": "^2.22.2",
-    "moment-jalali": "^0.3.9",
+    "needle": "^2.2.4",
+    "raven": "^2.6.2",
+    "redis": "^2.8.0",
     "soap": "^0.25.0",
+    "temp": "^0.8.3",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
@@ -30,6 +31,7 @@
     "@types/bunyan": "^1.8.5",
     "@types/chai": "^4.1.7",
     "@types/dotenv": "^6.1.0",
+    "@types/elasticsearch": "^5.0.30",
     "@types/express": "^4.16.0",
     "@types/http-errors": "^1.6.1",
     "@types/mocha": "^5.2.5",

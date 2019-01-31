@@ -25,29 +25,29 @@ services:
       - ${PWD}/api/key:/key
     networks:
       - hotspotplusgate
-#  hotspotpluslicensapi:
-#    build:
-#      context: ${PWD}/api-license
-#    user: '${UID:-1000}:${GID:-1000}'
-#    restart: always
-#    container_name: hotspotpluslicensapi
-#    command: npm run start:dev
-#    ports:
-#      - 3001:3000
-#    depends_on:
-#      - mongodb
-#      - elasticsearch
-#      - redis
-#    env_file:
-#      - api-license/.env
-#    volumes:
-#      - ${PWD}/api-license/server:/usr/src/app/server/
-#      - ${PWD}/api-license/node_modules:/usr/src/app/node_modules
-#      - ${PWD}/api-license/common:/usr/src/app/common/
-#      - ${PWD}/api-license/logs:/logs
-#      - ${PWD}/api-license/key:/key
-#    networks:
-#      - hotspotplusgate
+  hotspotpluslicensapi:
+    build:
+      context: ${PWD}/api-license
+    user: '${UID:-1000}:${GID:-1000}'
+    restart: always
+    container_name: hotspotpluslicensapi
+    command: npm run start:dev
+    ports:
+      - 3001:3000
+    depends_on:
+      - mongodb
+      - elasticsearch
+      - redis
+    env_file:
+      - api-license/.env
+    volumes:
+      - ${PWD}/api-license/server:/usr/src/app/server/
+      - ${PWD}/api-license/node_modules:/usr/src/app/node_modules
+      - ${PWD}/api-license/common:/usr/src/app/common/
+      - ${PWD}/api-license/logs:/logs
+      - ${PWD}/api-license/key:/key
+    networks:
+      - hotspotplusgate
   logworker:
     build:
       context: ./log-worker
@@ -58,7 +58,15 @@ services:
     environment:
       - RABBITMQ_USERNAME=payam
       - RABBITMQ_PASSWORD=123
+      - REDIS_PORT=6379
+      - REDIS_HOST=hsp_redis
       - LOG_WORKER_QUEUE=LOG_WORKER_QUEUE
+      - ELASTIC_INDEX_PREFIX=hotspotplus
+      - ELASTIC_IP=hsp_elasticsearch
+      - ELASTIC_PORT=9200
+      - LOG_LEVEL=debug
+      - APP_NAME=log-worker
+      - LOG_PATH=/logs/log-worker.log
     volumes:
       - ${PWD}/log-worker/dist/log.worker.js:/usr/src/app/log.worker.js
       - ${PWD}/log-worker/node_modules:/usr/src/app/node_modules
@@ -125,32 +133,32 @@ services:
 #      - ${PWD}/license-dashboard:/app
 #    networks:
 #      - hotspotplusgate
-#  coordinator:
-#    build:
-#      context: ${PWD}/coordinator
-#    user: '${UID:-1000}:${GID:-1000}'
-#    command: npm start
-#    restart: always
-#    env_file:
-#      - ${PWD}/coordinator/.env
-#    depends_on:
-#      - redis
-#      - hotspotpluslicensapi
-#    environment:
-#      - APP_NAME=coordinator
-#      - LOG_LEVEL=debug
-#      - LOG_DIR=/logs
-#      - REDIS_PORT=6379
-#      - REDIS_HOST=hsp_redis
-#      - REDIS_IP=hsp_redis
-#    volumes:
-#      - ${PWD}/coordinator/src/:/usr/src/app/src/
-#      - ${PWD}/coordinator/node_modules/:/usr/src/app/node_modules/
-#      - ${PWD}/systemId:/systemId
-#      - ${PWD}/coordinator/key:/key
-#      - ${PWD}/coordinator/logs:/logs
-#    networks:
-#      - hotspotplusgate
+  coordinator:
+    build:
+      context: ${PWD}/coordinator
+    user: '${UID:-1000}:${GID:-1000}'
+    command: npm start
+    restart: always
+    env_file:
+      - ${PWD}/coordinator/.env
+    depends_on:
+      - redis
+      - hotspotpluslicensapi
+    environment:
+      - APP_NAME=coordinator
+      - LOG_LEVEL=debug
+      - LOG_DIR=/logs
+      - REDIS_PORT=6379
+      - REDIS_HOST=hsp_redis
+      - REDIS_IP=hsp_redis
+    volumes:
+      - ${PWD}/coordinator/src/:/usr/src/app/src/
+      - ${PWD}/coordinator/node_modules/:/usr/src/app/node_modules/
+      - ${PWD}/systemId:/systemId
+      - ${PWD}/coordinator/key:/key
+      - ${PWD}/coordinator/logs:/logs
+    networks:
+      - hotspotplusgate
   mongodb:
     container_name: hsp_mongodb
     image: bitnami/mongodb:3.6.8-ol-7-r100
