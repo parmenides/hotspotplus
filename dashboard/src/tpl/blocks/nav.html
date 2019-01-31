@@ -42,6 +42,12 @@
             <span class="font-bold" translate="aside.nav.membersList">Members</span>
         </a>
     </li>
+    <li ui-sref-active="active" access="networkadmin, headmaster" access-permission-type="one">
+        <a ui-sref="app.reports">
+            <i class="fa fa-file"></i>
+            <span class="font-bold" translate="aside.nav.reportsList">Reports</span>
+        </a>
+    </li>
     <li ui-sref-active="active" access="networkadmin ,headmaster" access-permission-type="one">
         <a ui-sref="app.internetPlans">
             <i class="fa fa-rocket"></i>
@@ -91,7 +97,7 @@
         </a>
     </li>
 
-    <li ui-sref-active="active" access="networkadmin" access-permission-type="one">
+    <!--<li ui-sref-active="active" access="networkadmin" access-permission-type="one">
         <a ui-sref="app.netflowReport">
             <i class="fa fa-list"></i>
             <span class="font-bold" translate="aside.nav.netflow">IpReport</span>
@@ -103,7 +109,7 @@
             <span class="font-bold" translate="aside.nav.syslog">siteReport</span>
         </a>
     </li>
-
+-->
     <li ui-sref-active="active" access="networkadmin ,headmaster" access-permission-type="one">
         <a ui-sref="app.nases">
             <i class="fa fa-cube"></i>
