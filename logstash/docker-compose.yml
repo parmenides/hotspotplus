@@ -3,39 +3,43 @@ services:
   netflowlog:
     image: 'docker.elastic.co/logstash/logstash:6.5.4'
     restart: always
+    ports:
+      - 4055:4055/udp
     environment:
       XPACK_MONITORING_ENABLED: 'false'
     volumes:
+      - ./config/jvm.options:/usr/share/logstash/config/jvm.options
       - ./config/logstash.yml:/usr/share/logstash/config/logstash.yml
     networks:
       - hotspotplusgate
-  syslog:
-    image: 'docker.elastic.co/logstash/logstash:6.5.4'
-    restart: always
-    environment:
-      XPACK_MONITORING_ENABLED: 'false'
-    volumes:
-      - ./syslog:/usr/share/logstash/pipeline/
-    networks:
-      - hotspotplusgate
-  accountinglogstash:
-    image: 'docker.elastic.co/logstash/logstash:6.5.4'
-    restart: always
-    environment:
-      XPACK_MONITORING_ENABLED: 'false'
-    volumes:
-      - ./accounting/:/usr/share/logstash/pipeline/
-    networks:
-      - hotspotplusgate
-  sessions:
-    image: 'docker.elastic.co/logstash/logstash:6.5.4'
-    restart: always
-    environment:
-      XPACK_MONITORING_ENABLED: 'false'
-    volumes:
-      - ./sessions/:/usr/share/logstash/pipeline/
-    networks:
-      - hotspotplusgate
+#  syslog:
+#    image: 'docker.elastic.co/logstash/logstash:6.5.4'
+#    restart: always
+#    environment:
+#      XPACK_MONITORING_ENABLED: 'false'
+#    volumes:
+#      - ./syslog:/usr/share/logstash/pipeline/
+#    networks:
+#      - hotspotplusgate
+#  accountinglogstash:
+#    image: 'docker.elastic.co/logstash/logstash:6.5.4'
+#    restart: always
+#    environment:
+#      XPACK_MONITORING_ENABLED: 'false'
+#    volumes:
+#      - ./accounting/:/usr/share/logstash/pipeline/
+#    networks:
+#      - hotspotplusgate
+#  sessions:
+#    image: 'docker.elastic.co/logstash/logstash:6.5.4'
+#    restart: always
+#    environment:
+#      XPACK_MONITORING_ENABLED: 'false'
+#    volumes:
+#      - ./config/jvm.options:/usr/share/logstash/config/jvm.options
+#      - ./sessions/:/usr/share/logstash/pipeline/
+#    networks:
+#      - hotspotplusgate
 
 networks:
   hotspotplusgate:
