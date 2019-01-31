@@ -3,7 +3,8 @@ import dotenv from 'dotenv';
 import router from '../src/routes';
 import errorHandler from './utils/errorHandler';
 import logger from './utils/logger';
-import services from './worker';
+import netflowService from './worker/netflow';
+import sessionService from './worker/session';
 
 //require('date-utils');
 const log = logger.createLogger();
@@ -38,15 +39,12 @@ app.listen(app.get('port'), () => {
 const from = new Date('2019-01-21T00:00:00+03:30').getTime();
 const to = new Date('2019-01-29T23:59:59+03:30').getTime();
 
-/*
-
-services.getSessions({
+sessionService.findSessions({
   businessId: '5c46c8694f9e8400d37c66b4',
   memberId: '5c472bc538a573001cb1ae2d',
   fromDate: from,
   toDate: to,
 });
-*/
 
 /*
 services.getNetflowsByIndex(
@@ -58,7 +56,7 @@ services.getNetflowsByIndex(
 );
 */
 
-services.getNetflowReports(from, to, {
+netflowService.getNetflowReports(from, to, {
   clientIpList: ['192.168.2.254'],
   nasIpList: ['172.20.0.1'],
 });
