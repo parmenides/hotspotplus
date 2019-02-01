@@ -6,7 +6,7 @@ const SESSION_LOG_INDEX = `${process.env.ELASTIC_INDEX_PREFIX}sessions`;
 
 const LOG_WORKER_QUEUE = process.env.LOG_WORKER_QUEUE;
 const log = logger.createLogger();
-const API_BASE = process.env.CORE_API;
+const API_BASE = process.env.API_ADDRESS;
 if (!LOG_WORKER_QUEUE) {
   throw new Error('invalid settings');
 }

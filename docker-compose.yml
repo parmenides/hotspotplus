@@ -56,6 +56,9 @@ services:
     depends_on:
       - rabbitmq
     environment:
+      - API_ADDRESS=http://hotspotplusapi:3000
+      - SERVICE_MAN_USERNAME=pinTimeServiceMan
+      - SERVICE_MAN_PASSWORD=#123aaa)
       - RABBITMQ_USERNAME=payam
       - RABBITMQ_PASSWORD=123
       - REDIS_PORT=6379

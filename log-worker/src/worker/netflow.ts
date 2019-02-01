@@ -1,7 +1,8 @@
 import logger from '../utils/logger';
 import elasticClient from '../utils/elastic';
-import moment from 'moment-timezone';
+import momentTz from 'moment-timezone';
 import { Moment } from 'moment';
+import momentJ from 'moment-jalaali';
 
 const NETFLOW_LOG_INDEX_PREFIX = `netflow-`;
 
@@ -17,12 +18,13 @@ interface NetflowIpQueryData {
 }
 
 const getNetflowReports = async (
+  username: string,
   from: number,
   to: number,
   netflowIpQueryData: NetflowIpQueryData,
 ) => {
-  const fromDate = moment.tz(from, 'Europe/London');
-  const toDate = moment.tz(to, 'Europe/London');
+  const fromDate = momentTz.tz(from, 'Europe/London');
+  const toDate = momentTz.tz(to, 'Europe/London');
 
   const daysBetweenInMs = toDate.diff(fromDate);
   const days = Math.ceil(daysBetweenInMs / 86400000);
@@ -33,7 +35,7 @@ const getNetflowReports = async (
     indexNames.push(createNetflowIndexName(fromDate));
   }
 
-  let data: Array<{ _source: any }> = [];
+  let data: Array<RawNetflowReport> = [];
   log.debug('INDEXES', indexNames);
   for (const indexName of indexNames) {
     try {
@@ -53,9 +55,43 @@ const getNetflowReports = async (
       }
     }
   }
-  log.debug(data[1]);
+  //log.debug('log', data);
   log.debug(data.length);
-  return data;
+  const formattedResult = formatReports(username, data);
+  //log.debug(formattedResult);
+  return formattedResult;
+};
+
+const formatReports = (
+  username: string,
+  rawNetflowReports: Array<RawNetflowReport>,
+) => {
+  return rawNetflowReports.map((rawReport) => {
+    const localDate = momentTz.tz(
+      rawReport._source['@timestamp'],
+      'Asia/Tehran',
+    );
+    const jalaaliDate = momentJ(localDate);
+
+    return {
+      username,
+      date: getJalaaliDate(jalaaliDate),
+      src_addr: rawReport._source.netflow.src_addr,
+      src_port: rawReport._source.netflow.src_port,
+      src_port_name: rawReport._source.netflow.src_port_name,
+      src_mac: rawReport._source.netflow.src_mac,
+      dst_addr: rawReport._source.netflow.dst_addr,
+      dst_port: rawReport._source.netflow.dst_port,
+      dst_port_name: rawReport._source.netflow.dst_port_name,
+      dst_mac: rawReport._source.netflow.dst_mac,
+      protocol_name: rawReport._source.netflow.protocol_name,
+      '@timestamp': rawReport._source['@timestamp'],
+    };
+  });
+};
+
+const getJalaaliDate = (date: Moment) => {
+  return date.format('jYYYY/jM/jD HH:MM');
 };
 
 const createNetflowIndexName = (fromDate: Moment) => {
@@ -171,6 +207,58 @@ const createNetflowQuery = (
     },
   };
 };
+
+interface RawNetflowReport {
+  _source: {
+    netflow: {
+      tos: number;
+      xlate_dst_port: number;
+      src_port: number;
+      xlate_dst_addr_ipv4: string;
+      src_addr: string;
+      dst_mac: string;
+      dst_locality: string;
+      protocol_name: string;
+      tcp_flag_tags: Array<any>;
+      flowset_id: number;
+      xlate_src_addr_ipv4: string;
+      tcp_flags: number;
+      packets: 1;
+      src_locality: string;
+      protocol: number;
+      dst_addr: string;
+      next_hop: string;
+      src_mac: string;
+      flow_seq_num: number;
+      input_snmp: number;
+      src_mask_len: number;
+      src_port_name: string;
+      output_snmp: number;
+      out_src_mac: string;
+      last_switched: string;
+      xlate_src_port: number;
+      dst_port_name: string;
+      dst_port: number;
+      bytes: number;
+      version: string;
+      first_switched: string;
+      dst_mask_len: number;
+      flow_locality: string;
+      tcp_flags_label: string;
+    };
+    '@version': string;
+    geoip_dst: {
+      autonomous_system: string;
+    };
+    host: string;
+    geoip_src: {
+      autonomous_system: string;
+    };
+    type: string;
+    tags: string[];
+    '@timestamp': string;
+  };
+}
 
 export default {
   getNetflowsByIndex,
