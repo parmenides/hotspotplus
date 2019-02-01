@@ -14,9 +14,9 @@ export const testRunner = async () => {
     fromDate: from,
     toDate: to,
     businessId: '5c46c8694f9e8400d37c66b4',
+    reportRequestId: '5c548d57f29d60009dbef67d',
     memberId: '5c472bc538a573001cb1ae2d',
   };
-
   await channel.sendToQueue(
     LOG_WORKER_QUEUE,
     Buffer.from(JSON.stringify(message)),
