@@ -12,7 +12,7 @@
                     </div>
                 </div>
 
-                <div class="form-group">
+                <!--<div class="form-group">
                     <label class="control-label col-sm-3">{{ "report.creationDate" | translate }}</label>
                     <div class="col-sm-8">
                         <p class="input-group">
@@ -30,16 +30,17 @@
                         </p>
                     </div>
 
-                    <!--<div class="col-sm-8">
+                    &lt;!&ndash;<div class="col-sm-8">
                         <div class="font-bold text-primary">
                             {{report.creationDate | persianDate : 'fullDate'|translateNumber}}
                         </div>
-                    </div>-->
-                </div>
+                    </div>&ndash;&gt;
+                </div>-->
                 <div class="form-group" >
                     <label class="col-sm-3 control-label">{{ "report.username" | translate }}</label>
                     <div class="col-sm-8">
-                        <input type="text" ng-model="report.username" ng-model-options="modelOptions" uib-typeahead="username for username in usernames | filter:$viewValue | limitTo:8" class="form-control">
+                        <!--<input type="text" ng-model="report.username" ng-model-options="modelOptions" uib-typeahead="member as member.username for member in members | filter:{username:$viewValue}" class="form-control">-->
+                        <input type="text" ng-model="ngModelOptionsSelected" ng-model-options="modelOptions" uib-typeahead="member as member.username for member in members | filter:{username:$viewValue}" class="form-control">
                     </div>
                 </div>
                 <div class="form-group">
@@ -81,7 +82,8 @@
                         </p>
                     </div>
                 </div>
-                <div class="form-group" ng-if="options.reportType === 'ip'">
+                <!--todo:hide for now-->
+                <!--<div class="form-group" ng-if="options.reportType === 'ip'">
                     <label class="col-sm-3 control-label">{{ "report.destinationIp" | translate }}</label>
                     <div class="col-sm-8">
                         <input type="text" class="form-control" required ng-model="report.destinationIp"
@@ -94,7 +96,7 @@
                         <input type="text" class="form-control" required ng-model="report.destinationPort"
                                style="direction: ltr;text-align: center">
                     </div>
-                </div>
+                </div>-->
             </form>
         </div>
 
