@@ -16,6 +16,7 @@ app.controller ( 'reportList', [
 	'$uibModal',
 	'PREFIX',
 	'appMessenger',
+	'PersianDateService',
 	function (
 		$scope,
 		$state,
@@ -29,7 +30,8 @@ app.controller ( 'reportList', [
 		Session,
 		$uibModal,
 		PREFIX,
-		appMessenger
+		appMessenger,
+		PersianDateService
 	) {
 		var businessId = Session.business.id;
 
@@ -69,38 +71,46 @@ app.controller ( 'reportList', [
 				{
 					displayName:      'report.from',
 					field:            'from',
+					width:            250,
 					enableHiding:     false,
 					enableSorting:    false,
 					enableColumnMenu: false,
 					headerCellFilter: 'translate',
+					cellTemplate:
+					                  '<div class="ui-grid-cell-contents">{{row.entity.from |  persianDate : "fullDate" | translateNumber }}{{"general.,"| translate}}&nbsp;{{"general.hour"| translate}}:&nbsp;{{row.entity.from |  date : "HH:mm" | translateNumber }}</div>',
+
 				},
 				{
 					displayName:      'report.to',
 					field:            'to',
+					width:            250,
 					enableHiding:     false,
 					enableSorting:    false,
 					enableColumnMenu: false,
 					headerCellFilter: 'translate',
+					cellTemplate:
+					                  '<div class="ui-grid-cell-contents">{{row.entity.to |  persianDate : "fullDate" | translateNumber }}{{"general.,"| translate}}&nbsp;{{"general.hour"| translate}}:&nbsp;{{row.entity.to |  date : "HH:mm" | translateNumber }}</div>'
 				},
 				{
 					displayName:      'report.status',
 					field:            'status',
-					width:            90,
 					enableHiding:     false,
 					enableSorting:    false,
 					enableColumnMenu: false,
 					headerCellFilter: 'translate',
+					cellTemplate:
+					                  '<div class="ui-grid-cell-contents">{{"report." + row.entity.status  | translate }}</div>'
 				},
 				{
 					displayName:      'general.download',
 					field:            'download',
-					width:            90,
+					width:            70,
 					enableColumnMenu: false,
 					headerCellFilter: 'translate',
 					cellClass:        'center',
 					headerCellClass:  'headerCenter',
 					cellTemplate:
-					                  '<a class="btn btn-link" ng-enabled ="row.entity.status === ready" ng-click="grid.appScope.downloadReport(row)"><i class="fa  fa-download"></i></a>',
+					                  '<a class="btn btn-link" ng-enabled ="row.entity.status === ready" ng-click="grid.appScope.downloadReport(row)"><i class="fa  fa-download"></i></a>'
 				},
 				{
 					displayName:      'general.remove',
@@ -130,15 +140,6 @@ app.controller ( 'reportList', [
 			}
 		};
 
-		var _selected;
-		$scope.ngModelOptionsSelected = function ( value ) {
-			if ( arguments.length ) {
-				_selected = value;
-			} else {
-				return _selected;
-			}
-		};
-
 		$scope.modelOptions = {
 			debounce:     {
 				default: 500,
@@ -147,7 +148,6 @@ app.controller ( 'reportList', [
 			getterSetter: true
 		};
 
-		//$scope.members = [{'username':'Alabama','flag':'5/5c/Flag_of_Alabama.svg/45px-Flag_of_Alabama.svg.png'},{'username':'Alaska','flag':'e/e6/Flag_of_Alaska.svg/43px-Flag_of_Alaska.svg.png'},{'username':'Arizona','flag':'9/9d/Flag_of_Arizona.svg/45px-Flag_of_Arizona.svg.png'},{'username':'Arkansas','flag':'9/9d/Flag_of_Arkansas.svg/45px-Flag_of_Arkansas.svg.png'},{'username':'California','flag':'0/01/Flag_of_California.svg/45px-Flag_of_California.svg.png'},{'username':'Colorado','flag':'4/46/Flag_of_Colorado.svg/45px-Flag_of_Colorado.svg.png'},{'username':'Connecticut','flag':'9/96/Flag_of_Connecticut.svg/39px-Flag_of_Connecticut.svg.png'},{'username':'Delaware','flag':'c/c6/Flag_of_Delaware.svg/45px-Flag_of_Delaware.svg.png'},{'username':'Florida','flag':'f/f7/Flag_of_Florida.svg/45px-Flag_of_Florida.svg.png'},{'username':'Georgia','flag':'5/54/Flag_of_Georgia_%28U.S._state%29.svg/46px-Flag_of_Georgia_%28U.S._state%29.svg.png'},{'username':'Hawaii','flag':'e/ef/Flag_of_Hawaii.svg/46px-Flag_of_Hawaii.svg.png'},{'username':'Idaho','flag':'a/a4/Flag_of_Idaho.svg/38px-Flag_of_Idaho.svg.png'},{'username':'Illinois','flag':'0/01/Flag_of_Illinois.svg/46px-Flag_of_Illinois.svg.png'},{'username':'Indiana','flag':'a/ac/Flag_of_Indiana.svg/45px-Flag_of_Indiana.svg.png'},{'username':'Iowa','flag':'a/aa/Flag_of_Iowa.svg/44px-Flag_of_Iowa.svg.png'},{'username':'Kansas','flag':'d/da/Flag_of_Kansas.svg/46px-Flag_of_Kansas.svg.png'},{'username':'Kentucky','flag':'8/8d/Flag_of_Kentucky.svg/46px-Flag_of_Kentucky.svg.png'},{'username':'Louisiana','flag':'e/e0/Flag_of_Louisiana.svg/46px-Flag_of_Louisiana.svg.png'},{'username':'Maine','flag':'3/35/Flag_of_Maine.svg/45px-Flag_of_Maine.svg.png'},{'username':'Maryland','flag':'a/a0/Flag_of_Maryland.svg/45px-Flag_of_Maryland.svg.png'},{'username':'Massachusetts','flag':'f/f2/Flag_of_Massachusetts.svg/46px-Flag_of_Massachusetts.svg.png'},{'username':'Michigan','flag':'b/b5/Flag_of_Michigan.svg/45px-Flag_of_Michigan.svg.png'},{'username':'Minnesota','flag':'b/b9/Flag_of_Minnesota.svg/46px-Flag_of_Minnesota.svg.png'},{'username':'Mississippi','flag':'4/42/Flag_of_Mississippi.svg/45px-Flag_of_Mississippi.svg.png'},{'username':'Missouri','flag':'5/5a/Flag_of_Missouri.svg/46px-Flag_of_Missouri.svg.png'},{'username':'Montana','flag':'c/cb/Flag_of_Montana.svg/45px-Flag_of_Montana.svg.png'},{'username':'Nebraska','flag':'4/4d/Flag_of_Nebraska.svg/46px-Flag_of_Nebraska.svg.png'},{'username':'Nevada','flag':'f/f1/Flag_of_Nevada.svg/45px-Flag_of_Nevada.svg.png'},{'username':'New Hampshire','flag':'2/28/Flag_of_New_Hampshire.svg/45px-Flag_of_New_Hampshire.svg.png'},{'username':'New Jersey','flag':'9/92/Flag_of_New_Jersey.svg/45px-Flag_of_New_Jersey.svg.png'},{'username':'New Mexico','flag':'c/c3/Flag_of_New_Mexico.svg/45px-Flag_of_New_Mexico.svg.png'},{'username':'New York','flag':'1/1a/Flag_of_New_York.svg/46px-Flag_of_New_York.svg.png'},{'username':'North Carolina','flag':'b/bb/Flag_of_North_Carolina.svg/45px-Flag_of_North_Carolina.svg.png'},{'username':'North Dakota','flag':'e/ee/Flag_of_North_Dakota.svg/38px-Flag_of_North_Dakota.svg.png'},{'username':'Ohio','flag':'4/4c/Flag_of_Ohio.svg/46px-Flag_of_Ohio.svg.png'},{'username':'Oklahoma','flag':'6/6e/Flag_of_Oklahoma.svg/45px-Flag_of_Oklahoma.svg.png'},{'username':'Oregon','flag':'b/b9/Flag_of_Oregon.svg/46px-Flag_of_Oregon.svg.png'},{'username':'Pennsylvania','flag':'f/f7/Flag_of_Pennsylvania.svg/45px-Flag_of_Pennsylvania.svg.png'},{'username':'Rhode Island','flag':'f/f3/Flag_of_Rhode_Island.svg/32px-Flag_of_Rhode_Island.svg.png'},{'username':'South Carolina','flag':'6/69/Flag_of_South_Carolina.svg/45px-Flag_of_South_Carolina.svg.png'},{'username':'South Dakota','flag':'1/1a/Flag_of_South_Dakota.svg/46px-Flag_of_South_Dakota.svg.png'},{'username':'Tennessee','flag':'9/9e/Flag_of_Tennessee.svg/46px-Flag_of_Tennessee.svg.png'},{'username':'Texas','flag':'f/f7/Flag_of_Texas.svg/45px-Flag_of_Texas.svg.png'},{'username':'Utah','flag':'f/f6/Flag_of_Utah.svg/45px-Flag_of_Utah.svg.png'},{'username':'Vermont','flag':'4/49/Flag_of_Vermont.svg/46px-Flag_of_Vermont.svg.png'},{'username':'Virginia','flag':'4/47/Flag_of_Virginia.svg/44px-Flag_of_Virginia.svg.png'},{'username':'Washington','flag':'5/54/Flag_of_Washington.svg/46px-Flag_of_Washington.svg.png'},{'username':'West Virginia','flag':'2/22/Flag_of_West_Virginia.svg/46px-Flag_of_West_Virginia.svg.png'},{'username':'Wisconsin','flag':'2/22/Flag_of_Wisconsin.svg/45px-Flag_of_Wisconsin.svg.png'},{'username':'Wyoming','flag':'b/bc/Flag_of_Wyoming.svg/43px-Flag_of_Wyoming.svg.png'}];
 		$scope.addReport = function ( param ) {
 			Business.loadMembersUsernames ( { businessId: businessId } ).$promise.then (
 				function ( result ) {
@@ -155,7 +155,7 @@ app.controller ( 'reportList', [
 					$scope.report = {
 						status:       'scheduled',
 						creationDate: new Date ().getTime (),
-						from:         new Date ().getTime (),
+						from:         new Date ().getTime () - 7 * 24 * 60 * 60 * 1000,
 						to:           new Date ().getTime (),
 						businessId:   businessId
 					};
@@ -185,13 +185,13 @@ app.controller ( 'reportList', [
 								// Persian date picker methods
 								$scope.dateOptions = {
 									formatYear:  'yy',
-									startingDay: 6,
+									startingDay: 6
 								};
 								$scope.dateFormats = [
 									'dd-MMMM-yyyy',
 									'yyyy/MM/dd',
 									'dd.MM.yyyy',
-									'shortDate',
+									'shortDate'
 								];
 								$scope.dateFormat = $scope.dateFormats[ 0 ];
 								$scope.disabled = function ( date, mode ) {
@@ -209,7 +209,6 @@ app.controller ( 'reportList', [
 									$scope.endDateCalendarIsOpen = true;
 									$scope.startDateCalendarIsOpen = false;
 								};
-								//$scope.report.to = new Date ( $scope.report.from.getTime () + 7 * 24 * 60 * 60 * 1000 );
 
 								// --> for calendar bug
 								$scope.$watch ( 'report.from', function ( newValue, oldValue ) {
@@ -226,32 +225,45 @@ app.controller ( 'reportList', [
 									$uibModalInstance.close ();
 								};
 								$scope.save = function () {
-									if ( $scope.report.username ) {
-										//Business.members({where:[{useranme: $scope.report.username}]})
-									}
-									if ( $scope.report.from ) {
-										var from = new Date ( $scope.report.from );
-										$scope.report.from = from.getTime ();
-									}
-									if ( $scope.report.to ) {
-										var to = new Date ( $scope.report.to );
-										$scope.report.to = to.getTime ();
-									}
-									/*Member.reports
-										.create ( { id: memberId }, $scope.report )
-										.$promise.then (
-										function ( res ) {
-											appMessenger.showSuccess (
-												'report.createSuccessFull'
-											);
-											getPage ();
-											$uibModalInstance.close ()
-										},
-										function ( err ) {
-											appMessenger.showError ( 'report.createUnSuccessFull' );
-
+									if ( $scope.report.member && $scope.report.member.id ) {
+										var memberId = $scope.report.member.id;
+										var username = $scope.report.member.username;
+										delete $scope.report.member;
+										$scope.report.memberId = memberId;
+										$scope.report.username = username;
+										if ( $scope.report.from ) {
+											var from = new Date ( $scope.report.from );
+											$scope.report.from = from.getTime ();
+										} else {
+											$scope.report.from = new Date ().getTime () - 7 * 24 * 60 * 60 * 1000;
 										}
-									);*/
+										if ( $scope.report.to ) {
+											var to = new Date ( $scope.report.to );
+											$scope.report.to = to.getTime ();
+										} else {
+											$scope.report.to = new Date ().getTime ();
+										}
+										if ( !$scope.report.title ) {
+											//todo:fix bug on date
+											var time = new Date ( $scope.report.creationDate );
+											var year = PersianDateService.getFullYear ( time );
+											var month = PersianDateService.getMonth ( time );
+											var day = PersianDateService.getDay ( time );
+											$scope.report.title = username + '_' + year + '_' + month + '_' + day;
+										}
+										Business.reports.create ( { id: businessId }, $scope.report ).$promise.then (
+											function ( res ) {
+												appMessenger.showSuccess ( 'report.createSuccessFull' );
+												getPage ();
+												$uibModalInstance.close ()
+											},
+											function ( err ) {
+												appMessenger.showError ( 'report.createUnSuccessFull' );
+											}
+										);
+									} else {
+										appMessenger.showError ( 'report.enterUserName' );
+									}
 								};
 							}
 						]
@@ -272,20 +284,20 @@ app.controller ( 'reportList', [
 				yesCallback: function () {
 					var reportId = row.entity.id;
 					var index = $scope.gridOptions.data.indexOf ( row.entity );
-					Member.reports
-						.destroyById ( { id: memberId }, { fk: reportId } )
+					Business.reports
+						.destroyById ( { id: businessId }, { fk: reportId } )
 						.$promise.then (
-						function ( member ) {
+						function ( res ) {
 							$scope.gridOptions.data.splice ( index, 1 );
 							appMessenger.showSuccess ( 'report.removeSuccessFull' );
 						},
 						function ( err ) {
 							appMessenger.showError ( 'report.removeUnSuccessFull' );
-						},
+						}
 					);
 				},
 				NoCallback:  function () {
-				},
+				}
 			} );
 		};
 		$scope.removeReports = function () {

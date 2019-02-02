@@ -21,6 +21,10 @@
     "status": {
       "type": "string",
       "required": true
+    },
+    "username": {
+      "type": "string",
+      "required": true
     }
   },
   "validations": [],
@@ -41,6 +45,13 @@
       "foreignKey": ""
     }
   },
-  "acls": [],
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "networkadmin",
+      "permission": "ALLOW"
+    }
+  ],
   "methods": {}
 }

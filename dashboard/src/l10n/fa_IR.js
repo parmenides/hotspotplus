@@ -1185,6 +1185,8 @@
 	"from":                "تاریخ شروع",
 	"to":                  "تاریخ پایان",
 	"status":              "وضعیت",
+	"scheduled":           "برنامه ریزی شده",
+	"ready":               "آماده",
 	"destinationIp":       "آی پی مقصد",
 	"destinationPort":     "پورت مقصد",
 	"removeReports":       "حذف گزارش‌ها",
@@ -1195,7 +1197,9 @@
 	"createUnSuccessFull": "درخواست گزارش با خطا مواجه شد.",
 	"noReportToRemove":    "گزارشی برای حذف وجود ندارد.",
 	"removeUnSuccessFull": "حذف گزارش با خطا مواجه شد.",
-	"removeSuccessFull":   "حذف گزارش با موفقیت انجام شد."
+	"removeSuccessFull":   "حذف گزارش با موفقیت انجام شد.",
+	"selectUserName":      " لطفا نام کاربری را از نامهای کاربری موجود انتخاب کنید.",
+	"enterUserName":       " لطفا نام کاربری را انتخاب کنید."
   },
   "upload":       {
 	"selectFile":          "انتخاب فایل",
