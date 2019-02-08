@@ -1,7 +1,7 @@
 import logger from '../utils/logger';
 import elasticClient from '../utils/elastic';
 import momentTz from 'moment-timezone';
-import { Moment } from 'moment';
+import {Moment} from 'moment';
 import momentJ from 'moment-jalaali';
 
 const NETFLOW_LOG_INDEX_PREFIX = `netflow-`;
@@ -41,8 +41,8 @@ const getNetflowReports = async (
     try {
       const result = await getNetflowsByIndex(
         indexName,
-        from,
-        to,
+        fromDate,
+        toDate,
         netflowIpQueryData,
       );
       data = data.concat(result);
@@ -57,9 +57,8 @@ const getNetflowReports = async (
   }
   //log.debug('log', data);
   log.debug(data.length);
-  const formattedResult = formatReports(username, data);
-  //log.debug(formattedResult);
-  return formattedResult;
+    //log.debug(formattedResult);
+  return formatReports(username, data);
 };
 
 const formatReports = (
@@ -100,8 +99,8 @@ const createNetflowIndexName = (fromDate: Moment) => {
 
 const getNetflowsByIndex = async (
   netflowIndex: string,
-  fromDate: number,
-  toDate: number,
+  fromDate: Moment,
+  toDate: Moment,
   netflowIpQueryData: NetflowIpQueryData,
 ) => {
   const countResponse = await countNetflowReportByIndex(
@@ -147,8 +146,8 @@ const getNetflowsByIndex = async (
 
 const countNetflowReportByIndex = async (
   indexName: string,
-  fromDate: number,
-  toDate: number,
+  fromDate: Moment,
+  toDate: Moment,
   netflowIpQueryData: NetflowIpQueryData,
 ) => {
   const result = await elasticClient.count({
@@ -162,8 +161,8 @@ const queryNetflowReports = async (
   indexName: string,
   fromIndex: number,
   size: number,
-  fromDate: number,
-  toDate: number,
+  fromDate: Moment,
+  toDate: Moment,
   netflowIpQueryData: NetflowIpQueryData,
 ) => {
   const result = await elasticClient.search({
@@ -176,8 +175,8 @@ const queryNetflowReports = async (
 };
 
 const createNetflowQuery = (
-  fromDate: number,
-  toDate: number,
+  fromDate: Moment,
+  toDate: Moment,
   netflowIpQueryData: NetflowIpQueryData,
 ) => {
   return {
@@ -197,8 +196,8 @@ const createNetflowQuery = (
           {
             range: {
               '@timestamp': {
-                gte: fromDate,
-                lte: toDate,
+                gte: fromDate.format(),
+                lte: toDate.format(),
               },
             },
           },

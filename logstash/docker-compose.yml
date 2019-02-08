@@ -1,26 +1,31 @@
 version: '3'
 services:
-  netflowlog:
-    image: 'docker.elastic.co/logstash/logstash:6.5.4'
-    restart: always
-    ports:
-      - 4055:4055/udp
-    environment:
-      XPACK_MONITORING_ENABLED: 'false'
-    volumes:
-      - ./config/jvm.options:/usr/share/logstash/config/jvm.options
-      - ./config/logstash.yml:/usr/share/logstash/config/logstash.yml
-    networks:
-      - hotspotplusgate
-#  syslog:
+#  netflowlog:
 #    image: 'docker.elastic.co/logstash/logstash:6.5.4'
 #    restart: always
+#    ports:
+#      - 4055:4055/udp
 #    environment:
 #      XPACK_MONITORING_ENABLED: 'false'
 #    volumes:
-#      - ./syslog:/usr/share/logstash/pipeline/
+#      - ./config/jvm.options:/usr/share/logstash/config/jvm.options
+#      - ./config/logstash.yml:/usr/share/logstash/config/logstash.yml
 #    networks:
 #      - hotspotplusgate
+  syslog:
+    image: 'docker.elastic.co/logstash/logstash:6.6.0'
+    restart: always
+    ports:
+      - 9000:9000/tcp
+      - 9000:9000/udp
+    environment:
+      XPACK_MONITORING_ENABLED: 'false'
+    volumes:
+      - ./syslog/pipeline/:/usr/share/logstash/pipeline/
+      - ./syslog/config/logstash.yml:/usr/share/logstash/config/logstash.yml
+      - ./syslog/out/:/usr/share/out/
+    networks:
+      - hotspotplusgate
 #  accountinglogstash:
 #    image: 'docker.elastic.co/logstash/logstash:6.5.4'
 #    restart: always
