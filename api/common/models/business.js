@@ -2590,4 +2590,61 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
 		returns:     { arg:"members", type: "Array" }
 
 	} );
+
+	Business.destroyReportsById = function ( reportIds, ctx ) {
+		return Q.promise ( function ( resolve, reject ) {
+			var businessId = ctx.currentUserId;
+			log.error ( ctx );
+			log.error ( 'businessId:', businessId );
+			log.error ( 'reportIds:', reportIds );
+			var Report = app.models.Report;
+			log.debug ( '@destroyReportsById' );
+			if ( !businessId ) {
+				return reject ( 'invalid businessId' );
+			}
+			if ( !reportIds || reportIds.length == 0 ) {
+				return reject ( 'invalid array of reports' );
+			}
+			var tasks = [];
+			for ( var i = 0; i < reportIds.length; i++ ) {
+				(function () {
+					var reportId = reportIds[ i ];
+					tasks.push (
+						Q.Promise ( function ( resolve, reject ) {
+							Report.destroyById ( reportId, { businessId: businessId }, function (
+								error,
+								res,
+							) {
+								if ( error ) {
+									log.error ( error );
+									return reject ( error );
+								}
+								return resolve ( res );
+							} );
+						} ),
+					);
+				}) ();
+			}
+			Q.all ( tasks )
+				.then ( function ( resultArray ) {
+					return resolve ( { result: resultArray } );
+				} )
+				.fail ( function ( error ) {
+					return reject ( error );
+				} );
+		} );
+	};
+
+	Business.remoteMethod ( 'destroyReportsById', {
+		accepts: [
+			{
+				arg:      'reportIds',
+				type:     'array',
+				required: true,
+			},
+			{ arg: 'options', type: 'object', http: 'optionsFromRequest' },
+		],
+		returns: { root: true },
+	} );
+
 };

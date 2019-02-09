@@ -337,6 +337,13 @@
       "principalType": "ROLE",
       "principalId": "networkadmin",
       "permission": "ALLOW",
+      "property": "destroyReportsById"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "networkadmin",
+      "permission": "ALLOW",
       "property": "dropBoxAuthorization"
     },
     {

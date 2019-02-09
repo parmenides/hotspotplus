@@ -109,8 +109,8 @@ app.controller ( 'reportList', [
 					headerCellFilter: 'translate',
 					cellClass:        'center',
 					headerCellClass:  'headerCenter',
-					cellTemplate:
-					                  '<a class="btn btn-link" ng-enabled ="row.entity.status === ready" ng-click="grid.appScope.downloadReport(row)"><i class="fa  fa-download"></i></a>'
+					cellTemplate:     '<a class="btn btn-link" ng-class ="{\'disabled\': row.entity.status !== \'ready\' || !row.entity.fileStorageId  ,\'text-info\': row.entity.status === \'ready\' && row.entity.fileStorageId}" ' +
+						                  'ng-click="grid.appScope.downloadReport(row)"><i class="fa  fa-download"></i></a>'
 				},
 				{
 					displayName:      'general.remove',
@@ -247,8 +247,8 @@ app.controller ( 'reportList', [
 											//todo:fix bug on date
 											var time = new Date ( $scope.report.creationDate );
 											var year = PersianDateService.getFullYear ( time );
-											var month = PersianDateService.getMonth ( time );
-											var day = PersianDateService.getDay ( time );
+											var month = PersianDateService.getMonth ( time ) + 1;
+											var day = PersianDateService.getDate ( time );
 											$scope.report.title = username + '_' + year + '_' + month + '_' + day;
 										}
 										Business.reports.create ( { id: businessId }, $scope.report ).$promise.then (
@@ -288,6 +288,19 @@ app.controller ( 'reportList', [
 						.destroyById ( { id: businessId }, { fk: reportId } )
 						.$promise.then (
 						function ( res ) {
+							//todo: also delete related file
+							if ( row.entity.fileStorageId ) {
+								Business.files
+									.destroyById ( { id: businessId }, { fk: fileStorageId } )
+									.$promise.then (
+									function ( res ) {
+										appMessenger.showSuccess ( 'report.removeFileSuccessFull' );
+									},
+									function ( err ) {
+										appMessenger.showError ( 'report.removeFileUnSuccessFull' );
+									}
+								);
+							}
 							$scope.gridOptions.data.splice ( index, 1 );
 							appMessenger.showSuccess ( 'report.removeSuccessFull' );
 						},
@@ -300,6 +313,7 @@ app.controller ( 'reportList', [
 				}
 			} );
 		};
+
 		$scope.removeReports = function () {
 			var reportIds = [];
 			var selectedRows = $scope.gridApi.selection.getSelectedRows ();
@@ -308,6 +322,7 @@ app.controller ( 'reportList', [
 					reportIds.push ( selectedRow.id );
 				}
 			} );
+			//todo: also delete related files
 			if ( reportIds.length != 0 ) {
 				genericService.showConfirmDialog ( {
 					title:       'general.warning',
@@ -315,9 +330,9 @@ app.controller ( 'reportList', [
 					noBtnLabel:  'general.no',
 					yesBtnLabel: 'general.yes',
 					yesCallback: function () {
-						Member.destroyReportsById ( {
-							memberId:  memberId,
-							reportIds: reportIds,
+						Business.destroyReportsById ( {
+							businessId: businessId,
+							reportIds:  reportIds
 						} ).$promise.then (
 							function ( result ) {
 								$scope.gridApi.selection.clearSelectedRows ();
@@ -326,18 +341,28 @@ app.controller ( 'reportList', [
 							},
 							function ( err ) {
 								appMessenger.showError ( 'report.removeUnSuccessFull' );
-							},
+							}
 						);
 					},
 					NoCallback:  function () {
-					},
+					}
 				} );
 			} else {
 				appMessenger.showInfo ( 'report.noReportToRemove' );
 			}
 		};
 
-		$scope.$watch ( 'paginationOptions.itemPerPage', function ( newValue, oldValue, ) {
+		$scope.downloadReport = function ( row ) {
+			var reportId = row.entity.id;
+			if ( row.entity.fileStorageId ) {
+				var fileStorageId = row.entity.fileStorageId;
+
+			} else {
+				appMessenger.showError ( 'report.noReportsToDownload' )
+			}
+		};
+
+		$scope.$watch ( 'paginationOptions.itemPerPage', function ( newValue, oldValue ) {
 			getPage ();
 		} );
 

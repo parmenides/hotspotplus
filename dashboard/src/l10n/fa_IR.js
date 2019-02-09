@@ -1199,7 +1199,10 @@
 	"removeUnSuccessFull": "حذف گزارش با خطا مواجه شد.",
 	"removeSuccessFull":   "حذف گزارش با موفقیت انجام شد.",
 	"selectUserName":      " لطفا نام کاربری را از نامهای کاربری موجود انتخاب کنید.",
-	"enterUserName":       " لطفا نام کاربری را انتخاب کنید."
+	"enterUserName":       " لطفا نام کاربری را انتخاب کنید.",
+	"noReportsToDownload": "فایل گزارش برای دانلود وجود ندارد.",
+	"removeFileSuccessFull": "حذف فایل گزارش با موفقیت انجام شد.",
+	"removeFileUnSuccessFull": "حذف فایل گزارش با خطا مواجه شد."
   },
   "upload":       {
 	"selectFile":          "انتخاب فایل",
