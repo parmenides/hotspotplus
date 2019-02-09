@@ -1,0 +1,164 @@
+<div class="">
+    <div class="modal-header">
+        <h3 class="modal-title">{{ options.title |translate }}</h3>
+    </div>
+    <div class="modal-body">
+        <uib-tabset active="active" justified="true" class="wrapper-md">
+            <uib-tab index="0">
+                <uib-tab-heading class="" ng-class="{'text-primary': active==0}">
+                    <h1 class="m-n font-normal h5"><i class="fa fa-user"></i>&nbsp;&nbsp;{{'member.memberInfo'|translate}}
+                    </h1>
+                </uib-tab-heading>
+                <div class="row wrapper-md">
+                    <form class="form-horizontal" name="memberForm1">
+                        <div class="form-group col-sm-12" ng-class="{'has-error' : !member.username}">
+                            <label class="control-label">
+                                <span ng-show="!member.username">*</span>
+                                {{ "member.username" | translate }}</label>
+                            <input type="text" class="form-control" ng-model="member.username"
+                                   ng-pattern="/^[a-zA-Z0-9._-]+$/" ng-trim="false" autofocus required>
+                        </div>
+                        <div class="col-sm-12 text-info-dker text-sm">
+                            <i class="fa fa-info-circle"></i>&nbsp;{{"member.englishLettersOnly" | translate}}
+                        </div>
+                        <div class="form-group col-sm-12"
+                             ng-class="{'has-error' : !member.passwordText && options.newMember}">
+                            <label ng-if="options.newMember" class="control-label">
+                                <span ng-show="!member.passwordText && options.newMember">*</span>
+                                {{ "member.password" | translate }}</label>
+                            <input ng-if="options.newMember" type="text" class="form-control"
+                                   ng-model="member.passwordText" required>
+                            <div class="wrapper-sm" ng-if="!options.newMember">
+                                <a class="text-info" ng-click="password()">
+                                    <i class="fa fa-key"></i>
+                                    {{'member.editPassword' | translate}}
+                                </a>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <label class="control-label">{{ "member.firstName" | translate }}</label>
+                            <input type="text" class="form-control" ng-model="member.firstName">
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <label class="control-label">{{ "member.lastName" | translate }}</label>
+                            <input type="text" class="form-control" ng-model="member.lastName">
+                        </div>
+                        <div class="form-group col-sm-12" ng-if="member.fullName">
+                            <label class="control-label">{{ "member.fullName" | translate }}</label>
+                            <input type="text" class="form-control" ng-model="member.fullName">
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <label class="control-label">
+                                {{ "member.mobile" | translate }}</label>
+                            <input type="text" ng-minlength="10" class="form-control"
+                                   placeholder="{{'general.mobileExample' | translate}}" ng-model="member.mobile">
+                        </div>
+                        <div class="form-group col-sm-12" ng-class="{'has-error' : !member.selectedInternetPlan}"
+                             uib-popover="{{'help.internetPlanForMember'| translate}}" popover-trigger="mouseenter">
+                            <label class="control-label">
+                                <span ng-show="!member.selectedInternetPlan">*</span>
+                                {{ "member.internetPlanName" | translate }}
+                            </label>
+                            <select ng-model="member.selectedInternetPlan" class="form-control"
+                                    ng-options="internetPlan.name  for internetPlan in internetPlans">
+                            </select>
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <div class="col-sm-12 checkbox">
+                                <label class="i-checks">
+                                    <input type="checkbox" ng-model="member.active"><i></i>{{"member.active" |
+                                    translate}}
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </uib-tab>
+            <uib-tab index="1">
+                <uib-tab-heading class="" ng-class="{'text-primary': active==1}">
+                    <h1 class="m-n font-normal h5"><i class="fa fa-file-text"></i>&nbsp;&nbsp;{{'member.moreInfo'|translate}}
+                    </h1>
+                </uib-tab-heading>
+                <div class="row wrapper-md">
+                    <form class="form-horizontal" name="memberForm2">
+                        <div class="form-group col-sm-12">
+                            <label class="control-label">{{ "member.creationDate" | translate }}</label>
+                            <div class="font-bold text-primary">
+                                {{member.creationDate | persianDate : 'fullDate'|translateNumber}}
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-12" >
+                            <label class="control-label">{{ "member.fullName" | translate }}</label>
+                            <input type="text" class="form-control" ng-model="member.fullName">
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <label class="control-label">{{ "member.email" | translate }}</label>
+                            <input type="text" class="form-control" ng-model="member.email">
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <label class="control-label">{{ "member.nationalCode" | translate }}</label>
+                            <input type="text" class="form-control" ng-model="member.nationalCode">
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <label class="control-label">{{ "member.mac" | translate }}</label>
+                            <input type="text" class="form-control" ng-model="member.mac">
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <label class="control-label">{{ "member.gender" | translate }}</label>
+                            <select ng-model="member.gender" class="form-control">
+                                <option value="" hidden>{{'member.gender' | translate}}</option>
+                                <option value="female">{{'general.female' | translate}}</option>
+                                <option value="male">{{'general.male' | translate}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <label class="control-label">{{ "member.age" | translate }}</label>
+                            <input type="text" class="form-control" ng-model="member.age">
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <label class="control-label">{{ "member.birthday" | translate }}</label>
+                            <p class="input-group">
+                                <input type="text" class="form-control text-center"
+                                       datepicker-popup-persian='{{dateFormat}}' ng-model="member.birthday"
+                                       placeholder="{{ 'member.birthday' | translate }}"
+                                       is-open="startDateCalendarIsOpen" datepicker-options="dateOptions"
+                                       date-disabled="disabled(date, mode)"
+                                       close-text="{{ 'date.close' | translate }}"/>
+                                <span class="input-group-btn">
+                                        <button type="button" class="btn btn-primary"
+                                                ng-click="startDateCalendar($event)">
+                                            <i class="fa fa-calendar"></i>
+                                        </button>
+                                    </span>
+                            </p>
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <label class="control-label">{{ "member.passportNumber" | translate }}</label>
+                            <input type="text" class="form-control" ng-model="member.passportNumber">
+                        </div>
+
+                        <div class="form-group col-sm-12">
+                            <label class="control-label">{{ "member.roomNumber" | translate }}</label>
+                            <input type="text" class="form-control" ng-model="member.roomNumber">
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <label class="control-label">{{ "member.studentId" | translate }}</label>
+                            <input type="text" class="form-control" ng-model="member.studentId">
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <label class="control-label">{{ "member.studentGrade" | translate }}</label>
+                            <input type="text" class="form-control" ng-model="member.studentGrade">
+                        </div>
+                    </form>
+                </div>
+            </uib-tab>
+        </uib-tabset>
+    </div>
+    <div class="modal-footer">
+        <button ng-click="cancel()" class="btn btn-sm btn-default">{{ options.cancelBtnLabel | translate }}</button>
+        <button ng-click="save(0)" class="btn btn-sm btn-primary">{{ options.saveBtnLabel | translate }}</button>
+        <button ng-if="options.newMember" ng-click="save(1)" class="btn btn-sm btn-primary">
+            {{options.saveAndSendBtnLabel | translate }}
+        </button>
+    </div>
+</div>

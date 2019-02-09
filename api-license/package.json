@@ -7,6 +7,7 @@
   },
   "scripts": {
     "lint": "eslint .",
+    "build": "echo 'we are ready'",
     "start": "node server/server.js",
     "start:dev": "nodemon ./server/server.js",
     "releaseSandbox": "git commit -a -m 'sandbox:3.5';git tag -f release ;git push -u origin develop --tags --force",

@@ -1,0 +1,29 @@
+<div class="">
+    <div class="modal-header">
+        <h3 class="modal-title">{{ "business.confirmService" |translate }}</h3>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col col-md-12">
+                {{"nas.maxOnlineUsers"|translate}} : {{service.onlineUsers|translateNumber}}&nbsp;{{"general.client"|translate}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-md-12">
+                {{"business.serviceDuration"|translate}} : {{service.duration | translateNumber}}
+                {{"business.months"|translate}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-md-12">
+                {{"business.totalPrice"|translate}} : <span class="badge bg-primary">{{service.cost | currency : "" : 0 |translateNumber}}  {{"general.toman"|translate}}</span>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button ng-click="cancel()" class="btn btn-sm btn-default">{{ "general.cancel" | translate }}</button>
+        <button ng-click="openPaymentGateway()" class="btn btn-sm btn-info col-sm-4 pull-right">
+            {{ "business.sendToBank" | translate }}
+        </button>
+    </div>
+</div>

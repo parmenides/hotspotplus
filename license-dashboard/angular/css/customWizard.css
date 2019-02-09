@@ -1,0 +1,26 @@
+/*My settings for angular wizard*/
+
+.steps-indicator {
+    height: 60px;
+    border-bottom-left-radius: 2em;
+    border-bottom-right-radius: 2em;
+    background: #f6f8f8;
+}
+.steps-indicator li {
+    float: right;
+}
+.steps-indicator li a {
+    font-weight: normal;
+}
+.steps-indicator li.current a:before {
+    background-color: #7266ba;
+}
+.steps-indicator li.done a:before {
+    background-color: #e6e6e6;
+}
+.steps-indicator li.editing a:before {
+    background-color: #7266ba;
+}
+.min-height-500 {
+    min-height: 500px;
+}

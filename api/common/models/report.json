@@ -39,12 +39,26 @@
       "model": "Business",
       "foreignKey": ""
     },
-    "fileStorages": {
+    "fileStorage": {
       "type": "hasOne",
       "model": "FileStorage",
       "foreignKey": ""
     }
   },
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "serviceMan",
+      "permission": "ALLOW"
+    } ,
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "admin",
+      "permission": "ALLOW"
+    }
+  ],
   "acls": [
     {
       "accessType": "*",

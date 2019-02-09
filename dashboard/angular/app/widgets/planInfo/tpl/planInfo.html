@@ -1,0 +1,53 @@
+<h4 class="font-thin m-t-none m-b-md text-muted">{{'member.internetPlansInfo' | translate}}</h4>
+<div class="m-b" ng-if="params.planDeleted">
+    <div class="m-b">
+        <span>{{'member.packageName' | translate}}</span>
+        <span class="label text-base bg-warning pos-rlt padder-h-md m-r-10">
+            <i class="arrow right arrow-warning"></i>
+            {{'member.noInternetPlan' | translate}}
+        </span>
+    </div>
+</div>
+<div class="m-b" ng-if="!params.planDeleted">
+    <div class="m-b">
+        <span>{{'member.packageName' | translate}}</span>
+        <span class="label text-base bg-warning pos-rlt padder-h-md m-r-10">
+            <i class="arrow right arrow-warning"></i>
+            {{params.package.name}}
+        </span>
+    </div>
+    <div class="m-b">
+        <span>{{'member.planTime' | translate}}</span>
+        <span class="label text-base bg-info pos-rlt padder-h-md m-r-10">
+            <i class="arrow right arrow-info"></i>
+            {{params.package.duration | persianNumber}} {{'member.' + params.package.type | translate}}
+        </span>
+    </div>
+    <div class="m-b">
+        <span>{{'member.planSpeed' | translate}}</span>
+        <span class="label text-base bg-success pos-rlt padder-h-md m-r-10">
+            <i class="arrow right arrow-success"></i>
+            {{params.package.speed.value | persianNumber}}{{params.package.speed.type}}
+        </span>
+    </div>
+    <div class="m-b">
+        <span>{{'member.expireDate' | translate}}</span>
+        <span class="label text-base bg-primary pos-rlt padder-h-md m-r-10">
+            <i class="arrow right arrow-primary"></i>
+            {{params.expireDate}}
+        </span>
+    </div>
+    <div class="m-b">
+        <span>{{'member.connectionTime' | translate}}</span>
+        <span class="label text-base bg-light pos-rlt padder-h-md m-r-10">
+            <i class="arrow right arrow-light"></i>
+            <span ng-if="params.package.hourly">
+            {{'member.fromTime' | translate}} {{params.package.fromHour | persianNumber}}:{{params.package.fromMinute | persianNumber}}
+            {{'member.toTime' | translate}} {{params.package.toHour | persianNumber}}:{{params.package.toMinute | persianNumber}}
+            </span>
+            <span ng-if="!params.package.hourly">
+                {{'member.unlimited' | translate}}
+            </span>
+        </span>
+    </div>
+</div>

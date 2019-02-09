@@ -30,8 +30,8 @@ bower_components
 .lock-wscript
 
 # Compiled
-build
-dist
+#build
+#dist
 images
 
 # Dependency directories
@@ -76,4 +76,4 @@ jspm_packages/
 
 #local docker compose
 docker-compose-local.yml
-dashboard/angular
+# dashboard/angular

@@ -1,0 +1,43 @@
+<div class="">
+    <div class="modal-header">
+        <h3 class="modal-title">{{ "coupon.search" |translate }}</h3>
+    </div>
+    <div class="modal-body">
+        <fieldset class="wrapper-lg">
+            <form class="form-horizontal" name="searchCouponForm" ng-submit="searchCoupon(couponCode)" novalidate>
+                <div class="form-group form-group-md">
+                    <label class="col-sm-4 control-label">{{ "coupon.insertCode" | translate }}</label>
+                    <div class="col-sm-7">
+                        <div class="input-group">
+                            <input ng-model='couponCode' type="text" class="form-control" name="couponCode" autofocus required>
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-primary" ng-if="!isSearchingCoupon" ng-click="searchCoupon(couponCode)" ng-disabled='searchCouponForm.$invalid'>
+                                    <i class="fa fa-search"></i>
+                                </button>
+                                <button type="button" class="btn btn-primary" ng-if="isSearchingCoupon" ng-disabled='true'>
+                                    <i class="fa fa-circle-o-notch fa-spin"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="alert alert-danger alert-dismissable" ng-if="noCouponFound">
+                <div class="row">
+                    <div class="col text-center">
+                       <i class="fa fa-warning"></i>&nbsp;{{"coupon.notFound" | translate}}
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <div class="modal-footer">
+        <button ng-click="cancel()" class="btn btn-sm btn-default">{{ "general.cancel" | translate }}</button>
+        <button ng-click="searchCoupon(couponCode)" class="btn btn-sm btn-primary pull-right" ng-if="!isSearchingCoupon" ng-disabled='searchCouponForm.$invalid'>
+            {{ "general.search" | translate }}
+        </button>
+        <button class="btn btn-sm btn-primary pull-right" ng-if="isSearchingCoupon" ng-disabled='true'><i class="fa fa-circle-o-notch fa-spin"></i>
+            {{ "coupon.isSearching" | translate }}
+        </button>
+    </div>
+</div>

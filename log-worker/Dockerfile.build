@@ -1,0 +1,15 @@
+FROM bitnami/node:10-prod
+
+RUN install_packages git ca-certificates make python g++
+RUN mkdir /log
+RUN mkdir /key
+COPY ./dist /app
+COPY ./package.json /app
+COPY ./package-lock.json /app
+WORKDIR /app
+ENV NPM_CONFIG_PREFIX=/app/.npm-global
+ENV PATH=$PATH:/app/.npm-global/bin
+RUN npm i npm@latest -g
+
+RUN npm install --only=production
+CMD npm run start:node

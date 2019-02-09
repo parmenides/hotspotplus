@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="utf-8"/>
+    <title>پنل مدیریت هات‌اسپات پلاس</title>
+    <meta name="description" content=""/>
+    <meta name="keywords"
+          content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="css/app.min.css">
+
+    <link rel="stylesheet" href="css/app1.min.css">
+
+</head>
+<body ng-controller="AppCtrl" dir="rtl">
+<toaster-container
+        toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
+<div class="app" id="app"
+     ng-class="{'app-header-fixed':app.settings.headerFixed, 'app-aside-fixed':app.settings.asideFixed, 'app-aside-folded':app.settings.asideFolded, 'app-aside-dock':app.settings.asideDock, 'container':app.settings.container}"
+     ui-view></div>
+
+
+<script src="js/app1.angular.js"></script>
+<script src="js/app2.angular.js"></script>
+<script src="js/app3.angular.js"></script>
+<script src="../libs/assets/persian-date/persiandate.js"></script>
+<script src="../libs/raven-js/dist/plugins/angular.js"></script>
+<script src="js/app.js"></script>
+<script src="js/config.js"></script>
+<script src="js/config.router.js"></script>
+<script src="js/config.lazyload.js"></script>
+
+<script src="js/app5.angular.js"></script>
+<script>
+
+	angular.element ( document ).ready ( function () {
+		setConfig ( {
+			appStatus:"test",
+			serviceStatus:"cloud",
+			appTitle:"Hotspotplus",
+			protocol:'http',
+			isDefault:false,
+			enableSentry:false
+	} );
+		setupRaven ();
+		angular.bootstrap ( document, [ "app" ] );
+
+		function setConfig ( systemConfig ) {
+			Window.appStatus = systemConfig.appStatus;
+			Window.serviceStatus = systemConfig.serviceStatus;
+			Window.sentryPath = systemConfig.sentryPath;
+			Window.enableSentry = systemConfig.enableSentry;
+			Window.appTitle = systemConfig.appTitle;
+			Window.sentryDomain = systemConfig.sentryDomain;
+			Window.sentryToken = systemConfig.sentryToken;
+			if ( systemConfig.sentryReleaseToken ) {
+				Window.sentryReleaseToken = systemConfig.sentryReleaseToken;
+			}
+			Window.isDefault = systemConfig.isDefault || false;
+			Window.apiProtocol = systemConfig.apiProtocol;
+			Window.apiURL = Window.apiProtocol + "://" + location.host
+		}
+
+		function setupRaven ( id, username ) {
+			var userInfo = {};
+			if ( id ) {
+				userInfo.id = id;
+				userInfo.email = username;
+			}
+			Raven.config ( 'http://' + Window.sentryToken + '@' + Window.sentryDomain + '/' + Window.sentryPath, {
+				release:            Window.sentryReleaseToken,
+				shouldSendCallback: function () {
+					return false//Window.enableSentry;
+				}
+			} )
+				.addPlugin ( Raven.Plugins.Angular )
+				.install ();
+		}
+
+		Window.isCloud = function () {
+			return Window.serviceStatus === 'cloud';
+		}
+
+	} );
+</script>
+</body>
+</html>

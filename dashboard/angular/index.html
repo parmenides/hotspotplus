@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>پنل مدیریت هات‌اسپات پلاس</title>
+    <meta name="description" content=""/>
+    <meta name="keywords"
+          content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="css/app.min.css">
+
+    <link rel="stylesheet" href="css/app1.min.css">
+
+</head>
+<body ng-controller="AppCtrl" dir="rtl">
+<toaster-container
+        toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
+<div class="app" id="app"
+     ng-class="{'app-header-fixed':app.settings.headerFixed, 'app-aside-fixed':app.settings.asideFixed, 'app-aside-folded':app.settings.asideFolded, 'app-aside-dock':app.settings.asideDock, 'container':app.settings.container}"
+     ui-view></div>
+
+
+<script src="js/app1.angular.js"></script>
+<script src="js/app2.angular.js"></script>
+<script src="js/app3.angular.js"></script>
+<script src="../libs/assets/persian-date/persiandate.js"></script>
+<script src="../libs/raven-js/dist/plugins/angular.js"></script>
+<script src="js/app.js"></script>
+<script src="js/config.js"></script>
+<script src="js/config.router.js"></script>
+<script src="js/config.lazyload.js"></script>
+
+<script src="js/app5.angular.js"></script>
+<script>
+
+	Window.appStatus = 'test';
+	Window.appDomain = location.host;
+	Window.API_URL="";
+	if ( Window.appStatus === 'test'   ) {
+		Window.API_URL = "http://127.0.0.1:3000";
+	}
+	angular.element ( document ).ready ( function () {
+		$.ajax ( {
+			type:    "POST",
+			url:     Window.API_URL + "/api/config/systemConfig",
+			method:  'POST',
+			success: function ( systemConfig, textStatus, jqXHR ) {
+				setConfig ( systemConfig );
+				setupRaven ();
+				/*if ( Window.enableSentry ) {
+				}*/
+				angular.bootstrap ( document, [ "app" ] );
+			},
+			error:   function ( jqXHR, textStatus, errorThrown ) {
+				console.log ( textStatus );
+				console.log ( errorThrown );
+				alert ( "Error, Contact Support!" );
+			}
+		} );
+
+		function setConfig ( systemConfig ) {
+			Window.serviceStatus = systemConfig.serviceStatus;
+			Window.appTitle = systemConfig.appTitle;
+			Window.enableSentry = systemConfig.enableSentry;
+			Window.sentryUrl = systemConfig.sentryUrl;
+			Window.sentryReleaseToken = systemConfig.sentryReleaseToken || "default";
+			Window.isDefault = systemConfig.isDefault || false;
+			Window.systemConfig = systemConfig;
+		}
+
+		function setupRaven ( id, username ) {
+			var userInfo = {};
+			if ( id ) {
+				userInfo.id = id;
+				userInfo.email = username;
+			}
+			Raven.config ( Window.sentryUrl, {
+				release:            Window.sentryReleaseToken,
+				shouldSendCallback: function () {
+					return Window.enableSentry;
+				}
+			} ).addPlugin ( Raven.Plugins.Angular ).install ();
+		}
+
+
+	} );
+</script>
+</body>
+</html>

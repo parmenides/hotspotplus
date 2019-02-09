@@ -1,0 +1,322 @@
+.min-height-600 {
+    min-height: 600px;
+}
+
+.min-height-500 {
+    min-height: 500px;
+}
+
+.min-height-400 {
+    min-height: 400px;
+}
+
+.min-height-300 {
+    min-height: 300px;
+}
+.min-height-310 {
+    min-height: 310px;
+}
+
+.min-height-200 {
+    min-height: 200px;
+}
+
+.min-height-100 {
+    min-height: 100px;
+}
+
+.float-right {
+    float: right;
+}
+
+.margin-t-30 {
+    margin-top: 30px;
+}
+
+.margin-t-100 {
+    margin-top: 100px;
+}
+
+.padder-t-8 {
+    padding-top: 8px;
+}
+
+.padder-l-10 {
+    padding-left: 10px;
+}
+
+.padder-b-100 {
+    padding-bottom: 100px;
+}
+
+.padder-v-lg {
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+.padder-v-md {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.padder-v-sm {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.padder-v-xs {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.padder-h-md {
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+.no-padder-v {
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+}
+
+.m-r-10 {
+    margin-right: 10px;
+}
+
+.pagination {
+    margin: 0 !important;
+}
+
+.unicode-ltr {
+    direction: ltr;
+    unicode-bidi: bidi-override;
+}
+
+.ltr-text {
+    direction: ltr;
+}
+
+.access-form input {
+    text-align: center;
+}
+
+.text-gray {
+    color: #888;
+}
+
+.widget-growth .digitLabel {
+    font-size: 18px;
+}
+
+.widget-growth .count {
+    font-weight: 500;
+    font-size: 30px;
+    color: gray;
+    line-height: 45px;
+}
+
+.widget-session {
+    font-weight: 500;
+    font-size: 36px;
+    line-height: 84px;
+}
+.widget-credit {
+    font-weight: 500;
+    font-size: 22px;
+    line-height: 84px;
+}
+
+.widget-router {
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 41px;
+    vertical-align: middle;
+}
+
+.widget-growth .countPercent {
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 36px;
+}
+
+.widget-growth .icon {
+    padding-left: 6px;
+}
+
+.text-growth-positive {
+    color: #23b7e5;
+}
+
+.chart-height-max-9 canvas {
+    max-height: 266px;
+}
+
+.calender-container .dropdown-menu {
+    left: 0px !important;
+    right: auto !important;
+}
+
+body {
+    font-family: IRANSans, serif !important;
+    font-weight: 300;
+    direction: rtl;
+    font-size: 14px !important;
+    line-height: 22px !important;
+    /*background-color: #E2E2E2;*/
+    margin: 0;
+}
+
+h1, h2, h3, h4, h5, h6, input, textarea {
+    font-family: IRANSans, serif !important;
+}
+
+h1 {
+    font-weight: bold;
+}
+
+h3 {
+    line-height: 26px;
+}
+
+label {
+    margin-bottom: 3px !important;
+    margin-top: 3px !important;
+}
+
+.loading {
+    float: left;
+    margin-left: 12px;
+    margin-top: 3px;
+}
+
+.text-gray-ltr {
+    color: #bdbdbd;
+}
+
+.text-grey-dr {
+    color: #666;
+}
+
+.center {
+    text-align: center;
+}
+
+.headerCenter {
+    text-align: center;
+}
+
+.navbar-btn:hover {
+    color: #6254b2;
+}
+
+.navbar-brand {
+    font-size: 15px;
+}
+
+slider span.bar {
+    background-color: #7266ba !important;
+}
+
+.upload-modal {
+    line-height: 35px;
+}
+
+.upload-modal img {
+    max-height: 180px;
+    min-height: 180px;
+    opacity: 0.5;
+}
+
+.upload-modal .caption {
+    max-height: 80px;
+    min-height: 80px;
+}
+
+.upload-modal:hover, .selected {
+    box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+}
+
+.upload-modal > :checked + img {
+    opacity: 1.0;
+}
+
+.disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.badge-lg {
+    padding: 7px 12px !important;
+    font-size: 110%;
+}
+
+.popover-content {
+    font-family: IRANSans, serif !important;
+    font-weight: 300;
+    direction: rtl;
+    font-size: 14px !important;
+    line-height: 22px !important;
+    /*background-color: #E2E2E2;*/
+    margin: 0;
+}
+
+.serviceTable {
+    margin-top: 30px;
+}
+
+.serviceTable td {
+    text-align: center;
+}
+
+.serviceTable th {
+    text-align: center;
+}
+
+.startText {
+    text-align: right !important;
+}
+
+.service-premium-icon {
+    font-size: 1.1em;
+}
+
+.service-free-icon {
+    font-size: 1.1em;
+}
+
+.start-text {
+    text-align: right !important;
+}
+
+.pre-content {
+    font-family: IRANSans, serif !important;
+    font-weight: 300;
+    direction: rtl;
+    font-size: 14px !important;
+    line-height: 22px !important;
+}
+.ui-grid, .ui-grid-viewport {
+    height: auto !important;
+    min-height: 376px !important;
+}
+.fakedisabled{
+    opacity: .65;
+}
+
+.text-1-5{
+    font-size: 1.3em;
+}
+
+.border-dashed {
+    background-color: transparent;
+    border-style: dashed !important;
+    border-width: 0;
+}
+
+
+
+.dashboard-chart-label {
+    font-weight: lighter;
+    padding-top: 17px;
+    padding-bottom: 10px;
+}

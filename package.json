@@ -1,6 +1,6 @@
 {
   "name": "hotspotplus",
-  "version": "1.0.0",
+  "version": "1.0.19",
   "description": "hotspotplus",
   "scripts": {
     "start": "docker-compose down; docker-compose up",
@@ -9,6 +9,8 @@
     "log:apilc":"tail -f api-license/logs/License_Service-debug.log| bunyan",
     "log:cord":"tail -f coordinator/logs/coordinator-debug.log| bunyan",
     "preinstall": "node bin/preinstall",
+    "build": "node bin/build",
+    "release": "npm run build && git commit -am ${MESSAGE} && npm version ${VERSION} -m 'release' ",
     "prettier": "prettier '{api-license/server,api-license/common/models,coordinator/src,api/server,api/server/*,api/common/models}/**/*.js'  --write"
   },
   "prettier": {

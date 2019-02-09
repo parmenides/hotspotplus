@@ -20,7 +20,7 @@ module.exports = function (app) {
   SystemConfig.getConfig()
   createQueue((error) => {
     if (error) {
-      log.error(error);
+      log.error(error)
       throw error
     }
     addDefaultRolesAndUsers()
@@ -323,19 +323,17 @@ module.exports = function (app) {
       mappings: {
         report: {
           properties: {
-            username: {type: 'keyword'},
-            mac: {type: 'keyword'},
-            host: {type: 'keyword'},
-            clientIp: {type: 'keyword'},
-            businessId: {type: 'keyword'},
-            nasId: {type: 'keyword'},
-            groupIdentityId: {type: 'keyword'},
-            groupIdentity: {type: 'keyword'},
-            groupIdentityType: {type: 'keyword'},
+            timestamp: {type: 'date'},
+            nasIp: {type: 'keyword'},
+            path: {type: 'keyword'},
+            query: {type: 'keyword'},
+            params: {type: 'keyword'},
+            message: {type: 'keyword'},
+            protocol: {type: 'keyword'},
+            memberIp: {type: 'keyword'},
+            method: {type: 'keyword'},
             url: {type: 'keyword'},
             domain: {type: 'keyword'},
-            logDate: {type: 'date'},
-            creationDate: {type: 'date'},
             hostGeoIp: {
               properties: {
                 location: {
@@ -345,17 +343,7 @@ module.exports = function (app) {
                 city_name: {type: 'keyword'},
                 country_name: {type: 'keyword'},
               },
-            },
-            clientGeoIp: {
-              properties: {
-                location: {
-                  type: 'geo_point',
-                },
-                timezone: {type: 'keyword'},
-                city_name: {type: 'keyword'},
-                country_name: {type: 'keyword'},
-              },
-            },
+            }
           },
         },
       },

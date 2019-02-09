@@ -1,0 +1,45 @@
+<section desc="Status">
+  <div class="row">
+    <form class="col-md-6 col-md-offset-3 col-sm-12">
+      <div class="row">
+        <h4 class="wrapper-xs text-center alpha-header-text">
+          {{'statusHeaderText'|translate}}
+        </h4>
+        <div class="col-sm-12">
+          <div class="panel alpha-panel-default" ng-if="status.show">
+            <div class="panel-body">
+              <div class="row">
+                <span class="col-xs-5 font-bold">{{'yourIp' | translate}}</span>
+                <span class="col-xs-5 ltr">{{status.ip | persianNumber}}</span>
+              </div>
+              <div class="row">
+                <span class="col-xs-5 font-bold">{{'download' | translate}}</span>
+                <span class="col-xs-5 ltr">{{status.download | persianNumber}}</span>
+              </div>
+              <div class="row">
+                <span class="col-xs-5 font-bold">{{'upload' | translate}}</span>
+                <span class="col-xs-5 ltr">{{status.upload | persianNumber}}</span>
+              </div>
+              <div class="row">
+                <span class="col-xs-5 font-bold">{{'upTime' | translate}}</span>
+                <span class="col-xs-5 ltr">{{status.uptime | persianNumber}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group text-center">
+          <a class="alpha-social-btn" ng-show="showInstagram" href="{{instagram}}">
+            <i class="icon-instagram"></i>
+          </a>
+          <a class="alpha-social-btn" ng-show="showTelegram" href="{{telegram}}">
+            <i class="icon-telegram"></i>
+          </a>
+        </div>
+        <div class="form-group">
+          <button class="btn alpha-btn btn-block alpha-btn-primary" ng-click="signOut()">{{'signOutBtn'| translate}}
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>

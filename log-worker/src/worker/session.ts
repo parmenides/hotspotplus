@@ -6,7 +6,7 @@ const SESSION_LOG_INDEX = `${process.env.ELASTIC_INDEX_PREFIX}sessions`;
 
 const LOG_WORKER_QUEUE = process.env.LOG_WORKER_QUEUE;
 const log = logger.createLogger();
-const API_BASE = process.env.CORE_API;
+const API_BASE = process.env.API_ADDRESS;
 if (!LOG_WORKER_QUEUE) {
   throw new Error('invalid settings');
 }
@@ -73,7 +73,7 @@ const findSessions = async (reportRequestTask: SessionQuery) => {
   log.debug(Array.from(clientIpList));
   log.debug(Array.from(nasIpList));
   return {
-    clientIpList: Array.from(clientIpList),
+    memberIpList: Array.from(clientIpList),
     nasIpList: Array.from(nasIpList),
   };
 };
@@ -83,7 +83,7 @@ const querySessions = async (
   size: number,
   sessionQuery: SessionQuery,
 ) => {
-  log.debug(createSearchSessionQuery(sessionQuery));
+  log.debug(`session query %j`, createSearchSessionQuery(sessionQuery));
   const result = await elasticClient.search({
     index: SESSION_LOG_INDEX,
     from,

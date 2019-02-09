@@ -1,0 +1,21 @@
+<wizard>
+    <wz-step ng-repeat="step in campaignTypes[campaign.type].steps" wz-title="{{'campaign.'+step |translate}}">
+        <div class="wrapper-md b-b">
+            <h1 class="m-n font-thin h3">{{'campaign.'+step |translate}}</h1>
+        </div>
+        <div class="wrapper-md min-height-600">
+            <ng-include src="'app/campaign/tpl/steps/'+step+'.html'"></ng-include>
+        </div>
+        <nav>
+            <ul class="pager">
+                <li ng-hide="$first"><a href="" wz-previous><i class="fa fa-arrow-right"></i> {{"general.previous" |
+                    translate}}</a></li>
+                <li ng-hide="$last"><a href="" class="text-primary" wz-next>{{"general.next" | translate}} <i
+                        class="fa fa-arrow-left"></i></a>
+                </li>
+                <li ng-show="$last"><a href="" class="text-primary" wz-finish ng-click="save()">{{"general.save" |
+                    translate}} <i class="fa fa-check"></i></a></li>
+            </ul>
+        </nav>
+    </wz-step>
+</wizard>

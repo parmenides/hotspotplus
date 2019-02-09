@@ -1,0 +1,12 @@
+<div ui-jq="easyPieChart" ui-options={{chartOption}} class="inline m-t">
+    <div>
+        <span class="text-info h4">{{chartOption.percent | persianNumber}}%</span>
+    </div>
+</div>
+<div class="text-muted font-bold text-xs m-t m-b" ng-if="params.remainTime != 'unlimited'">
+    {{'member.timeRemain' | translate}} : {{params.remainTime | persianNumber}} {{'member.minute' | translate}}
+</div>
+<div class="text-muted font-bold text-xs m-t m-b" ng-if="params.remainTime == 'unlimited'">
+    {{'member.timeRemain' | translate}} : {{'member.' + params.remainTime | translate}}
+</div>
+
