@@ -1,0 +1,98 @@
+{
+  "name": "ClientSession",
+  "base": "Generic",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "replaceOnPUT": false,
+  "properties": {
+    "expiresAt": {
+      "type": "date",
+      "required": true
+    },
+    "creationDate": {
+      "type": "number",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "business": {
+      "type": "belongsTo",
+      "model": "Business",
+      "foreignKey": ""
+    },
+    "members": {
+      "type": "hasOne",
+      "model": "Member",
+      "foreignKey": ""
+    },
+    "ips": {
+      "type": "hasOne",
+      "model": "Ip",
+      "foreignKey": ""
+    }
+  },
+  "acls": [
+    {
+      "accessType": "READ",
+      "principalType": "ROLE",
+      "principalId": "$owner",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "WRITE",
+      "principalType": "ROLE",
+      "principalId": "$owner",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "admin",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "networkadmin",
+      "permission": "ALLOW",
+      "property": "count"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "networkadmin",
+      "permission": "ALLOW",
+      "property": "getOnlineUsers"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "networkadmin",
+      "permission": "ALLOW",
+      "property": "getOnlineSessionCount"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "networkadmin",
+      "permission": "ALLOW",
+      "property": "killOnlineSession"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "serviceMan",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "DENY"
+    }
+  ],
+  "methods": {}
+}
