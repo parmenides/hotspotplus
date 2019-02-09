@@ -6,11 +6,15 @@ stages:
   - build
 before_script:
   - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY_IMAGE
-deploy:
-  stage: build
+api:
+  stage: api
   script:
     - apk add --no-cache jq curl bash git
     - ./api/build.sh
+apilicense:
+  stage: apilicense
+  script:
+    - apk add --no-cache jq curl bash git
     - ./api-license/build.sh
     - ./dashboard/build.sh
     - ./license-dashboard/build.sh
