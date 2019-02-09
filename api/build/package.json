@@ -1,6 +1,6 @@
 {
   "name": "hotspotplus-api",
-  "version": "1.0.1",
+  "version": "4.0.2",
   "main": "server/server.js",
   "bin": "server/server.js",
   "pkg": {
@@ -31,6 +31,7 @@
     "start": "node server/server.js",
     "start:dev": "nodemon ./server/server.js",
     "pretest": "eslint .",
+    "build": "grunt && git add .",
     "releaseSandbox": "grunt ;git commit -a -m 'sandbox:latest';git tag -f release ;git push -u origin develop --tags --force",
     "releaseProduction": "grunt ;git commit -a -m 'production:3.12';git tag -f release ;git push -u origin master --tags --force",
     "releaseLocalProduction": "grunt ;git commit -a -m 'production:latest';git tag -f release ;git push -u origin master --tags --force",
