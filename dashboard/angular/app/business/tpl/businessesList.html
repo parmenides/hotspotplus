@@ -1,0 +1,142 @@
+<div ng-controller="businessList">
+    <div class="wrapper-md bg-light b-b">
+        <h1 class="m-n font-thin h3">{{"business.listTitle"|translate}}</h1>
+    </div>
+    <div class="hbox hbox-auto-xs hbox-auto-sm">
+        <div class="col wrapper-md">
+            <div class="row">
+                <div class="clearfix m-b ">
+                    <form class="" ng-submit="searchBusiness()">
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control input-sm" ng-model="businessId"
+                                   placeholder="{{'business.inputId' |  translate}}"
+                                   uib-popover="{{'help.searchById' | translate}}" popover-trigger="mouseenter"
+                                   popover-placement="bottom-right">
+                        </div>
+                    </form>
+                    <form class="" ng-submit="searchBusiness()">
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control input-sm" ng-model="businessMobile"
+                                   placeholder="{{'business.inputMobile' |  translate}}"
+                                   uib-popover="{{'help.searchByMobile' | translate}}" popover-trigger="mouseenter"
+                                   popover-placement="bottom-right">
+                        </div>
+                    </form>
+                    <button type="button" class="btn btn-sm btn-primary" ng-if="!isSearching"
+                            ng-click="searchBusiness()"
+                            uib-popover="{{'help.searchBusiness' | translate}}" popover-trigger="mouseenter"
+                            popover-placement="bottom-right">
+                        <i class="fa fa-search"></i>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-info"
+                            uib-popover="{{'help.isSearching' | translate}}" popover-trigger="mouseenter"
+                            popover-placement="bottom-right"
+                            ng-if="isSearching" disabled>
+                        <i class="fa fa-circle-o-notch fa-spin"></i>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-default"
+                            uib-popover="{{'help.clear' | translate}}" popover-trigger="mouseenter" popover-placement="left"
+                            ng-click="clearSearch()">
+                        <i class="fa fa-close"></i>
+                    </button>
+                </div>
+                <div class="clearfix m-b ">
+                    <div class="col-sm-3 form-horizontal">
+                        <div class="padder-l-10 float-right">
+                            <label class="control-label text-sm">{{"dashboard.start" | translate}}</label>
+                        </div>
+                        <div class="input-group input-group-sm calender-container">
+                            <input type="text" class="text-center form-control"
+                                   datepicker-popup-persian='{{dateFormat}}' ng-model="fromDate"
+                                   is-open="startDateCalendarIsOpen" datepicker-options="dateOptions"
+                                   date-disabled="disabled(date, mode)"
+                                   close-text="{{ 'date.close' | translate }}"
+                                   ng-class=""/>
+
+                            <span class="input-group-btn">
+                            <button type="button" class="btn btn-primary"
+                                    ng-click="startDateCalendar($event)">
+                                <i class="fa fa-calendar"></i>
+                            </button>
+                        </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 form-horizontal">
+                        <div class="padder-l-10 float-right">
+                            <label class="control-label text-sm">{{"dashboard.end" | translate}} </label>
+                        </div>
+                        <div class="input-group input-group-sm calender-container">
+                            <input type="text" class="text-center form-control"
+                                   datepicker-popup-persian='{{dateFormat}}' ng-model="endDate"
+                                   is-open="endDateCalendarIsOpen" datepicker-options="dateOptions"
+                                   date-disabled="disabled(date, mode)"
+                                   close-text="{{ 'date.close' | translate }}"
+                                   ng-class=""/>
+
+                            <span class="input-group-btn">
+                            <button type="button" class="btn btn-primary"
+                                    ng-click="endDateCalendar($event)">
+                                <i class="fa fa-calendar"></i>
+                            </button>
+                        </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+
+                    </div>
+                    <button type="button" class="btn btn-sm btn-primary" ng-if="!isSearching"
+                            ng-click="searchBusiness()"
+                            uib-popover="{{'help.searchBusiness' | translate}}" popover-trigger="mouseenter"
+                            popover-placement="bottom-right">
+                        <i class="fa fa-search"></i>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-info"
+                            uib-popover="{{'help.isSearching' | translate}}" popover-trigger="mouseenter"
+                            popover-placement="bottom-right"
+                            ng-if="isSearching" disabled>
+                        <i class="fa fa-circle-o-notch fa-spin"></i>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-default"
+                            uib-popover="{{'help.clear' | translate}}" popover-trigger="mouseenter" popover-placement="left"
+                            ng-click="clearSearch()">
+                        <i class="fa fa-close"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="table-responsive m-b-lg">
+                <div ui-i18n="{{localLang}}">
+                    <div ui-grid="gridOptions" ui-grid-pagination ui-grid-resize-columns class="grid"
+                         dir="{{direction}}"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="btn-group">
+                        <label class="btn btn-default" ng-model="paginationOptions.itemPerPage" uib-btn-radio="10"
+                               uncheckable>{{10 | translateNumber}}</label>
+                        <label class="btn btn-default" ng-model="paginationOptions.itemPerPage" uib-btn-radio="20"
+                               uncheckable>{{20 | translateNumber}}</label>
+                        <label class="btn btn-default" ng-model="paginationOptions.itemPerPage" uib-btn-radio="40"
+                               uncheckable>{{40 | translateNumber}}</label>
+                        <label class="btn btn-default" ng-model="paginationOptions.itemPerPage" uib-btn-radio="60"
+                               uncheckable>{{60 | translateNumber}}</label>
+                        <label class="btn btn-default" ng-model="paginationOptions.itemPerPage" uib-btn-radio="80"
+                               uncheckable>{{80 | translateNumber}}</label>
+                        <label class="btn btn-default" ng-model="paginationOptions.itemPerPage" uib-btn-radio="100"
+                               uncheckable>{{100 | translateNumber}}</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <uib-pagination ng-change="pageChanges()"
+                                    total-items="paginationOptions.totalItems"
+                                    items-per-page="paginationOptions.itemPerPage"
+                                    previous-text="{{'general.previous'|translate}}"
+                                    next-text="{{'general.next'|translate}}"
+                                    class="pagination-md"
+                                    ng-model="paginationOptions.pageNumber"
+                                    boundary-link-numbers="true" rotate="false" max-size="5"></uib-pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

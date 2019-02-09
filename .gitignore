@@ -76,4 +76,4 @@ jspm_packages/
 
 #local docker compose
 docker-compose-local.yml
-dashboard/angular
+# dashboard/angular

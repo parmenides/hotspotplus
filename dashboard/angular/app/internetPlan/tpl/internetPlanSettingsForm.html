@@ -1,0 +1,67 @@
+<div class="">
+    <div class="modal-header">
+        <h3 class="modal-title">{{ options.title |translate }}</h3>
+    </div>
+    <div class="modal-body">
+        <div class="col-sm-11">
+            <div uib-alert class="alert-success">
+                <div>{{'internetPlan.freePlansAreListed' | translate}}</div>
+            </div>
+        </div>
+        <form class="form-horizontal" name="internetPlanSettingsForm">
+            <div class="wrapper">
+                <div class="form-group">
+                    <div class="col-sm-11">
+                        <label class="control-label">
+                            {{ "internetPlan.chooseDefaultPlan" | translate }}</label>
+                        <select ng-model="defaultInternetPlan.plan"
+                                ng-options="internetPlan.name disable when internetPlan.price for internetPlan in options.internetPlans"
+                                class="form-control m-b">
+                            <option value="">{{'internetPlan.choosePlan' | translate}}</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-11">
+                        <label class="control-label">
+                            {{ "internetPlan.defaultPlanSchedule" | translate }}</label>
+                        <div class="input-group">
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-default" disabled="disabled">
+                                    {{"internetPlan.each" | translate}}
+                                </button>
+                            </div>
+                            <input type="text" class="form-control" ng-model="defaultInternetPlan.period">
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-default" disabled="disabled">
+                                    {{"internetPlan.hour" | translate}}
+                                </button>
+                            </div>
+                            <input type="text" class="form-control" ng-model="defaultInternetPlan.count">
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-default" disabled="disabled">
+                                    {{"internetPlan.numberDefaultPlan" | translate}}
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-sm-8 text-info-dker">
+                            {{"internetPlan.defaultPlanScheduleExample" | translate}}
+                        </div>
+                    </div>
+                </div>
+                <div class="wrapper">
+                    <div class="form-group">
+                        <div class="checkbox">
+                            <label class="i-checks">
+                                <input type="checkbox" ng-model="defaultInternetPlan.autoAssign"/><i></i>
+                                {{"internetPlan.autoAssignDefaultPlan" | translate}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button ng-click="cancel()" class="btn btn-sm btn-default">{{ options.cancelBtnLabel | translate }}</button>
+        <button ng-click="save()" class="btn btn-sm btn-primary">{{ options.saveBtnLabel | translate }}</button>
+    </div>
+</div>

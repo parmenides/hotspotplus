@@ -1,0 +1,57 @@
+<div ng-controller="wifiSettings">
+    <div class="wrapper-md bg-light b-b">
+        <h1 class="m-n font-thin h3">{{"wifi.wifiSettings"|translate}}</h1>
+    </div>
+
+    <div class="hbox hbox-auto-xs hbox-auto-sm">
+        <div class="wrapper-lg checkbox">
+            <label>
+                <input type="checkbox" ng-model="business.wifi.share"/>
+                {{"wifi.share" | translate}}
+            </label>
+        </div>
+        <form name="form" class="form-validation">
+            <fieldset ng-disabled="!business.wifi.share" class="wrapper" ng-class="{'text-muted':!business.wifi.share}">
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label class="control-label">{{'wifi.speed'| translate}}</label>
+                        <select class="form-control" ng-model="business.wifi.downloadSpeed"
+                                ng-options="speed for speed in speeds">
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="control-label">{{'wifi.bulk'| translate}}</label>
+                        <input class="form-control " type="number" min="0"
+                               ng-model="business.wifi.bulk"
+                               required>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset ng-disabled="!business.wifi.share" class="wrapper" ng-class="{'text-muted':!business.wifi.share}">
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label class="control-label">{{'wifi.time'| translate}}</label>
+                        <input class="form-control " ng-model="business.wifi.time" min="0"
+                               type="number"
+                               required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="control-label">{{'wifi.numOfPeople'| translate}}</label>
+                        <input class="form-control " ng-model="business.wifi.numOfPeople" type="number"
+                               min="0"
+                               required>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+
+        <div class="wrapper-lg">
+            <button type="submit" class="btn btn-md btn-default" ng-click="cancel()">
+                {{"general.cancel"|translate}}
+            </button>
+            <button type="submit" class="btn btn-md btn-primary" ng-click="save()">
+                {{"general.save"|translate}}
+            </button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,49 @@
+<div class="well" ng-controller="ticketDetailsController">
+
+
+    <div class="panel panel-info ">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                {{ticket.subject}} (&nbsp;{{"ticket.ticketCode"|translate}}:{{ticket.ticketCode|translateNumber}}
+                &nbsp;) <span
+                        class="pull-right">{{ticket.creationDate |  persianDate : "fullDate" | translateNumber }}</span>
+            </h3>
+        </div>
+        <div class="panel-body">
+            <div ng-repeat="message in ticket.messages ">
+                <div ng-if="message.sendBy=='customer'">
+                    <p>{{message.content}}</p>
+                </div>
+                <div ng-if="message.sendBy=='support'" style="margin-top: 30px">
+                    <div class="panel panel-default ">
+                        <div class="panel-heading">
+                            <h6 class="panel-title">
+                                <i class="fa fa-support"></i>
+                                {{"ticket.supportAnswer"|translate}}
+                                <span class="pull-right">{{message.creationDate | persianDate : "fullDate" | translateNumber }}</span>
+                            </h6>
+                        </div>
+                        <div class="panel-body">
+                            <p>{{message.content}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <button ng-click="sendReply()" class="btn btn-sm btn-primary "><i class="fa fa-fw fa-send"></i>&nbsp{{
+                "ticket.sendReply" | translate }}
+            </button>
+<!--
+            <button ng-click="closeTicket(false)" class="pull-right  btn btn-sm btn-default "><i
+                    class="fa fa-fw fa-remove"></i>&nbsp{{
+                "ticket.sadClosingTicket" | translate }}
+            </button>
+            <button ng-click="closeTicket(true)" class="pull-right btn btn-sm btn-warning "><i
+                    class="fa fa-fw fa-check"></i>&nbsp{{
+                "ticket.happyClosingTicket" | translate }}
+            </button>
+-->
+        </div>
+    </div>
+</div>

@@ -1,0 +1,34 @@
+<div class="">
+    <div class="modal-header">
+        <h3 class="modal-title">{{ "reseller.confirmPackage" |translate }}</h3>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col col-md-12">
+                {{"reseller.packageAllowedOnlineUsers"|translate}} : {{package.numOfUsers|translateNumber}}&nbsp;{{"general.person"|translate}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-md-12">
+                {{"reseller.packageDurationInMonths"|translate}} : {{package.durationInMonths | translateNumber}}
+                {{"business.months"|translate}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-md-12">
+                {{"reseller.packageCost"|translate}} :
+                <span class="badge bg-primary" ng-if="!package.discount">{{package.cost | currency : "" : 0 |translateNumber}}  {{"general.toman"|translate}}</span>
+                <span class="badge bg-primary" ng-if="package.discount">{{package.discount | currency : "" : 0 |translateNumber}}  {{"general.toman"|translate}}</span>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button ng-click="cancel()" class="btn btn-sm btn-default">{{ "general.cancel" | translate }}</button>
+        <button ng-click="openPaymentGateway()" ng-if='!bankWait' class="btn btn-sm btn-primary col-sm-4 pull-right">
+            {{ "reseller.confirmPackage" | translate }}
+        </button>
+        <button class="btn btn-sm btn-info col-sm-4 pull-right" ng-if="bankWait" ng-disabled='true'><i class="fa fa-circle-o-notch fa-spin"></i>
+            {{ "business.connectingToBank" | translate }}
+        </button>
+    </div>
+</div>

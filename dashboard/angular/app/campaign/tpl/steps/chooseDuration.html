@@ -1,0 +1,59 @@
+<h1 class="wrapper-sm m-n h5">{{"campaign.chooseCampaignDuration" | translate}}</h1>
+<ul class="list-group">
+    <li class="list-group-item">
+        <div class="checkbox">
+            <label class="i-checks">
+                <input type="checkbox" name="limitedTime" ng-model="campaign.limitedTime" ng-disabled="campaign.type=='sendBulkMessage'"><i></i>
+                {{"campaign.limitedTime" | translate}}
+            </label>
+        </div>
+        <fieldset ng-disabled="!campaign.limitedTime || campaign.type=='sendBulkMessage'" ng-class="{'text-muted' : !campaign.limitedTime}">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">{{"campaign.from" | translate}} </label>
+                    <div class="col-sm-7">
+                        <p class="input-group">
+                            <input type="text" class="form-control text-center"
+                                   datepicker-popup-persian='{{dateFormat}}' ng-model="campaign.start"
+                                   placeholder="{{ 'campaign.startDate' | translate }}"
+                                   is-open="startDateCalendarIsOpen" datepicker-options="dateOptions"
+                                   date-disabled="disabled(date, mode)"
+                                   close-text="{{ 'date.close' | translate }}"
+                                   ng-class="{'text-muted' : !campaign.limitedTime}"/>
+
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-primary"
+                                                ng-click="startDateCalendar($event)">
+                                            <i class="fa fa-calendar"></i>
+                                        </button>
+                                    </span>
+                        </p>
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">{{"campaign.till" | translate}} </label>
+
+                    <div class="col-sm-7">
+                        <p class="input-group">
+                            <input type="text" class="form-control text-center"
+                                   datepicker-popup-persian='{{dateFormat}}' ng-model="campaign.end"
+                                   placeholder="{{ 'campaign.endDate' | translate }}"
+                                   is-open="endDateCalendarIsOpen" datepicker-options="dateOptions"
+                                   date-disabled="disabled(date, mode)"
+                                   close-text="{{ 'date.close' | translate }}"
+                                   ng-class="{'text-muted' : !campaign.limitedTime}"/>
+
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-primary"
+                                                ng-click="endDateCalendar($event)">
+                                            <i class="fa fa-calendar"></i>
+                                        </button>
+                                    </span>
+                        </p>
+                    </div>
+                </div>
+            </form>
+        </fieldset>
+    </li>
+</ul>

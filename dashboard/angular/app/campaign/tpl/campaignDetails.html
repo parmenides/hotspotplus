@@ -1,0 +1,78 @@
+<div class="">
+    <div class="modal-header">
+        <h3 class="modal-title">{{"campaign.details" | translate}}</h3>
+    </div>
+    <div class="modal-body">
+        <div class="wrapper">
+            <dl class="dl-horizontal">
+                <div class="wrapper-xs">
+                    <dt>{{"campaign.name" | translate}}</dt>
+                    <dd>{{campaign.title}}</dd>
+                </div>
+                <div class="wrapper-xs">
+                    <dt>{{"campaign.type" | translate}}</dt>
+                    <dd>{{"campaign."+campaign.type | translate}}</dd>
+                </div>
+                <div class="wrapper-xs">
+                    <dt>{{"campaign.coupon" | translate}}</dt>
+                    <dd ng-if="campaign.sendCoupon">{{"campaign.hasCoupon" | translate}}</dd>
+                    <dd ng-if="!campaign.sendCoupon">{{"campaign.noCoupon" | translate}}</dd>
+                </div>
+                <div class="wrapper-xs" ng-if="campaign.sendCoupon">
+                    <dt>{{"campaign.discountPercentage" | translate}}</dt>
+                    <dd>{{campaign.discount.amount | translateNumber}} {{'general.'+campaign.discount.unit |
+                        translate}}
+                    </dd>
+                </div>
+                <!--<div class="wrapper-xs" ng-if="campaign.sendCoupon">
+                    <dt>{{"campaign.couponValidDays" |translate}}</dt>
+                    <dd>
+                            <span ng-repeat="(dayName,day) in campaign.days" ng-if="day == true">
+                                {{ dayName | translate}}
+                                <span ng-hide="$last">{{"general.," | translate}} </span>
+                            </span>
+                    </dd>
+                </div>
+                <div class="wrapper-xs" ng-if="campaign.sendCoupon">
+                    <dt>{{"campaign.couponValidHours" |translate}}</dt>
+                    <dd>
+                            <span ng-repeat="(hourName,hour) in campaign.hours" ng-if="hour == true">
+                                {{ hourName | translate}}
+                                <span ng-hide="$last">{{"general.," | translate}} </span>
+                            </span>
+                    </dd>
+                </div>-->
+                <div class="wrapper-xs">
+                    <dt>{{"campaign.startDate" | translate}}</dt>
+                    <dd ng-if="campaign.limitedTime">
+                        {{campaign.start | persianDate : 'fullDate'|translateNumber}}
+                        &nbsp;{{'general.hour' | translate}}:&nbsp;
+                        {{campaign.start | date: 'HH:mm' | translateNumber}}
+                    </dd>
+                    <dd ng-if="!campaign.limitedTime">{{"campaign.unlimited" | translate}}</dd>
+                </div>
+                <div class="wrapper-xs">
+                    <dt>{{"campaign.endDate" | translate}}</dt>
+                    <dd ng-if="campaign.limitedTime">
+                        {{campaign.end | persianDate : 'fullDate'|translateNumber}}
+                        &nbsp;{{'general.hour' | translate}}:&nbsp;
+                        {{campaign.end | date: 'HH:mm' | translateNumber}}
+                    </dd>
+                    <dd ng-if="!campaign.limitedTime">{{"campaign.unlimited" | translate}}</dd>
+                </div>
+                <div class="wrapper-xs">
+                    <dt>{{"campaign.message" | translate}}</dt>
+                    <dd>
+                        <pre class="pre-content">
+                            <p ng-if="campaign.messageBody">{{campaign.messageBody}}</p>
+                            <p ng-if="campaign.sendCoupon">{{"campaign.yourCouponCode" | translate}}: XXXXX {{"coupon.value" | translate}}:&nbsp;{{campaign.discount.amount | translateNumber}} {{'general.'+campaign.discount.unit | translate}}</p>
+                        </pre>
+                    </dd>
+                </div>
+            </dl>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button ng-click="ok()" class="btn btn-primary">{{ "general.ok" | translate }}</button>
+    </div>
+</div>

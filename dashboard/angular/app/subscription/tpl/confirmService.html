@@ -1,0 +1,61 @@
+<div class="">
+    <div class="modal-header">
+        <h3 class="modal-title">{{"general.pay" | translate}}</h3>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <p class="col-md-12"> {{"business.serviceTitle"|translate}}:&nbsp;{{premiumPackage.title}}</p>
+            <!--
+                        <p class="col-md-12"> {{"general.duration" |translate}}:&nbsp;{{"general.annually"|translate}}</p>
+            -->
+            <p class="col-md-12"> {{"general.payable" |translate}}:&nbsp;{{(premiumPackage.price - (premiumPackage.price * premiumPackage.discount)) | currency : "" : 0 |translateNumber}}  {{"general.toman"|translate}}</p>
+        </div>
+        <form class="form-horizontal" ng-submit="searchGiftCode(giftCode)">
+            <div class="form-group form-group-sm">
+                <label class="col-sm-3 control-label text-primary font-bold"><i class="fa fa-gift"></i>&nbsp;{{ "business.giftCode" | translate }}</label>
+                <div class="col-sm-6">
+                    <div class="input-group input-group-sm">
+                        <input ng-model='giftCode' type="text" class="form-control" name="giftCode" autofocus>
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-primary" ng-if="!isSearchingCode" ng-click="searchGiftCode(giftCode)" ng-disabled='!giftCode'>
+                                <i class="fa fa-search"></i>&nbsp;{{"general.addGiftCode" |translate}}
+                            </button>
+                            <button type="button" class="btn btn-primary" ng-if="isSearchingCode" ng-disabled='true'>
+                                <i class="fa fa-circle-o-notch fa-spin"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="alert alert-info alert-dismissable" ng-if="giftCodeValid && !giftCodeUsed">
+            <div class="row">
+                <p class="col-md-12"> {{"coupon.code"|translate}}:&nbsp;{{giftCodeFound.code}}</p>
+                <p class="col-md-12"> {{"coupon.value" |translate}}:&nbsp;{{giftCodeFound.value.amount | translateNumber}}&nbsp;{{'general.'+giftCodeFound.value.unit | translate}}</p>
+                <p class="col-md-12 font-bold"> {{"general.payableWithGift" |translate}}:&nbsp;{{premiumPackage.priceWithCode|currency : "" :0|translateNumber}}&nbsp;{{"general.toman" | translate}}</p>
+            </div>
+        </div>
+        <div class="alert alert-warning alert-dismissable" ng-if="giftCodeValid && giftCodeUsed">
+            <div class="row">
+                <div class="col text-center">
+                    <i class="fa fa-warning"></i>&nbsp;{{"general.giftCodeUsed" |translate}}
+                </div>
+            </div>
+        </div>
+        <div class="alert alert-warning alert-dismissable" ng-if="giftCodeValid == false && giftCode != null">
+            <div class="row">
+                <div class="col text-center">
+                    <i class="fa fa-warning"></i>&nbsp;{{"general.giftCodeNotFound" |translate}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button ng-click="close()" class="btn btn-sm btn-default">{{ "general.close" | translate }}
+        </button>
+        <button ng-click="openPaymentGateway()" class="btn btn-sm btn-primary">
+            <span ng-if="premiumPackage.priceWithCode!=0">{{ "business.sendToBank" | translate }}</span>
+            <span ng-if="premiumPackage.priceWithCode==0">{{ "business.activateService" | translate }}</span>
+        </button>
+    </div>
+</div>

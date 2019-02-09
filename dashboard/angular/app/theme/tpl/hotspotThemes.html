@@ -1,0 +1,33 @@
+<div ng-controller="hotspotThemes">
+    <div class="wrapper-md bg-light b-b">
+        <h1 class="m-n font-thin h3">{{"theme.hotspotThemes"|translate}}</h1>
+    </div>
+    <div class="hbox hbox-auto-xs hbox-auto-sm">
+        <div class="col wrapper-md">
+            <div class="col-md-4" ng-repeat="theme in themes">
+                <div class="panel b-a">
+                    <div class="panel-heading no-border bg-default" ng-class="{'bg-primary': theme.selected }">
+                        <span class="text-lt">{{theme.title}}</span>
+                    </div>
+                    <div class="item m-l-n-xxs m-r-n-xxs">
+                        <img ng-src="img/hotspotTheme/{{theme.id}}/{{theme.id}}.jpg" class="img-full">
+                    </div>
+                    <div class="hbox text-center b-b b-light text-sm">
+                        <a href="" class="col padder-v text-muted b-r b-light" ng-click="editThemeSettings(theme)">
+                            <i class="fa fa-gear block m-b-xs fa-2x"></i>
+                            <span>{{"theme.settings" | translate}} {{theme.title}}</span>
+                        </a>
+                        <a href="" class="col padder-v text-muted b-r b-light" ng-click="selectTheme(theme)">
+                            <i class="fa fa-circle-o block m-b-xs fa-2x" ng-if="!theme.selected"></i>
+                            <i class="fa fa-check-circle block m-b-xs text-primary fa-2x" ng-if="theme.selected"></i>
+                            <span>{{"theme.select" | translate}} {{theme.title}}</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

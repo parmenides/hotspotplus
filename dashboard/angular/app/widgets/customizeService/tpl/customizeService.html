@@ -1,0 +1,101 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="row no-padder-v text-gray">
+            <h3 class="col-xs-10 panel-title">{{"business.definedService" | translate}} </h3>
+        </div>
+    </div>
+
+    <div class="panel-body">
+        <div class="row" >
+            <div class="col col-md-12 " style="margin-bottom: 20px">
+                <div class="m-b-sm">
+                    <div class="btn-group btn-group-justified">
+                        <a ng-repeat="tmpName in serviceTemplatesName" href class="btn btn-default"
+                           ng-model="service.serviceTemplate" uib-btn-radio="tmpName"
+                           uib-uncheckable="false">{{"business." + tmpName|translate}}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" >
+            <div class="col col-md-6" style="margin-bottom: 8px">
+                <div class="">{{'nas.maxOnlineUsers'|translate}} <span class="badge bg-info">{{service.onlineUsers|translateNumber}} {{"general.client"|translate}}</span>
+                </div>
+                <slider
+                        ng-model="service.onlineUsers"
+                        floor="20"
+                        ceiling="500">
+                </slider>
+            </div>
+        </div>
+      <!--  <div class="row" >
+            <div class="col col-md-12 " style="margin-bottom: 15px">
+                <div class="" style="margin-bottom: 4px;">{{'business.selectThemePackage'|translate}}
+                    <span class="badge bg-info"></span>
+                </div>
+
+                <div class="m-b-sm">
+                    <div class="btn-group ">
+                        <a href class="btn btn-default" ng-model="service.templateGroup" uib-btn-radio="'bronze'"
+                           uib-uncheckable="false">{{"business.bronze"|translate}}
+                            ({{"general.gift"|translate}})
+                        </a>
+                        <a href class="btn btn-default" ng-model="service.templateGroup" uib-btn-radio="'silver'"
+                           uib-uncheckable="false">{{"business.silver"|translate}}
+                            ({{templateGroupPrices.silver| currency:"":0 |translateNumber}} {{"general.toman"|translate}})
+                        </a>
+                        <a href class="btn btn-default" ng-model="service.templateGroup" uib-btn-radio="'gold'"
+                           uib-uncheckable="false">{{"business.gold"|translate}}
+                            ({{templateGroupPrices.gold| currency:"":0 |translateNumber}} {{"general.toman"|translate}})
+                        </a>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 4px;">
+                    {{'business.serviceFeatures'|translate}}
+                    <span class="badge bg-success" style="margin-right: 2px;"
+                          ng-repeat=" features in currentTemplateGroupFeatures">{{"business." + features|translate}}</span>
+                </div>
+            </div>
+        </div>-->
+        <div class="row" >
+            <div class="col col-md-12 " style="margin-bottom: 8px">
+                <p class="">{{'business.serviceDuration'|translate}}
+                </p>
+
+                <div class="m-b-sm">
+                    <div class="btn-group ">
+                        <a href class="btn btn-default" ng-model="service.duration" uib-btn-radio="1"
+                           uib-uncheckable="false">{{"business.1_month"|translate}}</a>
+                        <a href class="btn btn-default" ng-model="service.duration" uib-btn-radio="3"
+                           uib-uncheckable="false">{{"business.3_months"|translate}}</a>
+                        <a href class="btn btn-default" ng-model="service.duration" uib-btn-radio="6"
+                           uib-uncheckable="false">{{"business.6_months"|translate}}</a>
+                        <a href class="btn btn-default" ng-model="service.duration" uib-btn-radio="12"
+                           uib-uncheckable="false">{{"business.12_months"|translate}}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--<div class="row">
+            <div class="col col-md-12">
+                <div class="alert alert-info">
+                    <span class=""> {{service.cost | translateNumber}} {{'general.toman'|translate}}
+                        {{'business.serviceCost'|translate}} {{service.duration |translateNumber}}
+                        {{'business.months'|translate}}
+                        {{'general.with'|translate}}
+                        {{service.onlineUsers}}
+                        {{'nas.onlineUsers'|translate}}
+                    </span>
+                </div>
+            </div>
+        </div>-->
+    </div>
+    <div class="panel-footer" ng-if="!public" >
+        <a class="btn btn-info" ng-click="showServiceSummery()" href="">{{'business.issueServiceInvoice'|translate}} ({{service.cost|currency : "" : 0
+            |translateNumber}} {{'general.toman'|translate}})</a>
+    </div>
+    <div class="panel-footer" ng-if="public" >
+        <a class="btn btn-info" ng-click="goToSignUp()" href="">{{'business.letsTestThePanel'|translate}} ({{service.cost|currency : "" : 0 |translateNumber}} {{'general.toman'|translate}})</a>
+    </div>
+</div>

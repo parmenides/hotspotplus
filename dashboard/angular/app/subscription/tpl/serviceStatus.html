@@ -1,0 +1,28 @@
+<div class="wrapper-lg" ng-controller="subscriptionService">
+    <div class="alert alert-info alert-dismissable">
+        <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <div class="row">
+            <h5 class="col col-md-12">
+                {{"business.yourCurrentService"|translate}}
+            </h5>
+            <div class="col col-md-12">
+                {{"nas.maxOnlineUsers"|translate}} : {{currentService.onlineUsers|translateNumber}}&nbsp;{{"general.client"|translate}}
+            </div>
+            <div class="col col-md-12">
+                {{"business.serviceDuration"|translate}} : {{currentService.durationInMonths | translateNumber}}
+                {{"business.months"|translate}}
+            </div>
+            <div class="col col-md-12">
+                {{"business.subscriptionDate"|translate}} :
+                <span ng-if="currentService.subscriptionDate">{{currentService.subscriptionDate | persianDate : 'fullDate' | translateNumber}}</span>
+                <span ng-if="!currentService.subscriptionDate">{{'general.undefined' | translate}}</span>
+            </div>
+            <div class="col col-md-12">
+                {{"business.endDate"|translate}} :
+                <span ng-if="currentService.endDate"> {{currentService.endDate | persianDate : 'fullDate' | translateNumber}}</span>
+                <span ng-if="!currentService.endDate"> {{'general.undefined' | translate}}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
