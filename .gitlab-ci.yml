@@ -14,25 +14,37 @@ before_script:
   - apk add --no-cache jq curl bash git
 api:
   stage: api
+  only:
+    - tags
   script:
     - ./api/build.sh
 apilicense:
   stage: apilicense
+  only:
+    - tags
   script:
     - ./api-license/build.sh
 dashboard:
   stage: dashboard
+  only:
+    - tags
   script:
     - ./dashboard/build.sh
 licensedashboard:
   stage: licensedashboard
+  only:
+    - tags
   script:
     - ./license-dashboard/build.sh
 logaggregator:
   stage: logaggregator
+  only:
+    - tags
   script:
     - ./log-aggregator/build.sh
 logworker:
   stage: logworker
+  only:
+    - tags
   script:
     - ./log-worker/build.sh
