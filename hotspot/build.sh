@@ -1,0 +1,15 @@
+#!/bin/bash -e
+
+REGISTRY="registry.gitlab.com"
+
+get_latest_commit(){
+    echo $(git log -n 1 --pretty=format:""%H)
+}
+
+build_image(){
+    docker build -t ${CI_REGISTRY_IMAGE}/hotspot:latest -t ${CI_REGISTRY_IMAGE}/hotspot:${CI_COMMIT_TAG} -f ./hotspot/Dockerfile.build ./hotspot
+    docker push ${CI_REGISTRY_IMAGE}/hotspot:${CI_COMMIT_TAG}
+    docker push ${CI_REGISTRY_IMAGE}/hotspot:latest
+}
+
+build_image

@@ -1,0 +1,46 @@
+<div class="">
+    <div class="modal-header">
+        <h3 class="modal-title">{{ options.title |translate }}</h3>
+    </div>
+    <div class="modal-body">
+        <fieldset class="wrapper-lg">
+            <legend>
+                <div class="wrapper padding-v text-center">
+                    <h1 class="m-n h4 text-primary">{{options.message | translate}}&nbsp;{{"general.:" | translate}}&nbsp;{{ options.balance | translateNumber }}&nbsp;{{"general.toman" | translate}}</h1>
+                    <h1 class="m-n h5 wrapper text-info" ng-if="options.requiredCredit">{{"business.requiredCredit" | translate}}&nbsp;{{"general.:" | translate}}&nbsp;{{ options.requiredCredit | translateNumber }}&nbsp;{{"general.toman" | translate}}</h1>
+                </div>
+            </legend>
+            <form class="form-horizontal" name="creditForm">
+                <!--<div class="form-group form-group-md" ng-if="options.requiredCredit">
+                    <label class="col-sm-4 control-label">{{ "business.requiredCredit" | translate }}</label>
+                    <div class="col-sm-7">
+                        {{options.requiredCredit}}
+                    </div>
+                </div>-->
+                <div class="form-group form-group-md">
+                    <label class="col-sm-4 control-label">{{ "business.increaseCreditAmount" | translate }}</label>
+                    <div class="col-sm-7">
+                        <div class="input-group">
+                            <input ng-model='amount' type="text" class="form-control" name="amount" ng-pattern="/^0|[۱-۹1-9][۰-۹0-9]*$/" required autofocus>
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-default" disabled="disabled">
+                                    {{"general.rial" | translate}}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-offset-4 text-danger" ng-show="creditForm.amount.$error.pattern" >{{"business.notValidAmount" | translate}}</div>
+            </form>
+        </fieldset>
+    </div>
+    <div class="modal-footer">
+        <button ng-click="cancel()" class="btn btn-sm btn-default" ng-disabled='bankWait'>{{ options.cancelBtnLabel | translate }}</button>
+        <button ng-click="payment()" ng-if='!bankWait' class="btn btn-sm btn-primary col-sm-4 pull-right" ng-disabled='creditForm.$invalid'>
+            {{ options.submitBtnLabel | translate }}
+        </button>
+        <button class="btn btn-sm btn-info col-sm-4 pull-right" ng-if="bankWait" ng-disabled='true'><i class="fa fa-circle-o-notch fa-spin"></i>
+            {{ "business.connectingToBank" | translate }}
+        </button>
+    </div>
+</div>

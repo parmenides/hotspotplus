@@ -1,0 +1,8 @@
+FROM ubuntu:xenial
+
+RUN mkdir /log
+RUN mkdir /key
+RUN mkdir /app
+COPY ./hotspotplus-cordinator /app
+RUN chmod a+x /app/hotspotplus-cordinator
+CMD /app/hotspotplus-cordinator
