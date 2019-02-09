@@ -17,6 +17,7 @@ build_api:
   when: manual
   only:
     - master
+    - tags
   script:
     - ./api/build.sh
 build_api_license:
