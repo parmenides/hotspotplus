@@ -324,10 +324,13 @@ module.exports = function (app) {
         report: {
           properties: {
             timestamp: {type: 'date'},
-            host: {type: 'keyword'},
+            nasIp: {type: 'keyword'},
+            path: {type: 'keyword'},
+            query: {type: 'keyword'},
+            params: {type: 'keyword'},
             message: {type: 'keyword'},
             protocol: {type: 'keyword'},
-            clientIp: {type: 'keyword'},
+            memberIp: {type: 'keyword'},
             method: {type: 'keyword'},
             url: {type: 'keyword'},
             domain: {type: 'keyword'},

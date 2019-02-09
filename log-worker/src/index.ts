@@ -5,6 +5,7 @@ import errorHandler from './utils/errorHandler';
 import logger from './utils/logger';
 import logWorker from './worker';
 import { testRunner } from './test';
+import { addSyslogIndexTemplates } from './modules/initElasticsearch';
 
 //require('date-utils');
 const log = logger.createLogger();
@@ -36,6 +37,7 @@ app.listen(app.get('port'), () => {
 
 logWorker.processLogRequest();
 testRunner();
+addSyslogIndexTemplates();
 
 process.on('uncaughtException', function(error) {
   console.error('Something bad happened here....');

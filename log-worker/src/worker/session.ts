@@ -73,7 +73,7 @@ const findSessions = async (reportRequestTask: SessionQuery) => {
   log.debug(Array.from(clientIpList));
   log.debug(Array.from(nasIpList));
   return {
-    clientIpList: Array.from(clientIpList),
+    memberIpList: Array.from(clientIpList),
     nasIpList: Array.from(nasIpList),
   };
 };
@@ -83,7 +83,7 @@ const querySessions = async (
   size: number,
   sessionQuery: SessionQuery,
 ) => {
-  log.debug(createSearchSessionQuery(sessionQuery));
+  log.debug(`session query %j`, createSearchSessionQuery(sessionQuery));
   const result = await elasticClient.search({
     index: SESSION_LOG_INDEX,
     from,

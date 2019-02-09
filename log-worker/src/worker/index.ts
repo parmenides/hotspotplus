@@ -9,6 +9,7 @@ import request from 'request-promise';
 import { login } from '../utils/auth';
 import { file as tmpFile } from 'tmp-promise';
 import util from 'util';
+import syslog from './syslog';
 
 // Convert fs.readFile into Promise version of same
 
@@ -31,7 +32,13 @@ if (
   throw new Error('invalid auth env variables');
 }
 
+export enum ReportType {
+  NETFLOW = 'netflow',
+  SYSLOG = 'syslog',
+}
+
 export interface ReportRequestTask {
+  reportType: ReportType;
   username: string;
   fromDate: number;
   toDate: number;
@@ -61,29 +68,39 @@ const processLogRequest = async () => {
 
       try {
         const sessionData = await session.findSessions(reportRequestTask);
-        const reports = await netflow.getNetflowReports(
-          reportRequestTask.username,
-          reportRequestTask.fromDate,
-          reportRequestTask.toDate,
-          {
-            nasIpList: sessionData.nasIpList,
-            clientIpList: sessionData.clientIpList,
-          },
+        log.debug(
+          `Sessions: nasIps: ${sessionData.nasIpList} memberIps: ${
+            sessionData.memberIpList
+          }`,
         );
-        const fields = [
-          'username',
-          'date',
-          'src_addr',
-          'src_port',
-          'src_port_name',
-          'src_mac',
-          'dst_addr',
-          'dst_port',
-          'dst_port_name',
-          'dst_mac',
-          'protocol_name',
-          '@timestamp',
-        ];
+        let reports: any;
+        let fields: string[];
+        if (reportRequestTask.reportType === ReportType.NETFLOW) {
+          reports = await netflow.getNetflowReports(
+            reportRequestTask.username,
+            reportRequestTask.fromDate,
+            reportRequestTask.toDate,
+            {
+              nasIpList: sessionData.nasIpList,
+              memberIpList: sessionData.memberIpList,
+            },
+          );
+          fields = getNetflowFields();
+        } else if (reportRequestTask.reportType === ReportType.SYSLOG) {
+          reports = await syslog.getSyslogReports(
+            reportRequestTask.username,
+            reportRequestTask.fromDate,
+            reportRequestTask.toDate,
+            {
+              nasIpList: sessionData.nasIpList,
+              memberIpList: sessionData.memberIpList,
+            },
+          );
+          fields = getSyslogFields();
+        } else {
+          throw new Error('invalid report type');
+        }
+        log.debug(reports);
         const csvReport = jsonToCsv(fields, reports);
         log.debug(csvReport);
         await uploadReport(
@@ -101,6 +118,26 @@ const processLogRequest = async () => {
   );
 };
 
+const getNetflowFields = () => {
+  return [
+    'username',
+    'date',
+    'src_addr',
+    'src_port',
+    'src_port_name',
+    'src_mac',
+    'dst_addr',
+    'dst_port',
+    'dst_port_name',
+    'dst_mac',
+    'protocol_name',
+    '@timestamp',
+  ];
+};
+
+const getSyslogFields = () => {
+  return ['username', 'date', 'domain', 'method', 'url', '@timestamp'];
+};
 const jsonToCsv = (fields: string[], jsonData: any) => {
   try {
     const opts = { fields };

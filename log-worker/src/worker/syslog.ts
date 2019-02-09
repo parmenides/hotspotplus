@@ -1,192 +1,268 @@
 import logger from '../utils/logger';
 import elasticClient from '../utils/elastic';
 import momentTz from 'moment-timezone';
-import {Moment} from 'moment';
+import { Moment } from 'moment';
 import momentJ from 'moment-jalaali';
 
+const SYSLOG_LOG_INDEX_PREFIX = `syslog-`;
+
 const LOG_WORKER_QUEUE = process.env.LOG_WORKER_QUEUE;
-const SYSLOG_INDEX = process.env.SYSLOG_INDEX;
 const log = logger.createLogger();
-if (!LOG_WORKER_QUEUE || !SYSLOG_INDEX) {
-    throw new Error('invalid settings');
+if (!LOG_WORKER_QUEUE) {
+  throw new Error('invalid settings');
 }
 
 interface SyslogIpQueryData {
-    clientIpList: string[];
-    nasIpList: string[];
+  memberIpList: string[];
+  nasIpList: string[];
 }
 
-/*
-* {
-        "_index" : "hotspotplussyslog",
-        "_type" : "report",
-        "_id" : "AWfgBtpUTl52eqElWkOx",
-        "_score" : 1.0,
-        "_source" : {
-          "@version" : "1",
-          "mac" : "F4:09:D8:E3:DE:97",
-          "@timestamp" : "2018-12-24T11:43:24.473Z",
-          "domain" : "library.hotspotplus.ir:8080",
-          "logDate" : "2018-12-24T11:22:34.768Z",
-          "creationDateStr" : "2018-12-24 15:13:23",
-          "host" : "2.182.220.63",
-          "logDateStr" : "2018-12-24 14:52:34",
-          "creationDate" : 1545651803548,
-          "clientIp" : "192.168.2.244",
-          "url" : "http://library.hotspotplus.ir:8080/",
-          "businessId" : "5c18784aff8b930013b6381b",
-          "username" : "9186983970",
-          "nasId" : "5c1881a3ff8b930013b6381e"
-        }
-      }
-      */
-const formatReports = (
-    username: string,
-    rawSyslogReports: Array<RawSyslogReport>,
-) => {
-    return rawSyslogReports.map((rawReport) => {
-        const localDate = momentTz.tz(
-            rawReport._source['@timestamp'],
-            'Asia/Tehran',
-        );
-        const jalaaliDate = momentJ(localDate);
-
-        return {
-            username,
-            date: getJalaaliDate(jalaaliDate),
-            '@timestamp': rawReport._source['@timestamp'],
-            ...rawReport._source
-        };
-    });
-};
-
-const getJalaaliDate = (date: Moment) => {
-    return date.format('jYYYY/jM/jD HH:MM');
-};
-
-
 const getSyslogReports = async (
-    username: string,
-    from: number,
-    to: number,
-    syslogIpQueryData: SyslogIpQueryData,
+  username: string,
+  from: number,
+  to: number,
+  syslogIpQueryData: SyslogIpQueryData,
 ) => {
-    const fromDate = momentTz.tz(from, 'Europe/London');
-    const toDate = momentTz.tz(to, 'Europe/London');
+  const fromDateCounter = momentTz.tz(from, 'Europe/London');
+  const fromDate = momentTz.tz(from, 'Europe/London');
+  const toDate = momentTz.tz(to, 'Europe/London');
+  const daysBetweenInMs = toDate.diff(fromDateCounter);
+  const days = Math.ceil(daysBetweenInMs / 86400000);
 
-    const countResponse = await countSyslogReport(
+  const indexNames = [createSyslogIndexName(fromDateCounter)];
+  for (let i = 0; i < days; i++) {
+    fromDateCounter.add(1, 'days');
+    indexNames.push(createSyslogIndexName(fromDateCounter));
+  }
+  let data: RawSyslogReport[] = [];
+  log.debug('indexes: ', indexNames);
+  for (const indexName of indexNames) {
+    try {
+      const result = await getSyslogByIndex(
+        indexName,
         fromDate,
         toDate,
         syslogIpQueryData,
-    );
-
-    const totalLogs = countResponse.count;
-    log.debug(totalLogs);
-    const maxResultSize = 500;
-    log.debug(Math.ceil(totalLogs / maxResultSize));
-    const partsLen =
-        totalLogs > maxResultSize ? Math.ceil(totalLogs / maxResultSize) : 1;
-
-    const parts = new Array(partsLen);
-    let fromIndex = 0;
-    let result: Array<{ _source: any }> = [];
-    for (const i of parts) {
-        try {
-            const queryResult = await querySyslogReports(
-                fromIndex,
-                maxResultSize,
-                fromDate,
-                toDate,
-                syslogIpQueryData,
-            );
-            if (queryResult.hits) {
-                result = result.concat(queryResult.hits.hits);
-            } else {
-                log.warn(queryResult);
-            }
-            fromIndex = fromIndex + maxResultSize;
-        } catch (error) {
-            log.error(error);
-            throw error;
-        }
+      );
+      data = data.concat(result);
+    } catch (error) {
+      if (error.status === 404) {
+        log.warn(`${indexName} index not found`);
+      } else {
+        log.error(error.status);
+        throw error;
+      }
     }
-    return formatReports(username, result);
+  }
+  //log.debug('log', data);
+  log.debug('Result size:', data.length);
+  //log.debug(formattedResult);
+  return formatReports(username, data);
 };
 
-const countSyslogReport = async (
-    fromDate: Moment,
-    toDate: Moment,
-    syslogIpQueryData: SyslogIpQueryData,
+const formatReports = (
+  username: string,
+  rawSyslogReports: RawSyslogReport[],
 ) => {
-    const result = await elasticClient.count({
-        index: SYSLOG_INDEX,
-        body: createSyslogQuery(fromDate, toDate, syslogIpQueryData),
-    });
-    return result;
+  return rawSyslogReports.map((rawReport) => {
+    const localDate = momentTz.tz(
+      rawReport._source['@timestamp'],
+      'Asia/Tehran',
+    );
+    const jalaaliDate = momentJ(localDate);
+    return {
+      username,
+      date: getJalaaliDate(jalaaliDate),
+      domain: rawReport._source.domain,
+      memberIp: rawReport._source.memberIp,
+      nasIp: rawReport._source.nasIp,
+      method: rawReport._source.method,
+      url: rawReport._source.url,
+      '@timestamp': rawReport._source['@timestamp'],
+    };
+  });
+};
+
+const getJalaaliDate = (date: Moment) => {
+  return date.format('jYYYY/jM/jD HH:MM');
+};
+
+export const createSyslogIndexName = (fromDate: Moment) => {
+  return `${SYSLOG_LOG_INDEX_PREFIX}${fromDate.format('YYYY.MM.DD')}`;
+};
+
+const getSyslogByIndex = async (
+  syslogIndex: string,
+  fromDate: Moment,
+  toDate: Moment,
+  syslogIpQueryData: SyslogIpQueryData,
+) => {
+  log.debug(
+    `query from ${syslogIndex} from ${fromDate.format()} to ${toDate.format()} for %j`,
+    syslogIpQueryData,
+  );
+  const countResponse = await countSyslogReportByIndex(
+    syslogIndex,
+    fromDate,
+    toDate,
+    syslogIpQueryData,
+  );
+
+  const totalLogs = countResponse.count;
+  log.debug(`total logs ${totalLogs}`);
+  const maxResultSize = 500;
+  log.debug(Math.ceil(totalLogs / maxResultSize));
+  const partsLen =
+    totalLogs > maxResultSize ? Math.ceil(totalLogs / maxResultSize) : 1;
+
+  const parts = new Array(partsLen);
+  let from = 0;
+  let result: { _source: any }[] = [];
+  for (const i of parts) {
+    try {
+      const queryResult = await querySyslogReports(
+        syslogIndex,
+        from,
+        maxResultSize,
+        fromDate,
+        toDate,
+        syslogIpQueryData,
+      );
+      if (queryResult.hits) {
+        result = result.concat(queryResult.hits.hits);
+      } else {
+        log.warn(queryResult);
+      }
+      log.warn(queryResult);
+      from = from + maxResultSize;
+    } catch (error) {
+      log.error(error);
+      throw error;
+    }
+  }
+  return result;
+};
+
+const countSyslogReportByIndex = async (
+  indexName: string,
+  fromDate: Moment,
+  toDate: Moment,
+  syslogIpQueryData: SyslogIpQueryData,
+) => {
+  const result = await elasticClient.count({
+    index: indexName,
+    body: createCountSyslogQuery(fromDate, toDate, syslogIpQueryData),
+  });
+  return result;
 };
 
 const querySyslogReports = async (
-    fromIndex: number,
-    size: number,
-    fromDate: Moment,
-    toDate: Moment,
-    syslogIpQueryData: SyslogIpQueryData,
+  indexName: string,
+  fromIndex: number,
+  size: number,
+  fromDate: Moment,
+  toDate: Moment,
+  syslogIpQueryData: SyslogIpQueryData,
 ) => {
-    const result = await elasticClient.search({
-        index: SYSLOG_INDEX,
-        from: fromIndex,
-        size,
-        body: createSyslogQuery(fromDate, toDate, syslogIpQueryData),
-    });
-    return result;
+  const result = await elasticClient.search({
+    index: indexName,
+    from: fromIndex,
+    size,
+    body: createSyslogQuery(fromDate, toDate, syslogIpQueryData),
+  });
+  return result;
 };
 
 const createSyslogQuery = (
-    fromDate: Moment,
-    toDate: Moment,
-    syslogIpQueryData: SyslogIpQueryData,
+  fromDate: Moment,
+  toDate: Moment,
+  syslogIpQueryData: SyslogIpQueryData,
 ) => {
-    return {
-        query: {
-            bool: {
-                must: [
-                    {
-                        terms: {
-                            host: syslogIpQueryData.nasIpList,
-                        },
-                    },
-                    {
-                        terms: {
-                            client_ip: syslogIpQueryData.clientIpList,
-                        },
-                    },
-                    {
-                        range: {
-                            '@timestamp': {
-                                gte: fromDate.format(),
-                                lte: toDate.format(),
-                            },
-                        },
-                    },
-                ],
+  return {
+    query: {
+      bool: {
+        must: [
+          {
+            terms: {
+              nasIp: syslogIpQueryData.nasIpList,
             },
+          },
+          {
+            terms: {
+              memberIp: syslogIpQueryData.memberIpList,
+            },
+          },
+          {
+            range: {
+              '@timestamp': {
+                gte: fromDate.format(),
+                lte: toDate.format(),
+              },
+            },
+          },
+        ],
+      },
+    },
+    aggs: {
+      group_by_domain: {
+        terms: {
+          field: 'domain',
         },
-    };
+      },
+    },
+  };
+};
+const createCountSyslogQuery = (
+  fromDate: Moment,
+  toDate: Moment,
+  syslogIpQueryData: SyslogIpQueryData,
+) => {
+  return {
+    query: {
+      bool: {
+        must: [
+          {
+            terms: {
+              nasIp: syslogIpQueryData.nasIpList,
+            },
+          },
+          {
+            terms: {
+              memberIp: syslogIpQueryData.memberIpList,
+            },
+          },
+          {
+            range: {
+              '@timestamp': {
+                gte: fromDate.format(),
+                lte: toDate.format(),
+              },
+            },
+          },
+        ],
+      },
+    },
+  };
 };
 
 interface RawSyslogReport {
-    _source: {
-        host: string;
-        type: string;
-        mac : string,
-        domain : string,
-        client_ip : string,
-        url : string,
-        tags: string[];
-        '@timestamp': string;
-    };
+  _source: {
+    query: string;
+    '@timestamp': string;
+    params: string;
+    message: string;
+    method: string;
+    url: string;
+    protocol: string;
+    path: string;
+    domain: string;
+    hostGeoIp: any;
+    memberIp: string;
+    nasIp: string;
+  };
 }
 
 export default {
-    getSyslogReports,
+  getSyslogByIndex,
+  getSyslogReports,
 };

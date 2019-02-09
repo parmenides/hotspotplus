@@ -21,9 +21,8 @@ services:
     environment:
       XPACK_MONITORING_ENABLED: 'false'
     volumes:
+      - ./syslog/config/jvm.options:/usr/share/logstash/config/jvm.options
       - ./syslog/pipeline/:/usr/share/logstash/pipeline/
-      - ./syslog/config/logstash.yml:/usr/share/logstash/config/logstash.yml
-      - ./syslog/out/:/usr/share/out/
     networks:
       - hotspotplusgate
 #  accountinglogstash:

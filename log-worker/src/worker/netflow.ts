@@ -1,7 +1,7 @@
 import logger from '../utils/logger';
 import elasticClient from '../utils/elastic';
 import momentTz from 'moment-timezone';
-import {Moment} from 'moment';
+import { Moment } from 'moment';
 import momentJ from 'moment-jalaali';
 
 const NETFLOW_LOG_INDEX_PREFIX = `netflow-`;
@@ -13,7 +13,7 @@ if (!LOG_WORKER_QUEUE) {
 }
 
 interface NetflowIpQueryData {
-  clientIpList: string[];
+  memberIpList: string[];
   nasIpList: string[];
 }
 
@@ -24,18 +24,19 @@ const getNetflowReports = async (
   netflowIpQueryData: NetflowIpQueryData,
 ) => {
   const fromDate = momentTz.tz(from, 'Europe/London');
+  const fromDateCounter = momentTz.tz(from, 'Europe/London');
   const toDate = momentTz.tz(to, 'Europe/London');
 
-  const daysBetweenInMs = toDate.diff(fromDate);
+  const daysBetweenInMs = toDate.diff(fromDateCounter);
   const days = Math.ceil(daysBetweenInMs / 86400000);
 
-  const indexNames = [createNetflowIndexName(fromDate)];
+  const indexNames = [createNetflowIndexName(fromDateCounter)];
   for (let i = 0; i < days; i++) {
-    fromDate.add(1, 'days');
-    indexNames.push(createNetflowIndexName(fromDate));
+    fromDateCounter.add(1, 'days');
+    indexNames.push(createNetflowIndexName(fromDateCounter));
   }
 
-  let data: Array<RawNetflowReport> = [];
+  let data: RawNetflowReport[] = [];
   log.debug('INDEXES', indexNames);
   for (const indexName of indexNames) {
     try {
@@ -57,13 +58,13 @@ const getNetflowReports = async (
   }
   //log.debug('log', data);
   log.debug(data.length);
-    //log.debug(formattedResult);
+  //log.debug(formattedResult);
   return formatReports(username, data);
 };
 
 const formatReports = (
   username: string,
-  rawNetflowReports: Array<RawNetflowReport>,
+  rawNetflowReports: RawNetflowReport[],
 ) => {
   return rawNetflowReports.map((rawReport) => {
     const localDate = momentTz.tz(
@@ -119,7 +120,7 @@ const getNetflowsByIndex = async (
 
   const parts = new Array(partsLen);
   let from = 0;
-  let result: Array<{ _source: any }> = [];
+  let result: { _source: any }[] = [];
   for (const i of parts) {
     try {
       const queryResult = await queryNetflowReports(
@@ -190,7 +191,7 @@ const createNetflowQuery = (
           },
           {
             terms: {
-              'netflow.src_addr': netflowIpQueryData.clientIpList,
+              'netflow.src_addr': netflowIpQueryData.memberIpList,
             },
           },
           {
@@ -218,7 +219,7 @@ interface RawNetflowReport {
       dst_mac: string;
       dst_locality: string;
       protocol_name: string;
-      tcp_flag_tags: Array<any>;
+      tcp_flag_tags: any[];
       flowset_id: number;
       xlate_src_addr_ipv4: string;
       tcp_flags: number;
