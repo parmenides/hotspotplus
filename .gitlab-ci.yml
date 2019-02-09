@@ -12,3 +12,6 @@ deploy:
     - apk add --no-cache jq curl bash git
     - ./api/build.sh
     - ./api-license/build.sh
+    - ./dashboard/build.sh
+    - ./license-dashboard/build.sh
+    - ./log-aggregator/build.sh
