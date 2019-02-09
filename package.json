@@ -11,6 +11,7 @@
     "log:logw": "tail -f log-worker/logs/log-worker.log| bunyan",
     "preinstall": "node bin/preinstall",
     "build": "node bin/build",
+    "release": "git commit -am ${MESSAGE} && npm version ${VERSION} -m 'release' ",
     "prettier": "prettier '{api-license/server,api-license/common/models,coordinator/src,api/server,api/server/*,api/common/models}/**/*.js'  --write"
   },
   "prettier": {

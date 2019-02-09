@@ -15,3 +15,4 @@ deploy:
     - ./dashboard/build.sh
     - ./license-dashboard/build.sh
     - ./log-aggregator/build.sh
+    - ./log-worker/build.sh
