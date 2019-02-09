@@ -5,6 +5,10 @@ services:
 stages:
   - api
   - apilicense
+  - dashboard
+  - licensedashboard
+  - logaggregator
+  - logworker
 before_script:
   - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY_IMAGE
 api:
@@ -17,7 +21,23 @@ apilicense:
   script:
     - apk add --no-cache jq curl bash git
     - ./api-license/build.sh
+dashboard:
+  stage: dashboard
+  script:
+    - apk add --no-cache jq curl bash git
     - ./dashboard/build.sh
+licensedashboard:
+  stage: licensedashboard
+  script:
+    - apk add --no-cache jq curl bash git
     - ./license-dashboard/build.sh
+logaggregator:
+  stage: logaggregator
+  script:
+    - apk add --no-cache jq curl bash git
     - ./log-aggregator/build.sh
+logworker:
+  stage: logworker
+  script:
+    - apk add --no-cache jq curl bash git
     - ./log-worker/build.sh
