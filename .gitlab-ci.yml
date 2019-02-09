@@ -16,41 +16,41 @@ build_api:
   stage: build_api
   when: manual
   only:
-    - master
+    - tags
   script:
     - ./api/build.sh
 build_api_license:
   stage: build_api_license
   when: manual
   only:
-    - master
+    - tags
   script:
     - ./api-license/build.sh
 build_dashboard:
   stage: build_dashboard
   when: manual
   only:
-    - master
+    - tags
   script:
     - ./dashboard/build.sh
 build_license_dashboard:
   stage: build_license_dashboard
   when: manual
   only:
-    - master
+    - tags
   script:
     - ./license-dashboard/build.sh
 build_log_aggregator:
   stage: build_log_aggregator
   when: manual
   only:
-    - master
+    - tags
   script:
     - ./log-aggregator/build.sh
 build_log_worker:
   stage: build_log_worker
   when: manual
   only:
-    - master
+    - tags
   script:
     - ./log-worker/build.sh
