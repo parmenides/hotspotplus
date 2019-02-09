@@ -10,4 +10,5 @@ deploy:
   stage: build
   script:
     - apk add --no-cache jq curl bash git
-    - ./build.sh
+    - ./api/build.sh
+    - ./api-license/build.sh

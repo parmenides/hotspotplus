@@ -7,8 +7,9 @@ get_latest_commit(){
 }
 
 build_image(){
-    docker build -t ${CI_REGISTRY_IMAGE}/api:latest -t ${CI_REGISTRY_IMAGE}/api:${CI_COMMIT_TAG} -f ./api/Dockerfile.build ./api/
+    docker build -t ${CI_REGISTRY_IMAGE}/api:latest -t ${CI_REGISTRY_IMAGE}/api:${CI_COMMIT_TAG} -f ./Dockerfile.build .
     docker push ${CI_REGISTRY_IMAGE}/api:${CI_COMMIT_TAG}
+    docker push ${CI_REGISTRY_IMAGE}/api:latest
 }
 
 build_image
