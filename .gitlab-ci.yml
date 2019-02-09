@@ -14,37 +14,49 @@ before_script:
   - apk add --no-cache jq curl bash git
 api:
   stage: api
+  when: manual
   only:
     - tags
+    - master
   script:
     - ./api/build.sh
 apilicense:
   stage: apilicense
+  when: manual
   only:
     - tags
+    - master
   script:
     - ./api-license/build.sh
 dashboard:
   stage: dashboard
+  when: manual
   only:
     - tags
+    - master
   script:
     - ./dashboard/build.sh
 licensedashboard:
   stage: licensedashboard
+  when: manual
   only:
     - tags
+    - master
   script:
     - ./license-dashboard/build.sh
 logaggregator:
   stage: logaggregator
+  when: manual
   only:
     - tags
+    - master
   script:
     - ./log-aggregator/build.sh
 logworker:
   stage: logworker
+  when: manual
   only:
     - tags
+    - master
   script:
     - ./log-worker/build.sh
