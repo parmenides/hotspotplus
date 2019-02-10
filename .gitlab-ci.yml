@@ -9,6 +9,8 @@ stages:
   - build_license_dashboard
   - build_log_aggregator
   - build_log_worker
+  - build_coordinator
+  - build_hotspot
 before_script:
   - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY_IMAGE
   - apk add --no-cache jq curl bash git
@@ -40,6 +42,13 @@ build_dashboard:
     - tags
   script:
     - ./dashboard/build.sh
+build_hotspot:
+  stage: build_hotspot
+  when: manual
+  only:
+    - tags
+  script:
+    - ./hotspot/build.sh
 build_license_dashboard:
   stage: build_license_dashboard
   when: manual

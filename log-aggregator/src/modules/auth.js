@@ -20,69 +20,6 @@ module.exports.serviceManLogin = function(ttlMs) {
   );
 };
 
-var loginToConfigServer = (module.exports.loginToApi = module.exports.loginToConfigServer = function(
-  configServerUrl,
-  username,
-  password,
-) {
-  return Q.Promise(function(resolve, reject) {
-    needle.post(
-      configServerUrl,
-      {
-        username: username,
-        password: password,
-      },
-      { json: true },
-      function(error, response, body) {
-        if (error) {
-          log.error('Error: ', error);
-          return reject(error);
-        }
-        log.debug('Auth Login:', response.statusCode);
-        if (response.statusCode !== 200) {
-          return reject(body);
-        }
-        var accessToken = body.id;
-        return resolve({ token: accessToken, userId: body.userId });
-      },
-    );
-  });
-});
-
-module.exports.loginToLicenseServer = function(CONFIG_SERVER_LOGIN_URL) {
-  log.debug('@loginToLicenseServer');
-  return Q.Promise(function(resolve, reject) {
-    utility
-      .getSystemUuid(process.env.SYSTEM_ID_PATH)
-      .then(function(systemUuid) {
-        if (!systemUuid) {
-          return resolve({});
-        }
-        log.info(systemUuid);
-        log.info(process.env.PASSWORD_PREFIX);
-        loginToConfigServer(
-          CONFIG_SERVER_LOGIN_URL,
-          systemUuid,
-          process.env.PASSWORD_PREFIX + utility.md5(systemUuid),
-        )
-          .then(function(authResult) {
-            var token = authResult.token;
-            var userId = authResult.userId;
-            log.debug('@loginToLicenseServer', authResult);
-            return resolve({ token: token, userId: userId });
-          })
-          .fail(function(error) {
-            log.error(error);
-            return reject(error);
-          });
-      })
-      .fail(function(error) {
-        log.error(error);
-        return reject(new Error('failed to load systemid'));
-      });
-  });
-};
-
 var login = (module.exports.login = function(username, password, ttlMs) {
   return Q.Promise(function(resolve, reject) {
     needle.post(

@@ -400,7 +400,7 @@ exports.sendMessage = function(error, options, moduleName) {
   );
   Raven.setContext({
     user: {
-      username: moduleName || process.env.APP_NAME || 'General',
+      username: moduleName || process.env.APP_NAME || 'API',
     },
   });
   Raven.mergeContext({
