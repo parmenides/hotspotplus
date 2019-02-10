@@ -68,7 +68,6 @@ services:
       - ELASTIC_IP=hsp_elasticsearch
       - ELASTIC_PORT=9200
       - LOG_LEVEL=debug
-      - APP_NAME=log-worker
       - LOG_PATH=/logs/log-worker.log
     volumes:
       - ${PWD}/log-worker/dist/log.worker.js:/usr/src/app/log.worker.js
@@ -148,7 +147,6 @@ services:
       - redis
       - hotspotpluslicensapi
     environment:
-      - APP_NAME=coordinator
       - LOG_LEVEL=debug
       - LOG_DIR=/logs
       - REDIS_PORT=6379

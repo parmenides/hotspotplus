@@ -1,0 +1,7 @@
+modules:
+- name: netflow
+  var.elasticsearch.hosts: 172.20.0.20:9200
+  var.input.udp.port: 4055
+  var.input.udp.workers: 2
+  var.kibana.host: 172.20.0.21:5601
+xpack.monitoring.enabled: false
