@@ -1,0 +1,23 @@
+<section desc="Verification">
+  <div class="row">
+    <form class="col-md-6 col-md-offset-3 col-sm-12">
+      <h4 class="wrapper-xs text-center alpha-header-text">
+        {{'enterVerificationCode' | translate}}
+      </h4>
+      <div class="form-group">
+        <input type="text" class="alpha-input form-control text-center dir-ltr"
+               placeholder="{{'verificationCode'| translate}}"
+               ng-model="data.verificationCode" autofocus>
+      </div>
+      <div class="form-group">
+        <button class="btn alpha-btn alpha-btn-primary btn-block" type="submit" ng-click="verify()">{{'confirm'| translate}}
+        </button>
+      </div>
+      <div class="form-group">
+        <button class="btn btn-block alpha-btn alpha-btn-default" type="button" ng-click="goBack('verify')">
+          {{'back' | translate}}
+        </button>
+      </div>
+    </form>
+  </div>
+</section>
