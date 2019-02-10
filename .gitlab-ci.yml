@@ -9,6 +9,7 @@ stages:
   - build_license_dashboard
   - build_log_aggregator
   - build_log_worker
+  - build_coordinator
 before_script:
   - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY_IMAGE
   - apk add --no-cache jq curl bash git
@@ -19,6 +20,13 @@ build_api:
     - tags
   script:
     - ./api/build.sh
+build_coordinator:
+  stage: build_coordinator
+  when: manual
+  only:
+    - tags
+  script:
+    - ./coordinator/build.sh
 build_api_license:
   stage: build_api_license
   when: manual
