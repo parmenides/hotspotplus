@@ -80,7 +80,7 @@
     "log": "tail -f logs/log-worker.log | ./node_modules/.bin/bunyan",
     "test": "mocha -r ts-node/register test/**/*.ts  ",
     "start:dev": "nodemon ./log.worker.js",
-    "start:node": "node ./dist/log.worker.js",
+    "start:node": "node ./log.worker.js",
     "watch:build": "webpack --watch",
     "build": "webpack",
     "prettier": "prettier '{test,src}/**/*.ts'  --write",
