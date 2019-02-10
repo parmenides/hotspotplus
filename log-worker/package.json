@@ -80,12 +80,11 @@
     "log": "tail -f logs/log-worker.log | ./node_modules/.bin/bunyan",
     "test": "mocha -r ts-node/register test/**/*.ts  ",
     "start:dev": "nodemon ./log.worker.js",
-    "start:node": "node ./log.worker.js",
+    "start:node": "node ./dist/log.worker.js",
     "watch:build": "webpack --watch",
     "build": "webpack",
     "prettier": "prettier '{test,src}/**/*.ts'  --write",
-    "lint": "tslint -c  tslint.json '{src,test}/**/*.ts'",
-    "start:server": "pm2 start ecosystem.config.json"
+    "lint": "tslint -c  tslint.json '{src,test}/**/*.ts'"
   },
   "prettier": {
     "parser": "typescript",
