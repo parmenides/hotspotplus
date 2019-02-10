@@ -29,14 +29,14 @@ module.exports = function(Reseller) {
           type: config.RESELLER_COMMISSION_CHARGE,
           amount: commission,
           forThe: resellerId + ':' + businessId,
-          date: new Date().getTime(),
+          date: new Date().getTime()
         });
         Charge.addCharge({
           businessId: resellerId,
           type: config.RESELLER_COMMISSION_CHARGE,
           amount: commission,
           forThe: resellerId + ':' + businessId,
-          date: new Date().getTime(),
+          date: new Date().getTime()
         });
         return resolve();
       });
@@ -65,10 +65,10 @@ module.exports = function(Reseller) {
       {
         arg: 'resellerId',
         type: 'string',
-        required: true,
-      },
+        required: true
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Reseller.loadBusiness = function(options) {
@@ -94,10 +94,10 @@ module.exports = function(Reseller) {
       {
         arg: 'options',
         type: 'object',
-        required: true,
-      },
+        required: true
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Reseller.createBusiness = function(business) {
@@ -138,10 +138,10 @@ module.exports = function(Reseller) {
       {
         arg: 'business',
         type: 'object',
-        required: true,
-      },
+        required: true
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Reseller.assignBusinessToReseller = function(businessId, resellerId) {
@@ -153,7 +153,7 @@ module.exports = function(Reseller) {
           return reject(error);
         }
         var update = {
-          resellerId: resellerId,
+          resellerId: resellerId
         };
         business.updateAttributes(update, function(error) {
           if (error) {
@@ -172,15 +172,15 @@ module.exports = function(Reseller) {
       {
         arg: 'businessId',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'resellerId',
         type: 'string',
-        required: true,
-      },
+        required: true
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Reseller.findBusiness = function(resellerId, businessId, cb) {
@@ -199,7 +199,7 @@ module.exports = function(Reseller) {
           return cb(error);
         }
         return cb(null, result);
-      },
+      }
     );
   };
 
@@ -209,15 +209,15 @@ module.exports = function(Reseller) {
       {
         arg: 'resellerId',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'businessId',
         type: 'string',
-        required: true,
-      },
+        required: true
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Reseller.updateBusiness = function(businessAttributes, cb) {
@@ -234,9 +234,9 @@ module.exports = function(Reseller) {
         where: {
           and: [
             { resellerId: businessAttributes.resellerId },
-            { id: businessAttributes.id },
-          ],
-        },
+            { id: businessAttributes.id }
+          ]
+        }
       },
       function(error, business) {
         if (error) {
@@ -250,7 +250,7 @@ module.exports = function(Reseller) {
           }
           return cb(null);
         });
-      },
+      }
     );
   };
 
@@ -260,10 +260,10 @@ module.exports = function(Reseller) {
       {
         arg: 'business',
         type: 'object',
-        required: true,
-      },
+        required: true
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Reseller.removeBusiness = function(resellerId, businessId, cb) {
@@ -290,7 +290,7 @@ module.exports = function(Reseller) {
           log.debug('business deleted');
           return cb(null, res);
         });
-      },
+      }
     );
   };
 
@@ -300,21 +300,21 @@ module.exports = function(Reseller) {
       {
         arg: 'resellerId',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'businessId',
         type: 'string',
-        required: true,
-      },
+        required: true
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Reseller.assignPackageToReseller = function(
     resellerId,
     allowedOnlineUsers,
-    durationInMonths,
+    durationInMonths
   ) {
     return Q.Promise(function(resolve, reject) {
       if (!resellerId) {
@@ -332,7 +332,7 @@ module.exports = function(Reseller) {
           {
             subscriptionDate: new Date().getTime(),
             durationInMonths: durationInMonths,
-            allowedOnlineUsers: allowedOnlineUsers,
+            allowedOnlineUsers: allowedOnlineUsers
           },
           function(error) {
             if (error) {
@@ -344,10 +344,10 @@ module.exports = function(Reseller) {
               token2: reseller.fullName,
               token3: durationInMonths,
               mobile: reseller.mobile,
-              template: config.RESELLER_PURCHASE_PACKAGE_CONFIRMED,
+              template: config.RESELLER_PURCHASE_PACKAGE_CONFIRMED
             });
             return resolve();
-          },
+          }
         );
       });
     });
@@ -359,14 +359,14 @@ module.exports = function(Reseller) {
       var id = ctx.instance.id;
       Role.findOne({ where: { name: config.ROLES.RESELLER } }, function(
         error,
-        role,
+        role
       ) {
         if (error) {
           log.error(
             'failed to load ' +
               config.ROLES.NETWORKADMIN +
               ' for role assignment',
-            error,
+            error
           );
           next();
         }
@@ -403,7 +403,7 @@ module.exports = function(Reseller) {
       if (reseller.password) {
         reseller.passwordText = utility.encrypt(
           reseller.password,
-          config.ENCRYPTION_KEY,
+          config.ENCRYPTION_KEY
         );
       }
     }
@@ -447,8 +447,8 @@ module.exports = function(Reseller) {
       Business.find(
         {
           where: {
-            resellerId: resellerId,
-          },
+            resellerId: resellerId
+          }
         },
         function(error, businesses) {
           if (error) {
@@ -469,7 +469,7 @@ module.exports = function(Reseller) {
             }
           }
           return resolve({ count: numberOfActiveBusiness });
-        },
+        }
       );
     });
   };
@@ -478,9 +478,9 @@ module.exports = function(Reseller) {
       {
         arg: 'resellerId',
         type: 'string',
-        required: true,
-      },
+        required: true
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 };

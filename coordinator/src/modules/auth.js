@@ -16,21 +16,21 @@ module.exports.serviceManLogin = function(ttlMs) {
   return login(
     process.env.SERVICE_MAN_USERNAME,
     process.env.SERVICE_MAN_PASSWORD,
-    ttlMs,
+    ttlMs
   );
 };
 
 var loginToConfigServer = (module.exports.loginToApi = module.exports.loginToConfigServer = function(
   configServerUrl,
   username,
-  password,
+  password
 ) {
   return Q.Promise(function(resolve, reject) {
     needle.post(
       configServerUrl,
       {
         username: username,
-        password: password,
+        password: password
       },
       { json: true },
       function(error, response, body) {
@@ -44,7 +44,7 @@ var loginToConfigServer = (module.exports.loginToApi = module.exports.loginToCon
         }
         var accessToken = body.id;
         return resolve({ token: accessToken, userId: body.userId });
-      },
+      }
     );
   });
 });
@@ -63,7 +63,7 @@ module.exports.loginToLicenseServer = function(CONFIG_SERVER_LOGIN_URL) {
         loginToConfigServer(
           CONFIG_SERVER_LOGIN_URL,
           systemUuid,
-          process.env.PASSWORD_PREFIX + utility.md5(systemUuid),
+          process.env.PASSWORD_PREFIX + utility.md5(systemUuid)
         )
           .then(function(authResult) {
             var token = authResult.token;
@@ -89,7 +89,7 @@ var login = (module.exports.login = function(username, password, ttlMs) {
       LOGIN_REST_API,
       {
         username: username,
-        password: password,
+        password: password
       },
       { json: true },
       function(error, response) {
@@ -106,7 +106,7 @@ var login = (module.exports.login = function(username, password, ttlMs) {
           }, ttlMs);
         }
         return resolve(accessToken);
-      },
+      }
     );
   });
 });
@@ -118,7 +118,7 @@ var logout = (module.exports.logout = function(accessToken) {
     }
     needle.post(LOGOUT_REST_API.replace('{0}', accessToken), function(
       error,
-      response,
+      response
     ) {
       if (error) {
         log.error('logged out failed: ', error);

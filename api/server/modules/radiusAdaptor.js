@@ -12,7 +12,7 @@ var utility = require('./utility');
 
 module.exports.RadiusResponse = function(RadiusMessage) {
   var data = {
-    message: {},
+    message: {}
   };
 
   this.setCode = function(code) {
@@ -45,7 +45,7 @@ module.exports.RadiusResponse = function(RadiusMessage) {
     rxBurstRate,
     txRate,
     txBurstRate,
-    burstTime,
+    burstTime
   ) {
     accessPointType = accessPointType.toLowerCase();
     if (accessPointType === config.ROUTER_TYPE.MIKROTIK) {
@@ -54,7 +54,7 @@ module.exports.RadiusResponse = function(RadiusMessage) {
       ].getRateLimit(rxRate, rxBurstRate, txRate, txBurstRate, burstTime);
       log.debug(
         'addConnectionSpeed',
-        data.message['reply:' + getAttrAvp('speed')],
+        data.message['reply:' + getAttrAvp('speed')]
       );
     } else if (accessPointType === config.ROUTER_TYPE.COOVACHILLI) {
       data.message['reply:' + getAttrAvp('downloadSpeed')] = txRate;

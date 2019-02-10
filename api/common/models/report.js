@@ -7,9 +7,9 @@ module.exports = function(Report) {
       {
         arg: 'resellerId',
         type: 'string',
-        required: true,
-      },
+        required: true
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 };

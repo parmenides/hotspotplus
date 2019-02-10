@@ -157,7 +157,7 @@ function binl2b64(binarray) {
   for (var i = 0; i < binarray.length * 32; i += 6) {
     str += tab.charAt(
       ((binarray[i >> 5] << i % 32) & 0x3f) |
-        ((binarray[i >> (5 + 1)] >> (32 - (i % 32))) & 0x3f),
+        ((binarray[i >> (5 + 1)] >> (32 - (i % 32))) & 0x3f)
     );
   }
   return str;

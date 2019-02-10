@@ -48,11 +48,11 @@ module.exports = function(Charge) {
           forThe: aCharge.forThe, // Reason description
           businessId: aCharge.businessId,
           date: aCharge.date,
-          timestamp: new Date().getTime(),
+          timestamp: new Date().getTime()
         };
         needle.post(ELASTIC_CHARGE_PATH, charge, { json: true }, function(
           error,
-          result,
+          result
         ) {
           if (error) {
             log.error(error);
@@ -63,7 +63,7 @@ module.exports = function(Charge) {
             smsModule.send({
               token1: aCharge.amount,
               mobile: ownerMobile,
-              template: process.env.BUSINESS_SMS_CHARGE_CONFIRM,
+              template: process.env.BUSINESS_SMS_CHARGE_CONFIRM
             });
           }
           return resolve();
@@ -78,24 +78,24 @@ module.exports = function(Charge) {
       {
         arg: 'businessId',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'startDate',
         type: 'number',
-        required: true,
+        required: true
       },
       {
         arg: 'skip',
         type: 'number',
-        required: true,
+        required: true
       },
       {
         arg: 'limit',
         type: 'number',
-        required: true,
-      },
+        required: true
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 };

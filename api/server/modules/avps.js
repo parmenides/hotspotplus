@@ -37,7 +37,7 @@ module.exports = {
     mschapv1_challenge: 'MS-CHAP-Challenge',
     mschapv1_password: 'MS-CHAP-Response',
     mschapv2_challenge: 'MS-CHAP-Challenge',
-    mschapv2_password: 'MS-CHAP2-Response',
+    mschapv2_password: 'MS-CHAP2-Response'
   },
   coovachilli: {
     sessionTerminateTime: 'WISPr-Session-Terminate-Time',
@@ -68,7 +68,7 @@ module.exports = {
     mschapv1_challenge: 'MS-CHAP-Challenge',
     mschapv1_password: 'MS-CHAP-Response',
     mschapv2_challenge: 'MS-CHAP-Challenge',
-    mschapv2_password: 'MS-CHAP2-Response',
+    mschapv2_password: 'MS-CHAP2-Response'
   },
   mikrotik: {
     sessionTerminateTime: 'WISPr-Session-Terminate-Time',
@@ -103,7 +103,7 @@ module.exports = {
       rxBurstRate,
       txRate,
       txBurstRate,
-      burstTime,
+      burstTime
     ) {
       // 64k/64k 256k/256k 128k/128k 10/10
       // 1024k/1024k 64k/64k 32k/32k 30/30
@@ -129,6 +129,6 @@ module.exports = {
           burstTime
         );
       }
-    },
-  },
+    }
+  }
 };

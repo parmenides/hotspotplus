@@ -46,8 +46,8 @@ exports.sendPod = function(clientSession) {
                     ['User-Name', username],
                     ['Framed-IP-Address', framedIpAddress],
                     ['Acct-Session-Id', nasSessionId],
-                    ['Calling-Station-Id', mac],
-                  ],
+                    ['Calling-Station-Id', mac]
+                  ]
                 };
                 var podRequest = radius.encode(podMessage);
                 var server = dgram.createSocket('udp4');
@@ -65,7 +65,7 @@ exports.sendPod = function(clientSession) {
                     server.close(function() {
                       log.error('Closed after big failure');
                       return reject(
-                        new Error('failed to disconnect user', username),
+                        new Error('failed to disconnect user', username)
                       );
                     });
                   }
@@ -98,14 +98,14 @@ exports.sendPod = function(clientSession) {
                       log.debug('socket closed!', closed);
                       return resolve();
                     });
-                  },
+                  }
                 );
               } else {
                 log.error(
                   'nas ip or port is empty, nothing to do, IP: ',
                   nasIp,
                   ', Port:',
-                  port,
+                  port
                 );
                 return resolve();
               }

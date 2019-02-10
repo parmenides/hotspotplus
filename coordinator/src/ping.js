@@ -30,7 +30,7 @@ var pingService = (module.exports.pingService = function() {
                 config.CONFIG_SERVER_PING.replace('{token}', token),
                 {
                   ip: ip,
-                  systemUuid: systemUuid,
+                  systemUuid: systemUuid
                 },
                 { rejectUnauthorized: true, json: true },
                 function(error, result, body) {
@@ -40,7 +40,7 @@ var pingService = (module.exports.pingService = function() {
                   }
                   log.debug('Ping Status Code', result.statusCode);
                   return resolve();
-                },
+                }
               );
             })
             .fail(function(error) {
@@ -62,7 +62,7 @@ var job = new CronJob({
     pingService();
   },
   start: true,
-  timeZone: 'Asia/Tehran',
+  timeZone: 'Asia/Tehran'
 });
 job.start();
 log.debug('Ping service: ', job.running);

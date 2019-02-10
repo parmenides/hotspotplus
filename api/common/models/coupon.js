@@ -15,20 +15,20 @@ module.exports = function(Coupon) {
     Coupon.findOne(
       {
         where: {
-          and: [{ code: giftCode }, { ownerId: config.ADMIN_OWNER_ID }],
-        },
+          and: [{ code: giftCode }, { ownerId: config.ADMIN_OWNER_ID }]
+        }
       },
       function(error, result) {
         if (error) {
           return cb(error);
         }
         return cb(null, result);
-      },
+      }
     );
   };
 
   Coupon.remoteMethod('verifyGiftCode', {
     accepts: [{ arg: 'giftCode', type: 'string', required: true }],
-    returns: { root: true },
+    returns: { root: true }
   });
 };

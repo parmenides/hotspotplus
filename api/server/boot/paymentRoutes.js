@@ -23,7 +23,7 @@ module.exports = function(app) {
       host,
       nasId,
       memberId,
-      businessId,
+      businessId
     )
       .then(function(result) {
         var url = result.returnUrl;

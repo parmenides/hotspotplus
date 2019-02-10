@@ -105,7 +105,7 @@ module.exports = function(app) {
 
       Nas.loadThemeConfigById(responseQuery.nasId, function(
         error,
-        themeConfig,
+        themeConfig
       ) {
         if (error) {
           log.error(error);
@@ -115,7 +115,7 @@ module.exports = function(app) {
         underscore.extend(themeConfig, responseQuery);
         Member.loadMemberCredentialsByMac(
           responseQuery.mac,
-          themeConfig.businessId,
+          themeConfig.businessId
         )
           .then(function(credentials) {
             log.debug('credentials loaded for: ', credentials);

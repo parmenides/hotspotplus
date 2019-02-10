@@ -48,7 +48,7 @@ module.exports = function(Campaign) {
               Member.count(
                 {
                   businessId: campaign.businessId,
-                  mobile: { gt: 0 },
+                  mobile: { gt: 0 }
                 },
                 function(error, receptorsLength) {
                   if (error) {
@@ -58,7 +58,7 @@ module.exports = function(Campaign) {
                   if (messageBody && sendCoupon) {
                     var tempMessage = messageBody.concat(
                       '\n',
-                      config.PERSIAN_COUPON_MESSAGE,
+                      config.PERSIAN_COUPON_MESSAGE
                     );
                   } else if (!messageBody && sendCoupon) {
                     tempMessage = config.PERSIAN_COUPON_MESSAGE;
@@ -66,7 +66,7 @@ module.exports = function(Campaign) {
 
                   var totalCost = Member.calculateBulkSmsCost(
                     receptorsLength,
-                    tempMessage,
+                    tempMessage
                   );
                   aggregate
                     .getProfileBalance(businessId)
@@ -79,15 +79,15 @@ module.exports = function(Campaign) {
                                 { businessId: businessId },
                                 {
                                   mobile: {
-                                    gt: 0,
-                                  },
-                                },
-                              ],
+                                    gt: 0
+                                  }
+                                }
+                              ]
                             },
                             fields: {
                               mobile: true,
-                              id: true,
-                            },
+                              id: true
+                            }
                           },
                           function(error, membersList) {
                             if (error) {
@@ -112,18 +112,18 @@ module.exports = function(Campaign) {
                                       code:
                                         couponPrefix +
                                         Math.floor(
-                                          Math.random() * 10000 + 1000,
+                                          Math.random() * 10000 + 1000
                                         ),
                                       value: discount,
                                       ownerId: businessId,
                                       campaignId: campaignId,
                                       used: 0,
                                       creationDate: new Date().getTime(),
-                                      count: 1,
+                                      count: 1
                                     };
                                     Coupon.create(coupon, function(
                                       error,
-                                      result,
+                                      result
                                     ) {
                                       if (error) {
                                         log.error(error);
@@ -131,19 +131,19 @@ module.exports = function(Campaign) {
                                       }
                                       var couponMessage = config.PERSIAN_COUPON_MESSAGE.replace(
                                         '{0}',
-                                        result.code,
+                                        result.code
                                       ).replace('{1}', result.value.amount);
                                       switch (result.value.unit) {
                                         case config.PERCENT_UNIT:
                                           couponMessage = couponMessage.replace(
                                             '{2}',
-                                            config.PERSIAN_PERCENT_UNIT,
+                                            config.PERSIAN_PERCENT_UNIT
                                           );
                                           break;
                                         case config.TOMAN_UNIT:
                                           couponMessage = couponMessage.replace(
                                             '{2}',
-                                            config.PERSIAN_TOMAN_UNIT,
+                                            config.PERSIAN_TOMAN_UNIT
                                           );
                                           break;
                                         default:
@@ -152,7 +152,7 @@ module.exports = function(Campaign) {
                                       if (messageBody != null) {
                                         var message = messageBody.concat(
                                           '\n',
-                                          couponMessage,
+                                          couponMessage
                                         );
                                       } else {
                                         message = couponMessage;
@@ -160,7 +160,7 @@ module.exports = function(Campaign) {
                                       smsModule.send({
                                         businessId: businessId,
                                         mobiles: mobileArray,
-                                        message: message,
+                                        message: message
                                       });
                                       logData.members.push(member.id);
                                       logData.mobiles.push(mobile);
@@ -173,7 +173,7 @@ module.exports = function(Campaign) {
                                         'bulk message added to Queue',
                                         businessId,
                                         mobile,
-                                        message,
+                                        message
                                       );
                                       campaign.updateAttributes(
                                         { log: campaignLog },
@@ -181,25 +181,25 @@ module.exports = function(Campaign) {
                                           if (error) {
                                             log.error(
                                               '@sendBulkMessages',
-                                              error,
+                                              error
                                             );
                                             return reject(error);
                                           }
                                           log.debug(
                                             'campaign updated',
-                                            campaignLog,
+                                            campaignLog
                                           );
                                           return resolve(
-                                            'bulk message added to Queue',
+                                            'bulk message added to Queue'
                                           );
-                                        },
+                                        }
                                       );
                                     });
                                   } else if (messageBody != null) {
                                     smsModule.send({
                                       businessId: businessId,
                                       mobiles: mobileArray,
-                                      message: messageBody,
+                                      message: messageBody
                                     });
                                     logData.members.push(member.id);
                                     logData.mobiles.push(mobile);
@@ -212,7 +212,7 @@ module.exports = function(Campaign) {
                                       'bulk message added to Queue',
                                       businessId,
                                       mobile,
-                                      messageBody,
+                                      messageBody
                                     );
                                     campaign.updateAttributes(
                                       { log: campaignLog },
@@ -223,12 +223,12 @@ module.exports = function(Campaign) {
                                         }
                                         log.debug(
                                           'campaign updated',
-                                          campaignLog,
+                                          campaignLog
                                         );
                                         return resolve(
-                                          'bulk message added to Queue',
+                                          'bulk message added to Queue'
                                         );
-                                      },
+                                      }
                                     );
                                   }
                                 })();
@@ -236,7 +236,7 @@ module.exports = function(Campaign) {
                             } else {
                               return reject('mobile list or message empty');
                             }
-                          },
+                          }
                         );
                       } else {
                         var error = 'balanceNotEnough';
@@ -248,14 +248,14 @@ module.exports = function(Campaign) {
                       log.error('@sendBulkMessages', error);
                       return reject(error);
                     });
-                },
+                }
               );
             })
             .fail(function(error) {
               log.error('@sendBulkMessages', error);
               log.debug(
                 '@sendBulkMessages',
-                'business does not have valid subscription',
+                'business does not have valid subscription'
               );
               return reject('business does not have valid subscription');
             });
@@ -270,9 +270,9 @@ module.exports = function(Campaign) {
       {
         arg: 'campaignId',
         type: 'string',
-        required: true,
-      },
+        required: true
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 };

@@ -17,7 +17,7 @@ var dataSource = {
     ':27017/' +
     process.env.MONGO_DB_NAME +
     '?w=1&j=true',
-  name: 'mongo',
+  name: 'mongo'
 };
 app.dataSource('mongo', dataSource);
 

@@ -38,7 +38,7 @@ var partitionsNumber = process.env.NUM_PARTITIONS;
 var redis = require('redis');
 var redisClient = redis.createClient(
   process.env.REDIS_PORT,
-  process.env.REDIS_HOST,
+  process.env.REDIS_HOST
 );
 var self = this;
 /* Return Max of Session Time & Download & Upload for Business Base on Member
@@ -54,7 +54,7 @@ module.exports.getMemberTrafficUsageReport = function(
   businessId,
   offset,
   interval,
-  size,
+  size
 ) {
   return Q.Promise(function(resolve, reject) {
     if (offset == null) {
@@ -78,19 +78,19 @@ module.exports.getMemberTrafficUsageReport = function(
             must: [
               {
                 term: {
-                  businessId: businessId,
-                },
+                  businessId: businessId
+                }
               },
               {
                 range: {
                   creationDate: {
                     gte: startDate,
-                    lt: endDate,
-                  },
-                },
-              },
-            ],
-          },
+                    lt: endDate
+                  }
+                }
+              }
+            ]
+          }
         },
         aggs: {
           usage: {
@@ -100,37 +100,37 @@ module.exports.getMemberTrafficUsageReport = function(
               min_doc_count: 0,
               extended_bounds: {
                 min: startDate,
-                max: endDate,
+                max: endDate
               },
-              offset: offset,
+              offset: offset
             },
             aggs: {
               group_by_sessionId: {
                 terms: {
                   field: 'sessionId',
-                  size: size,
+                  size: size
                 },
                 aggs: {
                   sessionTime: {
                     max: {
-                      field: 'sessionTime',
-                    },
+                      field: 'sessionTime'
+                    }
                   },
                   download: {
                     max: {
-                      field: 'download',
-                    },
+                      field: 'download'
+                    }
                   },
                   upload: {
                     max: {
-                      field: 'upload',
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
+                      field: 'upload'
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       },
       { json: true },
       function(error, response) {
@@ -157,7 +157,7 @@ module.exports.getMemberTrafficUsageReport = function(
               key: usageDates[i].key,
               download: { value: 0 },
               upload: { value: 0 },
-              sessionTime: { value: 0 },
+              sessionTime: { value: 0 }
             };
             if (usageDates[i].group_by_sessionId.buckets) {
               var sessionIdGroup = usageDates[i].group_by_sessionId.buckets;
@@ -184,7 +184,7 @@ module.exports.getMemberTrafficUsageReport = function(
           log.debug(response.body);
           return reject(response.body);
         }
-      },
+      }
     );
   });
 };
@@ -193,7 +193,7 @@ module.exports.getMemberUsage = function(
   startDate,
   endDate,
   memberId,
-  businessId,
+  businessId
 ) {
   return Q.Promise(function(resolve, reject) {
     if (!businessId) {
@@ -217,55 +217,55 @@ module.exports.getMemberUsage = function(
                 must: [
                   {
                     term: {
-                      businessId: businessId,
-                    },
+                      businessId: businessId
+                    }
                   },
                   {
                     term: {
-                      memberId: memberId,
-                    },
+                      memberId: memberId
+                    }
                   },
                   {
                     range: {
                       creationDate: {
                         gte: startDate,
-                        lt: endDate,
-                      },
-                    },
-                  },
-                ],
-              },
+                        lt: endDate
+                      }
+                    }
+                  }
+                ]
+              }
             },
             aggs: {
               group_by_sessionId: {
                 terms: {
                   size: sessionCount,
-                  field: 'sessionId',
+                  field: 'sessionId'
                 },
                 aggs: {
                   sessionTime: {
                     max: {
-                      field: 'sessionTime',
-                    },
+                      field: 'sessionTime'
+                    }
                   },
                   totalUsage: {
                     max: {
-                      field: 'totalUsage',
-                    },
+                      field: 'totalUsage'
+                    }
                   },
                   upload: {
                     max: {
-                      field: 'upload',
-                    },
+                      field: 'upload'
+                    }
                   },
                   download: {
                     max: {
-                      field: 'download',
-                    },
-                  },
-                },
-              },
-            },
+                      field: 'download'
+                    }
+                  }
+                }
+              }
+            }
           },
           { json: true },
           function(error, response, body) {
@@ -278,7 +278,7 @@ module.exports.getMemberUsage = function(
               bulk: 0,
               download: 0,
               upload: 0,
-              sessionTime: 0,
+              sessionTime: 0
             };
 
             if (response.statusCode >= 300) {
@@ -302,7 +302,7 @@ module.exports.getMemberUsage = function(
               log.warn('going to send empty usage', body);
             }
             return resolve(usage);
-          },
+          }
         );
       })
       .fail(function(error) {
@@ -322,16 +322,16 @@ module.exports.getLicenseBalance = function(licenseId) {
         {
           query: {
             term: {
-              licenseId: licenseId,
-            },
+              licenseId: licenseId
+            }
           },
           aggs: {
             balance: {
               sum: {
-                field: 'amount',
-              },
-            },
-          },
+                field: 'amount'
+              }
+            }
+          }
         },
         { json: true },
         function(error, response) {
@@ -357,13 +357,13 @@ module.exports.getLicenseBalance = function(licenseId) {
             var result = response.body.aggregations;
             var balance = result.balance.value;
             return resolve({
-              balance: balance,
+              balance: balance
             });
           } else {
             log.debug(response.body);
             return reject(response.body);
           }
-        },
+        }
       );
     } catch (error) {
       log.error(error);
@@ -382,16 +382,16 @@ module.exports.getProfileBalance = function(businessId) {
         {
           query: {
             term: {
-              businessId: businessId,
-            },
+              businessId: businessId
+            }
           },
           aggs: {
             balance: {
               sum: {
-                field: 'amount',
-              },
-            },
-          },
+                field: 'amount'
+              }
+            }
+          }
         },
         { json: true },
         function(error, response) {
@@ -414,13 +414,13 @@ module.exports.getProfileBalance = function(businessId) {
             var result = response.body.aggregations;
             var balance = result.balance.value;
             return resolve({
-              balance: balance,
+              balance: balance
             });
           } else {
             log.debug(response.body);
             return reject(response.body);
           }
-        },
+        }
       );
     } catch (error) {
       log.error(error);
@@ -449,35 +449,35 @@ module.exports.getSessionsReport = function(fromDateInMs, memberId, sessionId) {
           {
             download: { value: 0 },
             upload: { value: 0 },
-            sessionTime: { value: 0 },
-          },
+            sessionTime: { value: 0 }
+          }
         ],
-        memberId: memberId,
+        memberId: memberId
       });
     }
     var aggregate = {
       group_by_sessionId: {
         terms: {
-          field: 'sessionId',
+          field: 'sessionId'
         },
         aggs: {
           sessionTime: {
             max: {
-              field: 'sessionTime',
-            },
+              field: 'sessionTime'
+            }
           },
           download: {
             max: {
-              field: 'download',
-            },
+              field: 'download'
+            }
           },
           upload: {
             max: {
-              field: 'upload',
-            },
-          },
-        },
-      },
+              field: 'upload'
+            }
+          }
+        }
+      }
     };
 
     needle.post(
@@ -487,22 +487,22 @@ module.exports.getSessionsReport = function(fromDateInMs, memberId, sessionId) {
           bool: {
             must: [
               {
-                term: { memberId: memberId },
+                term: { memberId: memberId }
               },
               {
-                term: { sessionId: sessionId },
+                term: { sessionId: sessionId }
               },
               {
                 range: {
                   creationDate: {
-                    gte: fromDateInMs,
-                  },
-                },
-              },
-            ],
-          },
+                    gte: fromDateInMs
+                  }
+                }
+              }
+            ]
+          }
         },
-        aggs: aggregate,
+        aggs: aggregate
       },
       { json: true },
       function(error, response) {
@@ -523,10 +523,10 @@ module.exports.getSessionsReport = function(fromDateInMs, memberId, sessionId) {
               {
                 download: { value: 0 },
                 upload: { value: 0 },
-                sessionTime: { value: 0 },
-              },
+                sessionTime: { value: 0 }
+              }
             ],
-            memberId: memberId,
+            memberId: memberId
           });
         } else {
           //log.debug ( 'Members session usage aggregations : ', response.body.aggregations.group_by_sessionId.buckets )
@@ -537,18 +537,18 @@ module.exports.getSessionsReport = function(fromDateInMs, memberId, sessionId) {
               {
                 download: { value: 0 },
                 upload: { value: 0 },
-                sessionTime: { value: 0 },
-              },
+                sessionTime: { value: 0 }
+              }
             ];
           }
           return resolve({
             fromDate: fromDateInMs,
             sessionReports: sessionReports,
             sessionId: sessionId,
-            memberId: memberId,
+            memberId: memberId
           });
         }
-      },
+      }
     );
   });
 };
@@ -616,9 +616,9 @@ module.exports.getNetflowLog = function(options) {
       range: {
         creationDate: {
           gte: fromDate,
-          lt: toDate,
-        },
-      },
+          lt: toDate
+        }
+      }
     };
     // add fromDate & toDate to needle must query
     mustQuery.push(queryDate);
@@ -626,11 +626,11 @@ module.exports.getNetflowLog = function(options) {
     for (var param in params) {
       if (params.hasOwnProperty(param) && param && params[param]) {
         var q = {
-          match: {},
+          match: {}
         };
         q.match[param] = {
           query: params[param],
-          type: 'phrase',
+          type: 'phrase'
         };
         mustQuery.push(q);
       }
@@ -641,12 +641,12 @@ module.exports.getNetflowLog = function(options) {
       sort: [{ creationDate: { order: 'asc' } }],
       query: {
         bool: {
-          must: mustQuery,
-        },
+          must: mustQuery
+        }
       },
       _source: {
-        excludes: [],
-      },
+        excludes: []
+      }
     };
     log.debug('Netflow query', JSON.stringify(finalQuery, null, 2));
     needle.post(
@@ -669,9 +669,9 @@ module.exports.getNetflowLog = function(options) {
         }
         return resolve({
           total: response.body.hits.total,
-          log: response.body.hits.hits,
+          log: response.body.hits.hits
         });
-      },
+      }
     );
   });
 };
@@ -682,7 +682,7 @@ module.exports.getSessionLog = function(
   fromDate,
   toDate,
   memberId,
-  businessId,
+  businessId
 ) {
   const query = {
     query: {
@@ -690,25 +690,25 @@ module.exports.getSessionLog = function(
         must: [
           {
             term: {
-              memberId: memberId,
-            },
+              memberId: memberId
+            }
           },
           {
             term: {
-              businessId: businessId,
-            },
+              businessId: businessId
+            }
           },
           {
             range: {
               creationDate: {
                 gte: startDate,
-                lte: endDate,
-              },
-            },
-          },
-        ],
-      },
-    },
+                lte: endDate
+              }
+            }
+          }
+        ]
+      }
+    }
   };
   needle.post(
     ELASTIC_SESSION_LOG.replace('{0}', '_search'),
@@ -724,12 +724,12 @@ module.exports.getSessionLog = function(
         log.error(
           'Error Session Logs: %j %j',
           response.statusCode,
-          response.body,
+          response.body
         );
         return reject(response.body);
       }
       return resolve(response.body);
-    },
+    }
   );
 };
 
@@ -737,7 +737,7 @@ module.exports.getNetflowLogReports = function(
   fromDate,
   toDate,
   hostIps,
-  lanIps,
+  lanIps
 ) {
   var query = {
     query: {
@@ -745,25 +745,25 @@ module.exports.getNetflowLogReports = function(
         must: [
           {
             terms: {
-              host: hostIps || [],
-            },
+              host: hostIps || []
+            }
           },
           {
             terms: {
-              'netflow.src_addr': lanIps || [],
-            },
+              'netflow.src_addr': lanIps || []
+            }
           },
           {
             range: {
               '@timestamp': {
                 gte: fromDate,
-                lte: toDate,
-              },
-            },
-          },
-        ],
-      },
-    },
+                lte: toDate
+              }
+            }
+          }
+        ]
+      }
+    }
   };
 
   log.debug('netflow query %j', query);
@@ -782,12 +782,12 @@ module.exports.getNetflowLogReports = function(
         log.error(
           'Error TrafficUsageReport: %j %j',
           response.statusCode,
-          response.body,
+          response.body
         );
         return reject(response.body);
       }
       return resolve(response.body);
-    },
+    }
   );
 };
 
@@ -849,18 +849,18 @@ module.exports.getSyslog = function(options) {
       match: {
         businessId: {
           query: businessId,
-          type: 'phrase',
-        },
-      },
+          type: 'phrase'
+        }
+      }
     };
     // create range query for fromDate & toDate
     var queryDate = {
       range: {
         creationDate: {
           gte: fromDate,
-          lt: toDate,
-        },
-      },
+          lt: toDate
+        }
+      }
     };
     // add businessId to needle must query
     mustQuery.push(queryBusiness);
@@ -873,8 +873,8 @@ module.exports.getSyslog = function(options) {
         query_string: {
           analyze_wildcard: true,
           default_field: param,
-          query: '*' + params[param] + '*',
-        },
+          query: '*' + params[param] + '*'
+        }
       };
       mustQuery.push(match);
     }
@@ -886,12 +886,12 @@ module.exports.getSyslog = function(options) {
         sort: [{ creationDate: { order: 'asc' } }],
         query: {
           bool: {
-            must: mustQuery,
-          },
+            must: mustQuery
+          }
         },
         _source: {
-          excludes: [],
-        },
+          excludes: []
+        }
       },
       { json: true },
       function(error, response) {
@@ -911,9 +911,9 @@ module.exports.getSyslog = function(options) {
         }
         return resolve({
           total: response.body.hits.total,
-          log: response.body.hits.hits,
+          log: response.body.hits.hits
         });
-      },
+      }
     );
   });
 };
@@ -947,24 +947,24 @@ module.exports.getMemberDailyUsage = function(businessId, memberId, startDate) {
             must: [
               {
                 term: {
-                  businessId: businessId,
-                },
+                  businessId: businessId
+                }
               },
               {
                 term: {
-                  memberId: memberId,
-                },
+                  memberId: memberId
+                }
               },
               {
                 range: {
                   creationDate: {
                     gte: startDate,
-                    lt: endDate,
-                  },
-                },
-              },
-            ],
-          },
+                    lt: endDate
+                  }
+                }
+              }
+            ]
+          }
         },
         aggs: {
           usage: {
@@ -974,41 +974,41 @@ module.exports.getMemberDailyUsage = function(businessId, memberId, startDate) {
               min_doc_count: 0,
               extended_bounds: {
                 min: startDate,
-                max: endDate,
+                max: endDate
               },
-              offset: offset,
+              offset: offset
             },
             aggs: {
               group_by_sessionId: {
                 terms: {
-                  field: 'sessionId',
+                  field: 'sessionId'
                 },
                 aggs: {
                   download: {
                     max: {
-                      field: 'download',
-                    },
+                      field: 'download'
+                    }
                   },
                   upload: {
                     max: {
-                      field: 'upload',
-                    },
-                  },
-                },
+                      field: 'upload'
+                    }
+                  }
+                }
               },
               sum_download: {
                 sum_bucket: {
-                  buckets_path: 'group_by_sessionId>download',
-                },
+                  buckets_path: 'group_by_sessionId>download'
+                }
               },
               sum_upload: {
                 sum_bucket: {
-                  buckets_path: 'group_by_sessionId>upload',
-                },
-              },
-            },
-          },
-        },
+                  buckets_path: 'group_by_sessionId>upload'
+                }
+              }
+            }
+          }
+        }
       },
       { json: true },
       function(error, response) {
@@ -1027,7 +1027,7 @@ module.exports.getMemberDailyUsage = function(businessId, memberId, startDate) {
         var result = response.body.aggregations.usage.buckets;
         //log.debug ( '@getMemberDailyUsage: ', result );
         return resolve(result);
-      },
+      }
     );
   });
 };
@@ -1039,7 +1039,7 @@ module.exports.getMaxUsageReports = function(
   startDate,
   endDate,
   size,
-  partition,
+  partition
 ) {
   return Q.Promise(function(resolve, reject) {
     if (!startDate) {
@@ -1059,12 +1059,12 @@ module.exports.getMaxUsageReports = function(
               range: {
                 creationDate: {
                   gte: startDate,
-                  lte: endDate,
-                },
-              },
-            },
-          ],
-        },
+                  lte: endDate
+                }
+              }
+            }
+          ]
+        }
       },
       aggs: {
         sessions: {
@@ -1072,74 +1072,74 @@ module.exports.getMaxUsageReports = function(
             field: 'sessionId',
             include: {
               partition: partition,
-              num_partitions: partitionsNumber,
+              num_partitions: partitionsNumber
             },
-            size: size,
+            size: size
           },
           aggs: {
             businessId: {
               terms: {
-                field: 'businessId',
-              },
+                field: 'businessId'
+              }
             },
             memberId: {
               terms: {
-                field: 'memberId',
-              },
+                field: 'memberId'
+              }
             },
             nasId: {
               terms: {
-                field: 'nasId',
-              },
+                field: 'nasId'
+              }
             },
             username: {
               terms: {
-                field: 'username.keyword',
-              },
+                field: 'username.keyword'
+              }
             },
             mac: {
               terms: {
-                field: 'mac',
-              },
+                field: 'mac'
+              }
             },
             accStatusType: {
               terms: {
-                field: 'accStatusType',
-              },
+                field: 'accStatusType'
+              }
             },
             creationDate: {
               max: {
-                field: 'creationDate',
-              },
+                field: 'creationDate'
+              }
             },
             sessionTime: {
               max: {
-                field: 'sessionTime',
-              },
+                field: 'sessionTime'
+              }
             },
             totalUsage: {
               max: {
-                field: 'totalUsage',
-              },
+                field: 'totalUsage'
+              }
             },
             download: {
               max: {
-                field: 'download',
-              },
+                field: 'download'
+              }
             },
             upload: {
               max: {
-                field: 'upload',
-              },
+                field: 'upload'
+              }
             },
             timestamp: {
               max: {
-                field: 'timestamp',
-              },
-            },
-          },
-        },
-      },
+                field: 'timestamp'
+              }
+            }
+          }
+        }
+      }
     };
     log.debug(query);
     needle.post(
@@ -1191,7 +1191,7 @@ module.exports.getMaxUsageReports = function(
         }
         log.debug('Result Length:', result.length);
         return resolve(result);
-      },
+      }
     );
   });
 };
@@ -1204,7 +1204,7 @@ module.exports.getUsageReportSessions = function(
   endDate,
   accStatusType,
   size,
-  partition,
+  partition
 ) {
   return Q.Promise(function(resolve, reject) {
     if (!startDate) {
@@ -1224,19 +1224,19 @@ module.exports.getUsageReportSessions = function(
             must: [
               {
                 term: {
-                  accStatusType: accStatusType,
-                },
+                  accStatusType: accStatusType
+                }
               },
               {
                 range: {
                   creationDate: {
                     gte: startDate,
-                    lte: endDate,
-                  },
-                },
-              },
-            ],
-          },
+                    lte: endDate
+                  }
+                }
+              }
+            ]
+          }
         },
         aggs: {
           sessions: {
@@ -1244,12 +1244,12 @@ module.exports.getUsageReportSessions = function(
               field: 'sessionId',
               include: {
                 partition: partition,
-                num_partitions: partitionsNumber,
+                num_partitions: partitionsNumber
               },
-              size: size,
-            },
-          },
-        },
+              size: size
+            }
+          }
+        }
       },
       { json: true },
       function(error, response) {
@@ -1270,7 +1270,7 @@ module.exports.getUsageReportSessions = function(
           result.push(sessions[i].key);
         }
         return resolve(result);
-      },
+      }
     );
   });
 };
@@ -1282,7 +1282,7 @@ module.exports.getUsageReportSessions = function(
 module.exports.getUniqueSessionCount = function(
   businessId,
   startDate,
-  endDate,
+  endDate
 ) {
   return Q.Promise(function(resolve, reject) {
     if (!startDate) {
@@ -1302,27 +1302,27 @@ module.exports.getUniqueSessionCount = function(
             must: [
               {
                 term: {
-                  businessId: businessId,
-                },
+                  businessId: businessId
+                }
               },
               {
                 range: {
                   creationDate: {
                     gte: startDate,
-                    lte: endDate,
-                  },
-                },
-              },
-            ],
-          },
+                    lte: endDate
+                  }
+                }
+              }
+            ]
+          }
         },
         aggs: {
           distinct_session: {
             cardinality: {
-              field: 'sessionId',
-            },
-          },
-        },
+              field: 'sessionId'
+            }
+          }
+        }
       },
       { json: true },
       function(error, response) {
@@ -1339,7 +1339,7 @@ module.exports.getUniqueSessionCount = function(
         }
         var result = response.body.aggregations.distinct_session.value;
         return resolve(result);
-      },
+      }
     );
   });
 };
@@ -1368,20 +1368,20 @@ module.exports.getAllUniqueSessionCount = function(startDate, endDate) {
                 range: {
                   creationDate: {
                     gte: startDate,
-                    lte: endDate,
-                  },
-                },
-              },
-            ],
-          },
+                    lte: endDate
+                  }
+                }
+              }
+            ]
+          }
         },
         aggs: {
           distinct_session: {
             cardinality: {
-              field: 'sessionId',
-            },
-          },
-        },
+              field: 'sessionId'
+            }
+          }
+        }
       },
       { json: true },
       function(error, response) {
@@ -1398,7 +1398,7 @@ module.exports.getAllUniqueSessionCount = function(startDate, endDate) {
         }
         var result = response.body.aggregations.distinct_session.value;
         return resolve(result);
-      },
+      }
     );
   });
 };
@@ -1427,19 +1427,19 @@ module.exports.getCharges = function(businessId, startDate, skip, limit) {
             bool: {
               must: [
                 {
-                  term: { businessId: businessId },
+                  term: { businessId: businessId }
                 },
                 {
                   range: {
                     date: {
-                      gte: startDate,
-                    },
-                  },
-                },
-              ],
-            },
+                      gte: startDate
+                    }
+                  }
+                }
+              ]
+            }
           },
-          sort: [{ date: 'desc' }],
+          sort: [{ date: 'desc' }]
         },
         { json: true },
         function(error, response) {
@@ -1461,13 +1461,13 @@ module.exports.getCharges = function(businessId, startDate, skip, limit) {
           if (response.body && response.body.hits && response.body.hits.hits) {
             var result = response.body.hits.hits;
             return resolve({
-              charges: result,
+              charges: result
             });
           } else {
             log.debug(response.body);
             return reject(response.body);
           }
-        },
+        }
       );
     } catch (error) {
       log.error('getCharges %j', error);
@@ -1484,7 +1484,7 @@ module.exports.getMemberUniqueSessionCount = function(
   businessId,
   memberId,
   startDate,
-  endDate,
+  endDate
 ) {
   return Q.Promise(function(resolve, reject) {
     if (!startDate) {
@@ -1504,32 +1504,32 @@ module.exports.getMemberUniqueSessionCount = function(
             must: [
               {
                 term: {
-                  businessId: businessId,
-                },
+                  businessId: businessId
+                }
               },
               {
                 term: {
-                  memberId: memberId,
-                },
+                  memberId: memberId
+                }
               },
               {
                 range: {
                   creationDate: {
                     gte: startDate,
-                    lte: endDate,
-                  },
-                },
-              },
-            ],
-          },
+                    lte: endDate
+                  }
+                }
+              }
+            ]
+          }
         },
         aggs: {
           distinct_session: {
             cardinality: {
-              field: 'sessionId',
-            },
-          },
-        },
+              field: 'sessionId'
+            }
+          }
+        }
       },
       { json: true },
       function(error, response) {
@@ -1546,7 +1546,7 @@ module.exports.getMemberUniqueSessionCount = function(
         }
         var result = response.body.aggregations.distinct_session.value;
         return resolve(result);
-      },
+      }
     );
   });
 };
@@ -1556,7 +1556,7 @@ module.exports.getUsageReportSessions = function(
   endDate,
   accStatusType,
   size,
-  partition,
+  partition
 ) {
   return Q.Promise(function(resolve, reject) {
     if (!startDate) {
@@ -1576,19 +1576,19 @@ module.exports.getUsageReportSessions = function(
             must: [
               {
                 term: {
-                  accStatusType: accStatusType,
-                },
+                  accStatusType: accStatusType
+                }
               },
               {
                 range: {
                   creationDate: {
                     gte: startDate,
-                    lte: endDate,
-                  },
-                },
-              },
-            ],
-          },
+                    lte: endDate
+                  }
+                }
+              }
+            ]
+          }
         },
         aggs: {
           sessions: {
@@ -1596,12 +1596,12 @@ module.exports.getUsageReportSessions = function(
               field: 'sessionId',
               include: {
                 partition: partition,
-                num_partitions: partitionsNumber,
+                num_partitions: partitionsNumber
               },
-              size: size,
-            },
-          },
-        },
+              size: size
+            }
+          }
+        }
       },
       { json: true },
       function(error, response) {
@@ -1622,7 +1622,7 @@ module.exports.getUsageReportSessions = function(
           result.push(sessions[i].key);
         }
         return resolve(result);
-      },
+      }
     );
   });
 };
@@ -1642,29 +1642,29 @@ module.exports.getAllSessions = function(startDate, endDate, size) {
         bool: {
           must_not: {
             terms: {
-              accStatusType: [0],
-            },
+              accStatusType: [0]
+            }
           },
           must: [
             {
               range: {
                 creationDate: {
                   gte: startDate,
-                  lte: endDate,
-                },
-              },
-            },
-          ],
-        },
+                  lte: endDate
+                }
+              }
+            }
+          ]
+        }
       },
       aggs: {
         sessions: {
           terms: {
             field: 'sessionId',
-            size: size,
-          },
-        },
-      },
+            size: size
+          }
+        }
+      }
     };
     needle.post(
       ELASTIC_ACCOUNTING_USAGE_SEARCH.replace('{0}{1}', '_search'),
@@ -1691,7 +1691,7 @@ module.exports.getAllSessions = function(startDate, endDate, size) {
           sessionIds.push(buckets[i].key);
         }
         return resolve(sessionIds);
-      },
+      }
     );
   });
 };
@@ -1706,39 +1706,39 @@ module.exports.getAggregatedUsageBySessionId = function(sessionId) {
       size: size,
       query: {
         term: {
-          sessionId: sessionId,
-        },
+          sessionId: sessionId
+        }
       },
       aggs: {
         sessionTime: {
           max: {
-            field: 'sessionTime',
-          },
+            field: 'sessionTime'
+          }
         },
         download: {
           max: {
-            field: 'download',
-          },
+            field: 'download'
+          }
         },
         upload: {
           max: {
-            field: 'upload',
-          },
+            field: 'upload'
+          }
         },
         creationDate: {
           max: {
-            field: 'creationDate',
-          },
+            field: 'creationDate'
+          }
         },
         minCreationDate: {
           min: {
-            field: 'creationDate',
-          },
+            field: 'creationDate'
+          }
         },
         accountingDoc: {
           terms: {
             field: 'sessionId',
-            size: 1,
+            size: 1
           },
           aggs: {
             lastAccountingDoc: {
@@ -1750,15 +1750,15 @@ module.exports.getAggregatedUsageBySessionId = function(sessionId) {
                     'username',
                     'memberId',
                     'mac',
-                    'creationDateObj',
-                  ],
+                    'creationDateObj'
+                  ]
                 },
-                size: 1,
-              },
-            },
-          },
-        },
-      },
+                size: 1
+              }
+            }
+          }
+        }
+      }
     };
     needle.post(
       ELASTIC_ACCOUNTING_USAGE_SEARCH.replace('{0}{1}', '_search'),
@@ -1810,10 +1810,10 @@ module.exports.getAggregatedUsageBySessionId = function(sessionId) {
           aggregatedResult: result,
           range: {
             fromDateInMs: aggregations.minCreationDate.value,
-            toDateInMs: result.creationDate,
-          },
+            toDateInMs: result.creationDate
+          }
         });
-      },
+      }
     );
   });
 };
@@ -1821,7 +1821,7 @@ module.exports.getAggregatedUsageBySessionId = function(sessionId) {
 module.exports.deleteBySessionId = function(
   fromDateInMs,
   toDateInMs,
-  sessionId,
+  sessionId
 ) {
   return Q.Promise(function(resolve, reject) {
     if (!sessionId) {
@@ -1832,26 +1832,26 @@ module.exports.deleteBySessionId = function(
         bool: {
           must_not: {
             terms: {
-              accStatusType: [0],
-            },
+              accStatusType: [0]
+            }
           },
           must: [
             {
               term: {
-                sessionId: sessionId,
-              },
+                sessionId: sessionId
+              }
             },
             {
               range: {
                 creationDate: {
                   gte: fromDateInMs,
-                  lte: toDateInMs + 1000,
-                },
-              },
-            },
-          ],
-        },
-      },
+                  lte: toDateInMs + 1000
+                }
+              }
+            }
+          ]
+        }
+      }
     };
     needle.post(
       ELASTIC_ACCOUNTING_USAGE_SEARCH.replace('{0}{1}', '_delete_by_query'),
@@ -1876,11 +1876,11 @@ module.exports.deleteBySessionId = function(
             'Docs deleted for this session:',
             sessionId,
             ' : ',
-            body.deleted,
+            body.deleted
           );
         }
         return resolve(body);
-      },
+      }
     );
   });
 };
@@ -1908,13 +1908,13 @@ module.exports.cleanupDoc = function(docType, fromDateInMs, toDateInMs) {
               range: {
                 creationDate: {
                   gte: fromDateInMs,
-                  lte: toDateInMs,
-                },
-              },
-            },
-          ],
-        },
-      },
+                  lte: toDateInMs
+                }
+              }
+            }
+          ]
+        }
+      }
     };
     needle.post(
       SELECTED_INDEX.replace('{0}{1}', '_delete_by_query'),
@@ -1938,7 +1938,7 @@ module.exports.cleanupDoc = function(docType, fromDateInMs, toDateInMs) {
           log.debug('Docs cleaned up:', body.deleted);
         }
         return resolve(body);
-      },
+      }
     );
   });
 };
@@ -1948,7 +1948,7 @@ module.exports.addAccountingDoc = function(doc) {
     needle.post(ELASTIC_ACCOUNTING_INDEX, doc, { json: true }, function(
       error,
       result,
-      body,
+      body
     ) {
       if (error) {
         log.error(error);

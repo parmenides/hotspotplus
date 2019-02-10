@@ -35,7 +35,7 @@ module.exports = function(Member) {
     nasId,
     pinCode,
     mac,
-    cb,
+    cb
   ) {
     var Business = app.models.Business;
     var user = Member.createMemberUsername(businessId, username);
@@ -46,9 +46,9 @@ module.exports = function(Member) {
           and: [
             { username: user },
             { businessId: businessId },
-            { passwordText: utility.encrypt(password, config.ENCRYPTION_KEY) },
-          ],
-        },
+            { passwordText: utility.encrypt(password, config.ENCRYPTION_KEY) }
+          ]
+        }
       },
       function(error, member) {
         if (error) {
@@ -85,7 +85,7 @@ module.exports = function(Member) {
             msg[AVP['nasId']] = { type: 'string', value: [nasId] };
             msg[AVP[routerType]['username']] = {
               type: 'string',
-              value: [username],
+              value: [username]
             };
             //supply mac in order for lock_by_mac functionality
             msg[AVP[routerType]['mac']] = { type: 'string', value: [mac] };
@@ -126,7 +126,7 @@ module.exports = function(Member) {
                               active: member.active,
                               language: member.language,
                               message: RadiusResponse.getMessage(),
-                              code: RadiusResponse.getCode(),
+                              code: RadiusResponse.getCode()
                             });
                           } else {
                             var error = new Error();
@@ -138,7 +138,7 @@ module.exports = function(Member) {
                         .fail(function(e) {
                           log.warn(e);
                           log.debug(
-                            'This business does not have valid subscription, service blocked',
+                            'This business does not have valid subscription, service blocked'
                           );
                           var error = new Error();
                           error.message =
@@ -155,7 +155,7 @@ module.exports = function(Member) {
                       active: member.active,
                       language: member.language,
                       message: RadiusResponse.getMessage(),
-                      errorCode: RadiusResponse.getErrorCode(),
+                      errorCode: RadiusResponse.getErrorCode()
                     });
                   });
               })
@@ -168,7 +168,7 @@ module.exports = function(Member) {
             log.error(error);
             return cb(error);
           });
-      },
+      }
     );
   };
 
@@ -177,38 +177,38 @@ module.exports = function(Member) {
       {
         arg: 'businessId',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'username',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'password',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'routerType',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'nasId',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'pinCode',
-        type: 'string',
+        type: 'string'
       },
       {
         arg: 'mac',
-        type: 'string',
-      },
+        type: 'string'
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   /* return array of new & old count of members base on interval date from aggregates.js
@@ -222,7 +222,7 @@ module.exports = function(Member) {
     businessId,
     offset,
     monthDays,
-    cb,
+    cb
   ) {
     var fromDate = Number.parseInt(startDate);
     var toDate = Number.parseInt(endDate);
@@ -261,7 +261,7 @@ module.exports = function(Member) {
         }
         log.debug(
           'process of getting members info completed successfully' +
-            JSON.stringify(response),
+            JSON.stringify(response)
         );
         return cb(null, response);
       })
@@ -278,34 +278,34 @@ module.exports = function(Member) {
         arg: 'startDate',
         type: 'string',
         required: true,
-        description: 'Start Date',
+        description: 'Start Date'
       },
       {
         arg: 'endDate',
         type: 'string',
         required: true,
-        description: 'End Date',
+        description: 'End Date'
       },
       {
         arg: 'businessId',
         type: 'string',
         required: true,
-        description: 'business ID',
+        description: 'business ID'
       },
       {
         arg: 'offset',
         type: 'number',
         required: false,
-        description: 'Time Zone',
+        description: 'Time Zone'
       },
       {
         arg: 'monthDays',
         type: 'array',
         required: false,
-        description: 'Days Of Month',
-      },
+        description: 'Days Of Month'
+      }
     ],
-    returns: { arg: 'result', type: 'Object' },
+    returns: { arg: 'result', type: 'Object' }
   });
 
   Member.observe('after save', function(ctx, next) {
@@ -314,14 +314,14 @@ module.exports = function(Member) {
       var id = ctx.instance.id;
       Role.findOne({ where: { name: config.ROLES.HOTSPOTMEMBER } }, function(
         error,
-        role,
+        role
       ) {
         if (error) {
           log.error(
             'failed to load ' +
               config.ROLES.HOTSPOTMEMBER +
               ' for role assignment',
-            error,
+            error
           );
           return next(error);
         }
@@ -377,7 +377,7 @@ module.exports = function(Member) {
         member.uniqueUserId = member.businessId + member.username;
         member.username = Member.createMemberUsername(
           member.businessId,
-          member.username,
+          member.username
         );
       }
       return clbk();
@@ -390,8 +390,8 @@ module.exports = function(Member) {
       Member.findOne(
         {
           where: {
-            and: [{ id: memberId }, { businessId: businessId }],
-          },
+            and: [{ id: memberId }, { businessId: businessId }]
+          }
         },
         function(error, member) {
           if (error) {
@@ -414,7 +414,7 @@ module.exports = function(Member) {
           }
           var plainPassword = utility.decrypt(
             member.passwordText,
-            config.ENCRYPTION_KEY,
+            config.ENCRYPTION_KEY
           );
           var plainUsername = member.username.split('@')[0];
 
@@ -437,10 +437,10 @@ module.exports = function(Member) {
                   token2: plainPassword,
                   token3: shortUrl,
                   mobile: member.mobile,
-                  template: config.HOTSPOT_CREDENTIALS_URL_MESSAGE_TEMPLATE,
+                  template: config.HOTSPOT_CREDENTIALS_URL_MESSAGE_TEMPLATE
                 });
                 return resolve('sms added to Queue');
-              },
+              }
             );
           } else {
             log.warn(nasId && host);
@@ -449,11 +449,11 @@ module.exports = function(Member) {
               token1: plainUsername,
               token2: plainPassword,
               mobile: member.mobile,
-              template: config.HOTSPOT_CREDENTIALS_MESSAGE_TEMPLATE,
+              template: config.HOTSPOT_CREDENTIALS_MESSAGE_TEMPLATE
             });
             return resolve('sms added to Queue');
           }
-        },
+        }
       );
     });
   };
@@ -464,15 +464,15 @@ module.exports = function(Member) {
       {
         arg: 'businessId',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'memberId',
         type: 'string',
-        required: true,
-      },
+        required: true
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Member.recoverHotspotUser = function(userMobile, host, nasId, businessId) {
@@ -483,9 +483,9 @@ module.exports = function(Member) {
           where: {
             and: [
               { businessId: businessId },
-              { mobile: utility.verifyAndTrimMobile(userMobile) },
-            ],
-          },
+              { mobile: utility.verifyAndTrimMobile(userMobile) }
+            ]
+          }
         },
         function(error, member) {
           if (error) {
@@ -509,7 +509,7 @@ module.exports = function(Member) {
             .fail(function(error) {
               return reject(error);
             });
-        },
+        }
       );
     });
   };
@@ -519,23 +519,23 @@ module.exports = function(Member) {
       {
         arg: 'usernameOrMobile',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'host',
-        type: 'string',
+        type: 'string'
       },
       {
         arg: 'nasId',
-        type: 'string',
+        type: 'string'
       },
       {
         arg: 'businessId',
         type: 'string',
-        required: true,
-      },
+        required: true
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   /*Member.observe ( 'loaded', function ( ctx, next ) {
@@ -556,11 +556,11 @@ module.exports = function(Member) {
     Member.findOne(
       {
         where: {
-          and: [{ id: memberId }, { businessId: businessId }],
+          and: [{ id: memberId }, { businessId: businessId }]
         },
         fields: {
-          passwordText: false,
-        },
+          passwordText: false
+        }
       },
       function(error, member) {
         if (error) {
@@ -573,7 +573,7 @@ module.exports = function(Member) {
         }
         log.debug(member);
         return cb(null, member);
-      },
+      }
     );
   };
 
@@ -583,11 +583,11 @@ module.exports = function(Member) {
       {
         arg: 'memberId',
         type: 'string',
-        required: true,
+        required: true
       },
-      { arg: 'options', type: 'object', http: 'optionsFromRequest' },
+      { arg: 'options', type: 'object', http: 'optionsFromRequest' }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Member.loadMemberPassword = function(memberId, businessId, ctx, cb) {
@@ -595,11 +595,11 @@ module.exports = function(Member) {
     Member.findOne(
       {
         where: {
-          and: [{ id: memberId }, { businessId: businessId }],
+          and: [{ id: memberId }, { businessId: businessId }]
         },
         fields: {
-          passwordText: true,
-        },
+          passwordText: true
+        }
       },
       function(error, member) {
         if (error) {
@@ -612,10 +612,10 @@ module.exports = function(Member) {
         }
         member.passwordText = utility.decrypt(
           member.passwordText,
-          config.ENCRYPTION_KEY,
+          config.ENCRYPTION_KEY
         );
         return cb(null, member);
-      },
+      }
     );
   };
 
@@ -625,26 +625,26 @@ module.exports = function(Member) {
       {
         arg: 'memberId',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'businessId',
-        type: 'string',
+        type: 'string'
       },
-      { arg: 'options', type: 'object', http: 'optionsFromRequest' },
+      { arg: 'options', type: 'object', http: 'optionsFromRequest' }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Member.loadMemberInternetPlans = function(businessId, memberId, cb) {
     Member.findOne(
       {
         where: {
-          and: [{ id: memberId }, { businessId: businessId }],
+          and: [{ id: memberId }, { businessId: businessId }]
         },
         fields: {
-          internetPlanHistory: true,
-        },
+          internetPlanHistory: true
+        }
       },
       function(error, member) {
         if (error) {
@@ -656,7 +656,7 @@ module.exports = function(Member) {
           return cb('member not found');
         }
         return cb(null, member);
-      },
+      }
     );
   };
 
@@ -666,15 +666,15 @@ module.exports = function(Member) {
       {
         arg: 'businessId',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'memberId',
         type: 'string',
-        required: true,
-      },
+        required: true
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Member.getMemberByUserName = function(businessId, username) {
@@ -684,9 +684,9 @@ module.exports = function(Member) {
           where: {
             and: [
               { businessId: businessId },
-              { username: Member.createMemberUsername(businessId, username) },
-            ],
-          },
+              { username: Member.createMemberUsername(businessId, username) }
+            ]
+          }
         },
         function(error, member) {
           if (error) {
@@ -694,7 +694,7 @@ module.exports = function(Member) {
             return reject(error);
           }
           return resolve(member);
-        },
+        }
       );
     });
   };
@@ -736,7 +736,7 @@ module.exports = function(Member) {
                 log.debug('Loaded User ', member);
                 if (!member) {
                   RadiusResponse.addReplyMessage(
-                    Radius_Messages.usernameNotFound,
+                    Radius_Messages.usernameNotFound
                   );
                   RadiusResponse.setCode(404);
                   return reject(RadiusResponse);
@@ -745,7 +745,7 @@ module.exports = function(Member) {
                 if (member.active) {
                   var clearTextPass = utility.decrypt(
                     member.passwordText,
-                    config.ENCRYPTION_KEY,
+                    config.ENCRYPTION_KEY
                   );
                   RadiusResponse.addControl('clearTextPass', clearTextPass);
                   RadiusResponse.setCode(200);
@@ -826,7 +826,7 @@ module.exports = function(Member) {
               var internetPlanId = member.internetPlanId;
               if (!internetPlanId) {
                 RadiusResponse.addReplyMessage(
-                  Radius_Messages.memberHasNoInternetPlan,
+                  Radius_Messages.memberHasNoInternetPlan
                 );
                 RadiusResponse.setCode(401);
                 RadiusResponse.setErrorCode(601);
@@ -837,7 +837,7 @@ module.exports = function(Member) {
                 .then(function(isMoreSessionAllowedResult) {
                   if (isMoreSessionAllowedResult.ok === false) {
                     RadiusResponse.addReplyMessage(
-                      Radius_Messages.noMoreConnectionAllowed,
+                      Radius_Messages.noMoreConnectionAllowed
                     );
                     RadiusResponse.setCode(401);
                     RadiusResponse.setErrorCode(605);
@@ -847,12 +847,12 @@ module.exports = function(Member) {
 
                   InternetPlan.findById(internetPlanId, function(
                     error,
-                    internetPlan,
+                    internetPlan
                   ) {
                     if (error) {
                       log.error(error);
                       RadiusResponse.addReplyMessage(
-                        Radius_Messages.generalError,
+                        Radius_Messages.generalError
                       );
                       RadiusResponse.setCode(500);
                       RadiusResponse.setErrorCode(600);
@@ -862,7 +862,7 @@ module.exports = function(Member) {
                     if (!internetPlan) {
                       log.error('internetPlan not found');
                       RadiusResponse.addReplyMessage(
-                        Radius_Messages.internetPlanRemoved,
+                        Radius_Messages.internetPlanRemoved
                       );
                       RadiusResponse.setCode(404);
                       RadiusResponse.setErrorCode(600);
@@ -874,23 +874,23 @@ module.exports = function(Member) {
                     log.debug(
                       'BindMemberSigninToMac:',
                       internetPlan.bindMemberSigninToMac &&
-                        AccessRequest.getAttribute('mac'),
+                        AccessRequest.getAttribute('mac')
                     );
                     if (
                       internetPlan.bindMemberSigninToMac &&
                       AccessRequest.getAttribute('mac')
                     ) {
                       var deviceMac = utility.trimMac(
-                        AccessRequest.getAttribute('mac'),
+                        AccessRequest.getAttribute('mac')
                       );
                       log.debug('DeviceMac :', deviceMac);
                       log.debug(
                         'Mac :',
-                        member.mac && member.mac !== deviceMac,
+                        member.mac && member.mac !== deviceMac
                       );
                       if (member.mac && member.mac !== deviceMac) {
                         RadiusResponse.addReplyMessage(
-                          Radius_Messages.memberLoginBindToMac,
+                          Radius_Messages.memberLoginBindToMac
                         );
                         RadiusResponse.setCode(401);
                         RadiusResponse.setErrorCode(608);
@@ -910,7 +910,7 @@ module.exports = function(Member) {
                           if (numberOfMembersSession >= allowedSession) {
                             // send reject, no more session allowed
                             RadiusResponse.addReplyMessage(
-                              Radius_Messages.noMoreSessionAllowed,
+                              Radius_Messages.noMoreSessionAllowed
                             );
                             RadiusResponse.setCode(401);
                             RadiusResponse.setErrorCode(606);
@@ -922,7 +922,7 @@ module.exports = function(Member) {
                           if (nas.kickOnSingleSession) {
                             //Handle single session && kill other sessions
                             log.debug(
-                              'going to disconnect members because of kickOnSingleSession',
+                              'going to disconnect members because of kickOnSingleSession'
                             );
                             if (numberOfMembersSession > 0) {
                               for (var k = 0; k < sessions.length; k++) {
@@ -941,11 +941,11 @@ module.exports = function(Member) {
                               config.DEFAULT_ALLOWED_SINGLE_SESSION
                             ) {
                               log.debug(
-                                'Reject the request no more session allowed for single session service',
+                                'Reject the request no more session allowed for single session service'
                               );
                               // send reject, no more session allowed
                               RadiusResponse.addReplyMessage(
-                                Radius_Messages.noMoreSessionAllowed,
+                                Radius_Messages.noMoreSessionAllowed
                               );
                               RadiusResponse.setCode(401);
                               RadiusResponse.setErrorCode(606);
@@ -957,14 +957,14 @@ module.exports = function(Member) {
 
                         Member.hasValidSubscriptionDuration(
                           member,
-                          internetPlan,
+                          internetPlan
                         )
                           .then(function(duration) {
                             Member.getInternetUsage(
                               businessId.toString(),
                               member.id.toString(),
                               duration.from.getTime(),
-                              duration.to.getTime(),
+                              duration.to.getTime()
                             )
                               .then(function(usageReport) {
                                 log.warn('usageReport');
@@ -972,12 +972,12 @@ module.exports = function(Member) {
                                 Member.hasEnoughBulk(
                                   internetPlan,
                                   usageReport.bulk,
-                                  member.extraBulk,
+                                  member.extraBulk
                                 )
                                   .then(function(remainingBulk) {
                                     RadiusResponse.addReply(
                                       'accountingUpdateInterval',
-                                      config.DEFAULT_ACCOUNTING_UPDATE_INTERVAL_SECONDS,
+                                      config.DEFAULT_ACCOUNTING_UPDATE_INTERVAL_SECONDS
                                     );
                                     if (remainingBulk > 0) {
                                       if (
@@ -989,7 +989,7 @@ module.exports = function(Member) {
                                         ) {
                                           RadiusResponse.addReply(
                                             'accountingUpdateInterval',
-                                            config.FAST_ACCOUNTING_UPDATE_INTERVAL_SECONDS,
+                                            config.FAST_ACCOUNTING_UPDATE_INTERVAL_SECONDS
                                           );
                                         }
                                       }
@@ -1002,29 +1002,29 @@ module.exports = function(Member) {
                                       remainingBulk = 3900000000;
                                       log.debug(
                                         'To prevent 2^32 limit on acc input octet, changing bulk to:',
-                                        remainingBulk,
+                                        remainingBulk
                                       );
                                     }
                                     RadiusResponse.addAllowedBulk(
-                                      remainingBulk,
+                                      remainingBulk
                                     );
                                     Member.hasEnoughTime(
                                       internetPlan,
-                                      usageReport.sessionTime,
+                                      usageReport.sessionTime
                                     )
                                       .then(function(remainingTimeInSeconds) {
                                         if (remainingTimeInSeconds > 0) {
                                           RadiusResponse.addSessionTimeOut(
-                                            remainingTimeInSeconds,
+                                            remainingTimeInSeconds
                                           );
                                         }
                                         var uploadSpeed = utility.toKbps(
                                           internetPlan.speed.value,
-                                          internetPlan.speed.type,
+                                          internetPlan.speed.type
                                         );
                                         var downloadSpeed = utility.toKbps(
                                           internetPlan.speed.value,
-                                          internetPlan.speed.type,
+                                          internetPlan.speed.type
                                         );
                                         var burstTime =
                                           internetPlan.burstTime ||
@@ -1038,7 +1038,7 @@ module.exports = function(Member) {
 
                                         if (internetPlan.ipPoolName) {
                                           RadiusResponse.addIpPool(
-                                            internetPlan.ipPoolName,
+                                            internetPlan.ipPoolName
                                           );
                                         }
                                         if (
@@ -1047,7 +1047,7 @@ module.exports = function(Member) {
                                         ) {
                                           uploadSpeed = Math.round(uploadSpeed);
                                           downloadSpeed = Math.round(
-                                            downloadSpeed,
+                                            downloadSpeed
                                           );
                                           RadiusResponse.addConnectionSpeed(
                                             nas.accessPointType,
@@ -1055,7 +1055,7 @@ module.exports = function(Member) {
                                             downloadSpeed * burstDownloadFactor,
                                             uploadSpeed,
                                             uploadSpeed * burstUploadFactor,
-                                            burstTime,
+                                            burstTime
                                           );
                                         }
                                         RadiusResponse.setCode(200);
@@ -1063,7 +1063,7 @@ module.exports = function(Member) {
                                       })
                                       .fail(function() {
                                         RadiusResponse.addReplyMessage(
-                                          Radius_Messages.outOfTime,
+                                          Radius_Messages.outOfTime
                                         );
                                         RadiusResponse.setCode(401);
                                         RadiusResponse.setErrorCode(602);
@@ -1073,7 +1073,7 @@ module.exports = function(Member) {
                                   })
                                   .fail(function() {
                                     RadiusResponse.addReplyMessage(
-                                      Radius_Messages.outOfBulk,
+                                      Radius_Messages.outOfBulk
                                     );
                                     RadiusResponse.setCode(401);
                                     RadiusResponse.setErrorCode(603);
@@ -1085,7 +1085,7 @@ module.exports = function(Member) {
                                 log.error('failed to query usage report');
                                 log.error(error);
                                 RadiusResponse.addReplyMessage(
-                                  Radius_Messages.generalError,
+                                  Radius_Messages.generalError
                                 );
                                 RadiusResponse.setCode(500);
                                 RadiusResponse.setErrorCode(600);
@@ -1095,14 +1095,14 @@ module.exports = function(Member) {
                           })
                           .fail(function() {
                             RadiusResponse.addReplyMessage(
-                              Radius_Messages.noActiveSubscription,
+                              Radius_Messages.noActiveSubscription
                             );
                             RadiusResponse.setCode(401);
                             RadiusResponse.setErrorCode(605);
                             log.error(RadiusResponse);
                             return reject(RadiusResponse);
                           });
-                      },
+                      }
                     );
                   });
                 })
@@ -1134,7 +1134,7 @@ module.exports = function(Member) {
     businessId,
     memberId,
     fromDateInMs,
-    toDateInMs,
+    toDateInMs
   ) {
     log.debug(
       '@getInternetUsage',
@@ -1145,7 +1145,7 @@ module.exports = function(Member) {
       ' From: ',
       fromDateInMs,
       'to',
-      toDateInMs,
+      toDateInMs
     );
     return Q.Promise(function(resolve, reject) {
       aggregate
@@ -1170,7 +1170,7 @@ module.exports = function(Member) {
         subscriptionDate,
         numberOfMonthsOrDays,
         planType,
-        internetPlan.autoResubscribe,
+        internetPlan.autoResubscribe
       );
       if (validDuration && validDuration.from && validDuration.to) {
         return resolve(validDuration);
@@ -1184,19 +1184,19 @@ module.exports = function(Member) {
                 member.subscriptionDate === resubscribedMember.subscriptionDate
               ) {
                 log.error(
-                  'autoResubscribe failed, Race happened in member subscription update',
+                  'autoResubscribe failed, Race happened in member subscription update'
                 );
                 log.error(
                   'subscriptionDate : ',
                   member.subscriptionDate,
                   ':',
-                  resubscribedMember.subscriptionDate,
+                  resubscribedMember.subscriptionDate
                 );
                 return reject('Race happened in member subscription update');
               }
               Member.hasValidSubscriptionDuration(
                 resubscribedMember,
-                internetPlan,
+                internetPlan
               )
                 .then(function(result) {
                   return resolve(result);
@@ -1219,14 +1219,14 @@ module.exports = function(Member) {
         from,
         monthsOrDays,
         planType,
-        isAutoResubscribe,
+        isAutoResubscribe
       ) {
         monthsOrDays = Number(monthsOrDays);
         var to = new Date(from.getTime());
         if (planType === 'monthly') {
           var daysInMonth = Date.getDaysInMonth(
             from.getFullYear(),
-            from.getMonth(),
+            from.getMonth()
           );
           to.add({ days: daysInMonth });
         } else if (planType === 'daily') {
@@ -1256,7 +1256,7 @@ module.exports = function(Member) {
               to,
               monthsOrDays,
               planType,
-              isAutoResubscribe,
+              isAutoResubscribe
             );
           } else {
             log.debug('no check just returns null ', monthsOrDays);
@@ -1278,7 +1278,7 @@ module.exports = function(Member) {
         if (internetPlan.bulk) {
           allowedBulk = utility.toByte(
             internetPlan.bulk.value,
-            internetPlan.bulk.type,
+            internetPlan.bulk.type
           );
         }
         if (extraBulk) {
@@ -1354,8 +1354,8 @@ module.exports = function(Member) {
       Member.findOne(
         {
           where: {
-            and: [{ businessId: businessId }, { mac: mac }],
-          },
+            and: [{ businessId: businessId }, { mac: mac }]
+          }
         },
         function(error, member) {
           if (error) {
@@ -1366,18 +1366,18 @@ module.exports = function(Member) {
             //Fill in credentials
             var clearTextPass = utility.decrypt(
               member.passwordText,
-              config.ENCRYPTION_KEY,
+              config.ENCRYPTION_KEY
             );
             return resolve({
               username: member.username,
-              clearTextPassword: clearTextPass,
+              clearTextPassword: clearTextPass
             });
           } else {
             //return empty credential
             log.debug('member not found by mac');
             return resolve({});
           }
-        },
+        }
       );
     });
   };
@@ -1387,7 +1387,7 @@ module.exports = function(Member) {
       var ClientSession = app.models.ClientSession;
       ClientSession.find(
         {
-          where: { and: [{ memberId: memberId }, { businessId: businessId }] },
+          where: { and: [{ memberId: memberId }, { businessId: businessId }] }
         },
         function(error, sessions) {
           if (error) {
@@ -1395,7 +1395,7 @@ module.exports = function(Member) {
           }
           sessions = sessions || [];
           return resolve(sessions);
-        },
+        }
       );
     });
   };
@@ -1423,7 +1423,7 @@ module.exports = function(Member) {
     subscriptionDate,
     groupIdentity,
     groupIdentityId,
-    groupIdentityType,
+    groupIdentityType
   ) {
     const ClientSession = app.models.ClientSession;
     const nas = RadiusRequest.nas;
@@ -1438,7 +1438,7 @@ module.exports = function(Member) {
       framedIpAddress: RadiusRequest.getAttribute('framedIpAddress'),
       businessId: businessId,
       memberId: memberId,
-      creationDate: Date.now(),
+      creationDate: Date.now()
     };
     ClientSession.saveLogSession(session);
   };
@@ -1451,13 +1451,13 @@ module.exports = function(Member) {
     subscriptionDate,
     groupIdentity,
     groupIdentityId,
-    groupIdentityType,
+    groupIdentityType
   ) {
     log.debug(
       '@setSession for session id: ',
       uniqueId,
       ' username',
-      RadiusRequest.getAttribute('username'),
+      RadiusRequest.getAttribute('username')
     );
     var ClientSession = app.models.ClientSession;
     return Q.Promise(function(resolve, reject) {
@@ -1486,7 +1486,7 @@ module.exports = function(Member) {
           businessId: businessId,
           memberId: memberId,
           creationDate: new Date().getTime(),
-          expiresAt: expiresAt,
+          expiresAt: expiresAt
         };
 
         var redisSessionKey = businessId + ':' + nasId + ':' + framedIp;
@@ -1495,7 +1495,7 @@ module.exports = function(Member) {
           redisSessionKey,
           redisSession,
           'EX',
-          2 * config.DEFAULT_MEMBER_SESSION_EXPIRE_IN_SECONDS,
+          2 * config.DEFAULT_MEMBER_SESSION_EXPIRE_IN_SECONDS
         );
 
         if (!previousSession) {
@@ -1512,14 +1512,14 @@ module.exports = function(Member) {
               subscriptionDate,
               groupIdentity,
               groupIdentityId,
-              groupIdentityType,
+              groupIdentityType
             );
             return resolve();
           });
         } else {
           previousSession.updateAttributes(
             {
-              expiresAt: expiresAt,
+              expiresAt: expiresAt
             },
             function(error, result) {
               if (error) {
@@ -1534,10 +1534,10 @@ module.exports = function(Member) {
                 subscriptionDate,
                 groupIdentity,
                 groupIdentityId,
-                groupIdentityType,
+                groupIdentityType
               );
               return resolve(result);
-            },
+            }
           );
         }
       });
@@ -1552,7 +1552,7 @@ module.exports = function(Member) {
     var Usage = app.models.Usage;
     var Business = app.models.Business;
     var RadiusResponse = new radiusAdaptor.RadiusResponse(
-      RadiusAccountingMessage,
+      RadiusAccountingMessage
     );
     return Q.Promise(function(resolve, reject) {
       var username = RadiusAccountingMessage.getAttribute('username');
@@ -1566,15 +1566,15 @@ module.exports = function(Member) {
               '404 member not found for ',
               businessId,
               'Username ',
-              username,
+              username
             );
             utility.sendMessage('Member not found 404', {
               accStatusType: RadiusAccountingMessage.getAttribute(
-                'acctStatusType',
+                'acctStatusType'
               ),
               nasId: nasId,
               username: username,
-              businessId: businessId,
+              businessId: businessId
             });
             RadiusResponse.addReplyMessage('member not found');
             RadiusResponse.setCode(5);
@@ -1590,7 +1590,7 @@ module.exports = function(Member) {
           usage.username = username;
           usage.creationDate = new Date().getTime();
           usage.accStatusType = RadiusAccountingMessage.getAttribute(
-            'acctStatusType',
+            'acctStatusType'
           );
           usage.sessionId = RadiusAccountingMessage.getAttribute('sessionId');
           usage.mac = mac;
@@ -1602,7 +1602,7 @@ module.exports = function(Member) {
             !_.isUndefined(RadiusAccountingMessage.getAttribute('sessionTime'))
           ) {
             usage.sessionTime = RadiusAccountingMessage.getAttribute(
-              'sessionTime',
+              'sessionTime'
             );
           } else {
             usage.sessionTime = 0;
@@ -1616,7 +1616,7 @@ module.exports = function(Member) {
                 Member.removeSession(
                   RadiusAccountingMessage.getSessionId(),
                   businessId,
-                  member.id,
+                  member.id
                 );
               } else {
                 Member.setSession(
@@ -1627,7 +1627,7 @@ module.exports = function(Member) {
                   member.subscriptionDate,
                   member.groupIdentity,
                   member.groupIdentityId,
-                  member.groupIdentityType,
+                  member.groupIdentityType
                 );
               }
               if (
@@ -1642,7 +1642,7 @@ module.exports = function(Member) {
                 businessId: businessId,
                 remoteIp: RadiusAccountingMessage.getNasIp(),
                 ip: RadiusAccountingMessage.getNasIp(),
-                port: nas.port,
+                port: nas.port
               }).fail(function(error) {
                 log.error('failed to set nas session by member accounting');
                 log.error(error);
@@ -1682,11 +1682,11 @@ module.exports = function(Member) {
       } else {
         log.debug(
           'member already has mac address so no need to update:',
-          memberInstance.mac,
+          memberInstance.mac
         );
         return reject(
           'member already has mac address so no need to update:',
-          memberInstance.mac,
+          memberInstance.mac
         );
       }
     });
@@ -1712,14 +1712,14 @@ module.exports = function(Member) {
               businessId,
               memberId,
               duration.from.getTime(),
-              duration.to.getTime(),
+              duration.to.getTime()
             )
               .then(function(usageReport) {
                 log.debug('Evaluate usage report:', usageReport);
                 Member.hasEnoughBulk(
                   internetPlan,
                   usageReport.bulk,
-                  member.extraBulk,
+                  member.extraBulk
                 )
                   .then(function(remainingBulk) {
                     //nothing to do, has permission to use anything
@@ -1732,7 +1732,7 @@ module.exports = function(Member) {
                       .then(function() {
                         log.debug(
                           'not enough bulk send kill all for ',
-                          member.username,
+                          member.username
                         );
                         return resolve();
                       })
@@ -1754,7 +1754,7 @@ module.exports = function(Member) {
               .then(function() {
                 log.debug(
                   'expired subscription duration, send kill all for ',
-                  member.username,
+                  member.username
                 );
                 return resolve();
               })
@@ -1792,7 +1792,7 @@ module.exports = function(Member) {
     host,
     verificationCode,
     memberId,
-    cb,
+    cb
   ) {
     if (!businessId || !nasId || !host || !verificationCode || !memberId) {
       return cb('invalid params to create verification url');
@@ -1810,7 +1810,7 @@ module.exports = function(Member) {
       urlKey,
       verificationUrl,
       'EX',
-      config.SHORT_VERIFICATION_URL_EXPIRES_AT,
+      config.SHORT_VERIFICATION_URL_EXPIRES_AT
     );
     return cb(null, shortUrl);
   };
@@ -1822,7 +1822,7 @@ module.exports = function(Member) {
     username,
     password,
     memberId,
-    cb,
+    cb
   ) {
     var signInUrl = config
       .HOTSPOT_SIGNIN_URL()
@@ -1926,7 +1926,7 @@ module.exports = function(Member) {
               host,
               member.verificationCode,
               memberId,
-              member.mobile,
+              member.mobile
             )
               .then(function(verificationInfo) {
                 log.debug('verification code sent');
@@ -1937,7 +1937,7 @@ module.exports = function(Member) {
                   verificationCode: verificationInfo.verificationCode,
                   password: member.passwordText,
                   businessId: member.businessId,
-                  memberId: memberId,
+                  memberId: memberId
                 });
               })
               .fail(function(error) {
@@ -1952,7 +1952,7 @@ module.exports = function(Member) {
               username: member.username,
               password: member.passwordText,
               businessId: member.businessId,
-              memberId: memberId,
+              memberId: memberId
             });
           }
         });
@@ -1965,23 +1965,23 @@ module.exports = function(Member) {
       {
         arg: 'options',
         type: 'object',
-        required: true,
+        required: true
       },
       {
         arg: 'businessId',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'nasId',
-        type: 'string',
+        type: 'string'
       },
       {
         arg: 'host',
-        type: 'string',
-      },
+        type: 'string'
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Member.sendVerificationMessage = function(
@@ -1990,7 +1990,7 @@ module.exports = function(Member) {
     host,
     verificationCode,
     memberId,
-    mobile,
+    mobile
   ) {
     var businessId = business.id;
     return Q.Promise(function(resolve, reject) {
@@ -2019,13 +2019,13 @@ module.exports = function(Member) {
             token1: verificationCode,
             token2: shortUrl,
             mobile: mobile,
-            template: smsVerificationTemplate,
+            template: smsVerificationTemplate
           });
           return resolve({
             shortUrl: shortUrl,
-            verificationCode: verificationCode,
+            verificationCode: verificationCode
           });
-        },
+        }
       );
     });
   };
@@ -2054,7 +2054,7 @@ module.exports = function(Member) {
     studentGrade,
     studentId,
     verificationMethod,
-    cb,
+    cb
   ) {
     log.debug('@createHotSpotMember');
     Member.findOne(
@@ -2066,13 +2066,13 @@ module.exports = function(Member) {
               or: [
                 {
                   username:
-                    utility.verifyAndTrimMobile(mobile) + '@' + businessId,
+                    utility.verifyAndTrimMobile(mobile) + '@' + businessId
                 },
-                { mobile: utility.verifyAndTrimMobile(mobile) },
-              ],
-            },
-          ],
-        },
+                { mobile: utility.verifyAndTrimMobile(mobile) }
+              ]
+            }
+          ]
+        }
       },
       function(error, previousMember) {
         if (error) {
@@ -2137,11 +2137,11 @@ module.exports = function(Member) {
               roomNumber: roomNumber,
               studentGrade: studentGrade,
               studentId: studentId,
-              age: age,
+              age: age
             },
             businessId,
             nasId,
-            host,
+            host
           )
             .then(function(credential) {
               credential.status = responseStatus;
@@ -2173,14 +2173,14 @@ module.exports = function(Member) {
             if (previousMember.active) {
               log.error(
                 'Member Exist with username: ',
-                previousMember.username,
+                previousMember.username
               );
               return cb(null, { status: -1 });
             }
             if (!previousMember.mobile) {
               log.debug(
                 'Member find but needs manual verification ',
-                previousMember.username,
+                previousMember.username
               );
               return cb(null, { status: 3 });
             }
@@ -2191,7 +2191,7 @@ module.exports = function(Member) {
             ) {
               log.debug(
                 'Member find but it is not active, username: ',
-                previousMember.username,
+                previousMember.username
               );
               var count = previousMember.verificationCount + 1;
               previousMember.updateAttributes(
@@ -2207,7 +2207,7 @@ module.exports = function(Member) {
                     host,
                     previousMember.verificationCode,
                     previousMember.id,
-                    previousMember.mobile,
+                    previousMember.mobile
                   )
                     .then(function() {
                       log.debug('verification code sent to: ', mobile);
@@ -2216,7 +2216,7 @@ module.exports = function(Member) {
                       log.error('failed to send verification code');
                       log.error(error);
                     });
-                },
+                }
               );
               return cb(null, { status: 0, memberId: previousMember.id });
             } else if (
@@ -2225,13 +2225,13 @@ module.exports = function(Member) {
             ) {
               log.debug(
                 'Member exist but verification message limit reached: ',
-                previousMember.username,
+                previousMember.username
               );
               return cb(null, { status: 2 });
             }
           });
         }
-      },
+      }
     );
   };
 
@@ -2239,102 +2239,102 @@ module.exports = function(Member) {
     accepts: [
       {
         arg: 'mobile',
-        type: 'string',
+        type: 'string'
       },
       {
         arg: 'firstName',
-        type: 'string',
+        type: 'string'
       },
       {
         arg: 'lastName',
-        type: 'string',
+        type: 'string'
       },
       {
         arg: 'fullName',
-        type: 'string',
+        type: 'string'
       },
       {
         arg: 'gender',
-        type: 'string',
+        type: 'string'
       },
       {
         arg: 'birthday',
-        type: 'number',
+        type: 'number'
       },
       {
         arg: 'birthDay',
-        type: 'number',
+        type: 'number'
       },
       {
         arg: 'birthMonth',
-        type: 'number',
+        type: 'number'
       },
       {
         arg: 'birthYear',
-        type: 'number',
+        type: 'number'
       },
       {
         arg: 'username',
-        type: 'string',
+        type: 'string'
       },
       {
         arg: 'password',
-        type: 'string',
+        type: 'string'
       },
       {
         arg: 'email',
-        type: 'string',
+        type: 'string'
       },
       {
         arg: 'nationalCode',
-        type: 'string',
+        type: 'string'
       },
       {
         arg: 'age',
-        type: 'number',
+        type: 'number'
       },
       {
         arg: 'id',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'host',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'nasId',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'language',
-        type: 'string',
+        type: 'string'
       },
       {
         arg: 'roomNumber',
-        type: 'string',
+        type: 'string'
       },
       {
         arg: 'passportNumber',
-        type: 'string',
+        type: 'string'
       },
       {
         arg: 'studentGrade',
-        type: 'string',
+        type: 'string'
       },
       {
         arg: 'studentId',
-        type: 'string',
+        type: 'string'
       },
       {
         arg: 'verificationMethod',
         type: 'string',
-        required: true,
-      },
+        required: true
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   /* return status of hotspot member or create one if it's not exist
@@ -2348,7 +2348,7 @@ module.exports = function(Member) {
     verificationCode,
     host,
     nasId,
-    cb,
+    cb
   ) {
     log.debug('@verifyHotSpotMember');
     var Member = app.models.Member;
@@ -2364,7 +2364,7 @@ module.exports = function(Member) {
         member.updateAttributes(
           {
             active: true,
-            verificationDate: new Date().getTime(),
+            verificationDate: new Date().getTime()
           },
           function(error, res) {
             if (error) {
@@ -2373,7 +2373,7 @@ module.exports = function(Member) {
             }
             var password = utility.decrypt(
               member.passwordText,
-              config.ENCRYPTION_KEY,
+              config.ENCRYPTION_KEY
             );
             if (activatedPreviously !== true) {
               log.debug('member did not verified previously');
@@ -2381,7 +2381,7 @@ module.exports = function(Member) {
                 .then(function() {
                   return cb(null, {
                     username: member.username,
-                    password: password,
+                    password: password
                   });
                 })
                 .fail(function(error) {
@@ -2391,10 +2391,10 @@ module.exports = function(Member) {
               log.debug('member verified true');
               return cb(null, {
                 username: member.username,
-                password: password,
+                password: password
               });
             }
-          },
+          }
         );
       } else {
         var error = new Error();
@@ -2413,34 +2413,34 @@ module.exports = function(Member) {
   Member.remoteMethod('verifyHotSpot', {
     description: 'Verify mobile number',
     http: {
-      verb: 'post',
+      verb: 'post'
     },
     accepts: [
       {
         arg: 'id',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'memberId',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'verificationCode',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'host',
-        type: 'string',
+        type: 'string'
       },
       {
         arg: 'nasId',
-        type: 'string',
-      },
+        type: 'string'
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Member.paySubscription = function(
@@ -2450,10 +2450,10 @@ module.exports = function(Member) {
     nasId,
     host,
     username,
-    password,
+    password
   ) {
     log.debug(
-      'businessId, memberId, internetPlanId, nasId, host, username, password',
+      'businessId, memberId, internetPlanId, nasId, host, username, password'
     );
     log.debug(
       businessId,
@@ -2462,7 +2462,7 @@ module.exports = function(Member) {
       nasId,
       host,
       username,
-      password,
+      password
     );
     return Q.Promise(function(resolve, reject) {
       var Business = app.models.Business;
@@ -2515,7 +2515,7 @@ module.exports = function(Member) {
               description: desc,
               issueDate: issueDate,
               businessId: businessId,
-              memberId: memberId,
+              memberId: memberId
             },
             function(error, invoice) {
               if (error) {
@@ -2539,13 +2539,13 @@ module.exports = function(Member) {
                 config.PAYMENT_GATEWAY_INTERNET_PLAN_PAYMENT_DESC,
                 business.email,
                 business.mobile,
-                returnUrl,
+                returnUrl
               )
                 .then(function(response) {
                   var paymentId = response.paymentId;
                   invoice.updateAttributes(
                     {
-                      paymentId: paymentId,
+                      paymentId: paymentId
                     },
                     function(error) {
                       if (error) {
@@ -2554,16 +2554,16 @@ module.exports = function(Member) {
                       }
                       return resolve({
                         code: 200,
-                        url: response.url,
+                        url: response.url
                       });
-                    },
+                    }
                   );
                 })
                 .fail(function(error) {
                   log.error(error);
                   return reject(error);
                 });
-            },
+            }
           );
         });
       });
@@ -2572,47 +2572,47 @@ module.exports = function(Member) {
 
   Member.remoteMethod('paySubscription', {
     http: {
-      verb: 'post',
+      verb: 'post'
     },
     accepts: [
       {
         arg: 'businessId',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'memberId',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'packageId',
         type: 'string',
-        required: true,
+        required: true
       },
 
       {
         arg: 'nasId',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'host',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'username',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'password',
         type: 'string',
-        required: true,
-      },
+        required: true
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Member.verifySubscriptionPayment = function(
@@ -2622,7 +2622,7 @@ module.exports = function(Member) {
     host,
     nasId,
     memberId,
-    businessId,
+    businessId
   ) {
     return Q.Promise(function(resolve, reject) {
       var Invoice = app.models.Invoice;
@@ -2637,7 +2637,7 @@ module.exports = function(Member) {
             nasId: nasId,
             memberIdId: memberId,
             username: username,
-            password: password,
+            password: password
           };
           if (error) {
             log.error('Error in return url finding invoice ' + error);
@@ -2647,7 +2647,7 @@ module.exports = function(Member) {
               code: 302,
               returnUrl: config
                 .HOTSPOT_PAYMENT_WEB_RETURN_URL()
-                .replace('{0}', querystring.stringify(params)),
+                .replace('{0}', querystring.stringify(params))
             });
           }
           if (!invoice) {
@@ -2657,7 +2657,7 @@ module.exports = function(Member) {
               code: 302,
               returnUrl: config
                 .HOTSPOT_PAYMENT_WEB_RETURN_URL()
-                .replace('{0}', querystring.stringify(params)),
+                .replace('{0}', querystring.stringify(params))
             });
           }
           var businessId = invoice.businessId;
@@ -2672,7 +2672,7 @@ module.exports = function(Member) {
                 code: 302,
                 returnUrl: config
                   .HOTSPOT_PAYMENT_WEB_RETURN_URL()
-                  .replace('{0}', querystring.stringify(params)),
+                  .replace('{0}', querystring.stringify(params))
               });
             }
             if (!business) {
@@ -2682,7 +2682,7 @@ module.exports = function(Member) {
                 code: 302,
                 returnUrl: config
                   .HOTSPOT_PAYMENT_WEB_RETURN_URL()
-                  .replace('{0}', querystring.stringify(params)),
+                  .replace('{0}', querystring.stringify(params))
               });
             }
 
@@ -2692,7 +2692,7 @@ module.exports = function(Member) {
                 code: 500,
                 returnUrl: config
                   .HOTSPOT_PAYMENT_WEB_RETURN_URL()
-                  .replace('{0}', querystring.stringify(params)),
+                  .replace('{0}', querystring.stringify(params))
               });
             }
             Payment.verifyPayment(business.paymentApiKey, paymentId, price)
@@ -2705,7 +2705,7 @@ module.exports = function(Member) {
                     {
                       payed: true,
                       paymentRefId: refId,
-                      paymentDate: new Date().getTime(),
+                      paymentDate: new Date().getTime()
                     },
                     function(error) {
                       if (error) {
@@ -2716,18 +2716,18 @@ module.exports = function(Member) {
                           code: 302,
                           returnUrl: config
                             .HOTSPOT_PAYMENT_WEB_RETURN_URL()
-                            .replace('{0}', querystring.stringify(params)),
+                            .replace('{0}', querystring.stringify(params))
                         });
                       }
                       log.debug(
                         'Update invoiceId ' +
                           invoiceId +
                           ' with verify payment refId ' +
-                          refId,
+                          refId
                       );
                       InternetPlan.assignPlanToMember(
                         invoice.memberId,
-                        invoice.planId,
+                        invoice.planId
                       )
                         .then(function() {
                           log.debug('%%%%%%%%%%%');
@@ -2737,7 +2737,7 @@ module.exports = function(Member) {
                             code: 302,
                             returnUrl: config
                               .HOTSPOT_PAYMENT_WEB_RETURN_URL()
-                              .replace('{0}', querystring.stringify(params)),
+                              .replace('{0}', querystring.stringify(params))
                           });
                         })
                         .fail(function(error) {
@@ -2747,10 +2747,10 @@ module.exports = function(Member) {
                             code: 302,
                             returnUrl: config
                               .HOTSPOT_PAYMENT_WEB_RETURN_URL()
-                              .replace('{0}', querystring.stringify(params)),
+                              .replace('{0}', querystring.stringify(params))
                           });
                         });
-                    },
+                    }
                   );
                 } else {
                   log.debug('Payment failed ' + invoiceId);
@@ -2759,14 +2759,14 @@ module.exports = function(Member) {
                       config
                         .HOTSPOT_PAYMENT_WEB_RETURN_URL()
                         .replace('{0}', false)
-                        .replace('{1}', 'verify'),
+                        .replace('{1}', 'verify')
                   );
                   params.payStatus = false;
                   return resolve({
                     code: 302,
                     returnUrl: config
                       .HOTSPOT_PAYMENT_WEB_RETURN_URL()
-                      .replace('{0}', querystring.stringify(params)),
+                      .replace('{0}', querystring.stringify(params))
                   });
                 }
               })
@@ -2778,7 +2778,7 @@ module.exports = function(Member) {
                   code: 302,
                   returnUrl: config
                     .HOTSPOT_PAYMENT_WEB_RETURN_URL()
-                    .replace('{0}', querystring.stringify(params)),
+                    .replace('{0}', querystring.stringify(params))
                 });
               });
           });
@@ -2809,7 +2809,7 @@ module.exports = function(Member) {
         member.updateAttributes(
           {
             extraBulk: 0,
-            subscriptionDate: dateInMs,
+            subscriptionDate: dateInMs
           },
           function(error) {
             if (error) {
@@ -2818,7 +2818,7 @@ module.exports = function(Member) {
             }
             InternetPlan.updateInternetPlanHistory(
               memberId,
-              member.internetPlanId,
+              member.internetPlanId
             )
               .then(function() {
                 Member.findById(memberId, function(error, latestMember) {
@@ -2833,7 +2833,7 @@ module.exports = function(Member) {
                     'member resubscribed automatically:',
                     businessId,
                     ':',
-                    memberId,
+                    memberId
                   );
                   return resolve(latestMember);
                 });
@@ -2842,7 +2842,7 @@ module.exports = function(Member) {
                 log.error(error);
                 return reject(error);
               });
-          },
+          }
         );
       });
     });
@@ -2857,7 +2857,7 @@ module.exports = function(Member) {
         {
           fields: { subscriptionDate: true, id: true },
           where: { id: memberId },
-          order: 'subscriptionDate DESC',
+          order: 'subscriptionDate DESC'
         },
         function(error, member) {
           if (error) {
@@ -2869,7 +2869,7 @@ module.exports = function(Member) {
             subscriptionDate = member[0].subscriptionDate;
           }
           return resolve(subscriptionDate);
-        },
+        }
       );
     });
   };
@@ -2902,7 +2902,7 @@ module.exports = function(Member) {
 
       Member.count({ businessId: businessId, mobile: { gt: 0 } }, function(
         error,
-        receptorsLength,
+        receptorsLength
       ) {
         if (error) {
           log.error('@getSmsCostForAllMembers', error);
@@ -2910,7 +2910,7 @@ module.exports = function(Member) {
         }
         var totalCost = Member.calculateBulkSmsCost(
           receptorsLength,
-          messageText,
+          messageText
         );
         aggregate
           .getProfileBalance(businessId)
@@ -2920,7 +2920,7 @@ module.exports = function(Member) {
               receptorsLength: receptorsLength,
               messageText: messageText,
               balance: balance.balance,
-              balanceEnough: balance.balance > totalCost,
+              balanceEnough: balance.balance > totalCost
             };
             return resolve(result);
           })
@@ -2938,15 +2938,15 @@ module.exports = function(Member) {
       {
         arg: 'businessId',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'messageText',
         type: 'string',
-        required: true,
-      },
+        required: true
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Member.sendMessageToAll = function(messageText, ctx) {
@@ -2954,7 +2954,7 @@ module.exports = function(Member) {
     return Q.Promise(function(resolve, reject) {
       Member.count({ businessId: businessId, mobile: { gt: 0 } }, function(
         error,
-        receptorsLength,
+        receptorsLength
       ) {
         if (error) {
           log.error('@sendMessageToAll', error);
@@ -2962,7 +2962,7 @@ module.exports = function(Member) {
         }
         var totalCost = Member.calculateBulkSmsCost(
           receptorsLength,
-          messageText,
+          messageText
         );
         aggregate
           .getProfileBalance(businessId)
@@ -2975,14 +2975,14 @@ module.exports = function(Member) {
                       { businessId: businessId },
                       {
                         mobile: {
-                          gt: 0,
-                        },
-                      },
-                    ],
+                          gt: 0
+                        }
+                      }
+                    ]
                   },
                   fields: {
-                    mobile: true,
-                  },
+                    mobile: true
+                  }
                 },
                 function(error, mobileList) {
                   if (error) {
@@ -2996,7 +2996,7 @@ module.exports = function(Member) {
                   Member.sendSms(businessId, {
                     businessId: businessId,
                     mobiles: mobiles,
-                    message: messageText,
+                    message: messageText
                   })
                     .then(function() {
                       return resolve('sms added to Queue');
@@ -3004,7 +3004,7 @@ module.exports = function(Member) {
                     .fail(function(error) {
                       return reject(error);
                     });
-                },
+                }
               );
             } else {
               var error = 'balanceNotEnough';
@@ -3061,11 +3061,11 @@ module.exports = function(Member) {
       {
         arg: 'messageText',
         type: 'string',
-        required: true,
+        required: true
       },
-      { arg: 'options', type: 'object', http: 'optionsFromRequest' },
+      { arg: 'options', type: 'object', http: 'optionsFromRequest' }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Member.loadMemberUsage = function(members) {
@@ -3079,7 +3079,7 @@ module.exports = function(Member) {
           var id = member.id;
           var businessId = member.businessId;
           tasks.push(
-            aggregate.getMemberUsage(fromDate, toDate, id, businessId),
+            aggregate.getMemberUsage(fromDate, toDate, id, businessId)
           );
         }
       }
@@ -3093,7 +3093,7 @@ module.exports = function(Member) {
               download: utility.toMByte(memberTraffic.download),
               bulk: utility.toMByte(memberTraffic.totalUsage),
               sessionTime: memberTraffic.sessionTime,
-              memberId: memberTraffic.memberId,
+              memberId: memberTraffic.memberId
             };
           }
           return resolve(results);
@@ -3111,10 +3111,10 @@ module.exports = function(Member) {
       {
         arg: 'members',
         type: 'array',
-        required: true,
-      },
+        required: true
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   /* return balance of hotspot member
@@ -3138,8 +3138,8 @@ module.exports = function(Member) {
     Member.findOne(
       {
         where: {
-          and: [{ id: memberId }, { businessId: businessId }],
-        },
+          and: [{ id: memberId }, { businessId: businessId }]
+        }
       },
       function(error, member) {
         if (error) {
@@ -3164,8 +3164,8 @@ module.exports = function(Member) {
         InternetPlan.findOne(
           {
             where: {
-              id: member.internetPlanId,
-            },
+              id: member.internetPlanId
+            }
           },
           function(error, internetPlan) {
             if (error) {
@@ -3194,7 +3194,7 @@ module.exports = function(Member) {
               businessId,
               memberId,
               fromDateInMs,
-              toDateInMs,
+              toDateInMs
             )
               .then(function(usage) {
                 if (plan.bulk.value == 0) {
@@ -3243,9 +3243,9 @@ module.exports = function(Member) {
                 log.error(error);
                 return cb(error);
               });
-          },
+          }
         );
-      },
+      }
     );
   };
 
@@ -3255,15 +3255,15 @@ module.exports = function(Member) {
       {
         arg: 'businessId',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'memberId',
         type: 'string',
-        required: true,
-      },
+        required: true
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   /* logOut hotspot member
@@ -3287,15 +3287,15 @@ module.exports = function(Member) {
       {
         arg: 'businessId',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'memberId',
         type: 'string',
-        required: true,
-      },
+        required: true
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   /* Find Business Id from Member User Name And Business Url Prefix
@@ -3314,8 +3314,8 @@ module.exports = function(Member) {
     Business.find(
       {
         where: {
-          urlPrefix: businessUrl,
-        },
+          urlPrefix: businessUrl
+        }
       },
       function(error, business) {
         if (error) {
@@ -3330,7 +3330,7 @@ module.exports = function(Member) {
         var businessId = business[0].id;
         var uniqueUserId = Member.createMemberUsername(businessId, username);
         return cb(null, { username: uniqueUserId });
-      },
+      }
     );
   };
 
@@ -3359,15 +3359,15 @@ module.exports = function(Member) {
       {
         arg: 'businessUrl',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'username',
         type: 'string',
-        required: true,
-      },
+        required: true
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   /* Find Internet Usage of a Member Base on Daily Interval
@@ -3399,10 +3399,10 @@ module.exports = function(Member) {
           for (var i = 0; i < memberUsage.length; i++) {
             date.push(memberUsage[i].key);
             download.push(
-              utility.toMByte(memberUsage[i].sum_download.value).toFixed(0),
+              utility.toMByte(memberUsage[i].sum_download.value).toFixed(0)
             );
             upload.push(
-              utility.toMByte(memberUsage[i].sum_upload.value).toFixed(0),
+              utility.toMByte(memberUsage[i].sum_upload.value).toFixed(0)
             );
           }
           result.date = date;
@@ -3422,20 +3422,20 @@ module.exports = function(Member) {
       {
         arg: 'businessId',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'memberId',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'startDate',
         type: 'number',
-        required: true,
-      },
+        required: true
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Member.buyPlan = function(businessId, memberId, internetPlanId) {
@@ -3454,7 +3454,7 @@ module.exports = function(Member) {
           //return reject ( 'invalid business payment panel token' );
           return resolve({
             code: 500,
-            url: '/',
+            url: '/'
           });
         }
         InternetPlan.findById(internetPlanId, function(error, internetPlan) {
@@ -3485,7 +3485,7 @@ module.exports = function(Member) {
               description: desc,
               issueDate: issueDate,
               businessId: businessId,
-              memberId: memberId,
+              memberId: memberId
             },
             function(error, invoice) {
               if (error) {
@@ -3501,13 +3501,13 @@ module.exports = function(Member) {
                 config.PAYMENT_GATEWAY_INTERNET_PLAN_PAYMENT_DESC,
                 business.email,
                 business.mobile,
-                returnUrl,
+                returnUrl
               )
                 .then(function(response) {
                   var paymentId = response.paymentId;
                   invoice.updateAttributes(
                     {
-                      paymentId: paymentId,
+                      paymentId: paymentId
                     },
                     function(error) {
                       if (error) {
@@ -3515,15 +3515,15 @@ module.exports = function(Member) {
                       }
                       return resolve({
                         code: 200,
-                        url: response.url,
+                        url: response.url
                       });
-                    },
+                    }
                   );
                 })
                 .fail(function(error) {
                   return reject('Error in replace payment id ' + error);
                 });
-            },
+            }
           );
         });
       });
@@ -3536,20 +3536,20 @@ module.exports = function(Member) {
       {
         arg: 'businessId',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'memberId',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'internetPlanId',
         type: 'string',
-        required: true,
-      },
+        required: true
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Member.verifyPayment = function(invoiceId) {
@@ -3563,7 +3563,7 @@ module.exports = function(Member) {
           code: 302,
           returnUrl: returnUrl
             .replace('{0}', 'false')
-            .replace('{1}', '&error=No invoice id'),
+            .replace('{1}', '&error=No invoice id')
         });
       }
       Invoice.findById(invoiceId, function(error, invoice) {
@@ -3573,7 +3573,7 @@ module.exports = function(Member) {
             code: 302,
             returnUrl: returnUrl
               .replace('{0}', 'false')
-              .replace('{1}', '&error=Error in finding invoice'),
+              .replace('{1}', '&error=Error in finding invoice')
           });
         }
         if (!invoice) {
@@ -3581,7 +3581,7 @@ module.exports = function(Member) {
             code: 302,
             returnUrl: returnUrl
               .replace('{0}', 'false')
-              .replace('{1}', '&error=Invalid invoice id'),
+              .replace('{1}', '&error=Invalid invoice id')
           });
         }
         var businessId = invoice.businessId;
@@ -3595,7 +3595,7 @@ module.exports = function(Member) {
               code: 302,
               returnUrl: returnUrl
                 .replace('{0}', 'false')
-                .replace('{1}', '&error=Error in finding business'),
+                .replace('{1}', '&error=Error in finding business')
             });
           }
           if (!business) {
@@ -3603,7 +3603,7 @@ module.exports = function(Member) {
               code: 302,
               returnUrl: returnUrl
                 .replace('{0}', 'false')
-                .replace('{1}', '&error=Invalid business id'),
+                .replace('{1}', '&error=Invalid business id')
             });
           }
 
@@ -3612,7 +3612,7 @@ module.exports = function(Member) {
               code: 302,
               returnUrl: returnUrl
                 .replace('{0}', 'false')
-                .replace('{1}', '&error=Invalid payment token id'),
+                .replace('{1}', '&error=Invalid payment token id')
             });
           }
           Payment.verifyPayment(business.paymentPanelApiKey, paymentId, price)
@@ -3625,7 +3625,7 @@ module.exports = function(Member) {
                   {
                     payed: true,
                     paymentRefId: refId,
-                    paymentDate: new Date().getTime(),
+                    paymentDate: new Date().getTime()
                   },
                   function(error) {
                     if (error) {
@@ -3637,21 +3637,21 @@ module.exports = function(Member) {
                           .replace('{0}', 'false')
                           .replace(
                             '{1}',
-                            '&error=Error in update invoice with payment reference Id',
-                          ),
+                            '&error=Error in update invoice with payment reference Id'
+                          )
                       });
                     }
                     log.debug(
                       'Update invoiceId ' +
                         invoiceId +
                         ' with verify payment refId ' +
-                        refId,
+                        refId
                     );
                     switch (invoiceType) {
                       case config.BUY_INTERNET_PLAN:
                         InternetPlan.assignPlanToMember(
                           invoice.memberId,
-                          invoice.planId,
+                          invoice.planId
                         )
                           .then(function() {
                             log.debug('%%%%%%%%%%%');
@@ -3660,7 +3660,7 @@ module.exports = function(Member) {
                               code: 302,
                               returnUrl: returnUrl
                                 .replace('{0}', 'true')
-                                .replace('{1}', '&desc=success'),
+                                .replace('{1}', '&desc=success')
                             });
                           })
                           .fail(function(error) {
@@ -3671,15 +3671,15 @@ module.exports = function(Member) {
                                 .replace('{0}', 'false')
                                 .replace(
                                   '{1}',
-                                  '&error=Error in adding plan to member',
-                                ),
+                                  '&error=Error in adding plan to member'
+                                )
                             });
                           });
                         break;
                       case config.BUY_EXTRA_BULK:
                         Member.findById(invoice.memberId, function(
                           error,
-                          member,
+                          member
                         ) {
                           log.debug('%%%%%%%%%%%');
                           log.debug(member);
@@ -3691,8 +3691,8 @@ module.exports = function(Member) {
                                 .replace('{0}', 'false')
                                 .replace(
                                   '{1}',
-                                  '&error=Error in finding member',
-                                ),
+                                  '&error=Error in finding member'
+                                )
                             });
                           }
                           if (!invoice) {
@@ -3700,26 +3700,26 @@ module.exports = function(Member) {
                               code: 302,
                               returnUrl: returnUrl
                                 .replace('{0}', 'false')
-                                .replace('{1}', '&error=Invalid member id'),
+                                .replace('{1}', '&error=Invalid member id')
                             });
                           }
                           var description = invoice.description;
                           var amount = Number.parseInt(
-                            description.split(',')[0],
+                            description.split(',')[0]
                           );
                           if (member.extraBulk) {
                             amount += Number.parseInt(member.extraBulk);
                           }
                           member.updateAttributes(
                             {
-                              extraBulk: amount,
+                              extraBulk: amount
                             },
                             function(error, response) {
                               if (error) {
                                 log.error(error);
                                 log.error(
                                   'Error in update member : ',
-                                  invoice.memberId,
+                                  invoice.memberId
                                 );
                                 return resolve({
                                   code: 302,
@@ -3727,8 +3727,8 @@ module.exports = function(Member) {
                                     .replace('{0}', 'false')
                                     .replace(
                                       '{1}',
-                                      '&error=Error in update invoice with payment reference Id',
-                                    ),
+                                      '&error=Error in update invoice with payment reference Id'
+                                    )
                                 });
                               }
                               if (response) {
@@ -3736,27 +3736,27 @@ module.exports = function(Member) {
                                   code: 302,
                                   returnUrl: returnUrl
                                     .replace('{0}', 'true')
-                                    .replace('{1}', '&desc=success'),
+                                    .replace('{1}', '&desc=success')
                                 });
                               }
-                            },
+                            }
                           );
                         });
                         break;
                     }
-                  },
+                  }
                 );
               } else {
                 log.debug('Payment failed ' + invoiceId);
                 log.debug(
                   'Payment failed ' +
-                    returnUrl.replace('{0}', false).replace('{1}', 'verify'),
+                    returnUrl.replace('{0}', false).replace('{1}', 'verify')
                 );
                 return resolve({
                   code: 302,
                   returnUrl: returnUrl
                     .replace('{0}', 'false')
-                    .replace('{1}', '&error=Payment failed'),
+                    .replace('{1}', '&error=Payment failed')
                 });
               }
             })
@@ -3767,7 +3767,7 @@ module.exports = function(Member) {
                 code: 302,
                 returnUrl: returnUrl
                   .replace('{0}', 'false')
-                  .replace('{1}', '&error=Error in verifying payment'),
+                  .replace('{1}', '&error=Error in verifying payment')
               });
             });
         });
@@ -3838,7 +3838,7 @@ module.exports = function(Member) {
               description: desc,
               issueDate: issueDate,
               businessId: businessId,
-              memberId: memberId,
+              memberId: memberId
             },
             function(error, invoice) {
               if (error) {
@@ -3854,13 +3854,13 @@ module.exports = function(Member) {
                 config.PAYMENT_GATEWAY_INTERNET_BULK_PAYMENT_DESC,
                 business.email,
                 business.mobile,
-                returnUrl,
+                returnUrl
               )
                 .then(function(response) {
                   var paymentId = response.paymentId;
                   invoice.updateAttributes(
                     {
-                      paymentId: paymentId,
+                      paymentId: paymentId
                     },
                     function(error) {
                       if (error) {
@@ -3868,15 +3868,15 @@ module.exports = function(Member) {
                       }
                       return resolve({
                         code: 200,
-                        url: response.url,
+                        url: response.url
                       });
-                    },
+                    }
                   );
                 })
                 .fail(function(error) {
                   return reject('Error in replace payment id ' + error);
                 });
-            },
+            }
           );
         });
       });
@@ -3888,25 +3888,25 @@ module.exports = function(Member) {
       {
         arg: 'businessId',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'memberId',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'internetPlanId',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'amount',
         type: 'number',
-        required: true,
-      },
+        required: true
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Member.checkDefaultPlan = function(businessId, memberId, planId, cb) {
@@ -3984,20 +3984,20 @@ module.exports = function(Member) {
       {
         arg: 'businessId',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'memberId',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'planId',
         type: 'string',
-        required: true,
-      },
+        required: true
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
   Member.getAllMembersCount = function(fromDate, endDate, ctx, cb) {
     var businessId = ctx.currentUserId;
@@ -4016,7 +4016,7 @@ module.exports = function(Member) {
       Member.count(
         {
           businessId: businessId,
-          creationDate: { gte: creationDate, lt: endDate },
+          creationDate: { gte: creationDate, lt: endDate }
         },
         function(error, members) {
           if (error) {
@@ -4028,7 +4028,7 @@ module.exports = function(Member) {
             allMembers = members;
           }
           return cb(null, { allMembers: allMembers });
-        },
+        }
       );
     });
   };
@@ -4037,16 +4037,16 @@ module.exports = function(Member) {
     accepts: [
       {
         arg: 'fromDate',
-        type: 'number',
+        type: 'number'
       },
       {
         arg: 'endDate',
         type: 'number',
-        required: true,
+        required: true
       },
-      { arg: 'options', type: 'object', http: 'optionsFromRequest' },
+      { arg: 'options', type: 'object', http: 'optionsFromRequest' }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Member.importMemberFromCsv = function(csvString, internetPlanId, ctx) {
@@ -4101,7 +4101,7 @@ module.exports = function(Member) {
                   return function() {
                     return Member.createNewMember(option, businessId);
                   };
-                })(usersOptions[i], businessId),
+                })(usersOptions[i], businessId)
               );
             }
             var addMemberTaskResult = Q({});
@@ -4126,15 +4126,15 @@ module.exports = function(Member) {
       {
         arg: 'csvString',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'internetPlanId',
-        type: 'string',
+        type: 'string'
       },
-      { arg: 'options', type: 'object', http: 'optionsFromRequest' },
+      { arg: 'options', type: 'object', http: 'optionsFromRequest' }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Member.getNewMembersCount = function(fromDate, endDate, ctx, cb) {
@@ -4153,7 +4153,7 @@ module.exports = function(Member) {
       Member.count(
         {
           businessId: businessId,
-          creationDate: { gte: fromDate, lt: endDate },
+          creationDate: { gte: fromDate, lt: endDate }
         },
         function(error, members) {
           if (error) {
@@ -4165,7 +4165,7 @@ module.exports = function(Member) {
             newMembers = members;
           }
           return cb(null, { newMembers: newMembers });
-        },
+        }
       );
     });
   };
@@ -4176,16 +4176,16 @@ module.exports = function(Member) {
       {
         arg: 'fromDate',
         type: 'number',
-        required: true,
+        required: true
       },
       {
         arg: 'endDate',
         type: 'number',
-        required: true,
+        required: true
       },
-      { arg: 'options', type: 'object', http: 'optionsFromRequest' },
+      { arg: 'options', type: 'object', http: 'optionsFromRequest' }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Member.loadProfile = function(nasId, mac) {
@@ -4219,8 +4219,8 @@ module.exports = function(Member) {
             username: Member.extractMemberUsername(member.username),
             password: utility.decrypt(
               member.passwordText,
-              config.ENCRYPTION_KEY,
-            ),
+              config.ENCRYPTION_KEY
+            )
           });
         });
       });
@@ -4233,15 +4233,15 @@ module.exports = function(Member) {
       {
         arg: 'nasId',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'mac',
         type: 'string',
-        required: true,
-      },
+        required: true
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Member.renderMemberCredentials = function(membersList, helpText, direction) {
@@ -4256,19 +4256,19 @@ module.exports = function(Member) {
       }
       fs.readFile(config.VOUCHER_TEMPLATE_PATH, { encoding: 'utf-8' }, function(
         error,
-        voucherTemplates,
+        voucherTemplates
       ) {
         if (error) {
           log.error(error);
           return reject(error);
         }
         dust.loadSource(
-          dust.compile(voucherTemplates, 'memberPrintTemplate', false),
+          dust.compile(voucherTemplates, 'memberPrintTemplate', false)
         );
         var data = {
           members: pagesMembers,
           help: helpText,
-          direction: direction || 'rtl',
+          direction: direction || 'rtl'
         };
         log.debug(data);
         dust.render('memberPrintTemplate', data, function(error, script) {
@@ -4293,7 +4293,7 @@ module.exports = function(Member) {
     duration,
     helpLanguageCode,
     ctx,
-    cb,
+    cb
   ) {
     log.debug('@create group of member');
     var Business = app.models.Business;
@@ -4324,7 +4324,7 @@ module.exports = function(Member) {
       var counterNewValue = counterCurrentValue + count;
       business.updateAttributes(
         {
-          groupMemberCounter: counterNewValue,
+          groupMemberCounter: counterNewValue
         },
         function(error) {
           if (error) {
@@ -4359,7 +4359,7 @@ module.exports = function(Member) {
             nationalCode: nationalCode,
             passportNumber: passportNumber,
             businessId: businessId,
-            creationDate: new Date().getTime(),
+            creationDate: new Date().getTime()
           };
           MemberGroup.create(memberGroupData, function(error, memberGroup) {
             if (error) {
@@ -4386,16 +4386,16 @@ module.exports = function(Member) {
                       groupIdentityType: memberGroup.groupIdentityType,
                       expiresAt: expiresAt,
                       username: (business.groupMemberPrefix || 'b') + j,
-                      password: utility.createRandomHotspotPassword(),
+                      password: utility.createRandomHotspotPassword()
                     };
                     return Member.createNewMember(options, businessId).then(
                       function(theMember) {
                         memberList.push(theMember);
                         return memberList;
-                      },
+                      }
                     );
                   };
-                })(i),
+                })(i)
               );
             }
             var result = Q([]);
@@ -4430,7 +4430,7 @@ module.exports = function(Member) {
                 return cb(error);
               });
           });
-        },
+        }
       );
     });
   };
@@ -4440,43 +4440,43 @@ module.exports = function(Member) {
     accepts: [
       {
         arg: 'reserveCode',
-        type: 'string',
+        type: 'string'
       },
       {
         arg: 'tourCode',
-        type: 'string',
+        type: 'string'
       },
       {
         arg: 'mobile',
-        type: 'string',
+        type: 'string'
       },
       {
         arg: 'passportNumber',
-        type: 'string',
+        type: 'string'
       },
       {
         arg: 'nationalCode',
-        type: 'string',
+        type: 'string'
       },
       {
         arg: 'count',
         type: 'number',
-        required: true,
+        required: true
       },
       {
         arg: 'internetPlanId',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'duration',
-        type: 'number',
+        type: 'number'
       },
       {
         arg: 'helpLanguageCode',
-        type: 'string',
+        type: 'string'
       },
-      { arg: 'options', type: 'object', http: 'optionsFromRequest' },
-    ],
+      { arg: 'options', type: 'object', http: 'optionsFromRequest' }
+    ]
   });
 };

@@ -79,7 +79,7 @@ module.exports = function(InternetPlan) {
                   config.AGGREGATE.HOUR_MILLISECONDS;
                 if (member.subscriptionDate) {
                   subscriptionDate = new Date(
-                    member.subscriptionDate,
+                    member.subscriptionDate
                   ).getTime();
                 }
                 var expireTime = subscriptionDate + period;
@@ -110,7 +110,7 @@ module.exports = function(InternetPlan) {
                 internetPlanName: plan.name,
                 subscriptionDate: subscriptionDate,
                 activateDefaultPlanCount: activateDefaultPlanCount,
-                extraBulk: 0,
+                extraBulk: 0
               },
               function(error, result) {
                 if (error) {
@@ -126,7 +126,7 @@ module.exports = function(InternetPlan) {
                     log.error(error);
                     return reject(error);
                   });
-              },
+              }
             );
           });
         });
@@ -165,12 +165,12 @@ module.exports = function(InternetPlan) {
           //todo test this functionality
           if (internetPlanHistory.length > 20) {
             internetPlanHistory = internetPlanHistory.splice(
-              internetPlanHistory.length - 20,
+              internetPlanHistory.length - 20
             );
           }
           member.updateAttributes(
             {
-              internetPlanHistory: internetPlanHistory,
+              internetPlanHistory: internetPlanHistory
             },
             function(error, result) {
               if (error) {
@@ -179,7 +179,7 @@ module.exports = function(InternetPlan) {
               }
               log.debug('internet plan history update result:', result);
               return resolve();
-            },
+            }
           );
         });
       });
@@ -191,23 +191,23 @@ module.exports = function(InternetPlan) {
       {
         arg: 'memberId',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'planId',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'isFree',
-        type: 'boolean',
+        type: 'boolean'
       },
       {
         arg: 'byBusiness',
-        type: 'boolean',
-      },
+        type: 'boolean'
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   InternetPlan.assignFreePlanToMember = function(memberId, planId, clbk) {
@@ -227,15 +227,15 @@ module.exports = function(InternetPlan) {
       {
         arg: 'memberId',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'planId',
         type: 'string',
-        required: true,
-      },
+        required: true
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   InternetPlan.getPublicInternetPlans = function(businessId, clbk) {
@@ -251,9 +251,9 @@ module.exports = function(InternetPlan) {
         where: {
           and: [
             { businessId: businessId },
-            { accessType: config.PUPLIC_INTERNET_PLAN },
-          ],
-        },
+            { accessType: config.PUPLIC_INTERNET_PLAN }
+          ]
+        }
       },
       function(error, internetPlans) {
         if (error) {
@@ -261,7 +261,7 @@ module.exports = function(InternetPlan) {
           return clbk(error);
         }
         return clbk(null, internetPlans);
-      },
+      }
     );
   };
 
@@ -270,9 +270,9 @@ module.exports = function(InternetPlan) {
       {
         arg: 'businessId',
         type: 'string',
-        required: true,
-      },
+        required: true
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 };

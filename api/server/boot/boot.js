@@ -8,7 +8,7 @@ var amqp = require('amqplib/callback_api');
 
 var redisLicenseReload = redis.createClient(
   process.env.REDIS_PORT,
-  process.env.REDIS_IP,
+  process.env.REDIS_IP
 );
 module.exports = function(app) {
   var User = app.models.User;
@@ -18,7 +18,7 @@ module.exports = function(app) {
   var log = logger.createLogger();
 
   SystemConfig.getConfig();
-  createQueue((error) => {
+  createQueue(error => {
     if (error) {
       log.error(error);
       throw error;
@@ -39,12 +39,12 @@ module.exports = function(app) {
           channel.assertQueue(
             config.LOG_WORKER_QUEUE,
             { durable: true },
-            (error) => {
+            error => {
               cb && cb(error);
-            },
+            }
           );
         });
-      },
+      }
     );
   }
 
@@ -61,18 +61,18 @@ module.exports = function(app) {
       addOrLoadRole(config.ROLES.NAS),
       addOrLoadRole(config.ROLES.HOTSPOTMEMBER),
       addOrLoadRole(config.ROLES.SERVICEPROVIDER),
-      addOrLoadRole(config.ROLES.CUSTOMER),
+      addOrLoadRole(config.ROLES.CUSTOMER)
     ]).then(function() {
       log.debug('all roles added');
       addOrLoadUser(
         config.DEFAULTS.SERVICE_MAN_USERNAME,
         config.DEFAULTS.SERVICE_MAN_PASSWORD,
-        config.DEFAULTS.SERVICE_MAN_ROLES,
+        config.DEFAULTS.SERVICE_MAN_ROLES
       );
       addOrLoadUser(
         config.DEFAULTS.ADMIN_USERNAME,
         config.DEFAULTS.ADMIN_PASS,
-        config.DEFAULTS.ADMIN_ROLES,
+        config.DEFAULTS.ADMIN_ROLES
       );
     });
   }
@@ -88,7 +88,7 @@ module.exports = function(app) {
         username: username,
         active: true,
         password: password,
-        email: username + '@' + config.DEFAULTS.USERS_DOMAIN,
+        email: username + '@' + config.DEFAULTS.USERS_DOMAIN
       };
       if (!user) {
         User.create(superuser, function(error, user) {
@@ -170,10 +170,10 @@ module.exports = function(app) {
             sessionTime: { type: 'long' },
             totalUsage: { type: 'long' },
             download: { type: 'long' },
-            upload: { type: 'long' },
-          },
-        },
-      },
+            upload: { type: 'long' }
+          }
+        }
+      }
     };
     needle.put(
       config.ELASTIC_ACCOUNTING_MAIN_CONTEXT,
@@ -187,9 +187,9 @@ module.exports = function(app) {
         log.debug(
           'accounting usagereport mapping created',
           config.ELASTIC_ACCOUNTING_MAIN_CONTEXT,
-          body,
+          body
         );
-      },
+      }
     );
 
     var sessionLogMapping = {
@@ -207,10 +207,10 @@ module.exports = function(app) {
             groupIdentityType: { type: 'keyword' },
             mac: { type: 'keyword' },
             username: { type: 'keyword' },
-            framedIpAddress: { type: 'keyword' },
-          },
-        },
-      },
+            framedIpAddress: { type: 'keyword' }
+          }
+        }
+      }
     };
 
     needle.put(
@@ -226,9 +226,9 @@ module.exports = function(app) {
         log.debug(
           'sessionLog mapping created',
           config.ELASTIC_SESSION_REPORT_MAIN_CONTEXT,
-          body,
+          body
         );
-      },
+      }
     );
 
     var chargeMapping = {
@@ -240,10 +240,10 @@ module.exports = function(app) {
             forThe: { type: 'keyword' },
             type: { type: 'keyword' },
             amount: { type: 'integer' },
-            date: { type: 'long' },
-          },
-        },
-      },
+            date: { type: 'long' }
+          }
+        }
+      }
     };
     needle.put(
       config.ELASTIC_CHARGE_MAIN_CONTEXT,
@@ -255,7 +255,7 @@ module.exports = function(app) {
           return;
         }
         log.info('charge mapping mapping created', body);
-      },
+      }
     );
 
     var netflowMapping = {
@@ -279,36 +279,36 @@ module.exports = function(app) {
             srcGeoIp: {
               properties: {
                 location: {
-                  type: 'geo_point',
+                  type: 'geo_point'
                 },
                 timezone: { type: 'keyword' },
                 city_name: { type: 'keyword' },
-                country_name: { type: 'keyword' },
-              },
+                country_name: { type: 'keyword' }
+              }
             },
             dstGeoIp: {
               properties: {
                 location: {
-                  type: 'geo_point',
+                  type: 'geo_point'
                 },
                 timezone: { type: 'keyword' },
                 city_name: { type: 'keyword' },
-                country_name: { type: 'keyword' },
-              },
+                country_name: { type: 'keyword' }
+              }
             },
             hostGeoIp: {
               properties: {
                 location: {
-                  type: 'geo_point',
+                  type: 'geo_point'
                 },
                 timezone: { type: 'keyword' },
                 city_name: { type: 'keyword' },
-                country_name: { type: 'keyword' },
-              },
-            },
-          },
-        },
-      },
+                country_name: { type: 'keyword' }
+              }
+            }
+          }
+        }
+      }
     };
     needle.put(
       config.ELASTIC_NETFLOW_MAIN_CONTEXT,
@@ -320,7 +320,7 @@ module.exports = function(app) {
           return;
         }
         log.info('netflow mapping mapping created', body);
-      },
+      }
     );
 
     var syslogMapping = {
@@ -341,16 +341,16 @@ module.exports = function(app) {
             hostGeoIp: {
               properties: {
                 location: {
-                  type: 'geo_point',
+                  type: 'geo_point'
                 },
                 timezone: { type: 'keyword' },
                 city_name: { type: 'keyword' },
-                country_name: { type: 'keyword' },
-              },
-            },
-          },
-        },
-      },
+                country_name: { type: 'keyword' }
+              }
+            }
+          }
+        }
+      }
     };
     needle.put(
       config.ELASTIC_SYSLOG_MAIN_CONTEXT,
@@ -362,7 +362,7 @@ module.exports = function(app) {
           return;
         }
         log.info('syslog mapping mapping created', body);
-      },
+      }
     );
   }
 

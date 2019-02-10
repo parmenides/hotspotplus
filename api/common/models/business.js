@@ -13,7 +13,7 @@ var needle = require('needle');
 var redis = require('redis');
 var redisInvoicePayed = redis.createClient(
   config.REDIS.PORT,
-  config.REDIS.HOST,
+  config.REDIS.HOST
 );
 
 var underscore = require('underscore');
@@ -34,7 +34,7 @@ module.exports = function(Business) {
     function updateModel(business) {
       if (business.mobile) {
         business.mobile = utility.removeAllSpace(
-          utility.verifyAndTrimMobile(business.mobile),
+          utility.verifyAndTrimMobile(business.mobile)
         );
         if (!business.mobile) {
           var error = new Error();
@@ -46,7 +46,7 @@ module.exports = function(Business) {
       if (business.password) {
         business.passwordText = utility.encrypt(
           business.password,
-          config.ENCRYPTION_KEY,
+          config.ENCRYPTION_KEY
         );
       }
     }
@@ -137,7 +137,7 @@ module.exports = function(Business) {
             log.debug('members deleted');
             Invoice.destroyAll({ businessId: businessId }, function(
               error,
-              res,
+              res
             ) {
               if (error) {
                 log.error(error);
@@ -166,14 +166,14 @@ module.exports = function(Business) {
       var businessId = ctx.instance.id;
       Role.findOne({ where: { name: config.ROLES.NETWORKADMIN } }, function(
         error,
-        role,
+        role
       ) {
         if (error) {
           log.error(
             'failed to load ' +
               config.ROLES.NETWORKADMIN +
               ' for role assignment',
-            error,
+            error
           );
           return next();
         }
@@ -189,7 +189,7 @@ module.exports = function(Business) {
           smsModule.send({
             token1: business.username,
             mobile: business.mobile,
-            template: config.REGISTRATION_MESSAGE_TEMPLATE,
+            template: config.REGISTRATION_MESSAGE_TEMPLATE
           });
           //Add trial sms test;
           Business.assignDefaultPlanToBusiness(businessId)
@@ -224,7 +224,7 @@ module.exports = function(Business) {
         {
           mobile: mobile,
           title: title,
-          fullName: fullname,
+          fullName: fullname
         },
         { json: true },
         function(error, resp, body) {
@@ -250,7 +250,7 @@ module.exports = function(Business) {
             .fail(function(error) {
               return reject(error);
             });
-        },
+        }
       );
     });
   };
@@ -261,20 +261,20 @@ module.exports = function(Business) {
       {
         arg: 'mobile',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'fullName',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'title',
         type: 'string',
-        required: true,
-      },
+        required: true
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Business.loadConfig = function(bizId, cb) {
@@ -305,7 +305,7 @@ module.exports = function(Business) {
       if (!business.themeConfig) {
         business.themeConfig = {};
         business.themeConfig[config.DEFAULT_THEME_ID] = {
-          formConfig: hotspotTemplates[config.DEFAULT_THEME_ID].formConfig,
+          formConfig: hotspotTemplates[config.DEFAULT_THEME_ID].formConfig
         };
       }
       business.enableMemberAutoLogin = business.enableMemberAutoLogin === true;
@@ -323,10 +323,10 @@ module.exports = function(Business) {
       {
         arg: 'id',
         type: 'string',
-        required: true,
-      },
+        required: true
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Business.getPackageById = function(packageId) {
@@ -390,7 +390,7 @@ module.exports = function(Business) {
               id: 'economic',
               subscriptionDate: new Date().removeDays(31).getTime(),
               expiresAt: new Date().getTime(),
-              duration: 1,
+              duration: 1
             };
           }
           if (
@@ -398,7 +398,7 @@ module.exports = function(Business) {
             typeof currentService.allowedOnlineUsers === 'string'
           ) {
             currentService.allowedOnlineUsers = Number(
-              currentService.allowedOnlineUsers,
+              currentService.allowedOnlineUsers
             );
           }
           currentService.allowedOnlineUsers =
@@ -428,14 +428,14 @@ module.exports = function(Business) {
               id: 'sms',
               duration: business.services.duration,
               subscriptionDate: business.services.subscriptionDate,
-              expiresAt: business.services.expiresAt,
+              expiresAt: business.services.expiresAt
             },
             log: {
               id: 'log',
               duration: business.services.duration,
               subscriptionDate: business.services.subscriptionDate,
-              expiresAt: business.services.expiresAt,
-            },
+              expiresAt: business.services.expiresAt
+            }
           };
           return resolve(currentModules);
         }
@@ -455,7 +455,7 @@ module.exports = function(Business) {
   Business.remoteMethod('reloadLicense', {
     description: 'reloadLicense',
     accepts: [],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Business.buyPackage = function(packageId, discountCoupon, ctx) {
@@ -482,7 +482,7 @@ module.exports = function(Business) {
                       providerId: providerId,
                       returnUrl: config.BUY_LOCAL_PACKAGE_RETURN(),
                       packageId: packageId,
-                      discountCoupon: discountCoupon,
+                      discountCoupon: discountCoupon
                     },
                     { json: true },
                     function(error, response, body) {
@@ -494,7 +494,7 @@ module.exports = function(Business) {
                         return reject(response.body);
                       }
                       return resolve({ url: body.url });
-                    },
+                    }
                   );
                 })
                 .fail(function(error) {
@@ -522,9 +522,9 @@ module.exports = function(Business) {
                     where: {
                       and: [
                         { code: discountCoupon.code },
-                        { ownerId: config.ADMIN_OWNER_ID },
-                      ],
-                    },
+                        { ownerId: config.ADMIN_OWNER_ID }
+                      ]
+                    }
                   },
                   function(error, coupon) {
                     if (error) {
@@ -547,7 +547,7 @@ module.exports = function(Business) {
                     coupon
                       .updateAttributes({
                         used: coupon.used + 1,
-                        redeemDate: new Date().getTime(),
+                        redeemDate: new Date().getTime()
                       })
                       .then(
                         function() {
@@ -557,9 +557,9 @@ module.exports = function(Business) {
                           log.error('coupon update error:', error);
                           log.error(error);
                           return reject(error);
-                        },
+                        }
                       );
-                  },
+                  }
                 );
               } else {
                 createInvoiceAndPay(price);
@@ -573,13 +573,13 @@ module.exports = function(Business) {
                       return resolve({
                         url: returnUrl
                           .replace('{0}', 'true')
-                          .replace('{1}', '&desc=success'),
+                          .replace('{1}', '&desc=success')
                       });
                     })
                     .fail(function(error) {
                       log.error(
                         'failed to assign zero price pkg to business',
-                        error,
+                        error
                       );
                       return reject(error);
                     });
@@ -592,7 +592,7 @@ module.exports = function(Business) {
                       packageId: packageId,
                       invoiceType: config.BUY_SERVICE_CHARGE,
                       issueDate: issueDate,
-                      businessId: businessId,
+                      businessId: businessId
                     },
                     function(error, invoice) {
                       if (error) {
@@ -606,12 +606,12 @@ module.exports = function(Business) {
                         .replace('{1}', invoiceId);
                       log.debug(
                         'config.BUSINESS_PAYMENT_RETURN_URL (): ',
-                        config.BUSINESS_PAYMENT_RETURN_URL(),
+                        config.BUSINESS_PAYMENT_RETURN_URL()
                       );
                       log.debug('returnUrl: ', returnUrl);
                       log.debug(
                         'EXTRACTED_EXTERNAL_API_ADDRESS: ',
-                        process.env.EXTRACTED_EXTERNAL_API_ADDRESS,
+                        process.env.EXTRACTED_EXTERNAL_API_ADDRESS
                       );
                       Payment.openPaymentGateway(
                         config.PAYMENT_API_KEY,
@@ -619,14 +619,14 @@ module.exports = function(Business) {
                         config.PAYMENT_GATEWAY_DEFAULT_DESC,
                         config.PAYMENT_SUPPORT_EMAIL,
                         config.PAYMENT_SUPPORT_MOBILE,
-                        returnUrl,
+                        returnUrl
                       )
                         .then(function(response) {
                           var url = response.url;
                           var paymentId = response.paymentId;
                           invoice
                             .updateAttributes({
-                              paymentId: paymentId,
+                              paymentId: paymentId
                             })
                             .then(
                               function() {
@@ -635,7 +635,7 @@ module.exports = function(Business) {
                               function(error) {
                                 log.error('invoice update error:', error);
                                 return reject(error);
-                              },
+                              }
                             );
                         })
                         .fail(function(error) {
@@ -643,7 +643,7 @@ module.exports = function(Business) {
                           log.error(error);
                           return reject(error);
                         });
-                    },
+                    }
                   );
                 }
               }
@@ -663,15 +663,15 @@ module.exports = function(Business) {
       {
         arg: 'packageId',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'discount',
-        type: 'object',
+        type: 'object'
       },
-      { arg: 'options', type: 'object', http: 'optionsFromRequest' },
+      { arg: 'options', type: 'object', http: 'optionsFromRequest' }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Business.assignPackageToBusiness = function(businessId, packageId, options) {
@@ -719,7 +719,7 @@ module.exports = function(Business) {
                 subscriptionDate: serviceSubscriptionDate,
                 expiresAt: expiresAt,
                 duration: duration,
-                durationInDays: durationInDays,
+                durationInDays: durationInDays
               };
             }
             var selectedModules = selectedPkg.modules;
@@ -743,7 +743,7 @@ module.exports = function(Business) {
                 modules[moduleId] = {
                   subscriptionDate: modSubscriptionDate,
                   expiresAt: modExpiresAt,
-                  duration: duration,
+                  duration: duration
                 };
               });
               update.modules = modules;
@@ -770,19 +770,19 @@ module.exports = function(Business) {
       {
         arg: 'businessId',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'packageId',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'options',
-        type: 'object',
-      },
+        type: 'object'
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   /*Business.assignModuleToBusiness = function ( businessId, modulesItems ) {
@@ -864,7 +864,7 @@ module.exports = function(Business) {
                         systemUuid: systemUuid,
                         providerId: providerId,
                         returnUrl: config.BUY_LOCAL_SMS_CHARGE_RETURN(),
-                        price: rialPrice,
+                        price: rialPrice
                       },
                       { json: true },
                       function(error, response, body) {
@@ -876,7 +876,7 @@ module.exports = function(Business) {
                           return reject(response.body);
                         }
                         return resolve({ url: body.url });
-                      },
+                      }
                     );
                   })
                   .fail(function(error) {
@@ -896,7 +896,7 @@ module.exports = function(Business) {
                 payed: false,
                 invoiceType: config.BUY_CHARGE,
                 issueDate: issueDate,
-                businessId: businessId,
+                businessId: businessId
               },
               function(error, invoice) {
                 if (error) {
@@ -915,7 +915,7 @@ module.exports = function(Business) {
                   config.PAYMENT_GATEWAY_DEFAULT_DESC,
                   config.PAYMENT_SUPPORT_EMAIL,
                   config.PAYMENT_SUPPORT_MOBILE,
-                  returnUrl,
+                  returnUrl
                 )
                   .then(function(response) {
                     var url = response.url;
@@ -928,7 +928,7 @@ module.exports = function(Business) {
                         log.error('invoice update error:', error);
                         log.error(error);
                         return reject(error);
-                      },
+                      }
                     );
                   })
                   .fail(function(error) {
@@ -936,7 +936,7 @@ module.exports = function(Business) {
                     log.error(error);
                     return reject(error);
                   });
-              },
+              }
             );
           }
         })
@@ -952,11 +952,11 @@ module.exports = function(Business) {
       {
         arg: 'rialPrice',
         type: 'number',
-        required: true,
+        required: true
       },
-      { arg: 'options', type: 'object', http: 'optionsFromRequest' },
+      { arg: 'options', type: 'object', http: 'optionsFromRequest' }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Business.observe('loaded', function(ctx, next) {
@@ -982,7 +982,7 @@ module.exports = function(Business) {
                 themeId = config.DEFAULT_THEME_ID;
                 themeConfig[themeId] = extend(
                   {},
-                  returnThemeConfig(themeId, oldThemeConfig, serviceId),
+                  returnThemeConfig(themeId, oldThemeConfig, serviceId)
                 );
               } else if (
                 ctx.data.selectedThemeId === config.PREVIOUS_HOTEL_THEME_ID
@@ -990,13 +990,13 @@ module.exports = function(Business) {
                 themeId = config.HOTEL_THEME_ID;
                 themeConfig[themeId] = extend(
                   {},
-                  returnThemeConfig(themeId, oldThemeConfig, serviceId),
+                  returnThemeConfig(themeId, oldThemeConfig, serviceId)
                 );
               } else if (!hotspotTemplates[ctx.data.selectedThemeId]) {
                 themeId = config.DEFAULT_THEME_ID;
                 themeConfig[themeId] = extend(
                   {},
-                  returnThemeConfig(themeId, oldThemeConfig, serviceId),
+                  returnThemeConfig(themeId, oldThemeConfig, serviceId)
                 );
               }
               ctx.data.selectedThemeId = themeId;
@@ -1036,7 +1036,7 @@ module.exports = function(Business) {
           showInstagram: oldThemeConfig.showTelegram || false,
           instagram: oldThemeConfig.instagram || null,
           verificationMethod: 'mobile',
-          formConfig: hotspotTemplates[themeId].formConfig,
+          formConfig: hotspotTemplates[themeId].formConfig
         };
         if (oldThemeConfig.formConfig) {
           for (var i = 0; i < newThemeConfig.formConfig.length; i++) {
@@ -1072,7 +1072,7 @@ module.exports = function(Business) {
           code: 302,
           returnUrl: returnUrl
             .replace('{0}', 'false')
-            .replace('{1}', '&error=No invoice id'),
+            .replace('{1}', '&error=No invoice id')
         });
       }
       Invoice.findById(invoiceId, function(error, invoice) {
@@ -1082,7 +1082,7 @@ module.exports = function(Business) {
             code: 302,
             returnUrl: returnUrl
               .replace('{0}', 'false')
-              .replace('{1}', '&error=Error in finding invoice'),
+              .replace('{1}', '&error=Error in finding invoice')
           });
         }
         if (!invoice) {
@@ -1090,7 +1090,7 @@ module.exports = function(Business) {
             code: 302,
             returnUrl: returnUrl
               .replace('{0}', 'false')
-              .replace('{1}', '&error=Invalid invoice id'),
+              .replace('{1}', '&error=Invalid invoice id')
           });
         }
         log.debug(invoice);
@@ -1106,7 +1106,7 @@ module.exports = function(Business) {
                 code: 302,
                 returnUrl: returnUrl
                   .replace('{0}', 'false')
-                  .replace('{1}', '&error=Payment failed'),
+                  .replace('{1}', '&error=Payment failed')
               });
             }
 
@@ -1117,7 +1117,7 @@ module.exports = function(Business) {
                   code: 302,
                   returnUrl: returnUrl
                     .replace('{0}', 'false')
-                    .replace('{1}', '&error=Error in finding business'),
+                    .replace('{1}', '&error=Error in finding business')
                 });
               }
               if (!business) {
@@ -1125,7 +1125,7 @@ module.exports = function(Business) {
                   code: 302,
                   returnUrl: returnUrl
                     .replace('{0}', 'false')
-                    .replace('{1}', '&error=Invalid business id'),
+                    .replace('{1}', '&error=Invalid business id')
                 });
               }
 
@@ -1135,13 +1135,13 @@ module.exports = function(Business) {
                 type: config.BUY_SERVICE_CHARGE,
                 amount: price,
                 forThe: refId + ':' + invoice.paymentId + ':' + invoiceType,
-                date: new Date().getTime(),
+                date: new Date().getTime()
               });
               invoice.updateAttributes(
                 {
                   payed: true,
                   paymentRefId: refId,
-                  paymentDate: new Date().getTime(),
+                  paymentDate: new Date().getTime()
                 },
                 function(error) {
                   if (error) {
@@ -1152,8 +1152,8 @@ module.exports = function(Business) {
                         .replace('{0}', 'false')
                         .replace(
                           '{1}',
-                          '&error=Error in update invoice with payment reference Id',
-                        ),
+                          '&error=Error in update invoice with payment reference Id'
+                        )
                     });
                   }
 
@@ -1168,7 +1168,7 @@ module.exports = function(Business) {
                             type: config.BUY_SERVICE_CHARGE,
                             amount: price * -1,
                             forThe: selectedPackage.title,
-                            date: new Date().getTime(),
+                            date: new Date().getTime()
                           });
 
                           //add credit for business reseller
@@ -1176,7 +1176,7 @@ module.exports = function(Business) {
                             Reseller.addResellerCommission(
                               business.resellerId,
                               businessId,
-                              invoice.price,
+                              invoice.price
                             )
                               .then(function() {
                                 log.debug('Reseller commission added ');
@@ -1186,7 +1186,7 @@ module.exports = function(Business) {
                                 utility.sendMessage(error, {
                                   type: 'FailedToAddResellerCommission',
                                   resellerId: business.resellerId,
-                                  businessId: businessId,
+                                  businessId: businessId
                                 });
                               });
                           }
@@ -1194,7 +1194,7 @@ module.exports = function(Business) {
                             code: 302,
                             returnUrl: returnUrl
                               .replace('{0}', 'true')
-                              .replace('{1}', '&desc=success'),
+                              .replace('{1}', '&desc=success')
                           });
                         })
                         .fail(function(error) {
@@ -1205,8 +1205,8 @@ module.exports = function(Business) {
                               .replace('{0}', 'false')
                               .replace(
                                 '{1}',
-                                '&error=Error in update business with packageId',
-                              ),
+                                '&error=Error in update business with packageId'
+                              )
                           });
                         });
                     })
@@ -1218,11 +1218,11 @@ module.exports = function(Business) {
                           .replace('{0}', 'false')
                           .replace(
                             '{1}',
-                            '&error=Error in update business with packageId',
-                          ),
+                            '&error=Error in update business with packageId'
+                          )
                       });
                     });
-                },
+                }
               );
             });
           })
@@ -1232,7 +1232,7 @@ module.exports = function(Business) {
               code: 302,
               returnUrl: returnUrl
                 .replace('{0}', 'false')
-                .replace('{1}', '&error=Error in verifying payment'),
+                .replace('{1}', '&error=Error in verifying payment')
             });
           });
       });
@@ -1249,7 +1249,7 @@ module.exports = function(Business) {
           code: 302,
           returnUrl: returnUrl
             .replace('{0}', 'false')
-            .replace('{1}', '&error=No invoice id'),
+            .replace('{1}', '&error=No invoice id')
         });
       }
       Invoice.findById(invoiceId, function(error, invoice) {
@@ -1259,7 +1259,7 @@ module.exports = function(Business) {
             code: 302,
             returnUrl: returnUrl
               .replace('{0}', 'false')
-              .replace('{1}', '&error=Error in finding invoice'),
+              .replace('{1}', '&error=Error in finding invoice')
           });
         }
         if (!invoice) {
@@ -1267,7 +1267,7 @@ module.exports = function(Business) {
             code: 302,
             returnUrl: returnUrl
               .replace('{0}', 'false')
-              .replace('{1}', '&error=Invalid invoice id'),
+              .replace('{1}', '&error=Invalid invoice id')
           });
         }
         log.debug(invoice);
@@ -1286,7 +1286,7 @@ module.exports = function(Business) {
                     code: 302,
                     returnUrl: returnUrl
                       .replace('{0}', 'false')
-                      .replace('{1}', '&error=Error in finding business'),
+                      .replace('{1}', '&error=Error in finding business')
                   });
                 }
                 if (!business) {
@@ -1294,7 +1294,7 @@ module.exports = function(Business) {
                     code: 302,
                     returnUrl: returnUrl
                       .replace('{0}', 'false')
-                      .replace('{1}', '&error=Invalid business id'),
+                      .replace('{1}', '&error=Invalid business id')
                   });
                 }
 
@@ -1304,7 +1304,7 @@ module.exports = function(Business) {
                   {
                     payed: true,
                     paymentRefId: refId,
-                    paymentDate: new Date().getTime(),
+                    paymentDate: new Date().getTime()
                   },
                   function(error) {
                     if (error) {
@@ -1315,8 +1315,8 @@ module.exports = function(Business) {
                           .replace('{0}', 'false')
                           .replace(
                             '{1}',
-                            '&error=Error in update invoice with payment reference Id',
-                          ),
+                            '&error=Error in update invoice with payment reference Id'
+                          )
                       });
                     }
                     Charge.addCharge({
@@ -1326,15 +1326,15 @@ module.exports = function(Business) {
                       amount: price,
                       forThe:
                         refId + ':' + invoice.paymentId + ':' + invoiceType,
-                      date: new Date().getTime(),
+                      date: new Date().getTime()
                     });
                     return resolve({
                       code: 302,
                       returnUrl: returnUrl
                         .replace('{0}', 'true')
-                        .replace('{1}', '&desc=success'),
+                        .replace('{1}', '&desc=success')
                     });
-                  },
+                  }
                 );
               });
             } else {
@@ -1342,7 +1342,7 @@ module.exports = function(Business) {
                 code: 302,
                 returnUrl: returnUrl
                   .replace('{0}', 'false')
-                  .replace('{1}', '&error=Payment failed'),
+                  .replace('{1}', '&error=Payment failed')
               });
             }
           })
@@ -1352,7 +1352,7 @@ module.exports = function(Business) {
               code: 302,
               returnUrl: returnUrl
                 .replace('{0}', 'false')
-                .replace('{1}', '&error=Error in verifying payment'),
+                .replace('{1}', '&error=Error in verifying payment')
             });
           });
       });
@@ -1373,7 +1373,7 @@ module.exports = function(Business) {
         invoiceType: config.ADMIN_CHARGE,
         issueDate: issueDate,
         paymentDate: paymentDate,
-        businessId: businessId,
+        businessId: businessId
       },
       function(error, invoice) {
         if (error) {
@@ -1396,13 +1396,13 @@ module.exports = function(Business) {
             amount: price,
             notifyOwner: business.mobile,
             forThe: config.ADMIN_CHARGE,
-            date: new Date().getTime(),
+            date: new Date().getTime()
           });
 
           log.debug('@adminPayment, smsCharge', price);
           return cb && cb(null, invoice);
         });
-      },
+      }
     );
   };
 
@@ -1412,15 +1412,15 @@ module.exports = function(Business) {
       {
         arg: 'businessId',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'rialPrice',
         type: 'number',
-        required: true,
-      },
+        required: true
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Business.getBalance = function(businessId, ctx, cb) {
@@ -1441,7 +1441,7 @@ module.exports = function(Business) {
                   needle.post(
                     config.CONFIG_SERVER_LOCAL_CHARGE.replace('{token}', token),
                     {
-                      systemUuid: systemUuid,
+                      systemUuid: systemUuid
                     },
                     { json: true },
                     function(error, response, body) {
@@ -1457,7 +1457,7 @@ module.exports = function(Business) {
                         return cb(new Error('failed to load charges'));
                       }
                       return cb(null, { balance: body.remaincredit });
-                    },
+                    }
                   );
                 })
                 .fail(function(error) {
@@ -1494,11 +1494,11 @@ module.exports = function(Business) {
       {
         arg: 'businessId',
         type: 'string',
-        required: true,
+        required: true
       },
-      { arg: 'options', type: 'object', http: 'optionsFromRequest' },
+      { arg: 'options', type: 'object', http: 'optionsFromRequest' }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Business.getTrafficUsage = function(
@@ -1507,7 +1507,7 @@ module.exports = function(Business) {
     offset,
     monthDays,
     ctx,
-    cb,
+    cb
   ) {
     var businessId = ctx.currentUserId;
     startDate = startDate.toString();
@@ -1531,7 +1531,7 @@ module.exports = function(Business) {
         businessId,
         offset,
         intervalMili,
-        monthDays,
+        monthDays
       )
         .then(function(result) {
           return cb(null, result);
@@ -1550,29 +1550,29 @@ module.exports = function(Business) {
         arg: 'startDate',
         type: 'number',
         required: true,
-        description: 'Start Date',
+        description: 'Start Date'
       },
       {
         arg: 'endDate',
         type: 'number',
         required: true,
-        description: 'End Date',
+        description: 'End Date'
       },
       {
         arg: 'offset',
         type: 'number',
         required: false,
-        description: 'Time Zone',
+        description: 'Time Zone'
       },
       {
         arg: 'monthDays',
         type: 'array',
         required: false,
-        description: 'Days Of Month',
+        description: 'Days Of Month'
       },
-      { arg: 'options', type: 'object', http: 'optionsFromRequest' },
+      { arg: 'options', type: 'object', http: 'optionsFromRequest' }
     ],
-    returns: { arg: 'result', type: 'object' },
+    returns: { arg: 'result', type: 'object' }
   });
 
   Business.loadServiceInfo = function(clbk) {
@@ -1582,7 +1582,7 @@ module.exports = function(Business) {
   Business.remoteMethod('loadServiceInfo', {
     description: 'Load business packages',
     accepts: [],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Business.getNetflowReport = function(
@@ -1594,7 +1594,7 @@ module.exports = function(Business) {
     skip,
     limit,
     ctx,
-    cb,
+    cb
   ) {
     log.debug('@getNetflowReport');
     var businessId = ctx.currentUserId;
@@ -1641,36 +1641,36 @@ module.exports = function(Business) {
       {
         arg: 'fromDate',
         type: 'number',
-        required: true,
+        required: true
       },
       {
         arg: 'toDate',
         type: 'number',
-        required: true,
+        required: true
       },
       {
         arg: 'username',
-        type: 'string',
+        type: 'string'
       },
       {
         arg: 'sourceIp',
-        type: 'string',
+        type: 'string'
       },
       {
         arg: 'destinationIp',
-        type: 'string',
+        type: 'string'
       },
       {
         arg: 'skip',
-        type: 'number',
+        type: 'number'
       },
       {
         arg: 'limit',
-        type: 'number',
+        type: 'number'
       },
-      { arg: 'options', type: 'object', http: 'optionsFromRequest' },
+      { arg: 'options', type: 'object', http: 'optionsFromRequest' }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Business.getSyslogReport = function(
@@ -1680,7 +1680,7 @@ module.exports = function(Business) {
     skip,
     limit,
     ctx,
-    cb,
+    cb
   ) {
     var businessId = ctx.currentUserId;
     log.debug('@getSyslogReport');
@@ -1725,28 +1725,28 @@ module.exports = function(Business) {
       {
         arg: 'fromDate',
         type: 'number',
-        required: true,
+        required: true
       },
       {
         arg: 'toDate',
         type: 'number',
-        required: true,
+        required: true
       },
       {
         arg: 'username',
-        type: 'string',
+        type: 'string'
       },
       {
         arg: 'skip',
-        type: 'number',
+        type: 'number'
       },
       {
         arg: 'limit',
-        type: 'number',
+        type: 'number'
       },
-      { arg: 'options', type: 'object', http: 'optionsFromRequest' },
+      { arg: 'options', type: 'object', http: 'optionsFromRequest' }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Business.getResellerMobile = function(businessId, cb) {
@@ -1768,11 +1768,11 @@ module.exports = function(Business) {
       Reseller.findOne(
         {
           where: {
-            id: resellerId,
+            id: resellerId
           },
           fields: {
-            mobile: true,
-          },
+            mobile: true
+          }
         },
         function(error, reseller) {
           if (error) {
@@ -1784,7 +1784,7 @@ module.exports = function(Business) {
             return cb('reseller not found');
           }
           return cb(null, reseller);
-        },
+        }
       );
     });
   };
@@ -1795,10 +1795,10 @@ module.exports = function(Business) {
       {
         arg: 'businessId',
         type: 'string',
-        required: true,
-      },
+        required: true
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Business.hasValidSubscription = function(business) {
@@ -1822,7 +1822,7 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
         log.warn(
           'This business has valid subscription ',
           business.title,
-          businessId,
+          businessId
         );
         return resolve(true);
       } else {
@@ -1837,10 +1837,10 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
       {
         arg: 'business',
         type: 'Object',
-        required: true,
-      },
+        required: true
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Business.getPackages = function() {
@@ -1861,7 +1861,7 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
                 return reject('failed to load pkgs');
               }
               return resolve(body.packages);
-            },
+            }
           );
         } else {
           return resolve(config.SERVICES.packages);
@@ -1882,7 +1882,7 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
 
   Business.remoteMethod('loadServices', {
     accepts: [],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Business.loadResellersPackages = function(cb) {
@@ -1891,7 +1891,7 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
 
   Business.remoteMethod('loadResellersPackages', {
     accepts: [],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Business.resetPasswordByAdmin = function(businessId, password) {
@@ -1910,7 +1910,7 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
         }
         business.updateAttributes(
           {
-            password: password,
+            password: password
           },
           function(error) {
             if (error) {
@@ -1921,10 +1921,10 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
               token1: business.username,
               token2: password,
               mobile: business.mobile,
-              template: config.PASSWORD_RESET_TEMPLATE,
+              template: config.PASSWORD_RESET_TEMPLATE
             });
             return resolve({ password: password });
-          },
+          }
         );
       });
     });
@@ -1936,14 +1936,14 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
       {
         arg: 'businessId',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'password',
-        type: 'string',
-      },
+        type: 'string'
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Business.makeBackup = function(ctx) {
@@ -1970,15 +1970,15 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
               return function(result) {
                 return Member.find({
                   where: {
-                    businessId: businessId,
+                    businessId: businessId
                   },
                   skip: j * partitionSize,
-                  limit: partitionSize,
+                  limit: partitionSize
                 }).then(function(members) {
                   members.forEach(function(member) {
                     member.passwordText = utility.decrypt(
                       member.passwordText,
-                      config.ENCRYPTION_KEY,
+                      config.ENCRYPTION_KEY
                     );
                     member.internetPlanHistory = [];
                     result.push(member);
@@ -1986,7 +1986,7 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
                   return result;
                 });
               };
-            })(i),
+            })(i)
           );
         }
         var result = Q([]);
@@ -2006,7 +2006,7 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
                       members: members || [],
                       membersSize: members.length || 0,
                       internetPlans: internetPlans || [],
-                      internetPlansSize: internetPlans.length || 0,
+                      internetPlansSize: internetPlans.length || 0
                     });
                   })
                   .catch(function(error) {
@@ -2027,7 +2027,7 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
   Business.remoteMethod('makeBackup', {
     http: { verb: 'get' },
     accepts: [{ arg: 'options', type: 'object', http: 'optionsFromRequest' }],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Business.restoreBackupFromApi = function(url, ctx) {
@@ -2060,11 +2060,11 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
       {
         arg: 'url',
         type: 'string',
-        required: true,
+        required: true
       },
-      { arg: 'options', type: 'object', http: 'optionsFromRequest' },
+      { arg: 'options', type: 'object', http: 'optionsFromRequest' }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Business.restoreBackup = function(backup, ctx) {
@@ -2083,13 +2083,13 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
               delete memberGroup.id;
               log.debug('go add memberGroup', memberGroup);
               return MemberGroup.create(memberGroup).then(function(
-                createdMemberGroup,
+                createdMemberGroup
               ) {
                 memberGroupDic[memberGroupId] = createdMemberGroup.id;
                 return memberGroupDic;
               });
             };
-          })(memberGroup.id),
+          })(memberGroup.id)
         );
       });
 
@@ -2108,13 +2108,13 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
                   delete internetPlan.id;
                   log.debug('go add ip', internetPlan);
                   return InternetPlan.create(internetPlan).then(function(
-                    createdInternetPlan,
+                    createdInternetPlan
                   ) {
                     internetPlanDic[internetPlanId] = createdInternetPlan.id;
                     return internetPlanDic;
                   });
                 };
-              })(internetPlan.id),
+              })(internetPlan.id)
             );
           });
 
@@ -2141,12 +2141,12 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
                           memberGroupCreateResult[member.groupIdentityId],
                         groupIdentityType: member.groupIdentityType,
                         username: member.username.split('@')[0],
-                        password: member.passwordText,
+                        password: member.passwordText
                       };
                       log.debug('go add member', options);
                       return Member.createNewMember(options, businessId);
                     };
-                  })(),
+                  })()
                 );
               });
 
@@ -2162,14 +2162,14 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
                         {
                           groupMemberCounter:
                             backup.groupMemberCounter ||
-                            config.BUSINESS_GROUP_MEMBER_COUNTER_START,
+                            config.BUSINESS_GROUP_MEMBER_COUNTER_START
                         },
                         function(error) {
                           if (error) {
                             return reject(error);
                           }
                           return resolve({ ok: true });
-                        },
+                        }
                       );
                     })
                     .catch(function(error) {
@@ -2195,11 +2195,11 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
       {
         arg: 'backup',
         type: 'object',
-        required: true,
+        required: true
       },
-      { arg: 'options', type: 'object', http: 'optionsFromRequest' },
+      { arg: 'options', type: 'object', http: 'optionsFromRequest' }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Business.isMoreSessionAllowed = function(businessId) {
@@ -2222,8 +2222,8 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
             } else {
               query = {
                 where: {
-                  businessId: businessId,
-                },
+                  businessId: businessId
+                }
               };
             }
             ClientSession.find(query, function(error, sessions) {
@@ -2271,7 +2271,7 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
             Q.Promise(function(resolve, reject) {
               Member.destroyById(memberId, { businessId: businessId }, function(
                 error,
-                res,
+                res
               ) {
                 if (error) {
                   log.error(error);
@@ -2279,7 +2279,7 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
                 }
                 return resolve(res);
               });
-            }),
+            })
           );
         })();
       }
@@ -2298,11 +2298,11 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
       {
         arg: 'memberIds',
         type: 'array',
-        required: true,
+        required: true
       },
-      { arg: 'options', type: 'object', http: 'optionsFromRequest' },
+      { arg: 'options', type: 'object', http: 'optionsFromRequest' }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Business.dropBoxAuthorization = function(ctx, cb) {
@@ -2329,14 +2329,14 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
         .replace('{2}', CSRFToken);
       return cb(null, {
         code: 302,
-        returnUrl: dropBoxAuthUrl,
+        returnUrl: dropBoxAuthUrl
       });
     });
   };
 
   Business.remoteMethod('dropBoxAuthorization', {
     accepts: [{ arg: 'options', type: 'object', http: 'optionsFromRequest' }],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Business.dropboxSaveToken = function(options) {
@@ -2348,7 +2348,7 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
           code: 302,
           returnUrl: returnUrl
             .replace('{0}', 'false')
-            .replace('{1}', '&error=No response'),
+            .replace('{1}', '&error=No response')
         });
       }
       if (options.error && options.error === 'access_denied') {
@@ -2356,7 +2356,7 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
           code: 302,
           returnUrl: returnUrl
             .replace('{0}', 'false')
-            .replace('{1}', '&error=Access denied'),
+            .replace('{1}', '&error=Access denied')
         });
       }
       if (options.error) {
@@ -2364,7 +2364,7 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
           code: 302,
           returnUrl: returnUrl
             .replace('{0}', 'false')
-            .replace('{1}', '&error=Error in connecting to dropbox'),
+            .replace('{1}', '&error=Error in connecting to dropbox')
         });
       }
       var Business = app.models.Business;
@@ -2377,7 +2377,7 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
             code: 302,
             returnUrl: returnUrl
               .replace('{0}', 'false')
-              .replace('{1}', '&error=Error in finding business'),
+              .replace('{1}', '&error=Error in finding business')
           });
         }
         if (!business) {
@@ -2385,7 +2385,7 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
             code: 302,
             returnUrl: returnUrl
               .replace('{0}', 'false')
-              .replace('{1}', '&error=Invalid business id'),
+              .replace('{1}', '&error=Invalid business id')
           });
         }
         request(
@@ -2397,8 +2397,8 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
               grant_type: 'authorization_code',
               client_id: config.DROPBOX_APP_KEY(),
               client_secret: config.DROPBOX_APP_SECRET(),
-              redirect_uri: config.DROPBOX_REST_API(),
-            },
+              redirect_uri: config.DROPBOX_REST_API()
+            }
           },
           function(error, resp, body) {
             if (error) {
@@ -2408,7 +2408,7 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
                 code: 302,
                 returnUrl: returnUrl
                   .replace('{0}', 'false')
-                  .replace('{1}', '&error=' + error),
+                  .replace('{1}', '&error=' + error)
               });
             }
             try {
@@ -2419,7 +2419,7 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
                 business.updateAttributes(
                   {
                     dropboxToken: access_token,
-                    dropboxAccountId: account_id,
+                    dropboxAccountId: account_id
                   },
                   function(error) {
                     if (error) {
@@ -2430,21 +2430,21 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
                           .replace('{0}', 'false')
                           .replace(
                             '{1}',
-                            '&error=Error in update business with new Dropbox token',
-                          ),
+                            '&error=Error in update business with new Dropbox token'
+                          )
                       });
                     }
                     log.debug(
                       '@Dropbox token saved successfully for business: ',
-                      businessId,
+                      businessId
                     );
                     return resolve({
                       code: 302,
                       returnUrl: returnUrl
                         .replace('{0}', 'true')
-                        .replace('{1}', '&desc=success'),
+                        .replace('{1}', '&desc=success')
                     });
-                  },
+                  }
                 );
               } else {
                 log.error(result);
@@ -2452,10 +2452,7 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
                   code: 302,
                   returnUrl: returnUrl
                     .replace('{0}', 'false')
-                    .replace(
-                      '{1}',
-                      '&error=invalid access token or account id',
-                    ),
+                    .replace('{1}', '&error=invalid access token or account id')
                 });
               }
             } catch (error) {
@@ -2464,10 +2461,10 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
                 code: 302,
                 returnUrl: returnUrl
                   .replace('{0}', 'false')
-                  .replace('{1}', '&error=' + error),
+                  .replace('{1}', '&error=' + error)
               });
             }
-          },
+          }
         );
       });
     });
@@ -2477,7 +2474,7 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
     businessId,
     mobile,
     moduleId,
-    duration,
+    duration
   ) {
     return Q.Promise(function(resolve, reject) {
       var Invoice = app.models.Invoice;
@@ -2492,7 +2489,7 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
           duration: duration,
           type: 'local',
           creationDate: new Date().getTime(),
-          issueDate: new Date(),
+          issueDate: new Date()
         },
         function(error, invoice) {
           if (error) {
@@ -2510,14 +2507,14 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
             config.PAYMENT_GATEWAY_DEFAULT_DESC,
             config.PAYMENT_SUPPORT_EMAIL,
             config.PAYMENT_SUPPORT_MOBILE,
-            returnUrl,
+            returnUrl
           )
             .then(function(response) {
               var url = response.url;
               var paymentId = response.paymentId;
               invoice
                 .updateAttributes({
-                  paymentId: paymentId,
+                  paymentId: paymentId
                 })
                 .then(
                   function() {
@@ -2526,19 +2523,19 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
                   function(error) {
                     log.error('invoice update error:', error);
                     return reject(error);
-                  },
+                  }
                 );
             })
             .fail(function(error) {
               utility.sendMessage(
                 'failed to open local payment gateway not found',
-                { error: error },
+                { error: error }
               );
               log.error('failed to open payment gateway');
               log.error(error);
               return reject(error);
             });
-        },
+        }
       );
     });
   };
@@ -2550,8 +2547,8 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
         where: { businessId: businessId },
         fields: {
           username: true,
-          id: true,
-        },
+          id: true
+        }
       },
       function(error, member) {
         if (error) {
@@ -2563,7 +2560,7 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
           return cb('member not found');
         }
         return cb(null, member);
-      },
+      }
     );
   };
 
@@ -2573,9 +2570,9 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
       {
         arg: 'businessId',
         type: 'string',
-        required: true,
-      },
+        required: true
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 };

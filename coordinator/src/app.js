@@ -7,7 +7,7 @@ require('date-utils');
 var redis = require('redis');
 var redisClient = redis.createClient(
   process.env.REDIS_PORT,
-  process.env.REDIS_HOST,
+  process.env.REDIS_HOST
 );
 var utility = require('./modules/utility');
 var authUtility = require('./modules/auth');
@@ -16,11 +16,11 @@ var log = logger.createLogger();
 var SYSTEM_ID_PATH = process.env.SYSTEM_ID_PATH;
 var redisLicenseRenew = redis.createClient(
   process.env.REDIS_PORT,
-  process.env.REDIS_IP,
+  process.env.REDIS_IP
 );
 var redisLicenseLoaded = redis.createClient(
   process.env.REDIS_PORT,
-  process.env.REDIS_IP,
+  process.env.REDIS_IP
 );
 
 const CONFIG_SERVER_LICENSE_TEMPLATE = [
@@ -39,7 +39,7 @@ const CONFIG_SERVER_LICENSE_TEMPLATE = [
   '{{&services}}',
   '{{&scripts}}',
   '{{&serial}}',
-  '=====HOTSPOTPLUS END LICENSE=====',
+  '=====HOTSPOTPLUS END LICENSE====='
 ].join('\n');
 
 const NodeRSA = require('node-rsa');
@@ -101,7 +101,7 @@ function validateLicense() {
               var lcData = lc.parse({
                 publicKeyPath: publicKeyPath,
                 licenseFilePath: licensePath,
-                template: CONFIG_SERVER_LICENSE_TEMPLATE,
+                template: CONFIG_SERVER_LICENSE_TEMPLATE
               });
               fs.unlink(publicKeyPath, () => {
                 log.debug('removed1');
@@ -142,7 +142,7 @@ function validateLicense() {
                               log.error(error);
                               return reject();
                             }
-                          },
+                          }
                         );
                       })(i);
                     }
@@ -158,7 +158,7 @@ function validateLicense() {
                         return reject();
                       }
                       var scripts = JSON.parse(
-                        publicKey.decryptPublic(lcData.data.scripts, 'utf8'),
+                        publicKey.decryptPublic(lcData.data.scripts, 'utf8')
                       );
                       var methods = scripts.scripts;
                       var methodNames = [];
@@ -174,7 +174,7 @@ function validateLicense() {
                               log.error(error);
                               return reject();
                             }
-                          },
+                          }
                         );
                       }
                       /*log.debug ( '#########' );
@@ -189,10 +189,10 @@ function validateLicense() {
                             log.error(error);
                             return reject();
                           }
-                        },
+                        }
                       );
                       return resolve(lcData);
-                    },
+                    }
                   );
                 }
               } else {
@@ -234,13 +234,13 @@ function renewLicense() {
         log.debug(
           config.LICENSE_LOGIN,
           systemUuid,
-          config.PASSWORD_PREFIX + utility.md5(systemUuid),
+          config.PASSWORD_PREFIX + utility.md5(systemUuid)
         );
         authUtility
           .loginToConfigServer(
             config.LICENSE_LOGIN,
             systemUuid,
-            config.PASSWORD_PREFIX + utility.md5(systemUuid),
+            config.PASSWORD_PREFIX + utility.md5(systemUuid)
           )
           .then(function(authResult) {
             var token = authResult.token;
@@ -249,11 +249,11 @@ function renewLicense() {
             needle.get(
               config.DOWNLOAD_LICENSE.replace('{token}', token).replace(
                 '{systemUuid}',
-                systemUuid,
+                systemUuid
               ),
               {
                 output: LC_PATH + '/license',
-                rejectUnauthorized: true,
+                rejectUnauthorized: true
               },
               function(error, resp, body) {
                 if (error) {
@@ -279,7 +279,7 @@ function renewLicense() {
                   log.warn('failed to renew license');
                   return resolve();
                 }
-              },
+              }
             );
           })
           .fail(function(error) {

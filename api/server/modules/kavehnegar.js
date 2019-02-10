@@ -10,7 +10,7 @@ module.exports.sendMessageToKavehnegar = function(
   token2,
   token3,
   token10,
-  template,
+  template
 ) {
   log.debug('@sendMessageToKavehnegar');
   var LOOKUP_SMS_PROVIDER =
@@ -42,7 +42,7 @@ module.exports.sendMessageToKavehnegar = function(
 module.exports.sendGroupMessageToKavehnegar = function(
   SMS_API_KEY,
   receptors,
-  message,
+  message
 ) {
   var GROUP_SMS_PROVIDER =
     'https://api.kavenegar.com/v1/' + SMS_API_KEY + '/sms/send.json';

@@ -23,7 +23,7 @@ module.exports = function(Sms) {
           return smsModule.sendGroupMessageToKavehnegar(
             SMS_API_KEY,
             receptor,
-            message,
+            message
           );
         } else {
           throw new Error(403, 'Lowe credit');
@@ -44,15 +44,15 @@ module.exports = function(Sms) {
       {
         arg: 'receptor',
         type: 'array',
-        required: true,
+        required: true
       },
       {
         arg: 'message',
         type: 'string',
-        required: true,
+        required: true
       },
-      { arg: 'options', type: 'object', http: 'optionsFromRequest' },
-    ],
+      { arg: 'options', type: 'object', http: 'optionsFromRequest' }
+    ]
   });
 
   Sms.sendMessages = function(
@@ -62,7 +62,7 @@ module.exports = function(Sms) {
     token3,
     token10,
     template,
-    ctx,
+    ctx
   ) {
     var currentLicenseId = ctx.currentUserId;
     log.debug(ctx);
@@ -81,7 +81,7 @@ module.exports = function(Sms) {
             token2,
             token3,
             token10,
-            template,
+            template
           );
         } else {
           throw new Error(403, 'Low credit');
@@ -102,39 +102,39 @@ module.exports = function(Sms) {
       {
         arg: 'receptor',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'token',
-        type: 'string',
+        type: 'string'
       },
       {
         arg: 'token2',
-        type: 'string',
+        type: 'string'
       },
       {
         arg: 'token3',
-        type: 'string',
+        type: 'string'
       },
       {
         arg: 'token10',
-        type: 'string',
+        type: 'string'
       },
       {
         arg: 'template',
         type: 'string',
-        required: true,
+        required: true
       },
-      { arg: 'options', type: 'object', http: 'optionsFromRequest' },
-    ],
+      { arg: 'options', type: 'object', http: 'optionsFromRequest' }
+    ]
   });
 
   Sms.getLicenseBalance = function(systemUuid) {
     var License = app.models.License;
     return License.findOne({
       where: {
-        systemUuid: systemUuid,
-      },
+        systemUuid: systemUuid
+      }
     })
       .then(function(license) {
         if (!license) {
@@ -147,7 +147,7 @@ module.exports = function(Sms) {
 
         if (license.modules.sms.smsApiKey) {
           return needle('post', config.KAVEHNEGAR_LOAD_CUSTOMER, {
-            apikey: license.modules.sms.smsApiKey,
+            apikey: license.modules.sms.smsApiKey
           }).then(function(response) {
             var body = response.body;
             if (
@@ -160,7 +160,7 @@ module.exports = function(Sms) {
               if (body.entries.remaincredit) {
                 //To Toman
                 body.entries.remaincredit = Math.round(
-                  body.entries.remaincredit / 10,
+                  body.entries.remaincredit / 10
                 );
               }
               return { balance: body.entries.remaincredit };
@@ -182,7 +182,7 @@ module.exports = function(Sms) {
   Sms.remoteMethod('getLicenseBalance', {
     description: 'load sms credit',
     accepts: [{ arg: 'systemUuid', type: 'string', required: true }],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Sms.buySmsCredit = function(systemUuid, localReturnUrl, price) {
@@ -190,8 +190,8 @@ module.exports = function(Sms) {
     var License = app.models.License;
     return License.findOne({
       where: {
-        systemUuid: systemUuid,
-      },
+        systemUuid: systemUuid
+      }
     })
       .then(function(license) {
         if (!license) {
@@ -200,14 +200,14 @@ module.exports = function(Sms) {
         log.error(price);
         var serviceInfo = {
           smsCharge: { amount: price },
-          localReturnUrl: localReturnUrl,
+          localReturnUrl: localReturnUrl
         };
         var priceInToman = Math.round(price / 10);
         return Invoice.issueInvoice(
           priceInToman,
           license.id,
           config.LOCAL_SMS_CHARGE_INVOICE_TYPE,
-          serviceInfo,
+          serviceInfo
         );
       })
       .catch(function(error) {
@@ -221,8 +221,8 @@ module.exports = function(Sms) {
     accepts: [
       { arg: 'systemUuid', type: 'string', required: true },
       { arg: 'returnUrl', type: 'string', required: true },
-      { arg: 'price', type: 'number', required: true },
+      { arg: 'price', type: 'number', required: true }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 };

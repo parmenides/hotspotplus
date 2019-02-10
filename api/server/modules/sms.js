@@ -41,7 +41,7 @@ exports.send = function(data) {
       if (!mobilesList.length || mobilesList.length === 0) {
         log.error(
           '@send message dismissed, empty message or mobile ',
-          mobilesList,
+          mobilesList
         );
         return resolve();
       }
@@ -85,7 +85,7 @@ exports.send = function(data) {
                     token3,
                     token10,
                     template,
-                    businessId,
+                    businessId
                   )
                     .then(function() {
                       return resolve();
@@ -107,7 +107,7 @@ exports.send = function(data) {
                           token3,
                           token10,
                           template,
-                          businessId,
+                          businessId
                         )
                           .then(function() {
                             return resolve();
@@ -175,7 +175,7 @@ function sendMessage(
   token3,
   token10,
   template,
-  businessId,
+  businessId
 ) {
   log.debug('@sendMessage');
   var Charge = app.models.Charge;
@@ -185,7 +185,7 @@ function sendMessage(
         if (!mobile) {
           log.error(
             '@SMS_Queue:send message dismissed, empty message or mobile ',
-            mobile,
+            mobile
           );
           return resolve();
         }
@@ -199,7 +199,7 @@ function sendMessage(
               token2,
               token3,
               token10,
-              template,
+              template
             )
             .then(function(cost) {
               log.debug('message cost in Toman:', cost);
@@ -208,7 +208,7 @@ function sendMessage(
                 type: 'smsCost',
                 amount: cost,
                 forThe: 'message',
-                date: new Date().getTime(),
+                date: new Date().getTime()
               })
                 .then(function() {
                   return resolve();
@@ -236,7 +236,7 @@ function sendMessage(
               data.template = template;
               log.debug(
                 'LICENSE_SERVER_SMS_API_URL: ',
-                LICENSE_SERVER_SMS_API_URL,
+                LICENSE_SERVER_SMS_API_URL
               );
               needle.post(
                 LICENSE_SERVER_SMS_API_URL.replace('{token}', authResult.token),
@@ -251,13 +251,13 @@ function sendMessage(
                       'Error code in LICENSE_SERVER_SMS_API: ',
                       result.statusCode,
                       ' Body: ',
-                      body,
+                      body
                     );
                     return reject(body);
                   }
                   log.debug(body);
                   return resolve(result);
-                },
+                }
               );
             })
             .fail(function(error) {
@@ -289,7 +289,7 @@ var sendGroupMessage = function(mobilesList, message, businessId) {
                 type: 'smsCost',
                 amount: cost,
                 forThe: 'bulkMessages:' + mobilesList.length,
-                date: new Date().getTime(),
+                date: new Date().getTime()
               });
               return resolve();
             })
@@ -306,7 +306,7 @@ var sendGroupMessage = function(mobilesList, message, businessId) {
               needle.post(
                 LICENSE_SERVER_GROUP_SMS_API_URL.replace(
                   '{token}',
-                  authResult.token,
+                  authResult.token
                 ),
                 data,
                 { json: true },
@@ -320,13 +320,13 @@ var sendGroupMessage = function(mobilesList, message, businessId) {
                       'Error code in LICENSE_SERVER_GROUP_SMS_API',
                       result.statusCode,
                       ' Body: ',
-                      body,
+                      body
                     );
                     return reject(body);
                   }
                   log.debug(body);
                   return resolve(result);
-                },
+                }
               );
             })
             .fail(function(error) {

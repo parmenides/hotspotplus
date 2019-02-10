@@ -13,7 +13,7 @@ module.exports.openPaymentGateway = function(
   desc,
   email,
   mobile,
-  returnUrl,
+  returnUrl
 ) {
   log.debug(returnUrl);
   return Q.Promise(function(resolve, reject) {
@@ -28,7 +28,7 @@ module.exports.openPaymentGateway = function(
         log.warn(response);
         return resolve({
           url: url,
-          paymentId: authority,
+          paymentId: authority
         });
       })
       .catch(function(error) {
@@ -43,7 +43,7 @@ module.exports.verifyPayment = function(api_key, paymentId, price) {
     gateway
       .verify({
         api: api_key,
-        transId: paymentId,
+        transId: paymentId
       })
       .then(function(response) {
         log.warn('////////////////////');

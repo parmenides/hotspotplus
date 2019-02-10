@@ -1,4 +1,4 @@
-const CONFIG_SERVER_URL = "https://lcapiv4.prohotspotplus.com/api";
+const CONFIG_SERVER_URL = 'https://lcapiv4.prohotspotplus.com/api';
 //var CONFIG_SERVER_URL = "http://lcapi.captiveportal.ir/api";
 //var CONFIG_SERVER_URL = 'http://hotspotpluslicensapi:3000/api';
 
@@ -12,5 +12,5 @@ module.exports = {
     '/Licenses/downloadLicense?systemUuid={systemUuid}&access_token={token}',
   PASSWORD_PREFIX: process.env.PASSWORD_PREFIX,
   PING_JOB_SCHEDULER: '*/15 * * * *',
-  SYSTEM_ID_PATH: process.env.SYSTEM_ID_PATH,
+  SYSTEM_ID_PATH: process.env.SYSTEM_ID_PATH
 };

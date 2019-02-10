@@ -19,7 +19,7 @@ var dataSource = {
     ':27017/' +
     process.env.MONGO_DB_NAME +
     '?w=1&j=true',
-  name: 'mongo',
+  name: 'mongo'
 };
 var MongoClient = require('mongodb').MongoClient;
 MongoClient.connect(
@@ -32,17 +32,17 @@ MongoClient.connect(
     }
     db.collection('ClientSession').createIndex(
       { expiresAt: 1 },
-      { expireAfterSeconds: 0 },
+      { expireAfterSeconds: 0 }
     );
     db.collection('NasSession').createIndex(
       { expiresAt: 1 },
-      { expireAfterSeconds: 0 },
+      { expireAfterSeconds: 0 }
     );
     db.collection('Member').createIndex(
       { expiresAt: 1 },
-      { expireAfterSeconds: 0 },
+      { expireAfterSeconds: 0 }
     );
-  },
+  }
 );
 app.dataSource('mongo', dataSource);
 
@@ -97,18 +97,18 @@ app.use(function(request, response, next) {
     if (statusCode >= 500) {
       var myError = 'Http Error ' + response.statusCode + ' ' + request.path;
       utility.sendMessage(myError, {
-        request: request.body,
+        request: request.body
       });
     } else if (statusCode == 403) {
       var myError =
         'Error UnAuthorized Access' + response.statusCode + ' ' + request.path;
       utility.sendMessage(myError, {
-        request: request.body,
+        request: request.body
       });
     } else if (statusCode >= 400) {
       var myError = 'Http Error ' + response.statusCode + ' ' + request.path;
       utility.sendMessage(myError, {
-        request: request.body,
+        request: request.body
       });
     }
   });

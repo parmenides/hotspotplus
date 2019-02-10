@@ -38,7 +38,7 @@ var partitionsNumber = process.env.NUM_PARTITIONS;
 var redis = require('redis');
 var redisClient = redis.createClient(
   process.env.REDIS_PORT,
-  process.env.REDIS_HOST,
+  process.env.REDIS_HOST
 );
 var self = this;
 

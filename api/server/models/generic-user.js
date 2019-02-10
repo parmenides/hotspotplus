@@ -27,19 +27,19 @@ module.exports = function(GenericUser) {
       }
       app.models.Role.findOne({ where: { name: roleName } }, function(
         error,
-        role,
+        role
       ) {
         if (error) {
           return reject(error);
         }
         if (!role) {
           return reject(
-            roleName + ' role not found, delete user and add it again',
+            roleName + ' role not found, delete user and add it again'
           );
         }
         var roleMapping = {
           principalType: app.models.RoleMapping.USER,
-          principalId: userId,
+          principalId: userId
         };
         role.principals.create(roleMapping, function(error, result) {
           if (error) {
@@ -58,7 +58,7 @@ module.exports = function(GenericUser) {
     oldPassword,
     newPassword,
     setClearTextPassword,
-    model,
+    model
   ) {
     return Q.Promise(function(resolve, reject) {
       model.findOne({ where: { id: userId } }, function(error, user) {
@@ -76,7 +76,7 @@ module.exports = function(GenericUser) {
             model.set_Profile_Password(
               userUpdates,
               newPassword,
-              setClearTextPassword,
+              setClearTextPassword
             );
             user.updateAttributes(userUpdates, function(error, result) {
               if (error) {
@@ -84,7 +84,7 @@ module.exports = function(GenericUser) {
               }
               return resolve(result);
             });
-          },
+          }
         );
       });
     });

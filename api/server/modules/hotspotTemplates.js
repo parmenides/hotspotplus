@@ -23,7 +23,7 @@ module.exports = {
       { label: 'roomNumber', active: false, required: false },
       { label: 'passportNumber', active: false, required: false },
       { label: 'studentGrade', active: false, required: false },
-      { label: 'studentId', active: false, required: false },
+      { label: 'studentId', active: false, required: false }
     ],
     formConfigEn: [
       { label: 'mobile', active: true, required: true },
@@ -41,13 +41,13 @@ module.exports = {
       { label: 'roomNumber', active: false, required: false },
       { label: 'passportNumber', active: false, required: false },
       { label: 'studentGrade', active: false, required: false },
-      { label: 'studentId', active: false, required: false },
+      { label: 'studentId', active: false, required: false }
     ],
     styles: [
       { title: 'پاییز', id: 'fall' },
       { title: 'فضا', id: 'space' },
-      { title: 'مزرعه', id: 'field' },
-    ],
+      { title: 'مزرعه', id: 'field' }
+    ]
   },
   restaurant: {
     id: 'restaurant',
@@ -66,7 +66,7 @@ module.exports = {
       { label: 'lastName', active: false, required: false },
       { label: 'fullName', active: false, required: false },
       { label: 'gender', active: false, required: false },
-      { label: 'nationalCode', active: false, required: false },
+      { label: 'nationalCode', active: false, required: false }
     ],
     formConfigEn: [
       { label: 'mobile', active: true, required: true },
@@ -80,15 +80,15 @@ module.exports = {
       { label: 'lastName', active: false, required: false },
       { label: 'fullName', active: false, required: false },
       { label: 'gender', active: false, required: false },
-      { label: 'nationalCode', active: false, required: false },
+      { label: 'nationalCode', active: false, required: false }
     ],
     styles: [
       { title: 'پاستا', id: 'pasta' },
       { title: 'پیتزا', id: 'pizza' },
       { title: 'پیتزا قارچ', id: 'mushroomPizza' },
       { title: 'فست‌فود', id: 'fastfood' },
-      { title: 'سنتی', id: 'traditional' },
-    ],
+      { title: 'سنتی', id: 'traditional' }
+    ]
   },
   cafe: {
     id: 'cafe',
@@ -107,7 +107,7 @@ module.exports = {
       { label: 'lastName', active: false, required: false },
       { label: 'fullName', active: false, required: false },
       { label: 'gender', active: false, required: false },
-      { label: 'nationalCode', active: false, required: false },
+      { label: 'nationalCode', active: false, required: false }
     ],
     formConfigEn: [
       { label: 'mobile', active: true, required: true },
@@ -121,7 +121,7 @@ module.exports = {
       { label: 'lastName', active: false, required: false },
       { label: 'fullName', active: false, required: false },
       { label: 'gender', active: false, required: false },
-      { label: 'nationalCode', active: false, required: false },
+      { label: 'nationalCode', active: false, required: false }
     ],
     styles: [
       { title: 'صبحانه', id: 'breakfast' },
@@ -130,8 +130,8 @@ module.exports = {
       { title: 'عصرانه', id: 'supper' },
       { title: 'فانوس', id: 'lantern' },
       { title: 'کروسان', id: 'croisan' },
-      { title: 'کافئین', id: 'caffeine' },
-    ],
+      { title: 'کافئین', id: 'caffeine' }
+    ]
   },
   hotel: {
     id: 'hotel',
@@ -152,7 +152,7 @@ module.exports = {
       { label: 'gender', active: false, required: false },
       { label: 'nationalCode', active: false, required: false },
       { label: 'roomNumber', active: false, required: false },
-      { label: 'passportNumber', active: false, required: false },
+      { label: 'passportNumber', active: false, required: false }
     ],
     formConfigEn: [
       { label: 'mobile', active: true, required: true },
@@ -168,7 +168,7 @@ module.exports = {
       { label: 'gender', active: false, required: false },
       { label: 'nationalCode', active: false, required: false },
       { label: 'roomNumber', active: false, required: false },
-      { label: 'passportNumber', active: false, required: false },
+      { label: 'passportNumber', active: false, required: false }
     ],
     styles: [
       { title: 'اتاق', id: 'room' },
@@ -179,8 +179,8 @@ module.exports = {
       { title: 'چمدان', id: 'luggage' },
       { title: 'کوهستان', id: 'mountains' },
       { title: 'پذیرش', id: 'reception' },
-      { title: 'تعطیلات', id: 'vacation' },
-    ],
+      { title: 'تعطیلات', id: 'vacation' }
+    ]
   },
   university: {
     id: 'university',
@@ -201,7 +201,7 @@ module.exports = {
       { label: 'gender', active: false, required: false },
       { label: 'nationalCode', active: false, required: false },
       { label: 'studentGrade', active: false, required: false },
-      { label: 'studentId', active: false, required: false },
+      { label: 'studentId', active: false, required: false }
     ],
     formConfigEn: [
       { label: 'mobile', active: true, required: true },
@@ -217,7 +217,7 @@ module.exports = {
       { label: 'gender', active: false, required: false },
       { label: 'nationalCode', active: false, required: false },
       { label: 'studentGrade', active: false, required: false },
-      { label: 'studentId', active: false, required: false },
+      { label: 'studentId', active: false, required: false }
     ],
     styles: [
       { title: 'کتابخانه', id: 'library' },
@@ -226,8 +226,8 @@ module.exports = {
       { title: 'روباه', id: 'fox' },
       { title: 'یادداشت‌ها', id: 'notes' },
       { title: 'فارغ‌التحصیلی', id: 'graduation' },
-      { title: 'مطالعه', id: 'study' },
-    ],
+      { title: 'مطالعه', id: 'study' }
+    ]
   },
   market: {
     id: 'market',
@@ -246,7 +246,7 @@ module.exports = {
       { label: 'lastName', active: false, required: false },
       { label: 'fullName', active: false, required: false },
       { label: 'gender', active: false, required: false },
-      { label: 'nationalCode', active: false, required: false },
+      { label: 'nationalCode', active: false, required: false }
     ],
     formConfigEn: [
       { label: 'mobile', active: true, required: true },
@@ -260,7 +260,7 @@ module.exports = {
       { label: 'lastName', active: false, required: false },
       { label: 'fullName', active: false, required: false },
       { label: 'gender', active: false, required: false },
-      { label: 'nationalCode', active: false, required: false },
+      { label: 'nationalCode', active: false, required: false }
     ],
     styles: [
       { title: 'کوچه', id: 'alley' },
@@ -269,7 +269,7 @@ module.exports = {
       { title: 'سبد میوه', id: 'fruitBasket' },
       { title: 'سایز', id: 'size' },
       { title: 'توت‌فرنگی‌ها', id: 'strawberries' },
-      { title: 'سبزیجات', id: 'veggies' },
-    ],
-  },
+      { title: 'سبزیجات', id: 'veggies' }
+    ]
+  }
 };

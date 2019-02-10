@@ -27,7 +27,7 @@ module.exports = function(Ticket) {
         log.debug(ticket.messages);
         ticket.updateAttributes({ messages: messages }, function(
           error,
-          result,
+          result
         ) {
           if (error) {
             log.error(error);
@@ -48,7 +48,7 @@ module.exports = function(Ticket) {
             smsModule.send({
               token1: ticketCode,
               mobile: mobile,
-              template: messageTemplate,
+              template: messageTemplate
             });
           });
           return resolve(result);
@@ -61,14 +61,14 @@ module.exports = function(Ticket) {
       {
         arg: 'ticketId',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'message',
         type: 'object',
-        required: true,
-      },
+        required: true
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 };

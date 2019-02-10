@@ -7,7 +7,7 @@ var templatesPath = path.join(__dirname, '/../../templates/');
 var setup_script_path = path.join(__dirname, '/routers/mikrotik/');
 var mikrotik_hotspot_script_path = path.join(
   __dirname,
-  '/routers/mikrotik/html',
+  '/routers/mikrotik/html'
 );
 var elasticURL =
   'http://' + process.env.ELASTIC_IP + ':' + process.env.ELASTIC_PORT;
@@ -44,11 +44,11 @@ module.exports = {
   NOTIFY_CUSTOMER_TEMPLATE: 'ticketAnswered',
   BUSINESS_EMAIL_DOMAIN: '@' + process.env.BUSINESS_EMAIL_DOMAIN,
   ROUTER: {
-    ROUTER_CONFIG: 'templates/router_config.lua',
+    ROUTER_CONFIG: 'templates/router_config.lua'
   },
   STORAGES: {
     MONGODB: 'mongodb',
-    ELASTICSEARCH: 'elasticsearch',
+    ELASTICSEARCH: 'elasticsearch'
   },
   DEFAULT_LICENSE_DURATION_IN_DAYS: 365 * 2,
   DEFAULT_ONLINE_USER: 120,
@@ -100,7 +100,7 @@ module.exports = {
     ADMIN_ROLES: ['admin'],
     SERVICE_MAN_ROLES: ['serviceMan'],
     SERVICE_MAN_USERNAME: process.env.SERVICE_MAN_USERNAME,
-    SERVICE_MAN_PASSWORD: process.env.SERVICE_MAN_PASSWORD,
+    SERVICE_MAN_PASSWORD: process.env.SERVICE_MAN_PASSWORD
   },
   ROLES: {
     BUSINESS: 'business',
@@ -112,7 +112,7 @@ module.exports = {
     SERVICEMAN: 'serviceMan',
     CUSTOMER: 'customer',
     SERVICEPROVIDER: 'serviceProvider',
-    HOTSPOTMEMBER: 'member',
+    HOTSPOTMEMBER: 'member'
   },
   LC_PATH: process.env.LC_PATH,
   CONFIG_SERVER_LOGIN: CONFIG_SERVER_URL + '/Licenses/login',
@@ -135,17 +135,17 @@ module.exports = {
     webAppAddress: '',
     apiProtocol: 'http',
     serviceStatus: 'local',
-    numberOfAllowedBusiness: 1,
+    numberOfAllowedBusiness: 1
   },
   LOG: {
     appName: 'PinFi',
-    LOG_DIR: process.env.LOG_DIR,
+    LOG_DIR: process.env.LOG_DIR
   },
   REDIS: {
     HOST: process.env.REDIS_IP,
     PORT: process.env.REDIS_PORT,
     PASS: null,
-    OPTIONS: {},
+    OPTIONS: {}
   },
   ACCOUNTING_TOPIC: 'accountingTopic',
   SESSION_TOPIC: 'sessionTopic',
@@ -175,7 +175,7 @@ module.exports = {
     YEAR_LEAP_MILLISECONDS:
       6 * 31 * 24 * 60 * 60 * 1000 + 6 * 30 * 24 * 60 * 60 * 1000,
     WEEK_DAYS: 7,
-    MONTH_DAYS: 30,
+    MONTH_DAYS: 30
   },
   NAS_SESSION_EXPIRES_AT: process.env.NAS_SESSION_EXPIRES_AT,
 
@@ -228,37 +228,37 @@ module.exports = {
     MIKROTIK_HOTSPOT_PAGES: [
       {
         path: mikrotik_hotspot_script_path + '/alogin.html',
-        name: 'alogin.html',
+        name: 'alogin.html'
       },
       {
         path: mikrotik_hotspot_script_path + '/fstatus.html',
-        name: 'fstatus.html',
+        name: 'fstatus.html'
       },
       {
         path: mikrotik_hotspot_script_path + '/login.html',
-        name: 'login.html',
+        name: 'login.html'
       },
       {
         path: mikrotik_hotspot_script_path + '/logout.html',
-        name: 'logout.html',
+        name: 'logout.html'
       },
       {
         path: mikrotik_hotspot_script_path + '/redirect.html',
-        name: 'redirect.html',
+        name: 'redirect.html'
       },
       {
         path: mikrotik_hotspot_script_path + '/rlogin.html',
-        name: 'rlogin.html',
+        name: 'rlogin.html'
       },
       {
         path: mikrotik_hotspot_script_path + '/rstatus.html',
-        name: 'rstatus.html',
+        name: 'rstatus.html'
       },
       {
         path: mikrotik_hotspot_script_path + '/status.html',
-        name: 'status.html',
-      },
-    ],
+        name: 'status.html'
+      }
+    ]
   },
   RADIUS_IP: process.env.RADIUS_IP,
   SECOND_RADIUS_IP: process.env.SECOND_RADIUS_IP,
@@ -267,7 +267,7 @@ module.exports = {
   ROUTER_TYPE: {
     MIKROTIK: 'mikrotik',
     COOVACHILLI: 'coovachilli',
-    ENGENIUS: 'engenius',
+    ENGENIUS: 'engenius'
   },
   MIN_WALKBY_TIME_DEFAULT: 3, // MINUTES
   MAX_WALKBY_TIME_DEFAULT: 6, // MINUTES
@@ -279,7 +279,7 @@ module.exports = {
     offset: 4.5,
     isdst: true,
     text: '(UTC+03:30) Tehran',
-    utc: ['Asia/Tehran'],
+    utc: ['Asia/Tehran']
   },
   ACCOUNTING_DC_THRESHHOLD: 100000000,
   DEFAULT_MEMBER_SESSION_EXPIRE_IN_SECONDS:
@@ -301,8 +301,8 @@ module.exports = {
       showTelegram: false,
       showInstagram: false,
       verificationMethod: 'mobile',
-      formConfig: hotspotTemplates['alpha'].formConfig,
-    },
+      formConfig: hotspotTemplates['alpha'].formConfig
+    }
   },
   HOTEL_THEME_ID: 'hotel',
   PREVIOUS_HOTEL_THEME_ID: 'hotelTheme',
@@ -321,18 +321,18 @@ module.exports = {
         discount: 0,
         durationInDays: 15,
         service: {
-          allowedOnlineUsers: 120,
+          allowedOnlineUsers: 120
         },
         modules: {
           sms: {
             id: 'sms',
-            title: 'ماژول پیامک',
+            title: 'ماژول پیامک'
           },
           log: {
             id: 'log',
-            title: 'ثبت لاگ وب سایت و آی پی',
-          },
-        },
+            title: 'ثبت لاگ وب سایت و آی پی'
+          }
+        }
       },
       {
         id: 'economic',
@@ -354,8 +354,8 @@ module.exports = {
             { title: ' کابر آنلاین همزمان، ۱۲۰ کلاینت' },
             { title: 'اتصال به درگاه پرداخت مستقل' },
             { title: 'پنل مستقل کاربران' },
-            { title: 'پشتیبانی از طریق تیکت' },
-          ],
+            { title: 'پشتیبانی از طریق تیکت' }
+          ]
         },
         modules: {
           sms: {
@@ -363,21 +363,21 @@ module.exports = {
             features: [
               { title: 'ارسال پیامک تایید هویت' },
               { title: 'ارسال پیامک انبوه به کاربران' },
-              { title: 'هزینه هر یک پیامک ۱۳ تومان' },
-            ],
+              { title: 'هزینه هر یک پیامک ۱۳ تومان' }
+            ]
           },
           log: {
             title: 'ثبت لاگ وب سایت و آی پی',
             features: [
               { title: 'ثبت لاگ بر اساس آی پی و پورت' },
-              { title: 'ثبت لاگ بازدید وب سایت' },
-            ],
+              { title: 'ثبت لاگ بازدید وب سایت' }
+            ]
           },
           support: {
             title: 'پشتیبانی',
-            features: [{ title: 'پشتیبانی از طریق تیکت' }],
-          },
-        },
+            features: [{ title: 'پشتیبانی از طریق تیکت' }]
+          }
+        }
       },
       {
         id: 'economic12',
@@ -398,8 +398,8 @@ module.exports = {
             { title: ' کابر آنلاین همزمان، ۱۲۰ کلاینت' },
             { title: 'اتصال به درگاه پرداخت مستقل' },
             { title: 'پنل مستقل کاربران' },
-            { title: 'پشتیبانی از طریق تیکت' },
-          ],
+            { title: 'پشتیبانی از طریق تیکت' }
+          ]
         },
         modules: {
           sms: {
@@ -407,22 +407,22 @@ module.exports = {
             features: [
               { title: 'ارسال پیامک تایید هویت' },
               { title: 'ارسال پیامک انبوه به کاربران' },
-              { title: 'هزینه هر یک پیامک ۱۳ تومان' },
-            ],
+              { title: 'هزینه هر یک پیامک ۱۳ تومان' }
+            ]
           },
           log: {
             title: 'ثبت لاگ وب سایت و آی پی',
             features: [
               { title: 'ثبت لاگ بر اساس آی پی و پورت' },
-              { title: 'ثبت لاگ بازدید وب سایت' },
-            ],
+              { title: 'ثبت لاگ بازدید وب سایت' }
+            ]
           },
           support: {
             title: 'پشتیبانی',
-            features: [{ title: 'پشتیبانی از طریق تیکت' }],
-          },
-        },
-      },
+            features: [{ title: 'پشتیبانی از طریق تیکت' }]
+          }
+        }
+      }
     ],
     features: [
       {
@@ -431,7 +431,7 @@ module.exports = {
         type: 'number',
         monthly: 120,
         semiAnnually: 120,
-        annually: 120,
+        annually: 120
       },
       {
         title: 'تعداد کاربران قابل ثبت',
@@ -439,7 +439,7 @@ module.exports = {
         monthly: 'نامحدود',
         semiAnnually: 'نامحدود',
         annually: 'نامحدود',
-        type: 'string',
+        type: 'string'
       },
       {
         title: 'تعداد لاگ آی پی قابل ثبت',
@@ -447,7 +447,7 @@ module.exports = {
         monthly: 'نامحدود',
         semiAnnually: 'نامحدود',
         annually: 'نامحدود',
-        type: 'string',
+        type: 'string'
       },
       {
         title: 'قیمت هر پیامک',
@@ -455,7 +455,7 @@ module.exports = {
         monthly: 13,
         semiAnnually: 13,
         type: 'price',
-        desc: '',
+        desc: ''
       },
 
       {
@@ -464,7 +464,7 @@ module.exports = {
         monthly: true,
         semiAnnually: true,
         type: 'boolean',
-        desc: 'با ارسال تیکت‌ میتوانید از کمک کارشناسان فنی ما بهره‌مند شوید',
+        desc: 'با ارسال تیکت‌ میتوانید از کمک کارشناسان فنی ما بهره‌مند شوید'
       },
       {
         title: 'مدیریت مصرف اینترنت',
@@ -473,7 +473,7 @@ module.exports = {
         type: 'boolean',
         monthly: true,
         semiAnnually: true,
-        annually: true,
+        annually: true
       },
       {
         title: 'پنل مستقل برای ورود کاربران',
@@ -482,7 +482,7 @@ module.exports = {
         semiAnnually: true,
         type: 'boolean',
         desc:
-          'کاربران میتوانند با نام کاربری و رمز عبور خود به پنل لاگین کنند و میزان مصرف خود را مشاهده کنند.',
+          'کاربران میتوانند با نام کاربری و رمز عبور خود به پنل لاگین کنند و میزان مصرف خود را مشاهده کنند.'
       },
       {
         title: 'تغییر لوگو و فرم عضویت در صفحات هات‌اسپات',
@@ -491,7 +491,7 @@ module.exports = {
         monthly: true,
         semiAnnually: true,
         annually: true,
-        type: 'boolean',
+        type: 'boolean'
       },
       {
         title: 'تایید هویت کاربر هات‌اسپات با پیامک و بدون فیلتر شدن',
@@ -500,7 +500,7 @@ module.exports = {
         monthly: true,
         semiAnnually: true,
         annually: true,
-        type: 'boolean',
+        type: 'boolean'
       },
       {
         title: 'تایید هویت کاربر هات‌اسپات با تماس تلفنی خودکار',
@@ -508,7 +508,7 @@ module.exports = {
         monthly: true,
         semiAnnually: true,
         annually: true,
-        type: 'boolean',
+        type: 'boolean'
       },
       {
         title: 'دانلود شماره موبایل‌های مشتریان و ارسال پیامک تبلیغاتی',
@@ -517,7 +517,7 @@ module.exports = {
         annually: true,
         type: 'boolean',
         desc:
-          'با استفاده از این امکان می‌توانید پروفایل مشتریان را دانلود کنید یا برای آنها پیامک‌های تبلیغاتی ارسال کنید.',
+          'با استفاده از این امکان می‌توانید پروفایل مشتریان را دانلود کنید یا برای آنها پیامک‌های تبلیغاتی ارسال کنید.'
       },
       {
         title: 'متن انتهای پیامک',
@@ -526,9 +526,9 @@ module.exports = {
         annually: true,
         type: 'boolean',
         desc:
-          'با استفاده از این امکان میتوانید متن انتهای پیامک (از طرف...) را به نام مورد نظر خودتان تغییر دهید.',
-      },
-    ],
+          'با استفاده از این امکان میتوانید متن انتهای پیامک (از طرف...) را به نام مورد نظر خودتان تغییر دهید.'
+      }
+    ]
   },
   RESELLERS_TARIFFS: [
     { from: 0, to: 1, free: 0, silver: 30000, gold: 50000, whiteLabel: 10000 },
@@ -539,8 +539,8 @@ module.exports = {
       free: 0,
       silver: 20000,
       gold: 30000,
-      whiteLabel: 10000,
-    },
+      whiteLabel: 10000
+    }
   ],
   DEFAULT_HOTSPOT_HELP:
     'برای اتصال به اینترنت، به شبکه وای فای متصل شوید. سپس با مرورگر کروم به سایت wifi.ir وارد شوید. پس از باز شدن صفحه با نام کاربری و رمز زیر به هات اسپات لاگین کنید.',
@@ -723,5 +723,5 @@ module.exports = {
   DROPBOX_APP_SECRET: function() {
     return process.env.DROPBOX_APP_SECRET;
   },
-  LOG_WORKER_QUEUE: 'LOG_WORKER_QUEUE',
+  LOG_WORKER_QUEUE: 'LOG_WORKER_QUEUE'
 };

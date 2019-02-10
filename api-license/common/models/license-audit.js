@@ -12,7 +12,7 @@ module.exports = function(Licenseaudit) {
           licenseId: licenseId,
           ip: ip,
           creationDateStr: new Date(),
-          creationDate: new Date().getTime(),
+          creationDate: new Date().getTime()
         }).then(function() {
           return { ok: true };
         });
@@ -28,8 +28,8 @@ module.exports = function(Licenseaudit) {
     accepts: [
       { arg: 'systemUuid', type: 'string', required: true },
       { arg: 'ip', type: 'string', required: true },
-      { arg: 'options', type: 'object', http: 'optionsFromRequest' },
+      { arg: 'options', type: 'object', http: 'optionsFromRequest' }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 };

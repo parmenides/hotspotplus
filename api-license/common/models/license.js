@@ -45,7 +45,7 @@ module.exports = function(License) {
     externalApiAddress,
     hotspotAddress,
     dropBoxAppKey,
-    dropBoxAppSecret,
+    dropBoxAppSecret
   ) {
     log.debug('@registerNewLicense');
     var systemUuid = License.createSystemUuid();
@@ -61,12 +61,12 @@ module.exports = function(License) {
       externalApiAddress,
       hotspotAddress,
       dropBoxAppKey,
-      dropBoxAppSecret,
+      dropBoxAppSecret
     ).then(function(license) {
       return {
         ok: true,
         licenseId: license.id,
-        systemUuid: license.systemUuid,
+        systemUuid: license.systemUuid
       };
     });
   };
@@ -77,59 +77,59 @@ module.exports = function(License) {
       {
         arg: 'mobile',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'fullName',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'title',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'serviceStatus',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'numberOfAllowedBusiness',
         type: 'number',
-        required: true,
+        required: true
       },
       {
         arg: 'apiProtocol',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'webAppAddress',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'externalApiAddress',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'hotspotAddress',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'dropBoxAppKey',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'dropBoxAppSecret',
         type: 'string',
-        required: true,
-      },
-    ],
+        required: true
+      }
+    ]
   });
 
   License.registerPublicLicense = function(mobile, fullName, title) {
@@ -145,7 +145,7 @@ module.exports = function(License) {
       null,
       null,
       '',
-      '',
+      ''
     )
       .then(function(result) {
         return result.licenseId;
@@ -156,7 +156,7 @@ module.exports = function(License) {
           licenseId,
           freePackage.duration,
           freePackage.title,
-          freePackage.service.allowedOnlineUsers,
+          freePackage.service.allowedOnlineUsers
         )
           .then(function(result) {
             return result;
@@ -164,13 +164,13 @@ module.exports = function(License) {
           .then(function(result) {
             if (config.DEFAULT_FREE_LOG_PACKAGE) {
               var freeLogModule = License.getPackageById(
-                config.DEFAULT_FREE_LOG_PACKAGE,
+                config.DEFAULT_FREE_LOG_PACKAGE
               );
               return License.assignLogModule(
                 licenseId,
                 freeLogModule.duration,
                 freeLogModule.title,
-                new Date(),
+                new Date()
               );
             } else {
               return result;
@@ -179,14 +179,14 @@ module.exports = function(License) {
           .then(function(result) {
             if (config.DEFAULT_FREE_SMS_PACKAGE) {
               var freeSmsModule = License.getPackageById(
-                config.DEFAULT_FREE_SMS_PACKAGE,
+                config.DEFAULT_FREE_SMS_PACKAGE
               );
               return License.assignSmsModule(
                 licenseId,
                 freeSmsModule.duration,
                 freeSmsModule.title,
                 null,
-                new Date(),
+                new Date()
               );
             } else {
               return result;
@@ -215,19 +215,19 @@ module.exports = function(License) {
       {
         arg: 'mobile',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'fullName',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'title',
         type: 'string',
-        required: true,
-      },
-    ],
+        required: true
+      }
+    ]
   });
 
   License.verifyLicense = function(licenseFilePath) {
@@ -237,7 +237,7 @@ module.exports = function(License) {
       var parsedLicense = licenseFile.parse({
         publicKeyPath: PUBLIC_KEY_PATH,
         licenseFilePath: licenseFilePath,
-        template: licenseTemplate,
+        template: licenseTemplate
       });
       if (!parsedLicense.valid) {
         log.error('invalid license!', parsedLicense);
@@ -275,7 +275,7 @@ module.exports = function(License) {
       disableSignup: options.disableSignup || false,
       sentryUrl: process.env.SENTRY_URL,
       enableSentry: process.env.ENABLE_SENTRY,
-      sentryReleaseToken: process.env.SENTRY_RELEASE_TOKEN,
+      sentryReleaseToken: process.env.SENTRY_RELEASE_TOKEN
     };
   };
 
@@ -291,7 +291,7 @@ module.exports = function(License) {
     externalApiAddress,
     hotspotAddress,
     dropBoxAppKey,
-    dropBoxAppSecret,
+    dropBoxAppSecret
   ) {
     log.debug('#createNewLicense');
     var Role = app.models.Role;
@@ -320,16 +320,16 @@ module.exports = function(License) {
         serviceStatus: serviceStatus,
         apiProtocol: apiProtocol,
         expiresAt: expiresAt.toLocaleString('fa-IR', {
-          timeZone: 'Asia/Tehran',
+          timeZone: 'Asia/Tehran'
         }),
         creationDate: new Date().toLocaleString('fa-IR', {
-          timeZone: 'Asia/Tehran',
+          timeZone: 'Asia/Tehran'
         }),
         mobile: mobile,
         fullName: fullName,
         title: title,
         modules: {},
-        services: {},
+        services: {}
       };
       License.create(license, function(error, createdLicense) {
         if (error) {
@@ -344,7 +344,7 @@ module.exports = function(License) {
                   createdLicense.id,
                   config.DEFAULT_LICENSE_DURATION_IN_MONTHS,
                   'Accounting Module',
-                  config.DEFAULT_ONLINE_USER,
+                  config.DEFAULT_ONLINE_USER
                 )
                   .then(function() {
                     Role.findOne(
@@ -355,7 +355,7 @@ module.exports = function(License) {
                             'failed to load ' +
                               config.ROLES.LICENSE_ROLE +
                               ' for role assignment',
-                            error,
+                            error
                           );
                           return reject();
                         }
@@ -365,11 +365,11 @@ module.exports = function(License) {
                         }
                         var roleMapping = {
                           principalType: 'USER',
-                          principalId: createdLicense.id,
+                          principalId: createdLicense.id
                         };
                         role.principals.create(roleMapping, function(
                           error,
-                          result,
+                          result
                         ) {
                           if (error) {
                             log.error('failed to assign role to sp', error);
@@ -377,7 +377,7 @@ module.exports = function(License) {
                           log.debug('principal assigned ', result);
                           return resolve(createdLicense);
                         });
-                      },
+                      }
                     );
                   })
                   .fail(function(error) {
@@ -411,7 +411,7 @@ module.exports = function(License) {
           var licenseContent = result.content;
           var encryptedLicense = privateKey.encryptPrivate(
             licenseContent,
-            'base64',
+            'base64'
           );
           if (result.active === true) {
             return cb(null, encryptedLicense, 'application/octet-stream');
@@ -436,10 +436,10 @@ module.exports = function(License) {
       {
         arg: 'systemUuid',
         type: 'string',
-        required: true,
+        required: true
       },
-      { arg: 'options', type: 'object', http: 'optionsFromRequest' },
-    ],
+      { arg: 'options', type: 'object', http: 'optionsFromRequest' }
+    ]
   });
 
   License.createLicenseFile = function(licenseId) {
@@ -462,7 +462,7 @@ module.exports = function(License) {
           expiresAt: license.expiresAt,
           issueDate: new Date().getTime(),
           modules: JSON.stringify(license.modules),
-          services: JSON.stringify(license.services),
+          services: JSON.stringify(license.services)
         };
 
         licenseData.loadedAt = new Date();
@@ -479,19 +479,19 @@ module.exports = function(License) {
             oneTimeLicense: license.services.oneTimeLicense,
             disableSignup: license.services.disableSignup,
             dropBoxAppKey: license.dropBoxAppKey,
-            dropBoxAppSecret: license.dropBoxAppSecret,
-          }),
+            dropBoxAppSecret: license.dropBoxAppSecret
+          })
         );
         log.debug(licenseData.systemConfig);
         licenseData.scripts = privateKey.encryptPrivate(
           License.getAllLicenseScripts(),
-          'base64',
+          'base64'
         );
         var licenseTemplate = config.LICENSE_TEMPLATE;
         var licenseFileContent = licenseFile.generate({
           privateKeyPath: PRIVATE_KEY_PATH,
           template: licenseTemplate,
-          data: licenseData,
+          data: licenseData
         });
         utility
           .writeStringToFile(licenseFileContent)
@@ -501,7 +501,7 @@ module.exports = function(License) {
                 return resolve({
                   path: licenseFilePath,
                   content: licenseFileContent,
-                  active: license.active,
+                  active: license.active
                 });
               })
               .fail(function(error) {
@@ -546,13 +546,13 @@ module.exports = function(License) {
           fullname: title + '/' + license.fullName,
           password: licenseId,
           planid: config.KAVEHNEGAR_SMS_PLAN_ID,
-          status: config.KAVEHNEGAR_PANEL_DEFAULT_STATUS,
+          status: config.KAVEHNEGAR_PANEL_DEFAULT_STATUS
         };
         log.debug('Sms Customer', smsPanelCustomer);
         needle.post(config.KAVEHNEGAR_ADD_CUSTOMER, smsPanelCustomer, function(
           error,
           response,
-          body,
+          body
         ) {
           if (error) {
             log.error(error);
@@ -574,7 +574,7 @@ module.exports = function(License) {
                   return reject(body);
                 }
                 return resolve(body.entries.apikey);
-              },
+              }
             );
           }
         });
@@ -586,9 +586,9 @@ module.exports = function(License) {
     description: 'load sms credit',
     accepts: [
       { arg: 'licenseId', type: 'string', required: true },
-      { arg: 'forceUpdate', type: 'boolean' },
+      { arg: 'forceUpdate', type: 'boolean' }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   License.addLicenseLocalCharge = function(chargeInToman, licenseId) {
@@ -597,7 +597,7 @@ module.exports = function(License) {
       type: config.LICENSE_TYPE_CHARGE,
       licenseId: licenseId,
       date: new Date().getTime(),
-      timestamp: new Date().getTime(),
+      timestamp: new Date().getTime()
     };
     return needle('post', config.ELASTIC_LICENSE_CHARGE, charge, { json: true })
       .then(function(result) {
@@ -616,21 +616,21 @@ module.exports = function(License) {
 
   License.remoteMethod('getPackages', {
     accepts: [],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   License.buyLocalPackage = function(
     systemUuid,
     localReturnUrl,
     packageId,
-    discountCoupon,
+    discountCoupon
   ) {
     return Q.Promise(function(resolve, reject) {
       var Invoice = app.models.Invoice;
       License.findOne({
         where: {
-          systemUuid: systemUuid,
-        },
+          systemUuid: systemUuid
+        }
       })
         .then(function(license) {
           if (!license) {
@@ -650,14 +650,14 @@ module.exports = function(License) {
           }
           var serviceInfo = {
             selectedPackage: selectedPackage,
-            localReturnUrl: localReturnUrl,
+            localReturnUrl: localReturnUrl
           };
           Invoice.issueInvoice(
             selectedPackage.price,
             license.id,
             config.LOCAL_PKG_INVOICE_TYPE,
             serviceInfo,
-            discountCoupon,
+            discountCoupon
           )
             .then(function(result) {
               return resolve(result);
@@ -680,9 +680,9 @@ module.exports = function(License) {
       { arg: 'systemUuid', type: 'string', required: true },
       { arg: 'returnUrl', type: 'string', required: true },
       { arg: 'packageId', type: 'string', required: true },
-      { arg: 'discount', type: 'object' },
+      { arg: 'discount', type: 'object' }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   License.verifyInvoice = function(invoiceId, httpResponse) {
@@ -716,7 +716,7 @@ module.exports = function(License) {
                 {
                   payed: true,
                   paymentRefId: refId,
-                  paymentDate: new Date().getTime(),
+                  paymentDate: new Date().getTime()
                 },
                 function(error) {
                   if (error) {
@@ -728,7 +728,7 @@ module.exports = function(License) {
                       return httpResponse.redirect(
                         invoice.serviceInfo.localReturnUrl
                           .replace('{0}', true)
-                          .replace('{1}', 'success'),
+                          .replace('{1}', 'success')
                       );
                     })
                     .fail(function(error) {
@@ -736,16 +736,16 @@ module.exports = function(License) {
                       return httpResponse.redirect(
                         invoice.serviceInfo.localReturnUrl
                           .replace('{0}', false)
-                          .replace('{1}', 'license_update_failed'),
+                          .replace('{1}', 'license_update_failed')
                       );
                     });
-                },
+                }
               );
             } else {
               return httpResponse.redirect(
                 invoice.serviceInfo.localReturnUrl
                   .replace('{0}', false)
-                  .replace('{1}', 'not_payed'),
+                  .replace('{1}', 'not_payed')
               );
             }
           })
@@ -754,7 +754,7 @@ module.exports = function(License) {
             return httpResponse.redirect(
               invoice.serviceInfo.localReturnUrl
                 .replace('{0}', false)
-                .replace('{1}', 'verification_failed'),
+                .replace('{1}', 'verification_failed')
             );
           });
       });
@@ -770,10 +770,10 @@ module.exports = function(License) {
         type: 'object',
         http: function(ctx) {
           return ctx.res;
-        },
-      },
+        }
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   License.processInvoice = function(licenseId, serviceInfo) {
@@ -796,8 +796,8 @@ module.exports = function(License) {
               License.assignSmsModule(
                 license.id,
                 selectedPackage.duration,
-                selectedPackage.modules.sms.title,
-              ),
+                selectedPackage.modules.sms.title
+              )
             );
           }
           if (
@@ -809,8 +809,8 @@ module.exports = function(License) {
               License.assignLogModule(
                 license.id,
                 selectedPackage.duration,
-                selectedPackage.modules.log.title,
-              ),
+                selectedPackage.modules.log.title
+              )
             );
           }
           if (
@@ -823,16 +823,13 @@ module.exports = function(License) {
                 license.id,
                 selectedPackage.duration,
                 selectedPackage.service.title,
-                selectedPackage.service.allowedOnlineUsers,
-              ),
+                selectedPackage.service.allowedOnlineUsers
+              )
             );
           }
           if (serviceInfo.smsCharge && serviceInfo.smsCharge.amount) {
             updateTasks.push(
-              License.addLicenseCharge(
-                license.id,
-                serviceInfo.smsCharge.amount,
-              ),
+              License.addLicenseCharge(license.id, serviceInfo.smsCharge.amount)
             );
           }
 
@@ -857,7 +854,7 @@ module.exports = function(License) {
     duration,
     title,
     smsApiKey,
-    subscriptionDate,
+    subscriptionDate
   ) {
     return Q.Promise(function(resolve, reject) {
       if (!licenseId) {
@@ -891,7 +888,7 @@ module.exports = function(License) {
           return resolve({
             ok: true,
             assign: true,
-            systemUuid: license.systemUuid,
+            systemUuid: license.systemUuid
           });
         });
       });
@@ -905,16 +902,16 @@ module.exports = function(License) {
       { arg: 'duration', type: 'number', required: true },
       { arg: 'title', type: 'string' },
       { arg: 'smsApiKey', type: 'string' },
-      { arg: 'subscriptionDate', type: 'number' },
+      { arg: 'subscriptionDate', type: 'number' }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   License.assignLogModule = function(
     licenseId,
     duration,
     title,
-    subscriptionDate,
+    subscriptionDate
   ) {
     return Q.Promise(function(resolve, reject) {
       if (!licenseId) {
@@ -947,7 +944,7 @@ module.exports = function(License) {
           return resolve({
             ok: true,
             assign: true,
-            systemUuid: license.systemUuid,
+            systemUuid: license.systemUuid
           });
         });
       });
@@ -960,9 +957,9 @@ module.exports = function(License) {
       { arg: 'licenseId', type: 'string', required: true },
       { arg: 'duration', type: 'number', required: true },
       { arg: 'title', type: 'number' },
-      { arg: 'subscriptionDate', type: 'number' },
+      { arg: 'subscriptionDate', type: 'number' }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   License.assignAccountingService = function(
@@ -973,7 +970,7 @@ module.exports = function(License) {
     subscriptionDate,
     dontShowBuyPackages,
     oneTimeLicense,
-    disableSignup,
+    disableSignup
   ) {
     return Q.Promise(function(resolve, reject) {
       if (!licenseId) {
@@ -1025,7 +1022,7 @@ module.exports = function(License) {
           return resolve({
             ok: true,
             assign: true,
-            systemUuid: license.systemUuid,
+            systemUuid: license.systemUuid
           });
         });
       });
@@ -1042,9 +1039,9 @@ module.exports = function(License) {
       { arg: 'subscriptionDate', type: 'number', required: true },
       { arg: 'dontShowBuyPackages', type: 'boolean' },
       { arg: 'oneTimeLicense', type: 'boolean' },
-      { arg: 'disableSignup', type: 'boolean' },
+      { arg: 'disableSignup', type: 'boolean' }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   License.addLicenseCharge = function(licenseId, chargeInRial) {
@@ -1060,7 +1057,7 @@ module.exports = function(License) {
         if (license.modules.sms && license.modules.sms.smsApiKey) {
           var chargeRequest = {
             apikey: license.modules.sms.smsApiKey,
-            credit: chargeInRial,
+            credit: chargeInRial
           };
           log.debug('charge sms credit', chargeRequest);
           needle.post(
@@ -1078,7 +1075,7 @@ module.exports = function(License) {
               } else {
                 return resolve();
               }
-            },
+            }
           );
         } else {
           var chargeInToman = chargeInRial / 10;

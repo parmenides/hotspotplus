@@ -8,7 +8,7 @@ var kafka = require('kafka-node');
 var config = require('../../server/modules/config');
 
 const kafkaClient = new kafka.KafkaClient({
-  kafkaHost: process.env.KAFKA_IP + ':' + process.env.KAFKA_PORT,
+  kafkaHost: process.env.KAFKA_IP + ':' + process.env.KAFKA_PORT
 });
 const kafkaProducer = new kafka.Producer(kafkaClient, { partitionerType: 2 });
 
@@ -29,8 +29,8 @@ module.exports = function(ClientSession) {
       [
         {
           topic: config.SESSION_TOPIC,
-          messages: JSON.stringify(session),
-        },
+          messages: JSON.stringify(session)
+        }
       ],
       function(error, data) {
         if (error) {
@@ -38,7 +38,7 @@ module.exports = function(ClientSession) {
           return;
         }
         log.debug('session added:', data);
-      },
+      }
     );
   };
 
@@ -47,7 +47,7 @@ module.exports = function(ClientSession) {
     businessId,
     skip,
     limit,
-    cb,
+    cb
   ) {
     if (!businessId) {
       return cb('Business Id not defined');
@@ -70,7 +70,7 @@ module.exports = function(ClientSession) {
         where: { businessId: businessId },
         order: 'expiresAt DESC',
         limit: limit,
-        skip: skip,
+        skip: skip
       },
       function(error, sessionList) {
         if (error) {
@@ -97,7 +97,7 @@ module.exports = function(ClientSession) {
             return cb(null, { data: 'noReport' });
           }
         }
-      },
+      }
     );
   };
 
@@ -107,25 +107,25 @@ module.exports = function(ClientSession) {
       {
         arg: 'startDate',
         type: 'number',
-        required: true,
+        required: true
       },
       {
         arg: 'businessId',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'skip',
         type: 'number',
-        required: false,
+        required: false
       },
       {
         arg: 'limit',
         type: 'number',
-        required: false,
-      },
+        required: false
+      }
     ],
-    returns: { arg: 'result', type: 'Object' },
+    returns: { arg: 'result', type: 'Object' }
   });
 
   ClientSession.getOnlineSessionCount = function(businessId, cb) {
@@ -135,7 +135,7 @@ module.exports = function(ClientSession) {
     log.debug('@getOnlineSessionCount : ', businessId);
     ClientSession.find({ where: { businessId: businessId } }, function(
       error,
-      count,
+      count
     ) {
       if (error) {
         log.error(error);
@@ -152,10 +152,10 @@ module.exports = function(ClientSession) {
       {
         arg: 'businessId',
         type: 'string',
-        required: true,
-      },
+        required: true
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   ClientSession.killOnlineSession = function(session, ctx, cb) {
@@ -172,9 +172,9 @@ module.exports = function(ClientSession) {
           and: [
             { memberId: memberId },
             { businessId: businessId },
-            { id: sessionId },
-          ],
-        },
+            { id: sessionId }
+          ]
+        }
       },
       function(error, loadedSession) {
         if (error) {
@@ -185,7 +185,7 @@ module.exports = function(ClientSession) {
         }
         radiusPod.sendPod(loadedSession);
         return cb(null, { ok: true, killedSession: loadedSession });
-      },
+      }
     );
   };
 
@@ -195,10 +195,10 @@ module.exports = function(ClientSession) {
       {
         arg: 'session',
         type: 'object',
-        required: true,
+        required: true
       },
-      { arg: 'options', type: 'object', http: 'optionsFromRequest' },
+      { arg: 'options', type: 'object', http: 'optionsFromRequest' }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 };

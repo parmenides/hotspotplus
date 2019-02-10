@@ -9,7 +9,7 @@ var logger = require('../../server/modules/logger');
 var log = logger.createLogger();
 var _ = require('underscore');
 var kafkaClient = new kafka.KafkaClient({
-  kafkaHost: process.env.KAFKA_IP + ':' + process.env.KAFKA_PORT,
+  kafkaHost: process.env.KAFKA_IP + ':' + process.env.KAFKA_PORT
 });
 var kafkaProducer = new kafka.Producer(kafkaClient, { partitionerType: 2 });
 
@@ -41,8 +41,8 @@ module.exports = function(Usage) {
           [
             {
               topic: config.ACCOUNTING_TOPIC,
-              messages: JSON.stringify(usage),
-            },
+              messages: JSON.stringify(usage)
+            }
           ],
           function(error, data) {
             if (error) {
@@ -50,7 +50,7 @@ module.exports = function(Usage) {
               return;
             }
             log.debug('usage added:', data);
-          },
+          }
         );
         return resolve();
       }
@@ -63,7 +63,7 @@ module.exports = function(Usage) {
     businessId,
     offset,
     intervalMili,
-    monthDays,
+    monthDays
   ) {
     return Q.Promise(function(resolve, reject) {
       if (utility.isMongoDbStorage()) {
@@ -91,7 +91,7 @@ module.exports = function(Usage) {
                 businessId,
                 offset,
                 intervalMili,
-                sessionCount,
+                sessionCount
               )
               .then(function(memberResult) {
                 var response = { date: [], download: [], upload: [] };
@@ -131,7 +131,7 @@ module.exports = function(Usage) {
                 }
                 log.debug(
                   'process of getting traffic usage info completed successfully' +
-                    JSON.stringify(response),
+                    JSON.stringify(response)
                 );
                 return resolve(response);
               })
@@ -160,8 +160,8 @@ module.exports = function(Usage) {
           aggregate.getSessionsReport(
             singleSession.creationDate,
             singleSession.memberId,
-            sessionId,
-          ),
+            sessionId
+          )
         );
       }
       // get report info from getSessionsReport aggregation

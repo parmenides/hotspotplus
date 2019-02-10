@@ -13,7 +13,7 @@ var storage = multer.diskStorage({
   },
   filename: function(req, file, cb) {
     cb(null, file.originalname);
-  },
+  }
 });
 var upload = multer({ storage: storage });
 
@@ -32,7 +32,7 @@ module.exports = function(app) {
         res.writeHead(200, {
           'Content-Type': mimeType,
           'Content-Length': fileData.length,
-          'Content-Disposition': 'attachment; filename=' + fileName,
+          'Content-Disposition': 'attachment; filename=' + fileName
         });
         res.write(fileData);
         res.end();

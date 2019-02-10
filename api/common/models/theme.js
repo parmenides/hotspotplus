@@ -15,6 +15,6 @@ module.exports = function(Theme) {
   Theme.remoteMethod('loadHotspotThemes', {
     description: 'Load hotspot themes',
     accepts: [],
-    returns: { root: true },
+    returns: { root: true }
   });
 };

@@ -101,7 +101,7 @@ exports.pass2sha = function(password, salt) {
     salt.toString(),
     this.options.inputType,
     this.options.encription,
-    this.options.outputType,
+    this.options.outputType
   );
 };
 
@@ -126,13 +126,13 @@ exports.createPassword = function(length) {
   return keygen._({
     length: length,
     forceLowercase: true,
-    exclude: ['O', '0', 'I', '1', 'j', 'q', 'g', 'i', 'e', 'a', 'y', 'v'],
+    exclude: ['O', '0', 'I', '1', 'j', 'q', 'g', 'i', 'e', 'a', 'y', 'v']
   });
 };
 exports.createRandomKeyword = function(length) {
   length = length || 5;
   return keygen._({
-    length: length,
+    length: length
   });
 };
 
@@ -305,7 +305,7 @@ exports.zipIt = function(zipName, resources) {
           for (var j in resource.files) {
             files.push({
               source: resource.files[j].path,
-              target: resource.name + '/' + resource.files[j].name,
+              target: resource.name + '/' + resource.files[j].name
             });
           }
         }
@@ -386,28 +386,28 @@ exports.installRaven = function() {
     release: process.env.SENTRY_RELEASE_TOKEN || 'defaultRelease',
     shouldSendCallback: function() {
       return process.env.ENABLE_SENTRY === 'true';
-    },
+    }
   }).install();
 };
 
 exports.sendMessage = function(error, options, moduleName) {
   log.debug(
     ' ################ Sending error to sentry ################ ',
-    error,
+    error
   );
   Raven.setContext({
     user: {
-      username: moduleName || process.env.APP_NAME || 'coordinator',
-    },
+      username: moduleName || process.env.APP_NAME || 'coordinator'
+    }
   });
   Raven.mergeContext({
-    tags: options,
+    tags: options
   });
   Raven.captureException(error, function(sendErr) {
     if (sendErr) {
       log.debug(
         ' #######################  Failed to send captured exception to Sentry ########################  ',
-        sendErr,
+        sendErr
       );
       return;
     }
@@ -537,7 +537,7 @@ exports.elasticBulkInsertDoc = function(data) {
         }
         log.debug(
           '@ELASTIC_BULK_INSERT#####>>>>  docs inserted to elastic: ',
-          docs.length,
+          docs.length
         );
         return resolve();
       });

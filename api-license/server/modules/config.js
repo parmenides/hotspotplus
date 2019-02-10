@@ -34,11 +34,11 @@ module.exports = {
     '{{&services}}',
     '{{&scripts}}',
     '{{&serial}}',
-    '=====HOTSPOTPLUS END LICENSE=====',
+    '=====HOTSPOTPLUS END LICENSE====='
   ].join('\n'),
   ROLES: {
     ADMIN: 'admin',
-    LICENSE_ROLE: 'license',
+    LICENSE_ROLE: 'license'
   },
   ROOT_USERS_DOMAIN: 'hotspotplus.ir',
   ADMIN_USERNAME: 'payam',
@@ -83,10 +83,10 @@ module.exports = {
           title: 'لایسنس اکانتینگ رایگان',
           features: [
             ' کابر آنلاین همزمان، ۳۰ کلاینت',
-            'پروفایل های مجاز: ۱ عدد',
-          ],
+            'پروفایل های مجاز: ۱ عدد'
+          ]
         },
-        modules: {},
+        modules: {}
       },
       {
         id: 'fermiumLocalLog',
@@ -107,10 +107,10 @@ module.exports = {
             title: 'ثبت لاگ وب سایت و آی پی',
             features: [
               { title: 'ثبت لاگ بر اساس آی پی و پورت' },
-              { title: 'ثبت لاگ بازدید وب سایت' },
-            ],
-          },
-        },
+              { title: 'ثبت لاگ بازدید وب سایت' }
+            ]
+          }
+        }
       },
       {
         id: 'fermiumLocalSms',
@@ -132,10 +132,10 @@ module.exports = {
             features: [
               { title: 'ارسال پیامک تایید هویت' },
               { title: 'ارسال پیامک انبوه به کاربران' },
-              { title: 'هزینه هر یک پیامک ۱۳ تومان' },
-            ],
-          },
-        },
+              { title: 'هزینه هر یک پیامک ۱۳ تومان' }
+            ]
+          }
+        }
       },
       {
         id: 'oneTimeOrganization',
@@ -156,8 +156,8 @@ module.exports = {
           features: [
             { title: ' کابر آنلاین همزمان، ۵۰۰ کلاینت', class: 'font-bold' },
             { title: 'پروفایل های مجاز: ۳ عدد', class: 'font-bold' },
-            { title: 'به روزرسانی خودکار برنامه' },
-          ],
+            { title: 'به روزرسانی خودکار برنامه' }
+          ]
         },
         modules: {
           sms: {
@@ -167,16 +167,16 @@ module.exports = {
               { title: 'ارسال پیامک انبوه به کاربران' },
               {
                 title: 'امکان ارسال پیامک از خطوط اختصاصی',
-                class: 'font-bold',
-              },
-            ],
+                class: 'font-bold'
+              }
+            ]
           },
           log: {
             title: 'ثبت لاگ وب سایت و آی پی',
             features: [
               { title: 'ثبت لاگ بر اساس آی پی و پورت' },
-              { title: 'ثبت لاگ بازدید وب سایت' },
-            ],
+              { title: 'ثبت لاگ بازدید وب سایت' }
+            ]
           },
           support: {
             title: 'پشتیبانی',
@@ -184,11 +184,11 @@ module.exports = {
               { title: 'نصب رایگان و اختصاصی', class: 'font-bold' },
               {
                 title: 'پشتیبانی از طریق تلفن و اتصال ریموت',
-                class: 'font-bold',
-              },
-            ],
-          },
-        },
+                class: 'font-bold'
+              }
+            ]
+          }
+        }
       },
       {
         id: 'oneTimeOrganizationExpert',
@@ -209,8 +209,8 @@ module.exports = {
           features: [
             { title: ' کابر آنلاین همزمان، ۱۰۰۰ کلاینت', class: 'font-bold' },
             { title: 'پروفایل های مجاز: ۵ عدد', class: 'font-bold' },
-            { title: 'به روزرسانی خودکار برنامه' },
-          ],
+            { title: 'به روزرسانی خودکار برنامه' }
+          ]
         },
         modules: {
           sms: {
@@ -220,16 +220,16 @@ module.exports = {
               { title: 'ارسال پیامک انبوه به کاربران' },
               {
                 title: 'امکان ارسال پیامک از خطوط اختصاصی',
-                class: 'font-bold',
-              },
-            ],
+                class: 'font-bold'
+              }
+            ]
           },
           log: {
             title: 'ثبت لاگ وب سایت و آی پی',
             features: [
               { title: 'ثبت لاگ بر اساس آی پی و پورت' },
-              { title: 'ثبت لاگ بازدید وب سایت' },
-            ],
+              { title: 'ثبت لاگ بازدید وب سایت' }
+            ]
           },
           support: {
             title: 'پشتیبانی',
@@ -237,17 +237,17 @@ module.exports = {
               { title: 'نصب رایگان و اختصاصی', class: 'font-bold' },
               {
                 title: 'پشتیبانی از طریق تلفن و اتصال ریموت',
-                class: 'font-bold',
-              },
-            ],
-          },
-        },
-      },
-    ],
+                class: 'font-bold'
+              }
+            ]
+          }
+        }
+      }
+    ]
   },
   PASSWORD_PREFIX: process.env.PASSWORD_PREFIX,
   ADMIN_OWNER_ID: 'Admin',
   PERCENT_UNIT: 'percent',
   TOMAN_UNIT: 'toman',
-  BUY_LICENSE: 'LicenseCharge',
+  BUY_LICENSE: 'LicenseCharge'
 };

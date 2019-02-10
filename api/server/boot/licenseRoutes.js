@@ -31,7 +31,7 @@ module.exports = function(app) {
     log.debug(data);
     License.findOne({ where: { serial: receivedLicense.serial } }, function(
       error,
-      license,
+      license
     ) {
       if (error) {
         //deny
@@ -82,7 +82,7 @@ module.exports = function(app) {
           licenseId: license.id,
           status: statusCode,
           creationDate: new Date().getTime(),
-          creationDateObj: new Date(),
+          creationDateObj: new Date()
         },
         function(error) {
           if (error) {
@@ -101,7 +101,7 @@ module.exports = function(app) {
           return res
             .status(200)
             .send(utility.encrypt(JSON.stringify(res), license.serial));
-        },
+        }
       );
     });
 

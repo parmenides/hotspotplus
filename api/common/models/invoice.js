@@ -34,7 +34,7 @@ module.exports = function(Invoice) {
                 {
                   payed: true,
                   paymentRefId: refId,
-                  paymentDate: new Date().getTime(),
+                  paymentDate: new Date().getTime()
                 },
                 function(error, updated) {
                   if (error) {
@@ -42,7 +42,7 @@ module.exports = function(Invoice) {
                     return reject(error);
                   }
                   return resolve(updated);
-                },
+                }
               );
             } else {
               return reject();
@@ -62,8 +62,8 @@ module.exports = function(Invoice) {
         Coupon.findOne(
           {
             where: {
-              and: [{ code: couponCode }, { ownerId: config.ADMIN_OWNER_ID }],
-            },
+              and: [{ code: couponCode }, { ownerId: config.ADMIN_OWNER_ID }]
+            }
           },
           function(error, coupon) {
             if (error) {
@@ -85,7 +85,7 @@ module.exports = function(Invoice) {
             coupon
               .updateAttributes({
                 used: coupon.used + 1,
-                redeemDate: new Date().getTime(),
+                redeemDate: new Date().getTime()
               })
               .then(
                 function() {
@@ -94,9 +94,9 @@ module.exports = function(Invoice) {
                 function(error) {
                   log.error('coupon update error:', error);
                   return reject(error);
-                },
+                }
               );
-          },
+          }
         );
       } else {
         return resolve(price);
@@ -110,7 +110,7 @@ module.exports = function(Invoice) {
     invoiceType,
     returnUrl,
     serviceInfo,
-    discountCoupon,
+    discountCoupon
   ) {
     return Q.Promise(function(resolve, reject) {
       discountCoupon = discountCoupon || {};
@@ -125,7 +125,7 @@ module.exports = function(Invoice) {
               returnUrl: returnUrl,
               invoiceType: invoiceType,
               serviceInfo: serviceInfo,
-              issueDate: issueDate,
+              issueDate: issueDate
             },
             function(error, invoice) {
               if (error) {
@@ -143,14 +143,14 @@ module.exports = function(Invoice) {
                 config.PAYMENT_GATEWAY_DEFAULT_DESC,
                 config.PAYMENT_SUPPORT_EMAIL,
                 config.PAYMENT_SUPPORT_MOBILE,
-                returnUrl,
+                returnUrl
               )
                 .then(function(response) {
                   var url = response.url;
                   var paymentId = response.paymentId;
                   invoice.updateAttributes(
                     {
-                      paymentId: paymentId,
+                      paymentId: paymentId
                     },
                     function(error) {
                       if (error) {
@@ -158,14 +158,14 @@ module.exports = function(Invoice) {
                         return reject(error);
                       }
                       return resolve({ url: url });
-                    },
+                    }
                   );
                 })
                 .fail(function(error) {
                   log.error('failed to open payment gateway', error);
                   return reject(error);
                 });
-            },
+            }
           );
         })
         .fail(function(error) {
@@ -180,34 +180,34 @@ module.exports = function(Invoice) {
       {
         arg: 'price',
         type: 'number',
-        required: true,
+        required: true
       },
       {
         arg: 'uniqueId',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'invoiceType',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'returnUrl',
         type: 'string',
-        required: true,
+        required: true
       },
       {
         arg: 'serviceInfo',
         type: 'object',
-        required: true,
+        required: true
       },
       {
         arg: 'discountCoupon',
-        type: 'object',
-      },
+        type: 'object'
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Invoice.verifyExternalInvoice = function(invoiceId) {
@@ -241,7 +241,7 @@ module.exports = function(Invoice) {
                 {
                   payed: true,
                   paymentRefId: refId,
-                  paymentDate: new Date().getTime(),
+                  paymentDate: new Date().getTime()
                 },
                 function(error) {
                   if (error) {
@@ -253,16 +253,16 @@ module.exports = function(Invoice) {
                     code: 302,
                     returnUrl: invoice.returnUrl
                       .replace('{invoiceId}', invoiceId)
-                      .replace('{status}', 'success'),
+                      .replace('{status}', 'success')
                   });
-                },
+                }
               );
             } else {
               return resolve({
                 code: 302,
                 returnUrl: invoice.returnUrl
                   .replace('{invoiceId}', invoiceId)
-                  .replace('{status}', 'failed'),
+                  .replace('{status}', 'failed')
               });
             }
           })
@@ -272,7 +272,7 @@ module.exports = function(Invoice) {
               code: 302,
               returnUrl: invoice.returnUrl
                 .replace('{invoiceId}', invoiceId)
-                .replace('{status}', 'failed'),
+                .replace('{status}', 'failed')
             });
           });
       });
@@ -284,9 +284,9 @@ module.exports = function(Invoice) {
       {
         arg: 'invoiceId',
         type: 'string',
-        required: true,
-      },
+        required: true
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 };

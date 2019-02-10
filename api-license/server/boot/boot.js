@@ -22,10 +22,10 @@ module.exports = function(app) {
             forThe: { type: 'keyword' },
             type: { type: 'keyword' },
             amount: { type: 'integer' },
-            date: { type: 'long' },
-          },
-        },
-      },
+            date: { type: 'long' }
+          }
+        }
+      }
     };
     needle.put(
       config.ELASTIC_LICENSE_CHARGE_MAIN_CONTEXT,
@@ -37,7 +37,7 @@ module.exports = function(app) {
           return;
         }
         log.info('charge mapping mapping created', body);
-      },
+      }
     );
   }
 
@@ -50,7 +50,7 @@ module.exports = function(app) {
             addOrLoadUser(
               config.ADMIN_USERNAME,
               config.ADMIN_PASSWORD,
-              config.ADMIN_ROLES,
+              config.ADMIN_ROLES
             );
           })
           .fail(function(error) {
@@ -98,7 +98,7 @@ module.exports = function(app) {
         username: username,
         active: true,
         password: password,
-        email: username + '@' + config.ROOT_USERS_DOMAIN,
+        email: username + '@' + config.ROOT_USERS_DOMAIN
       };
 
       if (!user) {

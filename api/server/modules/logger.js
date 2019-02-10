@@ -12,12 +12,12 @@ module.exports.createLogger = function() {
     streams: [
       {
         level: process.env.LOG_LEVEL || 'debug',
-        path: path + '/' + name + '-debug.log',
+        path: path + '/' + name + '-debug.log'
       },
       {
         level: 'error',
-        path: path + '/' + name + '-error.log',
-      },
-    ],
+        path: path + '/' + name + '-error.log'
+      }
+    ]
   });
 };

@@ -132,10 +132,10 @@ module.exports = function(Nas) {
       {
         arg: 'nasId',
         type: 'string',
-        required: true,
-      },
+        required: true
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Nas.loadThemeConfigById = function(nasId, cb) {
@@ -173,10 +173,10 @@ module.exports = function(Nas) {
       {
         arg: 'nasId',
         type: 'string',
-        required: true,
-      },
+        required: true
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Nas.loadRadiusInfo = function(cb) {
@@ -184,14 +184,14 @@ module.exports = function(Nas) {
       radiusIp: config.RADIUS_IP,
       secondRadiusIp: config.SECOND_RADIUS_IP,
       accountingPort: config.RADIUS_ACC_PORT,
-      authenticationPort: config.RADIUS_AUTH_PORT,
+      authenticationPort: config.RADIUS_AUTH_PORT
     });
   };
 
   Nas.remoteMethod('loadRadiusInfo', {
     description: 'Load router info',
     accepts: [],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Nas.getMikrotikScripts = function(businessId, nasId) {
@@ -203,8 +203,8 @@ module.exports = function(Nas) {
           {
             type: 'folder',
             name: 'hotspotplus',
-            files: config.SCRIPTS.MIKROTIK_HOTSPOT_PAGES,
-          },
+            files: config.SCRIPTS.MIKROTIK_HOTSPOT_PAGES
+          }
         ])
         .then(function(zipFilePath) {
           log.debug(zipFilePath);
@@ -229,7 +229,7 @@ module.exports = function(Nas) {
     Nas.count(
       {
         businessId: businessId,
-        pingUpdatedAt: { lte: checkTime },
+        pingUpdatedAt: { lte: checkTime }
       },
       function(error, offLineNas) {
         if (error) {
@@ -238,7 +238,7 @@ module.exports = function(Nas) {
         result.offLine = offLineNas;
         Nas.count(
           {
-            businessId: businessId,
+            businessId: businessId
           },
           function(error, onLineNas) {
             if (error) {
@@ -246,9 +246,9 @@ module.exports = function(Nas) {
             }
             result.onLine = onLineNas;
             return cb(null, result);
-          },
+          }
         );
-      },
+      }
     );
   };
 
@@ -258,10 +258,10 @@ module.exports = function(Nas) {
       {
         arg: 'businessId',
         type: 'string',
-        required: true,
-      },
+        required: true
+      }
     ],
-    returns: { root: true },
+    returns: { root: true }
   });
 
   Nas.getNasCredential = function() {
@@ -346,7 +346,7 @@ module.exports = function(Nas) {
             business.modules.log.expiresAt
           ) {
             hasValidLogSubscription = new Date().isBefore(
-              new Date(business.modules.log.expiresAt),
+              new Date(business.modules.log.expiresAt)
             );
           }
           var sessionString = JSON.stringify({
@@ -358,7 +358,7 @@ module.exports = function(Nas) {
               business.nasSharedSecret || config.PRIMARY_SHARED_SECRET,
             nasId: nasId,
             nasIp: ip,
-            nasPort: port,
+            nasPort: port
           });
           log.debug(
             'Ip session updated on MongoDB businessId: ',
@@ -366,7 +366,7 @@ module.exports = function(Nas) {
             ' nasId: ',
             nasId,
             ' ip: ',
-            ip,
+            ip
           );
           redisClient.set(
             ip,
@@ -384,22 +384,22 @@ module.exports = function(Nas) {
                 ' nasId: ',
                 nasId,
                 ' ip: ',
-                ip,
+                ip
               );
               return resolve();
-            },
+            }
           );
           business.updateAttributes(
             {
               routerActivated: true,
-              lastPingAt: new Date().getTime(),
+              lastPingAt: new Date().getTime()
             },
             function(error) {
               if (error) {
                 log.error(error);
                 return reject(error);
               }
-            },
+            }
           );
         });
       });

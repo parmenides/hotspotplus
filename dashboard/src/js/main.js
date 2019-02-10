@@ -10,14 +10,7 @@ angular.module('app').controller('AppCtrl', [
   'Session',
   '$state',
   function(
-    $scope,
-    $translate,
-    $localStorage,
-    $window,
-    $rootScope,
-    Session,
-    $state,
-  ) {
+    $scope, $translate, $localStorage, $window, $rootScope, Session, $state) {
     // add 'ie' classes to html
     var isIE = !!navigator.userAgent.match(/MSIE/i);
     if (isIE) {
@@ -38,8 +31,8 @@ angular.module('app').controller('AppCtrl', [
 			 } );*/
     // config
     $scope.app = {
-      name: Window.appTitle,
-      domain: Window.appDomain,
+      name: Window.appTitle || "Hsp",
+      domain: Window.appDomain || "Hsp",
       version: Window.systemConfig.version || '-',
       // for chart colors
       color: {
@@ -85,7 +78,7 @@ angular.module('app').controller('AppCtrl', [
         // save to local storage
         $localStorage.settings = $scope.app.settings;
       },
-      true,
+      true
     );
 
     // angular translate
@@ -124,7 +117,7 @@ angular.module('app').controller('AppCtrl', [
         $window['opera'];
       // Checks for iOs, Android, Blackberry, Opera Mini, and Windows mobile devices
       return /iPhone|iPod|iPad|Silk|Android|BlackBerry|Opera Mini|IEMobile/.test(
-        ua,
+        ua
       );
     }
 

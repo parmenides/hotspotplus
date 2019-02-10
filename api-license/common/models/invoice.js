@@ -16,8 +16,8 @@ module.exports = function(Invoice) {
         Coupon.findOne(
           {
             where: {
-              code: couponCode,
-            },
+              code: couponCode
+            }
           },
           function(error, coupon) {
             if (error) {
@@ -39,7 +39,7 @@ module.exports = function(Invoice) {
             coupon
               .updateAttributes({
                 used: coupon.used + 1,
-                redeemDate: new Date().getTime(),
+                redeemDate: new Date().getTime()
               })
               .then(
                 function() {
@@ -48,9 +48,9 @@ module.exports = function(Invoice) {
                 function(error) {
                   log.error('coupon update error:', error);
                   return reject(error);
-                },
+                }
               );
-          },
+          }
         );
       } else {
         return resolve(price);
@@ -63,7 +63,7 @@ module.exports = function(Invoice) {
     licenseId,
     invoiceType,
     serviceInfo,
-    discountCoupon,
+    discountCoupon
   ) {
     log.debug('issueInvoice');
     return new Promise(function(resolve, reject) {
@@ -79,7 +79,7 @@ module.exports = function(Invoice) {
               licenseId: licenseId,
               invoiceType: invoiceType,
               serviceInfo: serviceInfo,
-              issueDate: issueDate,
+              issueDate: issueDate
             },
             function(error, invoice) {
               if (error) {
@@ -89,7 +89,7 @@ module.exports = function(Invoice) {
               var invoiceId = invoice.id;
               var returnUrl = config.RETURN_AND_VERIFY_REMOTE_SERVER_INVOICE.replace(
                 '{invoiceId}',
-                invoiceId,
+                invoiceId
               );
               log.debug('Invoice created for ', returnUrl);
               Payment.openPaymentGateway(
@@ -98,14 +98,14 @@ module.exports = function(Invoice) {
                 config.PAYMENT_GATEWAY_DEFAULT_DESC,
                 config.PAYMENT_SUPPORT_EMAIL,
                 config.PAYMENT_SUPPORT_MOBILE,
-                returnUrl,
+                returnUrl
               )
                 .then(function(response) {
                   var url = response.url;
                   var paymentId = response.paymentId;
                   invoice.updateAttributes(
                     {
-                      paymentId: paymentId,
+                      paymentId: paymentId
                     },
                     function(error) {
                       if (error) {
@@ -114,14 +114,14 @@ module.exports = function(Invoice) {
                       }
                       log.debug('Invoice.create', url);
                       return resolve({ url: url });
-                    },
+                    }
                   );
                 })
                 .fail(function(error) {
                   log.error('failed to open payment gateway', error);
                   return reject(error);
                 });
-            },
+            }
           );
         })
         .catch(function(error) {

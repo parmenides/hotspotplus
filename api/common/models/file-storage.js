@@ -25,7 +25,7 @@ module.exports = function(FileStorage) {
             name: name,
             size: size,
             type: mimeType,
-            data: bufferData,
+            data: bufferData
           },
           function(error, result) {
             if (error) {
@@ -33,7 +33,7 @@ module.exports = function(FileStorage) {
               return reject(error);
             }
             return resolve(result.id);
-          },
+          }
         );
       });
     });
@@ -55,7 +55,7 @@ module.exports = function(FileStorage) {
             contentBuffer: contentBuffer,
             name: file.name,
             size: file.size,
-            mimeType: file.type,
+            mimeType: file.type
           });
         } else {
           log.error('file not found');
@@ -73,7 +73,7 @@ module.exports = function(FileStorage) {
       {
         fields: { data: false, businessId: false },
         where: { businessId: businessId },
-        order: 'name DESC',
+        order: 'name DESC'
       },
       function(error, files) {
         if (error) {
@@ -81,7 +81,7 @@ module.exports = function(FileStorage) {
           return cb(error);
         }
         return cb(null, files);
-      },
+      }
     );
   };
 
@@ -91,9 +91,9 @@ module.exports = function(FileStorage) {
       {
         arg: 'businessId',
         type: 'string',
-        required: true,
-      },
+        required: true
+      }
     ],
-    returns: { arg: 'result', type: 'array' },
+    returns: { arg: 'result', type: 'array' }
   });
 };
