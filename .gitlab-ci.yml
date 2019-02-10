@@ -19,6 +19,13 @@ build_api:
     - tags
   script:
     - ./api/build.sh
+build_coordinator:
+  stage: build_coordinator
+  when: manual
+  only:
+    - tags
+  script:
+    - ./coordinator/build.sh
 build_api_license:
   stage: build_api_license
   when: manual

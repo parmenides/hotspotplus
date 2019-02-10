@@ -2546,29 +2546,29 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
   Business.loadMembersUsernames = function(businessId, cb) {
     var Member = app.models.Member;
     Member.find(
-        {
-          where: { businessId: businessId },
-          fields: {
-            username: true,
-            id: true
-          }
+      {
+        where: { businessId: businessId },
+        fields: {
+          username: true,
+          id: true,
         },
-        function(error, member) {
-          if (error) {
-            log.error(error);
-            return cb(error);
-          }
-          if (!member) {
-            log.error('member not found');
-            return cb('member not found');
-          }
-          return cb(null, member);
+      },
+      function(error, member) {
+        if (error) {
+          log.error(error);
+          return cb(error);
         }
+        if (!member) {
+          log.error('member not found');
+          return cb('member not found');
+        }
+        return cb(null, member);
+      },
     );
   };
 
   Business.remoteMethod('loadMembersUsernames', {
-    description: "load members usernames",
+    description: 'load members usernames',
     accepts: [
       {
         arg: 'businessId',
