@@ -31,7 +31,7 @@ module.exports = function(app) {
     amqp.connect(
       `amqp://${process.env.RABBITMQ_USERNAME}:${
         process.env.RABBITMQ_PASSWORD
-      }@hsp_rabbitmq`,
+      }@rabbitmq`,
       (error, amqpConnection) => {
         if (error) cb && cb(error);
         amqpConnection.createConfirmChannel((error, channel) => {
