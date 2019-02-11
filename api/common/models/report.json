@@ -25,6 +25,14 @@
     "username": {
       "type": "string",
       "required": true
+    },
+    "type": {
+      "type": "string",
+      "required": true
+    },
+    "fileStorageId": {
+      "type": "string",
+      "required": false
     }
   },
   "validations": [],
@@ -39,7 +47,7 @@
       "model": "Business",
       "foreignKey": ""
     },
-    "fileStorages": {
+    "fileStorage": {
       "type": "hasOne",
       "model": "FileStorage",
       "foreignKey": ""
@@ -50,6 +58,18 @@
       "accessType": "*",
       "principalType": "ROLE",
       "principalId": "networkadmin",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "serviceMan",
+      "permission": "ALLOW"
+    } ,
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "admin",
       "permission": "ALLOW"
     }
   ],
