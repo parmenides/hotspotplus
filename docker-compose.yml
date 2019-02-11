@@ -64,7 +64,6 @@ services:
       - RABBITMQ_PASSWORD=123
       - REDIS_PORT=6379
       - REDIS_HOST=hsp_redis
-      - LOG_WORKER_QUEUE=LOG_WORKER_QUEUE
       - ELASTIC_INDEX_PREFIX=hotspotplus
       - ELASTIC_IP=hsp_elasticsearch
       - ELASTIC_PORT=9200

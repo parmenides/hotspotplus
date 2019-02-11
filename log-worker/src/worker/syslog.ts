@@ -5,12 +5,7 @@ import { Moment } from 'moment';
 import momentJ from 'moment-jalaali';
 
 const SYSLOG_LOG_INDEX_PREFIX = `syslog-`;
-
-const LOG_WORKER_QUEUE = process.env.LOG_WORKER_QUEUE;
 const log = logger.createLogger();
-if (!LOG_WORKER_QUEUE) {
-  throw new Error('invalid settings');
-}
 
 interface SyslogIpQueryData {
   memberIpList: string[];
