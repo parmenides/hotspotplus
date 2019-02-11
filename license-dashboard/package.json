@@ -4,7 +4,7 @@
   "description": "Admin web application template with Bootstrap 3 and AngularJS.",
   "scripts": {
     "start": "node node_modules/http-server/bin/http-server -o -p 9090",
-    "build": "grunt build:angular && git add ."
+    "build": "grunt build:angular"
   },
   "keywords": [],
   "repository": "https://gitlab.com/parmenides/HotspotplusDashboard.git",
