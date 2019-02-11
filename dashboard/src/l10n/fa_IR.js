@@ -1185,7 +1185,7 @@
 	"from":                "تاریخ شروع",
 	"to":                  "تاریخ پایان",
 	"status":              "وضعیت",
-	"scheduled":           "برنامه ریزی شده",
+	"scheduled":           "در حال ساخت",
 	"ready":               "آماده",
 	"destinationIp":       "آی پی مقصد",
 	"destinationPort":     "پورت مقصد",
