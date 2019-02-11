@@ -52,13 +52,16 @@ redisClient.get('methodNames', function(error, methods) {
   for (let i in methods) {
     (function(theMethodName) {
       log.debug('TheMethodName: ', theMethodName);
-      redisClient.get('sc_' + theMethodName, function(error, a_method) {
+      redisClient.get(`sc_${theMethodName}`, function(error, a_method) {
         if (error) {
           log.error(error);
           return;
         }
         module.exports[theMethodName] = function() {
-          return eval('(' + a_method + ').apply(this,arguments)');
+          log.debug(theMethodName);
+          log.debug(arguments);
+          return eval(`(${a_method}).apply(this,arguments)`);
+          //return eval('(' + a_method + ').apply(this,arguments)');
         };
       });
     })(methods[i]);
