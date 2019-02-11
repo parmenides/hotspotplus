@@ -1,6 +1,6 @@
-//const CONFIG_SERVER_URL = 'https://lcapiv4.prohotspotplus.com/api';
+const CONFIG_SERVER_URL = 'https://lcapiv4.prohotspotplus.com/api';
 //var CONFIG_SERVER_URL = "http://lcapi.captiveportal.ir/api";
-var CONFIG_SERVER_URL = 'http://hotspotpluslicensapi:3000/api';
+//var CONFIG_SERVER_URL = 'http://hotspotpluslicensapi:3000/api';
 
 module.exports = {
   CONFIG_SERVER_URL: CONFIG_SERVER_URL,
