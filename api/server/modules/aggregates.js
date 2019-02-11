@@ -49,7 +49,7 @@ redisClient.get('methodNames', function(error, methods) {
     return;
   }
   methods = JSON.parse(methods);
-  for (var i in methods) {
+  for (let i in methods) {
     (function(theMethodName) {
       log.debug('TheMethodName: ', theMethodName);
       redisClient.get('sc_' + theMethodName, function(error, a_method) {
