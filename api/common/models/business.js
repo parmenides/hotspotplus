@@ -1445,14 +1445,14 @@ module.exports = function ( Business ) {
 										},
 										{ json: true },
 										function ( error, response, body ) {
-											log.debug ( '@loginToLicenseServer', response.body );
-											log.debug ( '@loginToLicenseServer', response.statusCode );
 
 											if ( error ) {
 												log.error ( error );
 												return cb ( new Error ( 'failed to load charges' ) );
 											}
-											if ( response.statusCode !== 200 ) {
+                      log.debug ( '@loginToLicenseServer', body );
+
+                      if ( response.statusCode !== 200 ) {
 												log.error ( body );
 												return cb ( new Error ( 'failed to load charges' ) );
 											}

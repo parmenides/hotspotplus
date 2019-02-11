@@ -36,7 +36,7 @@ app.listen(app.get('port'), async () => {
   await addDefaultQueue();
   await logWorker.processLogRequest();
   console.log(`App is running at http://localhost:${app.get('port')}`);
-  await testRunner();
+  //await testRunner();
   log.info(` App is running at http://localhost:${app.get('port')}`);
 });
 
