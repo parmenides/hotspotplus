@@ -224,7 +224,7 @@ app.service ( 'genericService', [ '$uibModal', '$log', '$q', '$location', 'PREFI
 					if ( options.fileName && options.fileName != 'undefined' ) {
 						$scope.image.name = options.fileName;
 					}
-					var option = { businessId: businessId }
+					var option = { businessId: businessId, fileType: 'image'}
 					getFiles ( option )
 					//create tabs for modal
 					$scope.tabs = [
