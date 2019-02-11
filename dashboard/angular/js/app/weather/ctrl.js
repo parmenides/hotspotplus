@@ -25,7 +25,7 @@ app.controller('WeatherCtrl', [
           $scope.getWeather(
             response.query.results.place.woeid,
             response.query.results.place.name,
-            response.query.results.place.country.content,
+            response.query.results.place.country.content
           );
         }
       });
@@ -41,7 +41,7 @@ app.controller('WeatherCtrl', [
           i.icon = $scope.getCustomIcon(i.code);
         });
         response.query.results.channel.item.condition.icon = $scope.getCustomIcon(
-          response.query.results.channel.item.condition.code,
+          response.query.results.channel.item.condition.code
         );
         $scope.data = response;
       });
@@ -111,7 +111,7 @@ app.controller('WeatherCtrl', [
           return '';
       }
     };
-  },
+  }
 ]);
 
 app.factory('yahooApi', [
@@ -123,20 +123,20 @@ app.factory('yahooApi', [
       {
         query: {
           method: 'GET',
-          isArray: false,
-        },
-      },
+          isArray: false
+        }
+      }
     );
-  },
+  }
 ]);
 
 app.factory('geoApi', [
   '$http',
   function($http) {
     return $http.jsonp(
-      'http://muslimsalat.com/daily.json?callback=JSON_CALLBACK',
+      'http://muslimsalat.com/daily.json?callback=JSON_CALLBACK'
     );
-  },
+  }
 ]);
 
 function JSON_CALLBACK() {

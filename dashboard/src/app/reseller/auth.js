@@ -32,10 +32,10 @@ app.controller('ResellerSignUpController', [
             $scope.authError = 'error.generalError';
             appMessenger.showError('error.generalError');
           }
-        },
+        }
       );
     };
-  },
+  }
 ]);
 
 app.controller('ResellerSignInController', [
@@ -59,13 +59,13 @@ app.controller('ResellerSignInController', [
     LoopBackAuth,
     roleService,
     englishNumberFilter,
-    errorMessenger,
+    errorMessenger
   ) {
     $scope.credential = {};
     $scope.authError = null;
     $scope.signIn = function() {
       $scope.credential.username = englishNumberFilter(
-        $scope.credential.username,
+        $scope.credential.username
       );
       Reseller.login($scope.credential).$promise.then(
         function(result) {
@@ -81,13 +81,13 @@ app.controller('ResellerSignInController', [
             },
             function() {
               appMessenger.showError('auth.loadingRoleFailed');
-            },
+            }
           );
         },
         function(errorResult) {
           $log.error(errorResult);
           appMessenger.showError('user.invalidLogin');
-        },
+        }
       );
     };
 
@@ -100,8 +100,8 @@ app.controller('ResellerSignInController', [
         function(error) {
           Session.clearSession();
           appMessenger.showError('auth.logoutFailed');
-        },
+        }
       );
     };
-  },
+  }
 ]);

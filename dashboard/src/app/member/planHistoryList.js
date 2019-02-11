@@ -22,14 +22,14 @@ app.controller('planHistoryList', [
     uiGridConstants,
     Session,
     PREFIX,
-    appMessenger,
+    appMessenger
   ) {
     $scope.daily = 'daily';
     $scope.monthly = 'monthly';
     $scope.paginationOptions = {
       pageNumber: 1,
       itemPerPage: 10,
-      sort: null,
+      sort: null
     };
     $scope.gridOptions = {
       enableSorting: true,
@@ -46,7 +46,7 @@ app.controller('planHistoryList', [
           enableHiding: false,
           enableSorting: false,
           enableColumnMenu: false,
-          headerCellFilter: 'translate',
+          headerCellFilter: 'translate'
         },
         {
           displayName: 'internetPlan.assignDate',
@@ -59,7 +59,7 @@ app.controller('planHistoryList', [
             '<div class="ui-grid-cell-contents"><span ng-if="row.entity.assignDate">' +
             '{{row.entity.assignDate |  persianDate : "fullDate" | translateNumber }}{{"general.,"| translate}}&nbsp;{{"general.hour"| translate}}:&nbsp;{{row.entity.assignDate |  date : "HH:mm" | translateNumber }}' +
             '</span><span ng-if="!row.entity.assignDate">-</span>' +
-            '</div>',
+            '</div>'
         },
         {
           displayName: 'internetPlan.duration',
@@ -73,7 +73,7 @@ app.controller('planHistoryList', [
             '<span ng-if="row.entity.type == grid.appScope.daily">{{"internetPlan.day" | translate }}</span>' +
             '<span ng-if="row.entity.type == grid.appScope.monthly">{{"internetPlan.month" | translate }}</span></span>' +
             '<span ng-if="!row.entity.duration">-</span>' +
-            '</div>',
+            '</div>'
         },
         {
           displayName: 'internetPlan.type',
@@ -83,7 +83,7 @@ app.controller('planHistoryList', [
           enableColumnMenu: false,
           headerCellFilter: 'translate',
           cellTemplate:
-            '<div class="ui-grid-cell-contents"><span ng-if="row.entity.type">{{row.entity.type | translate}}</span><span ng-if="!row.entity.type">-</span></div>',
+            '<div class="ui-grid-cell-contents"><span ng-if="row.entity.type">{{row.entity.type | translate}}</span><span ng-if="!row.entity.type">-</span></div>'
         },
         {
           displayName: 'internetPlan.accessType',
@@ -93,7 +93,7 @@ app.controller('planHistoryList', [
           enableColumnMenu: false,
           headerCellFilter: 'translate',
           cellTemplate:
-            '<div class="ui-grid-cell-contents"><span ng-if="row.entity.accessType">{{row.entity.accessType | translate}}</span><span ng-if="!row.entity.accessType">-</span></div>',
+            '<div class="ui-grid-cell-contents"><span ng-if="row.entity.accessType">{{row.entity.accessType | translate}}</span><span ng-if="!row.entity.accessType">-</span></div>'
         },
         {
           displayName: 'internetPlan.price',
@@ -110,7 +110,7 @@ app.controller('planHistoryList', [
             '<span ng-if="row.entity.price === 0">{{"general.free" | translate}}</span>' +
             '</span>' +
             '<span ng-if="row.entity.price == null">-</span>' +
-            '</div>',
+            '</div>'
         },
         {
           displayName: 'internetPlan.bulk',
@@ -124,7 +124,7 @@ app.controller('planHistoryList', [
             '<div class="ui-grid-cell-contents">' +
             '<span ng-if="row.entity.bulk">{{row.entity.bulk.value | translateNumber }} {{"internetPlan."+row.entity.bulk.type | translate }}</span>' +
             '<span ng-if="!row.entity.bulk">-</span>' +
-            '</div>',
+            '</div>'
         },
         {
           displayName: 'internetPlan.speed',
@@ -138,8 +138,8 @@ app.controller('planHistoryList', [
             '<div class="ui-grid-cell-contents">' +
             '<span ng-if="row.entity.speed">{{row.entity.speed.value | translateNumber }} {{"internetPlan."+row.entity.speed.type | translate }}</span>' +
             '<span ng-if="!row.entity.speed">-</span>' +
-            '</div>',
-        },
+            '</div>'
+        }
       ],
       onRegisterApi: function(gridApi) {
         $scope.gridApi = gridApi;
@@ -154,11 +154,11 @@ app.controller('planHistoryList', [
           }
           getPage();
         });
-      },
+      }
     };
     $scope.$watch('paginationOptions.itemPerPage', function(
       newValue,
-      oldValue,
+      oldValue
     ) {
       getPage();
     });
@@ -176,7 +176,7 @@ app.controller('planHistoryList', [
       }
       Member.loadMemberInternetPlans({
         businessId: $scope.businessId,
-        memberId: $scope.memberId,
+        memberId: $scope.memberId
       }).$promise.then(
         function(res) {
           if (res.internetPlanHistory && res.internetPlanHistory.length != 0) {
@@ -188,18 +188,18 @@ app.controller('planHistoryList', [
             $scope.gridOptions.totalItems = 1;
             $scope.paginationOptions.totalItems = 1;
             $scope.gridOptions.data.push({
-              name: $scope.member.internetPlanName,
+              name: $scope.member.internetPlanName
             });
           }
         },
         function(error) {
           $log.error(error);
           appMessenger.showError('error.generalError');
-        },
+        }
       );
     };
     $scope.ok = function() {
       $uibModalInstance.close();
     };
-  },
+  }
 ]);

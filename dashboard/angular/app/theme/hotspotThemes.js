@@ -25,7 +25,7 @@ app.controller('hotspotThemes', [
     genericService,
     Session,
     $uibModal,
-    uploadModal,
+    uploadModal
   ) {
     if (Session.business == null) {
       return;
@@ -58,13 +58,13 @@ app.controller('hotspotThemes', [
             function(error) {
               $log.error(error);
               appMessenger.showError('business.settingsLoadUnSuccessful');
-            },
+            }
           );
         },
         function(error) {
           $log.error(error);
           appMessenger.showError('theme.loadUnSuccessful');
-        },
+        }
       );
     };
     getPage();
@@ -86,7 +86,7 @@ app.controller('hotspotThemes', [
                 title: 'theme.selectHotspotTheme',
                 message: 'theme.areYouSureSelected',
                 noBtnLabel: 'general.no',
-                yesBtnLabel: 'general.yes',
+                yesBtnLabel: 'general.yes'
               };
               $scope.no = function() {
                 $uibModalInstance.close();
@@ -104,17 +104,17 @@ app.controller('hotspotThemes', [
                     showPinCode: false,
                     isMultiLanguage: false,
                     verificationMethodFa: 'mobile',
-                    verificationMethodEn: 'mobile',
+                    verificationMethodEn: 'mobile'
                   };
                 }
                 Business.prototype$updateAttributes(
                   {
-                    id: businessId,
+                    id: businessId
                   },
                   {
                     selectedThemeId: $scope.selectedThemeId,
-                    themeConfig: $scope.businessThemeConfig,
-                  },
+                    themeConfig: $scope.businessThemeConfig
+                  }
                 ).$promise.then(
                   function(res) {
                     $uibModalInstance.close();
@@ -122,12 +122,12 @@ app.controller('hotspotThemes', [
                   },
                   function(err) {
                     appMessenger.showError('theme.selectUnSuccessFull');
-                  },
+                  }
                 );
                 $uibModalInstance.close();
               };
-            },
-          ],
+            }
+          ]
         });
       }
     };
@@ -158,16 +158,16 @@ app.controller('hotspotThemes', [
                 showPinCode: false,
                 isMultiLanguage: false,
                 verificationMethodFa: 'mobile',
-                verificationMethodEn: 'mobile',
+                verificationMethodEn: 'mobile'
               };
             }
             //$scope.themeConfig = angular.copy ( $scope.businessThemeConfig[ themeId ] );
             var formConfig = angular.copy($scope.themes[themeId].formConfig);
             var formConfigEn = angular.copy(
-              $scope.themes[themeId].formConfigEn,
+              $scope.themes[themeId].formConfigEn
             );
             $scope.themeConfig = angular.copy(
-              $scope.businessThemeConfig[themeId],
+              $scope.businessThemeConfig[themeId]
             );
             $scope.themeConfig.formConfig = [];
             $scope.themeConfig.formConfigEn = [];
@@ -182,7 +182,7 @@ app.controller('hotspotThemes', [
                     $scope.themeConfig.formConfig[configIndex].active =
                       conf.active;
                   }
-                },
+                }
               );
             });
             angular.forEach(formConfigEn, function(config, configIndex) {
@@ -196,7 +196,7 @@ app.controller('hotspotThemes', [
                     $scope.themeConfig.formConfigEn[configIndex].active =
                       conf.active;
                   }
-                },
+                }
               );
             });
 
@@ -217,7 +217,7 @@ app.controller('hotspotThemes', [
                 $scope.themeConfig.formConfigEn[
                   getConfigIndexById(
                     $scope.themeConfig.formConfigEn,
-                    'password',
+                    'password'
                   )
                 ].active;
             }
@@ -228,7 +228,7 @@ app.controller('hotspotThemes', [
                     $scope.themeConfig.formConfig[
                       getConfigIndexById(
                         $scope.themeConfig.formConfig,
-                        'confirmPassword',
+                        'confirmPassword'
                       )
                     ].active = state;
                   }
@@ -239,7 +239,7 @@ app.controller('hotspotThemes', [
                     $scope.themeConfig.formConfigEn[
                       getConfigIndexById(
                         $scope.themeConfig.formConfigEn,
-                        'confirmPassword',
+                        'confirmPassword'
                       )
                     ].active = state;
                   }
@@ -255,16 +255,16 @@ app.controller('hotspotThemes', [
               themeTitle: theme.title,
               themeId: themeId,
               cancelBtnLabel: 'general.cancel',
-              saveBtnLabel: 'general.save',
+              saveBtnLabel: 'general.save'
             };
             $scope.$watch('themeConfig.verificationMethodFa', function(
               newVal,
-              oldVal,
+              oldVal
             ) {
               if (newVal == 'mobile') {
                 var mobileIndex = getConfigIndexById(
                   $scope.themeConfig.formConfig,
-                  'mobile',
+                  'mobile'
                 );
                 $scope.themeConfig.formConfig[mobileIndex].active = true;
                 $scope.themeConfig.formConfig[mobileIndex].required = true;
@@ -275,12 +275,12 @@ app.controller('hotspotThemes', [
             });
             $scope.$watch('themeConfig.verificationMethodEn', function(
               newVal,
-              oldVal,
+              oldVal
             ) {
               if (newVal == 'mobile') {
                 var mobileIndexEn = getConfigIndexById(
                   $scope.themeConfig.formConfigEn,
-                  'mobile',
+                  'mobile'
                 );
                 $scope.themeConfig.formConfigEn[mobileIndexEn].active = true;
                 $scope.themeConfig.formConfigEn[mobileIndexEn].required = true;
@@ -313,7 +313,7 @@ app.controller('hotspotThemes', [
                     $scope.themeConfig['background'].name = result.name;
                   }
                 },
-                cancelCallback: function() {},
+                cancelCallback: function() {}
               });
             };
             $scope.cancel = function() {
@@ -324,7 +324,7 @@ app.controller('hotspotThemes', [
               $scope.businessThemeConfig[themeId] = $scope.themeConfig;
               Business.prototype$updateAttributes(
                 { id: businessId },
-                { themeConfig: $scope.businessThemeConfig },
+                { themeConfig: $scope.businessThemeConfig }
               ).$promise.then(
                 function(res) {
                   appMessenger.showSuccess('theme.settingsUpdateSuccessFull');
@@ -333,7 +333,7 @@ app.controller('hotspotThemes', [
                 },
                 function(err) {
                   appMessenger.showError('theme.settingsUpdateUnSuccessFull');
-                },
+                }
               );
             };
             $scope.deleteFile = function(param) {
@@ -362,7 +362,7 @@ app.controller('hotspotThemes', [
                         title: 'theme.delete' + param,
                         message: 'theme.areYouSureDeleted',
                         noBtnLabel: 'general.no',
-                        yesBtnLabel: 'general.yes',
+                        yesBtnLabel: 'general.yes'
                       };
                       $scope.no = function() {
                         $uibModalInstance.close();
@@ -380,30 +380,30 @@ app.controller('hotspotThemes', [
                           $scope.themeConfig;
                         Business.prototype$updateAttributes(
                           { id: businessId },
-                          { themeConfig: $scope.businessThemeConfig },
+                          { themeConfig: $scope.businessThemeConfig }
                         ).$promise.then(
                           function(res) {
                             appMessenger.showSuccess(
-                              'theme.settingsUpdateSuccessFull',
+                              'theme.settingsUpdateSuccessFull'
                             );
                             $uibModalInstance.close();
                             getPage();
                           },
                           function(err) {
                             appMessenger.showError(
-                              'theme.settingsUpdateUnSuccessFull',
+                              'theme.settingsUpdateUnSuccessFull'
                             );
-                          },
+                          }
                         );
                       };
-                    },
-                  ],
+                    }
+                  ]
                 });
               }
             };
-          },
-        ],
+          }
+        ]
       });
     };
-  },
+  }
 ]);

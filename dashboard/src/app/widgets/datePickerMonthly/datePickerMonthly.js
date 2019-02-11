@@ -15,11 +15,11 @@ app.directive('datePickerMonthly', [
     persianDateFilter,
     translateNumberFilter,
     translateFilter,
-    dashboardTiming,
+    dashboardTiming
   ) {
     return {
       scope: {
-        updateDashboard: '&',
+        updateDashboard: '&'
       },
       controller: function($scope) {
         $scope.dateFormats = [
@@ -27,17 +27,17 @@ app.directive('datePickerMonthly', [
           'yyyy/MM/dd',
           'dd.MM.yyyy',
           'shortDate',
-          'MM',
+          'MM'
         ];
         $scope.persianMonth = [];
         for (var i = 1; i <= 12; i++) {
           $scope.persianMonth.push({
             code: i,
-            name: translateFilter('persianMonth.' + i),
+            name: translateFilter('persianMonth.' + i)
           });
         }
         $scope.month = parseInt(
-          persianDateFilter(new Date(), $scope.dateFormats[4]),
+          persianDateFilter(new Date(), $scope.dateFormats[4])
         );
         $scope.getDates = function() {
           var fromDate = new Date(new Date().getTime()).setHours(0, 0, 0, 0);
@@ -54,7 +54,7 @@ app.directive('datePickerMonthly', [
         };
       },
       templateUrl:
-        PREFIX + 'app/widgets/datePickerMonthly/tpl/datePickerMonthly.html',
+        PREFIX + 'app/widgets/datePickerMonthly/tpl/datePickerMonthly.html'
     };
-  },
+  }
 ]);

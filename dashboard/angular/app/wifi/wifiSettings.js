@@ -19,14 +19,14 @@ app.controller('wifiSettings', [
       },
       function(err) {
         appMessenger.showError('wifi.settingsLoadUnSuccessful');
-      },
+      }
     );
 
     $scope.save = function() {
       $scope.business.wifi.uploadSpeed = $scope.business.wifi.downloadSpeed;
       Business.prototype$updateAttributes(
         { id: businessId },
-        $scope.business,
+        $scope.business
       ).$promise.then(
         function(res) {
           appMessenger.showSuccess('wifi.settingsSaveSuccessful');
@@ -35,11 +35,11 @@ app.controller('wifiSettings', [
         function(err) {
           appMessenger.showError('wifi.settingsSaveUnSuccessful');
           // $state.go("app.dashboard");
-        },
+        }
       );
     };
     $scope.cancel = function() {
       $state.go('app.dashboard');
     };
-  },
+  }
 ]);

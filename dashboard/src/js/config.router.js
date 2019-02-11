@@ -13,7 +13,7 @@ angular.module('app').run([
     $rootScope.dontShowBuyPackages = Window.systemConfig.dontShowBuyPackages;
     $rootScope.oneTimeLicense = Window.systemConfig.oneTimeLicense;
     $rootScope.disableSignup = Window.systemConfig.disableSignup;
-  },
+  }
 ]);
 
 app.config([
@@ -38,7 +38,7 @@ app.config([
         abstract: true,
         url: '/app',
         templateUrl: layout,
-        resolve: load([]),
+        resolve: load([])
       })
       .state('app.networkAdminDashboard', {
         url: '/networkAdminDashboard',
@@ -60,28 +60,28 @@ app.config([
           PREFIX + 'app/widgets/sessionsReport/sessionsReport.js',
           PREFIX + 'app/widgets/sessionsCount/sessionsCount.js',
           PREFIX + 'app/widgets/memberCount/memberCount.js',
-          PREFIX + 'app/widgets/loading.js',
-        ]),
+          PREFIX + 'app/widgets/loading.js'
+        ])
       })
       .state('app.purchaseSubscription', {
         url: '/purchaseSubscription',
         controller: 'purchaseSubscriptionController',
         templateUrl:
           TEMPLATE_PREFIX + 'app/subscription/tpl/subscriptionPackages.html',
-        resolve: load([PREFIX + 'app/subscription/purchaseSubscription.js']),
+        resolve: load([PREFIX + 'app/subscription/purchaseSubscription.js'])
       })
       .state('app.loadDashboard', {
         url: '/loading',
         controller: 'loadDashboardController',
         template:
           '<div class="row wrapper-lg text-center" style="margin-top: 200px"><i class="fa fa-circle-o-notch fa-spin fa-5x"></i></div>',
-        resolve: load([PREFIX + 'app/common/loadDashboard.js']),
+        resolve: load([PREFIX + 'app/common/loadDashboard.js'])
       })
       .state('app.packages', {
         url: '/packages',
         controller: 'subscriptionPackages',
         templateUrl: TEMPLATE_PREFIX + 'app/package/tpl/buyLocalPackage.html',
-        resolve: load([PREFIX + 'app/package/buyLocalPackage.js']),
+        resolve: load([PREFIX + 'app/package/buyLocalPackage.js'])
       })
       .state('app.coupons', {
         url: '/coupons',
@@ -91,8 +91,8 @@ app.config([
           'ui.grid.pagination',
           'ui.grid.selection',
           'ui.bootstrap.persian.datepicker',
-          PREFIX + 'app/coupon/couponList.js',
-        ]),
+          PREFIX + 'app/coupon/couponList.js'
+        ])
       })
       .state('app.tickets', {
         url: '/tickets',
@@ -101,8 +101,8 @@ app.config([
           'ui.grid',
           'ui.grid.pagination',
           'ui.grid.selection',
-          PREFIX + 'app/ticket/ticketList.js',
-        ]),
+          PREFIX + 'app/ticket/ticketList.js'
+        ])
       })
       .state('app.ticketDetails', {
         url: '/tickets/:ticketId',
@@ -111,8 +111,8 @@ app.config([
           'ui.grid',
           'ui.grid.pagination',
           'ui.grid.selection',
-          PREFIX + 'app/ticket/ticketDetails.js',
-        ]),
+          PREFIX + 'app/ticket/ticketDetails.js'
+        ])
       })
       .state('app.campaigns', {
         url: '/campaigns',
@@ -126,8 +126,8 @@ app.config([
           'mgo-angular-wizard',
           'ui.grid.resizeColumns',
           PREFIX + 'app/campaign/campaignList.js',
-          PREFIX + 'app/campaign/campaignService.js',
-        ]),
+          PREFIX + 'app/campaign/campaignService.js'
+        ])
       })
       .state('app.businesses', {
         url: '/businesses',
@@ -138,8 +138,8 @@ app.config([
           'ui.grid.selection',
           'ui.bootstrap.persian.datepicker',
           'ui.grid.resizeColumns',
-          PREFIX + 'app/business/businessList.js',
-        ]),
+          PREFIX + 'app/business/businessList.js'
+        ])
       })
       .state('app.resellers', {
         url: '/resellers',
@@ -150,13 +150,13 @@ app.config([
           'ui.grid.selection',
           'ui.bootstrap.persian.datepicker',
           'ui.grid.resizeColumns',
-          PREFIX + 'app/reseller/resellerList.js',
-        ]),
+          PREFIX + 'app/reseller/resellerList.js'
+        ])
       })
       .state('app.resellersPackages', {
         url: '/resellersPackages',
         templateUrl: TEMPLATE_PREFIX + 'app/reseller/tpl/resellerPackages.html',
-        resolve: load([PREFIX + 'app/reseller/resellerPackages.js']),
+        resolve: load([PREFIX + 'app/reseller/resellerPackages.js'])
       })
       .state('app.resellerBusinessList', {
         url: '/businessList',
@@ -168,8 +168,8 @@ app.config([
           'ui.grid.selection',
           'ui.bootstrap.persian.datepicker',
           'ui.grid.resizeColumns',
-          PREFIX + 'app/reseller/resellerBusinessList.js',
-        ]),
+          PREFIX + 'app/reseller/resellerBusinessList.js'
+        ])
       })
       .state('app.businessSettings', {
         url: '/businessSettings',
@@ -179,8 +179,8 @@ app.config([
           'ui.bootstrap.persian.datepicker',
           'angularFileUpload',
           PREFIX + 'app/business/businessSettings.js',
-          PREFIX + 'app/business/passwordVerify.js',
-        ]),
+          PREFIX + 'app/business/passwordVerify.js'
+        ])
       })
       .state('app.hotspotThemes', {
         url: '/hotspotThemes',
@@ -189,8 +189,8 @@ app.config([
           'moment',
           'ui.bootstrap.persian.datepicker',
           'angularFileUpload',
-          PREFIX + 'app/theme/hotspotThemes.js',
-        ]),
+          PREFIX + 'app/theme/hotspotThemes.js'
+        ])
       })
       .state('app.customers', {
         url: '/customers',
@@ -200,8 +200,8 @@ app.config([
           'ui.grid.pagination',
           'ui.grid.selection',
           'ui.grid.resizeColumns',
-          PREFIX + 'app/customer/customerList.js',
-        ]),
+          PREFIX + 'app/customer/customerList.js'
+        ])
       })
       .state('app.nases', {
         url: '/nas',
@@ -211,8 +211,8 @@ app.config([
           'ui.grid.pagination',
           'ui.grid.selection',
           'ui.grid.resizeColumns',
-          PREFIX + 'app/nas/nasList.js',
-        ]),
+          PREFIX + 'app/nas/nasList.js'
+        ])
       })
       .state('app.wifi', {
         url: '/wifi',
@@ -221,8 +221,8 @@ app.config([
           'ui.grid',
           'ui.grid.pagination',
           'ui.grid.selection',
-          PREFIX + 'app/wifi/wifiSettings.js',
-        ]),
+          PREFIX + 'app/wifi/wifiSettings.js'
+        ])
       })
       .state('app.internetPlans', {
         url: '/internetPlans',
@@ -233,8 +233,8 @@ app.config([
           'ui.grid.pagination',
           'ui.grid.selection',
           'ui.grid.resizeColumns',
-          PREFIX + 'app/internetPlan/internetPlanList.js',
-        ]),
+          PREFIX + 'app/internetPlan/internetPlanList.js'
+        ])
       })
       .state('app.members', {
         url: '/member',
@@ -246,10 +246,10 @@ app.config([
           'ui.grid.resizeColumns',
           'ui.bootstrap.persian.datepicker',
           PREFIX + 'app/member/memberList.js',
-          PREFIX + 'app/member/planHistoryList.js',
-        ]),
+          PREFIX + 'app/member/planHistoryList.js'
+        ])
       })
-        .state('app.reports', {
+      .state('app.reports', {
         url: '/report',
         templateUrl: TEMPLATE_PREFIX + 'app/report/tpl/reportList.html',
         resolve: load([
@@ -258,23 +258,23 @@ app.config([
           'ui.grid.selection',
           'ui.grid.resizeColumns',
           'ui.bootstrap.persian.datepicker',
-          PREFIX + 'app/report/reportList.js',
-        ]),
+          PREFIX + 'app/report/reportList.js'
+        ])
       })
       .state('access.signUp', {
         url: '/signup',
         templateUrl: TEMPLATE_PREFIX + 'app/business/tpl/signUp.html',
-        resolve: load([PREFIX + 'app/business/auth.js']),
+        resolve: load([PREFIX + 'app/business/auth.js'])
       })
       .state('access.createLocalLicense', {
         url: '/license',
         templateUrl: TEMPLATE_PREFIX + 'app/business/tpl/createLicense.html',
-        resolve: load([PREFIX + 'app/business/lc.js']),
+        resolve: load([PREFIX + 'app/business/lc.js'])
       })
       .state('access.signIn', {
         url: '/signin',
         templateUrl: TEMPLATE_PREFIX + 'app/business/tpl/signIn.html',
-        resolve: load([PREFIX + 'app/business/auth.js']),
+        resolve: load([PREFIX + 'app/business/auth.js'])
       })
       .state('access.publicCustomizeService', {
         url: '/public/customizeService',
@@ -282,23 +282,23 @@ app.config([
           TEMPLATE_PREFIX + 'app/business/tpl/publicCustomizeService.html',
         resolve: load([
           'vr.directives.slider',
-          PREFIX + 'app/widgets/customizeService/customizeService.js',
-        ]),
+          PREFIX + 'app/widgets/customizeService/customizeService.js'
+        ])
       })
       .state('access.adminSignIn', {
         url: '/public/admin/signin',
         templateUrl: TEMPLATE_PREFIX + 'app/admin/tpl/signIn.html',
-        resolve: load([PREFIX + 'app/admin/auth.js']),
+        resolve: load([PREFIX + 'app/admin/auth.js'])
       })
       .state('access.resellerSignUp', {
         url: '/public/reseller/signup',
         templateUrl: TEMPLATE_PREFIX + 'app/reseller/tpl/signUp.html',
-        resolve: load([PREFIX + 'app/reseller/auth.js']),
+        resolve: load([PREFIX + 'app/reseller/auth.js'])
       })
       .state('access.resellerSignIn', {
         url: '/public/reseller/signin',
         templateUrl: TEMPLATE_PREFIX + 'app/reseller/tpl/signIn.html',
-        resolve: load([PREFIX + 'app/reseller/auth.js']),
+        resolve: load([PREFIX + 'app/reseller/auth.js'])
       })
       .state('app.netflowReport', {
         url: '/ipReport',
@@ -309,8 +309,8 @@ app.config([
           'ui.grid.selection',
           'ui.bootstrap.persian.datepicker',
           'ui.grid.resizeColumns',
-          PREFIX + 'app/report/netflowReport.js',
-        ]),
+          PREFIX + 'app/report/netflowReport.js'
+        ])
       })
       .state('app.syslogReport', {
         url: '/urlReport',
@@ -321,8 +321,8 @@ app.config([
           'ui.grid.selection',
           'ui.bootstrap.persian.datepicker',
           'ui.grid.resizeColumns',
-          PREFIX + 'app/report/syslogReport.js',
-        ]),
+          PREFIX + 'app/report/syslogReport.js'
+        ])
       })
       .state('app.memberDashboard', {
         url: '/memberDashboard',
@@ -336,26 +336,26 @@ app.config([
           PREFIX + 'app/widgets/planInfo/planInfo.js',
           PREFIX + 'app/widgets/remainBulk/remainBulk.js',
           PREFIX + 'app/widgets/remainTime/remainTime.js',
-          PREFIX + 'app/widgets/memberUsage/usageChart.js',
-        ]),
+          PREFIX + 'app/widgets/memberUsage/usageChart.js'
+        ])
       })
       .state('access.memberSignIn', {
         url: '/public/:name',
         templateUrl: TEMPLATE_PREFIX + 'app/member/tpl/hotspot/signIn.html',
-        resolve: load([PREFIX + 'app/member/auth.js']),
+        resolve: load([PREFIX + 'app/member/auth.js'])
       })
       // others
       .state('access', {
         url: '/access',
-        template: '<div ui-view class="fade-in-right-big smooth"></div>',
+        template: '<div ui-view class="fade-in-right-big smooth"></div>'
       })
       .state('access.forgotpwd', {
         url: '/forgotpwd',
-        templateUrl: 'tpl/page_forgotpwd.html',
+        templateUrl: 'tpl/page_forgotpwd.html'
       })
       .state('access.404', {
         url: '/404',
-        templateUrl: 'tpl/page_404.html',
+        templateUrl: 'tpl/page_404.html'
       });
 
     function load(srcs, callback) {
@@ -392,9 +392,9 @@ app.config([
                   return callback();
                 })
               : promise;
-          },
-        ],
+          }
+        ]
       };
     }
-  },
+  }
 ]);

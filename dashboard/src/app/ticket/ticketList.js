@@ -31,7 +31,7 @@ app.controller('ticketListController', [
     $uibModal,
     PREFIX,
     appMessenger,
-    Business,
+    Business
   ) {
     if (Session.business) {
       businessId = Session.business.id;
@@ -41,7 +41,7 @@ app.controller('ticketListController', [
     $scope.paginationOptions = {
       pageNumber: 1,
       itemPerPage: 10,
-      sort: null,
+      sort: null
     };
 
     $scope.gridOptions = {
@@ -63,7 +63,7 @@ app.controller('ticketListController', [
           enableColumnMenu: false,
           headerCellFilter: 'translate',
           cellTemplate:
-            '<a class="btn btn-link" ng-click="grid.appScope.showTicketDetails(row.entity.id)">{{row.entity.subject}}</a>',
+            '<a class="btn btn-link" ng-click="grid.appScope.showTicketDetails(row.entity.id)">{{row.entity.subject}}</a>'
         },
 
         {
@@ -74,7 +74,7 @@ app.controller('ticketListController', [
           enableColumnMenu: false,
           headerCellFilter: 'translate',
           cellTemplate:
-            '<div class="ui-grid-cell-contents">{{"ticket." + row.entity.response + "Response" | translate }}</div>',
+            '<div class="ui-grid-cell-contents">{{"ticket." + row.entity.response + "Response" | translate }}</div>'
         },
         {
           displayName: 'ticket.creationDate',
@@ -84,8 +84,8 @@ app.controller('ticketListController', [
           enableColumnMenu: false,
           headerCellFilter: 'translate',
           cellTemplate:
-            '<div class="ui-grid-cell-contents">{{row.entity.creationDate |  persianDate : "fullDate" | translateNumber }}{{"general.,"| translate}}&nbsp;{{"general.hour"| translate}}:&nbsp;{{row.entity.creationDate |  date : "HH:mm" | translateNumber }}</div>',
-        },
+            '<div class="ui-grid-cell-contents">{{row.entity.creationDate |  persianDate : "fullDate" | translateNumber }}{{"general.,"| translate}}&nbsp;{{"general.hour"| translate}}:&nbsp;{{row.entity.creationDate |  date : "HH:mm" | translateNumber }}</div>'
+        }
       ],
       onRegisterApi: function(gridApi) {
         $scope.gridApi = gridApi;
@@ -100,7 +100,7 @@ app.controller('ticketListController', [
           }
           getPage();
         });
-      },
+      }
     };
 
     $scope.addTicket = function() {
@@ -126,11 +126,11 @@ app.controller('ticketListController', [
               mobile: Session.business.mobile,
               businessId: Session.business.id,
               response: 'customer',
-              messages: [],
+              messages: []
             };
             $scope.message = {
               creationDate: new Date().getTime(),
-              sendBy: 'customer',
+              sendBy: 'customer'
             };
             $scope.cancel = function() {
               $uibModalInstance.close();
@@ -147,11 +147,11 @@ app.controller('ticketListController', [
                   },
                   function(err) {
                     appMessenger.showError('error.generalError');
-                  },
+                  }
                 );
             };
-          },
-        ],
+          }
+        ]
       });
     };
 
@@ -161,7 +161,7 @@ app.controller('ticketListController', [
 
     $scope.$watch('paginationOptions.itemPerPage', function(
       oldValue,
-      newValue,
+      newValue
     ) {
       getPage();
     });
@@ -193,7 +193,7 @@ app.controller('ticketListController', [
             },
             function(error) {
               $log.error(error);
-            },
+            }
           );
         options.id = businessId;
         options.filter.sort = $scope.paginationOptions.sort;
@@ -208,7 +208,7 @@ app.controller('ticketListController', [
           },
           function(error) {
             $log.error(error);
-          },
+          }
         );
       } else if (Session.userType === 'Admin') {
         if (inputFilter) {
@@ -221,7 +221,7 @@ app.controller('ticketListController', [
           },
           function(error) {
             $log.error(error);
-          },
+          }
         );
 
         options.id = businessId;
@@ -237,9 +237,9 @@ app.controller('ticketListController', [
           },
           function(error) {
             $log.error(error);
-          },
+          }
         );
       }
     };
-  },
+  }
 ]);

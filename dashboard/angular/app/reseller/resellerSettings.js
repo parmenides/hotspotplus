@@ -22,7 +22,7 @@ app.controller('resellerSettings', [
       function(error) {
         $log.error(error);
         appMessenger.showError('error.generalError');
-      },
+      }
     );
     /*
 		 Reseller.getOnlineUsers ( { resellerId: resellerId } ).$promise.then ( function ( res ) {
@@ -35,5 +35,5 @@ app.controller('resellerSettings', [
     /*$scope.buyPackage = function () {
 		 $state.go('app.resellersPackages');
 		 }*/
-  },
+  }
 ]);

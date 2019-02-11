@@ -10,15 +10,15 @@ app.controller('MapCtrl', [
     $scope.mapOptions = {
       center: new google.maps.LatLng(35.784, -78.67),
       zoom: 15,
-      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
     };
 
     $scope.addMarker = function($event, $params) {
       $scope.myMarkers.push(
         new google.maps.Marker({
           map: $scope.myMap,
-          position: $params[0].latLng,
-        }),
+          position: $params[0].latLng
+        })
       );
     };
 
@@ -37,5 +37,5 @@ app.controller('MapCtrl', [
     $scope.setMarkerPosition = function(marker, lat, lng) {
       marker.setPosition(new google.maps.LatLng(lat, lng));
     };
-  },
+  }
 ]);

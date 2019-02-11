@@ -166,7 +166,7 @@
       ctx,
       cx - s * rx,
       cy + c * ry + rmax * 0.5,
-      rmin + (1 - c * 0.5) * rmax,
+      rmin + (1 - c * 0.5) * rmax
     );
   }
 
@@ -243,7 +243,7 @@
       a,
       p + (TAU * 5) / 8,
       p + (TAU * 3) / 8,
-      true,
+      true
     );
     ctx.closePath();
     ctx.stroke();
@@ -511,7 +511,7 @@
         0.7147,
         0.163,
         0.75,
-        0.18,
+        0.18
       ],
       [
         -0.75,
@@ -577,8 +577,8 @@
         0.6994,
         -0.138,
         0.75,
-        -0.14,
-      ],
+        -0.14
+      ]
     ],
     WIND_OFFSETS = [{ start: 0.36, end: 0.11 }, { start: 0.56, end: 0.16 }];
 
@@ -634,7 +634,7 @@
 
       ctx.moveTo(
         cx + (path[b - 2] * (1 - a) + path[b] * a) * cw,
-        cy + (path[b - 1] * (1 - a) + path[b + 1] * a) * cw,
+        cy + (path[b - 1] * (1 - a) + path[b + 1] * a) * cw
       );
 
       if (c < 1) {
@@ -649,7 +649,7 @@
 
         ctx.lineTo(
           cx + (path[d - 2] * (1 - c) + path[d] * c) * cw,
-          cy + (path[d - 1] * (1 - c) + path[d + 1] * c) * cw,
+          cy + (path[d - 1] * (1 - c) + path[d + 1] * c) * cw
         );
       } else
         for (i = b; i !== path.length; i += 2)
@@ -672,7 +672,7 @@
 
       ctx.lineTo(
         cx + (path[d - 2] * (1 - c) + path[d] * c) * cw,
-        cy + (path[d - 1] * (1 - c) + path[d + 1] * c) * cw,
+        cy + (path[d - 1] * (1 - c) + path[d + 1] * c) * cw
       );
 
       ctx.stroke();
@@ -692,7 +692,7 @@
         cy + (path[f - 1] * (1 - e) + path[f + 1] * e) * cw,
         cw,
         s,
-        color,
+        color
       );
     }
   }
@@ -832,7 +832,7 @@
       obj = {
         element: el,
         context: el.getContext('2d'),
-        drawing: draw,
+        drawing: draw
       };
 
       this.list.push(obj);
@@ -889,7 +889,7 @@
         cancelInterval(this.interval);
         this.interval = null;
       }
-    },
+    }
   };
 
   global.Skycons = Skycons;

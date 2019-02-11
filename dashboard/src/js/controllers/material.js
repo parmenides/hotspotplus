@@ -27,7 +27,7 @@ app.controller('MDAutocompleteCtrl', function($scope, $timeout, $q) {
           deferred.resolve(results);
         },
         Math.random() * 1000,
-        false,
+        false
       );
       return deferred.promise;
     } else {
@@ -51,7 +51,7 @@ app.controller('MDAutocompleteCtrl', function($scope, $timeout, $q) {
     return allStates.split(/, +/g).map(function(state) {
       return {
         value: state.toLowerCase(),
-        display: state,
+        display: state
       };
     });
   }
@@ -77,7 +77,7 @@ app.controller('MDBottomSheetCtrl', function($scope, $timeout, $mdBottomSheet) {
       .show({
         templateUrl: 'bottom-sheet-list-template.html',
         controller: 'ListBottomSheetCtrl',
-        targetEvent: $event,
+        targetEvent: $event
       })
       .then(function(clickedItem) {
         $scope.alert = clickedItem.name + ' clicked!';
@@ -90,7 +90,7 @@ app.controller('MDBottomSheetCtrl', function($scope, $timeout, $mdBottomSheet) {
       .show({
         templateUrl: 'bottom-sheet-grid-template.html',
         controller: 'GridBottomSheetCtrl',
-        targetEvent: $event,
+        targetEvent: $event
       })
       .then(function(clickedItem) {
         $scope.alert = clickedItem.name + ' clicked!';
@@ -103,7 +103,7 @@ app.controller('MDListBottomSheetCtrl', function($scope, $mdBottomSheet) {
     { name: 'Share', icon: 'share' },
     { name: 'Upload', icon: 'upload' },
     { name: 'Copy', icon: 'copy' },
-    { name: 'Print this page', icon: 'print' },
+    { name: 'Print this page', icon: 'print' }
   ];
 
   $scope.listItemClick = function($index) {
@@ -119,7 +119,7 @@ app.controller('MDGridBottomSheetCtrl', function($scope, $mdBottomSheet) {
     { name: 'Message', icon: 'message' },
     { name: 'Copy', icon: 'copy' },
     { name: 'Facebook', icon: 'facebook' },
-    { name: 'Twitter', icon: 'twitter' },
+    { name: 'Twitter', icon: 'twitter' }
   ];
 
   $scope.listItemClick = function($index) {
@@ -141,32 +141,32 @@ app.controller('MDRadioCtrl', function($scope) {
   $scope.data = {
     group1: 'Banana',
     group2: '2',
-    group3: 'avatar-1',
+    group3: 'avatar-1'
   };
 
   $scope.avatarData = [
     {
       id: 'svg-1',
       title: 'avatar 1',
-      value: 'avatar-1',
+      value: 'avatar-1'
     },
     {
       id: 'svg-2',
       title: 'avatar 2',
-      value: 'avatar-2',
+      value: 'avatar-2'
     },
     {
       id: 'svg-3',
       title: 'avatar 3',
-      value: 'avatar-3',
-    },
+      value: 'avatar-3'
+    }
   ];
 
   $scope.radioData = [
     { label: '1', value: 1 },
     { label: '2', value: 2 },
     { label: '3', value: '3', isDisabled: true },
-    { label: '4', value: '4' },
+    { label: '4', value: '4' }
   ];
 
   $scope.submit = function() {
@@ -186,7 +186,7 @@ app.controller('MDRadioCtrl', function($scope) {
 app.controller('MDSwitchCtrl', function($scope) {
   $scope.data = {
     cb1: true,
-    cb4: true,
+    cb4: true
   };
 
   $scope.onChange = function(cbState) {
@@ -205,7 +205,7 @@ app.controller('MDDialogCtrl', function($scope, $mdDialog) {
         .content('You can specify some description text in here.')
         .ariaLabel('Password notification')
         .ok('Got it!')
-        .targetEvent(ev),
+        .targetEvent(ev)
     );
   };
 
@@ -225,7 +225,7 @@ app.controller('MDDialogCtrl', function($scope, $mdDialog) {
       },
       function() {
         $scope.alert = 'You decided to keep your debt.';
-      },
+      }
     );
   };
 
@@ -234,7 +234,7 @@ app.controller('MDDialogCtrl', function($scope, $mdDialog) {
       .show({
         controller: DialogController,
         templateUrl: 'tpl/material/dialog.tmpl.html',
-        targetEvent: ev,
+        targetEvent: ev
       })
       .then(
         function(answer) {
@@ -242,7 +242,7 @@ app.controller('MDDialogCtrl', function($scope, $mdDialog) {
         },
         function() {
           $scope.alert = 'You cancelled the dialog.';
-        },
+        }
       );
   };
 });
@@ -265,7 +265,7 @@ app.controller('MDSliderCtrl', function($scope) {
   $scope.color = {
     red: Math.floor(Math.random() * 255),
     green: Math.floor(Math.random() * 255),
-    blue: Math.floor(Math.random() * 255),
+    blue: Math.floor(Math.random() * 255)
   };
 
   $scope.rating1 = 3;
@@ -293,7 +293,7 @@ app.controller('MDSelectCtrl', function($timeout, $scope) {
     'Financial District',
     'Midtown',
     'West Village',
-    'Williamsburg',
+    'Williamsburg'
   ];
 
   $scope.toppings = [
@@ -304,7 +304,7 @@ app.controller('MDSelectCtrl', function($timeout, $scope) {
     { category: 'veg', name: 'Mushrooms' },
     { category: 'veg', name: 'Onion' },
     { category: 'veg', name: 'Green Pepper' },
-    { category: 'veg', name: 'Green Olives' },
+    { category: 'veg', name: 'Green Olives' }
   ];
 
   $scope.loadUsers = function() {
@@ -316,7 +316,7 @@ app.controller('MDSelectCtrl', function($timeout, $scope) {
         { id: 2, name: 'Shaggy Rodgers' },
         { id: 3, name: 'Fred Jones' },
         { id: 4, name: 'Daphne Blake' },
-        { id: 5, name: 'Velma Dinkley' },
+        { id: 5, name: 'Velma Dinkley' }
       ];
     }, 650);
   };
@@ -334,12 +334,12 @@ app.controller('MDInputCtrl', function($scope) {
     state: 'CA',
     biography:
       'Loves kittens, snowboarding, and can type at 130 WPM.\n\nAnd rumor has it she bouldered up Castle Craig!',
-    postalCode: '94043',
+    postalCode: '94043'
   };
   $scope.project = {
     description: 'Nuclear Missile Defense System',
     clientName: 'Bill Clinton',
-    rate: 500,
+    rate: 500
   };
 });
 
@@ -362,7 +362,7 @@ app.controller('MDProgressCtrl', [
       },
       100,
       0,
-      true,
+      true
     );
 
     $interval(
@@ -371,9 +371,9 @@ app.controller('MDProgressCtrl', [
       },
       7200,
       0,
-      true,
+      true
     );
-  },
+  }
 ]);
 
 app.controller('MDSidenavCtrl', function($scope, $timeout, $mdSidenav, $log) {
@@ -414,78 +414,78 @@ app.controller('MDSubheaderCtrl', function($scope) {
       what: 'Brunch this weekend?',
       who: 'Min Li Chan',
       when: '3:08PM',
-      notes: " I'll be in your neighborhood doing errands",
+      notes: " I'll be in your neighborhood doing errands"
     },
     {
       face: 'img/a1.jpg',
       what: 'Brunch this weekend?',
       who: 'Min Li Chan',
       when: '3:08PM',
-      notes: " I'll be in your neighborhood doing errands",
+      notes: " I'll be in your neighborhood doing errands"
     },
     {
       face: 'img/a2.jpg',
       what: 'Brunch this weekend?',
       who: 'Min Li Chan',
       when: '3:08PM',
-      notes: " I'll be in your neighborhood doing errands",
+      notes: " I'll be in your neighborhood doing errands"
     },
     {
       face: 'img/a3.jpg',
       what: 'Brunch this weekend?',
       who: 'Min Li Chan',
       when: '3:08PM',
-      notes: " I'll be in your neighborhood doing errands",
+      notes: " I'll be in your neighborhood doing errands"
     },
     {
       face: 'img/a4.jpg',
       what: 'Brunch this weekend?',
       who: 'Min Li Chan',
       when: '3:08PM',
-      notes: " I'll be in your neighborhood doing errands",
+      notes: " I'll be in your neighborhood doing errands"
     },
     {
       face: 'img/a5.jpg',
       what: 'Brunch this weekend?',
       who: 'Min Li Chan',
       when: '3:08PM',
-      notes: " I'll be in your neighborhood doing errands",
+      notes: " I'll be in your neighborhood doing errands"
     },
     {
       face: 'img/a6.jpg',
       what: 'Brunch this weekend?',
       who: 'Min Li Chan',
       when: '3:08PM',
-      notes: " I'll be in your neighborhood doing errands",
+      notes: " I'll be in your neighborhood doing errands"
     },
     {
       face: 'img/a7.jpg',
       what: 'Brunch this weekend?',
       who: 'Min Li Chan',
       when: '3:08PM',
-      notes: " I'll be in your neighborhood doing errands",
+      notes: " I'll be in your neighborhood doing errands"
     },
     {
       face: 'img/a8.jpg',
       what: 'Brunch this weekend?',
       who: 'Min Li Chan',
       when: '3:08PM',
-      notes: " I'll be in your neighborhood doing errands",
+      notes: " I'll be in your neighborhood doing errands"
     },
     {
       face: 'img/a9.jpg',
       what: 'Brunch this weekend?',
       who: 'Min Li Chan',
       when: '3:08PM',
-      notes: " I'll be in your neighborhood doing errands",
+      notes: " I'll be in your neighborhood doing errands"
     },
     {
       face: 'img/a0.jpg',
       what: 'Brunch this weekend?',
       who: 'Min Li Chan',
       when: '3:08PM',
-      notes: " I'll be in your neighborhood doing errands",
-    },
+      notes: " I'll be in your neighborhood doing errands"
+    }
   ];
 });
 
@@ -493,7 +493,7 @@ app.controller('MDTabCtrl', function($scope) {
   $scope.data = {
     selectedIndex: 0,
     secondLocked: true,
-    secondLabel: 'Item Two',
+    secondLabel: 'Item Two'
   };
 
   $scope.next = function() {
@@ -507,53 +507,51 @@ app.controller('MDTabCtrl', function($scope) {
   var tabs = [
     {
       title: 'One',
-      content:
-        "Tabs will become paginated if there isn't enough room for them.",
+      content: "Tabs will become paginated if there isn't enough room for them."
     },
     {
       title: 'Two',
-      content:
-        'You can swipe left and right on a mobile device to change tabs.',
+      content: 'You can swipe left and right on a mobile device to change tabs.'
     },
     {
       title: 'Three',
       content:
-        'You can bind the selected tab via the selected attribute on the md-tabs element.',
+        'You can bind the selected tab via the selected attribute on the md-tabs element.'
     },
     {
       title: 'Four',
       content:
-        'If you set the selected tab binding to -1, it will leave no tab selected.',
+        'If you set the selected tab binding to -1, it will leave no tab selected.'
     },
     {
       title: 'Five',
-      content: 'If you remove a tab, it will try to select a new one.',
+      content: 'If you remove a tab, it will try to select a new one.'
     },
     {
       title: 'Six',
       content:
-        "There's an ink bar that follows the selected tab, you can turn it off if you want.",
+        "There's an ink bar that follows the selected tab, you can turn it off if you want."
     },
     {
       title: 'Seven',
       content:
-        'If you set ng-disabled on a tab, it becomes unselectable. If the currently selected tab becomes disabled, it will try to select the next tab.',
+        'If you set ng-disabled on a tab, it becomes unselectable. If the currently selected tab becomes disabled, it will try to select the next tab.'
     },
     {
       title: 'Eight',
       content:
-        "If you look at the source, you're using tabs to look at a demo for tabs. Recursion!",
+        "If you look at the source, you're using tabs to look at a demo for tabs. Recursion!"
     },
     {
       title: 'Nine',
       content:
-        'If you set md-theme="green" on the md-tabs element, you\'ll get green tabs.',
+        'If you set md-theme="green" on the md-tabs element, you\'ll get green tabs.'
     },
     {
       title: 'Ten',
       content:
-        "If you're still reading this, you should just go check out the API docs for tabs!",
-    },
+        "If you're still reading this, you should just go check out the API docs for tabs!"
+    }
   ];
 
   $scope.tabs = tabs;
@@ -579,7 +577,7 @@ app.controller('MDToastCtrl', function($scope, $mdToast, $animate) {
     bottom: false,
     top: true,
     left: false,
-    right: true,
+    right: true
   };
 
   $scope.getToastPosition = function() {
@@ -596,7 +594,7 @@ app.controller('MDToastCtrl', function($scope, $mdToast, $animate) {
       templateUrl: 'tpl/material/toast.tmpl.html',
       hideDelay: 6000,
       parent: '#toast',
-      position: $scope.getToastPosition(),
+      position: $scope.getToastPosition()
     });
   };
 
@@ -606,7 +604,7 @@ app.controller('MDToastCtrl', function($scope, $mdToast, $animate) {
         .simple()
         .content('Simple Toast!')
         .position($scope.getToastPosition())
-        .hideDelay(3000),
+        .hideDelay(3000)
     );
   };
 

@@ -9,7 +9,7 @@ app.directive('visitGrowth', [
   function($log, PREFIX, FootTraffic) {
     return {
       scope: {
-        params: '=options',
+        params: '=options'
       },
 
       controller: function($scope) {
@@ -61,13 +61,13 @@ app.directive('visitGrowth', [
             function(error) {
               $log.error(
                 'can not get visits count and growth rate from data source: ',
-                error,
+                error
               );
-            },
+            }
           );
         }
       },
-      templateUrl: PREFIX + 'app/widgets/visitsGrowth/tpl/visitsGrowth.html',
+      templateUrl: PREFIX + 'app/widgets/visitsGrowth/tpl/visitsGrowth.html'
     };
-  },
+  }
 ]);

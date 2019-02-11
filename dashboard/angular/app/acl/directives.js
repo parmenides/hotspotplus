@@ -40,7 +40,7 @@ app.directive('checkAction', [
                 buyPremiumTitle +
                 '</div>',
               content: '<div>' + message + '</div>',
-              placement: 'bottom',
+              placement: 'bottom'
             });
           },
           determineVisibility = function(resetFirst) {
@@ -60,7 +60,7 @@ app.directive('checkAction', [
         if (attrs.accessAction) {
           determineVisibility(true);
         }
-      },
+      }
     };
-  },
+  }
 ]);

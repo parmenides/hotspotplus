@@ -13,17 +13,17 @@ app.controller('MusicCtrl', [
         sources: [
           {
             src: $sce.trustAsResourceUrl(
-              'http://flatfull.com/themes/assets/musics/Miaow-03-Lentement.mp3',
+              'http://flatfull.com/themes/assets/musics/Miaow-03-Lentement.mp3'
             ),
-            type: 'audio/mpeg',
+            type: 'audio/mpeg'
           },
           {
             src: $sce.trustAsResourceUrl(
-              'http://flatfull.com/themes/assets/musics/Miaow-03-Lentement.ogg',
+              'http://flatfull.com/themes/assets/musics/Miaow-03-Lentement.ogg'
             ),
-            type: 'audio/ogg',
-          },
-        ],
+            type: 'audio/ogg'
+          }
+        ]
       },
       {
         title: '2. Bubble',
@@ -32,17 +32,17 @@ app.controller('MusicCtrl', [
         sources: [
           {
             src: $sce.trustAsResourceUrl(
-              'http://flatfull.com/themes/assets/musics/Miaow-07-Bubble.mp3',
+              'http://flatfull.com/themes/assets/musics/Miaow-07-Bubble.mp3'
             ),
-            type: 'audio/mpeg',
+            type: 'audio/mpeg'
           },
           {
             src: $sce.trustAsResourceUrl(
-              'http://flatfull.com/themes/assets/musics/Miaow-07-Bubble.ogg',
+              'http://flatfull.com/themes/assets/musics/Miaow-07-Bubble.ogg'
             ),
-            type: 'audio/ogg',
-          },
-        ],
+            type: 'audio/ogg'
+          }
+        ]
       },
       {
         title: '3. Partir',
@@ -51,18 +51,18 @@ app.controller('MusicCtrl', [
         sources: [
           {
             src: $sce.trustAsResourceUrl(
-              'http://flatfull.com/themes/assets/musics/Miaow-09-Partir.mp3',
+              'http://flatfull.com/themes/assets/musics/Miaow-09-Partir.mp3'
             ),
-            type: 'audio/mpeg',
+            type: 'audio/mpeg'
           },
           {
             src: $sce.trustAsResourceUrl(
-              'http://flatfull.com/themes/assets/musics/Miaow-09-Partir.ogg',
+              'http://flatfull.com/themes/assets/musics/Miaow-09-Partir.ogg'
             ),
-            type: 'audio/ogg',
-          },
-        ],
-      },
+            type: 'audio/ogg'
+          }
+        ]
+      }
     ];
 
     $scope.config = {
@@ -72,8 +72,8 @@ app.controller('MusicCtrl', [
       shuffle: false,
       autoPlay: true,
       theme: {
-        url: 'js/app/music/videogular.css',
-      },
+        url: 'js/app/music/videogular.css'
+      }
     };
 
     $scope.onPlayerReady = function(API) {
@@ -145,33 +145,33 @@ app.controller('MusicCtrl', [
       sources: [
         {
           src: $sce.trustAsResourceUrl(
-            'http://flatfull.com/themes/assets/video/big_buck_bunny_trailer.m4v',
+            'http://flatfull.com/themes/assets/video/big_buck_bunny_trailer.m4v'
           ),
-          type: 'video/mp4',
+          type: 'video/mp4'
         },
         {
           src: $sce.trustAsResourceUrl(
-            'http://flatfull.com/themes/assets/video/big_buck_bunny_trailer.webm',
+            'http://flatfull.com/themes/assets/video/big_buck_bunny_trailer.webm'
           ),
-          type: 'video/webm',
+          type: 'video/webm'
         },
         {
           src: $sce.trustAsResourceUrl(
-            'http://flatfull.com/themes/assets/video/big_buck_bunny_trailer.ogv',
+            'http://flatfull.com/themes/assets/video/big_buck_bunny_trailer.ogv'
           ),
-          type: 'video/ogg',
-        },
+          type: 'video/ogg'
+        }
       ],
       theme: {
-        url: 'js/app/music/videogular.css',
+        url: 'js/app/music/videogular.css'
       },
       plugins: {
         controls: {
           autoHide: true,
-          autoHideTime: 5000,
+          autoHideTime: 5000
         },
-        poster: 'img/c1.jpg',
-      },
+        poster: 'img/c1.jpg'
+      }
     };
-  },
+  }
 ]);

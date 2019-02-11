@@ -15,14 +15,14 @@ angular
         $http
           .post(
             window.API_URL + '/Members/recoverHotspotUser',
-            usernameOrMobile,
+            usernameOrMobile
           )
           .then(function(result) {
             return clbk(null, result.data);
           })
           .catch(function(error) {
             sendError('recoverHotspotUser', error, {
-              usernameOrMobile: usernameOrMobile,
+              usernameOrMobile: usernameOrMobile
             });
             return clbk(error);
           });
@@ -51,7 +51,7 @@ angular
             if (error.status == 404) {
               message = 'bizNotFound';
               sendError('loadConfig', 'business profile not found', {
-                bizInfo: bizInfo,
+                bizInfo: bizInfo
               });
             }
             sendError('loadConfig', error, { bizInfo: bizInfo });
@@ -74,7 +74,7 @@ angular
       this.signIn = function(userInfo, clbk) {
         userInfo.username = usernameService.concat(
           userInfo.username,
-          userInfo.businessId,
+          userInfo.businessId
         );
         $http
           .post(window.API_URL + '/Members/signIn', userInfo)
@@ -125,7 +125,7 @@ angular
         $http
           .post(
             window.API_URL + '/InternetPlans/getPublicInternetPlans',
-            businessId,
+            businessId
           )
           .then(function(result) {
             return clbk(null, result.data);
@@ -153,7 +153,7 @@ angular
         $http
           .post(
             window.API_URL + '/InternetPlans/assignFreePlanToMember',
-            freePlan,
+            freePlan
           )
           .then(function(result) {
             return defer.resolve(result.data);
@@ -197,7 +197,7 @@ angular
           })
           .catch(function(error) {
             sendError('checkDefaultInternetPlan', error, {
-              defaultPlan: defaultPlan,
+              defaultPlan: defaultPlan
             });
             return cb(error);
           });
@@ -213,12 +213,12 @@ angular
             sendError(
               error,
               { method: 'createForeignHotSpotMember' },
-              { user: user },
+              { user: user }
             );
             return clbk(error);
           });
       };
-    },
+    }
   ])
   .service('errorMessage', [
     '$log',
@@ -240,5 +240,5 @@ angular
         }
         appMessenger.showError(errorMessage);
       };
-    },
+    }
   ]);

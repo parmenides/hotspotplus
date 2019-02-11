@@ -31,7 +31,7 @@ angular.module('app').directive('uiFullscreen', [
             }
           });
         });
-      },
+      }
     };
-  },
+  }
 ]);

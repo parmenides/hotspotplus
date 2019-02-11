@@ -23,7 +23,7 @@ app.controller('memberDashboardCtrl', [
       danger: '#f05050',
       light: '#e8eff0',
       dark: '#3a3f51',
-      black: '#1c2b36',
+      black: '#1c2b36'
     };
     $scope.planParams = {
       planDeleted: false,
@@ -35,22 +35,22 @@ app.controller('memberDashboardCtrl', [
         duration: 0,
         speed: {
           value: 0,
-          type: '',
-        },
-      },
+          type: ''
+        }
+      }
     };
     $scope.bulkParams = {
       color: $scope.color,
       remainBulk: { value: 0, type: '' },
-      bulk: 0,
+      bulk: 0
     };
     $scope.timeParams = {
       color: $scope.color,
       timeDuration: 0,
-      remainTime: 0,
+      remainTime: 0
     };
     $scope.usageParams = {
-      color: $scope.color,
+      color: $scope.color
     };
 
     var businessId = Session.member.businessId;
@@ -58,7 +58,7 @@ app.controller('memberDashboardCtrl', [
 
     Member.getMemberBalance({
       businessId: businessId,
-      memberId: memberId,
+      memberId: memberId
     }).$promise.then(
       function(balance) {
         $scope.package = {};
@@ -89,7 +89,7 @@ app.controller('memberDashboardCtrl', [
         ) {
           $scope.planParams.planDeleted = true;
         }
-      },
+      }
     );
-  },
+  }
 ]);

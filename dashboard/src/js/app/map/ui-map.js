@@ -8,7 +8,7 @@
       //Prefix all googlemap events with 'map-', so eg 'click'
       //for the googlemap doesn't interfere with a normal 'click' event
       window.google.maps.event.addListener(googleObject, eventName, function(
-        event,
+        event
       ) {
         element.triggerHandler('map-' + eventName, event);
         //We create an $apply if it isn't happening. we need better support for this
@@ -45,9 +45,9 @@
           model.assign(scope, map);
 
           bindMapEvents(scope, mapEvents, map, elm);
-        },
+        }
       };
-    },
+    }
   ]);
 
   app.value('uiMapInfoWindowConfig', {});
@@ -87,9 +87,9 @@
             $compile(elm.contents())(scope);
             _open.call(infoWindow, a1, a2, a3, a4, a5, a6);
           };
-        },
+        }
       };
-    },
+    }
   ]);
 
   /*
@@ -109,9 +109,9 @@
                 bindMapEvents(scope, events, newObject, elm);
               }
             });
-          },
+          }
         };
-      },
+      }
     ]);
   }
 
@@ -120,29 +120,29 @@
     'animation_changed click clickable_changed cursor_changed ' +
       'dblclick drag dragend draggable_changed dragstart flat_changed icon_changed ' +
       'mousedown mouseout mouseover mouseup position_changed rightclick ' +
-      'shadow_changed shape_changed title_changed visible_changed zindex_changed',
+      'shadow_changed shape_changed title_changed visible_changed zindex_changed'
   );
 
   mapOverlayDirective(
     'uiMapPolyline',
-    'click dblclick mousedown mousemove mouseout mouseover mouseup rightclick',
+    'click dblclick mousedown mousemove mouseout mouseover mouseup rightclick'
   );
 
   mapOverlayDirective(
     'uiMapPolygon',
-    'click dblclick mousedown mousemove mouseout mouseover mouseup rightclick',
+    'click dblclick mousedown mousemove mouseout mouseover mouseup rightclick'
   );
 
   mapOverlayDirective(
     'uiMapRectangle',
     'bounds_changed click dblclick mousedown mousemove mouseout mouseover ' +
-      'mouseup rightclick',
+      'mouseup rightclick'
   );
 
   mapOverlayDirective(
     'uiMapCircle',
     'center_changed click dblclick mousedown mousemove ' +
-      'mouseout mouseover mouseup radius_changed rightclick',
+      'mouseout mouseover mouseup radius_changed rightclick'
   );
 
   mapOverlayDirective('uiMapGroundOverlay', 'click dblclick');

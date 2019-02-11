@@ -82,7 +82,7 @@ angular.module('app').directive('uiNav', [
           next && next.trigger('mouseleave.nav');
           $('> .nav', wrap).remove();
         });
-      },
+      }
     };
-  },
+  }
 ]);

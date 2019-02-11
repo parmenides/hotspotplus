@@ -14,11 +14,11 @@ app.directive('membersChart', [
     Member,
     translateFilter,
     persianDateFilter,
-    translateNumberFilter,
+    translateNumberFilter
   ) {
     return {
       scope: {
-        params: '=options',
+        params: '=options'
       },
       controller: function($scope) {
         $scope.loading = false;
@@ -52,13 +52,13 @@ app.directive('membersChart', [
             var xAxesLabel = 'dashboard.xAxesLabelDaily';
             for (var date in res.result.date) {
               res.result.date[date] = translateNumberFilter(
-                persianDateFilter(new Date(res.result.date[date]), 'yyyy/M/dd'),
+                persianDateFilter(new Date(res.result.date[date]), 'yyyy/M/dd')
               );
             }
             $scope.labels = res.result.date;
             $scope.series = [
               translateFilter('dashboard.newMembers'),
-              translateFilter('dashboard.failedMembers'),
+              translateFilter('dashboard.failedMembers')
             ];
             $scope.data = [res.result.verified, res.result.failed];
             $scope.type = 'line';
@@ -72,8 +72,8 @@ app.directive('membersChart', [
                 display: true,
                 position: 'bottom',
                 labels: {
-                  fontColor: '#333',
-                },
+                  fontColor: '#333'
+                }
               },
               tooltips: {
                 enabled: true,
@@ -87,8 +87,8 @@ app.directive('membersChart', [
                       ' : ' +
                       translateNumberFilter(tooltipItems.yLabel)
                     );
-                  },
-                },
+                  }
+                }
               },
               scales: {
                 xAxes: [
@@ -96,7 +96,7 @@ app.directive('membersChart', [
                     scaleLabel: {
                       display: true,
                       labelString: translateFilter(xAxesLabel),
-                      fontColor: '#333',
+                      fontColor: '#333'
                     },
                     afterTickToLabelConversion: function(data) {
                       var xLabels = data.ticks;
@@ -107,8 +107,8 @@ app.directive('membersChart', [
                           }
                         });
                       }
-                    },
-                  },
+                    }
+                  }
                 ],
                 yAxes: [
                   {
@@ -119,27 +119,27 @@ app.directive('membersChart', [
                     scaleLabel: {
                       display: true,
                       labelString: translateFilter('dashboard.yAxesLabelQty'),
-                      fontColor: '#333',
+                      fontColor: '#333'
                     },
                     ticks: {
                       beginAtZero: true,
                       callback: function(value) {
                         return translateNumberFilter(Number(value));
-                      },
-                    },
-                  },
-                ],
-              },
+                      }
+                    }
+                  }
+                ]
+              }
             };
           }),
             function(error) {
               $log.error(
-                'can not get members chart info from data source: ' + error,
+                'can not get members chart info from data source: ' + error
               );
             };
         }
       },
-      templateUrl: PREFIX + 'app/widgets/membersChart/tpl/membersChart.html',
+      templateUrl: PREFIX + 'app/widgets/membersChart/tpl/membersChart.html'
     };
-  },
+  }
 ]);

@@ -8,7 +8,7 @@ app.directive('sessionsCount', [
   function(PREFIX, ClientSession, $log) {
     return {
       scope: {
-        params: '=options',
+        params: '=options'
       },
 
       controller: function($scope) {
@@ -27,7 +27,7 @@ app.directive('sessionsCount', [
           var session = {};
           session.businessId = $scope.params.businessId;
           ClientSession.getOnlineSessionCount({
-            businessId: session.businessId,
+            businessId: session.businessId
           }).$promise.then(
             function(result) {
               $scope.count = result.count;
@@ -35,11 +35,11 @@ app.directive('sessionsCount', [
             },
             function(error) {
               $log.error(error);
-            },
+            }
           );
         }
       },
-      templateUrl: PREFIX + 'app/widgets/sessionsCount/tpl/sessionsCount.html',
+      templateUrl: PREFIX + 'app/widgets/sessionsCount/tpl/sessionsCount.html'
     };
-  },
+  }
 ]);

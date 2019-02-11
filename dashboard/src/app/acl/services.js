@@ -18,13 +18,13 @@ app.service('AclService', [
     PREFIX,
     Business,
     Session,
-    translateFilter,
+    translateFilter
   ) {
     this.checkIfPermitted = function(action, clbk, option) {
       var buyPremium = translateFilter('general.buyPremium');
       var buyLogModule = translateFilter('general.buyLogModule');
       var buyMemberPanelModule = translateFilter(
-        'general.buyMemberPanelModule',
+        'general.buyMemberPanelModule'
       );
       var buyPaymentModule = translateFilter('general.buyPaymentModule');
 
@@ -63,7 +63,7 @@ app.service('AclService', [
           uploadMembers: true,
           uploadLogo: true,
           customizeHotspotForm: true,
-          enableDropbox: true,
+          enableDropbox: true
         },
         economic6: {
           addMessageSignature: true,
@@ -80,7 +80,7 @@ app.service('AclService', [
           uploadMembers: true,
           uploadLogo: true,
           customizeHotspotForm: true,
-          enableDropbox: true,
+          enableDropbox: true
         },
         economic12: {
           addMessageSignature: true,
@@ -97,8 +97,8 @@ app.service('AclService', [
           uploadMembers: true,
           uploadLogo: true,
           customizeHotspotForm: true,
-          enableDropbox: true,
-        },
+          enableDropbox: true
+        }
       };
 
       if (action === 'addMessageSignature') {
@@ -202,9 +202,9 @@ app.service('AclService', [
           },
           function(error) {
             return clbk(error);
-          },
+          }
         );
       }
     };
-  },
+  }
 ]);

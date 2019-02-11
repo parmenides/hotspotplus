@@ -19,7 +19,7 @@ app
         [9, 7.2],
         [10, 7],
         [11, 6.8],
-        [12, 7],
+        [12, 7]
       ];
 
       $scope.d0_1 = [
@@ -32,7 +32,7 @@ app
         [6, 11],
         [7, 6.5],
         [8, 8],
-        [9, 7],
+        [9, 7]
       ];
 
       $scope.d0_2 = [
@@ -45,7 +45,7 @@ app
         [6, 6],
         [7, 3],
         [8, 4],
-        [9, 3],
+        [9, 3]
       ];
 
       $scope.d1_1 = [[10, 120], [20, 70], [30, 70], [40, 60]];
@@ -65,7 +65,7 @@ app
         { label: 'iPad Mini', data: 10 },
         { label: 'iPad Mini Retina', data: 20 },
         { label: 'iPhone4S', data: 12 },
-        { label: 'iPad Air', data: 18 },
+        { label: 'iPad Air', data: 18 }
       ];
 
       $scope.refreshData = function() {
@@ -95,5 +95,5 @@ app
       };
 
       $scope.d4 = $scope.getRandomData();
-    },
+    }
   ]);

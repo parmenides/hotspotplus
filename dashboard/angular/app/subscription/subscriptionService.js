@@ -20,7 +20,7 @@ app.controller('subscriptionService', [
     $uibModal,
     PREFIX,
     Coupon,
-    Invoice,
+    Invoice
   ) {
     if (Session.business == null) {
       return;
@@ -53,7 +53,7 @@ app.controller('subscriptionService', [
             function(error) {
               $log.error(error);
               appMessenger.showError('business.settingsLoadUnSuccessful');
-            },
+            }
           );
         } else {
           $scope.hasReseller = false;
@@ -71,7 +71,7 @@ app.controller('subscriptionService', [
       function(error) {
         $log.error(error);
         appMessenger.showError('business.settingsLoadUnSuccessful');
-      },
+      }
     );
-  },
+  }
 ]);

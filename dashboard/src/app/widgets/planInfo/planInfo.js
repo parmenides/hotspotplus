@@ -9,7 +9,7 @@ app.directive('planInfo', [
   function(PREFIX, $log, persianDateFilter, translateNumberFilter) {
     return {
       scope: {
-        params: '=options',
+        params: '=options'
       },
 
       controller: function($scope) {
@@ -20,15 +20,15 @@ app.directive('planInfo', [
           'dd-MMMM-yyyy',
           'yyyy/MM/dd',
           'dd.MM.yyyy',
-          'shortDate',
+          'shortDate'
         ];
         $scope.dateFormat = $scope.dateFormats[1];
 
         $scope.params.expireDate = translateNumberFilter(
           persianDateFilter(
             new Date($scope.params.startDate),
-            $scope.dateFormat,
-          ),
+            $scope.dateFormat
+          )
         );
         $scope.$watch('params.package.duration', function(newVal, oldVal) {
           if (typeof newVal !== 'undefined') {
@@ -47,12 +47,12 @@ app.directive('planInfo', [
             }
             var expireDate = $scope.params.startDate + days * dayMilliSecond;
             $scope.params.expireDate = translateNumberFilter(
-              persianDateFilter(new Date(expireDate), $scope.dateFormat),
+              persianDateFilter(new Date(expireDate), $scope.dateFormat)
             );
           }
         });
       },
-      templateUrl: PREFIX + 'app/widgets/planInfo/tpl/planInfo.html',
+      templateUrl: PREFIX + 'app/widgets/planInfo/tpl/planInfo.html'
     };
-  },
+  }
 ]);

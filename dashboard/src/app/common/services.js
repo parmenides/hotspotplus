@@ -30,8 +30,8 @@ app
                 options.saveCallback &&
                   options.saveCallback($scope.currentPassword, $scope.password);
               };
-            },
-          ],
+            }
+          ]
         });
       };
 
@@ -55,11 +55,11 @@ app
                 $uibModalInstance.close();
                 options.yesCallback && options.yesCallback();
               };
-            },
-          ],
+            }
+          ]
         });
       };
-    },
+    }
   ])
   .service('crudUtils', [
     '$log',
@@ -72,7 +72,7 @@ app
           }
         });
       };
-    },
+    }
   ])
   .service('appMessenger', [
     'toaster',
@@ -85,7 +85,7 @@ app
         toaster.pop(
           'success',
           translateFilter(title),
-          translateFilter(message),
+          translateFilter(message)
         );
       };
 
@@ -103,7 +103,7 @@ app
         toaster.pop(
           'warning',
           translateFilter(title),
-          translateFilter(message),
+          translateFilter(message)
         );
       };
 
@@ -120,7 +120,7 @@ app
         }
         toaster.pop('wait', translateFilter(title), translateFilter(message));
       };
-    },
+    }
   ])
   .service('roleService', [
     '$log',
@@ -134,8 +134,8 @@ app
         return $q(function(resolve, reject) {
           RoleMapping.find({
             filter: {
-              where: { principalType: 'USER', principalId: principalId },
-            },
+              where: { principalType: 'USER', principalId: principalId }
+            }
           }).$promise.then(
             function(roleMapping) {
               var roleIds = [];
@@ -149,7 +149,7 @@ app
                   },
                   function(error) {
                     reject(error);
-                  },
+                  }
                 );
               } else {
                 resolve([]);
@@ -157,7 +157,7 @@ app
             },
             function(error) {
               reject(error);
-            },
+            }
           );
         });
       };
@@ -180,14 +180,14 @@ app
               },
               function(error) {
                 reject(error);
-              },
+              }
             );
           } else {
             resolve(ids);
           }
         });
       };
-    },
+    }
   ])
   .service('dashboardTiming', [
     '$log',
@@ -204,14 +204,14 @@ app
           0,
           0,
           0,
-          0,
+          0
         );
         return date;
       };
       this.startOfMonth = function(date) {
         var dayOfMonth = persianDate.getDate(date) - 1;
         return new Date(
-          date.getTime() - dayOfMonth * DAY_MILLISECONDS,
+          date.getTime() - dayOfMonth * DAY_MILLISECONDS
         ).setHours(0, 0, 0, 0);
       };
       this.endOfMonth = function(date) {
@@ -220,7 +220,7 @@ app
         var month = persianDate.getMonth(date) + 1;
         var monthDays = persianDate.persianMonthDays(year, month);
         return new Date(
-          date.getTime() + (monthDays - dayOfMonth) * DAY_MILLISECONDS,
+          date.getTime() + (monthDays - dayOfMonth) * DAY_MILLISECONDS
         ).setHours(0, 0, 0, 0);
       };
       this.advanceTime = function(startDate, endDate) {
@@ -228,7 +228,7 @@ app
         var result = {
           monthDays: monthDays,
           startDate: startDate,
-          endDate: endDate,
+          endDate: endDate
         };
         var daySelected = (endDate - startDate) / DAY_MILLISECONDS;
         startDate = new Date(startDate);
@@ -247,7 +247,7 @@ app
           ) {
             monthDays[counter] = persianDate.persianMonthDays(
               startDateYear,
-              startDateMonth,
+              startDateMonth
             );
             if (startDateMonth == 12) {
               startDateMonth++;
@@ -262,7 +262,7 @@ app
           result = {
             monthDays: monthDays,
             startDate: startDate,
-            endDate: endDate,
+            endDate: endDate
           };
         }
         return result;
@@ -283,14 +283,14 @@ app
         }
 
         result.stratDate = new Date(
-          today.getTime() - days * DAY_MILLISECONDS,
+          today.getTime() - days * DAY_MILLISECONDS
         ).setHours(0, 0, 0, 0);
         result.endDate = new Date(
-          today.getTime() - (days - monthDays + 1) * DAY_MILLISECONDS,
+          today.getTime() - (days - monthDays + 1) * DAY_MILLISECONDS
         ).setHours(23, 59, 59, 0);
         return result;
       };
-    },
+    }
   ])
   .service('credit', [
     '$log',
@@ -307,7 +307,7 @@ app
       englishNumberFilter,
       Business,
       $window,
-      appMessenger,
+      appMessenger
     ) {
       this.showIncreaseCreditForm = function(options) {
         $uibModal.open({
@@ -335,7 +335,7 @@ app
                 var paymentOptions = {
                   businessId: businessId,
                   rialPrice: amount,
-                  description: options.description,
+                  description: options.description
                 };
                 if ($scope.options.chargedBy == 'business') {
                   $scope.bankWait = true;
@@ -356,7 +356,7 @@ app
                       var errorMessage = 'error.generalError';
                       options.saveCallback &&
                         options.saveCallback(true, errorMessage);
-                    },
+                    }
                   );
                 } else if ($scope.options.chargedBy == 'admin') {
                   Business.adminChargeCredit(paymentOptions).$promise.then(
@@ -370,15 +370,15 @@ app
                       var errorMessage = 'error.generalError';
                       options.saveCallback &&
                         options.saveCallback(true, errorMessage);
-                    },
+                    }
                   );
                 }
               };
-            },
-          ],
+            }
+          ]
         });
       };
-    },
+    }
   ])
   .service('uploadModal', [
     '$log',
@@ -397,7 +397,7 @@ app
       FileUploader,
       appMessenger,
       genericService,
-      Business,
+      Business
     ) {
       this.showUploadModal = function(options) {
         $uibModal.open({
@@ -426,20 +426,20 @@ app
                 {
                   title: 'upload.fileList',
                   icon: 'fa-th-list',
-                  url: 'app/widgets/upload/tpl/fileListTabContent.html',
+                  url: 'app/widgets/upload/tpl/fileListTabContent.html'
                 },
                 {
                   title: 'upload.file',
                   icon: 'fa-upload',
-                  url: 'app/widgets/upload/tpl/uploadTabContent.html',
-                },
+                  url: 'app/widgets/upload/tpl/uploadTabContent.html'
+                }
               ];
               //upload file to data source
               $scope.DownloadUrlPrefix = Window.API_URL;
               var uploader = ($scope.uploader = new FileUploader({
                 url: $scope.DownloadUrlPrefix + '/api/file/upload',
                 removeAfterUpload: true,
-                formData: [{ businessId: businessId }],
+                formData: [{ businessId: businessId }]
               }));
               //delete message after select new file
               uploader.onAfterAddingFile = function(fileItem) {
@@ -450,7 +450,7 @@ app
                 fileItem,
                 response,
                 status,
-                headers,
+                headers
               ) {
                 $scope.show = true;
                 $scope.status = 'list-group-item-success';
@@ -463,7 +463,7 @@ app
                 fileItem,
                 response,
                 status,
-                headers,
+                headers
               ) {
                 $scope.show = true;
                 $scope.status = 'list-group-item-danger';
@@ -474,13 +474,13 @@ app
               //get files from data source
               function getFiles(business) {
                 Files.getFilesByBusinessId(business).$promise.then(function(
-                  files,
+                  files
                 ) {
                   $scope.fileList = files.result;
                 }),
                   function(error) {
                     $log.error(
-                      'can not get files info from data source: ' + error,
+                      'can not get files info from data source: ' + error
                     );
                     appMessenger.showError('error.generalError');
                   };
@@ -536,15 +536,15 @@ app
                                     $scope.image.name = null;
                                   }
                                 }
-                              },
+                              }
                             );
                             Business.prototype$updateAttributes(
                               { id: businessId },
-                              { themeConfig: options.businessThemeConfig },
+                              { themeConfig: options.businessThemeConfig }
                             ).$promise.then(
                               function(res) {
                                 appMessenger.showSuccess(
-                                  'upload.removeSuccessFull',
+                                  'upload.removeSuccessFull'
                                 );
                                 options.saveCallback &&
                                   options.saveCallback(option);
@@ -552,18 +552,18 @@ app
                               },
                               function(err) {
                                 appMessenger.showError(
-                                  'upload.removeUnSuccessFull',
+                                  'upload.removeUnSuccessFull'
                                 );
-                              },
+                              }
                             );
                           }
                         },
                         function(err) {
                           appMessenger.showError('upload.removeUnSuccessFull');
-                        },
+                        }
                       );
                   },
-                  NoCallback: function() {},
+                  NoCallback: function() {}
                 });
               };
               //close modal
@@ -571,11 +571,11 @@ app
                 $uibModalInstance.close();
                 options.cancelCallback && options.cancelCallback();
               };
-            },
-          ],
+            }
+          ]
         });
       };
-    },
+    }
   ])
   .service('usernameService', [
     '$log',
@@ -586,7 +586,7 @@ app
       this.concat = function(username, businessId) {
         return username.concat('@', businessId);
       };
-    },
+    }
   ])
   .service('errorMessenger', [
     '$log',
@@ -626,5 +626,5 @@ app
         }
         Raven.captureException(errorName, { tags: tags });
       };
-    },
+    }
   ]);

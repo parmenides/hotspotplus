@@ -21,7 +21,7 @@ app.controller('resellerPackages', [
     genericService,
     Session,
     $uibModal,
-    PREFIX,
+    PREFIX
   ) {
     if (Session.reseller == null) {
       return;
@@ -31,7 +31,7 @@ app.controller('resellerPackages', [
       {
         type: 'monthly',
         durationInMonths: 1,
-        onlineUsers: [{ number: 50, cost: 20000 }],
+        onlineUsers: [{ number: 50, cost: 20000 }]
       },
       {
         type: 'annually',
@@ -41,59 +41,59 @@ app.controller('resellerPackages', [
             number: 50,
             cost: 360000,
             discount: 250000,
-            discountPercentage: 31,
+            discountPercentage: 31
           },
           {
             number: 100,
             cost: 720000,
             discount: 499000,
-            discountPercentage: 31,
+            discountPercentage: 31
           },
           {
             number: 200,
             cost: 1440000,
             discount: 990000,
-            discountPercentage: 31,
+            discountPercentage: 31
           },
           {
             number: 300,
             cost: 2160000,
             discount: 1495000,
-            discountPercentage: 31,
+            discountPercentage: 31
           },
           {
             number: 400,
             cost: 2880000,
             discount: 1990000,
-            discountPercentage: 31,
+            discountPercentage: 31
           },
           {
             number: 600,
             cost: 4320000,
             discount: 2950000,
-            discountPercentage: 32,
+            discountPercentage: 32
           },
           {
             number: 800,
             cost: 5760000,
             discount: 3100000,
-            discountPercentage: 46,
+            discountPercentage: 46
           },
           {
             number: 1000,
             cost: 7200000,
             discount: 3600000,
-            discountPercentage: 50,
-          },
-        ],
-      },
+            discountPercentage: 50
+          }
+        ]
+      }
     ];
 
     $scope.selectPackage = function(
       durationInMonths,
       numOfUsers,
       cost,
-      discount,
+      discount
     ) {
       $uibModal.open({
         backdrop: true,
@@ -112,7 +112,7 @@ app.controller('resellerPackages', [
               durationInMonths: durationInMonths,
               numOfUsers: numOfUsers,
               cost: cost,
-              discount: discount,
+              discount: discount
             };
             $scope.bankWait = false;
             $scope.cancel = function() {
@@ -123,7 +123,7 @@ app.controller('resellerPackages', [
               Reseller.buyPackage({
                 resellerId: resellerId,
                 allowedOnlineUsers: numOfUsers,
-                durationInMonths: durationInMonths,
+                durationInMonths: durationInMonths
               }).$promise.then(
                 function(result) {
                   if (result.url) {
@@ -137,12 +137,12 @@ app.controller('resellerPackages', [
                   $scope.bankWait = false;
                   appMessenger.showError('reseller.packageBuyUnSuccessful');
                   $log.error(error);
-                },
+                }
               );
             };
-          },
-        ],
+          }
+        ]
       });
     };
-  },
+  }
 ]);

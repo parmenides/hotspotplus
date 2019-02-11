@@ -15,13 +15,13 @@ angular.module('app').directive('uiButterbar', [
           event,
           toState,
           toParams,
-          fromState,
+          fromState
         ) {
           event.targetScope.$watch('$viewContentLoaded', function() {
             el.addClass('hide').removeClass('active');
           });
         });
-      },
+      }
     };
-  },
+  }
 ]);

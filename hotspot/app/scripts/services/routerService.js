@@ -55,7 +55,7 @@ angular.module('masterHotspotApp').service('routerService', [
       var url = 'http://' + config.host + '/status';
       var signOutOptions = {};
       signOutOptions.headers = {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Type': 'application/x-www-form-urlencoded'
       };
       $http
         .post(url, $httpParamSerializer({ ok: true }), signOutOptions)
@@ -68,7 +68,7 @@ angular.module('masterHotspotApp').service('routerService', [
               sessionTime: data.sessionTime,
               uptime: data.uptime,
               upload: data.upload,
-              download: data.download,
+              download: data.download
             };
             if (data.redir && data.redir.logoutURL) {
               response.logoutUrl = data.redir.logoutURL;
@@ -86,7 +86,7 @@ angular.module('masterHotspotApp').service('routerService', [
     function isCoovaChilliLogin(clbk) {
       var pepper = Pepper({
         host: config.uamip,
-        port: config.uamport,
+        port: config.uamport
       });
       pepper.refresh(function(error, data) {
         $log.debug('########### isCoovaChilliLogin ##########');
@@ -109,7 +109,7 @@ angular.module('masterHotspotApp').service('routerService', [
             clientMac: redir.macAddress,
             uptime: accounting.sessionTime,
             upload: accounting.outputOctets,
-            download: accounting.inputOctets,
+            download: accounting.inputOctets
           });
         } else {
           return clbk(null, { online: false });
@@ -123,16 +123,16 @@ angular.module('masterHotspotApp').service('routerService', [
       var url = 'http://' + config.host + '/login';
       var signInOptions = {};
       signInOptions.headers = {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Type': 'application/x-www-form-urlencoded'
       };
       $http
         .post(
           url,
           $httpParamSerializer({
             username: username,
-            password: password,
+            password: password
           }),
-          signInOptions,
+          signInOptions
         )
         .then(function(result) {
           var data = result.data;
@@ -142,8 +142,8 @@ angular.module('masterHotspotApp').service('routerService', [
               { 'error message': data.message },
               {
                 username: username,
-                password: password,
-              },
+                password: password
+              }
             );
             return clbk({ message: data.message });
           } else {
@@ -161,7 +161,7 @@ angular.module('masterHotspotApp').service('routerService', [
       var url = 'http://' + config.host + '/logout';
       var signOutOptions = {};
       signOutOptions.headers = {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Type': 'application/x-www-form-urlencoded'
       };
       $http
         .post(url, $httpParamSerializer({ ok: true }), signOutOptions)
@@ -182,7 +182,7 @@ angular.module('masterHotspotApp').service('routerService', [
     function coovaChilliLogout(clbk) {
       var pepper = Pepper({
         host: config.uamip,
-        port: config.uamport,
+        port: config.uamport
       });
       pepper.logoff(function(error, data) {
         if (error) {
@@ -196,11 +196,11 @@ angular.module('masterHotspotApp').service('routerService', [
       $log.info('login to coova', config.challenge);
       var pepper = Pepper({
         host: config.uamip,
-        port: config.uamport,
+        port: config.uamport
       });
       pepper.logon(username, password, { protocol: 'CHAP' }, function(
         error,
-        data,
+        data
       ) {
         if (error) {
           return clbk(error);
@@ -231,5 +231,5 @@ angular.module('masterHotspotApp').service('routerService', [
     function isXClaim() {
       return config.accessPointType.toLowerCase() == XCLAIM;
     }
-  },
+  }
 ]);

@@ -17,7 +17,7 @@ app.controller('LcSignUpController', [
     $state,
     appMessenger,
     englishNumberFilter,
-    $timeout,
+    $timeout
   ) {
     $scope.lc = {};
     $scope.authError = null;
@@ -52,8 +52,8 @@ app.controller('LcSignUpController', [
             $scope.authError = 'error.generalError';
             appMessenger.showError('error.generalError');
           }
-        },
+        }
       );
     };
-  },
+  }
 ]);

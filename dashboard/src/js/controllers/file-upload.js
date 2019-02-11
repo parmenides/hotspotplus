@@ -3,7 +3,7 @@ app.controller('FileUploadCtrl', [
   'FileUploader',
   function($scope, FileUploader) {
     var uploader = ($scope.uploader = new FileUploader({
-      url: 'js/controllers/upload.php',
+      url: 'js/controllers/upload.php'
     }));
 
     // FILTERS
@@ -12,7 +12,7 @@ app.controller('FileUploadCtrl', [
       name: 'customFilter',
       fn: function(item /*{File|FileLikeObject}*/, options) {
         return this.queue.length < 10;
-      },
+      }
     });
 
     // CALLBACKS
@@ -20,7 +20,7 @@ app.controller('FileUploadCtrl', [
     uploader.onWhenAddingFileFailed = function(
       item /*{File|FileLikeObject}*/,
       filter,
-      options,
+      options
     ) {
       console.info('onWhenAddingFileFailed', item, filter, options);
     };
@@ -56,5 +56,5 @@ app.controller('FileUploadCtrl', [
     };
 
     console.info('uploader', uploader);
-  },
+  }
 ]);

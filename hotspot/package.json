@@ -42,7 +42,7 @@
   },
   "scripts": {
     "start": "grunt serve --force",
-    "build": "grunt build --force && git add .",
+    "build": "grunt build && git add .",
     "releaseSandbox": "grunt build --force;git commit -a -m 'sandbox:3.3';git tag -f release ;git push -u origin develop --tags --force",
     "releaseProduction": "grunt build --force;git commit -a -m 'production:3.3';git tag -f release ;git push -u origin master --tags --force",
     "releaseLocalProduction": "grunt build --force;git commit -a -m 'production:latest';git tag -f release ;git push -u origin master --tags --force",

@@ -22,7 +22,7 @@ app.controller('increaseBulk', [
     InternetPlan,
     englishNumberFilter,
     translateNumberFilter,
-    $window,
+    $window
   ) {
     if (Session.member == null) {
       return;
@@ -34,9 +34,9 @@ app.controller('increaseBulk', [
       InternetPlan.find({
         filter: {
           where: {
-            id: planId,
-          },
-        },
+            id: planId
+          }
+        }
       }).$promise.then(
         function(plan) {
           if (!plan[0].extraBulkPrice || plan[0].extraBulkPrice === 0) {
@@ -60,7 +60,7 @@ app.controller('increaseBulk', [
                 var amount = 0;
                 var price = 0;
                 $scope.bulk.price = translateNumberFilter(
-                  plan[0].extraBulkPrice * 10,
+                  plan[0].extraBulkPrice * 10
                 );
                 $scope.bulk.totalPrice = translateNumberFilter(0);
                 $scope.$watch('bulk.amount', function(newVal, oldVal) {
@@ -70,7 +70,7 @@ app.controller('increaseBulk', [
                     totalPrice = amount * price;
                     $scope.bulk.totalPrice = translateNumberFilter(totalPrice);
                     $scope.bulk.amount = translateNumberFilter(
-                      $scope.bulk.amount,
+                      $scope.bulk.amount
                     );
                   } else if (typeof newVal === 'undefined') {
                     $scope.bulk.totalPrice = translateNumberFilter(0);
@@ -86,7 +86,7 @@ app.controller('increaseBulk', [
                     memberId: memberId,
                     businessId: businessId,
                     internetPlanId: planId,
-                    amount: amount,
+                    amount: amount
                   };
                   $scope.bankWait = true;
                   $log.error(options);
@@ -103,18 +103,18 @@ app.controller('increaseBulk', [
                     function(error) {
                       $log.error(error);
                       appMessenger.showError('error.generalError');
-                    },
+                    }
                   );
                 };
-              },
-            ],
+              }
+            ]
           });
         },
         function(error) {
           $log.error(error);
           appMessenger.showError('error.generalError');
-        },
+        }
       );
     };
-  },
+  }
 ]);

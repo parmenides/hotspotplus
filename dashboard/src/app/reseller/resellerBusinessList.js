@@ -35,7 +35,7 @@ app.controller('resellerBusinessList', [
     PREFIX,
     Reseller,
     Session,
-    englishNumberFilter,
+    englishNumberFilter
   ) {
     if (!Session.reseller) {
       return;
@@ -46,7 +46,7 @@ app.controller('resellerBusinessList', [
     $scope.paginationOptions = {
       pageNumber: 1,
       itemPerPage: 10,
-      sort: null,
+      sort: null
     };
 
     $scope.gridOptions = {
@@ -69,7 +69,7 @@ app.controller('resellerBusinessList', [
           enableColumnMenu: false,
           cellTemplate:
             '<a class="btn btn-link" ng-click="grid.appScope.editBusiness(row)">{{row.entity.title}}</a>',
-          headerCellFilter: 'translate',
+          headerCellFilter: 'translate'
         },
         {
           displayName: 'general.mobile',
@@ -80,7 +80,7 @@ app.controller('resellerBusinessList', [
           enableColumnMenu: false,
           headerCellFilter: 'translate',
           cellTemplate:
-            '<div class="ui-grid-cell-contents"><span ng-if="row.entity.mobile">{{row.entity.mobile | translateNumber }}</span><span ng-if="!row.entity.mobile">-</span></div>',
+            '<div class="ui-grid-cell-contents"><span ng-if="row.entity.mobile">{{row.entity.mobile | translateNumber }}</span><span ng-if="!row.entity.mobile">-</span></div>'
         },
         {
           displayName: 'business.service',
@@ -91,7 +91,7 @@ app.controller('resellerBusinessList', [
           enableColumnMenu: false,
           headerCellFilter: 'translate',
           cellTemplate:
-            '<div class="ui-grid-cell-contents">{{"business."+(row.entity.services.id || "freeService") | translate }}</div>',
+            '<div class="ui-grid-cell-contents">{{"business."+(row.entity.services.id || "freeService") | translate }}</div>'
         },
         {
           displayName: 'business.durationInMonths',
@@ -102,7 +102,7 @@ app.controller('resellerBusinessList', [
           enableColumnMenu: false,
           headerCellFilter: 'translate',
           cellTemplate:
-            '<div class="ui-grid-cell-contents">{{row.entity.durationInMonths | translateNumber }}&nbsp;{{"general.month" | translate }}</div>',
+            '<div class="ui-grid-cell-contents">{{row.entity.durationInMonths | translateNumber }}&nbsp;{{"general.month" | translate }}</div>'
         },
         {
           displayName: 'general.email',
@@ -110,7 +110,7 @@ app.controller('resellerBusinessList', [
           enableHiding: false,
           enableSorting: false,
           enableColumnMenu: false,
-          headerCellFilter: 'translate',
+          headerCellFilter: 'translate'
         },
         {
           displayName: 'business.creationDate',
@@ -121,7 +121,7 @@ app.controller('resellerBusinessList', [
           enableColumnMenu: false,
           headerCellFilter: 'translate',
           cellTemplate:
-            '<div class="ui-grid-cell-contents">{{row.entity.creationDate |  persianDate : "fullDate" | translateNumber }}{{"general.,"| translate}}&nbsp;{{"general.hour"| translate}}:&nbsp;{{row.entity.creationDate |  date : "HH:mm" | translateNumber }}</div>',
+            '<div class="ui-grid-cell-contents">{{row.entity.creationDate |  persianDate : "fullDate" | translateNumber }}{{"general.,"| translate}}&nbsp;{{"general.hour"| translate}}:&nbsp;{{row.entity.creationDate |  date : "HH:mm" | translateNumber }}</div>'
         },
         {
           displayName: 'general.login',
@@ -132,7 +132,7 @@ app.controller('resellerBusinessList', [
           enableColumnMenu: false,
           headerCellFilter: 'translate',
           cellTemplate:
-            '<a class="btn btn-link" ng-click="grid.appScope.openLoginPage(row)" >{{"general.login"|translate}}</a>',
+            '<a class="btn btn-link" ng-click="grid.appScope.openLoginPage(row)" >{{"general.login"|translate}}</a>'
         },
         {
           displayName: 'general.remove',
@@ -144,8 +144,8 @@ app.controller('resellerBusinessList', [
           headerCellFilter: 'translate',
           cellClass: 'center',
           cellTemplate:
-            '<a class="btn btn-link" ng-click="grid.appScope.deleteBusiness(row)" ><i class="fa fa-fw fa-trash"></i></a>',
-        },
+            '<a class="btn btn-link" ng-click="grid.appScope.deleteBusiness(row)" ><i class="fa fa-fw fa-trash"></i></a>'
+        }
       ],
       onRegisterApi: function(gridApi) {
         $scope.gridApi = gridApi;
@@ -160,7 +160,7 @@ app.controller('resellerBusinessList', [
           }
           getPage();
         });
-      },
+      }
     };
 
     $scope.openLoginPage = function() {
@@ -169,7 +169,7 @@ app.controller('resellerBusinessList', [
           window.location.host +
           '/' +
           window.location.pathname +
-          '#/access/signin',
+          '#/access/signin'
       );
     };
 
@@ -193,7 +193,7 @@ app.controller('resellerBusinessList', [
             function($scope, $uibModalInstance, appMessenger) {
               $scope.activeTariff = activeTariff;
               $scope.data = {
-                modules: {},
+                modules: {}
               };
               $scope.data.packages = {};
               for (var i in services.packages) {
@@ -227,18 +227,18 @@ app.controller('resellerBusinessList', [
                 [
                   'data.modules.log',
                   'data.modules.memberPanel',
-                  'data.modules.payment',
+                  'data.modules.payment'
                 ],
                 function() {
                   $scope.updateModulePrice();
-                },
+                }
               );
 
               $scope.options = {
                 title: 'reseller.addProfile',
                 cancelBtnLabel: 'general.cancel',
                 saveBtnLabel: 'general.save',
-                newBusiness: true,
+                newBusiness: true
               };
               $scope.cancel = function() {
                 $uibModalInstance.close();
@@ -248,11 +248,11 @@ app.controller('resellerBusinessList', [
                 var validationError = false;
                 if (!error && !validationError) {
                   Reseller.createBusiness({
-                    business: $scope.business,
+                    business: $scope.business
                   }).$promise.then(
                     function(res) {
                       appMessenger.showSuccess(
-                        'profile.businessCreatedSuccessFully',
+                        'profile.businessCreatedSuccessFully'
                       );
                       $uibModalInstance.close();
                       /*if ( res.url ) {
@@ -266,14 +266,14 @@ app.controller('resellerBusinessList', [
                       } else {
                         appMessenger.showError('error.generalError');
                       }
-                    },
+                    }
                   );
                 } else if (error) {
                   appMessenger.showError('general.allFieldsRequired');
                 }
               };
-            },
-          ],
+            }
+          ]
         });
       });
     };
@@ -282,7 +282,7 @@ app.controller('resellerBusinessList', [
       var businessId = row.entity.id;
       Reseller.findBusiness({
         resellerId: resellerId,
-        businessId: businessId,
+        businessId: businessId
       }).$promise.then(
         function(business) {
           $uibModal.open({
@@ -301,34 +301,34 @@ app.controller('resellerBusinessList', [
                   title: 'reseller.editProfile',
                   cancelBtnLabel: 'general.cancel',
                   saveBtnLabel: 'general.save',
-                  newBusiness: false,
+                  newBusiness: false
                 };
                 $scope.business = business;
                 $scope.oldOnlineUsers = business.onlineUsers;
                 business.mobile = translateNumberFilter(business.mobile);
                 business.onlineUsers = translateNumberFilter(
-                  business.onlineUsers,
+                  business.onlineUsers
                 );
                 business.durationInMonths = translateNumberFilter(
-                  business.durationInMonths,
+                  business.durationInMonths
                 );
                 // Persian date picker methods
                 $scope.dateOptions = {
                   formatYear: 'yy',
-                  startingDay: 6,
+                  startingDay: 6
                 };
                 $scope.dateFormats = [
                   'dd-MMMM-yyyy',
                   'yyyy/MM/dd',
                   'dd.MM.yyyy',
-                  'shortDate',
+                  'shortDate'
                 ];
                 $scope.dateFormat = $scope.dateFormats[0];
                 $scope.disabled = function(date, mode) {
                   return mode === 'day' && date.getDay() === 5;
                 };
                 $scope.business.subscriptionDate = new Date(
-                  $scope.business.subscriptionDate,
+                  $scope.business.subscriptionDate
                 );
                 $scope.selectDate = function($event) {
                   $event.preventDefault();
@@ -340,13 +340,13 @@ app.controller('resellerBusinessList', [
                 };
                 $scope.save = function(error) {
                   $scope.business.subscriptionDate = new Date(
-                    $scope.business.subscriptionDate,
+                    $scope.business.subscriptionDate
                   ).getTime();
                   $scope.business.onlineUsers = englishNumberFilter(
-                    $scope.business.onlineUsers,
+                    $scope.business.onlineUsers
                   );
                   $scope.business.durationInMonths = englishNumberFilter(
-                    $scope.business.durationInMonths,
+                    $scope.business.durationInMonths
                   );
                   var validationError = false;
                   if (
@@ -371,21 +371,21 @@ app.controller('resellerBusinessList', [
                     validationError = true;
                   } else if ($scope.business.durationInMonths < 1) {
                     appMessenger.showError(
-                      'reseller.minDurationInMonthsRequired',
+                      'reseller.minDurationInMonthsRequired'
                     );
                     validationError = true;
                   } else if ($scope.business.durationInMonths > 12) {
                     appMessenger.showError(
-                      'reseller.maxDurationInMonthsRequired',
+                      'reseller.maxDurationInMonthsRequired'
                     );
                     validationError = true;
                   }
                   if (!error && !validationError) {
                     $scope.business.mobile = englishNumberFilter(
-                      $scope.business.mobile,
+                      $scope.business.mobile
                     );
                     Reseller.updateBusiness({
-                      business: $scope.business,
+                      business: $scope.business
                     }).$promise.then(
                       function(res) {
                         appMessenger.showSuccess('profile.updateSuccessFull');
@@ -398,20 +398,20 @@ app.controller('resellerBusinessList', [
                         } else {
                           appMessenger.showError('error.generalError');
                         }
-                      },
+                      }
                     );
                   } else if (error) {
                     appMessenger.showError('general.allFieldsRequired');
                   }
                 };
-              },
-            ],
+              }
+            ]
           });
         },
         function(error) {
           $log.error(error);
           appMessenger.showError('error.generalError');
-        },
+        }
       );
     };
 
@@ -426,7 +426,7 @@ app.controller('resellerBusinessList', [
           var index = $scope.gridOptions.data.indexOf(row.entity);
           Reseller.removeBusiness({
             resellerId: resellerId,
-            businessId: businessId,
+            businessId: businessId
           }).$promise.then(
             function(res) {
               $scope.gridOptions.data.splice(index, 1);
@@ -436,16 +436,16 @@ app.controller('resellerBusinessList', [
             function(error) {
               $log.error(error);
               appMessenger.showError('error.generalError');
-            },
+            }
           );
         },
-        NoCallback: function() {},
+        NoCallback: function() {}
       });
     };
 
     $scope.$watch('paginationOptions.itemPerPage', function(
       oldValue,
-      newValue,
+      newValue
     ) {
       getPage();
     });
@@ -479,8 +479,8 @@ app.controller('resellerBusinessList', [
         },
         function(error) {
           $log.error(error);
-        },
+        }
       );
     };
-  },
+  }
 ]);

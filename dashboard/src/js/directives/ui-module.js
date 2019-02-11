@@ -15,7 +15,7 @@ angular.module('app').directive('uiModule', [
             });
           });
         };
-      },
+      }
     };
-  },
+  }
 ]);

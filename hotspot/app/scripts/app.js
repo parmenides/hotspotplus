@@ -18,7 +18,7 @@ var app = angular
     'ngRaven',
     'toaster',
     'oc.lazyLoad',
-    'ui.bootstrap',
+    'ui.bootstrap'
   ])
   .config([
     '$stateProvider',
@@ -39,14 +39,14 @@ var app = angular
       $provide,
       $translateProvider,
       JQ_CONFIG,
-      MODULE_CONFIG,
+      MODULE_CONFIG
     ) {
       $stateProvider
         .state('home', {
           template:
             '<div style="width: 80%;margin: 0 auto;text-align: center;margin-top: 250px;">Loading</div>',
           url: '/home.html',
-          controller: 'appCtrl',
+          controller: 'appCtrl'
         })
         .state('theme', {
           abstract: true,
@@ -60,47 +60,47 @@ var app = angular
                 '/' +
                 businessConfig.themeConfig[businessConfig.selectedThemeId]
                   .style +
-                '.css',
+                '.css'
             ],
             JQ_CONFIG,
-            MODULE_CONFIG,
-          ),
+            MODULE_CONFIG
+          )
         })
         .state('theme.signin', {
           templateUrl: businessConfig.themeConfig.template + 'SignIn.tpl.html',
           controller: businessConfig.themeConfig.controller + 'SignInCtrl',
-          url: '/signin.html',
+          url: '/signin.html'
         })
         .state('theme.signup', {
           templateUrl: businessConfig.themeConfig.template + 'SignUp.tpl.html',
           controller: businessConfig.themeConfig.controller + 'SignUpCtrl',
-          url: '/signup.html',
+          url: '/signup.html'
         })
         .state('theme.forgetpassword', {
           templateUrl:
             businessConfig.themeConfig.template + 'ForgetPassword.tpl.html',
           controller:
             businessConfig.themeConfig.controller + 'ForgetPasswordCtrl',
-          url: '/forgetPassword.html',
+          url: '/forgetPassword.html'
         })
         .state('theme.verify', {
           templateUrl: businessConfig.themeConfig.template + 'Verify.tpl.html',
           controller: businessConfig.themeConfig.controller + 'VerifyCtrl',
-          url: '/verify.html',
+          url: '/verify.html'
         })
         .state('theme.selectVerification', {
           templateUrl:
             businessConfig.themeConfig.template + 'SelectVerification.tpl.html',
           controller:
             businessConfig.themeConfig.controller + 'SelectVerificationCtrl',
-          url: '/selectVerification.html',
+          url: '/selectVerification.html'
         })
         .state('theme.internetplans', {
           templateUrl:
             businessConfig.themeConfig.template + 'InternetPlan.tpl.html',
           controller:
             businessConfig.themeConfig.controller + 'InternetPlanListCtrl',
-          url: '/internetplans.html',
+          url: '/internetplans.html'
         })
         .state('theme.status', {
           templateUrl: businessConfig.themeConfig.template + 'Status.tpl.html',
@@ -112,18 +112,18 @@ var app = angular
             download: null,
             upload: null,
             uptime: null,
-            sessionTime: null,
-          },
+            sessionTime: null
+          }
         })
         .state('theme.lang', {
           templateUrl: businessConfig.themeConfig.template + 'Lang.tpl.html',
           controller: businessConfig.themeConfig.controller + 'LangCtrl',
-          url: '/lang.html',
+          url: '/lang.html'
         })
         .state('theme.welcome', {
           templateUrl: businessConfig.themeConfig.template + 'Welcome.tpl.html',
           controller: businessConfig.themeConfig.controller + 'WelcomeCtrl',
-          url: '/welcome.html',
+          url: '/welcome.html'
         });
       $urlRouterProvider.otherwise('/home.html');
       $translateProvider.translations('fa', {
@@ -356,7 +356,7 @@ var app = angular
         loyaltyStatusHeaderText: 'شما به اینترنت متصل شدید',
         loyaltyWelcomeHeader: 'به باشگاه مشتریان ما خوش آمدید.',
         connectBtn: 'اتصال به اینترنت',
-        noVerificationNeeded: 'عدم نیاز به تایید هویت',
+        noVerificationNeeded: 'عدم نیاز به تایید هویت'
       });
       $translateProvider.translations('en', {
         checkHotspotNetworkConnection:
@@ -534,7 +534,7 @@ var app = angular
         loyaltyStatusHeaderText: 'You are connected to internet.',
         loyaltyWelcomeHeader: 'Welcome to the customer club',
         connectBtn: 'Connect to the internet',
-        noVerificationNeeded: 'No verification needed.',
+        noVerificationNeeded: 'No verification needed.'
       });
       $translateProvider.preferredLanguage('fa');
 
@@ -546,7 +546,7 @@ var app = angular
       app.service = $provide.service;
       app.constant = $provide.constant;
       app.value = $provide.value;
-    },
+    }
   ])
 
   .value('config', {})
@@ -578,7 +578,7 @@ var app = angular
         INTERNET_PLAN_INFO: 'internetPlanInfo',
         MESSAGE: 'message',
         ERROR: 'error',
-        LOGIN_ERROR: 'invalidUsernameOrPassword',
+        LOGIN_ERROR: 'invalidUsernameOrPassword'
       });
       config.resendTimeout = 3;
       var tags = {};
@@ -592,7 +592,7 @@ var app = angular
 		 }
 		 );*/
       tags.username = 'hotSpot';
-    },
+    }
   ])
   .controller('appCtrl', [
     '$scope',
@@ -613,7 +613,7 @@ var app = angular
       $log,
       appService,
       routerService,
-      $rootScope,
+      $rootScope
     ) {
       $scope.DownloadUrlPrefix = window.API_URL;
 
@@ -693,7 +693,7 @@ var app = angular
           $state.go(getLandingState());
         }
       });
-    },
+    }
   ]);
 
 function load(srcs, JQ_CONFIG, MODULE_CONFIG, callback) {
@@ -730,7 +730,7 @@ function load(srcs, JQ_CONFIG, MODULE_CONFIG, callback) {
               return callback();
             })
           : promise;
-      },
-    ],
+      }
+    ]
   };
 }

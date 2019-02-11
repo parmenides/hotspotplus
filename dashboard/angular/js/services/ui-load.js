@@ -94,5 +94,5 @@ angular.module('ui.load', []).service('uiLoad', [
 
       return deferred.promise;
     };
-  },
+  }
 ]);

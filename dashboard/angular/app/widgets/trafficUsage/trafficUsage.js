@@ -14,11 +14,11 @@ app.directive('trafficUsage', [
     Business,
     translateFilter,
     persianDateFilter,
-    translateNumberFilter,
+    translateNumberFilter
   ) {
     return {
       scope: {
-        params: '=options',
+        params: '=options'
       },
       controller: function($scope) {
         $scope.loading = false;
@@ -45,21 +45,22 @@ app.directive('trafficUsage', [
           trafficUsageChart.offset = $scope.params.offset;
           trafficUsageChart.monthDays = $scope.params.monthDays;
           $scope.loading = true;
-          Business.getTrafficUsage(trafficUsageChart)
-          .$promise.then(function(res) {
+          Business.getTrafficUsage(trafficUsageChart).$promise.then(function(
+            res
+          ) {
             var DAY_MILLISECONDS = 24 * 60 * 60 * 1000;
             $scope.loading = false;
             var interval = res.result.date[1] - res.result.date[0];
             var xAxesLabel = 'dashboard.xAxesLabelDaily';
             for (var date in res.result.date) {
               res.result.date[date] = translateNumberFilter(
-                persianDateFilter(new Date(res.result.date[date]), 'M/d'),
+                persianDateFilter(new Date(res.result.date[date]), 'M/d')
               );
             }
             $scope.labels = res.result.date;
             $scope.series = [
               translateFilter('dashboard.download'),
-              translateFilter('dashboard.upload'),
+              translateFilter('dashboard.upload')
             ];
             $scope.data = [res.result.download, res.result.upload];
             $scope.type = 'line';
@@ -73,8 +74,8 @@ app.directive('trafficUsage', [
                 display: true,
                 position: 'bottom',
                 labels: {
-                  fontColor: '#333',
-                },
+                  fontColor: '#333'
+                }
               },
               tooltips: {
                 enabled: true,
@@ -91,8 +92,8 @@ app.directive('trafficUsage', [
                       translateFilter('dashboard.Mbps') +
                       ' '
                     );
-                  },
-                },
+                  }
+                }
               },
               scales: {
                 xAxes: [
@@ -100,7 +101,7 @@ app.directive('trafficUsage', [
                     scaleLabel: {
                       display: true,
                       labelString: translateFilter(xAxesLabel),
-                      fontColor: '#333',
+                      fontColor: '#333'
                     },
                     afterTickToLabelConversion: function(data) {
                       var xLabels = data.ticks;
@@ -111,8 +112,8 @@ app.directive('trafficUsage', [
                           }
                         });
                       }
-                    },
-                  },
+                    }
+                  }
                 ],
                 yAxes: [
                   {
@@ -127,28 +128,28 @@ app.directive('trafficUsage', [
                         ' ( ' +
                         translateFilter('dashboard.Mbps') +
                         ' )',
-                      fontColor: '#333',
+                      fontColor: '#333'
                     },
                     ticks: {
                       beginAtZero: true,
                       callback: function(value) {
                         return translateNumberFilter(Number(value));
-                      },
-                    },
-                  },
-                ],
-              },
+                      }
+                    }
+                  }
+                ]
+              }
             };
           }),
             function(error) {
               $log.error(
                 'can not get traffic usage chart info from data source: ' +
-                  error,
+                  error
               );
             };
         }
       },
-      templateUrl: PREFIX + 'app/widgets/trafficUsage/tpl/trafficUsage.html',
+      templateUrl: PREFIX + 'app/widgets/trafficUsage/tpl/trafficUsage.html'
     };
-  },
+  }
 ]);

@@ -59,7 +59,7 @@ app.filter('translateNumber', [
         return persianNumber(value);
       }
     };
-  },
+  }
 ]);
 
 app.filter('getDay', [
@@ -74,7 +74,7 @@ app.filter('getDay', [
         return date.getJalaliDate();
       }
     };
-  },
+  }
 ]);
 
 app.filter('getMonth', [
@@ -89,7 +89,7 @@ app.filter('getMonth', [
         return date.getJalaliMonth();
       }
     };
-  },
+  }
 ]);
 
 app.filter('getMonthName', [
@@ -105,7 +105,7 @@ app.filter('getMonthName', [
         return translateFilter(date.getJalaliMonth() + 1 + '-month');
       }
     };
-  },
+  }
 ]);
 
 app.filter('getYear', [
@@ -120,7 +120,7 @@ app.filter('getYear', [
         return date.getJalaliFullYear();
       }
     };
-  },
+  }
 ]);
 
 app.filter('translateDate', [
@@ -147,7 +147,7 @@ app.filter('translateDate', [
         );
       }
     };
-  },
+  }
 ]);
 app.filter('trimUsername', [
   'usernameService',
@@ -155,5 +155,5 @@ app.filter('trimUsername', [
     return function(username) {
       return usernameService.trim(username);
     };
-  },
+  }
 ]);

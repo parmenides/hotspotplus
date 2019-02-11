@@ -24,14 +24,14 @@ app.controller('FormDemoCtrl', [
     $scope.select2Number = [
       { text: 'First', value: 'One' },
       { text: 'Second', value: 'Two' },
-      { text: 'Third', value: 'Three' },
+      { text: 'Third', value: 'Three' }
     ];
 
     $scope.list_of_string = ['tag1', 'tag2'];
     $scope.select2Options = {
       multiple: true,
       simple_tags: true,
-      tags: ['tag1', 'tag2', 'tag3', 'tag4'], // Can be empty list.
+      tags: ['tag1', 'tag2', 'tag3', 'tag4'] // Can be empty list.
     };
 
     angular.element('#LinkInput').bind('click', function(event) {
@@ -39,5 +39,5 @@ app.controller('FormDemoCtrl', [
     });
 
     $scope.datePicker = function(start, end, label) {};
-  },
+  }
 ]);

@@ -18,11 +18,11 @@ app.directive('serviceStatus', [
     ClientSession,
     translateNumberFilter,
     $rootScope,
-    appMessenger,
+    appMessenger
   ) {
     return {
       scope: {
-        params: '=options',
+        params: '=options'
       },
 
       controller: function($scope) {
@@ -63,14 +63,14 @@ app.directive('serviceStatus', [
                 $scope.accountingChartOptions.data = [100];
               } else {
                 $scope.accountingRemainingDays = Math.round(
-                  (currentService.expiresAt - now.getTime()) / 86400000,
+                  (currentService.expiresAt - now.getTime()) / 86400000
                 );
                 $scope.accountingTotalDays = Math.round(
-                  (now.getTime() - currentService.subscriptionDate) / 86400000,
+                  (now.getTime() - currentService.subscriptionDate) / 86400000
                 );
                 $scope.accountingChartOptions.data = [
                   $scope.accountingRemainingDays,
-                  $scope.accountingTotalDays,
+                  $scope.accountingTotalDays
                 ];
                 $scope.accountingChartOptions.options.elements.center.text =
                   translateNumberFilter($scope.accountingRemainingDays) +
@@ -87,15 +87,15 @@ app.directive('serviceStatus', [
                   $scope.smsModuleChartOptions.data = [100];
                 } else {
                   $scope.smsRemainingDays = Math.round(
-                    (modules.sms.expiresAt - now.getTime()) / 86400000,
+                    (modules.sms.expiresAt - now.getTime()) / 86400000
                   );
                   $scope.smsTotalDays = Math.round(
-                    (now.getTime() - modules.sms.subscriptionDate) / 86400000,
+                    (now.getTime() - modules.sms.subscriptionDate) / 86400000
                   );
                   if ($scope.smsRemainingDays > 0) {
                     $scope.smsModuleChartOptions.data = [
                       $scope.smsRemainingDays,
-                      $scope.smsTotalDays,
+                      $scope.smsTotalDays
                     ];
                     $scope.smsModuleChartOptions.options.elements.center.text =
                       translateNumberFilter($scope.smsRemainingDays) +
@@ -103,7 +103,7 @@ app.directive('serviceStatus', [
                     if ($scope.smsRemainingDays <= 5) {
                       $scope.smsModuleChartOptions.colors = [
                         '#f1c40f',
-                        '#ecf0f1',
+                        '#ecf0f1'
                       ];
                     }
                   } else {
@@ -122,15 +122,15 @@ app.directive('serviceStatus', [
                   $scope.logModuleChartOptions.data = [100];
                 } else {
                   $scope.logRemainingDays = Math.round(
-                    (modules.log.expiresAt - now.getTime()) / 86400000,
+                    (modules.log.expiresAt - now.getTime()) / 86400000
                   );
                   $scope.logTotalDays = Math.round(
-                    (now.getTime() - modules.log.subscriptionDate) / 86400000,
+                    (now.getTime() - modules.log.subscriptionDate) / 86400000
                   );
                   if ($scope.logRemainingDays > 0) {
                     $scope.logModuleChartOptions.data = [
                       $scope.logRemainingDays,
-                      $scope.logTotalDays,
+                      $scope.logTotalDays
                     ];
                     $scope.logModuleChartOptions.options.elements.center.text =
                       translateNumberFilter($scope.logRemainingDays) +
@@ -138,7 +138,7 @@ app.directive('serviceStatus', [
                     if ($scope.logRemainingDays <= 5) {
                       $scope.logModuleChartOptions.colors = [
                         '#f1c40f',
-                        '#ecf0f1',
+                        '#ecf0f1'
                       ];
                     }
                   } else {
@@ -155,7 +155,7 @@ app.directive('serviceStatus', [
             function(error) {
               $log.error(error);
               appMessenger.showError('business.settingsLoadUnSuccessful');
-            },
+            }
           );
         }
 
@@ -165,7 +165,7 @@ app.directive('serviceStatus', [
           var session = {};
           session.businessId = $scope.params.businessId;
           ClientSession.getOnlineSessionCount({
-            businessId: session.businessId,
+            businessId: session.businessId
           }).$promise.then(
             function(result) {
               $scope.currentOnlineUsers = result.count;
@@ -173,7 +173,7 @@ app.directive('serviceStatus', [
                 $scope.allowedOnlineUsers - $scope.currentOnlineUsers;
               $scope.onlineUsersChartOptions.data = [
                 remainingOnlineUsers,
-                $scope.currentOnlineUsers,
+                $scope.currentOnlineUsers
               ];
               $scope.onlineUsersChartOptions.options.elements.center.text =
                 translateNumberFilter($scope.currentOnlineUsers) +
@@ -186,7 +186,7 @@ app.directive('serviceStatus', [
             },
             function(error) {
               $log.error(error);
-            },
+            }
           );
         }
 
@@ -200,12 +200,12 @@ app.directive('serviceStatus', [
                 text: '  غیر فعال  ',
                 color: '#2c3e50', // Default is #000000
                 fontStyle: 'IRANSans', // Default is Arial
-                sidePadding: 10, // Defualt is 20 (as a percentage)
-              },
+                sidePadding: 10 // Defualt is 20 (as a percentage)
+              }
             },
             title: {
               display: false,
-              text: 'Custom Chart Title',
+              text: 'Custom Chart Title'
             },
             cutoutPercentage: 80,
             rotation: 0.5 * Math.PI,
@@ -213,10 +213,10 @@ app.directive('serviceStatus', [
               display: false,
               position: 'bottom',
               labels: {
-                fontColor: 'rgb(255, 99, 132)',
-              },
-            },
-          },
+                fontColor: 'rgb(255, 99, 132)'
+              }
+            }
+          }
         };
         $scope.accountingChartOptions = {
           colors: ['#9b59b6', '#ecf0f1'],
@@ -228,12 +228,12 @@ app.directive('serviceStatus', [
                 text: '  غیر فعال  ',
                 color: '#2c3e50', // Default is #000000
                 fontStyle: 'IRANSans', // Default is Arial
-                sidePadding: 20, // Defualt is 20 (as a percentage)
-              },
+                sidePadding: 20 // Defualt is 20 (as a percentage)
+              }
             },
             title: {
               display: false,
-              text: 'Custom Chart Title',
+              text: 'Custom Chart Title'
             },
             cutoutPercentage: 80,
             rotation: 0.5 * Math.PI,
@@ -241,10 +241,10 @@ app.directive('serviceStatus', [
               display: false,
               position: 'bottom',
               labels: {
-                fontColor: 'rgb(255, 99, 132)',
-              },
-            },
-          },
+                fontColor: 'rgb(255, 99, 132)'
+              }
+            }
+          }
         };
         $scope.smsModuleChartOptions = {
           colors: ['#9b59b6', '#ecf0f1'],
@@ -256,22 +256,22 @@ app.directive('serviceStatus', [
                 text: '  غیر فعال  ',
                 color: '#2c3e50', // Default is #000000
                 fontStyle: 'IRANSans', // Default is Arial
-                sidePadding: 20, // Defualt is 20 (as a percentage)
-              },
+                sidePadding: 20 // Defualt is 20 (as a percentage)
+              }
             },
             title: {
               display: false,
-              text: 'Custom Chart Title',
+              text: 'Custom Chart Title'
             },
             cutoutPercentage: 80,
             rotation: 0.5 * Math.PI,
             legend: {
               display: false,
               labels: {
-                fontColor: 'rgb(255, 99, 132)',
-              },
-            },
-          },
+                fontColor: 'rgb(255, 99, 132)'
+              }
+            }
+          }
         };
         $scope.logModuleChartOptions = {
           colors: ['#9b59b6', '#ecf0f1'],
@@ -283,25 +283,25 @@ app.directive('serviceStatus', [
                 text: '  غیر فعال  ',
                 color: '#2c3e50', // Default is #000000
                 fontStyle: 'IRANSans', // Default is Arial
-                sidePadding: 20, // Defualt is 20 (as a percentage)
-              },
+                sidePadding: 20 // Defualt is 20 (as a percentage)
+              }
             },
             title: {
               display: false,
-              text: 'Custom Chart Title',
+              text: 'Custom Chart Title'
             },
             cutoutPercentage: 80,
             rotation: 0.5 * Math.PI,
             legend: {
               display: false,
               labels: {
-                fontColor: 'rgb(255, 99, 132)',
-              },
-            },
-          },
+                fontColor: 'rgb(255, 99, 132)'
+              }
+            }
+          }
         };
       },
-      templateUrl: PREFIX + 'app/widgets/serviceStatus/tpl/serviceStatus.html',
+      templateUrl: PREFIX + 'app/widgets/serviceStatus/tpl/serviceStatus.html'
     };
-  },
+  }
 ]);

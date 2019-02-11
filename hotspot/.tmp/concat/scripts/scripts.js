@@ -18,7 +18,7 @@ var app = angular
     'ngRaven',
     'toaster',
     'oc.lazyLoad',
-    'ui.bootstrap',
+    'ui.bootstrap'
   ])
   .config([
     '$stateProvider',
@@ -39,14 +39,14 @@ var app = angular
       $provide,
       $translateProvider,
       JQ_CONFIG,
-      MODULE_CONFIG,
+      MODULE_CONFIG
     ) {
       $stateProvider
         .state('home', {
           template:
             '<div style="width: 80%;margin: 0 auto;text-align: center;margin-top: 250px;">Loading</div>',
           url: '/home.html',
-          controller: 'appCtrl',
+          controller: 'appCtrl'
         })
         .state('theme', {
           abstract: true,
@@ -60,47 +60,47 @@ var app = angular
                 '/' +
                 businessConfig.themeConfig[businessConfig.selectedThemeId]
                   .style +
-                '.css',
+                '.css'
             ],
             JQ_CONFIG,
-            MODULE_CONFIG,
-          ),
+            MODULE_CONFIG
+          )
         })
         .state('theme.signin', {
           templateUrl: businessConfig.themeConfig.template + 'SignIn.tpl.html',
           controller: businessConfig.themeConfig.controller + 'SignInCtrl',
-          url: '/signin.html',
+          url: '/signin.html'
         })
         .state('theme.signup', {
           templateUrl: businessConfig.themeConfig.template + 'SignUp.tpl.html',
           controller: businessConfig.themeConfig.controller + 'SignUpCtrl',
-          url: '/signup.html',
+          url: '/signup.html'
         })
         .state('theme.forgetpassword', {
           templateUrl:
             businessConfig.themeConfig.template + 'ForgetPassword.tpl.html',
           controller:
             businessConfig.themeConfig.controller + 'ForgetPasswordCtrl',
-          url: '/forgetPassword.html',
+          url: '/forgetPassword.html'
         })
         .state('theme.verify', {
           templateUrl: businessConfig.themeConfig.template + 'Verify.tpl.html',
           controller: businessConfig.themeConfig.controller + 'VerifyCtrl',
-          url: '/verify.html',
+          url: '/verify.html'
         })
         .state('theme.selectVerification', {
           templateUrl:
             businessConfig.themeConfig.template + 'SelectVerification.tpl.html',
           controller:
             businessConfig.themeConfig.controller + 'SelectVerificationCtrl',
-          url: '/selectVerification.html',
+          url: '/selectVerification.html'
         })
         .state('theme.internetplans', {
           templateUrl:
             businessConfig.themeConfig.template + 'InternetPlan.tpl.html',
           controller:
             businessConfig.themeConfig.controller + 'InternetPlanListCtrl',
-          url: '/internetplans.html',
+          url: '/internetplans.html'
         })
         .state('theme.status', {
           templateUrl: businessConfig.themeConfig.template + 'Status.tpl.html',
@@ -112,18 +112,18 @@ var app = angular
             download: null,
             upload: null,
             uptime: null,
-            sessionTime: null,
-          },
+            sessionTime: null
+          }
         })
         .state('theme.lang', {
           templateUrl: businessConfig.themeConfig.template + 'Lang.tpl.html',
           controller: businessConfig.themeConfig.controller + 'LangCtrl',
-          url: '/lang.html',
+          url: '/lang.html'
         })
         .state('theme.welcome', {
           templateUrl: businessConfig.themeConfig.template + 'Welcome.tpl.html',
           controller: businessConfig.themeConfig.controller + 'WelcomeCtrl',
-          url: '/welcome.html',
+          url: '/welcome.html'
         });
       $urlRouterProvider.otherwise('/home.html');
       $translateProvider.translations('fa', {
@@ -356,7 +356,7 @@ var app = angular
         loyaltyStatusHeaderText: 'شما به اینترنت متصل شدید',
         loyaltyWelcomeHeader: 'به باشگاه مشتریان ما خوش آمدید.',
         connectBtn: 'اتصال به اینترنت',
-        noVerificationNeeded: 'عدم نیاز به تایید هویت',
+        noVerificationNeeded: 'عدم نیاز به تایید هویت'
       });
       $translateProvider.translations('en', {
         checkHotspotNetworkConnection:
@@ -534,7 +534,7 @@ var app = angular
         loyaltyStatusHeaderText: 'You are connected to internet.',
         loyaltyWelcomeHeader: 'Welcome to the customer club',
         connectBtn: 'Connect to the internet',
-        noVerificationNeeded: 'No verification needed.',
+        noVerificationNeeded: 'No verification needed.'
       });
       $translateProvider.preferredLanguage('fa');
 
@@ -546,7 +546,7 @@ var app = angular
       app.service = $provide.service;
       app.constant = $provide.constant;
       app.value = $provide.value;
-    },
+    }
   ])
 
   .value('config', {})
@@ -578,7 +578,7 @@ var app = angular
         INTERNET_PLAN_INFO: 'internetPlanInfo',
         MESSAGE: 'message',
         ERROR: 'error',
-        LOGIN_ERROR: 'invalidUsernameOrPassword',
+        LOGIN_ERROR: 'invalidUsernameOrPassword'
       });
       config.resendTimeout = 3;
       var tags = {};
@@ -592,7 +592,7 @@ var app = angular
 		 }
 		 );*/
       tags.username = 'hotSpot';
-    },
+    }
   ])
   .controller('appCtrl', [
     '$scope',
@@ -613,7 +613,7 @@ var app = angular
       $log,
       appService,
       routerService,
-      $rootScope,
+      $rootScope
     ) {
       $scope.DownloadUrlPrefix = window.API_URL;
 
@@ -693,7 +693,7 @@ var app = angular
           $state.go(getLandingState());
         }
       });
-    },
+    }
   ]);
 
 function load(srcs, JQ_CONFIG, MODULE_CONFIG, callback) {
@@ -730,8 +730,8 @@ function load(srcs, JQ_CONFIG, MODULE_CONFIG, callback) {
               return callback();
             })
           : promise;
-      },
-    ],
+      }
+    ]
   };
 }
 
@@ -752,14 +752,14 @@ angular
         $http
           .post(
             window.API_URL + '/Members/recoverHotspotUser',
-            usernameOrMobile,
+            usernameOrMobile
           )
           .then(function(result) {
             return clbk(null, result.data);
           })
           .catch(function(error) {
             sendError('recoverHotspotUser', error, {
-              usernameOrMobile: usernameOrMobile,
+              usernameOrMobile: usernameOrMobile
             });
             return clbk(error);
           });
@@ -788,7 +788,7 @@ angular
             if (error.status == 404) {
               message = 'bizNotFound';
               sendError('loadConfig', 'business profile not found', {
-                bizInfo: bizInfo,
+                bizInfo: bizInfo
               });
             }
             sendError('loadConfig', error, { bizInfo: bizInfo });
@@ -811,7 +811,7 @@ angular
       this.signIn = function(userInfo, clbk) {
         userInfo.username = usernameService.concat(
           userInfo.username,
-          userInfo.businessId,
+          userInfo.businessId
         );
         $http
           .post(window.API_URL + '/Members/signIn', userInfo)
@@ -862,7 +862,7 @@ angular
         $http
           .post(
             window.API_URL + '/InternetPlans/getPublicInternetPlans',
-            businessId,
+            businessId
           )
           .then(function(result) {
             return clbk(null, result.data);
@@ -890,7 +890,7 @@ angular
         $http
           .post(
             window.API_URL + '/InternetPlans/assignFreePlanToMember',
-            freePlan,
+            freePlan
           )
           .then(function(result) {
             return defer.resolve(result.data);
@@ -934,7 +934,7 @@ angular
           })
           .catch(function(error) {
             sendError('checkDefaultInternetPlan', error, {
-              defaultPlan: defaultPlan,
+              defaultPlan: defaultPlan
             });
             return cb(error);
           });
@@ -950,12 +950,12 @@ angular
             sendError(
               error,
               { method: 'createForeignHotSpotMember' },
-              { user: user },
+              { user: user }
             );
             return clbk(error);
           });
       };
-    },
+    }
   ])
   .service('errorMessage', [
     '$log',
@@ -977,7 +977,7 @@ angular
         }
         appMessenger.showError(errorMessage);
       };
-    },
+    }
   ]);
 
 // lazyload config
@@ -988,12 +988,12 @@ angular
   .constant('MODULE_CONFIG', [
     {
       name: 'hotspotplus.tpls.alpha',
-      files: ['controllers/alpha.templates.js', 'controllers/base.js'],
+      files: ['controllers/alpha.templates.js', 'controllers/base.js']
     },
     {
       name: 'hotspotplus.tpls.loyalty',
-      files: ['controllers/loyalty.templates.js', 'controllers/loyalty.js'],
-    },
+      files: ['controllers/loyalty.templates.js', 'controllers/loyalty.js']
+    }
   ])
   // oclazyload config
   .config([
@@ -1004,9 +1004,9 @@ angular
       $ocLazyLoadProvider.config({
         debug: false,
         events: true,
-        modules: MODULE_CONFIG,
+        modules: MODULE_CONFIG
       });
-    },
+    }
   ]);
 
 angular.module('masterHotspotApp').filter('requiredField', [
@@ -1018,7 +1018,7 @@ angular.module('masterHotspotApp').filter('requiredField', [
         ? translateFilter('requiredField') + ' ' + label
         : label;
     };
-  },
+  }
 ]);
 
 app.filter('englishNumber', function() {
@@ -1148,7 +1148,7 @@ angular.module('masterHotspotApp').service('routerService', [
       var url = 'http://' + config.host + '/status';
       var signOutOptions = {};
       signOutOptions.headers = {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Type': 'application/x-www-form-urlencoded'
       };
       $http
         .post(url, $httpParamSerializer({ ok: true }), signOutOptions)
@@ -1161,7 +1161,7 @@ angular.module('masterHotspotApp').service('routerService', [
               sessionTime: data.sessionTime,
               uptime: data.uptime,
               upload: data.upload,
-              download: data.download,
+              download: data.download
             };
             if (data.redir && data.redir.logoutURL) {
               response.logoutUrl = data.redir.logoutURL;
@@ -1179,7 +1179,7 @@ angular.module('masterHotspotApp').service('routerService', [
     function isCoovaChilliLogin(clbk) {
       var pepper = Pepper({
         host: config.uamip,
-        port: config.uamport,
+        port: config.uamport
       });
       pepper.refresh(function(error, data) {
         $log.debug('########### isCoovaChilliLogin ##########');
@@ -1202,7 +1202,7 @@ angular.module('masterHotspotApp').service('routerService', [
             clientMac: redir.macAddress,
             uptime: accounting.sessionTime,
             upload: accounting.outputOctets,
-            download: accounting.inputOctets,
+            download: accounting.inputOctets
           });
         } else {
           return clbk(null, { online: false });
@@ -1216,16 +1216,16 @@ angular.module('masterHotspotApp').service('routerService', [
       var url = 'http://' + config.host + '/login';
       var signInOptions = {};
       signInOptions.headers = {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Type': 'application/x-www-form-urlencoded'
       };
       $http
         .post(
           url,
           $httpParamSerializer({
             username: username,
-            password: password,
+            password: password
           }),
-          signInOptions,
+          signInOptions
         )
         .then(function(result) {
           var data = result.data;
@@ -1235,8 +1235,8 @@ angular.module('masterHotspotApp').service('routerService', [
               { 'error message': data.message },
               {
                 username: username,
-                password: password,
-              },
+                password: password
+              }
             );
             return clbk({ message: data.message });
           } else {
@@ -1254,7 +1254,7 @@ angular.module('masterHotspotApp').service('routerService', [
       var url = 'http://' + config.host + '/logout';
       var signOutOptions = {};
       signOutOptions.headers = {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Type': 'application/x-www-form-urlencoded'
       };
       $http
         .post(url, $httpParamSerializer({ ok: true }), signOutOptions)
@@ -1275,7 +1275,7 @@ angular.module('masterHotspotApp').service('routerService', [
     function coovaChilliLogout(clbk) {
       var pepper = Pepper({
         host: config.uamip,
-        port: config.uamport,
+        port: config.uamport
       });
       pepper.logoff(function(error, data) {
         if (error) {
@@ -1289,11 +1289,11 @@ angular.module('masterHotspotApp').service('routerService', [
       $log.info('login to coova', config.challenge);
       var pepper = Pepper({
         host: config.uamip,
-        port: config.uamport,
+        port: config.uamport
       });
       pepper.logon(username, password, { protocol: 'CHAP' }, function(
         error,
-        data,
+        data
       ) {
         if (error) {
           return clbk(error);
@@ -1324,7 +1324,7 @@ angular.module('masterHotspotApp').service('routerService', [
     function isXClaim() {
       return config.accessPointType.toLowerCase() == XCLAIM;
     }
-  },
+  }
 ]);
 
 angular
@@ -1340,7 +1340,7 @@ angular
         toaster.pop(
           'success',
           translateFilter(title),
-          translateFilter(message),
+          translateFilter(message)
         );
       };
 
@@ -1358,7 +1358,7 @@ angular
         toaster.pop(
           'warning',
           translateFilter(title),
-          translateFilter(message),
+          translateFilter(message)
         );
       };
 
@@ -1375,7 +1375,7 @@ angular
         }
         toaster.pop('wait', translateFilter(title), translateFilter(message));
       };
-    },
+    }
   ])
   .service('loadingModal', [
     '$log',
@@ -1395,14 +1395,14 @@ angular
             '$uibModalInstance',
             function($scope, $uibModalInstance) {
               _this.modalInstance = $uibModalInstance;
-            },
-          ],
+            }
+          ]
         });
       };
       this.hide = function() {
         _this.modalInstance && _this.modalInstance.close();
       };
-    },
+    }
   ])
   .service('numberService', [
     '$log',
@@ -1412,7 +1412,7 @@ angular
           return '0' + clock;
         } else return clock;
       };
-    },
+    }
   ])
   .service('usernameService', [
     '$log',
@@ -1426,7 +1426,7 @@ angular
         }
         return username.concat('@', businessId);
       };
-    },
+    }
   ])
   .service('nationalCode', [
     '$log',
@@ -1461,7 +1461,7 @@ angular
           return false;
         }
       };
-    },
+    }
   ])
   .service('birthday', [
     '$log',
@@ -1489,7 +1489,7 @@ angular
           return null;
         }
       };
-    },
+    }
   ])
   .directive('ngFormCommit', [
     function() {
@@ -1499,8 +1499,8 @@ angular
           $form.commit = function() {
             $el[0].submit();
           };
-        },
+        }
       };
-    },
+    }
   ]);
 

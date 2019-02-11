@@ -15,7 +15,7 @@ app.controller('NoteCtrl', [
       var note = {
         content: 'New note',
         color: $scope.colors[Math.floor(Math.random() * 3)],
-        date: Date.now(),
+        date: Date.now()
       };
       $scope.notes.push(note);
       $scope.selectNote(note);
@@ -36,5 +36,5 @@ app.controller('NoteCtrl', [
       $scope.note = note;
       $scope.note.selected = true;
     };
-  },
+  }
 ]);

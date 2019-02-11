@@ -11,12 +11,12 @@ app.controller('AccordionDemoCtrl', [
     $scope.groups = [
       {
         title: 'Accordion group header - #1',
-        content: 'Dynamic group body - #1',
+        content: 'Dynamic group body - #1'
       },
       {
         title: 'Accordion group header - #2',
-        content: 'Dynamic group body - #2',
-      },
+        content: 'Dynamic group body - #2'
+      }
     ];
 
     $scope.items = ['Item 1', 'Item 2', 'Item 3'];
@@ -28,9 +28,9 @@ app.controller('AccordionDemoCtrl', [
 
     $scope.status = {
       isFirstOpen: true,
-      isFirstDisabled: false,
+      isFirstDisabled: false
     };
-  },
+  }
 ]);
 app.controller('AlertDemoCtrl', [
   '$scope',
@@ -38,30 +38,30 @@ app.controller('AlertDemoCtrl', [
     $scope.alerts = [
       {
         type: 'success',
-        msg: 'Well done! You successfully read this important alert message.',
+        msg: 'Well done! You successfully read this important alert message.'
       },
       {
         type: 'info',
         msg:
-          'Heads up! This alert needs your attention, but it is not super important.',
+          'Heads up! This alert needs your attention, but it is not super important.'
       },
       {
         type: 'warning',
-        msg: 'Warning! Best check yo self, you are not looking too good...',
-      },
+        msg: 'Warning! Best check yo self, you are not looking too good...'
+      }
     ];
 
     $scope.addAlert = function() {
       $scope.alerts.push({
         type: 'danger',
-        msg: 'Oh snap! Change a few things up and try submitting again.',
+        msg: 'Oh snap! Change a few things up and try submitting again.'
       });
     };
 
     $scope.closeAlert = function(index) {
       $scope.alerts.splice(index, 1);
     };
-  },
+  }
 ]);
 app.controller('ButtonsDemoCtrl', [
   '$scope',
@@ -73,9 +73,9 @@ app.controller('ButtonsDemoCtrl', [
     $scope.checkModel = {
       left: false,
       middle: true,
-      right: false,
+      right: false
     };
-  },
+  }
 ]);
 app.controller('CarouselDemoCtrl', [
   '$scope',
@@ -89,14 +89,14 @@ app.controller('CarouselDemoCtrl', [
           'Carousel text #0',
           'Carousel text #1',
           'Carousel text #2',
-          'Carousel text #3',
-        ][slides.length % 4],
+          'Carousel text #3'
+        ][slides.length % 4]
       });
     };
     for (var i = 0; i < 4; i++) {
       $scope.addSlide();
     }
-  },
+  }
 ]);
 app.controller('DropdownDemoCtrl', [
   '$scope',
@@ -104,11 +104,11 @@ app.controller('DropdownDemoCtrl', [
     $scope.items = [
       'The first choice!',
       'And another choice for you.',
-      'but wait! A third!',
+      'but wait! A third!'
     ];
 
     $scope.status = {
-      isopen: false,
+      isopen: false
     };
 
     $scope.toggled = function(open) {
@@ -120,7 +120,7 @@ app.controller('DropdownDemoCtrl', [
       $event.stopPropagation();
       $scope.status.isopen = !$scope.status.isopen;
     };
-  },
+  }
 ]);
 app.controller('ModalInstanceCtrl', [
   '$scope',
@@ -129,7 +129,7 @@ app.controller('ModalInstanceCtrl', [
   function($scope, $modalInstance, items) {
     $scope.items = items;
     $scope.selected = {
-      item: $scope.items[0],
+      item: $scope.items[0]
     };
 
     $scope.ok = function() {
@@ -139,7 +139,7 @@ app.controller('ModalInstanceCtrl', [
     $scope.cancel = function() {
       $modalInstance.dismiss('cancel');
     };
-  },
+  }
 ]);
 app.controller('ModalDemoCtrl', [
   '$scope',
@@ -155,8 +155,8 @@ app.controller('ModalDemoCtrl', [
         resolve: {
           items: function() {
             return $scope.items;
-          },
-        },
+          }
+        }
       });
 
       modalInstance.result.then(
@@ -165,10 +165,10 @@ app.controller('ModalDemoCtrl', [
         },
         function() {
           $log.info('Modal dismissed at: ' + new Date());
-        },
+        }
       );
     };
-  },
+  }
 ]);
 app.controller('PaginationDemoCtrl', [
   '$scope',
@@ -188,14 +188,14 @@ app.controller('PaginationDemoCtrl', [
     $scope.maxSize = 5;
     $scope.bigTotalItems = 175;
     $scope.bigCurrentPage = 1;
-  },
+  }
 ]);
 app.controller('PopoverDemoCtrl', [
   '$scope',
   function($scope) {
     $scope.dynamicPopover = 'Hello, World!';
     $scope.dynamicPopoverTitle = 'Title';
-  },
+  }
 ]);
 app.controller('ProgressDemoCtrl', [
   '$scope',
@@ -231,12 +231,12 @@ app.controller('ProgressDemoCtrl', [
         var index = Math.floor(Math.random() * 4);
         $scope.stacked.push({
           value: Math.floor(Math.random() * 30 + 1),
-          type: types[index],
+          type: types[index]
         });
       }
     };
     $scope.randomStacked();
-  },
+  }
 ]);
 app.controller('TabsDemoCtrl', [
   '$scope',
@@ -246,10 +246,10 @@ app.controller('TabsDemoCtrl', [
       {
         title: 'Dynamic Title 2',
         content: 'Dynamic content 2',
-        disabled: true,
-      },
+        disabled: true
+      }
     ];
-  },
+  }
 ]);
 app.controller('RatingDemoCtrl', [
   '$scope',
@@ -262,7 +262,7 @@ app.controller('RatingDemoCtrl', [
       $scope.overStar = value;
       $scope.percent = 100 * (value / $scope.max);
     };
-  },
+  }
 ]);
 app.controller('TooltipDemoCtrl', [
   '$scope',
@@ -270,7 +270,7 @@ app.controller('TooltipDemoCtrl', [
     $scope.dynamicTooltip = 'Hello, World!';
     $scope.dynamicTooltipText = 'dynamic';
     $scope.htmlTooltip = "I've been made <b>bold</b>!";
-  },
+  }
 ]);
 app.controller('TypeaheadDemoCtrl', [
   '$scope',
@@ -327,7 +327,7 @@ app.controller('TypeaheadDemoCtrl', [
       'Washington',
       'West Virginia',
       'Wisconsin',
-      'Wyoming',
+      'Wyoming'
     ];
     // Any function returning a promise object can be used to load values asynchronously
     $scope.getLocation = function(val) {
@@ -335,8 +335,8 @@ app.controller('TypeaheadDemoCtrl', [
         .get('http://maps.googleapis.com/maps/api/geocode/json', {
           params: {
             address: val,
-            sensor: false,
-          },
+            sensor: false
+          }
         })
         .then(function(res) {
           var addresses = [];
@@ -346,7 +346,7 @@ app.controller('TypeaheadDemoCtrl', [
           return addresses;
         });
     };
-  },
+  }
 ]);
 app.controller('DatepickerDemoCtrl', [
   '$scope',
@@ -380,13 +380,13 @@ app.controller('DatepickerDemoCtrl', [
     $scope.dateOptions = {
       formatYear: 'yy',
       startingDay: 1,
-      class: 'datepicker',
+      class: 'datepicker'
     };
 
     $scope.initDate = new Date('2016-15-20');
     $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
     $scope.format = $scope.formats[0];
-  },
+  }
 ]);
 app.controller('TimepickerDemoCtrl', [
   '$scope',
@@ -398,7 +398,7 @@ app.controller('TimepickerDemoCtrl', [
 
     $scope.options = {
       hstep: [1, 2, 3],
-      mstep: [1, 5, 10, 15, 25, 30],
+      mstep: [1, 5, 10, 15, 25, 30]
     };
 
     $scope.ismeridian = true;
@@ -420,5 +420,5 @@ app.controller('TimepickerDemoCtrl', [
     $scope.clear = function() {
       $scope.mytime = null;
     };
-  },
+  }
 ]);

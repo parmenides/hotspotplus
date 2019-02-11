@@ -20,7 +20,7 @@ app.controller('campaignList', [
     $uibModal,
     PREFIX,
     Session,
-    appMessenger,
+    appMessenger
   ) {
     var businessId = Session.business.id;
 
@@ -28,7 +28,7 @@ app.controller('campaignList', [
     $scope.paginationOptions = {
       pageNumber: 1,
       itemPerPage: 10,
-      sort: null,
+      sort: null
     };
 
     $scope.gridOptions = {
@@ -53,7 +53,7 @@ app.controller('campaignList', [
           }
           getPage();
         });
-      },
+      }
     };
 
     // Remove a campaign
@@ -74,10 +74,10 @@ app.controller('campaignList', [
               },
               function(err) {
                 appMessenger.showError('campaign.removeUnSuccessFull');
-              },
+              }
             );
         },
-        NoCallback: function() {},
+        NoCallback: function() {}
       });
     };
 
@@ -88,7 +88,7 @@ app.controller('campaignList', [
         Business.campaigns
           .findById({
             id: businessId,
-            fk: campaignId,
+            fk: campaignId
           })
           .$promise.then(
             function(res) {
@@ -96,7 +96,7 @@ app.controller('campaignList', [
             },
             function(error) {
               appMessenger.showError('campaign.notFound');
-            },
+            }
           );
       } else {
         var today = new Date();
@@ -116,7 +116,7 @@ app.controller('campaignList', [
               couponPrefix: couponPrefix,
               discount: {
                 amount: 0,
-                unit: 'percent',
+                unit: 'percent'
               },
               allDays: true,
               allHours: true,
@@ -128,18 +128,18 @@ app.controller('campaignList', [
                 tuesday: false,
                 wednesday: false,
                 thursday: false,
-                friday: false,
+                friday: false
               },
               hours: {
                 morning: false,
                 afternoon: false,
-                evening: false,
-              },
+                evening: false
+              }
             });
           },
           function(err) {
             appMessenger.showError('business.settingsLoadUnSuccessful');
-          },
+          }
         );
       }
     };
@@ -162,13 +162,13 @@ app.controller('campaignList', [
             // Persian date picker methods
             $scope.dateOptions = {
               formatYear: 'yy',
-              startingDay: 6,
+              startingDay: 6
             };
             $scope.dateFormats = [
               'dd-MMMM-yyyy',
               'yyyy/MM/dd',
               'dd.MM.yyyy',
-              'shortDate',
+              'shortDate'
             ];
             $scope.dateFormat = $scope.dateFormats[0];
             $scope.disabled = function(date, mode) {
@@ -192,7 +192,7 @@ app.controller('campaignList', [
               }
               if (newValue != oldValue && newValue != 'sendBulkMessage') {
                 $scope.campaign.end = new Date(
-                  $scope.campaign.start.getTime() + 7 * 24 * 60 * 60 * 1000,
+                  $scope.campaign.start.getTime() + 7 * 24 * 60 * 60 * 1000
                 );
               }
             });
@@ -255,19 +255,19 @@ app.controller('campaignList', [
                         switch ($scope.campaign.type) {
                           case 'sendBulkMessage':
                             Campaign.sendBulkMessages({
-                              campaignId: campaign.id,
+                              campaignId: campaign.id
                             }).$promise.then(
                               function(res) {
                                 $uibModalInstance.close();
                                 appMessenger.showSuccess(
-                                  'campaign.sendBulkMessageSuccessFull',
+                                  'campaign.sendBulkMessageSuccessFull'
                                 );
                               },
                               function(err) {
                                 appMessenger.showError(
-                                  'campaign.sendBulkMessageUnSuccessFull',
+                                  'campaign.sendBulkMessageUnSuccessFull'
                                 );
-                              },
+                              }
                             );
                             break;
                           default:
@@ -277,16 +277,16 @@ app.controller('campaignList', [
                       },
                       function(err) {
                         appMessenger.showError('campaign.createUnSuccessFull');
-                      },
+                      }
                     );
                 } else {
                   Business.campaigns
                     .updateById(
                       {
                         id: businessId,
-                        fk: $scope.campaign.id,
+                        fk: $scope.campaign.id
                       },
-                      $scope.campaign,
+                      $scope.campaign
                     )
                     .$promise.then(
                       function(res) {
@@ -296,13 +296,13 @@ app.controller('campaignList', [
                       },
                       function(err) {
                         appMessenger.showError('campaign.updateUnSuccessFull');
-                      },
+                      }
                     );
                 }
               }
             };
-          },
-        ],
+          }
+        ]
       });
     };
 
@@ -325,7 +325,7 @@ app.controller('campaignList', [
                   title: 'general.warning',
                   message: 'general.areYouSure',
                   noBtnLabel: 'general.no',
-                  yesBtnLabel: 'general.yes',
+                  yesBtnLabel: 'general.yes'
                 };
                 $scope.no = function() {
                   $uibModalInstance.close();
@@ -336,7 +336,7 @@ app.controller('campaignList', [
                   Business.campaigns.updateById(
                     {
                       id: businessId,
-                      fk: campaignId,
+                      fk: campaignId
                     },
                     { active: active },
                     function(res) {
@@ -344,7 +344,7 @@ app.controller('campaignList', [
                         appMessenger.showSuccess('campaign.activeSuccessFull');
                       } else {
                         appMessenger.showSuccess(
-                          'campaign.disabledSuccessFull',
+                          'campaign.disabledSuccessFull'
                         );
                       }
                       getPage();
@@ -354,15 +354,15 @@ app.controller('campaignList', [
                         appMessenger.showError('campaign.activeUnSuccessFull');
                       } else {
                         appMessenger.showError(
-                          'campaign.disabledUnSuccessFull',
+                          'campaign.disabledUnSuccessFull'
                         );
                       }
-                    },
+                    }
                   );
                   $uibModalInstance.close();
                 };
-              },
-            ],
+              }
+            ]
           });
         });
     };
@@ -387,15 +387,15 @@ app.controller('campaignList', [
                 $scope.ok = function() {
                   $uibModalInstance.close();
                 };
-              },
-            ],
+              }
+            ]
           });
         });
     };
 
     $scope.$watch('paginationOptions.itemPerPage', function(
       oldValue,
-      newValue,
+      newValue
     ) {
       getPage();
     });
@@ -428,7 +428,7 @@ app.controller('campaignList', [
         },
         function(error) {
           $log.error(error);
-        },
+        }
       );
       Business.campaigns(options).$promise.then(
         function(campaigns) {
@@ -464,8 +464,8 @@ app.controller('campaignList', [
         },
         function(error) {
           $log.error(error);
-        },
+        }
       );
     };
-  },
+  }
 ]);

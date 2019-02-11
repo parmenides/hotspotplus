@@ -16,7 +16,7 @@ app.controller('ScrollController', [
           }
           return success(result);
         }, 100);
-      },
+      }
     };
-  },
+  }
 ]);

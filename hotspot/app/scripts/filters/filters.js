@@ -7,7 +7,7 @@ angular.module('masterHotspotApp').filter('requiredField', [
         ? translateFilter('requiredField') + ' ' + label
         : label;
     };
-  },
+  }
 ]);
 
 app.filter('englishNumber', function() {

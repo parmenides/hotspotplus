@@ -8,7 +8,7 @@ app.directive('routersCount', [
   function(PREFIX, Nas, $log) {
     return {
       scope: {
-        params: '=options',
+        params: '=options'
       },
 
       controller: function($scope) {
@@ -34,13 +34,13 @@ app.directive('routersCount', [
           }),
             function(error) {
               $log.error(
-                'can not get routers status from data source: ' + error,
+                'can not get routers status from data source: ' + error
               );
             };
         }
       },
 
-      templateUrl: PREFIX + 'app/widgets/routersCount/tpl/routersCount.html',
+      templateUrl: PREFIX + 'app/widgets/routersCount/tpl/routersCount.html'
     };
-  },
+  }
 ]);

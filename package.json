@@ -12,7 +12,7 @@
     "preinstall": "node bin/preinstall",
     "build": "node bin/build && git add .",
     "release": "npm run build && git commit -am ${MESSAGE} && npm version ${VERSION} -m 'release' ",
-    "prettier": "prettier '{api-license/server,api-license/common/models,coordinator/src,api/server,api/server/*,api/common/models}/**/*.js'  --write"
+    "prettier": "prettier '{dashboard/src/js,dashboard/src/acpp,hotspot/app,api-license/server,api-license/common/models,coordinator/src,api/server,api/server/*,api/common/models}/**/*.js'  --write"
   },
   "prettier": {
     "singleQuote": true,

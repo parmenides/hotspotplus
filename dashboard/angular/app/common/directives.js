@@ -23,7 +23,7 @@ app.directive('access', [
             result = authorization.authorize(
               true,
               roles,
-              attrs.accessPermissionType,
+              attrs.accessPermissionType
             );
             if (result === 'authorized') {
               makeVisible();
@@ -40,7 +40,7 @@ app.directive('access', [
         if (roles.length > 0) {
           determineVisibility(true);
         }
-      },
+      }
     };
-  },
+  }
 ]);

@@ -37,10 +37,10 @@ app.controller('BusinessSignUpController', [
             $scope.authError = 'error.generalError';
             appMessenger.showError('error.generalError');
           }
-        },
+        }
       );
     };
-  },
+  }
 ]);
 
 app.controller('BusinessSignInController', [
@@ -62,7 +62,7 @@ app.controller('BusinessSignInController', [
     Session,
     LoopBackAuth,
     roleService,
-    errorMessenger,
+    errorMessenger
   ) {
     $scope.credential = {};
     $scope.authError = null;
@@ -81,13 +81,13 @@ app.controller('BusinessSignInController', [
             },
             function() {
               appMessenger.showError('auth.loadingRoleFailed');
-            },
+            }
           );
         },
         function(errorResult) {
           $log.error(errorResult);
           appMessenger.showError('user.invalidLogin');
-        },
+        }
       );
     };
 
@@ -100,8 +100,8 @@ app.controller('BusinessSignInController', [
         function(error) {
           Session.clearSession();
           appMessenger.showError('auth.logoutFailed');
-        },
+        }
       );
     };
-  },
+  }
 ]);

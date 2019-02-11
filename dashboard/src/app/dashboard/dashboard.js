@@ -16,7 +16,7 @@ app.controller('dashboard', [
     appMessenger,
     $timeout,
     translateFilter,
-    persianDateFilter,
+    persianDateFilter
   ) {
     var RELOAD_DASHBOARD_EVENT = 'dashboard.reload';
     var businessId = Session.business.id;
@@ -43,8 +43,8 @@ app.controller('dashboard', [
           endDate: $scope.endDate,
           businessId: businessId,
           offset: timeZone,
-          advanceTime: $scope.advanceTime,
-        },
+          advanceTime: $scope.advanceTime
+        }
       });
     };
 
@@ -71,7 +71,7 @@ app.controller('dashboard', [
         businessId: businessId,
         offset: timeZone,
         advanceTime: $scope.advanceTime,
-        reloadEvent: RELOAD_DASHBOARD_EVENT,
+        reloadEvent: RELOAD_DASHBOARD_EVENT
       };
     }
 
@@ -83,7 +83,7 @@ app.controller('dashboard', [
         var option = {
           fromDate: $scope.fromDate,
           endDate: $scope.endDate,
-          advanceTime: $scope.advanceTime,
+          advanceTime: $scope.advanceTime
         };
         $scope.updateDashboard(option);
         intervalFunction();
@@ -96,7 +96,7 @@ app.controller('dashboard', [
         },
         function() {
           //$log.info( "Timer stopped" );
-        },
+        }
       );
     }
 
@@ -109,5 +109,5 @@ app.controller('dashboard', [
         $timeout.cancel(timer);
       }
     });
-  },
+  }
 ]);

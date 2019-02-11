@@ -7,21 +7,21 @@ app.controller('MailCtrl', [
       { name: 'Sent', filter: 'sent' },
       { name: 'Important', filter: 'important' },
       { name: 'Draft', filter: 'draft' },
-      { name: 'Trash', filter: 'trash' },
+      { name: 'Trash', filter: 'trash' }
     ];
 
     $scope.labels = [
       { name: 'Angular', filter: 'angular', color: '#23b7e5' },
       { name: 'Bootstrap', filter: 'bootstrap', color: '#7266ba' },
       { name: 'Client', filter: 'client', color: '#fad733' },
-      { name: 'Work', filter: 'work', color: '#27c24c' },
+      { name: 'Work', filter: 'work', color: '#27c24c' }
     ];
 
     $scope.addLabel = function() {
       $scope.labels.push({
         name: $scope.newLabel.name,
         filter: angular.lowercase($scope.newLabel.name),
-        color: '#ccc',
+        color: '#ccc'
       });
       $scope.newLabel.name = '';
     };
@@ -31,10 +31,10 @@ app.controller('MailCtrl', [
         'b-l-info': angular.lowercase(label) === 'angular',
         'b-l-primary': angular.lowercase(label) === 'bootstrap',
         'b-l-warning': angular.lowercase(label) === 'client',
-        'b-l-success': angular.lowercase(label) === 'work',
+        'b-l-success': angular.lowercase(label) === 'work'
       };
     };
-  },
+  }
 ]);
 
 app.controller('MailListCtrl', [
@@ -46,7 +46,7 @@ app.controller('MailListCtrl', [
     mails.all().then(function(mails) {
       $scope.mails = mails;
     });
-  },
+  }
 ]);
 
 app.controller('MailDetailCtrl', [
@@ -57,7 +57,7 @@ app.controller('MailDetailCtrl', [
     mails.get($stateParams.mailId).then(function(mail) {
       $scope.mail = mail;
     });
-  },
+  }
 ]);
 
 app.controller('MailNewCtrl', [
@@ -66,14 +66,14 @@ app.controller('MailNewCtrl', [
     $scope.mail = {
       to: '',
       subject: '',
-      content: '',
+      content: ''
     };
     $scope.tolist = [
       { name: 'James', email: 'james@gmail.com' },
       { name: 'Luoris Kiso', email: 'luoris.kiso@hotmail.com' },
-      { name: 'Lucy Yokes', email: 'lucy.yokes@gmail.com' },
+      { name: 'Lucy Yokes', email: 'lucy.yokes@gmail.com' }
     ];
-  },
+  }
 ]);
 
 angular.module('app').directive('labelColor', function() {

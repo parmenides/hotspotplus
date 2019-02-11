@@ -33,14 +33,14 @@ app.controller('internetPlanList', [
     Session,
     appMessenger,
     translateNumberFilter,
-    englishNumberFilter,
+    englishNumberFilter
   ) {
     var businessId = Session.business.id;
 
     $scope.paginationOptions = {
       pageNumber: 1,
       itemPerPage: 10,
-      sort: null,
+      sort: null
     };
     $scope.gridOptions = {
       enableSorting: true,
@@ -60,7 +60,7 @@ app.controller('internetPlanList', [
           enableColumnMenu: false,
           headerCellFilter: 'translate',
           cellTemplate:
-            '<a class="btn btn-link" ng-click="grid.appScope.editPlan(row)">{{row.entity.name}}</a>',
+            '<a class="btn btn-link" ng-click="grid.appScope.editPlan(row)">{{row.entity.name}}</a>'
         },
         {
           displayName: 'internetPlan.accessType',
@@ -69,7 +69,7 @@ app.controller('internetPlanList', [
           enableSorting: false,
           enableColumnMenu: false,
           headerCellFilter: 'translate',
-          cellFilter: 'translate',
+          cellFilter: 'translate'
         },
         {
           displayName: 'internetPlan.price',
@@ -80,7 +80,7 @@ app.controller('internetPlanList', [
           headerCellFilter: 'translate',
           cellFilter: 'translate',
           cellTemplate:
-            '<div class="ui-grid-cell-contents"><span ng-if="row.entity.price != 0">{{row.entity.price | translateNumber }} {{"general.toman" | translate }}</span><span ng-if="row.entity.price == 0">{{"general.free" | translate}}</span></div>',
+            '<div class="ui-grid-cell-contents"><span ng-if="row.entity.price != 0">{{row.entity.price | translateNumber }} {{"general.toman" | translate }}</span><span ng-if="row.entity.price == 0">{{"general.free" | translate}}</span></div>'
         },
         {
           displayName: 'internetPlan.defaultPlan',
@@ -94,7 +94,7 @@ app.controller('internetPlanList', [
           cellTemplate:
             '<a class="btn btn-link" ng-disabled="row.entity.price != 0" ng-click="grid.appScope.editDefaultPlanSettings()" uib-popover={{grid.appScope.selectDefaultPlanSettingsText}} popover-trigger="mouseenter"' +
             'popover-placement="right"><i class="fa fa-circle-o" ng-if="!row.entity.selected"></i>' +
-            '<i class="fa fa-dot-circle-o text-info" ng-if="row.entity.selected"></i></a>',
+            '<i class="fa fa-dot-circle-o text-info" ng-if="row.entity.selected"></i></a>'
         },
         {
           displayName: 'general.edit',
@@ -107,7 +107,7 @@ app.controller('internetPlanList', [
           cellClass: 'center',
           headerCellClass: 'center',
           cellTemplate:
-            '<a class="btn btn-link" ng-click="grid.appScope.editPlan(row)"><i class="fa fa-fw fa-pencil"></i></a>',
+            '<a class="btn btn-link" ng-click="grid.appScope.editPlan(row)"><i class="fa fa-fw fa-pencil"></i></a>'
         },
         {
           displayName: 'general.remove',
@@ -120,8 +120,8 @@ app.controller('internetPlanList', [
           cellClass: 'center',
           headerCellClass: 'center',
           cellTemplate:
-            '<a class="btn btn-link" ng-click="grid.appScope.removePlan(row)"><i class="fa fa-fw fa-trash"></i></a>',
-        },
+            '<a class="btn btn-link" ng-click="grid.appScope.removePlan(row)"><i class="fa fa-fw fa-trash"></i></a>'
+        }
       ],
       onRegisterApi: function(gridApi) {
         $scope.gridApi = gridApi;
@@ -136,11 +136,11 @@ app.controller('internetPlanList', [
           }
           getPage();
         });
-      },
+      }
     };
 
     $scope.selectDefaultPlanSettingsText = translateFilter(
-      'help.selectDefaultPlanSettings',
+      'help.selectDefaultPlanSettings'
     );
     $scope.removePlan = function(row) {
       genericService.showConfirmDialog({
@@ -159,10 +159,10 @@ app.controller('internetPlanList', [
               },
               function(err) {
                 appMessenger.showError('internetPlan.removeUnSuccessFull');
-              },
+              }
             );
         },
-        NoCallback: function() {},
+        NoCallback: function() {}
       });
     };
 
@@ -190,12 +190,12 @@ app.controller('internetPlanList', [
               toMinute: 0,
               extraBulkPrice: 0,
               autoResubscribe: false,
-              accessType: 'private',
+              accessType: 'private'
             };
             $scope.options = {
               title: 'internetPlan.' + 'addPlan',
               cancelBtnLabel: 'general.cancel',
-              saveBtnLabel: 'general.save',
+              saveBtnLabel: 'general.save'
             };
             $scope.speedTypes = ['Kbps', 'Mbps', 'Gbps'];
             $scope.bulkTypes = ['KB', 'MB', 'GB'];
@@ -221,11 +221,11 @@ app.controller('internetPlanList', [
                     if (err.status == 422) {
                       appMessenger.showError('general.invalidInput');
                     }
-                  },
+                  }
                 );
             };
-          },
-        ],
+          }
+        ]
       });
     };
 
@@ -246,13 +246,13 @@ app.controller('internetPlanList', [
             $scope.options = {
               title: 'internetPlan.editPlan',
               cancelBtnLabel: 'general.cancel',
-              saveBtnLabel: 'general.save',
+              saveBtnLabel: 'general.save'
             };
             var internetPlanId = row.entity.id;
             Business.internetPlans
               .findById({
                 id: businessId,
-                fk: internetPlanId,
+                fk: internetPlanId
               })
               .$promise.then(
                 function(internetPlan) {
@@ -263,7 +263,7 @@ app.controller('internetPlanList', [
                 },
                 function(error) {
                   $log.error(error);
-                },
+                }
               );
             $scope.cancel = function() {
               $uibModalInstance.close();
@@ -274,9 +274,9 @@ app.controller('internetPlanList', [
                 .updateById(
                   {
                     id: businessId,
-                    fk: internetPlanId,
+                    fk: internetPlanId
                   },
-                  $scope.internetPlan,
+                  $scope.internetPlan
                 )
                 .$promise.then(
                   function(res) {
@@ -289,11 +289,11 @@ app.controller('internetPlanList', [
                     if (err.status == 422) {
                       appMessenger.showError('general.invalidInput');
                     }
-                  },
+                  }
                 );
             };
-          },
-        ],
+          }
+        ]
       });
     };
 
@@ -313,7 +313,7 @@ app.controller('internetPlanList', [
             $scope.options = {
               title: 'internetPlan.defaultPlanSettings',
               cancelBtnLabel: 'general.cancel',
-              saveBtnLabel: 'general.save',
+              saveBtnLabel: 'general.save'
             };
             Business.internetPlans({ id: businessId }).$promise.then(
               function(internetPlans) {
@@ -344,7 +344,7 @@ app.controller('internetPlanList', [
                   $scope.defaultInternetPlan.count
                 ) {
                   $scope.defaultInternetPlan.count = translateNumberFilter(
-                    $scope.defaultInternetPlan.count,
+                    $scope.defaultInternetPlan.count
                   );
                 }
                 if (
@@ -352,13 +352,13 @@ app.controller('internetPlanList', [
                   $scope.defaultInternetPlan.period
                 ) {
                   $scope.defaultInternetPlan.period = translateNumberFilter(
-                    $scope.defaultInternetPlan.period,
+                    $scope.defaultInternetPlan.period
                   );
                 }
               },
               function(error) {
                 $log.error(error);
-              },
+              }
             );
             $scope.cancel = function() {
               $uibModalInstance.close();
@@ -375,31 +375,31 @@ app.controller('internetPlanList', [
                     englishNumberFilter($scope.defaultInternetPlan.count) || 0,
                   period:
                     englishNumberFilter($scope.defaultInternetPlan.period) || 0,
-                  autoAssign: $scope.defaultInternetPlan.autoAssign,
+                  autoAssign: $scope.defaultInternetPlan.autoAssign
                 };
               }
               Business.prototype$updateAttributes(
                 { id: businessId },
-                { defaultInternetPlan: defaultInternetPlan },
+                { defaultInternetPlan: defaultInternetPlan }
               ).$promise.then(
                 function(res) {
                   appMessenger.showSuccess('business.settingsUpdateSuccessful');
                 },
                 function(err) {
                   appMessenger.showError('business.settingsUpdateUnSuccessful');
-                },
+                }
               );
               $uibModalInstance.close();
               getPage();
             };
-          },
-        ],
+          }
+        ]
       });
     };
 
     $scope.$watch('paginationOptions.itemPerPage', function(
       oldValue,
-      newValue,
+      newValue
     ) {
       getPage();
     });
@@ -432,7 +432,7 @@ app.controller('internetPlanList', [
         },
         function(error) {
           $log.error(error);
-        },
+        }
       );
       Business.internetPlans(options).$promise.then(
         function(internetPlans) {
@@ -445,7 +445,7 @@ app.controller('internetPlanList', [
               ) {
                 $scope.defaultInternetPlan = business.defaultInternetPlan;
                 angular.forEach($scope.gridOptions.data, function(
-                  internetPlan,
+                  internetPlan
                 ) {
                   internetPlan.selected = false;
                   if (internetPlan.id == $scope.defaultInternetPlan.id) {
@@ -458,12 +458,12 @@ app.controller('internetPlanList', [
             },
             function(err) {
               appMessenger.showError('business.settingsLoadUnSuccessful');
-            },
+            }
           );
         },
         function(error) {
           $log.error(error);
-        },
+        }
       );
     };
 
@@ -474,11 +474,11 @@ app.controller('internetPlanList', [
       angular.extend(plan, {
         speed: {
           value: translateNumberFilter(plan.speed.value),
-          type: plan.speed.type,
+          type: plan.speed.type
         },
         bulk: {
           value: translateNumberFilter(plan.bulk.value),
-          type: plan.bulk.type,
+          type: plan.bulk.type
         },
         timeDuration: translateNumberFilter(plan.timeDuration),
         price: translateNumberFilter(plan.price),
@@ -487,7 +487,7 @@ app.controller('internetPlanList', [
         fromMinute: translateNumberFilter(plan.fromMinute),
         toMinute: translateNumberFilter(plan.toMinute),
         duration: translateNumberFilter(plan.duration),
-        extraBulkPrice: translateNumberFilter(plan.extraBulkPrice),
+        extraBulkPrice: translateNumberFilter(plan.extraBulkPrice)
       });
       return plan;
     };
@@ -495,11 +495,11 @@ app.controller('internetPlanList', [
       angular.extend(plan, {
         speed: {
           value: englishNumberFilter(plan.speed.value),
-          type: plan.speed.type,
+          type: plan.speed.type
         },
         bulk: {
           value: englishNumberFilter(plan.bulk.value),
-          type: plan.bulk.type,
+          type: plan.bulk.type
         },
         timeDuration: englishNumberFilter(plan.timeDuration),
         price: englishNumberFilter(plan.price),
@@ -508,7 +508,7 @@ app.controller('internetPlanList', [
         fromMinute: englishNumberFilter(plan.fromMinute),
         toMinute: englishNumberFilter(plan.toMinute),
         duration: englishNumberFilter(plan.duration),
-        extraBulkPrice: englishNumberFilter(plan.extraBulkPrice),
+        extraBulkPrice: englishNumberFilter(plan.extraBulkPrice)
       });
       return plan;
     };
@@ -520,5 +520,5 @@ app.controller('internetPlanList', [
       var matcher = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)$/;
       return matcher.test(ip);
     }
-  },
+  }
 ]);

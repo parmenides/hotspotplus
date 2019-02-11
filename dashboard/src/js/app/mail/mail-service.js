@@ -20,5 +20,5 @@ app.factory('mails', [
       });
     };
     return factory;
-  },
+  }
 ]);

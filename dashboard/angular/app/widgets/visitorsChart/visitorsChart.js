@@ -14,11 +14,11 @@ app.directive('visitorsChart', [
     $log,
     translateFilter,
     persianDateFilter,
-    translateNumberFilter,
+    translateNumberFilter
   ) {
     return {
       scope: {
-        params: '=options',
+        params: '=options'
       },
       controller: function($scope) {
         $scope.loading = false;
@@ -45,7 +45,7 @@ app.directive('visitorsChart', [
           visitorsChart.monthDays = $scope.params.monthDays;
           $scope.loading = true;
           FootTraffic.getVisitorsChart(visitorsChart).$promise.then(function(
-            res,
+            res
           ) {
             var DAY_MILLISECONDS = 24 * 60 * 60 * 1000;
             $scope.loading = false;
@@ -53,13 +53,13 @@ app.directive('visitorsChart', [
             var xAxesLabel = 'dashboard.xAxesLabelDaily';
             for (var date in res.result.date) {
               res.result.date[date] = translateNumberFilter(
-                persianDateFilter(new Date(res.result.date[date]), 'M/d'),
+                persianDateFilter(new Date(res.result.date[date]), 'M/d')
               );
             }
             $scope.labels = res.result.date;
             $scope.series = [
               translateFilter('dashboard.returningVisitors'),
-              translateFilter('dashboard.newVisitors'),
+              translateFilter('dashboard.newVisitors')
             ];
             $scope.data = [res.result.reVisitors, res.result.newVisitors];
             $scope.type = 'line';
@@ -73,8 +73,8 @@ app.directive('visitorsChart', [
                 display: true,
                 position: 'bottom',
                 labels: {
-                  fontColor: '#333',
-                },
+                  fontColor: '#333'
+                }
               },
               tooltips: {
                 enabled: true,
@@ -88,8 +88,8 @@ app.directive('visitorsChart', [
                       ' : ' +
                       translateNumberFilter(tooltipItems.yLabel)
                     );
-                  },
-                },
+                  }
+                }
               },
               scales: {
                 xAxes: [
@@ -97,7 +97,7 @@ app.directive('visitorsChart', [
                     scaleLabel: {
                       display: true,
                       labelString: translateFilter(xAxesLabel),
-                      fontColor: '#333',
+                      fontColor: '#333'
                     },
                     afterTickToLabelConversion: function(data) {
                       var xLabels = data.ticks;
@@ -108,8 +108,8 @@ app.directive('visitorsChart', [
                           }
                         });
                       }
-                    },
-                  },
+                    }
+                  }
                 ],
                 yAxes: [
                   {
@@ -120,27 +120,27 @@ app.directive('visitorsChart', [
                     scaleLabel: {
                       display: true,
                       labelString: translateFilter('dashboard.yAxesLabelQty'),
-                      fontColor: '#333',
+                      fontColor: '#333'
                     },
                     ticks: {
                       beginAtZero: true,
                       callback: function(value) {
                         return translateNumberFilter(Number(value));
-                      },
-                    },
-                  },
-                ],
-              },
+                      }
+                    }
+                  }
+                ]
+              }
             };
           }),
             function(error) {
               $log.error(
-                'can not get visitors chart info from data source: ' + error,
+                'can not get visitors chart info from data source: ' + error
               );
             };
         }
       },
-      templateUrl: PREFIX + 'app/widgets/visitorsChart/tpl/visitorsChart.html',
+      templateUrl: PREFIX + 'app/widgets/visitorsChart/tpl/visitorsChart.html'
     };
-  },
+  }
 ]);

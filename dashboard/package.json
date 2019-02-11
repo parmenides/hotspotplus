@@ -3,7 +3,7 @@
   "version": "2.2.0",
   "description": "Admin web application template with Bootstrap 3 and AngularJS.",
   "scripts": {
-    "build": "grunt build:angular --force && git add .",
+    "build": "grunt build:angular && git add .",
     "start": "node node_modules/http-server/bin/http-server -o ",
     "releaseSandbox": "git commit -a -m 'sandbox:latest';git tag -f release ;git push -u origin develop --tags --force",
     "releaseProduction": "git commit -a -m 'production:3.6';git tag -f release ;git push -u origin master --tags --force",

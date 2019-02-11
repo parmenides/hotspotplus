@@ -11,7 +11,7 @@ app.directive('visitsChart', [
   function(PREFIX, FootTraffic, $log, translateNumberFilter, translateFilter) {
     return {
       scope: {
-        params: '=options',
+        params: '=options'
       },
       controller: function($scope) {
         $scope.loading = false;
@@ -38,7 +38,7 @@ app.directive('visitsChart', [
 					 */
           $scope.loading = true;
           FootTraffic.getDailyVisitsChart(visitsChart).$promise.then(function(
-            res,
+            res
           ) {
             $scope.loading = false;
             $scope.labels = [];
@@ -47,7 +47,7 @@ app.directive('visitsChart', [
             }
             $scope.series = [
               translateFilter('dashboard.visits'),
-              translateFilter('dashboard.walkBys'),
+              translateFilter('dashboard.walkBys')
             ];
             $scope.data = [res.visits, res.walkBys];
             $scope.colors = ['#7266ba', '#DDDDDD', '#3a3f51'];
@@ -56,9 +56,9 @@ app.directive('visitsChart', [
                 display: true,
                 position: 'bottom',
                 labels: {
-                  fontColor: '#333',
+                  fontColor: '#333'
                 },
-                fullWidth: true,
+                fullWidth: true
               },
               tooltips: {
                 enabled: true,
@@ -72,8 +72,8 @@ app.directive('visitsChart', [
                       ' : ' +
                       translateNumberFilter(tooltipItems.yLabel)
                     );
-                  },
-                },
+                  }
+                }
               },
               scales: {
                 xAxes: [
@@ -81,11 +81,11 @@ app.directive('visitsChart', [
                     scaleLabel: {
                       display: true,
                       labelString: translateFilter(
-                        'dashboard.xAxesLabelHourly',
+                        'dashboard.xAxesLabelHourly'
                       ),
-                      fontColor: '#333',
-                    },
-                  },
+                      fontColor: '#333'
+                    }
+                  }
                 ],
                 yAxes: [
                   {
@@ -96,27 +96,27 @@ app.directive('visitsChart', [
                     scaleLabel: {
                       display: true,
                       labelString: translateFilter('dashboard.yAxesLabelQty'),
-                      fontColor: '#333',
+                      fontColor: '#333'
                     },
                     ticks: {
                       beginAtZero: true,
                       callback: function(value) {
                         return translateNumberFilter(Number(value));
-                      },
-                    },
-                  },
-                ],
-              },
+                      }
+                    }
+                  }
+                ]
+              }
             };
           }),
             function(error) {
               $log.error(
-                'can not get visits chart info from data source: ' + error,
+                'can not get visits chart info from data source: ' + error
               );
             };
         }
       },
-      templateUrl: PREFIX + 'app/widgets/visitsChart/tpl/visitsChart.html',
+      templateUrl: PREFIX + 'app/widgets/visitsChart/tpl/visitsChart.html'
     };
-  },
+  }
 ]);

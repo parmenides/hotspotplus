@@ -11,8 +11,8 @@ app.service('campaignService', [
           times: {
             rightNow: {
               title: 'campaign.rightNow',
-              description: 'campaign.rightNowDescription',
-            },
+              description: 'campaign.rightNowDescription'
+            }
           },
           title: 'campaign.birthday',
           description: 'campaign.birthdayDescription',
@@ -20,16 +20,16 @@ app.service('campaignService', [
             'chooseCampaign',
             'chooseMessage',
             'chooseDuration',
-            'confirmSave',
+            'confirmSave'
           ],
-          disabled: false,
+          disabled: false
         },
         loyalty: {
           times: {
             rightNow: {
               title: 'campaign.rightNow',
-              description: 'campaign.rightNowDescription',
-            },
+              description: 'campaign.rightNowDescription'
+            }
           },
           title: 'campaign.loyalty',
           description: 'campaign.loyaltyDescription',
@@ -37,16 +37,16 @@ app.service('campaignService', [
             'chooseCampaign',
             'chooseMessage',
             'chooseDuration',
-            'confirmSave',
+            'confirmSave'
           ],
-          disabled: false,
+          disabled: false
         },
         memberAtRisk: {
           times: {
             rightNow: {
               title: 'campaign.rightNow',
-              description: 'campaign.rightNowDescription',
-            },
+              description: 'campaign.rightNowDescription'
+            }
           },
           title: 'campaign.memberAtRisk',
           description: 'campaign.memberAtRiskDescription',
@@ -54,24 +54,24 @@ app.service('campaignService', [
             'chooseCampaign',
             'chooseMessage',
             'chooseDuration',
-            'confirmSave',
+            'confirmSave'
           ],
-          disabled: false,
+          disabled: false
         },
         sendBulkMessage: {
           times: {
             rightNow: {
               title: 'campaign.rightNow',
-              description: 'campaign.rightNowDescription',
+              description: 'campaign.rightNowDescription'
             },
             onEntrance: {
               title: 'campaign.onEntrance',
-              description: 'campaign.onEntranceDescription',
+              description: 'campaign.onEntranceDescription'
             },
             onExit: {
               title: 'campaign.onExit',
-              description: 'campaign.onExitDescription',
-            },
+              description: 'campaign.onExitDescription'
+            }
           },
           title: 'campaign.sendBulkMessage',
           description: 'campaign.sendBulkMessageDescription',
@@ -79,16 +79,16 @@ app.service('campaignService', [
             'chooseCampaign',
             'chooseMessage',
             'chooseDuration',
-            'confirmSave',
+            'confirmSave'
           ],
-          disabled: false,
+          disabled: false
         },
         customerAcquisition: {
           times: {
             rightNow: {
               title: 'campaign.onSignup',
-              description: 'campaign.rightNowDescription',
-            },
+              description: 'campaign.rightNowDescription'
+            }
           },
           title: 'campaign.customerAcquisition',
           description: 'campaign.customerAcquisitionDescription',
@@ -96,16 +96,16 @@ app.service('campaignService', [
             'chooseCampaign',
             'chooseMessage',
             'chooseDuration',
-            'confirmSave',
+            'confirmSave'
           ],
-          disabled: true,
+          disabled: true
         },
         proximity: {
           times: {
             rightNow: {
               title: 'campaign.onSee',
-              description: 'campaign.rightNowDescription',
-            },
+              description: 'campaign.rightNowDescription'
+            }
           },
           title: 'campaign.proximity',
           description: 'campaign.proximityDescription',
@@ -113,24 +113,24 @@ app.service('campaignService', [
             'chooseCampaign',
             'chooseMessage',
             'chooseDuration',
-            'confirmSave',
+            'confirmSave'
           ],
-          disabled: true,
+          disabled: true
         },
         inviteFriend: {
           times: {
             rightNow: {
               title: 'campaign.rightNow',
-              description: 'campaign.rightNowDescription',
+              description: 'campaign.rightNowDescription'
             },
             onEntrance: {
               title: 'campaign.onEntrance',
-              description: 'campaign.onEntranceDescription',
+              description: 'campaign.onEntranceDescription'
             },
             onExit: {
               title: 'campaign.onExit',
-              description: 'campaign.onExitDescription',
-            },
+              description: 'campaign.onExitDescription'
+            }
           },
           title: 'campaign.inviteFriend',
           description: 'campaign.inviteFriendDescription',
@@ -138,11 +138,11 @@ app.service('campaignService', [
             'chooseCampaign',
             'chooseMessage',
             'chooseDuration',
-            'confirmSave',
+            'confirmSave'
           ],
-          disabled: true,
-        },
+          disabled: true
+        }
       };
     };
-  },
+  }
 ]);

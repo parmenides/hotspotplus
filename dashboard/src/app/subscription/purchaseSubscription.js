@@ -20,7 +20,7 @@ app.controller('purchaseSubscriptionController', [
     $uibModal,
     PREFIX,
     Coupon,
-    Invoice,
+    Invoice
   ) {
     if (Session.business == null) {
       return;
@@ -38,12 +38,12 @@ app.controller('purchaseSubscriptionController', [
           function(error) {
             $log.error(error);
             appMessenger.showError('business.failedToLoadService');
-          },
+          }
         );
       },
       function(err) {
         appMessenger.showError('business.settingsLoadUnSuccessful');
-      },
+      }
     );
 
     $scope.showDetails = function(theDesc) {
@@ -62,8 +62,8 @@ app.controller('purchaseSubscriptionController', [
             $scope.closeTheDesc = function() {
               $uibModalInstance.close();
             };
-          },
-        ],
+          }
+        ]
       });
     };
 
@@ -129,7 +129,7 @@ app.controller('purchaseSubscriptionController', [
                   },
                   function(error) {
                     $log.error(error);
-                  },
+                  }
                 );
               }
             };
@@ -138,7 +138,7 @@ app.controller('purchaseSubscriptionController', [
               Business.buyPackage({
                 businessId: businessId,
                 packageId: selectedPackage.id,
-                discount: $scope.giftCodeFound,
+                discount: $scope.giftCodeFound
               }).$promise.then(
                 function(result) {
                   $log.debug(result);
@@ -146,7 +146,7 @@ app.controller('purchaseSubscriptionController', [
                     window.location.href = result.url;
                   } else if (result.ok) {
                     appMessenger.showSuccess(
-                      'business.serviceActivatedSuccessfully',
+                      'business.serviceActivatedSuccessfully'
                     );
                     $uibModalInstance.close();
                     $state.reload();
@@ -154,11 +154,11 @@ app.controller('purchaseSubscriptionController', [
                 },
                 function(error) {
                   $log.error(error);
-                },
+                }
               );
             };
-          },
-        ],
+          }
+        ]
       });
     };
 
@@ -203,7 +203,7 @@ app.controller('purchaseSubscriptionController', [
                         var options = { filter: {} };
                         options.filter.where = {
                           code: giftCode,
-                          ownerId: 'Admin',
+                          ownerId: 'Admin'
                         };
                         Coupon.find(options).$promise.then(
                           function(result) {
@@ -240,7 +240,7 @@ app.controller('purchaseSubscriptionController', [
                           },
                           function(error) {
                             $log.error(error);
-                          },
+                          }
                         );
                       }
                     };
@@ -249,7 +249,7 @@ app.controller('purchaseSubscriptionController', [
                       Business.buyService({
                         businessId: businessId,
                         packageId: selectedPackage.id,
-                        discount: $scope.giftCodeFound,
+                        discount: $scope.giftCodeFound
                       }).$promise.then(
                         function(result) {
                           $log.debug(result);
@@ -257,7 +257,7 @@ app.controller('purchaseSubscriptionController', [
                             window.location.href = result.url;
                           } else if (result.ok) {
                             appMessenger.showSuccess(
-                              'business.serviceActivatedSuccessfully',
+                              'business.serviceActivatedSuccessfully'
                             );
                             $uibModalInstance.close();
                             $state.reload();
@@ -265,23 +265,23 @@ app.controller('purchaseSubscriptionController', [
                         },
                         function(error) {
                           $log.error(error);
-                        },
+                        }
                       );
                     };
-                  },
-                ],
+                  }
+                ]
               });
             },
             function(error) {
               $log.error(error);
               appMessenger.showError('business.failedToLoadService');
-            },
+            }
           );
         },
         function(error) {
           $log.error(error);
           appMessenger.showError('business.settingsLoadUnSuccessful');
-        },
+        }
       );
     };
 
@@ -310,7 +310,7 @@ app.controller('purchaseSubscriptionController', [
             function(error) {
               $log.error(error);
               appMessenger.showError('business.settingsLoadUnSuccessful');
-            },
+            }
           );
         } else {
           $scope.hasReseller = false;
@@ -328,7 +328,7 @@ app.controller('purchaseSubscriptionController', [
       function(error) {
         $log.error(error);
         appMessenger.showError('business.settingsLoadUnSuccessful');
-      },
+      }
     );
-  },
+  }
 ]);

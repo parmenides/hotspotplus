@@ -21,7 +21,7 @@ app.controller('loadDashboardController', [
     $location,
     $uibModal,
     PREFIX,
-    Business,
+    Business
   ) {
     if ($location.search().license_updated) {
       Business.reloadLicense();
@@ -42,7 +42,7 @@ app.controller('loadDashboardController', [
           '$uibModalInstance',
           function($scope, $uibModalInstance) {
             $scope.options = {
-              payed: $location.search().payed,
+              payed: $location.search().payed
             };
             if ($location.search().error) {
               $log.info('error:', $location.search().error);
@@ -53,8 +53,8 @@ app.controller('loadDashboardController', [
               $state.go('access.signIn');
               Session.clearSession();
             };
-          },
-        ],
+          }
+        ]
       });
     } else if (
       $location.search().dropbox != undefined &&
@@ -72,7 +72,7 @@ app.controller('loadDashboardController', [
           '$uibModalInstance',
           function($scope, $uibModalInstance) {
             $scope.options = {
-              payed: $location.search().dropbox,
+              payed: $location.search().dropbox
             };
             if ($location.search().error) {
               $log.info('error:', $location.search().error);
@@ -81,8 +81,8 @@ app.controller('loadDashboardController', [
               $uibModalInstance.close();
               $state.go($state.$current, null, { reload: true });
             };
-          },
-        ],
+          }
+        ]
       });
     } else {
       if (Session.isBusinessUser() && !Session.business) {
@@ -122,5 +122,5 @@ app.controller('loadDashboardController', [
       $log.debug(Session.roles.indexOf(role) !== -1);
       return Session.roles.indexOf(role) !== -1;
     }
-  },
+  }
 ]);

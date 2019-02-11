@@ -12,7 +12,7 @@ app.directive('customizeService', [
     //uibButtonConfig.activeClass = 'btn-primary';
     return {
       scope: {
-        public: '=public',
+        public: '=public'
       },
 
       controller: function($scope) {
@@ -30,7 +30,7 @@ app.directive('customizeService', [
 
             $scope.$watch('service.serviceTemplate', function(
               newValue,
-              oldValue,
+              oldValue
             ) {
               if (oldValue != newValue) {
                 var template = $scope.serviceTemplates[newValue];
@@ -66,7 +66,7 @@ app.directive('customizeService', [
           },
           function(error) {
             $log.error(error);
-          },
+          }
         );
 
         $scope.goToSignUp = function() {
@@ -94,7 +94,7 @@ app.directive('customizeService', [
                   Business.buyService({
                     businessId: businessId,
                     onlineUsers: $scope.service.onlineUsers,
-                    durationInMonths: $scope.service.duration,
+                    durationInMonths: $scope.service.duration
                   }).$promise.then(
                     function(result) {
                       $log.debug(result);
@@ -102,7 +102,7 @@ app.directive('customizeService', [
                         window.location.href = result.url;
                       } else if (result.ok) {
                         appMessenger.showSuccess(
-                          'business.serviceActivatedSuccessfully',
+                          'business.serviceActivatedSuccessfully'
                         );
                         $uibModalInstance.close();
                         $state.reload();
@@ -110,16 +110,16 @@ app.directive('customizeService', [
                     },
                     function(error) {
                       $log.error(error);
-                    },
+                    }
                   );
                 };
-              },
-            ],
+              }
+            ]
           });
         };
       },
       templateUrl:
-        PREFIX + 'app/widgets/customizeService/tpl/customizeService.html',
+        PREFIX + 'app/widgets/customizeService/tpl/customizeService.html'
     };
-  },
+  }
 ]);

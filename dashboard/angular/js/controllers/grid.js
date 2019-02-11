@@ -4,13 +4,13 @@ app.controller('GridDemoCtrl', [
   function($scope, $http) {
     $scope.filterOptions = {
       filterText: '',
-      useExternalFilter: true,
+      useExternalFilter: true
     };
     $scope.totalServerItems = 0;
     $scope.pagingOptions = {
       pageSizes: [250, 500, 1000],
       pageSize: 250,
-      currentPage: 1,
+      currentPage: 1
     };
     $scope.setPagingData = function(data, page, pageSize) {
       var pagedData = data.slice((page - 1) * pageSize, page * pageSize);
@@ -49,7 +49,7 @@ app.controller('GridDemoCtrl', [
 
     $scope.getPagedDataAsync(
       $scope.pagingOptions.pageSize,
-      $scope.pagingOptions.currentPage,
+      $scope.pagingOptions.currentPage
     );
 
     $scope.$watch(
@@ -59,11 +59,11 @@ app.controller('GridDemoCtrl', [
           $scope.getPagedDataAsync(
             $scope.pagingOptions.pageSize,
             $scope.pagingOptions.currentPage,
-            $scope.filterOptions.filterText,
+            $scope.filterOptions.filterText
           );
         }
       },
-      true,
+      true
     );
     $scope.$watch(
       'filterOptions',
@@ -72,11 +72,11 @@ app.controller('GridDemoCtrl', [
           $scope.getPagedDataAsync(
             $scope.pagingOptions.pageSize,
             $scope.pagingOptions.currentPage,
-            $scope.filterOptions.filterText,
+            $scope.filterOptions.filterText
           );
         }
       },
-      true,
+      true
     );
 
     $scope.gridOptions = {
@@ -87,7 +87,7 @@ app.controller('GridDemoCtrl', [
       headerRowHeight: 36,
       totalServerItems: 'totalServerItems',
       pagingOptions: $scope.pagingOptions,
-      filterOptions: $scope.filterOptions,
+      filterOptions: $scope.filterOptions
     };
-  },
+  }
 ]);

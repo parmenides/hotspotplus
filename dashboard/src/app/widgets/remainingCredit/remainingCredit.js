@@ -9,7 +9,7 @@ app.directive('remainingCredit', [
   function(PREFIX, Business, $log, appMessenger) {
     return {
       scope: {
-        params: '=options',
+        params: '=options'
       },
 
       controller: function($scope) {
@@ -33,12 +33,12 @@ app.directive('remainingCredit', [
             function(error) {
               appMessenger.showError('business.balanceLoadUnSuccessful');
               return error;
-            },
+            }
           );
         }
       },
       templateUrl:
-        PREFIX + 'app/widgets/remainingCredit/tpl/remainingCredit.html',
+        PREFIX + 'app/widgets/remainingCredit/tpl/remainingCredit.html'
     };
-  },
+  }
 ]);

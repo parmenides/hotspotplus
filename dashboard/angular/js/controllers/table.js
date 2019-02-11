@@ -8,22 +8,22 @@ app.controller('TableCtrl', [
         lastName: 'Renard',
         birthDate: new Date('1987-05-21'),
         balance: 102,
-        email: 'whatever@gmail.com',
+        email: 'whatever@gmail.com'
       },
       {
         firstName: 'Blandine',
         lastName: 'Faivre',
         birthDate: new Date('1987-04-25'),
         balance: -2323.22,
-        email: 'oufblandou@gmail.com',
+        email: 'oufblandou@gmail.com'
       },
       {
         firstName: 'Francoise',
         lastName: 'Frere',
         birthDate: new Date('1955-08-27'),
         balance: 42343,
-        email: 'raymondef@gmail.com',
-      },
+        email: 'raymondef@gmail.com'
+      }
     ];
 
     $scope.removeRow = function(row) {
@@ -38,7 +38,7 @@ app.controller('TableCtrl', [
       'lastName',
       'birthDate',
       'balance',
-      'email',
+      'email'
     ];
     $scope.selectedPredicate = $scope.predicates[0];
 
@@ -58,7 +58,7 @@ app.controller('TableCtrl', [
         firstName: firstname,
         lastName: lastname,
         birthDate: new Date(birthdate),
-        balance: balance,
+        balance: balance
       };
     }
 
@@ -116,5 +116,5 @@ app.controller('TableCtrl', [
     };
 
     $scope.getPage();
-  },
+  }
 ]);

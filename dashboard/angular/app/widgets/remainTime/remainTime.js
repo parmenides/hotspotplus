@@ -7,7 +7,7 @@ app.directive('remainTime', [
   function(PREFIX, $log) {
     return {
       scope: {
-        params: '=options',
+        params: '=options'
       },
 
       controller: function($scope) {
@@ -33,7 +33,7 @@ app.directive('remainTime', [
             $scope.params.timeDuration !== 0
           ) {
             $scope.percent = Math.round(
-              ($scope.params.remainTime / $scope.params.timeDuration) * 100,
+              ($scope.params.remainTime / $scope.params.timeDuration) * 100
             );
           }
           $scope.chartOption = {
@@ -44,11 +44,11 @@ app.directive('remainTime', [
             scaleColor: false,
             size: 115,
             rotate: 0,
-            lineCap: 'butt',
+            lineCap: 'butt'
           };
         }
       },
-      templateUrl: PREFIX + 'app/widgets/remainTime/tpl/remainTime.html',
+      templateUrl: PREFIX + 'app/widgets/remainTime/tpl/remainTime.html'
     };
-  },
+  }
 ]);

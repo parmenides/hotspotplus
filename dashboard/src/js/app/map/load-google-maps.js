@@ -30,7 +30,7 @@ var loadGoogleMaps = (function($) {
       params = $.extend(
         { sensor: false },
         apiKey ? { key: apiKey } : {},
-        language ? { language: language } : {},
+        language ? { language: language } : {}
       );
 
     //If google.maps exists, then Google Maps API was probably loaded with the <script> tag
@@ -41,7 +41,7 @@ var loadGoogleMaps = (function($) {
     } else if (window.google && google.load) {
       google.load('maps', version || 3, {
         other_params: $.param(params),
-        callback: resolve,
+        callback: resolve
       });
 
       //Last, try pure jQuery Ajax technique to load the Google Maps API in Async.
@@ -49,7 +49,7 @@ var loadGoogleMaps = (function($) {
       //Ajax URL params
       params = $.extend(params, {
         v: version || 3,
-        callback: callbackName,
+        callback: callbackName
       });
 
       //Declare the global callback
@@ -68,7 +68,7 @@ var loadGoogleMaps = (function($) {
       $.ajax({
         dataType: 'script',
         data: params,
-        url: 'http://maps.google.com/maps/api/js',
+        url: 'http://maps.google.com/maps/api/js'
       });
     }
 

@@ -12,6 +12,6 @@ angular.module('app').directive('uiFocus', function($timeout, $parse) {
       element.bind('blur', function() {
         scope.$apply(model.assign(scope, false));
       });
-    },
+    }
   };
 });

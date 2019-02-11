@@ -33,12 +33,12 @@ app.controller('businessList', [
     appMessenger,
     $uibModal,
     PREFIX,
-    englishNumberFilter,
+    englishNumberFilter
   ) {
     $scope.paginationOptions = {
       pageNumber: 1,
       itemPerPage: 10,
-      sort: null,
+      sort: null
     };
     $scope.gridOptions = {
       enableSorting: true,
@@ -61,7 +61,7 @@ app.controller('businessList', [
           enableColumnMenu: false,
           headerCellFilter: 'translate',
           cellTemplate:
-            '<a class="btn btn-link" ng-click="grid.appScope.showBusinessInfo(row)">{{row.entity.title}}</a>',
+            '<a class="btn btn-link" ng-click="grid.appScope.showBusinessInfo(row)">{{row.entity.title}}</a>'
         },
 
         {
@@ -73,7 +73,7 @@ app.controller('businessList', [
           enableColumnMenu: false,
           headerCellFilter: 'translate',
           cellTemplate:
-            '<div class="ui-grid-cell-contents"><span ng-if="row.entity.mobile"> <span ng-if="row.entity.routerActivated">Active</span> </span></div>',
+            '<div class="ui-grid-cell-contents"><span ng-if="row.entity.mobile"> <span ng-if="row.entity.routerActivated">Active</span> </span></div>'
         },
 
         {
@@ -83,7 +83,7 @@ app.controller('businessList', [
           enableHiding: false,
           enableSorting: false,
           enableColumnMenu: false,
-          headerCellFilter: 'translate',
+          headerCellFilter: 'translate'
         },
         {
           displayName: 'business.creationDate',
@@ -93,7 +93,7 @@ app.controller('businessList', [
           enableColumnMenu: false,
           headerCellFilter: 'translate',
           cellTemplate:
-            '<div class="ui-grid-cell-contents">{{row.entity.creationDate |  persianDate : "fullDate" | translateNumber }}</div>',
+            '<div class="ui-grid-cell-contents">{{row.entity.creationDate |  persianDate : "fullDate" | translateNumber }}</div>'
         },
         {
           displayName: 'general.package',
@@ -105,7 +105,7 @@ app.controller('businessList', [
           cellClass: 'center',
           headerCellFilter: 'translate',
           cellTemplate:
-            '<a class="btn btn-link" ng-click="grid.appScope.manageBusinessPackage(row)"><i class="fa fa-fw fa-rocket"></i></a>',
+            '<a class="btn btn-link" ng-click="grid.appScope.manageBusinessPackage(row)"><i class="fa fa-fw fa-rocket"></i></a>'
         },
         {
           displayName: 'business.reseller',
@@ -117,7 +117,7 @@ app.controller('businessList', [
           cellClass: 'center',
           headerCellFilter: 'translate',
           cellTemplate:
-            '<a class="btn btn-link" ng-click="grid.appScope.openAssignBusinessToResellerForm(row)"><i class="fa fa-fw fa-support"></i></a>',
+            '<a class="btn btn-link" ng-click="grid.appScope.openAssignBusinessToResellerForm(row)"><i class="fa fa-fw fa-support"></i></a>'
         },
         {
           displayName: 'business.smsCredit',
@@ -129,7 +129,7 @@ app.controller('businessList', [
           enableFiltering: false,
           headerCellFilter: 'translate',
           cellTemplate:
-            '<a class="btn btn-link" ng-click="grid.appScope.increaseCredit(row)"><i class="fa fa-fw fa-credit-card"></i>&nbsp;{{row.entity.balance | translateNumber }}&nbsp;{{"general.toman"|translate}}</a>',
+            '<a class="btn btn-link" ng-click="grid.appScope.increaseCredit(row)"><i class="fa fa-fw fa-credit-card"></i>&nbsp;{{row.entity.balance | translateNumber }}&nbsp;{{"general.toman"|translate}}</a>'
         },
         {
           displayName: 'general.changePassword',
@@ -142,7 +142,7 @@ app.controller('businessList', [
           headerCellFilter: 'translate',
           cellClass: 'center',
           cellTemplate:
-            '<a class="btn btn-link" ng-click="grid.appScope.changePassword(row)"><i class="fa fa-fw fa-key"></i></a>',
+            '<a class="btn btn-link" ng-click="grid.appScope.changePassword(row)"><i class="fa fa-fw fa-key"></i></a>'
         },
         {
           displayName: 'general.invoices',
@@ -155,7 +155,7 @@ app.controller('businessList', [
           headerCellFilter: 'translate',
           cellClass: 'center',
           cellTemplate:
-            '<a class="btn btn-link" ng-click="grid.appScope.showInvoices(row)" ><i class="fa fa-fw fa-binoculars"></i></a>',
+            '<a class="btn btn-link" ng-click="grid.appScope.showInvoices(row)" ><i class="fa fa-fw fa-binoculars"></i></a>'
         },
         {
           displayName: 'general.remove',
@@ -168,8 +168,8 @@ app.controller('businessList', [
           headerCellFilter: 'translate',
           cellClass: 'center',
           cellTemplate:
-            '<a class="btn btn-link" ng-click="grid.appScope.deleteBusiness(row)" ><i class="fa fa-fw fa-trash"></i></a>',
-        },
+            '<a class="btn btn-link" ng-click="grid.appScope.deleteBusiness(row)" ><i class="fa fa-fw fa-trash"></i></a>'
+        }
       ],
       onRegisterApi: function(gridApi) {
         $scope.gridApi = gridApi;
@@ -184,7 +184,7 @@ app.controller('businessList', [
           }
           getPage();
         });
-      },
+      }
     };
 
     $scope.businessId = '';
@@ -213,13 +213,13 @@ app.controller('businessList', [
                 $state.reload();
               }
             },
-            cancelCallback: function() {},
+            cancelCallback: function() {}
           });
         },
         function(error) {
           appMessenger.showError('business.balanceLoadUnSuccessful');
           return error;
-        },
+        }
       );
     };
 
@@ -251,11 +251,11 @@ app.controller('businessList', [
                 function(error) {
                   $log.error(error);
                   appMessenger.showError('error.generalError');
-                },
+                }
               );
             };
-          },
-        ],
+          }
+        ]
       });
     };
 
@@ -273,10 +273,10 @@ app.controller('businessList', [
             function(res) {
               $scope.gridOptions.data.splice(index, 1);
             },
-            function(err) {},
+            function(err) {}
           );
         },
-        NoCallback: function() {},
+        NoCallback: function() {}
       });
     };
 
@@ -302,14 +302,14 @@ app.controller('businessList', [
                   $scope.cancel = function() {
                     $uibModalInstance.close();
                   };
-                },
-              ],
+                }
+              ]
             });
           },
           function(error) {
             $log.error(error);
             appMessenger.showError('error.generalError');
-          },
+          }
         );
       }
     };
@@ -320,7 +320,7 @@ app.controller('businessList', [
           var business = res;
           var options = {
             title: 'reseller.editBusiness',
-            newBusiness: false,
+            newBusiness: false
           };
           $uibModal.open({
             backdrop: true,
@@ -345,13 +345,13 @@ app.controller('businessList', [
                 // Persian date picker methods
                 $scope.dateOptions = {
                   formatYear: 'yy',
-                  startingDay: 6,
+                  startingDay: 6
                 };
                 $scope.dateFormats = [
                   'dd-MMMM-yyyy',
                   'yyyy/MM/dd',
                   'dd.MM.yyyy',
-                  'shortDate',
+                  'shortDate'
                 ];
                 $scope.dateFormat = $scope.dateFormats[0];
                 $scope.disabled = function(date, mode) {
@@ -368,26 +368,26 @@ app.controller('businessList', [
                 $scope.save = function() {
                   if ($scope.serviceOption.subscriptionDate) {
                     $scope.serviceOption.subscriptionDate = new Date(
-                      $scope.serviceOption.subscriptionDate,
+                      $scope.serviceOption.subscriptionDate
                     ).getTime();
                   }
                   if ($scope.serviceOption.duration) {
                     $scope.serviceOption.duration = Number(
-                      englishNumberFilter($scope.serviceOption.duration),
+                      englishNumberFilter($scope.serviceOption.duration)
                     );
                   }
                   if ($scope.serviceOption.allowedOnlineUsers) {
                     $scope.serviceOption.allowedOnlineUsers = Number(
                       englishNumberFilter(
-                        $scope.serviceOption.allowedOnlineUsers,
-                      ),
+                        $scope.serviceOption.allowedOnlineUsers
+                      )
                     );
                   }
 
                   Business.assignPackageToBusiness({
                     businessId: business.id,
                     packageId: $scope.serviceItem.id,
-                    options: $scope.serviceOption,
+                    options: $scope.serviceOption
                   }).$promise.then(
                     function(res) {
                       appMessenger.showSuccess('business.updateSuccessFull');
@@ -396,17 +396,17 @@ app.controller('businessList', [
                     },
                     function(err) {
                       appMessenger.showError('error.generalError');
-                    },
+                    }
                   );
                 };
-              },
-            ],
+              }
+            ]
           });
         },
         function(error) {
           $log.error(error);
           appMessenger.showError('error.generalError');
-        },
+        }
       );
     };
 
@@ -428,7 +428,7 @@ app.controller('businessList', [
               function($scope, $uibModalInstance) {
                 $scope.data = {
                   businessId: businessId,
-                  resellerId: business.resellerId,
+                  resellerId: business.resellerId
                 };
                 $scope.options = {};
                 $scope.options.saveBtnLabel = 'general.save';
@@ -444,17 +444,17 @@ app.controller('businessList', [
                     },
                     function(error) {
                       appMessenger.showError('error.generalError');
-                    },
+                    }
                   );
                 };
-              },
-            ],
+              }
+            ]
           });
         },
         function(error) {
           $log.error(error);
           appMessenger.showError('error.generalError');
-        },
+        }
       );
     };
 
@@ -480,24 +480,24 @@ app.controller('businessList', [
                 $scope.options = {
                   title: 'general.invoices',
                   okBtnLabel: 'general.ok',
-                  invoices: invoices,
+                  invoices: invoices
                 };
                 $scope.ok = function() {
                   $uibModalInstance.close();
                 };
-              },
-            ],
+              }
+            ]
           });
         },
         function(error) {
           $log.error(error);
-        },
+        }
       );
     };
 
     $scope.$watch('paginationOptions.itemPerPage', function(
       oldValue,
-      newValue,
+      newValue
     ) {
       getPage();
     });
@@ -523,7 +523,7 @@ app.controller('businessList', [
     $scope.$watchGroup(['businessId', 'businessMobile'], function(
       newValues,
       oldValues,
-      scope,
+      scope
     ) {
       if (
         newValues != oldValues &&
@@ -571,7 +571,7 @@ app.controller('businessList', [
         },
         function(error) {
           $log.error(error);
-        },
+        }
       );
       Business.find(options).$promise.then(
         function(businesses) {
@@ -590,21 +590,21 @@ app.controller('businessList', [
                     function(error) {
                       $log.error(error);
                       appMessenger.showError('error.generalError');
-                    },
+                    }
                   );
                 }
               },
               function(error) {
                 appMessenger.showError('business.balanceLoadUnSuccessful');
                 return error;
-              },
+              }
             );
           });
         },
         function(error) {
           $log.error(error);
-        },
+        }
       );
     };
-  },
+  }
 ]);

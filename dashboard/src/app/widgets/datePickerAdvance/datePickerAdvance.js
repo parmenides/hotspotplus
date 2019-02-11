@@ -15,11 +15,11 @@ app.directive('datePickerAdvance', [
     persianDateFilter,
     translateNumberFilter,
     translateFilter,
-    dashboardTiming,
+    dashboardTiming
   ) {
     return {
       scope: {
-        updateDashboard: '&',
+        updateDashboard: '&'
       },
       controller: function($scope) {
         var DAY_MILLISECONDS = 24 * 60 * 60 * 1000;
@@ -28,7 +28,7 @@ app.directive('datePickerAdvance', [
           'yyyy/MM/dd',
           'dd.MM.yyyy',
           'shortDate',
-          'MM',
+          'MM'
         ];
         $scope.isAdvance = true;
         $scope.isBasic = false;
@@ -56,7 +56,7 @@ app.directive('datePickerAdvance', [
         };
         $scope.dateOptions = {
           formatYear: 'yy',
-          startingDay: 6,
+          startingDay: 6
         };
         $scope.dateFormat = $scope.dateFormats[0];
 
@@ -70,7 +70,7 @@ app.directive('datePickerAdvance', [
                 0,
                 0,
                 0,
-                0,
+                0
               );
               if ($scope.advanceTime) {
                 delete $scope.advanceTime;
@@ -96,12 +96,12 @@ app.directive('datePickerAdvance', [
                   appMessenger.showError('dashboard.endDateIncorrect');
                   fromDate = new Date($scope.fromDate).setHours(0, 0, 0, 0);
                   endDate = new Date(
-                    new Date($scope.fromDate).getTime() + DAY_MILLISECONDS,
+                    new Date($scope.fromDate).getTime() + DAY_MILLISECONDS
                   ).setHours(23, 59, 59, 0);
                 }
                 $scope.advanceTime = dashboardTiming.advanceTime(
                   fromDate,
-                  endDate,
+                  endDate
                 );
               }
               break;
@@ -114,7 +114,7 @@ app.directive('datePickerAdvance', [
         };
       },
       templateUrl:
-        PREFIX + 'app/widgets/datePickerAdvance/tpl/datePickerAdvance.html',
+        PREFIX + 'app/widgets/datePickerAdvance/tpl/datePickerAdvance.html'
     };
-  },
+  }
 ]);

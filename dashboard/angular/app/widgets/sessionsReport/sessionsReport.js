@@ -22,11 +22,11 @@ app.directive('sessionsReport', [
     persianDateFilter,
     translateNumberFilter,
     appMessenger,
-    trimUsernameFilter,
+    trimUsernameFilter
   ) {
     return {
       scope: {
-        params: '=options',
+        params: '=options'
       },
       controller: function($scope) {
         $scope.localLang = $rootScope.localLang;
@@ -47,7 +47,7 @@ app.directive('sessionsReport', [
           $scope.paginationOptions = {
             pageNumber: 1,
             itemPerPage: 10,
-            sort: null,
+            sort: null
           };
 
           $scope.gridOptions = {
@@ -69,7 +69,7 @@ app.directive('sessionsReport', [
                 enableSorting: false,
                 cellClass: 'center',
                 headerCellClass: 'headerCenter',
-                headerCellFilter: 'translate',
+                headerCellFilter: 'translate'
               },
               {
                 displayName: 'dashboard.framedIpAddress',
@@ -79,7 +79,7 @@ app.directive('sessionsReport', [
                 enableSorting: false,
                 cellClass: 'center',
                 headerCellClass: 'headerCenter',
-                headerCellFilter: 'translate',
+                headerCellFilter: 'translate'
               } /*{
 								displayName:      'dashboard.connectedAt',
 								field:            'creationDate',
@@ -100,7 +100,7 @@ app.directive('sessionsReport', [
                 headerCellClass: 'headerCenter',
                 headerCellFilter: 'translate',
                 cellClass: 'center',
-                cellFilter: 'translateNumber',
+                cellFilter: 'translateNumber'
               },
               {
                 displayName: 'dashboard.downloadMbps',
@@ -112,7 +112,7 @@ app.directive('sessionsReport', [
                 headerCellClass: 'headerCenter',
                 headerCellFilter: 'translate',
                 cellClass: 'center',
-                cellFilter: 'translateNumber',
+                cellFilter: 'translateNumber'
               },
               {
                 displayName: 'dashboard.uploadMbps',
@@ -124,7 +124,7 @@ app.directive('sessionsReport', [
                 headerCellClass: 'headerCenter',
                 headerCellFilter: 'translate',
                 cellClass: 'center',
-                cellFilter: 'translateNumber',
+                cellFilter: 'translateNumber'
               },
               {
                 displayName: 'dashboard.killOnlineSession',
@@ -138,8 +138,8 @@ app.directive('sessionsReport', [
                 cellClass: 'center',
                 cellFilter: 'translateNumber',
                 cellTemplate:
-                  '<a class="btn btn-link" ng-click="grid.appScope.killOnlineSession(row)"><i class="fa fa-power-off"></i></a>',
-              },
+                  '<a class="btn btn-link" ng-click="grid.appScope.killOnlineSession(row)"><i class="fa fa-power-off"></i></a>'
+              }
             ],
             onRegisterApi: function(gridApi) {
               $scope.gridApi = gridApi;
@@ -151,33 +151,33 @@ app.directive('sessionsReport', [
 							 }
 							 getPage ()
 							 } )*/
-            },
+            }
           };
 
           $scope.killOnlineSession = function(row) {
             if (row && row.entity) {
               ClientSession.killOnlineSession({
-                session: row.entity,
+                session: row.entity
               }).$promise.then(
                 function(result) {
                   /*$scope.gridOptions.data.splice ( index, 1 )*/
                   appMessenger.showSuccess(
-                    'dashboard.killOnlineSessionSuccessFull',
+                    'dashboard.killOnlineSessionSuccessFull'
                   );
                 },
                 function(error) {
                   $log.error(error);
                   appMessenger.showError(
-                    'dashboard.killOnlineSessionUnSuccessFull',
+                    'dashboard.killOnlineSessionUnSuccessFull'
                   );
-                },
+                }
               );
             }
           };
 
           $scope.$watch('paginationOptions.itemPerPage', function(
             oldValue,
-            newValue,
+            newValue
           ) {
             $scope.loading = true;
             getPage();
@@ -206,19 +206,19 @@ app.directive('sessionsReport', [
             query.limit = $scope.paginationOptions.itemPerPage;
 
             ClientSession.getOnlineSessionCount({
-              businessId: query.businessId,
+              businessId: query.businessId
             }).$promise.then(
               function(result) {
                 $scope.gridOptions.totalItems = result.count;
                 $scope.paginationOptions.totalItems = result.count;
 
                 ClientSession.getOnlineUsers(query).$promise.then(function(
-                  onlineUsers,
+                  onlineUsers
                 ) {
                   switch (onlineUsers.result.data) {
                     case 'noSession':
                       $scope.result = translateFilter(
-                        'dashboard.noSessionOnlineUsers',
+                        'dashboard.noSessionOnlineUsers'
                       );
                       $scope.loading = false;
                       break;
@@ -230,19 +230,18 @@ app.directive('sessionsReport', [
                 }),
                   function(error) {
                     $log.error(
-                      'can not get online user info from data source: ' + error,
+                      'can not get online user info from data source: ' + error
                     );
                   };
               },
               function(error) {
                 $log.error(error);
-              },
+              }
             );
           };
         }
       },
-      templateUrl:
-        PREFIX + 'app/widgets/sessionsReport/tpl/sessionsReport.html',
+      templateUrl: PREFIX + 'app/widgets/sessionsReport/tpl/sessionsReport.html'
     };
-  },
+  }
 ]);

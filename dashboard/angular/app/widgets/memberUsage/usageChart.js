@@ -16,11 +16,11 @@ app.directive('usageChart', [
     Session,
     translateFilter,
     persianDateFilter,
-    translateNumberFilter,
+    translateNumberFilter
   ) {
     return {
       scope: {
-        params: '=options',
+        params: '=options'
       },
 
       controller: function($scope) {
@@ -45,28 +45,28 @@ app.directive('usageChart', [
                 var upload = data.upload;
                 for (var i = 0; i < date.length; i++) {
                   persianDate[i] = translateNumberFilter(
-                    persianDateFilter(new Date(date[i]), 'M/d'),
+                    persianDateFilter(new Date(date[i]), 'M/d')
                   );
                 }
                 var xAxesLabel = 'dashboard.xAxesLabelDaily';
                 $scope.labels = persianDate;
                 $scope.series = [
                   translateFilter('dashboard.download'),
-                  translateFilter('dashboard.upload'),
+                  translateFilter('dashboard.upload')
                 ];
                 $scope.data = [download, upload];
                 $scope.type = 'line';
                 $scope.colors = [
                   $scope.params.color.success,
-                  $scope.params.color.primary,
+                  $scope.params.color.primary
                 ];
                 $scope.options = {
                   legend: {
                     display: true,
                     position: 'bottom',
                     labels: {
-                      fontColor: '#333',
-                    },
+                      fontColor: '#333'
+                    }
                   },
                   tooltips: {
                     enabled: true,
@@ -83,8 +83,8 @@ app.directive('usageChart', [
                           translateFilter('dashboard.Mbps') +
                           ' '
                         );
-                      },
-                    },
+                      }
+                    }
                   },
                   scales: {
                     xAxes: [
@@ -92,7 +92,7 @@ app.directive('usageChart', [
                         scaleLabel: {
                           display: true,
                           labelString: translateFilter(xAxesLabel),
-                          fontColor: '#333',
+                          fontColor: '#333'
                         },
                         afterTickToLabelConversion: function(data) {
                           var xLabels = data.ticks;
@@ -103,8 +103,8 @@ app.directive('usageChart', [
                               }
                             });
                           }
-                        },
-                      },
+                        }
+                      }
                     ],
                     yAxes: [
                       {
@@ -119,27 +119,27 @@ app.directive('usageChart', [
                             ' ( ' +
                             translateFilter('dashboard.Mbps') +
                             ' )',
-                          fontColor: '#333',
+                          fontColor: '#333'
                         },
                         ticks: {
                           beginAtZero: true,
                           callback: function(value) {
                             return translateNumberFilter(Number(value));
-                          },
-                        },
-                      },
-                    ],
-                  },
+                          }
+                        }
+                      }
+                    ]
+                  }
                 };
               }
             },
             function(error) {
               appMessenger.showError('generalError');
-            },
+            }
           );
         }
       },
-      templateUrl: PREFIX + 'app/widgets/memberUsage/tpl/usageChart.html',
+      templateUrl: PREFIX + 'app/widgets/memberUsage/tpl/usageChart.html'
     };
-  },
+  }
 ]);

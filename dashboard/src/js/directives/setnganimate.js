@@ -9,9 +9,9 @@ angular.module('app').directive('setNgAnimate', [
           },
           function(valnew, valold) {
             $animate.enabled(!!valnew, $element);
-          },
+          }
         );
-      },
+      }
     };
-  },
+  }
 ]);

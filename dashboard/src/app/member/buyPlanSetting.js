@@ -22,7 +22,7 @@ app.controller('buyPlan', [
     InternetPlan,
     $window,
     $state,
-    Member,
+    Member
   ) {
     if (Session.member == null) {
       return;
@@ -33,9 +33,9 @@ app.controller('buyPlan', [
       InternetPlan.find({
         filter: {
           where: {
-            businessId: businessId,
-          },
-        },
+            businessId: businessId
+          }
+        }
       }).$promise.then(
         function(plans) {
           if (plans.length === 0) {
@@ -62,7 +62,7 @@ app.controller('buyPlan', [
                 };
                 $scope.payment = function(planId, planPrice) {
                   var options = {
-                    memberId: memberId,
+                    memberId: memberId
                   };
                   if (planPrice === 0) {
                     options.planId = planId;
@@ -83,12 +83,12 @@ app.controller('buyPlan', [
                           'default plan activated too many times'
                         ) {
                           appMessenger.showError(
-                            'member.defaultPlanActivatedMax',
+                            'member.defaultPlanActivatedMax'
                           );
                         } else {
                           appMessenger.showError('member.addPlanUnSuccessFull');
                         }
-                      },
+                      }
                     );
                   } else {
                     options.businessId = businessId;
@@ -106,19 +106,19 @@ app.controller('buyPlan', [
                       function(error) {
                         $log.error(error);
                         appMessenger.showError('error.generalError');
-                      },
+                      }
                     );
                   }
                 };
-              },
-            ],
+              }
+            ]
           });
         },
         function(error) {
           $log.error(error);
           appMessenger.showError('error.generalError');
-        },
+        }
       );
     };
-  },
+  }
 ]);

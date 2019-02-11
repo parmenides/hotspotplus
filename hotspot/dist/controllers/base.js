@@ -30,7 +30,7 @@ angular.module('masterHotspotApp').controller('baseCtrl', [
           break;
       }
     };
-  },
+  }
 ]);
 angular.module('masterHotspotApp').controller('baseSignInCtrl', [
   '$scope',
@@ -65,7 +65,7 @@ angular.module('masterHotspotApp').controller('baseSignInCtrl', [
     loadingModal,
     numberService,
     usernameService,
-    $sce,
+    $sce
   ) {
     if (!config || !config.selectedThemeConfig) {
       $state.go('home');
@@ -118,7 +118,7 @@ angular.module('masterHotspotApp').controller('baseSignInCtrl', [
           businessId: config.businessId,
           username: username,
           password: password,
-          pinCode: pinCode,
+          pinCode: pinCode
         },
         function(error, result) {
           loadingModal.hide();
@@ -134,13 +134,13 @@ angular.module('masterHotspotApp').controller('baseSignInCtrl', [
             config.memberId = result.memberId;
             Raven.setUserContext({
               id: username,
-              email: config.businessId + '@hotspotplus.ir',
+              email: config.businessId + '@hotspotplus.ir'
             });
             if (result.ok == true) {
               loadingModal.show();
               routerService.login(username, password, $form, function(
                 error,
-                result,
+                result
               ) {
                 loadingModal.hide();
                 if (error) {
@@ -194,7 +194,7 @@ angular.module('masterHotspotApp').controller('baseSignInCtrl', [
               }
             }
           }
-        },
+        }
       );
     };
 
@@ -206,7 +206,7 @@ angular.module('masterHotspotApp').controller('baseSignInCtrl', [
     if (config.verificationCode) {
       $state.go('theme.verify');
     }
-  },
+  }
 ]);
 angular.module('masterHotspotApp').controller('baseSignUpCtrl', [
   '$scope',
@@ -241,7 +241,7 @@ angular.module('masterHotspotApp').controller('baseSignUpCtrl', [
     numberService,
     usernameService,
     nationalCode,
-    birthday,
+    birthday
   ) {
     if (!config || !config.selectedThemeConfig) {
       $state.go('home');
@@ -270,7 +270,7 @@ angular.module('masterHotspotApp').controller('baseSignUpCtrl', [
       id: config.businessId,
       nasId: config.nasId,
       host: config.host,
-      language: config.localLang,
+      language: config.localLang
     };
 
     if ($scope.verificationMethod === 'user') {
@@ -299,7 +299,7 @@ angular.module('masterHotspotApp').controller('baseSignUpCtrl', [
             $scope.user.birthday = birthday.getPersianEpochDay(newValues);
           }
         }
-      },
+      }
     );
 
     $scope.$watchCollection('user', function(newVal, oldVal) {
@@ -363,7 +363,7 @@ angular.module('masterHotspotApp').controller('baseSignUpCtrl', [
           if (formConfig.active && formConfig.required) {
             if ($scope.user[formConfig.label]) {
               $scope.user[formConfig.label] = englishNumberFilter(
-                $scope.user[formConfig.label],
+                $scope.user[formConfig.label]
               );
             }
           }
@@ -391,7 +391,7 @@ angular.module('masterHotspotApp').controller('baseSignUpCtrl', [
             $state.go('theme.signin');
           } else if (result.status === 3) {
             appMessenger.showInfo(
-              'memberExistPleaseContactOperatorForManualVerification',
+              'memberExistPleaseContactOperatorForManualVerification'
             );
             $state.go('theme.signin');
           } else if (result.status === 5) {
@@ -416,7 +416,7 @@ angular.module('masterHotspotApp').controller('baseSignUpCtrl', [
         appMessenger.showError('requiredFieldTitle');
       }
     };
-  },
+  }
 ]);
 angular.module('masterHotspotApp').controller('baseVerifyCtrl', [
   '$scope',
@@ -443,7 +443,7 @@ angular.module('masterHotspotApp').controller('baseVerifyCtrl', [
     englishNumberFilter,
     routerService,
     translateFilter,
-    loadingModal,
+    loadingModal
   ) {
     if (!config.selectedThemeConfig) {
       $state.go('home');
@@ -452,7 +452,7 @@ angular.module('masterHotspotApp').controller('baseVerifyCtrl', [
     $scope.resendTimeoutReached = false;
     $scope.counter = 0;
     $scope.data = {
-      verificationCode: config.verificationCode || null,
+      verificationCode: config.verificationCode || null
     };
     $scope.verify = function() {
       loadingModal.show();
@@ -462,7 +462,7 @@ angular.module('masterHotspotApp').controller('baseVerifyCtrl', [
           memberId: config.memberId,
           nasId: config.nasId,
           host: config.host,
-          verificationCode: englishNumberFilter($scope.data.verificationCode),
+          verificationCode: englishNumberFilter($scope.data.verificationCode)
         },
         function(error, result) {
           loadingModal.hide();
@@ -477,14 +477,14 @@ angular.module('masterHotspotApp').controller('baseVerifyCtrl', [
           config.verificationCode = null;
           appMessenger.showSuccess('signUpSuccess');
           $state.go('theme.signin');
-        },
+        }
       );
     };
 
     if ($scope.data.verificationCode) {
       return $scope.verify();
     }
-  },
+  }
 ]);
 angular.module('masterHotspotApp').controller('baseStatusCtrl', [
   '$scope',
@@ -515,7 +515,7 @@ angular.module('masterHotspotApp').controller('baseStatusCtrl', [
     translateFilter,
     loadingModal,
     $stateParams,
-    $timeout,
+    $timeout
   ) {
     if (!$stateParams) {
       $state.go('theme.signin');
@@ -575,7 +575,7 @@ angular.module('masterHotspotApp').controller('baseStatusCtrl', [
         $state.go('theme.signin');
       });
     };
-  },
+  }
 ]);
 angular.module('masterHotspotApp').controller('baseInternetPlanListCtrl', [
   '$scope',
@@ -602,7 +602,7 @@ angular.module('masterHotspotApp').controller('baseInternetPlanListCtrl', [
     englishNumberFilter,
     routerService,
     translateFilter,
-    loadingModal,
+    loadingModal
   ) {
     if (!config.selectedThemeConfig) {
       $state.go('home');
@@ -611,7 +611,7 @@ angular.module('masterHotspotApp').controller('baseInternetPlanListCtrl', [
     var businessId = config.businessId;
     appService.findInternetPlan({ businessId: businessId }, function(
       error,
-      plans,
+      plans
     ) {
       if (error) {
         errorMessage.show(error);
@@ -642,7 +642,7 @@ angular.module('masterHotspotApp').controller('baseInternetPlanListCtrl', [
         if (price == 0) {
           var freePlan = {
             memberId: memberId,
-            planId: plan.id,
+            planId: plan.id
           };
           appService
             .assignFreePlanToMember(freePlan)
@@ -669,7 +669,7 @@ angular.module('masterHotspotApp').controller('baseInternetPlanListCtrl', [
             password: password,
             businessId: businessId,
             memberId: memberId,
-            packageId: planId,
+            packageId: planId
           };
           appService
             .payment(paymentData)
@@ -685,7 +685,7 @@ angular.module('masterHotspotApp').controller('baseInternetPlanListCtrl', [
         }
       }
     };
-  },
+  }
 ]);
 angular.module('masterHotspotApp').controller('baseForgetPasswordCtrl', [
   '$scope',
@@ -712,7 +712,7 @@ angular.module('masterHotspotApp').controller('baseForgetPasswordCtrl', [
     englishNumberFilter,
     routerService,
     translateFilter,
-    loadingModal,
+    loadingModal
   ) {
     if (!config.selectedThemeConfig) {
       $state.go('home');
@@ -728,7 +728,7 @@ angular.module('masterHotspotApp').controller('baseForgetPasswordCtrl', [
         {
           usernameOrMobile: usernameOrMobile,
           nasId: config.nasId,
-          host: config.host,
+          host: config.host
         },
         function(error, result) {
           loadingModal.hide();
@@ -739,10 +739,10 @@ angular.module('masterHotspotApp').controller('baseForgetPasswordCtrl', [
           config.username = null;
           config.password = null;
           return $state.go('theme.signin');
-        },
+        }
       );
     };
-  },
+  }
 ]);
 angular.module('masterHotspotApp').controller('baseLangCtrl', [
   '$scope',
@@ -771,5 +771,5 @@ angular.module('masterHotspotApp').controller('baseLangCtrl', [
       $translate.use(config.localLang);
       $state.go('theme.signin');
     };
-  },
+  }
 ]);

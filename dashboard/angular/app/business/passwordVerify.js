@@ -6,7 +6,7 @@ app.directive('passwordVerify', function() {
   return {
     require: 'ngModel',
     scope: {
-      passwordVerify: '=',
+      passwordVerify: '='
     },
     link: function(scope, element, attrs, ctrl) {
       scope.$watch(
@@ -31,8 +31,8 @@ app.directive('passwordVerify', function() {
               }
             });
           }
-        },
+        }
       );
-    },
+    }
   };
 });

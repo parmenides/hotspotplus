@@ -8,104 +8,104 @@ app.controller('UiGridDemoCtrl', [
         {
           name: 'Ethel Price',
           gender: 'female',
-          company: 'Enersol',
+          company: 'Enersol'
         },
         {
           name: 'Claudine Neal',
           gender: 'female',
-          company: 'Sealoud',
+          company: 'Sealoud'
         },
         {
           name: 'Beryl Rice',
           gender: 'female',
-          company: 'Velity',
+          company: 'Velity'
         },
         {
           name: 'Wilder Gonzales',
           gender: 'male',
-          company: 'Geekko',
+          company: 'Geekko'
         },
         {
           name: 'Georgina Schultz',
           gender: 'female',
-          company: 'Suretech',
+          company: 'Suretech'
         },
         {
           name: 'Carroll Buchanan',
           gender: 'male',
-          company: 'Ecosys',
+          company: 'Ecosys'
         },
         {
           name: 'Valarie Atkinson',
           gender: 'female',
-          company: 'Hopeli',
+          company: 'Hopeli'
         },
         {
           name: 'Schroeder Mathews',
           gender: 'male',
-          company: 'Polarium',
+          company: 'Polarium'
         },
         {
           name: 'Lynda Mendoza',
           gender: 'female',
-          company: 'Dogspa',
+          company: 'Dogspa'
         },
         {
           name: 'Sarah Massey',
           gender: 'female',
-          company: 'Bisba',
+          company: 'Bisba'
         },
         {
           name: 'Robles Boyle',
           gender: 'male',
-          company: 'Comtract',
+          company: 'Comtract'
         },
         {
           name: 'Evans Hickman',
           gender: 'male',
-          company: 'Parleynet',
+          company: 'Parleynet'
         },
         {
           name: 'Dawson Barber',
           gender: 'male',
-          company: 'Dymi',
+          company: 'Dymi'
         },
         {
           name: 'Bruce Strong',
           gender: 'male',
-          company: 'Xyqag',
+          company: 'Xyqag'
         },
         {
           name: 'Nellie Whitfield',
           gender: 'female',
-          company: 'Exospace',
+          company: 'Exospace'
         },
         {
           name: 'Jackson Macias',
           gender: 'male',
-          company: 'Aquamate',
+          company: 'Aquamate'
         },
         {
           name: 'Pena Pena',
           gender: 'male',
-          company: 'Quarx',
+          company: 'Quarx'
         },
         {
           name: 'Lelia Gates',
           gender: 'female',
-          company: 'Proxsoft',
+          company: 'Proxsoft'
         },
         {
           name: 'Letitia Vasquez',
           gender: 'female',
-          company: 'Slumberia',
+          company: 'Slumberia'
         },
         {
           name: 'Trevino Moreno',
           gender: 'male',
-          company: 'Conjurica',
-        },
-      ],
+          company: 'Conjurica'
+        }
+      ]
     };
 
     $scope.gridOptionsComplex = {
@@ -116,7 +116,7 @@ app.controller('UiGridDemoCtrl', [
         {
           name: 'name',
           aggregationType: uiGridConstants.aggregationTypes.count,
-          width: 150,
+          width: 150
         },
         {
           name: 'gender',
@@ -129,161 +129,161 @@ app.controller('UiGridDemoCtrl', [
             } else if (grid.getCellValue(row, col) === 'female') {
               return 'pink';
             }
-          },
+          }
         },
         {
           name: 'age',
           aggregationType: uiGridConstants.aggregationTypes.avg,
-          width: 100,
+          width: 100
         },
-        { name: 'company', enableFiltering: false, width: 200 },
+        { name: 'company', enableFiltering: false, width: 200 }
       ],
       data: [
         {
           name: 'Ethel Price',
           gender: 'female',
           company: 'Enersol',
-          age: 25,
+          age: 25
         },
         {
           name: 'Claudine Neal',
           gender: 'female',
           company: 'Sealoud',
-          age: 19,
+          age: 19
         },
         {
           name: 'Beryl Rice',
           gender: 'female',
           company: 'Velity',
-          age: 44,
+          age: 44
         },
         {
           name: 'Wilder Gonzales',
           gender: 'male',
           company: 'Geekko',
-          age: 26,
+          age: 26
         },
         {
           name: 'Georgina Schultz',
           gender: 'female',
           company: 'Suretech',
-          age: 53,
+          age: 53
         },
         {
           name: 'Carroll Buchanan',
           gender: 'male',
           company: 'Ecosys',
-          age: 64,
+          age: 64
         },
         {
           name: 'Valarie Atkinson',
           gender: 'female',
           company: 'Hopeli',
-          age: 35,
+          age: 35
         },
         {
           name: 'Schroeder Mathews',
           gender: 'male',
           company: 'Polarium',
-          age: 29,
+          age: 29
         },
         {
           name: 'Lynda Mendoza',
           gender: 'female',
           company: 'Dogspa',
-          age: 49,
+          age: 49
         },
         {
           name: 'Sarah Massey',
           gender: 'female',
           company: 'Bisba',
-          age: 40,
+          age: 40
         },
         {
           name: 'Robles Boyle',
           gender: 'male',
           company: 'Comtract',
-          age: 32,
+          age: 32
         },
         {
           name: 'Evans Hickman',
           gender: 'male',
           company: 'Parleynet',
-          age: 38,
+          age: 38
         },
         {
           name: 'Dawson Barber',
           gender: 'male',
           company: 'Dymi',
-          age: 21,
+          age: 21
         },
         {
           name: 'Bruce Strong',
           gender: 'male',
           company: 'Xyqag',
-          age: 61,
+          age: 61
         },
         {
           name: 'Nellie Whitfield',
           gender: 'female',
           company: 'Exospace',
-          age: 54,
+          age: 54
         },
         {
           name: 'Jackson Macias',
           gender: 'male',
           company: 'Aquamate',
-          age: 49,
+          age: 49
         },
         {
           name: 'Pena Pena',
           gender: 'male',
           company: 'Quarx',
-          age: 25,
+          age: 25
         },
         {
           name: 'Lelia Gates',
           gender: 'female',
           company: 'Proxsoft',
-          age: 54,
+          age: 54
         },
         {
           name: 'Alfred Oscar',
           gender: 'male',
           company: 'Transprop',
-          age: 34,
+          age: 34
         },
         {
           name: 'John Alfred',
           gender: 'male',
           company: 'Haymans',
-          age: 70,
+          age: 70
         },
         {
           name: 'Leonie Warren',
           gender: 'female',
           company: 'Hilltop',
-          age: 25,
+          age: 25
         },
         {
           name: 'Belinda Gosford',
           gender: 'female',
           company: 'Archison',
-          age: 42,
+          age: 42
         },
         {
           name: 'Tracey Misoni',
           gender: 'female',
           company: 'Verizona',
-          age: 34,
+          age: 34
         },
         {
           name: 'Trevino Moreno',
           gender: 'male',
           company: 'Conjurica',
-          age: 31,
-        },
-      ],
+          age: 31
+        }
+      ]
     };
-  },
+  }
 ]);

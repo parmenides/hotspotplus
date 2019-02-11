@@ -8,7 +8,7 @@ app.directive('memberCount', [
   function(PREFIX, Member, $log) {
     return {
       scope: {
-        params: '=options',
+        params: '=options'
       },
 
       controller: function($scope) {
@@ -40,16 +40,16 @@ app.directive('memberCount', [
                 },
                 function(error) {
                   $log.error(error);
-                },
+                }
               );
             },
             function(error) {
               $log.error(error);
-            },
+            }
           );
         }
       },
-      templateUrl: PREFIX + 'app/widgets/memberCount/tpl/memberCount.html',
+      templateUrl: PREFIX + 'app/widgets/memberCount/tpl/memberCount.html'
     };
-  },
+  }
 ]);

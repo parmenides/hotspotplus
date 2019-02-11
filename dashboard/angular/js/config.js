@@ -12,7 +12,7 @@ var app = angular
       $compileProvider,
       $filterProvider,
       $provide,
-      $ocLazyLoadProvider,
+      $ocLazyLoadProvider
     ) {
       // lazy controller, directive and service
       app.controller = $controllerProvider.register;
@@ -23,9 +23,9 @@ var app = angular
       app.constant = $provide.constant;
       app.value = $provide.value;
       $ocLazyLoadProvider.config({
-        debug: true,
+        debug: true
       });
-    },
+    }
   ])
   .config([
     '$translateProvider',
@@ -36,7 +36,7 @@ var app = angular
       // Those urls are [prefix][langKey][suffix].
       $translateProvider.useStaticFilesLoader({
         prefix: 'l10n/',
-        suffix: '.js',
+        suffix: '.js'
       });
 
       //Handle 401 responses
@@ -56,7 +56,7 @@ var app = angular
               }
             }
             return $q.reject(rejection);
-          },
+          }
         };
       });
       // Tell the module what language to use by default
@@ -104,8 +104,8 @@ var app = angular
             //Draw text in center
             ctx.fillText(txt, centerX, centerY);
           }
-        },
+        }
       });
-    },
+    }
   ])
   .run();

@@ -26,7 +26,7 @@ angular.module('app').directive('uiToggleClass', [
                   .split(' ')
                   .join('\\s|\\s') +
                 '\\s',
-              'g',
+              'g'
             );
             var cn = ' ' + $(target)[0].className + ' ';
             while (patt.test(cn)) {
@@ -35,7 +35,7 @@ angular.module('app').directive('uiToggleClass', [
             $(target)[0].className = $.trim(cn);
           }
         });
-      },
+      }
     };
-  },
+  }
 ]);

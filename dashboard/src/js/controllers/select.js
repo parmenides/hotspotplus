@@ -77,62 +77,62 @@ app.controller('SelectCtrl', function($scope, $http, $timeout) {
         name: 'Adam',
         email: 'adam@email.com',
         age: 12,
-        country: 'United States',
+        country: 'United States'
       },
       {
         name: 'Amalie',
         email: 'amalie@email.com',
         age: 12,
-        country: 'Argentina',
+        country: 'Argentina'
       },
       {
         name: 'Estefanía',
         email: 'estefania@email.com',
         age: 21,
-        country: 'Argentina',
+        country: 'Argentina'
       },
       {
         name: 'Adrian',
         email: 'adrian@email.com',
         age: 21,
-        country: 'Ecuador',
+        country: 'Ecuador'
       },
       {
         name: 'Wladimir',
         email: 'wladimir@email.com',
         age: 30,
-        country: 'Ecuador',
+        country: 'Ecuador'
       },
       {
         name: 'Samantha',
         email: 'samantha@email.com',
         age: 30,
-        country: 'United States',
+        country: 'United States'
       },
       {
         name: 'Nicole',
         email: 'nicole@email.com',
         age: 43,
-        country: 'Colombia',
+        country: 'Colombia'
       },
       {
         name: 'Natasha',
         email: 'natasha@email.com',
         age: 54,
-        country: 'Ecuador',
+        country: 'Ecuador'
       },
       {
         name: 'Michael',
         email: 'michael@email.com',
         age: 15,
-        country: 'Colombia',
+        country: 'Colombia'
       },
       {
         name: 'Nicolás',
         email: 'nicole@email.com',
         age: 43,
-        country: 'Colombia',
-      },
+        country: 'Colombia'
+      }
     ];
   }, 3000);
 
@@ -145,7 +145,7 @@ app.controller('SelectCtrl', function($scope, $http, $timeout) {
   $scope.removed = function(item, model) {
     $scope.lastRemoved = {
       item: item,
-      model: model,
+      model: model
     };
   };
 
@@ -155,52 +155,52 @@ app.controller('SelectCtrl', function($scope, $http, $timeout) {
       name: 'Adam',
       email: 'adam@email.com',
       age: 12,
-      country: 'United States',
+      country: 'United States'
     },
     {
       name: 'Amalie',
       email: 'amalie@email.com',
       age: 12,
-      country: 'Argentina',
+      country: 'Argentina'
     },
     {
       name: 'Estefanía',
       email: 'estefania@email.com',
       age: 21,
-      country: 'Argentina',
+      country: 'Argentina'
     },
     { name: 'Adrian', email: 'adrian@email.com', age: 21, country: 'Ecuador' },
     {
       name: 'Wladimir',
       email: 'wladimir@email.com',
       age: 30,
-      country: 'Ecuador',
+      country: 'Ecuador'
     },
     {
       name: 'Samantha',
       email: 'samantha@email.com',
       age: 30,
-      country: 'United States',
+      country: 'United States'
     },
     { name: 'Nicole', email: 'nicole@email.com', age: 43, country: 'Colombia' },
     {
       name: 'Natasha',
       email: 'natasha@email.com',
       age: 54,
-      country: 'Ecuador',
+      country: 'Ecuador'
     },
     {
       name: 'Michael',
       email: 'michael@email.com',
       age: 15,
-      country: 'Colombia',
+      country: 'Colombia'
     },
     {
       name: 'Nicolás',
       email: 'nicolas@email.com',
       age: 43,
-      country: 'Colombia',
-    },
+      country: 'Colombia'
+    }
   ];
 
   $scope.availableColors = [
@@ -211,7 +211,7 @@ app.controller('SelectCtrl', function($scope, $http, $timeout) {
     'Magenta',
     'Maroon',
     'Umbra',
-    'Turquoise',
+    'Turquoise'
   ];
 
   $scope.multipleDemo = {};
@@ -219,11 +219,11 @@ app.controller('SelectCtrl', function($scope, $http, $timeout) {
   $scope.multipleDemo.selectedPeople = [$scope.people[5], $scope.people[4]];
   $scope.multipleDemo.selectedPeopleWithGroupBy = [
     $scope.people[8],
-    $scope.people[6],
+    $scope.people[6]
   ];
   $scope.multipleDemo.selectedPeopleSimple = [
     'samantha@email.com',
-    'wladimir@email.com',
+    'wladimir@email.com'
   ];
 
   $scope.address = {};
@@ -231,7 +231,7 @@ app.controller('SelectCtrl', function($scope, $http, $timeout) {
     var params = { address: address, sensor: false };
     return $http
       .get('http://maps.googleapis.com/maps/api/geocode/json', {
-        params: params,
+        params: params
       })
       .then(function(response) {
         $scope.addresses = response.data.results;
@@ -483,6 +483,6 @@ app.controller('SelectCtrl', function($scope, $http, $timeout) {
     { name: 'Western Sahara', code: 'EH' },
     { name: 'Yemen', code: 'YE' },
     { name: 'Zambia', code: 'ZM' },
-    { name: 'Zimbabwe', code: 'ZW' },
+    { name: 'Zimbabwe', code: 'ZW' }
   ];
 });

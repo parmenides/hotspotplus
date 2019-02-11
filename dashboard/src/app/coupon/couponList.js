@@ -29,7 +29,7 @@ app.controller('couponList', [
     Session,
     $uibModal,
     PREFIX,
-    appMessenger,
+    appMessenger
   ) {
     if (Session.userType == 'Admin') {
       $scope.ownerId = 'Admin';
@@ -40,7 +40,7 @@ app.controller('couponList', [
     $scope.paginationOptions = {
       pageNumber: 1,
       itemPerPage: 10,
-      sort: null,
+      sort: null
     };
 
     $scope.gridOptions = {
@@ -62,7 +62,7 @@ app.controller('couponList', [
           enableColumnMenu: false,
           headerCellFilter: 'translate',
           cellTemplate:
-            '<a class="btn btn-link" ng-click="grid.appScope.openCouponDetailsModal(row.entity.id)">{{row.entity.code}}</a>',
+            '<a class="btn btn-link" ng-click="grid.appScope.openCouponDetailsModal(row.entity.id)">{{row.entity.code}}</a>'
         },
         {
           displayName: 'coupon.value',
@@ -72,7 +72,7 @@ app.controller('couponList', [
           enableColumnMenu: false,
           headerCellFilter: 'translate',
           cellTemplate:
-            '<div class="ui-grid-cell-contents">{{row.entity.value.amount | translateNumber }}&nbsp;{{"general."+row.entity.value.unit | translate }}</div>',
+            '<div class="ui-grid-cell-contents">{{row.entity.value.amount | translateNumber }}&nbsp;{{"general."+row.entity.value.unit | translate }}</div>'
         },
         {
           displayName: 'coupon.count',
@@ -82,7 +82,7 @@ app.controller('couponList', [
           enableColumnMenu: false,
           headerCellFilter: 'translate',
           cellTemplate:
-            '<div class="ui-grid-cell-contents">{{row.entity.count | translateNumber }}&nbsp;{{"general.count" | translate }}</div>',
+            '<div class="ui-grid-cell-contents">{{row.entity.count | translateNumber }}&nbsp;{{"general.count" | translate }}</div>'
         },
         {
           displayName: 'coupon.status',
@@ -97,7 +97,7 @@ app.controller('couponList', [
             '{{row.entity.used | translateNumber}}&nbsp;{{"general.count" | translate}}&nbsp;{{"coupon.redeemed" | translate}}' +
             '</span>' +
             '<a class="btn btn-link" ng-if="row.entity.used < row.entity.count" ng-click="grid.appScope.openCouponDetailsModal(row.entity.id)">' +
-            '<i class="fa fa-money"></i></a></div>',
+            '<i class="fa fa-money"></i></a></div>'
         },
         {
           displayName: 'coupon.creationDate',
@@ -108,7 +108,7 @@ app.controller('couponList', [
           enableColumnMenu: false,
           headerCellFilter: 'translate',
           cellTemplate:
-            '<div class="ui-grid-cell-contents">{{row.entity.creationDate |  persianDate : "fullDate" | translateNumber }}{{"general.,"| translate}}&nbsp;{{"general.hour"| translate}}:&nbsp;{{row.entity.creationDate |  date : "HH:mm" | translateNumber }}</div>',
+            '<div class="ui-grid-cell-contents">{{row.entity.creationDate |  persianDate : "fullDate" | translateNumber }}{{"general.,"| translate}}&nbsp;{{"general.hour"| translate}}:&nbsp;{{row.entity.creationDate |  date : "HH:mm" | translateNumber }}</div>'
         },
         {
           displayName: 'coupon.redeemDate',
@@ -124,7 +124,7 @@ app.controller('couponList', [
             '{{row.entity.redeemDate |  persianDate : "fullDate" | translateNumber }}{{"general.,"| translate}}&nbsp;{{"general.hour"| translate}}:&nbsp;{{row.entity.redeemDate |  date : "HH:mm" | translateNumber }}' +
             '</span>' +
             '<span ng-if="!row.entity.redeemDate">-</span>' +
-            '</div>',
+            '</div>'
         },
         {
           displayName: 'coupon.campaignName',
@@ -132,8 +132,8 @@ app.controller('couponList', [
           enableHiding: false,
           enableSorting: false,
           enableColumnMenu: false,
-          headerCellFilter: 'translate',
-        },
+          headerCellFilter: 'translate'
+        }
       ],
       onRegisterApi: function(gridApi) {
         $scope.gridApi = gridApi;
@@ -148,7 +148,7 @@ app.controller('couponList', [
           }
           getPage();
         });
-      },
+      }
     };
 
     $scope.addOrEditCoupon = function(row) {
@@ -158,13 +158,13 @@ app.controller('couponList', [
           function(res) {
             $scope.openCouponForm(res, {
               title: 'coupon.editCoupon',
-              newCoupon: false,
+              newCoupon: false
             });
           },
           function(error) {
             $log.error(error);
             appMessenger.showError('error.generalError');
-          },
+          }
         );
       } else {
         $scope.openCouponForm(
@@ -174,13 +174,13 @@ app.controller('couponList', [
             creationDate: new Date().getTime(),
             value: {
               amount: 10,
-              unit: 'percent',
-            },
+              unit: 'percent'
+            }
           },
           {
             title: 'coupon.addCoupon',
-            newCoupon: true,
-          },
+            newCoupon: true
+          }
         );
       }
     };
@@ -216,12 +216,12 @@ app.controller('couponList', [
                     },
                     function(err) {
                       appMessenger.showError('error.generalError');
-                    },
+                    }
                   );
                 } else {
                   Coupon.prototype$updateAttributes(
                     { id: $scope.coupon.id },
-                    $scope.coupon,
+                    $scope.coupon
                   ).$promise.then(
                     function(res) {
                       appMessenger.showSuccess('coupon.updateSuccessFull');
@@ -234,15 +234,15 @@ app.controller('couponList', [
                       } else {
                         appMessenger.showError('error.generalError');
                       }
-                    },
+                    }
                   );
                 }
               } else if (error) {
                 appMessenger.showError('general.allFieldsRequired');
               }
             };
-          },
-        ],
+          }
+        ]
       });
     };
 
@@ -270,7 +270,7 @@ app.controller('couponList', [
                 var options = { filter: {} };
                 options.filter.where = {
                   code: couponCode,
-                  ownerId: $scope.ownerId,
+                  ownerId: $scope.ownerId
                 };
                 Coupon.find(options).$promise.then(
                   function(result) {
@@ -286,12 +286,12 @@ app.controller('couponList', [
                   },
                   function(error) {
                     $log.error(error);
-                  },
+                  }
                 );
               }
             };
-          },
-        ],
+          }
+        ]
       });
     };
 
@@ -328,7 +328,7 @@ app.controller('couponList', [
                         title: 'coupon.redeem',
                         message: 'coupon.areYouSureRedeem',
                         noBtnLabel: 'general.no',
-                        yesBtnLabel: 'general.yes',
+                        yesBtnLabel: 'general.yes'
                       };
                       $scope.no = function() {
                         $uibModalInstance.close();
@@ -336,40 +336,40 @@ app.controller('couponList', [
                       $scope.yes = function() {
                         Coupon.prototype$updateAttributes(
                           {
-                            id: couponId,
+                            id: couponId
                           },
                           {
                             used: coupon.used + 1,
-                            redeemDate: new Date().getTime(),
-                          },
+                            redeemDate: new Date().getTime()
+                          }
                         ).$promise.then(
                           function(res) {
                             appMessenger.showSuccess(
-                              'coupon.redeemedSuccessFull',
+                              'coupon.redeemedSuccessFull'
                             );
                             $uibModalInstance.close();
                             getPage();
                           },
                           function(err) {
                             appMessenger.showError(
-                              'coupon.redeemedUnSuccessFull',
+                              'coupon.redeemedUnSuccessFull'
                             );
-                          },
+                          }
                         );
                       };
-                    },
-                  ],
+                    }
+                  ]
                 });
               };
-            },
-          ],
+            }
+          ]
         });
       });
     };
 
     $scope.$watch('paginationOptions.itemPerPage', function(
       oldValue,
-      newValue,
+      newValue
     ) {
       getPage();
     });
@@ -403,7 +403,7 @@ app.controller('couponList', [
         },
         function(error) {
           $log.error(error);
-        },
+        }
       );
 
       Coupon.find(options).$promise.then(
@@ -418,7 +418,7 @@ app.controller('couponList', [
                 function(error) {
                   $log.error(error);
                   appMessenger.showError('error.generalError');
-                },
+                }
               );
             } else {
               $scope.gridOptions.data[index].campaignName = '-';
@@ -427,8 +427,8 @@ app.controller('couponList', [
         },
         function(error) {
           $log.error(error);
-        },
+        }
       );
     };
-  },
+  }
 ]);

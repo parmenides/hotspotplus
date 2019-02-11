@@ -8,7 +8,7 @@ app.factory('todoStorage', function() {
 
     put: function(todos) {
       localStorage.setItem(STORAGE_ID, JSON.stringify(todos));
-    },
+    }
   };
 });
 
@@ -22,7 +22,7 @@ app.controller('TodoCtrl', [
 
     $scope.newTodo = '';
     $scope.remainingCount = $filter('filter')(todos, {
-      completed: false,
+      completed: false
     }).length;
 
     if ($location.path() === '') {
@@ -35,7 +35,7 @@ app.controller('TodoCtrl', [
       console.log(path);
       $scope.statusFilter = {
         '/app/todo/active': { completed: false },
-        '/app/todo/completed': { completed: true },
+        '/app/todo/completed': { completed: true }
       }[path];
     });
 
@@ -51,7 +51,7 @@ app.controller('TodoCtrl', [
 
       todos.push({
         title: newTodo,
-        completed: false,
+        completed: false
       });
       todoStorage.put(todos);
 
@@ -106,5 +106,5 @@ app.controller('TodoCtrl', [
       $scope.remainingCount = !completed ? todos.length : 0;
       todoStorage.put(todos);
     };
-  },
+  }
 ]);

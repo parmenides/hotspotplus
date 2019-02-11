@@ -21,7 +21,7 @@ app.controller('AdminSignInController', [
     Session,
     LoopBackAuth,
     roleService,
-    errorMessenger,
+    errorMessenger
   ) {
     $scope.credential = {};
     $scope.authError = null;
@@ -40,13 +40,13 @@ app.controller('AdminSignInController', [
             },
             function() {
               appMessenger.showError('auth.loadingRoleFailed');
-            },
+            }
           );
         },
         function(errorResult) {
           $log.error(errorResult);
           appMessenger.showError('user.invalidLogin');
-        },
+        }
       );
     };
 
@@ -59,8 +59,8 @@ app.controller('AdminSignInController', [
         function(error) {
           Session.clearSession();
           appMessenger.showError('auth.logoutFailed');
-        },
+        }
       );
     };
-  },
+  }
 ]);

@@ -9,7 +9,7 @@ angular.module('app').directive('uiScrollTo', [
           $location.hash(attr.uiScrollTo);
           $anchorScroll();
         });
-      },
+      }
     };
-  },
+  }
 ]);

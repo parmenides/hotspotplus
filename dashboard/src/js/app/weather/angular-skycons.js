@@ -6,7 +6,7 @@ angularSkycons.directive('skycon', function() {
     replace: true,
     scope: {
       icon: '=',
-      size: '=',
+      size: '='
     },
     link: function(scope, element, attrs) {
       // make a canvas for our icon
@@ -41,7 +41,7 @@ angularSkycons.directive('skycon', function() {
             canvas.width = scope.size || 64;
           }
         },
-        true,
+        true
       );
 
       // watch the icon property from the controller
@@ -50,7 +50,7 @@ angularSkycons.directive('skycon', function() {
         function() {
           skycons.set(canvas, scope.icon);
         },
-        true,
+        true
       );
 
       skycons.play();
@@ -67,6 +67,6 @@ angularSkycons.directive('skycon', function() {
           skycons.pause(canvas);
         }
       });
-    },
+    }
   };
 });

@@ -33,7 +33,7 @@ app.controller('ticketDetailsController', [
     PREFIX,
     appMessenger,
     Business,
-    $stateParams,
+    $stateParams
   ) {
     var ticketId = $stateParams.ticketId;
     Ticket.findById({ id: ticketId }).$promise.then(function(ticket) {
@@ -55,7 +55,7 @@ app.controller('ticketDetailsController', [
           'Ticket',
           function($scope, $uibModalInstance, Business, Ticket) {
             $scope.message = {
-              creationDate: new Date().getTime(),
+              creationDate: new Date().getTime()
             };
             $scope.cancel = function() {
               $uibModalInstance.close();
@@ -68,7 +68,7 @@ app.controller('ticketDetailsController', [
               }
               Ticket.replyToTicket({
                 ticketId: ticketId,
-                message: $scope.message,
+                message: $scope.message
               }).$promise.then(
                 function() {
                   appMessenger.showSuccess('ticket.replySent');
@@ -78,12 +78,12 @@ app.controller('ticketDetailsController', [
                   $log.error(error);
                   appMessenger.showError('error.generalError');
                   return;
-                },
+                }
               );
             };
-          },
-        ],
+          }
+        ]
       });
     };
-  },
+  }
 ]);

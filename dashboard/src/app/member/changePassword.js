@@ -19,7 +19,7 @@ app.controller('changePasswordCtrl', [
       var memberId = Session.member.id;
       Member.loadMemberPassword({
         businessId: businessId,
-        memberId: memberId,
+        memberId: memberId
       }).$promise.then(
         function(res) {
           $uibModal.open({
@@ -38,7 +38,7 @@ app.controller('changePasswordCtrl', [
                   cancelBtnLabel: 'general.cancel',
                   saveBtnLabel: 'general.save',
                   saveAndSendBtnLabel: 'general.saveAndSendPass',
-                  sendBtnLabel: 'general.sendPass',
+                  sendBtnLabel: 'general.sendPass'
                 };
                 $scope.newPassword = null;
                 $scope.currentPassword = res.passwordText;
@@ -50,13 +50,13 @@ app.controller('changePasswordCtrl', [
                   if ($scope.newPassword) {
                     Member.prototype$updateAttributes(
                       {
-                        id: memberId,
+                        id: memberId
                       },
-                      { passwordText: $scope.newPassword },
+                      { passwordText: $scope.newPassword }
                     ).$promise.then(
                       function(res) {
                         appMessenger.showSuccess(
-                          'member.passwordChangeSuccessFull',
+                          'member.passwordChangeSuccessFull'
                         );
                         if (sendMessage) {
                           $scope.sendPassword(memberId);
@@ -64,27 +64,27 @@ app.controller('changePasswordCtrl', [
                       },
                       function(err) {
                         appMessenger.showError(
-                          'member.passwordChangeUnSuccessFull',
+                          'member.passwordChangeUnSuccessFull'
                         );
-                      },
+                      }
                     );
                   } else if (sendMessage) {
                     $scope.sendPassword(memberId);
                   }
                 };
-              },
-            ],
+              }
+            ]
           });
         },
         function(error) {
           $log.error(error);
           appMessenger.showError('error.generalError');
-        },
+        }
       );
       $scope.sendPassword = function(memberId) {
         Member.sendPassword({
           memberId: memberId,
-          businessId: businessId,
+          businessId: businessId
         }).$promise.then(
           function(result) {
             appMessenger.showSuccess('member.passwordSentSuccessFull');
@@ -101,9 +101,9 @@ app.controller('changePasswordCtrl', [
               appMessenger.showError('member.passwordSentUnSuccessFull');
               appMessenger.showError('error.generalError');
             }
-          },
+          }
         );
       };
     };
-  },
+  }
 ]);

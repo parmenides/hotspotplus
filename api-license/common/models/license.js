@@ -454,7 +454,7 @@ module.exports = function(License) {
         }
         var licenseData = {
           title: license.title,
-          licenseVersion: 'v4',//license.licenseVersion ,
+          licenseVersion: 'v4', //license.licenseVersion ,
           numberOfAllowedBusiness: license.numberOfAllowedBusiness,
           applicationVersion: license.applicationVersion,
           systemUuid: license.systemUuid,

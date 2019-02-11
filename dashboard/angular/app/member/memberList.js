@@ -41,7 +41,7 @@ app.controller('memberList', [
     englishNumberFilter,
     credit,
     FileSaver,
-    Blob,
+    Blob
   ) {
     var businessId = Session.business.id;
 
@@ -50,7 +50,7 @@ app.controller('memberList', [
     $scope.paginationOptions = {
       pageNumber: 1,
       itemPerPage: 10,
-      sort: null,
+      sort: null
     };
     $scope.gridOptions = {
       enableSorting: true,
@@ -73,7 +73,7 @@ app.controller('memberList', [
           enableColumnMenu: false,
           cellTemplate:
             '<a class="btn btn-link" ng-click="grid.appScope.editMember(row)">{{row.entity.username}}</a>',
-          headerCellFilter: 'translate',
+          headerCellFilter: 'translate'
         },
         {
           displayName: 'member.internetPlanName',
@@ -84,7 +84,7 @@ app.controller('memberList', [
           enableColumnMenu: false,
           headerCellFilter: 'translate',
           cellTemplate:
-            '<div class="ui-grid-cell-contents"><span ng-if="row.entity.internetPlanName">{{row.entity.internetPlanName}}</span><span ng-if="!row.entity.internetPlanName">-</span></div>',
+            '<div class="ui-grid-cell-contents"><span ng-if="row.entity.internetPlanName">{{row.entity.internetPlanName}}</span><span ng-if="!row.entity.internetPlanName">-</span></div>'
         },
         {
           displayName: 'dashboard.upload',
@@ -94,7 +94,7 @@ app.controller('memberList', [
           enableColumnMenu: false,
           headerCellFilter: 'translate',
           cellTemplate:
-            '<div class="ui-grid-cell-contents">{{row.entity.upload | number | translateNumber }}&nbsp;{{"dashboard.Mbps" | translate}}</div>',
+            '<div class="ui-grid-cell-contents">{{row.entity.upload | number | translateNumber }}&nbsp;{{"dashboard.Mbps" | translate}}</div>'
         },
         {
           displayName: 'dashboard.download',
@@ -104,7 +104,7 @@ app.controller('memberList', [
           enableColumnMenu: false,
           headerCellFilter: 'translate',
           cellTemplate:
-            '<div class="ui-grid-cell-contents">{{row.entity.download | number | translateNumber }}&nbsp;{{"dashboard.Mbps" | translate}}</div>',
+            '<div class="ui-grid-cell-contents">{{row.entity.download | number | translateNumber }}&nbsp;{{"dashboard.Mbps" | translate}}</div>'
         },
         {
           displayName: 'member.active',
@@ -119,7 +119,7 @@ app.controller('memberList', [
           cellTemplate:
             '<a class="btn btn-link" ng-click="grid.appScope.activateMember(row)" uib-popover={{grid.appScope.activateMemberHelpText}} popover-trigger="mouseenter"' +
             'popover-placement="right"><i class="fa fa-circle-o" ng-if="!row.entity.active"></i>' +
-            '<i class="fa fa-dot-circle-o text-info" ng-if="row.entity.active"></i></a>',
+            '<i class="fa fa-dot-circle-o text-info" ng-if="row.entity.active"></i></a>'
         },
         {
           displayName: 'member.refresh',
@@ -131,7 +131,7 @@ app.controller('memberList', [
           headerCellClass: 'headerCenter',
           cellTemplate:
             '<a class="btn btn-link" type="button" ng-click="grid.appScope.refreshPlan(row)" uib-popover={{grid.appScope.refreshPlanHelpText}} popover-trigger="mouseenter"' +
-            'popover-placement="right"><i class="fa  fa-refresh"></i></a>',
+            'popover-placement="right"><i class="fa  fa-refresh"></i></a>'
         },
         {
           displayName: 'member.editPassword',
@@ -142,7 +142,7 @@ app.controller('memberList', [
           cellClass: 'center',
           headerCellClass: 'headerCenter',
           cellTemplate:
-            '<a class="btn btn-link" ng-click="grid.appScope.editPassword(row.entity)"><i class="fa fa-key"></i></a>',
+            '<a class="btn btn-link" ng-click="grid.appScope.editPassword(row.entity)"><i class="fa fa-key"></i></a>'
         },
         {
           displayName: 'member.showPlanHistory',
@@ -155,7 +155,7 @@ app.controller('memberList', [
           headerCellFilter: 'translate',
           cellTemplate:
             '<div class="ui-grid-cell-contents" ng-click="grid.appScope.showPlanHistory(row)" uib-popover={{grid.appScope.showPlanHistoryHelpText}} popover-trigger="mouseenter"' +
-            'popover-placement="right"><i class="fa fa-history"></i></div>',
+            'popover-placement="right"><i class="fa fa-history"></i></div>'
         },
         {
           displayName: 'general.edit',
@@ -166,7 +166,7 @@ app.controller('memberList', [
           cellClass: 'center',
           headerCellClass: 'headerCenter',
           cellTemplate:
-            '<a class="btn btn-link" ng-click="grid.appScope.editMember(row)"><i class="fa  fa-pencil"></i></a>',
+            '<a class="btn btn-link" ng-click="grid.appScope.editMember(row)"><i class="fa  fa-pencil"></i></a>'
         },
         {
           displayName: 'general.remove',
@@ -177,8 +177,8 @@ app.controller('memberList', [
           cellClass: 'center',
           headerCellClass: 'headerCenter',
           cellTemplate:
-            '<a class="btn btn-link" ng-click="grid.appScope.removeMember(row)"><i class="fa  fa-trash"></i></a>',
-        },
+            '<a class="btn btn-link" ng-click="grid.appScope.removeMember(row)"><i class="fa  fa-trash"></i></a>'
+        }
       ],
       onRegisterApi: function(gridApi) {
         $scope.gridApi = gridApi;
@@ -193,7 +193,7 @@ app.controller('memberList', [
           }
           getPage();
         });
-      },
+      }
     };
     $scope.refreshPlanHelpText = translateFilter('help.memberRefreshPlan');
     $scope.activateMemberHelpText = translateFilter('help.activateMember');
@@ -204,7 +204,7 @@ app.controller('memberList', [
         subscriptionDate: new Date().getTime(),
         creationDate: new Date().getTime(),
         businessId: businessId,
-        selectedInternetPlan: null,
+        selectedInternetPlan: null
       };
       Business.internetPlans({ id: businessId }).$promise.then(
         function(internetPlans) {
@@ -228,18 +228,18 @@ app.controller('memberList', [
                     cancelBtnLabel: 'general.cancel',
                     saveBtnLabel: 'general.save',
                     saveAndSendBtnLabel: 'general.saveAndSendPass',
-                    newMember: true,
+                    newMember: true
                   };
                   // Persian date picker methods
                   $scope.dateOptions = {
                     formatYear: 'yy',
-                    startingDay: 6,
+                    startingDay: 6
                   };
                   $scope.dateFormats = [
                     'dd-MMMM-yyyy',
                     'yyyy/MM/dd',
                     'dd.MM.yyyy',
-                    'shortDate',
+                    'shortDate'
                   ];
                   $scope.dateFormat = $scope.dateFormats[0];
                   $scope.disabled = function(date, mode) {
@@ -253,7 +253,7 @@ app.controller('memberList', [
                   // --> for calendar bug
                   $scope.$watch('member.birthday', function(
                     newValue,
-                    oldValue,
+                    oldValue
                   ) {
                     $scope.startDateCalendarIsOpen = false;
                   });
@@ -268,7 +268,7 @@ app.controller('memberList', [
                     }
                     if ($scope.member.mobile) {
                       $scope.member.mobile = englishNumberFilter(
-                        $scope.member.mobile,
+                        $scope.member.mobile
                       );
                     }
                     var planId = $scope.member.selectedInternetPlan.id;
@@ -280,23 +280,23 @@ app.controller('memberList', [
                           var memberId = res.id;
                           InternetPlan.assignPlanToMember({
                             memberId: memberId,
-                            planId: planId,
+                            planId: planId
                           }).$promise.then(
                             function(res) {
                               if (sendMessage) {
                                 $scope.sendPassword(memberId);
                               }
                               appMessenger.showSuccess(
-                                'member.createSuccessFull',
+                                'member.createSuccessFull'
                               );
                               getPage();
                               $uibModalInstance.close();
                             },
                             function(error) {
                               appMessenger.showError(
-                                'member.assignInternetPlanUnSuccessFull',
+                                'member.assignInternetPlanUnSuccessFull'
                               );
-                            },
+                            }
                           );
                         },
                         function(err) {
@@ -304,11 +304,11 @@ app.controller('memberList', [
                           if (err.status == 422) {
                             appMessenger.showError('member.usernameNotValid');
                           }
-                        },
+                        }
                       );
                   };
-                },
-              ],
+                }
+              ]
             });
           } else {
             appMessenger.showWarning('member.pleaseCreateAnInternetPlan');
@@ -317,13 +317,13 @@ app.controller('memberList', [
         function(error) {
           $log.error(error);
           appMessenger.showError('error.generalError');
-        },
+        }
       );
     };
     $scope.sendPassword = function(memberId) {
       Member.sendPassword({
         memberId: memberId,
-        businessId: businessId,
+        businessId: businessId
       }).$promise.then(
         function(result) {
           appMessenger.showSuccess('member.passwordSentSuccessFull');
@@ -344,14 +344,14 @@ app.controller('memberList', [
             appMessenger.showError('member.passwordSentUnSuccessFull');
             appMessenger.showError('error.generalError');
           }
-        },
+        }
       );
     };
     $scope.editMember = function(row) {
       var memberId = row.entity.id;
       Member.loadMember({
         businessId: businessId,
-        memberId: memberId,
+        memberId: memberId
       }).$promise.then(
         function(member) {
           $uibModal.open({
@@ -371,7 +371,7 @@ app.controller('memberList', [
                   cancelBtnLabel: 'general.cancel',
                   saveBtnLabel: 'general.save',
                   saveAndSendBtnLabel: 'general.saveAndSend',
-                  newMember: false,
+                  newMember: false
                 };
                 var memberId = row.entity.id;
                 $scope.member = member;
@@ -391,18 +391,18 @@ app.controller('memberList', [
                   },
                   function(error) {
                     $log.error(error);
-                  },
+                  }
                 );
                 // Persian date picker methods
                 $scope.dateOptions = {
                   formatYear: 'yy',
-                  startingDay: 6,
+                  startingDay: 6
                 };
                 $scope.dateFormats = [
                   'dd-MMMM-yyyy',
                   'yyyy/MM/dd',
                   'dd.MM.yyyy',
-                  'shortDate',
+                  'shortDate'
                 ];
                 $scope.dateFormat = $scope.dateFormats[0];
                 $scope.disabled = function(date, mode) {
@@ -427,7 +427,7 @@ app.controller('memberList', [
                   }
                   if ($scope.member.mobile) {
                     $scope.member.mobile = englishNumberFilter(
-                      $scope.member.mobile,
+                      $scope.member.mobile
                     );
                   }
                   if (!$scope.member.selectedInternetPlan) {
@@ -439,33 +439,33 @@ app.controller('memberList', [
                       .updateById(
                         {
                           id: businessId,
-                          fk: memberId,
+                          fk: memberId
                         },
-                        $scope.member,
+                        $scope.member
                       )
                       .$promise.then(
                         function(res) {
                           if (planId != res.internetPlanId) {
                             InternetPlan.assignPlanToMember({
                               memberId: memberId,
-                              planId: planId,
+                              planId: planId
                             }).$promise.then(
                               function(res) {
                                 appMessenger.showSuccess(
-                                  'member.updateSuccessFull',
+                                  'member.updateSuccessFull'
                                 );
                                 getPage();
                                 $uibModalInstance.close();
                               },
                               function(err) {
                                 appMessenger.showError(
-                                  'member.assignInternetPlanUnSuccessFull',
+                                  'member.assignInternetPlanUnSuccessFull'
                                 );
-                              },
+                              }
                             );
                           } else {
                             appMessenger.showSuccess(
-                              'member.updateSuccessFull',
+                              'member.updateSuccessFull'
                             );
                             getPage();
                             $uibModalInstance.close();
@@ -476,7 +476,7 @@ app.controller('memberList', [
                           if (err.status == 422) {
                             appMessenger.showError('member.duplicateUsername');
                           }
-                        },
+                        }
                       );
                   }
                 };
@@ -484,14 +484,14 @@ app.controller('memberList', [
                   $uibModalInstance.close();
                   $scope.editPassword(row.entity);
                 };
-              },
-            ],
+              }
+            ]
           });
         },
         function(error) {
           $log.error(error);
           appMessenger.showError('error.generalError');
-        },
+        }
       );
     };
     $scope.createMemberByGroup = function() {
@@ -520,13 +520,13 @@ app.controller('memberList', [
                     count: 3,
                     helpLanguageCode: 'fa',
                     duration: 30,
-                    internetPlan: $scope.internetPlans[0],
+                    internetPlan: $scope.internetPlans[0]
                   };
                   $scope.save = function() {
                     var validationError = false;
                     if ($scope.memberByGroup.mobile) {
                       $scope.memberByGroup.mobile = englishNumberFilter(
-                        $scope.memberByGroup.mobile,
+                        $scope.memberByGroup.mobile
                       );
                     }
                     if (
@@ -542,7 +542,7 @@ app.controller('memberList', [
                     } else {
                       validationError = true;
                       appMessenger.showError(
-                        'member.memberByGroupRequiredInternetPlan',
+                        'member.memberByGroupRequiredInternetPlan'
                       );
                     }
                     if (
@@ -554,7 +554,7 @@ app.controller('memberList', [
                     ) {
                       validationError = true;
                       appMessenger.showError(
-                        'member.memberByGroupRequiredField',
+                        'member.memberByGroupRequiredField'
                       );
                     }
                     if (
@@ -574,15 +574,15 @@ app.controller('memberList', [
                       }
                       $scope.loading = true;
                       Member.createMembersByGroup(
-                        $scope.memberByGroup,
+                        $scope.memberByGroup
                       ).$promise.then(
                         function(renderedHtmlAsString) {
                           var data = new Blob([renderedHtmlAsString.html], {
-                            type: 'text/html',
+                            type: 'text/html'
                           });
                           FileSaver.saveAs(data, 'users.html');
                           appMessenger.showSuccess(
-                            'member.memberByGroupCreateSuccessfully',
+                            'member.memberByGroupCreateSuccessfully'
                           );
                           $uibModalInstance.close();
                           $scope.loading = false;
@@ -592,12 +592,12 @@ app.controller('memberList', [
                           $log.error(error);
                           $scope.loading = false;
                           appMessenger.showError('error.generalError');
-                        },
+                        }
                       );
                     }
                   };
-                },
-              ],
+                }
+              ]
             });
           } else {
             appMessenger.showWarning('member.pleaseCreateAnInternetPlan');
@@ -606,7 +606,7 @@ app.controller('memberList', [
         function(error) {
           $log.error(error);
           appMessenger.showError('error.generalError');
-        },
+        }
       );
     };
     $scope.showCsvForm = function() {
@@ -634,7 +634,7 @@ app.controller('memberList', [
                 $scope.uploadCsv = function() {
                   $uibModalInstance.close();
                   appMessenger.showSuccess(
-                    'member.membersImportedSuccessfully',
+                    'member.membersImportedSuccessfully'
                   );
                   var internetPlanId = null;
                   if (
@@ -646,21 +646,21 @@ app.controller('memberList', [
                   Member.importMemberFromCsv({
                     businessId: businessId,
                     csvString: $scope.csvString,
-                    internetPlanId: internetPlanId,
+                    internetPlanId: internetPlanId
                   }).$promise.then(
                     function(result) {
                       $uibModalInstance.close();
                     },
                     function(error) {
                       appMessenger.showError('member.failedToImportMembers');
-                    },
+                    }
                   );
                 };
-              },
-            ],
+              }
+            ]
           });
         },
-        function() {},
+        function() {}
       );
     };
     $scope.removeMember = function(row) {
@@ -681,10 +681,10 @@ app.controller('memberList', [
               },
               function(err) {
                 appMessenger.showError('member.removeUnSuccessFull');
-              },
+              }
             );
         },
-        NoCallback: function() {},
+        NoCallback: function() {}
       });
     };
     $scope.removeMembers = function() {
@@ -704,7 +704,7 @@ app.controller('memberList', [
           yesCallback: function() {
             Business.destroyMembersById({
               businessId: businessId,
-              memberIds: memberIds,
+              memberIds: memberIds
             }).$promise.then(
               function(result) {
                 $scope.gridApi.selection.clearSelectedRows();
@@ -713,10 +713,10 @@ app.controller('memberList', [
               },
               function(err) {
                 appMessenger.showError('member.removeUnSuccessFull');
-              },
+              }
             );
           },
-          NoCallback: function() {},
+          NoCallback: function() {}
         });
       } else {
         appMessenger.showInfo('member.noMemberToRemove');
@@ -726,7 +726,7 @@ app.controller('memberList', [
       var memberId = member.id;
       Member.loadMemberPassword({
         businessId: businessId,
-        memberId: memberId,
+        memberId: memberId
       }).$promise.then(
         function(res) {
           $uibModal.open({
@@ -745,7 +745,7 @@ app.controller('memberList', [
                   cancelBtnLabel: 'general.cancel',
                   saveBtnLabel: 'general.save',
                   saveAndSendBtnLabel: 'general.saveAndSendPass',
-                  sendBtnLabel: 'general.sendPass',
+                  sendBtnLabel: 'general.sendPass'
                 };
                 $scope.newPassword = null;
                 $scope.currentPassword = res.passwordText;
@@ -759,14 +759,14 @@ app.controller('memberList', [
                       .updateById(
                         {
                           id: businessId,
-                          fk: memberId,
+                          fk: memberId
                         },
-                        { passwordText: $scope.newPassword },
+                        { passwordText: $scope.newPassword }
                       )
                       .$promise.then(
                         function(res) {
                           appMessenger.showSuccess(
-                            'member.passwordChangeSuccessFull',
+                            'member.passwordChangeSuccessFull'
                           );
                           if (sendMessage) {
                             $scope.sendPassword(memberId);
@@ -775,29 +775,29 @@ app.controller('memberList', [
                         },
                         function(err) {
                           appMessenger.showError(
-                            'member.passwordChangeUnSuccessFull',
+                            'member.passwordChangeUnSuccessFull'
                           );
-                        },
+                        }
                       );
                   } else if (sendMessage) {
                     $scope.sendPassword(memberId);
                   }
                 };
-              },
-            ],
+              }
+            ]
           });
         },
         function(error) {
           $log.error(error);
           appMessenger.showError('error.generalError');
-        },
+        }
       );
     };
     $scope.refreshPlan = function(row) {
       var memberId = row.entity.id;
       Member.loadMember({
         businessId: businessId,
-        memberId: memberId,
+        memberId: memberId
       }).$promise.then(function(member) {
         $uibModal.open({
           backdrop: true,
@@ -813,7 +813,7 @@ app.controller('memberList', [
                 title: 'member.refreshInternetPlan',
                 message: 'member.areYouSureRefreshPlan',
                 noBtnLabel: 'general.no',
-                yesBtnLabel: 'general.yes',
+                yesBtnLabel: 'general.yes'
               };
               $scope.no = function() {
                 $uibModalInstance.close();
@@ -821,7 +821,7 @@ app.controller('memberList', [
               $scope.yes = function() {
                 InternetPlan.assignPlanToMember({
                   memberId: memberId,
-                  planId: member.internetPlanId,
+                  planId: member.internetPlanId
                 }).$promise.then(
                   function(res) {
                     appMessenger.showSuccess('member.refreshPlanSuccessFull');
@@ -830,11 +830,11 @@ app.controller('memberList', [
                   },
                   function(err) {
                     appMessenger.showError('member.refreshPlanUnSuccessFull');
-                  },
+                  }
                 );
               };
-            },
-          ],
+            }
+          ]
         });
       });
     };
@@ -842,7 +842,7 @@ app.controller('memberList', [
       var memberId = row.entity.id;
       Member.loadMember({
         businessId: businessId,
-        memberId: memberId,
+        memberId: memberId
       }).$promise.then(function(member) {
         $uibModal.open({
           backdrop: true,
@@ -858,7 +858,7 @@ app.controller('memberList', [
                 title: 'member.status',
                 message: 'member.areYouSureChangeStatus',
                 noBtnLabel: 'general.no',
-                yesBtnLabel: 'general.yes',
+                yesBtnLabel: 'general.yes'
               };
               $scope.no = function() {
                 $uibModalInstance.close();
@@ -870,27 +870,27 @@ app.controller('memberList', [
                   .updateById(
                     {
                       id: businessId,
-                      fk: memberId,
+                      fk: memberId
                     },
-                    { active: active },
+                    { active: active }
                   )
                   .$promise.then(
                     function(res) {
                       appMessenger.showSuccess(
-                        'member.changeStatusSuccessFull',
+                        'member.changeStatusSuccessFull'
                       );
                       getPage();
                     },
                     function(err) {
                       appMessenger.showError(
-                        'member.changeStatusUnSuccessFull',
+                        'member.changeStatusUnSuccessFull'
                       );
-                    },
+                    }
                   );
                 $uibModalInstance.close();
               };
-            },
-          ],
+            }
+          ]
         });
       });
     };
@@ -910,7 +910,7 @@ app.controller('memberList', [
               title: 'message.sendMessage',
               cancelBtnLabel: 'general.cancel',
               saveBtnLabel: 'message.reviewAndSend',
-              message: {},
+              message: {}
             };
             $scope.cancel = function() {
               $uibModalInstance.close();
@@ -919,7 +919,7 @@ app.controller('memberList', [
               if (message.body) {
                 Member.getSmsCostForAllMembers({
                   businessId: businessId,
-                  messageText: message.body,
+                  messageText: message.body
                 }).$promise.then(
                   function(result) {
                     $uibModalInstance.close();
@@ -927,14 +927,14 @@ app.controller('memberList', [
                   },
                   function(error) {
                     appMessenger.showError('error.generalError');
-                  },
+                  }
                 );
               } else {
                 appMessenger.showError('message.requiredMessageBody');
               }
             };
-          },
-        ],
+          }
+        ]
       });
     };
     $scope.showSendMessageConfirmDialog = function(message) {
@@ -955,7 +955,7 @@ app.controller('memberList', [
               receptorsLength: message.receptorsLength,
               totalCost: message.totalCost,
               balance: message.balance,
-              balanceEnough: message.balanceEnough,
+              balanceEnough: message.balanceEnough
             };
 
             if (message.receptorsLength == 0) {
@@ -972,7 +972,7 @@ app.controller('memberList', [
             $scope.send = function() {
               Member.sendMessageToAll({
                 messageText: message.messageText,
-                businessId: businessId,
+                businessId: businessId
               }).$promise.then(
                 function(result) {
                   $uibModalInstance.close();
@@ -984,7 +984,7 @@ app.controller('memberList', [
                   } else {
                     appMessenger.showError('error.generalError');
                   }
-                },
+                }
               );
             };
             $scope.increaseCredit = function() {
@@ -1000,11 +1000,11 @@ app.controller('memberList', [
                 chargedBy: 'business',
                 businessId: businessId,
                 saveCallback: function() {},
-                cancelCallback: function() {},
+                cancelCallback: function() {}
               });
             };
-          },
-        ],
+          }
+        ]
       });
     };
     $scope.searchMember = function() {
@@ -1029,7 +1029,7 @@ app.controller('memberList', [
       $scope.memberId = row.entity.id;
       Member.loadMember({
         businessId: businessId,
-        memberId: $scope.memberId,
+        memberId: $scope.memberId
       }).$promise.then(
         function(member) {
           $scope.member = member;
@@ -1041,13 +1041,13 @@ app.controller('memberList', [
             size: 'lg',
             scope: $scope,
             templateUrl: PREFIX + 'app/member/tpl/planHistoryList.html',
-            controller: 'planHistoryList',
+            controller: 'planHistoryList'
           });
         },
         function(error) {
           $log.error(error);
           appMessenger.showError('error.generalError');
-        },
+        }
       );
     };
 
@@ -1059,7 +1059,7 @@ app.controller('memberList', [
 
     $scope.$watch('paginationOptions.itemPerPage', function(
       newValue,
-      oldValue,
+      oldValue
     ) {
       getPage();
     });
@@ -1098,7 +1098,7 @@ app.controller('memberList', [
           },
           function(error) {
             $log.error(error);
-          },
+          }
         );
       Business.members(options).$promise.then(
         function(members) {
@@ -1127,18 +1127,18 @@ app.controller('memberList', [
                 },
                 function(err) {
                   $log.error(err);
-                },
+                }
               );
             },
             function(error) {
               $log.error(error);
-            },
+            }
           );
         },
         function(error) {
           $log.error(error);
-        },
+        }
       );
     };
-  },
+  }
 ]);

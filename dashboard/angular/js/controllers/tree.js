@@ -17,70 +17,70 @@ app.controller('AbnTestController', function($scope, $timeout) {
         {
           label: 'Dog',
           data: {
-            description: "man's best friend",
-          },
+            description: "man's best friend"
+          }
         },
         {
           label: 'Cat',
           data: {
-            description: 'Felis catus',
-          },
+            description: 'Felis catus'
+          }
         },
         {
           label: 'Hippopotamus',
           data: {
-            description: 'hungry, hungry',
-          },
+            description: 'hungry, hungry'
+          }
         },
         {
           label: 'Chicken',
-          children: ['White Leghorn', 'Rhode Island Red', 'Jersey Giant'],
-        },
-      ],
+          children: ['White Leghorn', 'Rhode Island Red', 'Jersey Giant']
+        }
+      ]
     },
     {
       label: 'Vegetable',
       data: {
         definition:
           'A plant or part of a plant used as food, typically as accompaniment to meat or fish, such as a cabbage, potato, carrot, or bean.',
-        data_can_contain_anything: true,
+        data_can_contain_anything: true
       },
       onSelect: function(branch) {
         return ($scope.output = 'Vegetable: ' + branch.data.definition);
       },
       children: [
         {
-          label: 'Oranges',
+          label: 'Oranges'
         },
         {
           label: 'Apples',
           children: [
             {
               label: 'Granny Smith',
-              onSelect: apple_selected,
+              onSelect: apple_selected
             },
             {
               label: 'Red Delicous',
-              onSelect: apple_selected,
+              onSelect: apple_selected
             },
             {
               label: 'Fuji',
-              onSelect: apple_selected,
-            },
-          ],
-        },
-      ],
+              onSelect: apple_selected
+            }
+          ]
+        }
+      ]
     },
     {
       label: 'Mineral',
       children: [
         {
           label: 'Rock',
-          children: ['Igneous', 'Sedimentary', 'Metamorphic'],
+          children: ['Igneous', 'Sedimentary', 'Metamorphic']
         },
         {
           label: 'Metal',
-          children: ['Aluminum', 'Steel', 'Copper'],
+          children: ['Aluminum', 'Steel', 'Copper']
         },
         {
           label: 'Plastic',
@@ -91,8 +91,8 @@ app.controller('AbnTestController', function($scope, $timeout) {
                 'polyethylene',
                 'polypropylene',
                 'polystyrene',
-                ' polyvinyl chloride',
-              ],
+                ' polyvinyl chloride'
+              ]
             },
             {
               label: 'Thermosetting Polymer',
@@ -101,13 +101,13 @@ app.controller('AbnTestController', function($scope, $timeout) {
                 'polyurethane',
                 'vulcanized rubber',
                 'bakelite',
-                'urea-formaldehyde',
-              ],
-            },
-          ],
-        },
-      ],
-    },
+                'urea-formaldehyde'
+              ]
+            }
+          ]
+        }
+      ]
+    }
   ];
   treedata_geography = [
     {
@@ -115,35 +115,35 @@ app.controller('AbnTestController', function($scope, $timeout) {
       children: [
         {
           label: 'Canada',
-          children: ['Toronto', 'Vancouver'],
+          children: ['Toronto', 'Vancouver']
         },
         {
           label: 'USA',
-          children: ['New York', 'Los Angeles'],
+          children: ['New York', 'Los Angeles']
         },
         {
           label: 'Mexico',
-          children: ['Mexico City', 'Guadalajara'],
-        },
-      ],
+          children: ['Mexico City', 'Guadalajara']
+        }
+      ]
     },
     {
       label: 'South America',
       children: [
         {
           label: 'Venezuela',
-          children: ['Caracas', 'Maracaibo'],
+          children: ['Caracas', 'Maracaibo']
         },
         {
           label: 'Brazil',
-          children: ['Sao Paulo', 'Rio de Janeiro'],
+          children: ['Sao Paulo', 'Rio de Janeiro']
         },
         {
           label: 'Argentina',
-          children: ['Buenos Aires', 'Cordoba'],
-        },
-      ],
-    },
+          children: ['Buenos Aires', 'Cordoba']
+        }
+      ]
+    }
   ];
   $scope.my_data = treedata_avm;
   $scope.try_changing_the_tree_data = function() {
@@ -174,8 +174,8 @@ app.controller('AbnTestController', function($scope, $timeout) {
       label: 'New Branch',
       data: {
         something: 42,
-        else: 43,
-      },
+        else: 43
+      }
     });
   });
 });

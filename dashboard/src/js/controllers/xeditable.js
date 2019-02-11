@@ -21,7 +21,7 @@ app.controller('XeditableCtrl', [
       time: '12:30',
       datetime: null,
       month: null,
-      week: null,
+      week: null
     };
 
     $scope.user = {
@@ -29,20 +29,20 @@ app.controller('XeditableCtrl', [
       desc: 'Awesome user \ndescription!',
       status: 2,
       agenda: 1,
-      remember: false,
+      remember: false
     };
 
     $scope.statuses = [
       { value: 1, text: 'status1' },
       { value: 2, text: 'status2' },
-      { value: 3, text: 'status3' },
+      { value: 3, text: 'status3' }
     ];
 
     $scope.agenda = [{ value: 1, text: 'male' }, { value: 2, text: 'female' }];
 
     $scope.showStatus = function() {
       var selected = $filter('filter')($scope.statuses, {
-        value: $scope.user.status,
+        value: $scope.user.status
       });
       return $scope.user.status && selected.length
         ? selected[0].text
@@ -51,7 +51,7 @@ app.controller('XeditableCtrl', [
 
     $scope.showAgenda = function() {
       var selected = $filter('filter')($scope.agenda, {
-        value: $scope.user.agenda,
+        value: $scope.user.agenda
       });
       return $scope.user.agenda && selected.length
         ? selected[0].text
@@ -66,9 +66,9 @@ app.controller('XeditableCtrl', [
         name: 'awesome user2',
         status: undefined,
         group: 3,
-        groupName: 'vip',
+        groupName: 'vip'
       },
-      { id: 3, name: 'awesome user3', status: 2, group: null },
+      { id: 3, name: 'awesome user3', status: 2, group: null }
     ];
 
     $scope.groups = [];
@@ -120,9 +120,9 @@ app.controller('XeditableCtrl', [
         id: $scope.users.length + 1,
         name: '',
         status: null,
-        group: null,
+        group: null
       };
       $scope.users.push($scope.inserted);
     };
-  },
+  }
 ]);

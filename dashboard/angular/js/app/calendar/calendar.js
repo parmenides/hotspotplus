@@ -15,7 +15,7 @@ app.controller('FullcalendarCtrl', [
       url:
         'http://www.google.com/calendar/feeds/usa__en%40holiday.calendar.google.com/public/basic',
       className: 'gcal-event', // an option!
-      currentTimezone: 'America/Chicago', // an option!
+      currentTimezone: 'America/Chicago' // an option!
     };
 
     /* event source that contains custom events on the scope */
@@ -26,7 +26,7 @@ app.controller('FullcalendarCtrl', [
         className: ['b-l b-2x b-info'],
         location: 'New York',
         info:
-          'This a all day event that will start from 9:00 am to 9:00 pm, have fun!',
+          'This a all day event that will start from 9:00 am to 9:00 pm, have fun!'
       },
       {
         title: 'Dance class',
@@ -35,28 +35,28 @@ app.controller('FullcalendarCtrl', [
         allDay: false,
         className: ['b-l b-2x b-danger'],
         location: 'London',
-        info: 'Two days dance training class.',
+        info: 'Two days dance training class.'
       },
       {
         title: 'Game racing',
         start: new Date(y, m, 6, 16, 0),
         className: ['b-l b-2x b-info'],
         location: 'Hongkong',
-        info: 'The most big racing of this year.',
+        info: 'The most big racing of this year.'
       },
       {
         title: 'Soccer',
         start: new Date(y, m, 8, 15, 0),
         className: ['b-l b-2x b-info'],
         location: 'Rio',
-        info: 'Do not forget to watch.',
+        info: 'Do not forget to watch.'
       },
       {
         title: 'Family',
         start: new Date(y, m, 9, 19, 30),
         end: new Date(y, m, 9, 20, 30),
         className: ['b-l b-2x b-success'],
-        info: 'Family party',
+        info: 'Family party'
       },
       {
         title: 'Long Event',
@@ -64,14 +64,14 @@ app.controller('FullcalendarCtrl', [
         end: new Date(y, m, d - 2),
         className: ['bg-success bg'],
         location: 'HD City',
-        info: 'It is a long long event',
+        info: 'It is a long long event'
       },
       {
         title: 'Play game',
         start: new Date(y, m, d - 1, 16, 0),
         className: ['b-l b-2x b-info'],
         location: 'Tokyo',
-        info: 'Tokyo Game Racing',
+        info: 'Tokyo Game Racing'
       },
       {
         title: 'Birthday Party',
@@ -80,7 +80,7 @@ app.controller('FullcalendarCtrl', [
         allDay: false,
         className: ['b-l b-2x b-primary'],
         location: 'New York',
-        info: 'Party all day',
+        info: 'Party all day'
       },
       {
         title: 'Repeating Event',
@@ -88,20 +88,20 @@ app.controller('FullcalendarCtrl', [
         alDay: false,
         className: ['b-l b-2x b-warning'],
         location: 'Home Town',
-        info: 'Repeat every day',
+        info: 'Repeat every day'
       },
       {
         title: 'Click for Google',
         start: new Date(y, m, 28),
         end: new Date(y, m, 29),
         url: 'http://google.com/',
-        className: ['b-l b-2x b-primary'],
+        className: ['b-l b-2x b-primary']
       },
       {
         title: 'Feed cat',
         start: new Date(y, m + 1, 6, 18, 0),
-        className: ['b-l b-2x b-info'],
-      },
+        className: ['b-l b-2x b-info']
+      }
     ];
 
     /* alert on dayClick */
@@ -113,7 +113,7 @@ app.controller('FullcalendarCtrl', [
         $scope.events.push({
           title: 'New Event',
           start: date,
-          className: ['b-l b-2x b-info'],
+          className: ['b-l b-2x b-info']
         });
       }
       $scope.lastClickTime = time;
@@ -129,7 +129,7 @@ app.controller('FullcalendarCtrl', [
       revertFunc,
       jsEvent,
       ui,
-      view,
+      view
     ) {
       $scope.alertMessage = 'Event Resized to make dayDelta ' + delta;
     };
@@ -179,13 +179,13 @@ app.controller('FullcalendarCtrl', [
         header: {
           left: 'prev',
           center: 'title',
-          right: 'next',
+          right: 'next'
         },
         dayClick: $scope.alertOnEventClick,
         eventDrop: $scope.alertOnDrop,
         eventResize: $scope.alertOnResize,
-        eventMouseover: $scope.alertOnMouseOver,
-      },
+        eventMouseover: $scope.alertOnMouseOver
+      }
     };
 
     /* add custom event*/
@@ -193,7 +193,7 @@ app.controller('FullcalendarCtrl', [
       $scope.events.push({
         title: 'New Event',
         start: new Date(y, m, d),
-        className: ['b-l b-2x b-info'],
+        className: ['b-l b-2x b-info']
       });
     };
 
@@ -213,6 +213,6 @@ app.controller('FullcalendarCtrl', [
 
     /* event sources array*/
     $scope.eventSources = [$scope.events];
-  },
+  }
 ]);
 /* EOF */

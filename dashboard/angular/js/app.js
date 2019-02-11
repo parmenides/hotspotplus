@@ -22,6 +22,6 @@ angular.module('app', [
   'angularFileUpload',
   'ngRaven',
   'ngRoute',
-  'ngFileSaver',
+  'ngFileSaver'
 ]);
 /*persian date picker doc : https://github.com/AminRahimi/angular-bootstrap-persian-datepicker/tree/gh-pages*/

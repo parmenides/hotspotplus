@@ -10,7 +10,14 @@ angular.module('app').controller('AppCtrl', [
   'Session',
   '$state',
   function(
-    $scope, $translate, $localStorage, $window, $rootScope, Session, $state) {
+    $scope,
+    $translate,
+    $localStorage,
+    $window,
+    $rootScope,
+    Session,
+    $state
+  ) {
     // add 'ie' classes to html
     var isIE = !!navigator.userAgent.match(/MSIE/i);
     if (isIE) {
@@ -31,8 +38,8 @@ angular.module('app').controller('AppCtrl', [
 			 } );*/
     // config
     $scope.app = {
-      name: Window.appTitle || "Hsp",
-      domain: Window.appDomain || "Hsp",
+      name: Window.appTitle || 'Hsp',
+      domain: Window.appDomain || 'Hsp',
       version: Window.systemConfig.version || '-',
       // for chart colors
       color: {
@@ -43,7 +50,7 @@ angular.module('app').controller('AppCtrl', [
         danger: '#f05050',
         light: '#e8eff0',
         dark: '#3a3f51',
-        black: '#1c2b36',
+        black: '#1c2b36'
       },
       settings: {
         themeID: 1,
@@ -54,8 +61,8 @@ angular.module('app').controller('AppCtrl', [
         asideFixed: false,
         asideFolded: false,
         asideDock: false,
-        container: false,
-      },
+        container: false
+      }
     };
 
     // save settings to local storage
@@ -87,7 +94,7 @@ angular.module('app').controller('AppCtrl', [
       en: 'English',
       de_DE: 'German',
       it_IT: 'Italian',
-      fa_IR: 'Persian',
+      fa_IR: 'Persian'
     };
     $scope.selectLang =
       $scope.langs[$translate.proposedLanguage()] || 'Persian';
@@ -125,5 +132,5 @@ angular.module('app').controller('AppCtrl', [
       $state.go('access.signIn');
       return;
     }
-  },
+  }
 ]);

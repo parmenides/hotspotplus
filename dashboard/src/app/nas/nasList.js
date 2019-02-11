@@ -29,14 +29,14 @@ app.controller('nasList', [
     $uibModal,
     PREFIX,
     Session,
-    appMessenger,
+    appMessenger
   ) {
     var businessId = Session.business.id;
 
     $scope.paginationOptions = {
       pageNumber: 1,
       itemPerPage: 10,
-      sort: null,
+      sort: null
     };
     $scope.gridOptions = {
       enableSorting: true,
@@ -56,7 +56,7 @@ app.controller('nasList', [
           enableColumnMenu: false,
           headerCellFilter: 'translate',
           cellTemplate:
-            '<a class="btn btn-link" ng-click="grid.appScope.editNas(row)">{{row.entity.title}}</a>',
+            '<a class="btn btn-link" ng-click="grid.appScope.editNas(row)">{{row.entity.title}}</a>'
         },
         {
           displayName: 'nas.type',
@@ -65,7 +65,7 @@ app.controller('nasList', [
           enableSorting: false,
           enableColumnMenu: false,
           headerCellFilter: 'translate',
-          cellFilter: 'translate',
+          cellFilter: 'translate'
         },
         {
           displayName: 'ip.address',
@@ -73,7 +73,7 @@ app.controller('nasList', [
           enableHiding: false,
           enableSorting: false,
           enableColumnMenu: false,
-          headerCellFilter: 'translate',
+          headerCellFilter: 'translate'
         },
         {
           displayName: 'nas.downloadHotspotTemplate',
@@ -86,7 +86,7 @@ app.controller('nasList', [
           headerCellClass: 'headerCenter',
           headerCellFilter: 'translate',
           cellTemplate:
-            '<a class="btn btn-warning btn-block" ng-click="grid.appScope.downloadScript(row)" ><i class="fa fa-fw fa-download"></i></a>',
+            '<a class="btn btn-warning btn-block" ng-click="grid.appScope.downloadScript(row)" ><i class="fa fa-fw fa-download"></i></a>'
         },
         {
           displayName: 'general.edit',
@@ -99,7 +99,7 @@ app.controller('nasList', [
           headerCellClass: 'headerCenter',
           headerCellFilter: 'translate',
           cellTemplate:
-            "<a  class='btn btn-link btn-block' ng-click='grid.appScope.editNas(row)' ><i class='fa fa-fw fa-pencil'></i></a>",
+            "<a  class='btn btn-link btn-block' ng-click='grid.appScope.editNas(row)' ><i class='fa fa-fw fa-pencil'></i></a>"
         },
         {
           displayName: 'general.remove',
@@ -112,8 +112,8 @@ app.controller('nasList', [
           headerCellClass: 'headerCenter',
           headerCellFilter: 'translate',
           cellTemplate:
-            '<a class="btn btn-link btn-block" ng-click="grid.appScope.removeNas(row)" ><i class="fa fa-fw fa-trash"></i></a>',
-        },
+            '<a class="btn btn-link btn-block" ng-click="grid.appScope.removeNas(row)" ><i class="fa fa-fw fa-trash"></i></a>'
+        }
       ],
       onRegisterApi: function(gridApi) {
         $scope.gridApi = gridApi;
@@ -128,7 +128,7 @@ app.controller('nasList', [
           }
           getPage();
         });
-      },
+      }
     };
 
     $scope.removeNas = function(row) {
@@ -148,10 +148,10 @@ app.controller('nasList', [
               },
               function(err) {
                 appMessenger.showError('nas.removeUnSuccessFull');
-              },
+              }
             );
         },
-        NoCallback: function() {},
+        NoCallback: function() {}
       });
     };
 
@@ -169,12 +169,12 @@ app.controller('nasList', [
             $scope.options = {
               title: 'nas.addNas',
               cancelBtnLabel: 'general.cancel',
-              saveBtnLabel: 'general.save',
+              saveBtnLabel: 'general.save'
             };
             $scope.nas = {
               port: '3799',
               sessionStatus: 'singleSession',
-              accessPointType: 'mikrotik',
+              accessPointType: 'mikrotik'
             };
             $scope.cancel = function() {
               $uibModalInstance.close();
@@ -204,12 +204,12 @@ app.controller('nasList', [
                     },
                     function(error) {
                       appMessenger.showError('nas.createUnSuccessFull');
-                    },
+                    }
                   );
               }
             };
-          },
-        ],
+          }
+        ]
       });
     };
 
@@ -232,7 +232,7 @@ app.controller('nasList', [
           },
           function(error) {
             $log.error(error);
-          },
+          }
         );
       } else {
         appMessenger.showError('nas.eapRouterDoesNotHaveScript');
@@ -251,7 +251,7 @@ app.controller('nasList', [
         },
         function(error) {
           $log.error(error);
-        },
+        }
       );
     };
 
@@ -272,7 +272,7 @@ app.controller('nasList', [
                 $scope.options = {
                   title: 'nas.editNas',
                   cancelBtnLabel: 'general.cancel',
-                  saveBtnLabel: 'general.save',
+                  saveBtnLabel: 'general.save'
                 };
                 var nasId = row.entity.id;
                 nas.sessionStatus = nas.sessionStatus || 'singleSession';
@@ -289,9 +289,9 @@ app.controller('nasList', [
                       .updateById(
                         {
                           id: businessId,
-                          fk: nasId,
+                          fk: nasId
                         },
-                        $scope.nas,
+                        $scope.nas
                       )
                       .$promise.then(
                         function(res) {
@@ -300,17 +300,17 @@ app.controller('nasList', [
                         },
                         function(err) {
                           appMessenger.showError('nas.updateUnSuccessFull');
-                        },
+                        }
                       );
                   }
                 };
-              },
-            ],
+              }
+            ]
           });
         },
         function(error) {
           $log.error(error);
-        },
+        }
       );
     };
 
@@ -328,7 +328,7 @@ app.controller('nasList', [
           ) {
             appMessenger.showError('nas.nasListEmpty');
           }
-        },
+        }
       );
     };
 
@@ -357,7 +357,7 @@ app.controller('nasList', [
 
     $scope.$watch('paginationOptions.itemPerPage', function(
       oldValue,
-      newValue,
+      newValue
     ) {
       getPage();
     });
@@ -402,7 +402,7 @@ app.controller('nasList', [
         },
         function(error) {
           $log.error(error);
-        },
+        }
       );
       Business.nas(options).$promise.then(
         function(nases) {
@@ -410,8 +410,8 @@ app.controller('nasList', [
         },
         function(error) {
           $log.error(error);
-        },
+        }
       );
     };
-  },
+  }
 ]);

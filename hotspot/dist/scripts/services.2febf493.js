@@ -11,7 +11,7 @@ angular
         toaster.pop(
           'success',
           translateFilter(title),
-          translateFilter(message),
+          translateFilter(message)
         );
       };
 
@@ -29,7 +29,7 @@ angular
         toaster.pop(
           'warning',
           translateFilter(title),
-          translateFilter(message),
+          translateFilter(message)
         );
       };
 
@@ -46,7 +46,7 @@ angular
         }
         toaster.pop('wait', translateFilter(title), translateFilter(message));
       };
-    },
+    }
   ])
   .service('loadingModal', [
     '$log',
@@ -66,14 +66,14 @@ angular
             '$uibModalInstance',
             function($scope, $uibModalInstance) {
               _this.modalInstance = $uibModalInstance;
-            },
-          ],
+            }
+          ]
         });
       };
       this.hide = function() {
         _this.modalInstance && _this.modalInstance.close();
       };
-    },
+    }
   ])
   .service('numberService', [
     '$log',
@@ -83,7 +83,7 @@ angular
           return '0' + clock;
         } else return clock;
       };
-    },
+    }
   ])
   .service('usernameService', [
     '$log',
@@ -97,7 +97,7 @@ angular
         }
         return username.concat('@', businessId);
       };
-    },
+    }
   ])
   .service('nationalCode', [
     '$log',
@@ -132,7 +132,7 @@ angular
           return false;
         }
       };
-    },
+    }
   ])
   .service('birthday', [
     '$log',
@@ -160,7 +160,7 @@ angular
           return null;
         }
       };
-    },
+    }
   ])
   .directive('ngFormCommit', [
     function() {
@@ -170,7 +170,7 @@ angular
           $form.commit = function() {
             $el[0].submit();
           };
-        },
+        }
       };
-    },
+    }
   ]);

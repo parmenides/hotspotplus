@@ -15,7 +15,7 @@ app.controller('ContactCtrl', [
       { name: 'Family' },
       { name: 'Friends' },
       { name: 'Partners' },
-      { name: 'Group' },
+      { name: 'Group' }
     ];
 
     $scope.createGroup = function() {
@@ -70,7 +70,7 @@ app.controller('ContactCtrl', [
     $scope.createItem = function() {
       var item = {
         group: 'Friends',
-        avatar: 'img/a0.jpg',
+        avatar: 'img/a0.jpg'
       };
       $scope.items.push(item);
       $scope.selectItem(item);
@@ -86,5 +86,5 @@ app.controller('ContactCtrl', [
     $scope.doneEditing = function(item) {
       item.editing = false;
     };
-  },
+  }
 ]);

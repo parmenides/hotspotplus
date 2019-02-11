@@ -33,7 +33,7 @@ angular
             !JQ_CONFIG[tAttrs.uiJq]
           ) {
             throw new Error(
-              'ui-jq: The "' + tAttrs.uiJq + '" function does not exist',
+              'ui-jq: The "' + tAttrs.uiJq + '" function does not exist'
             );
           }
           var options = uiJqConfig && uiJqConfig[tAttrs.uiJq];
@@ -71,7 +71,7 @@ angular
                   elm[attrs.uiJq].apply(elm, getOptions());
                 },
                 0,
-                false,
+                false
               );
             }
 
@@ -98,7 +98,7 @@ angular
               refresh();
             }
           };
-        },
+        }
       };
-    },
+    }
   ]);

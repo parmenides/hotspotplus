@@ -31,7 +31,7 @@ app.controller('businessSettings', [
     englishNumberFilter,
     translateNumberFilter,
     Nas,
-    AclService,
+    AclService
   ) {
     if (Session.business == null) {
       return;
@@ -49,7 +49,7 @@ app.controller('businessSettings', [
       },
       function(error) {
         appMessenger.showError('error.generalError');
-      },
+      }
     );
 
     // load the business from the session
@@ -62,7 +62,7 @@ app.controller('businessSettings', [
       },
       function(err) {
         appMessenger.showError('business.settingsLoadUnSuccessful');
-      },
+      }
     );
 
     // load charges
@@ -71,7 +71,7 @@ app.controller('businessSettings', [
       businessId: businessId,
       startDate: startDate,
       skip: 0,
-      limit: 1000,
+      limit: 1000
     }).$promise.then(
       function(res) {
         $scope.activities = [];
@@ -95,7 +95,7 @@ app.controller('businessSettings', [
       function(error) {
         appMessenger.showError('business.chargeLoadUnSuccessful');
         return error;
-      },
+      }
     );
 
     Business.getBalance({ businessId: businessId }).$promise.then(
@@ -105,7 +105,7 @@ app.controller('businessSettings', [
       function(error) {
         appMessenger.showError('business.balanceLoadUnSuccessful');
         return error;
-      },
+      }
     );
 
     // get time zones from json
@@ -115,7 +115,7 @@ app.controller('businessSettings', [
 
     $scope.$watch('business.autoAssignInternetPlan', function(
       newValue,
-      oldValue,
+      oldValue
     ) {
       if (
         newValue == true &&
@@ -139,14 +139,14 @@ app.controller('businessSettings', [
       }
       Business.prototype$updateAttributes(
         { id: businessId },
-        $scope.business,
+        $scope.business
       ).$promise.then(
         function(res) {
           appMessenger.showSuccess('business.settingsUpdateSuccessful');
         },
         function(err) {
           appMessenger.showError('business.settingsUpdateUnSuccessful');
-        },
+        }
       );
     };
 
@@ -164,22 +164,22 @@ app.controller('businessSettings', [
             function(result) {
               Business.prototype$updateAttributes(
                 { id: businessId },
-                { password: password },
+                { password: password }
               ).$promise.then(
                 function(res) {
                   appMessenger.showSuccess('general.passwordChangeSuccessful');
                 },
                 function(err) {
                   appMessenger.showError('general.passwordChangeUnSuccessful');
-                },
+                }
               );
             },
             function(errorResult) {
               $log.error(errorResult);
               appMessenger.showError('general.invalidPassword');
-            },
+            }
           );
-        },
+        }
       });
     };
 
@@ -194,7 +194,7 @@ app.controller('businessSettings', [
         chargedBy: 'business',
         businessId: businessId,
         saveCallback: function() {},
-        cancelCallback: function() {},
+        cancelCallback: function() {}
       });
     };
 
@@ -209,8 +209,8 @@ app.controller('businessSettings', [
         },
         function(error) {
           appMessenger.showError('business.dropboxConnectionFailed');
-        },
+        }
       );
     };
-  },
+  }
 ]);

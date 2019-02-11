@@ -31,12 +31,12 @@ app.controller('resellerList', [
     appMessenger,
     $uibModal,
     PREFIX,
-    englishNumberFilter,
+    englishNumberFilter
   ) {
     $scope.paginationOptions = {
       pageNumber: 1,
       itemPerPage: 10,
-      sort: null,
+      sort: null
     };
 
     $scope.gridOptions = {
@@ -59,7 +59,7 @@ app.controller('resellerList', [
           enableColumnMenu: false,
           headerCellFilter: 'translate',
           cellTemplate:
-            '<a class="btn btn-link" ng-click="grid.appScope.addOrEditReseller(row)">{{row.entity.title}}</a>',
+            '<a class="btn btn-link" ng-click="grid.appScope.addOrEditReseller(row)">{{row.entity.title}}</a>'
         },
         {
           displayName: 'general.mobile',
@@ -69,7 +69,7 @@ app.controller('resellerList', [
           enableColumnMenu: false,
           headerCellFilter: 'translate',
           cellTemplate:
-            '<div class="ui-grid-cell-contents"><span ng-if="row.entity.mobile">{{row.entity.mobile | translateNumber }}</span><span ng-if="!row.entity.mobile">-</span></div>',
+            '<div class="ui-grid-cell-contents"><span ng-if="row.entity.mobile">{{row.entity.mobile | translateNumber }}</span><span ng-if="!row.entity.mobile">-</span></div>'
         },
         {
           displayName: 'reseller.owner',
@@ -77,7 +77,7 @@ app.controller('resellerList', [
           enableHiding: false,
           enableSorting: false,
           enableColumnMenu: false,
-          headerCellFilter: 'translate',
+          headerCellFilter: 'translate'
         },
         {
           displayName: 'general.city',
@@ -85,7 +85,7 @@ app.controller('resellerList', [
           enableSorting: false,
           enableColumnMenu: false,
           field: 'city',
-          headerCellFilter: 'translate',
+          headerCellFilter: 'translate'
         },
         {
           displayName: 'reseller.creationDate',
@@ -97,7 +97,7 @@ app.controller('resellerList', [
           field: 'subscriptionDate',
           headerCellFilter: 'translate',
           cellTemplate:
-            '<div class="ui-grid-cell-contents">{{row.entity.creationDate |  persianDate : "fullDate" | translateNumber }}{{"general.,"| translate}}&nbsp;{{"general.hour"| translate}}:&nbsp;{{row.entity.creationDate |  date : "HH:mm" | translateNumber }}</div>',
+            '<div class="ui-grid-cell-contents">{{row.entity.creationDate |  persianDate : "fullDate" | translateNumber }}{{"general.,"| translate}}&nbsp;{{"general.hour"| translate}}:&nbsp;{{row.entity.creationDate |  date : "HH:mm" | translateNumber }}</div>'
         },
         {
           displayName: 'general.invoices',
@@ -110,7 +110,7 @@ app.controller('resellerList', [
           headerCellFilter: 'translate',
           cellClass: 'center',
           cellTemplate:
-            '<a class="btn btn-link" ng-click="grid.appScope.showInvoices(row)" ><i class="fa fa-fw fa-binoculars"></i></a>',
+            '<a class="btn btn-link" ng-click="grid.appScope.showInvoices(row)" ><i class="fa fa-fw fa-binoculars"></i></a>'
         },
         {
           displayName: 'reseller.active',
@@ -125,7 +125,7 @@ app.controller('resellerList', [
           headerCellClass: 'headerCenter',
           cellTemplate:
             '<a class="btn btn-link" ng-click="grid.appScope.activateReseller(row)"><i class="fa fa-circle-o" ng-if="!row.entity.active"></i>' +
-            '<i class="fa fa-dot-circle-o text-info" ng-if="row.entity.active"></i></a>',
+            '<i class="fa fa-dot-circle-o text-info" ng-if="row.entity.active"></i></a>'
         },
         {
           displayName: 'general.remove',
@@ -138,8 +138,8 @@ app.controller('resellerList', [
           headerCellFilter: 'translate',
           cellClass: 'center',
           cellTemplate:
-            '<a class="btn btn-link" ng-click="grid.appScope.deleteReseller(row)" ><i class="fa fa-fw fa-trash"></i></a>',
-        },
+            '<a class="btn btn-link" ng-click="grid.appScope.deleteReseller(row)" ><i class="fa fa-fw fa-trash"></i></a>'
+        }
       ],
       onRegisterApi: function(gridApi) {
         $scope.gridApi = gridApi;
@@ -154,7 +154,7 @@ app.controller('resellerList', [
           }
           getPage();
         });
-      },
+      }
     };
 
     $scope.addOrEditReseller = function(row) {
@@ -164,13 +164,13 @@ app.controller('resellerList', [
           function(res) {
             $scope.openResellerForm(res, {
               title: 'reseller.editReseller',
-              newReseller: false,
+              newReseller: false
             });
           },
           function(error) {
             $log.error(error);
             appMessenger.showError('error.generalError');
-          },
+          }
         );
       } else {
         $scope.openResellerForm(
@@ -179,12 +179,12 @@ app.controller('resellerList', [
             subscriptionDate: new Date(),
             durationInMonths: 1,
             allowedOnlineUsers: 10,
-            planType: 'static',
+            planType: 'static'
           },
           {
             title: 'reseller.addReseller',
-            newReseller: true,
-          },
+            newReseller: true
+          }
         );
       }
     };
@@ -203,16 +203,16 @@ app.controller('resellerList', [
           function($scope, $uibModalInstance) {
             $scope.reseller = reseller;
             $scope.reseller.allowedOnlineUsers = translateNumberFilter(
-              $scope.reseller.allowedOnlineUsers,
+              $scope.reseller.allowedOnlineUsers
             );
             if ($scope.reseller.durationInMonths) {
               $scope.reseller.durationInMonths = translateNumberFilter(
-                $scope.reseller.durationInMonths,
+                $scope.reseller.durationInMonths
               );
             }
             if ($scope.reseller.mobile) {
               $scope.reseller.mobile = translateNumberFilter(
-                $scope.reseller.mobile,
+                $scope.reseller.mobile
               );
             }
             $scope.options = options;
@@ -221,13 +221,13 @@ app.controller('resellerList', [
             // Persian date picker methods
             $scope.dateOptions = {
               formatYear: 'yy',
-              startingDay: 6,
+              startingDay: 6
             };
             $scope.dateFormats = [
               'dd-MMMM-yyyy',
               'yyyy/MM/dd',
               'dd.MM.yyyy',
-              'shortDate',
+              'shortDate'
             ];
             $scope.dateFormat = $scope.dateFormats[0];
             $scope.disabled = function(date, mode) {
@@ -243,16 +243,16 @@ app.controller('resellerList', [
             };
             $scope.save = function(error) {
               $scope.reseller.subscriptionDate = new Date(
-                $scope.reseller.subscriptionDate,
+                $scope.reseller.subscriptionDate
               ).getTime();
               $scope.reseller.allowedOnlineUsers = englishNumberFilter(
-                $scope.reseller.allowedOnlineUsers,
+                $scope.reseller.allowedOnlineUsers
               );
               $scope.reseller.durationInMonths = englishNumberFilter(
-                $scope.reseller.durationInMonths,
+                $scope.reseller.durationInMonths
               );
               $scope.reseller.mobile = englishNumberFilter(
-                $scope.reseller.mobile,
+                $scope.reseller.mobile
               );
               var validationError = false;
               if (
@@ -284,12 +284,12 @@ app.controller('resellerList', [
                       } else {
                         appMessenger.showError('error.generalError');
                       }
-                    },
+                    }
                   );
                 } else {
                   Reseller.prototype$updateAttributes(
                     { id: $scope.reseller.id },
-                    $scope.reseller,
+                    $scope.reseller
                   ).$promise.then(
                     function(res) {
                       appMessenger.showSuccess('reseller.updateSuccessFull');
@@ -302,15 +302,15 @@ app.controller('resellerList', [
                       } else {
                         appMessenger.showError('error.generalError');
                       }
-                    },
+                    }
                   );
                 }
               } else if (error) {
                 appMessenger.showError('general.allFieldsRequired');
               }
             };
-          },
-        ],
+          }
+        ]
       });
     };
 
@@ -331,7 +331,7 @@ app.controller('resellerList', [
                 title: 'general.warning',
                 message: 'general.areYouSure',
                 noBtnLabel: 'general.no',
-                yesBtnLabel: 'general.yes',
+                yesBtnLabel: 'general.yes'
               };
               $scope.no = function() {
                 $uibModalInstance.close();
@@ -341,25 +341,25 @@ app.controller('resellerList', [
                 active = !active;
                 Reseller.prototype$updateAttributes(
                   {
-                    id: resellerId,
+                    id: resellerId
                   },
                   { active: active },
                   function(res) {
                     appMessenger.showSuccess(
-                      'reseller.changeStatusSuccessFull',
+                      'reseller.changeStatusSuccessFull'
                     );
                     getPage();
                   },
                   function(err) {
                     appMessenger.showError(
-                      'reseller.changeStatusUnSuccessFull',
+                      'reseller.changeStatusUnSuccessFull'
                     );
-                  },
+                  }
                 );
                 $uibModalInstance.close();
               };
-            },
-          ],
+            }
+          ]
         });
       });
     };
@@ -379,10 +379,10 @@ app.controller('resellerList', [
             },
             function(err) {
               appMessenger.showError(err);
-            },
+            }
           );
         },
-        NoCallback: function() {},
+        NoCallback: function() {}
       });
     };
 
@@ -408,24 +408,24 @@ app.controller('resellerList', [
                 $scope.options = {
                   title: 'general.invoices',
                   okBtnLabel: 'general.ok',
-                  invoices: invoices,
+                  invoices: invoices
                 };
                 $scope.ok = function() {
                   $uibModalInstance.close();
                 };
-              },
-            ],
+              }
+            ]
           });
         },
         function(error) {
           $log.error(error);
-        },
+        }
       );
     };
 
     $scope.$watch('paginationOptions.itemPerPage', function(
       oldValue,
-      newValue,
+      newValue
     ) {
       getPage();
     });
@@ -457,7 +457,7 @@ app.controller('resellerList', [
         },
         function(error) {
           $log.error(error);
-        },
+        }
       );
       Reseller.find(options).$promise.then(
         function(resellers) {
@@ -465,8 +465,8 @@ app.controller('resellerList', [
         },
         function(error) {
           $log.error(error);
-        },
+        }
       );
     };
-  },
+  }
 ]);

@@ -9,7 +9,7 @@ app
       var authorize = function(
         loginRequired,
         requiredPermissions,
-        permissionCheckType,
+        permissionCheckType
       ) {
         var result = 'authorized',
           user =
@@ -68,9 +68,9 @@ app
       };
 
       return {
-        authorize: authorize,
+        authorize: authorize
       };
-    },
+    }
   ])
   .factory('Session', [
     'Business',
@@ -83,7 +83,7 @@ app
         'user',
         'userType',
         'reseller',
-        'member',
+        'member'
       ];
 
       function Session() {
@@ -158,7 +158,7 @@ app
         }
         Raven.setUserContext({
           id: theUser.id,
-          email: theUser.username + '@hotspotplus.ir',
+          email: theUser.username + '@hotspotplus.ir'
         });
         this.save();
       };
@@ -206,5 +206,5 @@ app
       }
 
       return new Session();
-    },
+    }
   ]);

@@ -36,7 +36,7 @@ angular.module('app').directive('uiShift', [
             });
           }
         });
-      },
+      }
     };
-  },
+  }
 ]);

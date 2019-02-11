@@ -15,12 +15,12 @@ app.controller('customerList', [
     translateFilter,
     Customer,
     uiGridConstants,
-    genericService,
+    genericService
   ) {
     $scope.paginationOptions = {
       pageNumber: 1,
       itemPerPage: 10,
-      sort: null,
+      sort: null
     };
     $scope.gridOptions = {
       enableSorting: true,
@@ -38,7 +38,7 @@ app.controller('customerList', [
           enableHiding: false,
           enableSorting: false,
           enableColumnMenu: false,
-          headerCellFilter: 'translate',
+          headerCellFilter: 'translate'
         },
         {
           displayName: 'general.mobile',
@@ -46,7 +46,7 @@ app.controller('customerList', [
           enableHiding: false,
           enableSorting: false,
           enableColumnMenu: false,
-          headerCellFilter: 'translate',
+          headerCellFilter: 'translate'
         },
         {
           displayName: 'general.email',
@@ -54,7 +54,7 @@ app.controller('customerList', [
           enableHiding: false,
           enableSorting: false,
           enableColumnMenu: false,
-          headerCellFilter: 'translate',
+          headerCellFilter: 'translate'
         },
         {
           displayName: 'general.remove',
@@ -65,8 +65,8 @@ app.controller('customerList', [
           enableColumnMenu: false,
           headerCellFilter: 'translate',
           cellTemplate:
-            '<a class="btn btn-link" style="color: #f05050;" ng-click="grid.appScope.deleteCustomer(row)" ><i class="fa fa-fw fa-trash"></i></a>',
-        },
+            '<a class="btn btn-link" style="color: #f05050;" ng-click="grid.appScope.deleteCustomer(row)" ><i class="fa fa-fw fa-trash"></i></a>'
+        }
       ],
       onRegisterApi: function(gridApi) {
         $scope.gridApi = gridApi;
@@ -81,7 +81,7 @@ app.controller('customerList', [
           }
           getPage();
         });
-      },
+      }
     };
 
     $scope.deleteCustomer = function(row) {
@@ -105,19 +105,19 @@ app.controller('customerList', [
                 },
                 function(err) {
                   $log.error('Customer not deleted:', err);
-                },
+                }
               );
             },
-            function(error) {},
+            function(error) {}
           );
         },
-        NoCallback: function() {},
+        NoCallback: function() {}
       });
     };
 
     $scope.$watch('paginationOptions.itemPerPage', function(
       oldValue,
-      newValue,
+      newValue
     ) {
       getPage();
     });
@@ -149,7 +149,7 @@ app.controller('customerList', [
         },
         function(error) {
           $log.error(error);
-        },
+        }
       );
       Customer.find(options).$promise.then(
         function(customers) {
@@ -157,8 +157,8 @@ app.controller('customerList', [
         },
         function(error) {
           $log.error(error);
-        },
+        }
       );
     };
-  },
+  }
 ]);

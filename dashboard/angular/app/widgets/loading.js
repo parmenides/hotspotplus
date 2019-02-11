@@ -13,6 +13,6 @@ app.directive('loading', function() {
       "{'fa-circle-o-notch fa-spin':loading," +
       "'fa-check':!loading}" +
       '"class="fa fa-fw fa-lg"></i><span class="sr-only"></span>',
-    link: function(scope, element, attr) {},
+    link: function(scope, element, attr) {}
   };
 });

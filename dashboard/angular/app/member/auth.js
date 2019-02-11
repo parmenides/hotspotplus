@@ -25,7 +25,7 @@ app.controller('MemberSignInController', [
     Session,
     LoopBackAuth,
     roleService,
-    errorMessenger,
+    errorMessenger
   ) {
     $scope.credential = {};
     $scope.authError = null;
@@ -52,7 +52,7 @@ app.controller('MemberSignInController', [
       } else if (businessName && businessName != '') {
         var options = {
           businessUrl: businessName,
-          username: $scope.credential.username,
+          username: $scope.credential.username
         };
         Member.getBusinessId(options).$promise.then(
           function(username) {
@@ -62,7 +62,7 @@ app.controller('MemberSignInController', [
           },
           function() {
             appMessenger.showError('business.settingsLoadUnSuccessful');
-          },
+          }
         );
       }
     };
@@ -83,12 +83,12 @@ app.controller('MemberSignInController', [
             },
             function() {
               appMessenger.showError('auth.loadingRoleFailed');
-            },
+            }
           );
         },
         function() {
           appMessenger.showError('user.invalidLogin');
-        },
+        }
       );
     };
     $scope.signOut = function() {
@@ -101,8 +101,8 @@ app.controller('MemberSignInController', [
         function(error) {
           Session.clearSession();
           appMessenger.showError('auth.logoutFailed');
-        },
+        }
       );
     };
-  },
+  }
 ]);

@@ -6,12 +6,12 @@ angular
   .constant('MODULE_CONFIG', [
     {
       name: 'hotspotplus.tpls.alpha',
-      files: ['controllers/alpha.templates.js', 'controllers/base.js'],
+      files: ['controllers/alpha.templates.js', 'controllers/base.js']
     },
     {
       name: 'hotspotplus.tpls.loyalty',
-      files: ['controllers/loyalty.templates.js', 'controllers/loyalty.js'],
-    },
+      files: ['controllers/loyalty.templates.js', 'controllers/loyalty.js']
+    }
   ])
   // oclazyload config
   .config([
@@ -22,7 +22,7 @@ angular
       $ocLazyLoadProvider.config({
         debug: false,
         events: true,
-        modules: MODULE_CONFIG,
+        modules: MODULE_CONFIG
       });
-    },
+    }
   ]);

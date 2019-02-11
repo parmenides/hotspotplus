@@ -7,7 +7,7 @@ app.directive('remainBulk', [
   function(PREFIX, $log) {
     return {
       scope: {
-        params: '=options',
+        params: '=options'
       },
 
       controller: function($scope) {
@@ -48,7 +48,7 @@ app.directive('remainBulk', [
                 case 'MB':
                   extraBulk = $scope.params.extraBulk * 1024;
                   remainBulk = ($scope.params.remainBulk.value / 1024).toFixed(
-                    0,
+                    0
                   );
                   break;
                 case 'GB':
@@ -60,11 +60,11 @@ app.directive('remainBulk', [
               $scope.params.remainBulk.type = 'GB';
               $scope.params.remainBulk.value = remainBulk;
               $scope.percent = Math.round(
-                ($scope.params.remainBulk.value / originalBulk) * 100,
+                ($scope.params.remainBulk.value / originalBulk) * 100
               );
             } else {
               $scope.percent = Math.round(
-                ($scope.params.remainBulk.value / $scope.params.bulk) * 100,
+                ($scope.params.remainBulk.value / $scope.params.bulk) * 100
               );
             }
           }
@@ -76,11 +76,11 @@ app.directive('remainBulk', [
             scaleColor: false,
             size: 115,
             rotate: 0,
-            lineCap: 'butt',
+            lineCap: 'butt'
           };
         }
       },
-      templateUrl: PREFIX + 'app/widgets/remainBulk/tpl/remainBulk.html',
+      templateUrl: PREFIX + 'app/widgets/remainBulk/tpl/remainBulk.html'
     };
-  },
+  }
 ]);

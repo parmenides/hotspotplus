@@ -15,7 +15,7 @@ app.controller('SignupFormController', [
         .post('api/signup', {
           name: $scope.user.name,
           email: $scope.user.email,
-          password: $scope.user.password,
+          password: $scope.user.password
         })
         .then(
           function(response) {
@@ -27,8 +27,8 @@ app.controller('SignupFormController', [
           },
           function(x) {
             $scope.authError = 'Server Error';
-          },
+          }
         );
     };
-  },
+  }
 ]);
