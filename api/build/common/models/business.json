@@ -128,11 +128,6 @@
       "model": "Ip",
       "foreignKey": ""
     },
-    "files": {
-      "type": "hasMany",
-      "model": "File",
-      "foreignKey": ""
-    },
     "tickets": {
       "type": "hasMany",
       "model": "Ticket",
@@ -146,6 +141,16 @@
     "resellers": {
       "type": "hasOne",
       "model": "Reseller",
+      "foreignKey": ""
+    },
+    "reports": {
+      "type": "hasMany",
+      "model": "Report",
+      "foreignKey": ""
+    },
+    "fileStorages": {
+      "type": "hasMany",
+      "model": "FileStorage",
       "foreignKey": ""
     }
   },
@@ -326,6 +331,13 @@
       "principalId": "networkadmin",
       "permission": "ALLOW",
       "property": "destroyMembersById"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "networkadmin",
+      "permission": "ALLOW",
+      "property": "destroyReportsById"
     },
     {
       "accessType": "EXECUTE",
