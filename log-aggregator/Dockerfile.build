@@ -1,4 +1,4 @@
-FROM bitnami/node:8-prod
+FROM bitnami/node:10-prod
 
 RUN install_packages git ca-certificates make python g++
 RUN mkdir /log

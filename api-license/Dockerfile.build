@@ -1,4 +1,4 @@
-FROM bitnami/node:8
+FROM bitnami/node:10-prod
 
 RUN install_packages git ca-certificates
 RUN mkdir /log
