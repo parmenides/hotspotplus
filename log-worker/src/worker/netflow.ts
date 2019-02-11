@@ -37,7 +37,7 @@ const getNetflowReports = async (
   }
 
   let data: RawNetflowReport[] = [];
-  log.debug('INDEXES', indexNames);
+  log.debug('INDEXES:', indexNames);
   for (const indexName of indexNames) {
     try {
       const result = await getNetflowsByIndex(

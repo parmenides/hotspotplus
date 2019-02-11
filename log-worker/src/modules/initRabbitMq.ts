@@ -1,9 +1,12 @@
 import { QUEUES } from '../typings';
 import { getRabbitMqChannel } from '../utils/rabbitmq';
+import logger from '../utils/logger';
 
+const log = logger.createLogger();
 const LOG_REQUEST_RETRY_MS = Number(process.env.LOG_REQUEST_RETRY_MS);
 
 export const addDefaultQueue = async () => {
+  log.debug('@ add default queue');
   const channel = await getRabbitMqChannel();
   // Add card to accountNumber Queue
   await channel.assertExchange(QUEUES.LOG_WORKER_EXCHANGE, 'fanout', {
@@ -33,4 +36,5 @@ export const addDefaultQueue = async () => {
     QUEUES.RETRY_LOG_WORKER_EXCHANGE,
     '',
   );
+  log.debug('default queue added');
 };

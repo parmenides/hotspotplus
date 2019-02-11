@@ -33,9 +33,10 @@ app.use((req, resp, next) => {
 app.listen(app.get('port'), async () => {
   /*tslint:disable*/
   console.log('Add default queues...');
-  await addDefaultQueue();
-  logWorker.processLogRequest();
-  console.log(` App is running at http://localhost:${app.get('port')}`);
+  console.log('Add default queues...');
+  //addDefaultQueue();
+  //logWorker.processLogRequest();
+  console.log(`App is running at http://localhost:${app.get('port')}`);
   log.info(` App is running at http://localhost:${app.get('port')}`);
 });
 
