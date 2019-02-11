@@ -1,7 +1,7 @@
 import { getRabbitMqChannel } from './utils/rabbitmq';
 import { ReportRequestTask, ReportType } from './worker';
 import { ancestorWhere } from 'tslint';
-import {QUEUES} from "./typings";
+import { QUEUES } from './typings';
 
 export const testRunner = async () => {
   const channel = await getRabbitMqChannel();

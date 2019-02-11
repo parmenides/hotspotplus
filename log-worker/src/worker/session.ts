@@ -1,5 +1,4 @@
 import logger from '../utils/logger';
-import { getRabbitMqChannel } from '../utils/rabbitmq';
 import elasticClient from '../utils/elastic';
 
 const SESSION_LOG_INDEX = `${process.env.ELASTIC_INDEX_PREFIX}sessions`;
@@ -18,7 +17,7 @@ interface SessionQuery {
   businessId?: string;
 }
 
-interface IP_DATA {
+interface IpData {
   nasIp: string;
   framedIpAddress: string;
 }
@@ -66,8 +65,8 @@ const findSessions = async (reportRequestTask: SessionQuery) => {
   const clientIpList = new Set();
   const nasIpList = new Set();
   result.map((item) => {
-    clientIpList.add((item._source as IP_DATA).framedIpAddress);
-    nasIpList.add((item._source as IP_DATA).nasIp);
+    clientIpList.add((item._source as IpData).framedIpAddress);
+    nasIpList.add((item._source as IpData).nasIp);
   });
 
   log.debug(Array.from(clientIpList));

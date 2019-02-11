@@ -19,8 +19,8 @@ const log = logger.createLogger();
 export const login = async (username: string, password: string) => {
   const httpClient = createHttpClient(API_ADDRESS);
   const response = await httpClient.post('/api/Users/login', {
-    username: username,
-    password: password,
+    username,
+    password,
   });
   return response.data.id;
 };

@@ -45,7 +45,7 @@ export interface ReportRequestTask {
 }
 
 const processLogRequest = async () => {
-  log.debug('log requests');
+  log.debug('At processing log requests');
   const channel = await getRabbitMqChannel();
   process.once('SIGINT', async () => {
     await channel.close();

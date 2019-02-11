@@ -56,6 +56,7 @@ services:
     depends_on:
       - rabbitmq
     environment:
+      - LOG_REQUEST_RETRY_MS=300000
       - API_ADDRESS=http://hotspotplusapi:3000
       - SERVICE_MAN_USERNAME=pinTimeServiceMan
       - SERVICE_MAN_PASSWORD=#123aaa)
@@ -182,7 +183,7 @@ services:
       - hotspotplusgate
   elasticsearch:
     container_name: hsp_elasticsearch
-    image: 'bitnami/elasticsearch:6.5.4'
+    image: 'bitnami/elasticsearch:6.6.0'
     restart: always
     environment:
       - ELASTICSEARCH_HEAP_SIZE=1024m
@@ -220,11 +221,11 @@ services:
 #  kafka:
 #    image: 'bitnami/kafka:latest'
 #    restart: always
-#    container_name: 'hsp_kafka'
+#    container_name: 'kafka'
 #    depends_on:
 #      - zookeeper
 #    environment:
-#      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://hsp_kafka:9092
+#      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
 #      - KAFKA_LOG_RETENTION_HOURS=72
 #      - ALLOW_ANONYMOUS_LOGIN=yes
 #      - ALLOW_PLAINTEXT_LISTENER=yes
@@ -232,7 +233,7 @@ services:
 #    expose:
 #      - '9092'
 #    volumes:
-#      - hsp_kafka:/bitnami/kafka
+#      - kafka:/bitnami/kafka
 #    networks:
 #      hotspotplusgate:
 #        ipv4_address: 172.20.0.80
@@ -262,7 +263,7 @@ volumes:
     driver: local
   hsp_kibana:
     driver: local
-  hsp_kafka:
+  kafka:
     driver: local
 
 networks:

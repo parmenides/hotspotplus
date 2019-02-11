@@ -117,7 +117,7 @@ const getSyslogByIndex = async (
 
   const parts = new Array(partsLen);
   let from = 0;
-  let result: { _source: any }[] = [];
+  let result: Array<{ _source: any }> = [];
   for (const i of parts) {
     try {
       const queryResult = await querySyslogReports(

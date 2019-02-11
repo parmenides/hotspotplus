@@ -33,14 +33,13 @@ app.use((req, resp, next) => {
 app.listen(app.get('port'), async () => {
   /*tslint:disable*/
   console.log('Add default queues...');
-  console.log('Add default queues...');
-  //addDefaultQueue();
-  //logWorker.processLogRequest();
+  await addDefaultQueue();
+  await logWorker.processLogRequest();
   console.log(`App is running at http://localhost:${app.get('port')}`);
+  await testRunner();
   log.info(` App is running at http://localhost:${app.get('port')}`);
 });
 
-//testRunner();
 //addSyslogIndexTemplates();
 
 process.on('uncaughtException', function(error) {
