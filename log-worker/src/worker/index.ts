@@ -201,6 +201,7 @@ const updateReportRequest = async (reportId: string, fileStorageId: string) => {
   await httpClient.patch(
     `/${reportId}`,
     {
+      status: 'ready',
       fileStorageId,
     },
     {

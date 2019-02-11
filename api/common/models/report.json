@@ -42,14 +42,14 @@
       "model": "Member",
       "foreignKey": ""
     },
-    "business": {
-      "type": "belongsTo",
-      "model": "Business",
-      "foreignKey": ""
-    },
     "fileStorage": {
       "type": "hasOne",
       "model": "FileStorage",
+      "foreignKey": ""
+    },
+    "businesses": {
+      "type": "hasOne",
+      "model": "Business",
       "foreignKey": ""
     }
   },
@@ -65,7 +65,7 @@
       "principalType": "ROLE",
       "principalId": "serviceMan",
       "permission": "ALLOW"
-    } ,
+    },
     {
       "accessType": "*",
       "principalType": "ROLE",

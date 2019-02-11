@@ -290,8 +290,8 @@ app.controller ( 'reportList', [
 						function ( res ) {
 							//todo: also delete related file
 							if ( row.entity.fileStorageId ) {
-								Business.files
-									.destroyById ( { id: businessId }, { fk: fileStorageId } )
+								Business.fileStorages
+									.destroyById ( { id: businessId }, { fk: row.entity.fileStorageId } )
 									.$promise.then (
 									function ( res ) {
 										appMessenger.showSuccess ( 'report.removeFileSuccessFull' );
