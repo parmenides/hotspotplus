@@ -304,7 +304,7 @@ module.exports = function(License) {
         return reject('invalid security prefix');
       }
       var license = {
-        licenseVersion: '1',
+        licenseVersion: 'v4',
         applicationVersion: '1.0.0',
         active: true,
         username: systemUuid,
