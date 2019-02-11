@@ -5,10 +5,12 @@ module.exports = function ( grunt ) {
 		obfuscator: {
 			options: {
 				// global options for the obfuscator
+
 			},
 			task1:   {
 				options: {
-					compact: true,
+          exclude:["aggregates.js"],
+          compact: true,
 					controlFlowFlattening: true,
 					controlFlowFlatteningThreshold: 0.75,
 					deadCodeInjection: true,
@@ -31,7 +33,6 @@ module.exports = function ( grunt ) {
 					'build/': [
 						'common/**/*.js',
 						'modules/**/*.js',
-						'server/**/*.js',
 						'templates/**/*.js',
 						'services/**/*.js'
 					]

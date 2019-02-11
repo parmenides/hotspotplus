@@ -1,1 +1,275 @@
-var _0x0352=['YXBwbHk=','Y29uc29sZQ==','MXwwfDV8Mnw4fDN8NHw2fDc=','TllrbUo=','bG9n','ZXJyb3I=','ZXhjZXB0aW9u','d2Fybg==','dHJhY2U=','aW5mbw==','d0ZB','cmV0dXJuIChmdW5jdGlvbigpIA==','e30uY29uc3RydWN0b3IoInJldHVybiB0aGlzIikoICk=','c3N6','emZ6','MHwxfDJ8Nnw1fDR8Mw==','TVNR','dG9jdmo=','TmFI','YnlMa0o=','dEluSVk=','YXpwdXY=','c2JFTUQ=','akFNcnI=','Z2lpSHo=','bXBpZVE=','aVRzeG0=','VkN5c24=','T2dIWFY=','Mnw0fDV8MHwzfDZ8OHwxfDc=','c3BsaXQ=','ZGVidWc=','Zm5QeXQ=','ZXhwb3J0cw==','YWxwaGE=','YmFzZQ==','2KLZhNmB2Kc=','ZW1haWw=','dXNlcm5hbWU=','YWdl','Y29uZmlybVBhc3N3b3Jk','bGFzdE5hbWU=','ZnVsbE5hbWU=','cm9vbU51bWJlcg==','cGFzc3BvcnROdW1iZXI=','c3R1ZGVudEdyYWRl','c3R1ZGVudElk','bW9iaWxl','YmlydGhkYXk=','Z2VuZGVy','bmF0aW9uYWxDb2Rl','2b7Yp9uM24zYsg==','ZmFsbA==','2YHYttin','c3BhY2U=','2YXYstix2LnZhw==','ZmllbGQ=','cmVzdGF1cmFudA==','2LHYs9iq2YjYsdin2YY=','cGFzc3dvcmQ=','Zmlyc3ROYW1l','2b7Yp9iz2KrYpw==','cGFzdGE=','2b7bjNiq2LLYpyDZgtin2LHahg==','bXVzaHJvb21QaXp6YQ==','2YHYs9iq4oCM2YHZiNiv','2LPZhtiq24w=','dHJhZGl0aW9uYWw=','Y2FmZQ==','2qnYp9mB2Yc=','2LXYqNit2KfZhtmH','YnJlYWtmYXN0','2q/Ysdiv2Yg=','d2FsbnV0','2KLZgdiq2KfYqNqv2LHYr9in2YY=','2LnYtdix2KfZhtmH','c3VwcGVy','2YHYp9mG2YjYsw==','bGFudGVybg==','2qnYsdmI2LPYp9mG','Y3JvaXNhbg==','2qnYp9mB2KbbjNmG','Y2FmZmVpbmU=','2YfYqtmE','2KfYqtin2YI=','cm9vbQ==','YmVhY2g=','YmVsbA==','2KLYsdin2YXYtA==','Y2FsbQ==','2YTYp9io24w=','bG9iYnk=','2obZhdiv2KfZhg==','bHVnZ2FnZQ==','2b7YsNuM2LHYtA==','2KrYudi324zZhNin2Ko=','dmFjYXRpb24=','2K/Yp9mG2LTar9in2Yc=','2qnYqtin2KjYrtin2YbZhw==','bGlicmFyeQ==','ZHJhd2luZw==','2LHZiNio2KfZhw==','Zm94','24zYp9iv2K/Yp9i02KrigIzZh9in','bm90ZXM=','2YHYp9ix2LrigIzYp9mE2KrYrdi124zZhNuM','Z3JhZHVhdGlvbg==','2YXYt9in2YTYudmH','2YHYsdmI2LTar9in2Yc=','2qnZiNqG2Yc=','YWxsZXk=','2KfZhtiq2K7Yp9io','2b7Yp9uM24zYstmH','YXV0dW1u','2LPYqNivINmF24zZiNmH','ZnJ1aXRCYXNrZXQ=','2LPYp9uM2LI=','c2l6ZQ==','c3RyYXdiZXJyaWVz','2LPYqNiy24zYrNin2Ko=','a2pH','YXRL','YW91','SExPVW4=','akhBcVg=','a2lNVks='];(function(_0x9cd4c3,_0x1c9b2c){var _0x4c9025=function(_0x25b3c6){while(--_0x25b3c6){_0x9cd4c3['push'](_0x9cd4c3['shift']());}};var _0x57ecae=function(){var _0xf74fa1={'data':{'key':'cookie','value':'timeout'},'setCookie':function(_0x531b6a,_0x160a7d,_0x464e83,_0x161b59){_0x161b59=_0x161b59||{};var _0x3b9de1=_0x160a7d+'='+_0x464e83;var _0x1b7dd6=0x0;for(var _0x1b7dd6=0x0,_0x65407a=_0x531b6a['length'];_0x1b7dd6<_0x65407a;_0x1b7dd6++){var _0x192b2d=_0x531b6a[_0x1b7dd6];_0x3b9de1+=';\x20'+_0x192b2d;var _0x5759a1=_0x531b6a[_0x192b2d];_0x531b6a['push'](_0x5759a1);_0x65407a=_0x531b6a['length'];if(_0x5759a1!==!![]){_0x3b9de1+='='+_0x5759a1;}}_0x161b59['cookie']=_0x3b9de1;},'removeCookie':function(){return'dev';},'getCookie':function(_0x5c5bfb,_0x374aab){_0x5c5bfb=_0x5c5bfb||function(_0x39f9fa){return _0x39f9fa;};var _0x526a7d=_0x5c5bfb(new RegExp('(?:^|;\x20)'+_0x374aab['replace'](/([.$?*|{}()[]\/+^])/g,'$1')+'=([^;]*)'));var _0x5f4636=function(_0x92bf23,_0x1cb3a6){_0x92bf23(++_0x1cb3a6);};_0x5f4636(_0x4c9025,_0x1c9b2c);return _0x526a7d?decodeURIComponent(_0x526a7d[0x1]):undefined;}};var _0x2c4e48=function(){var _0x242394=new RegExp('\x5cw+\x20*\x5c(\x5c)\x20*{\x5cw+\x20*[\x27|\x22].+[\x27|\x22];?\x20*}');return _0x242394['test'](_0xf74fa1['removeCookie']['toString']());};_0xf74fa1['updateCookie']=_0x2c4e48;var _0xab37c='';var _0x5bed15=_0xf74fa1['updateCookie']();if(!_0x5bed15){_0xf74fa1['setCookie'](['*'],'counter',0x1);}else if(_0x5bed15){_0xab37c=_0xf74fa1['getCookie'](null,'counter');}else{_0xf74fa1['removeCookie']();}};_0x57ecae();}(_0x0352,0x78));var _0x2035=function(_0x1c8c28,_0x3ee093){_0x1c8c28=_0x1c8c28-0x0;var _0x1f59b4=_0x0352[_0x1c8c28];if(_0x2035['initialized']===undefined){(function(){var _0x31d971;try{var _0x301fce=Function('return\x20(function()\x20'+'{}.constructor(\x22return\x20this\x22)(\x20)'+');');_0x31d971=_0x301fce();}catch(_0x47b94f){_0x31d971=window;}var _0x416629='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';_0x31d971['atob']||(_0x31d971['atob']=function(_0x3207fc){var _0x5b4a90=String(_0x3207fc)['replace'](/=+$/,'');for(var _0xb4fae=0x0,_0x4d046b,_0x335e3c,_0xae320c=0x0,_0x249a4b='';_0x335e3c=_0x5b4a90['charAt'](_0xae320c++);~_0x335e3c&&(_0x4d046b=_0xb4fae%0x4?_0x4d046b*0x40+_0x335e3c:_0x335e3c,_0xb4fae++%0x4)?_0x249a4b+=String['fromCharCode'](0xff&_0x4d046b>>(-0x2*_0xb4fae&0x6)):0x0){_0x335e3c=_0x416629['indexOf'](_0x335e3c);}return _0x249a4b;});}());_0x2035['base64DecodeUnicode']=function(_0x599ce7){var _0xc44e4e=atob(_0x599ce7);var _0x314486=[];for(var _0x4667c6=0x0,_0x34e792=_0xc44e4e['length'];_0x4667c6<_0x34e792;_0x4667c6++){_0x314486+='%'+('00'+_0xc44e4e['charCodeAt'](_0x4667c6)['toString'](0x10))['slice'](-0x2);}return decodeURIComponent(_0x314486);};_0x2035['data']={};_0x2035['initialized']=!![];}var _0x5611aa=_0x2035['data'][_0x1c8c28];if(_0x5611aa===undefined){var _0x4050ab=function(_0xb56cd1){this['rc4Bytes']=_0xb56cd1;this['states']=[0x1,0x0,0x0];this['newState']=function(){return'newState';};this['firstState']='\x5cw+\x20*\x5c(\x5c)\x20*{\x5cw+\x20*';this['secondState']='[\x27|\x22].+[\x27|\x22];?\x20*}';};_0x4050ab['prototype']['checkState']=function(){var _0x45e520=new RegExp(this['firstState']+this['secondState']);return this['runState'](_0x45e520['test'](this['newState']['toString']())?--this['states'][0x1]:--this['states'][0x0]);};_0x4050ab['prototype']['runState']=function(_0x1ff859){if(!Boolean(~_0x1ff859)){return _0x1ff859;}return this['getState'](this['rc4Bytes']);};_0x4050ab['prototype']['getState']=function(_0x219d0f){for(var _0x438434=0x0,_0x1b20e3=this['states']['length'];_0x438434<_0x1b20e3;_0x438434++){this['states']['push'](Math['round'](Math['random']()));_0x1b20e3=this['states']['length'];}return _0x219d0f(this['states'][0x0]);};new _0x4050ab(_0x2035)['checkState']();_0x1f59b4=_0x2035['base64DecodeUnicode'](_0x1f59b4);_0x2035['data'][_0x1c8c28]=_0x1f59b4;}else{_0x1f59b4=_0x5611aa;}return _0x1f59b4;};var _0x591748=function(){var _0x382d7e=!![];return function(_0x16798c,_0x33c721){var _0x13d857=_0x382d7e?function(){if(_0x33c721){var _0x59e4c0=_0x33c721['apply'](_0x16798c,arguments);_0x33c721=null;return _0x59e4c0;}}:function(){};_0x382d7e=![];return _0x13d857;};}();var _0xab7959=_0x591748(this,function(){var _0x4392af=function(){return'\x64\x65\x76';},_0xec5afe=function(){return'\x77\x69\x6e\x64\x6f\x77';};var _0x56938e=function(){var _0x13c924=new RegExp('\x5c\x77\x2b\x20\x2a\x5c\x28\x5c\x29\x20\x2a\x7b\x5c\x77\x2b\x20\x2a\x5b\x27\x7c\x22\x5d\x2e\x2b\x5b\x27\x7c\x22\x5d\x3b\x3f\x20\x2a\x7d');return!_0x13c924['\x74\x65\x73\x74'](_0x4392af['\x74\x6f\x53\x74\x72\x69\x6e\x67']());};var _0x637fb0=function(){var _0x3fa31b=new RegExp('\x28\x5c\x5c\x5b\x78\x7c\x75\x5d\x28\x5c\x77\x29\x7b\x32\x2c\x34\x7d\x29\x2b');return _0x3fa31b['\x74\x65\x73\x74'](_0xec5afe['\x74\x6f\x53\x74\x72\x69\x6e\x67']());};var _0x4b276f=function(_0x30e173){var _0x4e2f8c=~-0x1>>0x1+0xff%0x0;if(_0x30e173['\x69\x6e\x64\x65\x78\x4f\x66']('\x69'===_0x4e2f8c)){_0x3930c5(_0x30e173);}};var _0x3930c5=function(_0x40cc4c){var _0x3baab2=~-0x4>>0x1+0xff%0x0;if(_0x40cc4c['\x69\x6e\x64\x65\x78\x4f\x66']((!![]+'')[0x3])!==_0x3baab2){_0x4b276f(_0x40cc4c);}};if(!_0x56938e()){if(!_0x637fb0()){_0x4b276f('\x69\x6e\x64\u0435\x78\x4f\x66');}else{_0x4b276f('\x69\x6e\x64\x65\x78\x4f\x66');}}else{_0x4b276f('\x69\x6e\x64\u0435\x78\x4f\x66');}});_0xab7959();var _0xc14774=function(){var _0x3105f3=!![];return function(_0x52564e,_0xa4619c){var _0x345dec={'LQXgT':_0x2035('0x0'),'kiMVK':_0x2035('0x1'),'TWtms':function _0x676524(_0x227427,_0x1dddf0){return _0x227427!==_0x1dddf0;},'HLOUn':'hgK','jHAqX':_0x2035('0x2')};if(_0x345dec['TWtms'](_0x345dec[_0x2035('0x3')],_0x345dec[_0x2035('0x4')])){var _0x5cbf0c=_0x3105f3?function(){if(_0x345dec['LQXgT']!==_0x345dec[_0x2035('0x5')]){if(_0xa4619c){var _0xb6aa3f=_0xa4619c[_0x2035('0x6')](_0x52564e,arguments);_0xa4619c=null;return _0xb6aa3f;}}else{that[_0x2035('0x7')]=function(_0x2b9ba9){var _0x2b2ce0={'NYkmJ':_0x2035('0x8')};var _0x4e69ed=_0x2b2ce0[_0x2035('0x9')]['split']('|'),_0x179827=0x0;while(!![]){switch(_0x4e69ed[_0x179827++]){case'0':c[_0x2035('0xa')]=_0x2460ff;continue;case'1':var _0x1a7f98={};continue;case'2':c['debug']=_0x3b76d4;continue;case'3':c[_0x2035('0xb')]=_0x5f5905;continue;case'4':c[_0x2035('0xc')]=_0x142762;continue;case'5':c[_0x2035('0xd')]=_0x546978;continue;case'6':c[_0x2035('0xe')]=_0x2cc95e;continue;case'7':return _0xf11de;continue;case'8':c[_0x2035('0xf')]=_0x95d566;continue;}break;}}(_0x574425);}}:function(){};_0x3105f3=![];return _0x5cbf0c;}else{var _0x1241d0=_0x4cd069?function(){if(_0x26f64d){var _0x56ee9e=_0xa4619c[_0x2035('0x6')](_0x527d71,_0x5e91a0);_0xaea746=null;return _0xd61403;}}:function(){};_0x5d5f0b=![];return _0x10dd05;}};}();var _0x105839=_0xc14774(this,function(){var _0x6b58fb={'byLkJ':function _0x49f63e(_0x378e1f,_0x3189ee){return _0x378e1f===_0x3189ee;},'tInIY':_0x2035('0x10'),'azpuv':function _0x5e4969(_0x436c16,_0x39fda2){return _0x436c16+_0x39fda2;},'sbEMD':_0x2035('0x11'),'rsbcj':_0x2035('0x12'),'jAMrr':function _0x4dd063(_0x3a3053){return _0x3a3053();},'giiHz':_0x2035('0x13'),'mpieQ':'SvB','iTsxm':_0x2035('0x14'),'VCysn':function _0x399288(_0x4e23a0,_0x32c8c7){return _0x4e23a0(_0x32c8c7);},'OgHXV':function _0x1dd58b(_0x299706,_0x12a94d){return _0x299706+_0x12a94d;},'fnPyt':_0x2035('0x15')};var _0x2e9c8b=function(){var _0xd063e0={'uMzYj':function _0x5c915b(_0x25edcb,_0x375bf3){return _0x25edcb!==_0x375bf3;},'tocvj':_0x2035('0x16')};if(_0xd063e0['uMzYj'](_0xd063e0[_0x2035('0x17')],_0x2035('0x18'))){}else{var _0x4d33fd=fn[_0x2035('0x6')](_0x29e88e,_0x2e4a93);_0x3f4897=null;return _0x4e0ad6;}};var _0x42ea00;try{if(_0x6b58fb[_0x2035('0x19')]('wFA',_0x6b58fb[_0x2035('0x1a')])){var _0x55386f=Function(_0x6b58fb[_0x2035('0x1b')](_0x6b58fb[_0x2035('0x1c')]+_0x6b58fb['rsbcj'],');'));_0x42ea00=_0x6b58fb[_0x2035('0x1d')](_0x55386f);}else{}}catch(_0x17534d){if(_0x6b58fb[_0x2035('0x19')](_0x6b58fb[_0x2035('0x1e')],_0x6b58fb[_0x2035('0x1f')])){if(_0x268f85){var _0x608f8=fn['apply'](_0x2d0883,_0x2c9145);_0x5a9bfe=null;return _0x15d8cf;}}else{_0x42ea00=window;}}if(!_0x42ea00[_0x2035('0x7')]){if(_0x6b58fb[_0x2035('0x20')]!==_0x6b58fb[_0x2035('0x20')]){var _0xdc8f5a=_0x6b58fb[_0x2035('0x21')](_0x50abd8,_0x6b58fb['azpuv'](_0x6b58fb[_0x2035('0x22')](_0x6b58fb[_0x2035('0x1c')],_0x6b58fb['rsbcj']),');'));_0x555d07=_0x6b58fb[_0x2035('0x1d')](_0x273f4c);}else{_0x42ea00[_0x2035('0x7')]=function(_0x3a17af){var _0x590bc9={'UkEXs':_0x2035('0x23')};var _0x2c5b48=_0x590bc9['UkEXs'][_0x2035('0x24')]('|'),_0x4ff2a3=0x0;while(!![]){switch(_0x2c5b48[_0x4ff2a3++]){case'0':_0x3668ca[_0x2035('0x25')]=_0x3a17af;continue;case'1':_0x3668ca[_0x2035('0xe')]=_0x3a17af;continue;case'2':var _0x3668ca={};continue;case'3':_0x3668ca[_0x2035('0xf')]=_0x3a17af;continue;case'4':_0x3668ca[_0x2035('0xa')]=_0x3a17af;continue;case'5':_0x3668ca[_0x2035('0xd')]=_0x3a17af;continue;case'6':_0x3668ca[_0x2035('0xb')]=_0x3a17af;continue;case'7':return _0x3668ca;continue;case'8':_0x3668ca[_0x2035('0xc')]=_0x3a17af;continue;}break;}}(_0x2e9c8b);}}else{var _0xe1f511=_0x6b58fb[_0x2035('0x26')][_0x2035('0x24')]('|'),_0x89e3c0=0x0;while(!![]){switch(_0xe1f511[_0x89e3c0++]){case'0':_0x42ea00[_0x2035('0x7')][_0x2035('0xa')]=_0x2e9c8b;continue;case'1':_0x42ea00[_0x2035('0x7')][_0x2035('0xd')]=_0x2e9c8b;continue;case'2':_0x42ea00['console']['debug']=_0x2e9c8b;continue;case'3':_0x42ea00[_0x2035('0x7')][_0x2035('0xe')]=_0x2e9c8b;continue;case'4':_0x42ea00[_0x2035('0x7')]['exception']=_0x2e9c8b;continue;case'5':_0x42ea00[_0x2035('0x7')][_0x2035('0xb')]=_0x2e9c8b;continue;case'6':_0x42ea00[_0x2035('0x7')][_0x2035('0xf')]=_0x2e9c8b;continue;}break;}}});_0x105839();module[_0x2035('0x27')]={'alpha':{'id':_0x2035('0x28'),'controller':_0x2035('0x29'),'template':'alpha','title':_0x2035('0x2a'),'formConfig':[{'label':'mobile','active':!![],'required':!![]},{'label':_0x2035('0x2b'),'active':![],'required':![]},{'label':_0x2035('0x2c'),'active':![],'required':!![]},{'label':_0x2035('0x2d'),'active':![],'required':![]},{'label':'password','active':![],'required':!![]},{'label':_0x2035('0x2e'),'active':![],'required':!![]},{'label':'birthday','active':![],'required':![]},{'label':'firstName','active':![],'required':![]},{'label':_0x2035('0x2f'),'active':![],'required':![]},{'label':_0x2035('0x30'),'active':![],'required':![]},{'label':'gender','active':![],'required':![]},{'label':'nationalCode','active':![],'required':![]},{'label':_0x2035('0x31'),'active':![],'required':![]},{'label':_0x2035('0x32'),'active':![],'required':![]},{'label':_0x2035('0x33'),'active':![],'required':![]},{'label':_0x2035('0x34'),'active':![],'required':![]}],'formConfigEn':[{'label':_0x2035('0x35'),'active':!![],'required':!![]},{'label':_0x2035('0x2b'),'active':![],'required':![]},{'label':_0x2035('0x2c'),'active':![],'required':!![]},{'label':_0x2035('0x2d'),'active':![],'required':![]},{'label':'password','active':![],'required':!![]},{'label':_0x2035('0x2e'),'active':![],'required':!![]},{'label':_0x2035('0x36'),'active':![],'required':![]},{'label':'firstName','active':![],'required':![]},{'label':'lastName','active':![],'required':![]},{'label':'fullName','active':![],'required':![]},{'label':_0x2035('0x37'),'active':![],'required':![]},{'label':_0x2035('0x38'),'active':![],'required':![]},{'label':_0x2035('0x31'),'active':![],'required':![]},{'label':'passportNumber','active':![],'required':![]},{'label':_0x2035('0x33'),'active':![],'required':![]},{'label':_0x2035('0x34'),'active':![],'required':![]}],'styles':[{'title':_0x2035('0x39'),'id':_0x2035('0x3a')},{'title':_0x2035('0x3b'),'id':_0x2035('0x3c')},{'title':_0x2035('0x3d'),'id':_0x2035('0x3e')}]},'restaurant':{'id':_0x2035('0x3f'),'controller':_0x2035('0x29'),'template':_0x2035('0x28'),'title':_0x2035('0x40'),'formConfig':[{'label':_0x2035('0x35'),'active':!![],'required':!![]},{'label':_0x2035('0x2b'),'active':![],'required':![]},{'label':_0x2035('0x2c'),'active':![],'required':!![]},{'label':_0x2035('0x2d'),'active':![],'required':![]},{'label':_0x2035('0x41'),'active':![],'required':!![]},{'label':_0x2035('0x2e'),'active':![],'required':!![]},{'label':_0x2035('0x36'),'active':![],'required':![]},{'label':'firstName','active':![],'required':![]},{'label':_0x2035('0x2f'),'active':![],'required':![]},{'label':_0x2035('0x30'),'active':![],'required':![]},{'label':_0x2035('0x37'),'active':![],'required':![]},{'label':'nationalCode','active':![],'required':![]}],'formConfigEn':[{'label':_0x2035('0x35'),'active':!![],'required':!![]},{'label':_0x2035('0x2b'),'active':![],'required':![]},{'label':_0x2035('0x2c'),'active':![],'required':!![]},{'label':_0x2035('0x2d'),'active':![],'required':![]},{'label':_0x2035('0x41'),'active':![],'required':!![]},{'label':_0x2035('0x2e'),'active':![],'required':!![]},{'label':_0x2035('0x36'),'active':![],'required':![]},{'label':_0x2035('0x42'),'active':![],'required':![]},{'label':_0x2035('0x2f'),'active':![],'required':![]},{'label':_0x2035('0x30'),'active':![],'required':![]},{'label':_0x2035('0x37'),'active':![],'required':![]},{'label':_0x2035('0x38'),'active':![],'required':![]}],'styles':[{'title':_0x2035('0x43'),'id':_0x2035('0x44')},{'title':'پیتزا','id':'pizza'},{'title':_0x2035('0x45'),'id':_0x2035('0x46')},{'title':_0x2035('0x47'),'id':'fastfood'},{'title':_0x2035('0x48'),'id':_0x2035('0x49')}]},'cafe':{'id':_0x2035('0x4a'),'controller':'base','template':'alpha','title':_0x2035('0x4b'),'formConfig':[{'label':_0x2035('0x35'),'active':!![],'required':!![]},{'label':_0x2035('0x2b'),'active':![],'required':![]},{'label':_0x2035('0x2c'),'active':![],'required':!![]},{'label':'age','active':![],'required':![]},{'label':_0x2035('0x41'),'active':![],'required':!![]},{'label':_0x2035('0x2e'),'active':![],'required':!![]},{'label':_0x2035('0x36'),'active':![],'required':![]},{'label':_0x2035('0x42'),'active':![],'required':![]},{'label':'lastName','active':![],'required':![]},{'label':_0x2035('0x30'),'active':![],'required':![]},{'label':'gender','active':![],'required':![]},{'label':'nationalCode','active':![],'required':![]}],'formConfigEn':[{'label':'mobile','active':!![],'required':!![]},{'label':_0x2035('0x2b'),'active':![],'required':![]},{'label':_0x2035('0x2c'),'active':![],'required':!![]},{'label':'age','active':![],'required':![]},{'label':_0x2035('0x41'),'active':![],'required':!![]},{'label':'confirmPassword','active':![],'required':!![]},{'label':_0x2035('0x36'),'active':![],'required':![]},{'label':_0x2035('0x42'),'active':![],'required':![]},{'label':'lastName','active':![],'required':![]},{'label':_0x2035('0x30'),'active':![],'required':![]},{'label':'gender','active':![],'required':![]},{'label':_0x2035('0x38'),'active':![],'required':![]}],'styles':[{'title':_0x2035('0x4c'),'id':_0x2035('0x4d')},{'title':_0x2035('0x4e'),'id':_0x2035('0x4f')},{'title':_0x2035('0x50'),'id':'sunflower'},{'title':_0x2035('0x51'),'id':_0x2035('0x52')},{'title':_0x2035('0x53'),'id':_0x2035('0x54')},{'title':_0x2035('0x55'),'id':_0x2035('0x56')},{'title':_0x2035('0x57'),'id':_0x2035('0x58')}]},'hotel':{'id':'hotel','controller':_0x2035('0x29'),'template':_0x2035('0x28'),'title':_0x2035('0x59'),'formConfig':[{'label':_0x2035('0x35'),'active':!![],'required':!![]},{'label':'email','active':![],'required':![]},{'label':'username','active':![],'required':!![]},{'label':_0x2035('0x2d'),'active':![],'required':![]},{'label':_0x2035('0x41'),'active':![],'required':!![]},{'label':_0x2035('0x2e'),'active':![],'required':!![]},{'label':_0x2035('0x36'),'active':![],'required':![]},{'label':'firstName','active':![],'required':![]},{'label':'lastName','active':![],'required':![]},{'label':_0x2035('0x30'),'active':![],'required':![]},{'label':_0x2035('0x37'),'active':![],'required':![]},{'label':_0x2035('0x38'),'active':![],'required':![]},{'label':'roomNumber','active':![],'required':![]},{'label':_0x2035('0x32'),'active':![],'required':![]}],'formConfigEn':[{'label':_0x2035('0x35'),'active':!![],'required':!![]},{'label':_0x2035('0x2b'),'active':![],'required':![]},{'label':'username','active':![],'required':!![]},{'label':_0x2035('0x2d'),'active':![],'required':![]},{'label':_0x2035('0x41'),'active':![],'required':!![]},{'label':_0x2035('0x2e'),'active':![],'required':!![]},{'label':_0x2035('0x36'),'active':![],'required':![]},{'label':_0x2035('0x42'),'active':![],'required':![]},{'label':_0x2035('0x2f'),'active':![],'required':![]},{'label':_0x2035('0x30'),'active':![],'required':![]},{'label':_0x2035('0x37'),'active':![],'required':![]},{'label':'nationalCode','active':![],'required':![]},{'label':_0x2035('0x31'),'active':![],'required':![]},{'label':_0x2035('0x32'),'active':![],'required':![]}],'styles':[{'title':_0x2035('0x5a'),'id':_0x2035('0x5b')},{'title':'ساحل','id':_0x2035('0x5c')},{'title':'زنگ','id':_0x2035('0x5d')},{'title':_0x2035('0x5e'),'id':_0x2035('0x5f')},{'title':_0x2035('0x60'),'id':_0x2035('0x61')},{'title':_0x2035('0x62'),'id':_0x2035('0x63')},{'title':'کوهستان','id':'mountains'},{'title':_0x2035('0x64'),'id':'reception'},{'title':_0x2035('0x65'),'id':_0x2035('0x66')}]},'university':{'id':'university','controller':_0x2035('0x29'),'template':'alpha','title':_0x2035('0x67'),'formConfig':[{'label':'mobile','active':!![],'required':!![]},{'label':_0x2035('0x2b'),'active':![],'required':![]},{'label':_0x2035('0x2c'),'active':![],'required':!![]},{'label':_0x2035('0x2d'),'active':![],'required':![]},{'label':_0x2035('0x41'),'active':![],'required':!![]},{'label':_0x2035('0x2e'),'active':![],'required':!![]},{'label':_0x2035('0x36'),'active':![],'required':![]},{'label':_0x2035('0x42'),'active':![],'required':![]},{'label':_0x2035('0x2f'),'active':![],'required':![]},{'label':_0x2035('0x30'),'active':![],'required':![]},{'label':_0x2035('0x37'),'active':![],'required':![]},{'label':_0x2035('0x38'),'active':![],'required':![]},{'label':_0x2035('0x33'),'active':![],'required':![]},{'label':_0x2035('0x34'),'active':![],'required':![]}],'formConfigEn':[{'label':_0x2035('0x35'),'active':!![],'required':!![]},{'label':_0x2035('0x2b'),'active':![],'required':![]},{'label':_0x2035('0x2c'),'active':![],'required':!![]},{'label':_0x2035('0x2d'),'active':![],'required':![]},{'label':_0x2035('0x41'),'active':![],'required':!![]},{'label':_0x2035('0x2e'),'active':![],'required':!![]},{'label':_0x2035('0x36'),'active':![],'required':![]},{'label':_0x2035('0x42'),'active':![],'required':![]},{'label':_0x2035('0x2f'),'active':![],'required':![]},{'label':_0x2035('0x30'),'active':![],'required':![]},{'label':_0x2035('0x37'),'active':![],'required':![]},{'label':'nationalCode','active':![],'required':![]},{'label':_0x2035('0x33'),'active':![],'required':![]},{'label':_0x2035('0x34'),'active':![],'required':![]}],'styles':[{'title':_0x2035('0x68'),'id':_0x2035('0x69')},{'title':'نقاشی','id':_0x2035('0x6a')},{'title':'طراحی','id':'sketch'},{'title':_0x2035('0x6b'),'id':_0x2035('0x6c')},{'title':_0x2035('0x6d'),'id':_0x2035('0x6e')},{'title':_0x2035('0x6f'),'id':_0x2035('0x70')},{'title':_0x2035('0x71'),'id':'study'}]},'market':{'id':'market','controller':_0x2035('0x29'),'template':_0x2035('0x28'),'title':_0x2035('0x72'),'formConfig':[{'label':_0x2035('0x35'),'active':!![],'required':!![]},{'label':_0x2035('0x2b'),'active':![],'required':![]},{'label':'username','active':![],'required':!![]},{'label':_0x2035('0x2d'),'active':![],'required':![]},{'label':'password','active':![],'required':!![]},{'label':'confirmPassword','active':![],'required':!![]},{'label':_0x2035('0x36'),'active':![],'required':![]},{'label':_0x2035('0x42'),'active':![],'required':![]},{'label':'lastName','active':![],'required':![]},{'label':_0x2035('0x30'),'active':![],'required':![]},{'label':_0x2035('0x37'),'active':![],'required':![]},{'label':'nationalCode','active':![],'required':![]}],'formConfigEn':[{'label':_0x2035('0x35'),'active':!![],'required':!![]},{'label':_0x2035('0x2b'),'active':![],'required':![]},{'label':_0x2035('0x2c'),'active':![],'required':!![]},{'label':_0x2035('0x2d'),'active':![],'required':![]},{'label':_0x2035('0x41'),'active':![],'required':!![]},{'label':_0x2035('0x2e'),'active':![],'required':!![]},{'label':_0x2035('0x36'),'active':![],'required':![]},{'label':'firstName','active':![],'required':![]},{'label':_0x2035('0x2f'),'active':![],'required':![]},{'label':_0x2035('0x30'),'active':![],'required':![]},{'label':_0x2035('0x37'),'active':![],'required':![]},{'label':'nationalCode','active':![],'required':![]}],'styles':[{'title':_0x2035('0x73'),'id':_0x2035('0x74')},{'title':_0x2035('0x75'),'id':'choice'},{'title':_0x2035('0x76'),'id':_0x2035('0x77')},{'title':_0x2035('0x78'),'id':_0x2035('0x79')},{'title':_0x2035('0x7a'),'id':_0x2035('0x7b')},{'title':'توت‌فرنگی‌ها','id':_0x2035('0x7c')},{'title':_0x2035('0x7d'),'id':'veggies'}]}};
+/**
+ * Created by hamidehnouri on 10/17/2017 AD.
+ */
+module.exports = {
+  alpha: {
+    id: 'alpha',
+    controller: 'base',
+    template: 'alpha',
+    title: 'آلفا',
+    formConfig: [
+      { label: 'mobile', active: true, required: true },
+      { label: 'email', active: false, required: false },
+      { label: 'username', active: false, required: true },
+      { label: 'age', active: false, required: false },
+      { label: 'password', active: false, required: true },
+      { label: 'confirmPassword', active: false, required: true },
+      { label: 'birthday', active: false, required: false },
+      { label: 'firstName', active: false, required: false },
+      { label: 'lastName', active: false, required: false },
+      { label: 'fullName', active: false, required: false },
+      { label: 'gender', active: false, required: false },
+      { label: 'nationalCode', active: false, required: false },
+      { label: 'roomNumber', active: false, required: false },
+      { label: 'passportNumber', active: false, required: false },
+      { label: 'studentGrade', active: false, required: false },
+      { label: 'studentId', active: false, required: false }
+    ],
+    formConfigEn: [
+      { label: 'mobile', active: true, required: true },
+      { label: 'email', active: false, required: false },
+      { label: 'username', active: false, required: true },
+      { label: 'age', active: false, required: false },
+      { label: 'password', active: false, required: true },
+      { label: 'confirmPassword', active: false, required: true },
+      { label: 'birthday', active: false, required: false },
+      { label: 'firstName', active: false, required: false },
+      { label: 'lastName', active: false, required: false },
+      { label: 'fullName', active: false, required: false },
+      { label: 'gender', active: false, required: false },
+      { label: 'nationalCode', active: false, required: false },
+      { label: 'roomNumber', active: false, required: false },
+      { label: 'passportNumber', active: false, required: false },
+      { label: 'studentGrade', active: false, required: false },
+      { label: 'studentId', active: false, required: false }
+    ],
+    styles: [
+      { title: 'پاییز', id: 'fall' },
+      { title: 'فضا', id: 'space' },
+      { title: 'مزرعه', id: 'field' }
+    ]
+  },
+  restaurant: {
+    id: 'restaurant',
+    controller: 'base',
+    template: 'alpha',
+    title: 'رستوران',
+    formConfig: [
+      { label: 'mobile', active: true, required: true },
+      { label: 'email', active: false, required: false },
+      { label: 'username', active: false, required: true },
+      { label: 'age', active: false, required: false },
+      { label: 'password', active: false, required: true },
+      { label: 'confirmPassword', active: false, required: true },
+      { label: 'birthday', active: false, required: false },
+      { label: 'firstName', active: false, required: false },
+      { label: 'lastName', active: false, required: false },
+      { label: 'fullName', active: false, required: false },
+      { label: 'gender', active: false, required: false },
+      { label: 'nationalCode', active: false, required: false }
+    ],
+    formConfigEn: [
+      { label: 'mobile', active: true, required: true },
+      { label: 'email', active: false, required: false },
+      { label: 'username', active: false, required: true },
+      { label: 'age', active: false, required: false },
+      { label: 'password', active: false, required: true },
+      { label: 'confirmPassword', active: false, required: true },
+      { label: 'birthday', active: false, required: false },
+      { label: 'firstName', active: false, required: false },
+      { label: 'lastName', active: false, required: false },
+      { label: 'fullName', active: false, required: false },
+      { label: 'gender', active: false, required: false },
+      { label: 'nationalCode', active: false, required: false }
+    ],
+    styles: [
+      { title: 'پاستا', id: 'pasta' },
+      { title: 'پیتزا', id: 'pizza' },
+      { title: 'پیتزا قارچ', id: 'mushroomPizza' },
+      { title: 'فست‌فود', id: 'fastfood' },
+      { title: 'سنتی', id: 'traditional' }
+    ]
+  },
+  cafe: {
+    id: 'cafe',
+    controller: 'base',
+    template: 'alpha',
+    title: 'کافه',
+    formConfig: [
+      { label: 'mobile', active: true, required: true },
+      { label: 'email', active: false, required: false },
+      { label: 'username', active: false, required: true },
+      { label: 'age', active: false, required: false },
+      { label: 'password', active: false, required: true },
+      { label: 'confirmPassword', active: false, required: true },
+      { label: 'birthday', active: false, required: false },
+      { label: 'firstName', active: false, required: false },
+      { label: 'lastName', active: false, required: false },
+      { label: 'fullName', active: false, required: false },
+      { label: 'gender', active: false, required: false },
+      { label: 'nationalCode', active: false, required: false }
+    ],
+    formConfigEn: [
+      { label: 'mobile', active: true, required: true },
+      { label: 'email', active: false, required: false },
+      { label: 'username', active: false, required: true },
+      { label: 'age', active: false, required: false },
+      { label: 'password', active: false, required: true },
+      { label: 'confirmPassword', active: false, required: true },
+      { label: 'birthday', active: false, required: false },
+      { label: 'firstName', active: false, required: false },
+      { label: 'lastName', active: false, required: false },
+      { label: 'fullName', active: false, required: false },
+      { label: 'gender', active: false, required: false },
+      { label: 'nationalCode', active: false, required: false }
+    ],
+    styles: [
+      { title: 'صبحانه', id: 'breakfast' },
+      { title: 'گردو', id: 'walnut' },
+      { title: 'آفتابگردان', id: 'sunflower' },
+      { title: 'عصرانه', id: 'supper' },
+      { title: 'فانوس', id: 'lantern' },
+      { title: 'کروسان', id: 'croisan' },
+      { title: 'کافئین', id: 'caffeine' }
+    ]
+  },
+  hotel: {
+    id: 'hotel',
+    controller: 'base',
+    template: 'alpha',
+    title: 'هتل',
+    formConfig: [
+      { label: 'mobile', active: true, required: true },
+      { label: 'email', active: false, required: false },
+      { label: 'username', active: false, required: true },
+      { label: 'age', active: false, required: false },
+      { label: 'password', active: false, required: true },
+      { label: 'confirmPassword', active: false, required: true },
+      { label: 'birthday', active: false, required: false },
+      { label: 'firstName', active: false, required: false },
+      { label: 'lastName', active: false, required: false },
+      { label: 'fullName', active: false, required: false },
+      { label: 'gender', active: false, required: false },
+      { label: 'nationalCode', active: false, required: false },
+      { label: 'roomNumber', active: false, required: false },
+      { label: 'passportNumber', active: false, required: false }
+    ],
+    formConfigEn: [
+      { label: 'mobile', active: true, required: true },
+      { label: 'email', active: false, required: false },
+      { label: 'username', active: false, required: true },
+      { label: 'age', active: false, required: false },
+      { label: 'password', active: false, required: true },
+      { label: 'confirmPassword', active: false, required: true },
+      { label: 'birthday', active: false, required: false },
+      { label: 'firstName', active: false, required: false },
+      { label: 'lastName', active: false, required: false },
+      { label: 'fullName', active: false, required: false },
+      { label: 'gender', active: false, required: false },
+      { label: 'nationalCode', active: false, required: false },
+      { label: 'roomNumber', active: false, required: false },
+      { label: 'passportNumber', active: false, required: false }
+    ],
+    styles: [
+      { title: 'اتاق', id: 'room' },
+      { title: 'ساحل', id: 'beach' },
+      { title: 'زنگ', id: 'bell' },
+      { title: 'آرامش', id: 'calm' },
+      { title: 'لابی', id: 'lobby' },
+      { title: 'چمدان', id: 'luggage' },
+      { title: 'کوهستان', id: 'mountains' },
+      { title: 'پذیرش', id: 'reception' },
+      { title: 'تعطیلات', id: 'vacation' }
+    ]
+  },
+  university: {
+    id: 'university',
+    controller: 'base',
+    template: 'alpha',
+    title: 'دانشگاه',
+    formConfig: [
+      { label: 'mobile', active: true, required: true },
+      { label: 'email', active: false, required: false },
+      { label: 'username', active: false, required: true },
+      { label: 'age', active: false, required: false },
+      { label: 'password', active: false, required: true },
+      { label: 'confirmPassword', active: false, required: true },
+      { label: 'birthday', active: false, required: false },
+      { label: 'firstName', active: false, required: false },
+      { label: 'lastName', active: false, required: false },
+      { label: 'fullName', active: false, required: false },
+      { label: 'gender', active: false, required: false },
+      { label: 'nationalCode', active: false, required: false },
+      { label: 'studentGrade', active: false, required: false },
+      { label: 'studentId', active: false, required: false }
+    ],
+    formConfigEn: [
+      { label: 'mobile', active: true, required: true },
+      { label: 'email', active: false, required: false },
+      { label: 'username', active: false, required: true },
+      { label: 'age', active: false, required: false },
+      { label: 'password', active: false, required: true },
+      { label: 'confirmPassword', active: false, required: true },
+      { label: 'birthday', active: false, required: false },
+      { label: 'firstName', active: false, required: false },
+      { label: 'lastName', active: false, required: false },
+      { label: 'fullName', active: false, required: false },
+      { label: 'gender', active: false, required: false },
+      { label: 'nationalCode', active: false, required: false },
+      { label: 'studentGrade', active: false, required: false },
+      { label: 'studentId', active: false, required: false }
+    ],
+    styles: [
+      { title: 'کتابخانه', id: 'library' },
+      { title: 'نقاشی', id: 'drawing' },
+      { title: 'طراحی', id: 'sketch' },
+      { title: 'روباه', id: 'fox' },
+      { title: 'یادداشت‌ها', id: 'notes' },
+      { title: 'فارغ‌التحصیلی', id: 'graduation' },
+      { title: 'مطالعه', id: 'study' }
+    ]
+  },
+  market: {
+    id: 'market',
+    controller: 'base',
+    template: 'alpha',
+    title: 'فروشگاه',
+    formConfig: [
+      { label: 'mobile', active: true, required: true },
+      { label: 'email', active: false, required: false },
+      { label: 'username', active: false, required: true },
+      { label: 'age', active: false, required: false },
+      { label: 'password', active: false, required: true },
+      { label: 'confirmPassword', active: false, required: true },
+      { label: 'birthday', active: false, required: false },
+      { label: 'firstName', active: false, required: false },
+      { label: 'lastName', active: false, required: false },
+      { label: 'fullName', active: false, required: false },
+      { label: 'gender', active: false, required: false },
+      { label: 'nationalCode', active: false, required: false }
+    ],
+    formConfigEn: [
+      { label: 'mobile', active: true, required: true },
+      { label: 'email', active: false, required: false },
+      { label: 'username', active: false, required: true },
+      { label: 'age', active: false, required: false },
+      { label: 'password', active: false, required: true },
+      { label: 'confirmPassword', active: false, required: true },
+      { label: 'birthday', active: false, required: false },
+      { label: 'firstName', active: false, required: false },
+      { label: 'lastName', active: false, required: false },
+      { label: 'fullName', active: false, required: false },
+      { label: 'gender', active: false, required: false },
+      { label: 'nationalCode', active: false, required: false }
+    ],
+    styles: [
+      { title: 'کوچه', id: 'alley' },
+      { title: 'انتخاب', id: 'choice' },
+      { title: 'پاییزه', id: 'autumn' },
+      { title: 'سبد میوه', id: 'fruitBasket' },
+      { title: 'سایز', id: 'size' },
+      { title: 'توت‌فرنگی‌ها', id: 'strawberries' },
+      { title: 'سبزیجات', id: 'veggies' }
+    ]
+  }
+};

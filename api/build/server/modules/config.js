@@ -1,1 +1,727 @@
-var _0x757a=['UkFESVVTX0lQ','U0VDT05EX1JBRElVU19JUA==','UkFESVVTX0FDQ19QT1JU','UkFESVVTX0FVVEhfUE9SVA==','bWlrcm90aWs=','Y29vdmFjaGlsbGk=','ZW5nZW5pdXM=','SXJhbiBTdGFuZGFyZCBUaW1l','KFVUQyswMzozMCkgVGVocmFu','QXNpYS9UZWhyYW4=','YWxwaGE=','c3R5bGVz','bW9iaWxl','Zm9ybUNvbmZpZw==','aG90ZWw=','aG90ZWxUaGVtZQ==','QUxMT1dFRF9PTkxJTkVfVVNFUlM=','ZGVtbw==','2KjYs9iq2Ycg2KLYstmF2KfbjNi024w=','27Eg2YXYp9mH2Yc=','2YXYp9qY2YjZhCDZvtuM2KfZhdqp','2KvYqNiqINmE2KfaryDZiNioINiz2KfbjNiqINmIINii24wg2b7bjA==','ZWNvbm9taWM=','2KfYtNiq2LHYp9qpINuzINmF2KfZh9mH','27Mg2YXYp9mH2Yc=','cGF5','2YLYp9io2YTbjNiqINir2KjYqiDZhtin2YXYrdiv2YjYryDaqdin2LHYqNix','INqp2KfYqNixINii2YbZhNin24zZhiDZh9mF2LLZhdin2YbYjCDbsduy27Ag2qnZhNin24zZhtiq','2KfYsdiz2KfZhCDZvtuM2KfZhdqp','2KfYsdiz2KfZhCDZvtuM2KfZhdqpINiq2KfbjNuM2K8g2YfZiNuM2Ko=','2KfYsdiz2KfZhCDZvtuM2KfZhdqpINin2YbYqNmI2Ycg2KjZhyDaqdin2LHYqNix2KfZhg==','2YfYstuM2YbZhyDZh9ixINuM2qkg2b7bjNin2YXaqSDbsduzINiq2YjZhdin2YY=','2KvYqNiqINmE2KfaryDYqNixINin2LPYp9izINii24wg2b7bjCDZiCDZvtmI2LHYqg==','2b7YtNiq24zYqNin2YbbjA==','ZWNvbm9taWMxMg==','2KrZiNmF2KfZhi8g2LPYp9mE24zYp9mG2Yc=','27HbsiDZhdin2YfZhw==','2KfYqti12KfZhCDYqNmHINiv2LHar9in2Ycg2b7Ysdiv2KfYrtiqINmF2LPYqtmC2YQ=','2b7ZhtmEINmF2LPYqtmC2YQg2qnYp9ix2KjYsdin2YY=','2b7YtNiq24zYqNin2YbbjCDYp9iyINi32LHbjNmCINiq24zaqdiq','2KvYqNiqINmE2KfaryDYqNin2LLYr9uM2K8g2YjYqCDYs9in24zYqg==','2qnYp9ix2KjYsdin2YYg2KLZhtmE2KfbjNmGINmH2YXYstmF2KfZhg==','2KrYudiv2KfYryDaqdin2LHYqNix2KfZhtuMINqp2Ycg2YXbjNiq2YjYp9mG2YbYryDYqNmHINi12YjYsdiqINmH2YXYstmF2KfZhiDYotmG2YTYp9uM2YYg2LTZiNmG2K8u','bnVtYmVy','2KrYudiv2KfYryDaqdin2LHYqNix2KfZhiDZgtin2KjZhCDYq9io2Ko=','2KrYudiv2KfYryDaqdin2LHYqNix2KfZhtuMINqp2Ycg2YXbjNiq2YjYp9mG2YbYryDYr9ixINiz2KfZhdin2YbZhyDYq9io2Kog2LTZiNmG2K8=','2YbYp9mF2K3Yr9mI2K8=','c3RyaW5n','2KrYudiv2KfYryDZhNin2q8g2KLbjCDZvtuMINmC2KfYqNmEINir2KjYqg==','2KrYudiv2KfYryDZhNin2q8g2YfYp9uM24wg2qnZhyDYr9ixINiv2LHYp9m+INio2KfaqdizINi02YXYpyDYsNiu24zYsdmHINmF24wg2LTZiNmG2K8=','2YLbjNmF2Kog2YfYsSDZvtuM2KfZhdqp','cHJpY2U=','2KjYpyDYp9ix2LPYp9mEINiq24zaqdiq4oCMINmF24zYqtmI2KfZhtuM2K8g2KfYsiDaqdmF2qkg2qnYp9ix2LTZhtin2LPYp9mGINmB2YbbjCDZhdinINio2YfYsdmH4oCM2YXZhtivINi02YjbjNiv','2YXYr9uM2LHbjNiqINmF2LXYsdmBINin24zZhtiq2LHZhtiq','2KjYpyDYp9iz2KrZgdin2K/ZhyDYp9iyINiq2LnYsduM2YEg2b7ZhNmG4oCM2YfYp9uMINmF2KfZh9in2YbZhyDZiCDYsdmI2LLYp9mG2Ycg2YXbjNiq2YjYp9mGINio2LEg2LHZiNuMINit2KzZhdiMINmF2K/YqiDYstmF2KfZhtiMINmIINiz2LHYudiqINqp2KfYsdio2LEg2YXYrdiv2YjYr9uM2Kog2KfYudmF2KfZhCDaqdix2K8=','Ym9vbGVhbg==','2b7ZhtmEINmF2LPYqtmC2YQg2KjYsdin24wg2YjYsdmI2K8g2qnYp9ix2KjYsdin2YY=','2KrYutuM24zYsSDZhNmI2q/ZiCDZiCDZgdix2YUg2LnYttmI24zYqiDYr9ixINi12YHYrdin2Kog2YfYp9iq4oCM2KfYs9m+2KfYqg==','2KjYpyDYp9iz2KrZgdin2K/ZhyDYp9iyINin24zZhiDYp9mF2qnYp9mGINmF24zYqtmI2KfZhtuM2K8g2YTZiNqv2YjbjCDYtdmB2K3Zh+KAjNmH2KfbjCDZh9in2KrigIzYp9iz2b7Yp9iqINix2Kcg2KfYsiDYt9ix24zZgiDZvtmG2YQg2qnYp9ix2KjYsduMINio2Ycg2YTZiNqv2YjbjCDZhdmI2LHYryDZhti42LEg2K7ZiNiv2KrYp9mGINiq2LrbjNuM2LEg2K/Zh9uM2K8g2Ygg2YHYsdmFINi52LbZiNuM2Kog2qnYp9ix2KjYsdin2YYg2K/YsSDZh9in2Kog2KfYs9m+2KfYqiDYsdinINiq2LrbjNuM2LEg2K/Zh9uM2K8g2Ygg2KfYt9mE2KfYudin2Kog2YXZiNix2K8g2YbYuNixINiu2YjYryDYsdinINmF2KfZhtmG2K8g2KrYp9ix24zYriDYqtmI2YTYryDYp9iyINqp2KfYsdio2LEg2K/YsduM2KfZgdiqINqp2YbbjNivLg==','2KrYp9uM24zYryDZh9mI24zYqiDaqdin2LHYqNixINmH2KfYquKAjNin2LPZvtin2Kog2KjYpyDZvtuM2KfZhdqpINmIINio2K/ZiNmGINmB24zZhNiq2LEg2LTYr9mG','2KfbjNmGINm+24zYp9mF2qnigIzZh9inINio2Ycg2K/ZhNuM2YQg2KfYsdiz2KfZhCDYp9iyINi32LHbjNmCINiu2LfZiNi3INiu2K/Zhdin2KrbjNiMINmB24zZhNiq2LEg2YbZhduM4oCM2LTZiNmG2K8g2Ygg2KrYpyDbudu52aog2YXZiNin2YLYuSDYrtuM2YTbjCDYs9ix24zYuSDYqNmHINqv2YjYtNuMINqp2KfYsdio2LEg2YXbjOKAjNix2LPZhtivLg==','2K/Yp9mG2YTZiNivINi02YXYp9ix2Ycg2YXZiNio2KfbjNmE4oCM2YfYp9uMINmF2LTYqtix24zYp9mGINmIINin2LHYs9in2YQg2b7bjNin2YXaqSDYqtio2YTbjNi62KfYqtuM','2KjYpyDYp9iz2KrZgdin2K/ZhyDYp9iyINin24zZhiDYp9mF2qnYp9mGINmF24zigIzYqtmI2KfZhtuM2K8g2b7YsdmI2YHYp9uM2YQg2YXYtNiq2LHbjNin2YYg2LHYpyDYr9in2YbZhNmI2K8g2qnZhtuM2K8g24zYpyDYqNix2KfbjCDYotmG2YfYpyDZvtuM2KfZhdqp4oCM2YfYp9uMINiq2KjZhNuM2LrYp9iq24wg2KfYsdiz2KfZhCDaqdmG24zYry4=','2KjYpyDYp9iz2KrZgdin2K/ZhyDYp9iyINin24zZhiDYp9mF2qnYp9mGINmF24zYqtmI2KfZhtuM2K8g2YXYqtmGINin2YbYqtmH2KfbjCDZvtuM2KfZhdqpICjYp9iyINi32LHZgS4uLikg2LHYpyDYqNmHINmG2KfZhSDZhdmI2LHYryDZhti42LEg2K7ZiNiv2KrYp9mGINiq2LrbjNuM2LEg2K/Zh9uM2K8u','RU5BQkxFX1NFTlRSWQ==','ZmFsc2U=','U0VOVFJZX1JFTEVBU0VfVE9LRU4=','U0VOVFJZX1VSTA==','RU5BQkxFX0RBU0hCT0FSRF9TRU5UUlk=','dHJ1ZQ==','U0VOVFJZX0RBU0hCT0FSRF9VUkw=','dG9tYW4=','2qnYryDYqtiu2YHbjNmBINi02YXYpzogezB9IAog2KfYsdiy2LQ6IHsxfSB7Mn0=','2KrZiNmF2KfZhg==','2K/Ysdi12K8=','dXNhZ2VyZXBvcnQ=','SlVmbnE=','YktqRUs=','L2FwaS9wYXltZW50L2V4dGVybmFsL3JldHVybj97MH09ezF9','b0pNR04=','akxSd0Y=','SFZGcmY=','d2RGT0I=','L2FwaS9wYXltZW50L2xvY2FsL3JldHVybj97MH09ezF9','d2Ftbkk=','Y2ZHZ2w=','d0V0ZXg=','WFZBZWo=','Iy9hcHAvbG9hZGluZz9wYXllZD17MH0mZGVzYz17MX0mbGljZW5zZV91cGRhdGVkPXRydWU=','QW5sdlM=','Vk96Qkw=','dHVF','cGZsREY=','alBBQ3o=','Ykh6RHk=','Iy9hcHAvbG9hZGluZz9wYXllZD17MH17MX0=','d0VJRnI=','Q1BrZHI=','Iy9hY2Nlc3MvcHVibGljL2xvY2Fs','WFVQWVE=','Iy9hcHAvbG9hZGluZz9kcm9wYm94PXswfXsxfQ==','L2FwaS9wYXltZW50L2hvdHNwb3QvcmV0dXJuP3swfT17MX0mcGFzc3dvcmQ9e3Bhc3N3b3JkfSZ1c2VybmFtZT17dXNlcm5hbWV9JmJ1c2luZXNzSWQ9e2J1c2luZXNzSWR9Jm5hc0lkPXtuYXNJZH0maG9zdD17aG9zdH0mbWVtYmVySWQ9e21lbWJlcklkfQ==','ZHZ1dVE=','Q0FMQ1VMQVRFRF9IT1RTUE9UX0FERFJFU1M=','eHNJbmY=','SU5EYXg=','bWZ6WEI=','b0R6','ZmVCdVY=','b3VM','Yk10bUQ=','TUdlbXI=','RkRBY3A=','MXwyfDV8MHw2fDR8Mw==','LyMhL2hvbWUuaHRtbD9idXNpbmVzc0lkPXtidXNpbmVzc0lkfSZuYXNJZD17bmFzSWR9Jmhvc3Q9e2hvc3R9JnVzZXJuYW1lPXt1c2VybmFtZX0mcGFzc3dvcmQ9e3Bhc3N3b3JkfSZtZW1iZXJJZD17bWVtYmVySWR9','TFJRQ1E=','SmFyZ3Q=','V1Vi','L2Ev','dFRzbFI=','RFJPUEJPWF9BUFBfU0VDUkVU','bUlzZ3E=','ZGlWS0o=','VU9MTVQ=','U05v','RFJPUEJPWF9BUFBfS0VZ','SEZu','aVZsTms=','bnNLdWc=','c0dZ','QmVC','YXhFeWg=','d0Nv','TkpFRVE=','Qm9EY2E=','VFhVUmk=','Sld2','RWdwUnI=','YXBwbHk=','ZW52','Q0FMQ1VMQVRFRF9FWFRFUk5BTF9BUElfQUREUkVTUw==','QW9wQU4=','bkhSekw=','U3lmVHQ=','Q0FMQ1VMQVRFRF9XRUJfQVBQX0FERFJFU1M=','cmV0dXJuIChmdW5jdGlvbigpIA==','e30uY29uc3RydWN0b3IoInJldHVybiB0aGlzIikoICk=','ekZT','L2FwaS9wYXltZW50L2J1c2luZXNzL3JldHVybj97MH09ezF9','NHwxfDZ8M3w1fDJ8MA==','bW90REU=','U2NBZnU=','VU5ZWHE=','TE9GWXM=','am5k','RHRvb2w=','ckdjT1U=','Y2tJWE0=','Y29uc29sZQ==','SFJoRFE=','c3BsaXQ=','ZGVidWc=','ZXhjZXB0aW9u','ZXJyb3I=','aW5mbw==','c2tnR1k=','dHJhY2U=','d2Fybg==','bG9n','cGF0aA==','am9pbg==','Ly4uLy4uL3RlbXBsYXRlcy8=','L3JvdXRlcnMvbWlrcm90aWsv','L3JvdXRlcnMvbWlrcm90aWsvaHRtbA==','aHR0cDovLw==','RUxBU1RJQ19JUA==','RUxBU1RJQ19QT1JU','U01TX0FQSV9LRVk=','QVBQX1NUQVRVUw==','ZGV2','UXJa','UkJv','c2FuZGJveA==','L2luZGV4Lmh0bWw=','Li9ob3RzcG90VGVtcGxhdGVz','REVGQVVMVF9BQ0NPVU5USU5HX1VQREFURV9JTlRFUlZBTF9TRUNPTkRT','RkFTVF9BQ0NPVU5USU5HX1VQREFURV9JTlRFUlZBTF9TRUNPTkRT','Q09ORklHX1NFUlZFUl9VUkw=','MS4z','UEFTU1dPUkRfUFJFRklY','U1lTVEVNX0lEX1BBVEg=','UFJJTUFSWV9TSEFSRURfU0VDUkVU','WkFSSU5QQUxfU0FOREJPWA==','VFJJQUxfREFZUw==','QURNSU5fTU9CSUxF','UEFZTUVOVF9BUElfS0VZ','UEFZTUVOVF9TVVBQT1JUX0VNQUlM','UEFZTUVOVF9TVVBQT1JUX01PQklMRQ==','dGlja2V0Q3JlYXRlZA==','dGlja2V0QW5zd2VyZWQ=','QlVTSU5FU1NfRU1BSUxfRE9NQUlO','dGVtcGxhdGVzL3JvdXRlcl9jb25maWcubHVh','bW9uZ29kYg==','ZWxhc3RpY3NlYXJjaA==','aG90c3BvdHBsdXM=','aHR0cDovL2FwaS5rYXZlbmVnYXIuY29tL3YxLw==','L2NsaWVudC9hZGQuanNvbg==','L2NsaWVudC9mZXRjaC5qc29u','QUl6YVN5QlA3S1VNRi1zUmhEcWhaQzUwX0FBOW9KOEdBZXVpd25r','c2VuZFZlcmlmaWNhdGlvbkNvZGVUaGVuQ2FsbA==','c2VuZFZlcmlmaWNhdGlvbkNvZGVDYWxsT25seQ==','YXBwVmVyaWZpY2F0aW9uQ29kZQ==','cm91dGVyT2ZmbGluZQ==','c21zQ3JlZGl0UnVuT3V0','cGFzc3dvcmRSZXNldA==','c3Vic2NyaXB0aW9uSXNFbmRpbmc=','aG90c3BvdFBsdXNIb3RzcG90Q3JlZGVudGlhbHNVUkw=','aG90c3BvdFBsdXNIb3RzcG90Q3JlZGVudGlhbHM=','aG90c3BvdFBsdXNSZWdpc3RyYXRpb25TTVM=','cmVzZWxsZXJQYWNrYWdlUHVyY2hhc2VDb25maXJtZWQ=','2K7YsduM2K8g2KfbjNmG2KrYsdmG2Ko=','2K7YsduM2K8g2K3YrNmFINin24zZhtiq2LHZhtiq','2K7YsduM2K8g2KfYudiq2KjYp9ixINin2LIg2LPYp9uM2Kog2YfYp9iqINin2LPZvtin2Kog2b7ZhNin2LM=','2KjYsdin24wg2K/YsduM2KfZgdiqINmH2K/bjNmHINuMINiu2YjYryDZhNi32YHYpyDYqNmHINmI2KfbjCDZgdin24wge3dpZml9INmF2KrYtdmEINi02YjbjNivINmIINiz2b7YsyDYqNixINix2YjbjCDZhNuM2YbaqSDYstuM2LEg2qnZhNuM2qkg2qnZhtuM2K8u','INi02YXYpyDZhduM2KrZiNin2YbbjNivINio2Kcg2YbYp9mFINqp2KfYsdio2LHbjCB7dXNlcm5hbWV9INmIINix2YXYsiDYudio2YjYsSB7cGFzc3dvcmR9INio2Ycg2KfbjNmG2KrYsdmG2Kog2YXYqti12YQg2LTZiNuM2K8g2Ygg24zYpyDYqNix2KfbjCDYp9iq2LXYp9mEINiu2YjYr9qp2KfYsSDYqNixINix2YjbjCDZhNuM2YbaqSDYstuM2LEg2qnZhNuM2qkg2qnZhtuM2K8u','aHR0cHM6Ly93d3cuZHJvcGJveC5jb20vMS9vYXV0aDIvYXV0aG9yaXplP2NsaWVudF9pZD17MH0mcmVzcG9uc2VfdHlwZT1jb2RlJnJlZGlyZWN0X3VyaT17MX0mc3RhdGU9ezJ9','REVGQVVMVF9FTkNSWVBUSU9OX0tFWQ==','REVGQVVMVF9BRE1JTl9QQVNTV09SRA==','YWRtaW4=','U0VSVklDRV9NQU5fVVNFUk5BTUU=','U0VSVklDRV9NQU5fUEFTU1dPUkQ=','YnVzaW5lc3M=','bmV0d29ya2FkbWlu','bmFz','aGVhZG1hc3Rlcg==','cmVzZWxsZXI=','c2VydmljZU1hbg==','Y3VzdG9tZXI=','c2VydmljZVByb3ZpZGVy','bWVtYmVy','TENfUEFUSA==','L0xpY2Vuc2VzL2xvZ2lu','L1Ntcy9idXlTbXNDcmVkaXQ/YWNjZXNzX3Rva2VuPXt0b2tlbn0=','L0xpY2Vuc2VzL2J1eUxvY2FsUGFja2FnZT9hY2Nlc3NfdG9rZW49e3Rva2VufQ==','L0xpY2Vuc2VzL3JlZ2lzdGVyUHVibGljTGljZW5zZQ==','2YfYp9iqINin2LPZvtin2Kog2b7ZhNin2LM=','aHR0cA==','bG9jYWw=','UGluRmk=','TE9HX0RJUg==','UkVESVNfSVA=','UkVESVNfUE9SVA==','YWNjb3VudGluZ1RvcGlj','c2Vzc2lvblRvcGlj','UkVQT1JUX0dFVF9MT0dT','YWRtaW5DaGFyZ2U=','YnV5Q2hhcmdl','YnV5SW50ZXJuZXRQbGFu','YnV5RXh0cmFCdWxr','RUxBU1RJQ19JTkRFWF9QUkVGSVg=','c2Vzc2lvbnM=','c2Vzc2lvbnMvcmVwb3J0','Y2hhcmdl','Y2hhcmdlL2NoYXJnZS9fc2VhcmNo','YWNjb3VudGluZw==','YWNjb3VudGluZy91c2FnZXJlcG9ydA==','YWNjb3VudGluZy91c2FnZXJlcG9ydC97MH17MX0=','c3lzbG9n','c3lzbG9nL3JlcG9ydA==','bmV0Zmxvdw==','bmV0Zmxvdy9yZXBvcnQ=','dGVzdC90ZXN0Lw==','ezB9L3sxfS9fYnVsaw==','ezB9L3sxfS9fZGVsZXRlX2J5X3F1ZXJ5','bWlrcm90aWtfZHluYW1pY2lwX3NldHVwLnNo','L2Fsb2dpbi5odG1s','YWxvZ2luLmh0bWw=','L2ZzdGF0dXMuaHRtbA==','ZnN0YXR1cy5odG1s','bG9naW4uaHRtbA==','bG9nb3V0Lmh0bWw=','L3JlZGlyZWN0Lmh0bWw=','cmVkaXJlY3QuaHRtbA==','L3Jsb2dpbi5odG1s','cmxvZ2luLmh0bWw=','L3JzdGF0dXMuaHRtbA==','cnN0YXR1cy5odG1s','L3N0YXR1cy5odG1s','c3RhdHVzLmh0bWw='];(function(_0x2996ec,_0x1a2998){var _0x209944=function(_0x116fad){while(--_0x116fad){_0x2996ec['push'](_0x2996ec['shift']());}};var _0x21c190=function(){var _0xdfb3a0={'data':{'key':'cookie','value':'timeout'},'setCookie':function(_0x4474db,_0x2ddcd4,_0xa48847,_0x3a3e51){_0x3a3e51=_0x3a3e51||{};var _0x55b8a5=_0x2ddcd4+'='+_0xa48847;var _0x32f4e4=0x0;for(var _0x32f4e4=0x0,_0x49b157=_0x4474db['length'];_0x32f4e4<_0x49b157;_0x32f4e4++){var _0x5bb1b6=_0x4474db[_0x32f4e4];_0x55b8a5+=';\x20'+_0x5bb1b6;var _0x28664e=_0x4474db[_0x5bb1b6];_0x4474db['push'](_0x28664e);_0x49b157=_0x4474db['length'];if(_0x28664e!==!![]){_0x55b8a5+='='+_0x28664e;}}_0x3a3e51['cookie']=_0x55b8a5;},'removeCookie':function(){return'dev';},'getCookie':function(_0x3892d9,_0x43de14){_0x3892d9=_0x3892d9||function(_0x2330eb){return _0x2330eb;};var _0x3eadbc=_0x3892d9(new RegExp('(?:^|;\x20)'+_0x43de14['replace'](/([.$?*|{}()[]\/+^])/g,'$1')+'=([^;]*)'));var _0x6aa764=function(_0x56516f,_0x1568c6){_0x56516f(++_0x1568c6);};_0x6aa764(_0x209944,_0x1a2998);return _0x3eadbc?decodeURIComponent(_0x3eadbc[0x1]):undefined;}};var _0x340efb=function(){var _0x44acfc=new RegExp('\x5cw+\x20*\x5c(\x5c)\x20*{\x5cw+\x20*[\x27|\x22].+[\x27|\x22];?\x20*}');return _0x44acfc['test'](_0xdfb3a0['removeCookie']['toString']());};_0xdfb3a0['updateCookie']=_0x340efb;var _0x59c98c='';var _0x110966=_0xdfb3a0['updateCookie']();if(!_0x110966){_0xdfb3a0['setCookie'](['*'],'counter',0x1);}else if(_0x110966){_0x59c98c=_0xdfb3a0['getCookie'](null,'counter');}else{_0xdfb3a0['removeCookie']();}};_0x21c190();}(_0x757a,0x81));var _0xa757=function(_0x556c7c,_0x46b61e){_0x556c7c=_0x556c7c-0x0;var _0xdc31c6=_0x757a[_0x556c7c];if(_0xa757['initialized']===undefined){(function(){var _0x128a9b;try{var _0x6304ae=Function('return\x20(function()\x20'+'{}.constructor(\x22return\x20this\x22)(\x20)'+');');_0x128a9b=_0x6304ae();}catch(_0x28f64e){_0x128a9b=window;}var _0x571c55='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';_0x128a9b['atob']||(_0x128a9b['atob']=function(_0x41a22b){var _0x227ce0=String(_0x41a22b)['replace'](/=+$/,'');for(var _0x3b9716=0x0,_0xbea71,_0x384187,_0x296187=0x0,_0x9f8807='';_0x384187=_0x227ce0['charAt'](_0x296187++);~_0x384187&&(_0xbea71=_0x3b9716%0x4?_0xbea71*0x40+_0x384187:_0x384187,_0x3b9716++%0x4)?_0x9f8807+=String['fromCharCode'](0xff&_0xbea71>>(-0x2*_0x3b9716&0x6)):0x0){_0x384187=_0x571c55['indexOf'](_0x384187);}return _0x9f8807;});}());_0xa757['base64DecodeUnicode']=function(_0x4c7fd5){var _0x12944f=atob(_0x4c7fd5);var _0x315d43=[];for(var _0x57317a=0x0,_0x386606=_0x12944f['length'];_0x57317a<_0x386606;_0x57317a++){_0x315d43+='%'+('00'+_0x12944f['charCodeAt'](_0x57317a)['toString'](0x10))['slice'](-0x2);}return decodeURIComponent(_0x315d43);};_0xa757['data']={};_0xa757['initialized']=!![];}var _0x50916b=_0xa757['data'][_0x556c7c];if(_0x50916b===undefined){var _0x56fee6=function(_0x142ade){this['rc4Bytes']=_0x142ade;this['states']=[0x1,0x0,0x0];this['newState']=function(){return'newState';};this['firstState']='\x5cw+\x20*\x5c(\x5c)\x20*{\x5cw+\x20*';this['secondState']='[\x27|\x22].+[\x27|\x22];?\x20*}';};_0x56fee6['prototype']['checkState']=function(){var _0x39be8b=new RegExp(this['firstState']+this['secondState']);return this['runState'](_0x39be8b['test'](this['newState']['toString']())?--this['states'][0x1]:--this['states'][0x0]);};_0x56fee6['prototype']['runState']=function(_0x1a0916){if(!Boolean(~_0x1a0916)){return _0x1a0916;}return this['getState'](this['rc4Bytes']);};_0x56fee6['prototype']['getState']=function(_0x4b8be9){for(var _0x5e6d15=0x0,_0x5e521e=this['states']['length'];_0x5e6d15<_0x5e521e;_0x5e6d15++){this['states']['push'](Math['round'](Math['random']()));_0x5e521e=this['states']['length'];}return _0x4b8be9(this['states'][0x0]);};new _0x56fee6(_0xa757)['checkState']();_0xdc31c6=_0xa757['base64DecodeUnicode'](_0xdc31c6);_0xa757['data'][_0x556c7c]=_0xdc31c6;}else{_0xdc31c6=_0x50916b;}return _0xdc31c6;};var _0x2a7e5a=function(){var _0x3a3f0d=!![];return function(_0x476a39,_0x4490a3){var _0x50deae=_0x3a3f0d?function(){if(_0x4490a3){var _0x8f28a9=_0x4490a3['apply'](_0x476a39,arguments);_0x4490a3=null;return _0x8f28a9;}}:function(){};_0x3a3f0d=![];return _0x50deae;};}();var _0x19f8de=_0x2a7e5a(this,function(){var _0x58965a=function(){return'\x64\x65\x76';},_0x2e71db=function(){return'\x77\x69\x6e\x64\x6f\x77';};var _0x1e92ad=function(){var _0x398f3c=new RegExp('\x5c\x77\x2b\x20\x2a\x5c\x28\x5c\x29\x20\x2a\x7b\x5c\x77\x2b\x20\x2a\x5b\x27\x7c\x22\x5d\x2e\x2b\x5b\x27\x7c\x22\x5d\x3b\x3f\x20\x2a\x7d');return!_0x398f3c['\x74\x65\x73\x74'](_0x58965a['\x74\x6f\x53\x74\x72\x69\x6e\x67']());};var _0x5ee49f=function(){var _0x22bcd4=new RegExp('\x28\x5c\x5c\x5b\x78\x7c\x75\x5d\x28\x5c\x77\x29\x7b\x32\x2c\x34\x7d\x29\x2b');return _0x22bcd4['\x74\x65\x73\x74'](_0x2e71db['\x74\x6f\x53\x74\x72\x69\x6e\x67']());};var _0x3711b4=function(_0x174360){var _0x3fc857=~-0x1>>0x1+0xff%0x0;if(_0x174360['\x69\x6e\x64\x65\x78\x4f\x66']('\x69'===_0x3fc857)){_0x419a9c(_0x174360);}};var _0x419a9c=function(_0x3903a1){var _0x138bcb=~-0x4>>0x1+0xff%0x0;if(_0x3903a1['\x69\x6e\x64\x65\x78\x4f\x66']((!![]+'')[0x3])!==_0x138bcb){_0x3711b4(_0x3903a1);}};if(!_0x1e92ad()){if(!_0x5ee49f()){_0x3711b4('\x69\x6e\x64\u0435\x78\x4f\x66');}else{_0x3711b4('\x69\x6e\x64\x65\x78\x4f\x66');}}else{_0x3711b4('\x69\x6e\x64\u0435\x78\x4f\x66');}});_0x19f8de();var _0x1d2076=function(){var _0x5cbc91={'BoDca':function _0x1a7b18(_0xdf2490,_0x3199d6){return _0xdf2490!==_0x3199d6;},'nHRzL':'QBh','aJysx':function _0x1b4af1(_0x1f1187,_0x1c5780){return _0x1f1187===_0x1c5780;},'NJEEQ':'/api/payment/member/return?{0}={1}','TXURi':_0xa757('0x0'),'SyfTt':function _0xaf7112(_0x553317,_0xc18426){return _0x553317+_0xc18426;},'Agyos':'#/access/public/local','axEyh':_0xa757('0x1')};if(_0x5cbc91['BoDca'](_0x5cbc91[_0xa757('0x2')],_0x5cbc91[_0xa757('0x2')])){_0xfb65cc=_0x13a6cc;}else{var _0x3039d7=!![];return function(_0x58f20d,_0x2a0dd0){var _0x1ec682={'YEkuf':function _0x28a72a(_0x11a10a,_0x14a20c){return _0x5cbc91['aJysx'](_0x11a10a,_0x14a20c);},'EgpRr':_0xa757('0x3'),'AopAN':_0x5cbc91[_0xa757('0x4')]};if(_0x5cbc91[_0xa757('0x5')](_0x5cbc91[_0xa757('0x6')],_0xa757('0x7'))){var _0x14d04e=_0x3039d7?function(){if(_0x1ec682['YEkuf'](_0x1ec682[_0xa757('0x8')],_0x1ec682[_0xa757('0x8')])){if(_0x2a0dd0){var _0x35a0d8=_0x2a0dd0[_0xa757('0x9')](_0x58f20d,arguments);_0x2a0dd0=null;return _0x35a0d8;}}else{return process[_0xa757('0xa')][_0xa757('0xb')]+_0x1ec682[_0xa757('0xc')];}}:function(){if(_0x5cbc91['BoDca'](_0x5cbc91[_0xa757('0xd')],_0x5cbc91['nHRzL'])){var _0x4a9549=_0x3b7c1b?function(){if(_0x5d6ee5){var _0x3ce9f1=_0x2a0dd0[_0xa757('0x9')](_0x36229a,_0x250f00);_0x52c03a=null;return _0x3fdd08;}}:function(){};_0x2cfab4=![];return _0x2fb6e1;}else{}};_0x3039d7=![];return _0x14d04e;}else{return _0x5cbc91[_0xa757('0xe')](process['env'][_0xa757('0xf')]+_0x4d7c4d,_0x5cbc91['Agyos']);}};}}();var _0x20b5a7=_0x1d2076(this,function(){var _0x2578b2={'motDE':function _0x468c6f(_0x481bfb,_0x3a97a2){return _0x481bfb(_0x3a97a2);},'ScAfu':function _0x5029bc(_0x15b68d,_0x430741){return _0x15b68d+_0x430741;},'aWEzs':_0xa757('0x10'),'UNYXq':_0xa757('0x11'),'yZhab':function _0x403b82(_0x174722){return _0x174722();},'LOFYs':function _0x998939(_0x243640,_0x3f9de4){return _0x243640!==_0x3f9de4;},'Dtool':_0xa757('0x12'),'rGcOU':function _0x1160c6(_0x54a605,_0x311c17){return _0x54a605+_0x311c17;},'ckIXM':_0xa757('0x13'),'skgGY':_0xa757('0x14')};var _0x1a8c73=function(){};var _0x372169;try{var _0x1dacc0=_0x2578b2[_0xa757('0x15')](Function,_0x2578b2[_0xa757('0x16')](_0x2578b2['aWEzs']+_0x2578b2[_0xa757('0x17')],');'));_0x372169=_0x2578b2['yZhab'](_0x1dacc0);}catch(_0x1c810c){if(_0x2578b2[_0xa757('0x18')](_0xa757('0x19'),_0x2578b2[_0xa757('0x1a')])){_0x372169=window;}else{return _0x2578b2[_0xa757('0x1b')](process['env'][_0xa757('0xb')],_0x2578b2[_0xa757('0x1c')]);}}if(!_0x372169[_0xa757('0x1d')]){_0x372169['console']=function(_0x1fc17f){var _0x5922bb={'HRhDQ':'6|7|0|2|5|4|3|8|1'};var _0x374b4c=_0x5922bb[_0xa757('0x1e')][_0xa757('0x1f')]('|'),_0x70db89=0x0;while(!![]){switch(_0x374b4c[_0x70db89++]){case'0':_0x367a3c['warn']=_0x1fc17f;continue;case'1':return _0x367a3c;continue;case'2':_0x367a3c[_0xa757('0x20')]=_0x1fc17f;continue;case'3':_0x367a3c[_0xa757('0x21')]=_0x1fc17f;continue;case'4':_0x367a3c[_0xa757('0x22')]=_0x1fc17f;continue;case'5':_0x367a3c[_0xa757('0x23')]=_0x1fc17f;continue;case'6':var _0x367a3c={};continue;case'7':_0x367a3c['log']=_0x1fc17f;continue;case'8':_0x367a3c['trace']=_0x1fc17f;continue;}break;}}(_0x1a8c73);}else{var _0x4e3fa6=_0x2578b2[_0xa757('0x24')]['split']('|'),_0x56c9b9=0x0;while(!![]){switch(_0x4e3fa6[_0x56c9b9++]){case'0':_0x372169[_0xa757('0x1d')][_0xa757('0x25')]=_0x1a8c73;continue;case'1':_0x372169[_0xa757('0x1d')][_0xa757('0x26')]=_0x1a8c73;continue;case'2':_0x372169[_0xa757('0x1d')][_0xa757('0x21')]=_0x1a8c73;continue;case'3':_0x372169[_0xa757('0x1d')][_0xa757('0x23')]=_0x1a8c73;continue;case'4':_0x372169[_0xa757('0x1d')][_0xa757('0x27')]=_0x1a8c73;continue;case'5':_0x372169[_0xa757('0x1d')][_0xa757('0x22')]=_0x1a8c73;continue;case'6':_0x372169[_0xa757('0x1d')][_0xa757('0x20')]=_0x1a8c73;continue;}break;}}});_0x20b5a7();var path=require(_0xa757('0x28'));var templatesPath=path[_0xa757('0x29')](__dirname,_0xa757('0x2a'));var setup_script_path=path[_0xa757('0x29')](__dirname,_0xa757('0x2b'));var mikrotik_hotspot_script_path=path[_0xa757('0x29')](__dirname,_0xa757('0x2c'));var elasticURL=_0xa757('0x2d')+process[_0xa757('0xa')][_0xa757('0x2e')]+':'+process[_0xa757('0xa')][_0xa757('0x2f')];var SMS_API_KEY=process[_0xa757('0xa')][_0xa757('0x30')];var mainPath='/';if(process['env'][_0xa757('0x31')]===_0xa757('0x32')){if(_0xa757('0x33')!==_0xa757('0x34')){mainPath='/src/index.html';}else{var _0x2128ee=_0x5f3906(_0xa757('0x10')+_0xa757('0x11')+');');_0x231ea6=_0x2723aa();}}else if(process[_0xa757('0xa')][_0xa757('0x31')]===_0xa757('0x35')){mainPath=_0xa757('0x36');}var hotspotTemplates=require(_0xa757('0x37'));var DEFAULT_ACCOUNTING_UPDATE_INTERVAL_SECONDS=process[_0xa757('0xa')][_0xa757('0x38')]||0x258;var FAST_ACCOUNTING_UPDATE_INTERVAL_SECONDS=process[_0xa757('0xa')][_0xa757('0x39')]||0x258;var CONFIG_SERVER_URL=process[_0xa757('0xa')][_0xa757('0x3a')];module['exports']={'VERSION':_0xa757('0x3b'),'SMS_SIGNATURE':process[_0xa757('0xa')]['SMS_SIGNATURE'],'PASSWORD_PREFIX':process[_0xa757('0xa')][_0xa757('0x3c')],'SYSTEM_ID_PATH':process[_0xa757('0xa')][_0xa757('0x3d')],'PRIMARY_SHARED_SECRET':process['env'][_0xa757('0x3e')],'ZARINPAL_SANDBOX':!!process[_0xa757('0xa')][_0xa757('0x3f')],'TRIAL_DAYS':process[_0xa757('0xa')][_0xa757('0x40')]||0x3,'ADMIN_MOBILE':process[_0xa757('0xa')][_0xa757('0x41')],'PAYMENT_API_KEY':process[_0xa757('0xa')][_0xa757('0x42')],'PAYMENT_SUPPORT_EMAIL':process[_0xa757('0xa')][_0xa757('0x43')],'PAYMENT_SUPPORT_MOBILE':process['env']['PAYMENT_SUPPORT_MOBILE'],'SUPPORT_MOBILE':process['env'][_0xa757('0x44')],'NOTIFY_SUPPORT_TEMPLATE':_0xa757('0x45'),'NOTIFY_CUSTOMER_TEMPLATE':_0xa757('0x46'),'BUSINESS_EMAIL_DOMAIN':'@'+process[_0xa757('0xa')][_0xa757('0x47')],'ROUTER':{'ROUTER_CONFIG':_0xa757('0x48')},'STORAGES':{'MONGODB':_0xa757('0x49'),'ELASTICSEARCH':_0xa757('0x4a')},'DEFAULT_LICENSE_DURATION_IN_DAYS':0x16d*0x2,'DEFAULT_ONLINE_USER':0x78,'KAVEHNEGAR_DEFAULT_SMS_CREDIT':0x0,'KAVEHNEGAR_SMS_PLAN_ID':_0xa757('0x4b'),'KAVEHNEGAR_PANEL_DEFAULT_STATUS':'1','KAVEHNEGAR_ADD_CUSTOMER':_0xa757('0x4c')+SMS_API_KEY+_0xa757('0x4d'),'KAVEHNEGAR_LOAD_CUSTOMER':_0xa757('0x4c')+SMS_API_KEY+_0xa757('0x4e'),'GOOGLE_URL_SHORTNER_API':_0xa757('0x4f'),'HOTSPOT_VERIFICATION_MESSAGE_TEMPLATE':_0xa757('0x50'),'HOTSPOT_VERIFICATION_MESSAGE_TEMPLATE_BY_CALL':_0xa757('0x51'),'APP_VERIFICATION_CODE':_0xa757('0x52'),'ROUTER_OFFLINE_MESSAGE_TEMPLATE':_0xa757('0x53'),'SMS_CREDIT_RUNOUT_MESSAGE_TEMPLATE':_0xa757('0x54'),'PASSWORD_RESET_TEMPLATE':_0xa757('0x55'),'SUBSCRIPTION_IS_ENDING_MESSAGE_TEMPLATE':_0xa757('0x56'),'HOTSPOT_CREDENTIALS_URL_MESSAGE_TEMPLATE':_0xa757('0x57'),'HOTSPOT_CREDENTIALS_MESSAGE_TEMPLATE':_0xa757('0x58'),'REGISTRATION_MESSAGE_TEMPLATE':_0xa757('0x59'),'RESELLER_PURCHASE_PACKAGE_CONFIRMED':_0xa757('0x5a'),'BUSINESS_SMS_CHARGE_CONFIRM':'businessSmsChargePurchaseConfirmed','PAYMENT_GATEWAY_INTERNET_PLAN_PAYMENT_DESC':_0xa757('0x5b'),'PAYMENT_GATEWAY_INTERNET_BULK_PAYMENT_DESC':_0xa757('0x5c'),'PAYMENT_GATEWAY_DEFAULT_DESC':_0xa757('0x5d'),'couponCodeMessage':_0xa757('0x5e'),'simpleMessage':'برای\x20تایید\x20عضویت\x20خود\x20لطفا\x20به\x20وای\x20فای\x20{wifi}\x20متصل\x20شوید\x20و\x20سپس\x20بر\x20روی\x20لینک\x20زیر\x20کلیک\x20کنید.','hotspotCredentialMessage':_0xa757('0x5f'),'HOTSPOT_HOME_URL':'http://msn.com','DROPBOX_AUTHORISE_URL':_0xa757('0x60'),'SHORT_VERIFICATION_URL_EXPIRES_AT':0x3c*0x3c,'SHORT_LOGIN_URL_EXPIRES_AT':0x1e*0x18*0x3c*0x3c,'DEFAULT_ALLOWED_SINGLE_SESSION':0x1,'DEFAULT_ALLOWED_MULTI_SESSION':0x3,'DEFAULT_BURST_TIME_IN_SECONDS':0x8,'DEFAULT_UPLOAD_BURST_FACTOR':0x4,'DEFAULT_DOWNLOAD_BURST_FACTOR':0x4,'BUSINESS_GROUP_MEMBER_COUNTER_START':0x550,'ENCRYPTION_KEY':process[_0xa757('0xa')][_0xa757('0x61')],'DEFAULTS':{'USERS_DOMAIN':'hotspotplus.ir','ADMIN_USERNAME':process[_0xa757('0xa')]['DEFAULT_ADMIN_USERNAME'],'ADMIN_PASS':process['env'][_0xa757('0x62')],'ADMIN_ROLES':[_0xa757('0x63')],'SERVICE_MAN_ROLES':['serviceMan'],'SERVICE_MAN_USERNAME':process[_0xa757('0xa')][_0xa757('0x64')],'SERVICE_MAN_PASSWORD':process[_0xa757('0xa')][_0xa757('0x65')]},'ROLES':{'BUSINESS':_0xa757('0x66'),'NETWORKADMIN':_0xa757('0x67'),'NAS':_0xa757('0x68'),'HEADMASTER':_0xa757('0x69'),'ADMIN':_0xa757('0x63'),'RESELLER':_0xa757('0x6a'),'SERVICEMAN':_0xa757('0x6b'),'CUSTOMER':_0xa757('0x6c'),'SERVICEPROVIDER':_0xa757('0x6d'),'HOTSPOTMEMBER':_0xa757('0x6e')},'LC_PATH':process[_0xa757('0xa')][_0xa757('0x6f')],'CONFIG_SERVER_LOGIN':CONFIG_SERVER_URL+_0xa757('0x70'),'CONFIG_SERVER_CHARGE_SMS':CONFIG_SERVER_URL+_0xa757('0x71'),'CONFIG_SERVER_BUY_PACKAGE':CONFIG_SERVER_URL+_0xa757('0x72'),'CONFIG_SERVER_LOCAL_MODULES':CONFIG_SERVER_URL+'/Licenses/getPackages','CONFIG_SERVER_LOCAL_CHARGE':CONFIG_SERVER_URL+'/Sms/getLicenseBalance?access_token={token}','CONFIG_SERVER_NEW_LICENSE':CONFIG_SERVER_URL+_0xa757('0x73'),'DEFAULT_SYSTEM_CONFIG':{'appTitle':_0xa757('0x74'),'isDefault':!![],'dropBoxAppSecret':'','dropBoxAppKey':'','hotspotAddress':'','externalApiAddress':'','webAppAddress':'','apiProtocol':_0xa757('0x75'),'serviceStatus':_0xa757('0x76'),'numberOfAllowedBusiness':0x1},'LOG':{'appName':_0xa757('0x77'),'LOG_DIR':process[_0xa757('0xa')][_0xa757('0x78')]},'REDIS':{'HOST':process['env'][_0xa757('0x79')],'PORT':process[_0xa757('0xa')][_0xa757('0x7a')],'PASS':null,'OPTIONS':{}},'ACCOUNTING_TOPIC':_0xa757('0x7b'),'SESSION_TOPIC':_0xa757('0x7c'),'ELASTIC_BULK_INSERT':'ELASTIC_BULK_INSERT','REPORT_GET_LOGS':_0xa757('0x7d'),'DEFAULT_AGGREGATION_SIZE':0xa,'TSHARK_TRANSFORM_COMMAND':'tshark\x20-r\x20{1}\x20\x20-T\x20fields\x20-e\x20wlan.sa\x20-e\x20wlan.da\x20-e\x20frame.time_epoch\x20-e\x20radiotap.dbm_antsignal\x20-e\x20\x20wlan_mgt.ssid\x20-E\x20header=y\x20-E\x20separator=,\x20\x20\x20>\x20{0}','AGGREGATE':{'MINUTE_MILLISECONDS':0x3c*0x3e8,'MINUTE_SECONDS':0x3c,'HOUR_MILLISECONDS':0x3c*0x3c*0x3e8,'DAY_MINUTES':0x18*0x3c,'DAY_MILLISECONDS':0x18*0x3c*0x3c*0x3e8,'WEEK_MILLISECONDS':0x7*0x18*0x3c*0x3c*0x3e8,'MONTH_FIRST_HALF_MILLISECONDS':0x1f*0x18*0x3c*0x3c*0x3e8,'MONTH_SECOND_HALF_MILLISECONDS':0x1e*0x18*0x3c*0x3c*0x3e8,'MONTH_MARCH_MILLISECONDS':0x1d*0x18*0x3c*0x3c*0x3e8,'QUARTER_FIRST_HALF_MILLISECONDS':0x3*0x1f*0x18*0x3c*0x3c*0x3e8,'QUARTER_SECOND_HALF_MILLISECONDS':0x3*0x1e*0x18*0x3c*0x3c*0x3e8,'QUARTER_WINTER_MILLISECONDS':0x2*0x1e*0x18*0x3c*0x3c*0x3e8+0x1d*0x18*0x3c*0x3c*0x3e8,'YEAR_MILLISECONDS':0x6*0x1f*0x18*0x3c*0x3c*0x3e8+0x5*0x1e*0x18*0x3c*0x3c*0x3e8+0x1d*0x18*0x3c*0x3c*0x3e8,'YEAR_LEAP_MILLISECONDS':0x6*0x1f*0x18*0x3c*0x3c*0x3e8+0x6*0x1e*0x18*0x3c*0x3c*0x3e8,'WEEK_DAYS':0x7,'MONTH_DAYS':0x1e},'NAS_SESSION_EXPIRES_AT':process[_0xa757('0xa')]['NAS_SESSION_EXPIRES_AT'],'THRESHOLD_BEFORE_BLOCKING_SERVICE_IN_DAYS':0x1,'ENGLISH_SMS_COST':0x2e,'PERSIAN_SMS_COST':0x13,'ADMIN_CHARGE':_0xa757('0x7e'),'BUY_CHARGE':_0xa757('0x7f'),'BUY_SERVICE_CHARGE':'serviceCharge','RESELLER_COMMISSION_CHARGE':'commissionCharge','BUY_INTERNET_PLAN':_0xa757('0x80'),'BUY_EXTRA_BULK':_0xa757('0x81'),'DEFAULT_RESELLER_ONLINE_USERS':0x0,'DEFAULT_RESELLER_DURATION_MONTHS':0x0,'DEFAULT_RESELLER_PLAN_TYPE':'static','ELASTIC_SESSION_REPORT_MAIN_CONTEXT':elasticURL+process[_0xa757('0xa')][_0xa757('0x82')]+_0xa757('0x83'),'ELASTIC_SESSION_REPORT':elasticURL+process[_0xa757('0xa')][_0xa757('0x82')]+_0xa757('0x84'),'ELASTIC_CHARGE_MAIN_CONTEXT':elasticURL+process['env'][_0xa757('0x82')]+_0xa757('0x85'),'ELASTIC_CHARGE_SEARCH':elasticURL+process[_0xa757('0xa')][_0xa757('0x82')]+_0xa757('0x86'),'ELASTIC_ACCOUNTING_MAIN_CONTEXT':elasticURL+process[_0xa757('0xa')][_0xa757('0x82')]+_0xa757('0x87'),'ELASTIC_ACCOUNTING_USAGE':elasticURL+process[_0xa757('0xa')][_0xa757('0x82')]+_0xa757('0x88'),'ELASTIC_ACCOUNTING_USAGE_SEARCH':elasticURL+process[_0xa757('0xa')]['ELASTIC_INDEX_PREFIX']+_0xa757('0x89'),'ELASTIC_SYSLOG_MAIN_CONTEXT':elasticURL+process[_0xa757('0xa')][_0xa757('0x82')]+_0xa757('0x8a'),'ELASTIC_SYSLOG_REPORT':elasticURL+process['env'][_0xa757('0x82')]+_0xa757('0x8b'),'ELASTIC_NETFLOW_MAIN_CONTEXT':elasticURL+process[_0xa757('0xa')][_0xa757('0x82')]+_0xa757('0x8c'),'ELASTIC_NETFLOW_REPORT':elasticURL+process['env'][_0xa757('0x82')]+_0xa757('0x8d'),'ELASTIC_TEST_PATH':elasticURL+process[_0xa757('0xa')][_0xa757('0x82')]+_0xa757('0x8e'),'ELASTIC_BULK':elasticURL+process[_0xa757('0xa')][_0xa757('0x82')]+_0xa757('0x8f'),'ELASTIC_DELETE_BY_QUERY':elasticURL+process[_0xa757('0xa')]['ELASTIC_INDEX_PREFIX']+_0xa757('0x90'),'VOUCHER_TEMPLATE_PATH':templatesPath+'memberPrintTemplate.dust.html','SCRIPTS':{'MIKROTIK_DYNAMIC_IP_SCRIPT':setup_script_path+_0xa757('0x91'),'MIKROTIK_SETUP_SCRIPT':setup_script_path+'mikrotik_setup.sh','MIKROTIK_HOTSPOT_PAGES':[{'path':mikrotik_hotspot_script_path+_0xa757('0x92'),'name':_0xa757('0x93')},{'path':mikrotik_hotspot_script_path+_0xa757('0x94'),'name':_0xa757('0x95')},{'path':mikrotik_hotspot_script_path+'/login.html','name':_0xa757('0x96')},{'path':mikrotik_hotspot_script_path+'/logout.html','name':_0xa757('0x97')},{'path':mikrotik_hotspot_script_path+_0xa757('0x98'),'name':_0xa757('0x99')},{'path':mikrotik_hotspot_script_path+_0xa757('0x9a'),'name':_0xa757('0x9b')},{'path':mikrotik_hotspot_script_path+_0xa757('0x9c'),'name':_0xa757('0x9d')},{'path':mikrotik_hotspot_script_path+_0xa757('0x9e'),'name':_0xa757('0x9f')}]},'RADIUS_IP':process[_0xa757('0xa')][_0xa757('0xa0')],'SECOND_RADIUS_IP':process[_0xa757('0xa')][_0xa757('0xa1')],'RADIUS_ACC_PORT':process[_0xa757('0xa')][_0xa757('0xa2')],'RADIUS_AUTH_PORT':process[_0xa757('0xa')][_0xa757('0xa3')],'ROUTER_TYPE':{'MIKROTIK':_0xa757('0xa4'),'COOVACHILLI':_0xa757('0xa5'),'ENGENIUS':_0xa757('0xa6')},'MIN_WALKBY_TIME_DEFAULT':0x3,'MAX_WALKBY_TIME_DEFAULT':0x6,'MIN_VISIT_TIME_DEFAULT':0xa,'MAX_VISIT_TIME_DEFAULT':0x3c,'TIME_ZONE_DEFAULT':{'name':_0xa757('0xa7'),'abbr':'IDT','offset':4.5,'isdst':!![],'text':_0xa757('0xa8'),'utc':[_0xa757('0xa9')]},'ACCOUNTING_DC_THRESHHOLD':0x5f5e100,'DEFAULT_MEMBER_SESSION_EXPIRE_IN_SECONDS':DEFAULT_ACCOUNTING_UPDATE_INTERVAL_SECONDS+0xa,'NAS_STATUS_CHECK_IN_SECONDS':0x3c*0xa,'DEFAULT_ACCOUNTING_UPDATE_INTERVAL_SECONDS':DEFAULT_ACCOUNTING_UPDATE_INTERVAL_SECONDS,'FAST_ACCOUNTING_UPDATE_INTERVAL_SECONDS':FAST_ACCOUNTING_UPDATE_INTERVAL_SECONDS,'MAX_VERIFICATION_COUNT':0x5,'MIN_REQUIRED_SMS_CREDIT':0x64,'DEFAULT_THEME_ID':_0xa757('0xaa'),'DEFAULT_THEME_CONFIG':{'alpha':{'style':hotspotTemplates[_0xa757('0xaa')][_0xa757('0xab')][0x0]['id'],'showLogo':!![],'logo':{},'background':{},'isMultiLanguage':![],'showPinCode':![],'showTelegram':![],'showInstagram':![],'verificationMethod':_0xa757('0xac'),'formConfig':hotspotTemplates[_0xa757('0xaa')][_0xa757('0xad')]}},'HOTEL_THEME_ID':_0xa757('0xae'),'PREVIOUS_HOTEL_THEME_ID':_0xa757('0xaf'),'PREVIOUS_DEFAULT_THEME_ID':'defaultTheme','PUPLIC_INTERNET_PLAN':'public','DEFAULT_ALLOWED_ONLINE_USERS':Number(process[_0xa757('0xa')][_0xa757('0xb0')])||0x78,'SERVICES':{'RESELLERS_COMMISSION_RATE':0x1e/0x64,'packages':[{'id':_0xa757('0xb1'),'active':![],'packageDesc':_0xa757('0xb2'),'title':_0xa757('0xb3'),'price':0x0,'discount':0x0,'durationInDays':0xf,'service':{'allowedOnlineUsers':0x78},'modules':{'sms':{'id':'sms','title':_0xa757('0xb4')},'log':{'id':_0xa757('0x27'),'title':_0xa757('0xb5')}}},{'id':_0xa757('0xb6'),'active':!![],'buyDisabled':![],'oneTime':![],'packageDesc':_0xa757('0xb7'),'title':_0xa757('0xb8'),'price':0x124f8*0x3,'discount':0x0,'duration':0x3,'buyMethod':_0xa757('0xb9'),'durationTitle':'تومان/\x20۳\x20ماهه','discountDesc':'۲۰٪\x20تخفیف','service':{'allowedOnlineUsers':0x78,'features':[{'title':_0xa757('0xba')},{'title':_0xa757('0xbb')},{'title':'اتصال\x20به\x20درگاه\x20پرداخت\x20مستقل'},{'title':'پنل\x20مستقل\x20کاربران'},{'title':'پشتیبانی\x20از\x20طریق\x20تیکت'}]},'modules':{'sms':{'title':_0xa757('0xbc'),'features':[{'title':_0xa757('0xbd')},{'title':_0xa757('0xbe')},{'title':_0xa757('0xbf')}]},'log':{'title':_0xa757('0xb5'),'features':[{'title':_0xa757('0xc0')},{'title':'ثبت\x20لاگ\x20بازدید\x20وب\x20سایت'}]},'support':{'title':_0xa757('0xc1'),'features':[{'title':'پشتیبانی\x20از\x20طریق\x20تیکت'}]}}},{'id':_0xa757('0xc2'),'active':![],'buyDisabled':![],'oneTime':![],'buyMethod':_0xa757('0xb9'),'durationTitle':_0xa757('0xc3'),'packageDesc':'اشتراک\x20سالیانه','title':_0xa757('0xc4'),'price':0x124f8*0xc,'discount':0x0,'duration':0xc,'service':{'allowedOnlineUsers':0x78,'features':[{'title':_0xa757('0xba')},{'title':_0xa757('0xbb')},{'title':_0xa757('0xc5')},{'title':_0xa757('0xc6')},{'title':_0xa757('0xc7')}]},'modules':{'sms':{'title':_0xa757('0xbc'),'features':[{'title':'ارسال\x20پیامک\x20تایید\x20هویت'},{'title':_0xa757('0xbe')},{'title':_0xa757('0xbf')}]},'log':{'title':_0xa757('0xb5'),'features':[{'title':_0xa757('0xc0')},{'title':_0xa757('0xc8')}]},'support':{'title':_0xa757('0xc1'),'features':[{'title':'پشتیبانی\x20از\x20طریق\x20تیکت'}]}}}],'features':[{'title':_0xa757('0xc9'),'desc':_0xa757('0xca'),'type':_0xa757('0xcb'),'monthly':0x78,'semiAnnually':0x78,'annually':0x78},{'title':_0xa757('0xcc'),'desc':_0xa757('0xcd'),'monthly':_0xa757('0xce'),'semiAnnually':_0xa757('0xce'),'annually':_0xa757('0xce'),'type':_0xa757('0xcf')},{'title':_0xa757('0xd0'),'desc':_0xa757('0xd1'),'monthly':'نامحدود','semiAnnually':_0xa757('0xce'),'annually':_0xa757('0xce'),'type':'string'},{'title':_0xa757('0xd2'),'annually':0xd,'monthly':0xd,'semiAnnually':0xd,'type':_0xa757('0xd3'),'desc':''},{'title':'پشیبانی\x20از\x20طریق\x20تیکت','annually':!![],'monthly':!![],'semiAnnually':!![],'type':'boolean','desc':_0xa757('0xd4')},{'title':_0xa757('0xd5'),'desc':_0xa757('0xd6'),'type':_0xa757('0xd7'),'monthly':!![],'semiAnnually':!![],'annually':!![]},{'title':_0xa757('0xd8'),'annually':!![],'monthly':!![],'semiAnnually':!![],'type':_0xa757('0xd7'),'desc':'کاربران\x20میتوانند\x20با\x20نام\x20کاربری\x20و\x20رمز\x20عبور\x20خود\x20به\x20پنل\x20لاگین\x20کنند\x20و\x20میزان\x20مصرف\x20خود\x20را\x20مشاهده\x20کنند.'},{'title':_0xa757('0xd9'),'desc':_0xa757('0xda'),'monthly':!![],'semiAnnually':!![],'annually':!![],'type':'boolean'},{'title':_0xa757('0xdb'),'desc':_0xa757('0xdc'),'monthly':!![],'semiAnnually':!![],'annually':!![],'type':'boolean'},{'title':'تایید\x20هویت\x20کاربر\x20هات‌اسپات\x20با\x20تماس\x20تلفنی\x20خودکار','desc':'کد\x20تایید\x20با\x20یک\x20تماس\x20تلفنی\x20خودکار\x20به\x20موبایل\x20کاربر\x20ارسال\x20می‌شود.','monthly':!![],'semiAnnually':!![],'annually':!![],'type':_0xa757('0xd7')},{'title':_0xa757('0xdd'),'monthly':!![],'semiAnnually':!![],'annually':!![],'type':'boolean','desc':_0xa757('0xde')},{'title':'متن\x20انتهای\x20پیامک','monthly':!![],'semiAnnually':!![],'annually':!![],'type':_0xa757('0xd7'),'desc':_0xa757('0xdf')}]},'RESELLERS_TARIFFS':[{'from':0x0,'to':0x1,'free':0x0,'silver':0x7530,'gold':0xc350,'whiteLabel':0x2710},{'from':0x2,'to':0x5,'free':0x0,'silver':0x61a8,'gold':0x9c40,'whiteLabel':0x2710},{'from':0x6,'to':0x64,'free':0x0,'silver':0x4e20,'gold':0x7530,'whiteLabel':0x2710}],'DEFAULT_HOTSPOT_HELP':'برای\x20اتصال\x20به\x20اینترنت،\x20به\x20شبکه\x20وای\x20فای\x20متصل\x20شوید.\x20سپس\x20با\x20مرورگر\x20کروم\x20به\x20سایت\x20wifi.ir\x20وارد\x20شوید.\x20پس\x20از\x20باز\x20شدن\x20صفحه\x20با\x20نام\x20کاربری\x20و\x20رمز\x20زیر\x20به\x20هات\x20اسپات\x20لاگین\x20کنید.','ENABLE_SENTRY':process['env'][_0xa757('0xe0')]===_0xa757('0xe1'),'SENTRY_RELEASE_TOKEN':process[_0xa757('0xa')][_0xa757('0xe2')],'SENTRY_URL':process[_0xa757('0xa')][_0xa757('0xe3')],'ENABLE_DASHBOARD_SENTRY':process['env'][_0xa757('0xe4')]===_0xa757('0xe5'),'SENTRY_DASHBOARD_RELEASE_TOKEN':process['env']['SENTRY_DASHBOARD_RELEASE_TOKEN'],'SENTRY_DASHBOARD_URL':process[_0xa757('0xa')][_0xa757('0xe6')],'DEFAULT_SENTRY_URL':'http://api.hotspotplus.ir/5','ADMIN_OWNER_ID':'Admin','PERCENT_UNIT':'percent','TOMAN_UNIT':_0xa757('0xe7'),'PERSIAN_COUPON_MESSAGE':_0xa757('0xe8'),'PERSIAN_TOMAN_UNIT':_0xa757('0xe9'),'PERSIAN_PERCENT_UNIT':_0xa757('0xea'),'ELASTIC_TYPE_USAGEREPORT':_0xa757('0xeb'),'ELASTIC_INDEX_ACCOUNTING':_0xa757('0x87'),'BUSINESS_PAYMENT_RETURN_URL':function(){var _0x3df741={'JUfnq':function _0x2ec5e7(_0x5160e6,_0x525cad){return _0x5160e6+_0x525cad;},'bKjEK':_0xa757('0x13')};return _0x3df741[_0xa757('0xec')](process['env'][_0xa757('0xb')],_0x3df741[_0xa757('0xed')]);},'EXTERNAL_PAYMENT_RETURN_URL':function(){var _0x394b9b={'oJMGN':function _0x2d94f8(_0x205333,_0x33cd78){return _0x205333+_0x33cd78;},'jLRwF':_0xa757('0xee')};return _0x394b9b[_0xa757('0xef')](process[_0xa757('0xa')][_0xa757('0xb')],_0x394b9b[_0xa757('0xf0')]);},'CHARGE_PAYMENT_RETURN_URL':function(){var _0x5c1cc8={'HVFrf':function _0xfa3578(_0x23cc8a,_0x256bb6){return _0x23cc8a+_0x256bb6;},'wdFOB':'/api/payment/charge/return?{0}={1}'};return _0x5c1cc8[_0xa757('0xf1')](process[_0xa757('0xa')][_0xa757('0xb')],_0x5c1cc8[_0xa757('0xf2')]);},'LOCAL_PAYMENT_RETURN_URL':function(){var _0x325afa={'wamnI':function _0x4be11c(_0x2c06d5,_0x33287b){return _0x2c06d5+_0x33287b;},'hDnfX':_0xa757('0xf3')};return _0x325afa[_0xa757('0xf4')](process[_0xa757('0xa')][_0xa757('0xb')],_0x325afa['hDnfX']);},'MEMBER_PAYMENT_RETURN_URL':function(){var _0x39d99d={'cfGgl':function _0x3851cd(_0x2e51f2,_0x193bd6){return _0x2e51f2+_0x193bd6;},'eFXvP':'/api/payment/member/return?{0}={1}'};return _0x39d99d[_0xa757('0xf5')](process[_0xa757('0xa')][_0xa757('0xb')],_0x39d99d['eFXvP']);},'DROPBOX_REST_API':function(){var _0x55558a={'wEtex':function _0x457560(_0xb450f9,_0x4da8d6){return _0xb450f9+_0x4da8d6;},'XVAej':'/api/dropBox'};return _0x55558a[_0xa757('0xf6')](process[_0xa757('0xa')][_0xa757('0xb')],_0x55558a[_0xa757('0xf7')]);},'BUY_LOCAL_SMS_CHARGE_RETURN':function(){var _0x4d12ac={'InsSB':function _0x4190ab(_0x474a5f,_0x2c6bda){return _0x474a5f+_0x2c6bda;},'AnlvS':_0xa757('0xf8')};return _0x4d12ac['InsSB'](process[_0xa757('0xa')][_0xa757('0xf')],mainPath)+_0x4d12ac[_0xa757('0xf9')];},'BUY_LOCAL_PACKAGE_RETURN':function(){var _0x2d4ce1={'VOzBL':_0xa757('0xf8')};return process[_0xa757('0xa')][_0xa757('0xf')]+mainPath+_0x2d4ce1[_0xa757('0xfa')];},'BUSINESS_PAYMENT_RESULT_URL':function(){var _0x31430c={'gQEGc':function _0x3e6ea1(_0xb7163c,_0xb77272){return _0xb7163c===_0xb77272;},'pflDF':_0xa757('0xfb'),'jPACz':function _0x38e81e(_0xd559ce,_0x42420b){return _0xd559ce+_0x42420b;},'bHzDy':function _0x510314(_0xf01ad,_0x28773a){return _0xf01ad+_0x28773a;}};if(_0x31430c['gQEGc'](_0x31430c[_0xa757('0xfc')],_0x31430c[_0xa757('0xfc')])){return _0x31430c[_0xa757('0xfd')](_0x31430c[_0xa757('0xfe')](process['env'][_0xa757('0xf')],mainPath),_0xa757('0xff'));}else{}},'LOCAL_PAYMENT_RESULT_URL':function(){var _0x4f8b0a={'wEIFr':function _0x3bfd0f(_0xb496e,_0x650da6){return _0xb496e+_0x650da6;},'CPkdr':function _0x363e1f(_0x5d68be,_0x466606){return _0x5d68be+_0x466606;}};return _0x4f8b0a[_0xa757('0x100')](_0x4f8b0a[_0xa757('0x101')](process['env']['CALCULATED_WEB_APP_ADDRESS'],mainPath),_0xa757('0x102'));},'MEMBER_PAYMENT_RESULT_URL':function(){var _0x3a3600={'XUPYQ':function _0x7cf039(_0x5df3a1,_0x3949b5){return _0x5df3a1+_0x3949b5;},'gadMg':_0xa757('0xff')};return _0x3a3600[_0xa757('0x103')](process['env'][_0xa757('0xf')]+mainPath,_0x3a3600['gadMg']);},'DROPBOX_AUTHORISE_RESULT_URL':function(){var _0x39d5c9={'HkQxs':function _0x350146(_0x3c12ea,_0x3d3fbe){return _0x3c12ea+_0x3d3fbe;},'noYqt':_0xa757('0x104')};return _0x39d5c9['HkQxs'](process[_0xa757('0xa')][_0xa757('0xf')]+mainPath,_0x39d5c9['noYqt']);},'HOTSPOT_PAYMENT_RETURN_URL':function(){var _0x33947c={'dvuuQ':function _0x1707ef(_0x26a23d,_0x2f61b8){return _0x26a23d+_0x2f61b8;},'xsInf':_0xa757('0x105')};return _0x33947c[_0xa757('0x106')](process[_0xa757('0xa')][_0xa757('0x107')],_0x33947c[_0xa757('0x108')]);},'HOTSPOT_PAYMENT_WEB_RETURN_URL':function(){var _0x4cccfa={'INDax':function _0x2d1997(_0x5a4737,_0x153d6e){return _0x5a4737+_0x153d6e;},'mfzXB':'/#!/home.html?{0}'};return _0x4cccfa[_0xa757('0x109')](process[_0xa757('0xa')][_0xa757('0x107')],_0x4cccfa[_0xa757('0x10a')]);},'HOTSPOT_VERIFICATION_URL':function(){var _0x55052b={'feBuV':function _0x19d612(_0x295d80,_0x3f968d){return _0x295d80!==_0x3f968d;},'bMtmD':_0xa757('0x10b'),'MGemr':function _0x46fe9b(_0x11d4e0,_0x31347c){return _0x11d4e0+_0x31347c;},'FDAcp':'/#!/home.html?businessId={businessId}&nasId={nasId}&host={host}&verificationCode={verificationCode}&memberId={memberId}'};if(_0x55052b[_0xa757('0x10c')](_0xa757('0x10d'),_0x55052b[_0xa757('0x10e')])){return _0x55052b[_0xa757('0x10f')](process[_0xa757('0xa')]['CALCULATED_HOTSPOT_ADDRESS'],_0x55052b[_0xa757('0x110')]);}else{var _0xd0a33e=_0xa757('0x111')[_0xa757('0x1f')]('|'),_0x195b99=0x0;while(!![]){switch(_0xd0a33e[_0x195b99++]){case'0':that[_0xa757('0x1d')][_0xa757('0x23')]=_0x5eeb89;continue;case'1':that['console'][_0xa757('0x27')]=_0x586593;continue;case'2':that[_0xa757('0x1d')][_0xa757('0x26')]=_0x1f490f;continue;case'3':that[_0xa757('0x1d')][_0xa757('0x25')]=_0x2dfd83;continue;case'4':that[_0xa757('0x1d')][_0xa757('0x21')]=_0x4d5ee0;continue;case'5':that[_0xa757('0x1d')]['debug']=_0x28c140;continue;case'6':that[_0xa757('0x1d')][_0xa757('0x22')]=_0x1fbcf2;continue;}break;}}},'HOTSPOT_SIGNIN_URL':function(){var _0x18365e={'LRQCQ':function _0x567a1c(_0x57aabf,_0x38ebb2){return _0x57aabf+_0x38ebb2;},'Jargt':_0xa757('0x112')};return _0x18365e[_0xa757('0x113')](process[_0xa757('0xa')][_0xa757('0x107')],_0x18365e[_0xa757('0x114')]);},'SHORTNER_URL':function(){var _0x152fa5={'pNxqf':function _0x1dca38(_0x5ceb1c,_0x59cd94){return _0x5ceb1c!==_0x59cd94;},'tTslR':_0xa757('0x115'),'mIsgq':function _0x57ef9a(_0xd9c3c9,_0x765804){return _0xd9c3c9+_0x765804;},'diVKJ':_0xa757('0x116')};if(_0x152fa5['pNxqf'](_0x152fa5[_0xa757('0x117')],_0xa757('0x115'))){return process[_0xa757('0xa')][_0xa757('0x118')];}else{return _0x152fa5[_0xa757('0x119')](process[_0xa757('0xa')][_0xa757('0x107')],_0x152fa5[_0xa757('0x11a')]);}},'DROPBOX_APP_KEY':function(){var _0x26dcea={'UOLMT':function _0x223f8d(_0x4e70fb,_0x33696f){return _0x4e70fb!==_0x33696f;}};if(_0x26dcea[_0xa757('0x11b')](_0xa757('0x11c'),'SNo')){var _0x4c131f=fn[_0xa757('0x9')](_0x482599,_0x11de81);_0xa50431=null;return _0x58afd7;}else{return process['env'][_0xa757('0x11d')];}},'DROPBOX_APP_SECRET':function(){var _0x5c0a45={'iVlNk':function _0x5944ea(_0xe58268,_0x408e2f){return _0xe58268!==_0x408e2f;},'nsKug':_0xa757('0x11e'),'gcNiT':_0xa757('0x116')};if(_0x5c0a45[_0xa757('0x11f')](_0x5c0a45[_0xa757('0x120')],'Xqq')){return process['env'][_0xa757('0x118')];}else{return process[_0xa757('0xa')]['CALCULATED_HOTSPOT_ADDRESS']+_0x5c0a45['gcNiT'];}},'LOG_WORKER_QUEUE':'log-worker'};
+/**
+ * Created by payamyousefi on 4/13/15.
+ */
+
+var path = require('path');
+var templatesPath = path.join(__dirname, '/../../templates/');
+var setup_script_path = path.join(__dirname, '/routers/mikrotik/');
+var mikrotik_hotspot_script_path = path.join(
+  __dirname,
+  '/routers/mikrotik/html'
+);
+var elasticURL =
+  'http://' + process.env.ELASTIC_IP + ':' + process.env.ELASTIC_PORT;
+// "7A706844375A7964785A3452317054583841535548413D3D";
+// "7A706844375A7964785A3452317054583841535548413D3D";
+var SMS_API_KEY = process.env.SMS_API_KEY;
+var mainPath = '/';
+if (process.env.APP_STATUS === 'dev') {
+  mainPath = '/src/index.html';
+} else if (process.env.APP_STATUS === 'sandbox') {
+  mainPath = '/index.html';
+}
+var hotspotTemplates = require('./hotspotTemplates');
+var DEFAULT_ACCOUNTING_UPDATE_INTERVAL_SECONDS =
+  process.env.DEFAULT_ACCOUNTING_UPDATE_INTERVAL_SECONDS || 600;
+var FAST_ACCOUNTING_UPDATE_INTERVAL_SECONDS =
+  process.env.FAST_ACCOUNTING_UPDATE_INTERVAL_SECONDS || 600;
+
+var CONFIG_SERVER_URL = process.env.CONFIG_SERVER_URL;
+module.exports = {
+  VERSION: '1.3',
+  SMS_SIGNATURE: process.env.SMS_SIGNATURE,
+  PASSWORD_PREFIX: process.env.PASSWORD_PREFIX,
+  SYSTEM_ID_PATH: process.env.SYSTEM_ID_PATH,
+  PRIMARY_SHARED_SECRET: process.env.PRIMARY_SHARED_SECRET,
+  ZARINPAL_SANDBOX: !!process.env.ZARINPAL_SANDBOX,
+  TRIAL_DAYS: process.env.TRIAL_DAYS || 3,
+  ADMIN_MOBILE: process.env.ADMIN_MOBILE,
+  PAYMENT_API_KEY: process.env.PAYMENT_API_KEY,
+  PAYMENT_SUPPORT_EMAIL: process.env.PAYMENT_SUPPORT_EMAIL,
+  PAYMENT_SUPPORT_MOBILE: process.env.PAYMENT_SUPPORT_MOBILE,
+  SUPPORT_MOBILE: process.env.PAYMENT_SUPPORT_MOBILE,
+  NOTIFY_SUPPORT_TEMPLATE: 'ticketCreated',
+  NOTIFY_CUSTOMER_TEMPLATE: 'ticketAnswered',
+  BUSINESS_EMAIL_DOMAIN: '@' + process.env.BUSINESS_EMAIL_DOMAIN,
+  ROUTER: {
+    ROUTER_CONFIG: 'templates/router_config.lua'
+  },
+  STORAGES: {
+    MONGODB: 'mongodb',
+    ELASTICSEARCH: 'elasticsearch'
+  },
+  DEFAULT_LICENSE_DURATION_IN_DAYS: 365 * 2,
+  DEFAULT_ONLINE_USER: 120,
+  KAVEHNEGAR_DEFAULT_SMS_CREDIT: 0,
+  KAVEHNEGAR_SMS_PLAN_ID: 'hotspotplus',
+  KAVEHNEGAR_PANEL_DEFAULT_STATUS: '1',
+  KAVEHNEGAR_ADD_CUSTOMER:
+    'http://api.kavenegar.com/v1/' + SMS_API_KEY + '/client/add.json',
+  KAVEHNEGAR_LOAD_CUSTOMER:
+    'http://api.kavenegar.com/v1/' + SMS_API_KEY + '/client/fetch.json',
+  GOOGLE_URL_SHORTNER_API: 'AIzaSyBP7KUMF-sRhDqhZC50_AA9oJ8GAeuiwnk',
+  HOTSPOT_VERIFICATION_MESSAGE_TEMPLATE: 'sendVerificationCodeThenCall',
+  HOTSPOT_VERIFICATION_MESSAGE_TEMPLATE_BY_CALL: 'sendVerificationCodeCallOnly',
+  APP_VERIFICATION_CODE: 'appVerificationCode',
+  ROUTER_OFFLINE_MESSAGE_TEMPLATE: 'routerOffline',
+  SMS_CREDIT_RUNOUT_MESSAGE_TEMPLATE: 'smsCreditRunOut',
+  PASSWORD_RESET_TEMPLATE: 'passwordReset',
+  SUBSCRIPTION_IS_ENDING_MESSAGE_TEMPLATE: 'subscriptionIsEnding',
+  HOTSPOT_CREDENTIALS_URL_MESSAGE_TEMPLATE: 'hotspotPlusHotspotCredentialsURL',
+  HOTSPOT_CREDENTIALS_MESSAGE_TEMPLATE: 'hotspotPlusHotspotCredentials',
+  REGISTRATION_MESSAGE_TEMPLATE: 'hotspotPlusRegistrationSMS',
+  RESELLER_PURCHASE_PACKAGE_CONFIRMED: 'resellerPackagePurchaseConfirmed',
+  BUSINESS_SMS_CHARGE_CONFIRM: 'businessSmsChargePurchaseConfirmed',
+  PAYMENT_GATEWAY_INTERNET_PLAN_PAYMENT_DESC: 'خرید اینترنت',
+  PAYMENT_GATEWAY_INTERNET_BULK_PAYMENT_DESC: 'خرید حجم اینترنت',
+  PAYMENT_GATEWAY_DEFAULT_DESC: 'خرید اعتبار از سایت هات اسپات پلاس',
+  couponCodeMessage:
+    'برای دریافت هدیه ی خود لطفا به وای فای {wifi} متصل شوید و سپس بر روی لینک زیر کلیک کنید.',
+  simpleMessage:
+    'برای تایید عضویت خود لطفا به وای فای {wifi} متصل شوید و سپس بر روی لینک زیر کلیک کنید.',
+  hotspotCredentialMessage:
+    ' شما میتوانید با نام کاربری {username} و رمز عبور {password} به اینترنت متصل شوید و یا برای اتصال خودکار بر روی لینک زیر کلیک کنید.',
+  HOTSPOT_HOME_URL: 'http://msn.com',
+  DROPBOX_AUTHORISE_URL:
+    'https://www.dropbox.com/1/oauth2/authorize?client_id={0}&response_type=code&redirect_uri={1}&state={2}',
+  SHORT_VERIFICATION_URL_EXPIRES_AT: 60 * 60,
+  SHORT_LOGIN_URL_EXPIRES_AT: 30 * 24 * 60 * 60,
+  DEFAULT_ALLOWED_SINGLE_SESSION: 1,
+  DEFAULT_ALLOWED_MULTI_SESSION: 3,
+  DEFAULT_BURST_TIME_IN_SECONDS: 8,
+  DEFAULT_UPLOAD_BURST_FACTOR: 4,
+  DEFAULT_DOWNLOAD_BURST_FACTOR: 4,
+  BUSINESS_GROUP_MEMBER_COUNTER_START: 1360,
+  ENCRYPTION_KEY: process.env.DEFAULT_ENCRYPTION_KEY,
+  DEFAULTS: {
+    USERS_DOMAIN: 'hotspotplus.ir',
+    ADMIN_USERNAME: process.env.DEFAULT_ADMIN_USERNAME,
+    ADMIN_PASS: process.env.DEFAULT_ADMIN_PASSWORD,
+    ADMIN_ROLES: ['admin'],
+    SERVICE_MAN_ROLES: ['serviceMan'],
+    SERVICE_MAN_USERNAME: process.env.SERVICE_MAN_USERNAME,
+    SERVICE_MAN_PASSWORD: process.env.SERVICE_MAN_PASSWORD
+  },
+  ROLES: {
+    BUSINESS: 'business',
+    NETWORKADMIN: 'networkadmin',
+    NAS: 'nas',
+    HEADMASTER: 'headmaster',
+    ADMIN: 'admin',
+    RESELLER: 'reseller',
+    SERVICEMAN: 'serviceMan',
+    CUSTOMER: 'customer',
+    SERVICEPROVIDER: 'serviceProvider',
+    HOTSPOTMEMBER: 'member'
+  },
+  LC_PATH: process.env.LC_PATH,
+  CONFIG_SERVER_LOGIN: CONFIG_SERVER_URL + '/Licenses/login',
+  CONFIG_SERVER_CHARGE_SMS:
+    CONFIG_SERVER_URL + '/Sms/buySmsCredit?access_token={token}',
+  CONFIG_SERVER_BUY_PACKAGE:
+    CONFIG_SERVER_URL + '/Licenses/buyLocalPackage?access_token={token}',
+  CONFIG_SERVER_LOCAL_MODULES: CONFIG_SERVER_URL + '/Licenses/getPackages',
+  CONFIG_SERVER_LOCAL_CHARGE:
+    CONFIG_SERVER_URL + '/Sms/getLicenseBalance?access_token={token}',
+  CONFIG_SERVER_NEW_LICENSE:
+    CONFIG_SERVER_URL + '/Licenses/registerPublicLicense',
+  DEFAULT_SYSTEM_CONFIG: {
+    appTitle: 'هات اسپات پلاس',
+    isDefault: true,
+    dropBoxAppSecret: '',
+    dropBoxAppKey: '',
+    hotspotAddress: '',
+    externalApiAddress: '',
+    webAppAddress: '',
+    apiProtocol: 'http',
+    serviceStatus: 'local',
+    numberOfAllowedBusiness: 1
+  },
+  LOG: {
+    appName: 'PinFi',
+    LOG_DIR: process.env.LOG_DIR
+  },
+  REDIS: {
+    HOST: process.env.REDIS_IP,
+    PORT: process.env.REDIS_PORT,
+    PASS: null,
+    OPTIONS: {}
+  },
+  ACCOUNTING_TOPIC: 'accountingTopic',
+  SESSION_TOPIC: 'sessionTopic',
+  ELASTIC_BULK_INSERT: 'ELASTIC_BULK_INSERT',
+  REPORT_GET_LOGS: 'REPORT_GET_LOGS',
+  DEFAULT_AGGREGATION_SIZE: 10,
+  TSHARK_TRANSFORM_COMMAND:
+    'tshark -r {1}  -T fields -e wlan.sa -e wlan.da -e frame.time_epoch -e radiotap.dbm_antsignal -e  wlan_mgt.ssid -E header=y -E separator=,   > {0}',
+  AGGREGATE: {
+    MINUTE_MILLISECONDS: 60 * 1000,
+    MINUTE_SECONDS: 60,
+    HOUR_MILLISECONDS: 60 * 60 * 1000,
+    DAY_MINUTES: 24 * 60,
+    DAY_MILLISECONDS: 24 * 60 * 60 * 1000,
+    WEEK_MILLISECONDS: 7 * 24 * 60 * 60 * 1000,
+    MONTH_FIRST_HALF_MILLISECONDS: 31 * 24 * 60 * 60 * 1000,
+    MONTH_SECOND_HALF_MILLISECONDS: 30 * 24 * 60 * 60 * 1000,
+    MONTH_MARCH_MILLISECONDS: 29 * 24 * 60 * 60 * 1000,
+    QUARTER_FIRST_HALF_MILLISECONDS: 3 * 31 * 24 * 60 * 60 * 1000,
+    QUARTER_SECOND_HALF_MILLISECONDS: 3 * 30 * 24 * 60 * 60 * 1000,
+    QUARTER_WINTER_MILLISECONDS:
+      2 * 30 * 24 * 60 * 60 * 1000 + 29 * 24 * 60 * 60 * 1000,
+    YEAR_MILLISECONDS:
+      6 * 31 * 24 * 60 * 60 * 1000 +
+      5 * 30 * 24 * 60 * 60 * 1000 +
+      29 * 24 * 60 * 60 * 1000,
+    YEAR_LEAP_MILLISECONDS:
+      6 * 31 * 24 * 60 * 60 * 1000 + 6 * 30 * 24 * 60 * 60 * 1000,
+    WEEK_DAYS: 7,
+    MONTH_DAYS: 30
+  },
+  NAS_SESSION_EXPIRES_AT: process.env.NAS_SESSION_EXPIRES_AT,
+
+  THRESHOLD_BEFORE_BLOCKING_SERVICE_IN_DAYS: 1,
+  ENGLISH_SMS_COST: 46,
+  PERSIAN_SMS_COST: 19,
+  ADMIN_CHARGE: 'adminCharge',
+  BUY_CHARGE: 'buyCharge',
+  BUY_SERVICE_CHARGE: 'serviceCharge',
+  RESELLER_COMMISSION_CHARGE: 'commissionCharge',
+  BUY_INTERNET_PLAN: 'buyInternetPlan',
+  BUY_EXTRA_BULK: 'buyExtraBulk',
+  DEFAULT_RESELLER_ONLINE_USERS: 0,
+  DEFAULT_RESELLER_DURATION_MONTHS: 0,
+  DEFAULT_RESELLER_PLAN_TYPE: 'static',
+  ELASTIC_SESSION_REPORT_MAIN_CONTEXT:
+    elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'sessions',
+  ELASTIC_SESSION_REPORT:
+    elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'sessions/report',
+  ELASTIC_CHARGE_MAIN_CONTEXT:
+    elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'charge',
+  ELASTIC_CHARGE_SEARCH:
+    elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'charge/charge/_search',
+  ELASTIC_ACCOUNTING_MAIN_CONTEXT:
+    elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'accounting',
+  ELASTIC_ACCOUNTING_USAGE:
+    elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'accounting/usagereport',
+  ELASTIC_ACCOUNTING_USAGE_SEARCH:
+    elasticURL +
+    process.env.ELASTIC_INDEX_PREFIX +
+    'accounting/usagereport/{0}{1}',
+  ELASTIC_SYSLOG_MAIN_CONTEXT:
+    elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'syslog',
+  ELASTIC_SYSLOG_REPORT:
+    elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'syslog/report',
+  ELASTIC_NETFLOW_MAIN_CONTEXT:
+    elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'netflow',
+  ELASTIC_NETFLOW_REPORT:
+    elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'netflow/report',
+  ELASTIC_TEST_PATH:
+    elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'test/test/',
+  ELASTIC_BULK: elasticURL + process.env.ELASTIC_INDEX_PREFIX + '{0}/{1}/_bulk',
+  ELASTIC_DELETE_BY_QUERY:
+    elasticURL + process.env.ELASTIC_INDEX_PREFIX + '{0}/{1}/_delete_by_query',
+  VOUCHER_TEMPLATE_PATH: templatesPath + 'memberPrintTemplate.dust.html',
+  SCRIPTS: {
+    MIKROTIK_DYNAMIC_IP_SCRIPT:
+      setup_script_path + 'mikrotik_dynamicip_setup.sh',
+    MIKROTIK_SETUP_SCRIPT: setup_script_path + 'mikrotik_setup.sh',
+    MIKROTIK_HOTSPOT_PAGES: [
+      {
+        path: mikrotik_hotspot_script_path + '/alogin.html',
+        name: 'alogin.html'
+      },
+      {
+        path: mikrotik_hotspot_script_path + '/fstatus.html',
+        name: 'fstatus.html'
+      },
+      {
+        path: mikrotik_hotspot_script_path + '/login.html',
+        name: 'login.html'
+      },
+      {
+        path: mikrotik_hotspot_script_path + '/logout.html',
+        name: 'logout.html'
+      },
+      {
+        path: mikrotik_hotspot_script_path + '/redirect.html',
+        name: 'redirect.html'
+      },
+      {
+        path: mikrotik_hotspot_script_path + '/rlogin.html',
+        name: 'rlogin.html'
+      },
+      {
+        path: mikrotik_hotspot_script_path + '/rstatus.html',
+        name: 'rstatus.html'
+      },
+      {
+        path: mikrotik_hotspot_script_path + '/status.html',
+        name: 'status.html'
+      }
+    ]
+  },
+  RADIUS_IP: process.env.RADIUS_IP,
+  SECOND_RADIUS_IP: process.env.SECOND_RADIUS_IP,
+  RADIUS_ACC_PORT: process.env.RADIUS_ACC_PORT,
+  RADIUS_AUTH_PORT: process.env.RADIUS_AUTH_PORT,
+  ROUTER_TYPE: {
+    MIKROTIK: 'mikrotik',
+    COOVACHILLI: 'coovachilli',
+    ENGENIUS: 'engenius'
+  },
+  MIN_WALKBY_TIME_DEFAULT: 3, // MINUTES
+  MAX_WALKBY_TIME_DEFAULT: 6, // MINUTES
+  MIN_VISIT_TIME_DEFAULT: 10, // MINUTES
+  MAX_VISIT_TIME_DEFAULT: 60, // MINUTES
+  TIME_ZONE_DEFAULT: {
+    name: 'Iran Standard Time',
+    abbr: 'IDT',
+    offset: 4.5,
+    isdst: true,
+    text: '(UTC+03:30) Tehran',
+    utc: ['Asia/Tehran']
+  },
+  ACCOUNTING_DC_THRESHHOLD: 100000000,
+  DEFAULT_MEMBER_SESSION_EXPIRE_IN_SECONDS:
+    DEFAULT_ACCOUNTING_UPDATE_INTERVAL_SECONDS + 10,
+  NAS_STATUS_CHECK_IN_SECONDS: 60 * 10,
+  DEFAULT_ACCOUNTING_UPDATE_INTERVAL_SECONDS: DEFAULT_ACCOUNTING_UPDATE_INTERVAL_SECONDS,
+  FAST_ACCOUNTING_UPDATE_INTERVAL_SECONDS: FAST_ACCOUNTING_UPDATE_INTERVAL_SECONDS,
+  MAX_VERIFICATION_COUNT: 5,
+  MIN_REQUIRED_SMS_CREDIT: 100,
+  DEFAULT_THEME_ID: 'alpha',
+  DEFAULT_THEME_CONFIG: {
+    alpha: {
+      style: hotspotTemplates['alpha'].styles[0].id,
+      showLogo: true,
+      logo: {},
+      background: {},
+      isMultiLanguage: false,
+      showPinCode: false,
+      showTelegram: false,
+      showInstagram: false,
+      verificationMethod: 'mobile',
+      formConfig: hotspotTemplates['alpha'].formConfig
+    }
+  },
+  HOTEL_THEME_ID: 'hotel',
+  PREVIOUS_HOTEL_THEME_ID: 'hotelTheme',
+  PREVIOUS_DEFAULT_THEME_ID: 'defaultTheme',
+  PUPLIC_INTERNET_PLAN: 'public',
+  DEFAULT_ALLOWED_ONLINE_USERS: Number(process.env.ALLOWED_ONLINE_USERS) || 120,
+  SERVICES: {
+    RESELLERS_COMMISSION_RATE: 30 / 100,
+    packages: [
+      {
+        id: 'demo',
+        active: false,
+        packageDesc: 'بسته آزمایشی',
+        title: '۱ ماهه',
+        price: 0,
+        discount: 0,
+        durationInDays: 15,
+        service: {
+          allowedOnlineUsers: 120
+        },
+        modules: {
+          sms: {
+            id: 'sms',
+            title: 'ماژول پیامک'
+          },
+          log: {
+            id: 'log',
+            title: 'ثبت لاگ وب سایت و آی پی'
+          }
+        }
+      },
+      {
+        id: 'economic',
+        active: true,
+        buyDisabled: false,
+        oneTime: false,
+        packageDesc: 'اشتراک ۳ ماهه',
+        title: '۳ ماهه',
+        price: 75000 * 3,
+        discount: 0,
+        duration: 3,
+        buyMethod: 'pay',
+        durationTitle: 'تومان/ ۳ ماهه',
+        discountDesc: '۲۰٪ تخفیف',
+        service: {
+          allowedOnlineUsers: 120,
+          features: [
+            { title: 'قابلیت ثبت نامحدود کاربر' },
+            { title: ' کابر آنلاین همزمان، ۱۲۰ کلاینت' },
+            { title: 'اتصال به درگاه پرداخت مستقل' },
+            { title: 'پنل مستقل کاربران' },
+            { title: 'پشتیبانی از طریق تیکت' }
+          ]
+        },
+        modules: {
+          sms: {
+            title: 'ارسال پیامک',
+            features: [
+              { title: 'ارسال پیامک تایید هویت' },
+              { title: 'ارسال پیامک انبوه به کاربران' },
+              { title: 'هزینه هر یک پیامک ۱۳ تومان' }
+            ]
+          },
+          log: {
+            title: 'ثبت لاگ وب سایت و آی پی',
+            features: [
+              { title: 'ثبت لاگ بر اساس آی پی و پورت' },
+              { title: 'ثبت لاگ بازدید وب سایت' }
+            ]
+          },
+          support: {
+            title: 'پشتیبانی',
+            features: [{ title: 'پشتیبانی از طریق تیکت' }]
+          }
+        }
+      },
+      {
+        id: 'economic12',
+        active: false,
+        buyDisabled: false,
+        oneTime: false,
+        buyMethod: 'pay',
+        durationTitle: 'تومان/ سالیانه',
+        packageDesc: 'اشتراک سالیانه',
+        title: '۱۲ ماهه',
+        price: 75000 * 12,
+        discount: 0,
+        duration: 12,
+        service: {
+          allowedOnlineUsers: 120,
+          features: [
+            { title: 'قابلیت ثبت نامحدود کاربر' },
+            { title: ' کابر آنلاین همزمان، ۱۲۰ کلاینت' },
+            { title: 'اتصال به درگاه پرداخت مستقل' },
+            { title: 'پنل مستقل کاربران' },
+            { title: 'پشتیبانی از طریق تیکت' }
+          ]
+        },
+        modules: {
+          sms: {
+            title: 'ارسال پیامک',
+            features: [
+              { title: 'ارسال پیامک تایید هویت' },
+              { title: 'ارسال پیامک انبوه به کاربران' },
+              { title: 'هزینه هر یک پیامک ۱۳ تومان' }
+            ]
+          },
+          log: {
+            title: 'ثبت لاگ وب سایت و آی پی',
+            features: [
+              { title: 'ثبت لاگ بر اساس آی پی و پورت' },
+              { title: 'ثبت لاگ بازدید وب سایت' }
+            ]
+          },
+          support: {
+            title: 'پشتیبانی',
+            features: [{ title: 'پشتیبانی از طریق تیکت' }]
+          }
+        }
+      }
+    ],
+    features: [
+      {
+        title: 'کاربران آنلاین همزمان',
+        desc: 'تعداد کاربرانی که میتوانند به صورت همزمان آنلاین شوند.',
+        type: 'number',
+        monthly: 120,
+        semiAnnually: 120,
+        annually: 120
+      },
+      {
+        title: 'تعداد کاربران قابل ثبت',
+        desc: 'تعداد کاربرانی که میتوانند در سامانه ثبت شوند',
+        monthly: 'نامحدود',
+        semiAnnually: 'نامحدود',
+        annually: 'نامحدود',
+        type: 'string'
+      },
+      {
+        title: 'تعداد لاگ آی پی قابل ثبت',
+        desc: 'تعداد لاگ هایی که در دراپ باکس شما ذخیره می شوند',
+        monthly: 'نامحدود',
+        semiAnnually: 'نامحدود',
+        annually: 'نامحدود',
+        type: 'string'
+      },
+      {
+        title: 'قیمت هر پیامک',
+        annually: 13,
+        monthly: 13,
+        semiAnnually: 13,
+        type: 'price',
+        desc: ''
+      },
+
+      {
+        title: 'پشیبانی از طریق تیکت',
+        annually: true,
+        monthly: true,
+        semiAnnually: true,
+        type: 'boolean',
+        desc: 'با ارسال تیکت‌ میتوانید از کمک کارشناسان فنی ما بهره‌مند شوید'
+      },
+      {
+        title: 'مدیریت مصرف اینترنت',
+        desc:
+          'با استفاده از تعریف پلن‌های ماهانه و روزانه میتوان بر روی حجم، مدت زمان، و سرعت کاربر محدودیت اعمال کرد',
+        type: 'boolean',
+        monthly: true,
+        semiAnnually: true,
+        annually: true
+      },
+      {
+        title: 'پنل مستقل برای ورود کاربران',
+        annually: true,
+        monthly: true,
+        semiAnnually: true,
+        type: 'boolean',
+        desc:
+          'کاربران میتوانند با نام کاربری و رمز عبور خود به پنل لاگین کنند و میزان مصرف خود را مشاهده کنند.'
+      },
+      {
+        title: 'تغییر لوگو و فرم عضویت در صفحات هات‌اسپات',
+        desc:
+          'با استفاده از این امکان میتوانید لوگوی صفحه‌های هات‌اسپات را از طریق پنل کاربری به لوگوی مورد نظر خودتان تغییر دهید و فرم عضویت کاربران در هات اسپات را تغییر دهید و اطلاعات مورد نظر خود را مانند تاریخ تولد از کاربر دریافت کنید.',
+        monthly: true,
+        semiAnnually: true,
+        annually: true,
+        type: 'boolean'
+      },
+      {
+        title: 'تایید هویت کاربر هات‌اسپات با پیامک و بدون فیلتر شدن',
+        desc:
+          'این پیامک‌ها به دلیل ارسال از طریق خطوط خدماتی، فیلتر نمی‌شوند و تا ۹۹٪ مواقع خیلی سریع به گوشی کاربر می‌رسند.',
+        monthly: true,
+        semiAnnually: true,
+        annually: true,
+        type: 'boolean'
+      },
+      {
+        title: 'تایید هویت کاربر هات‌اسپات با تماس تلفنی خودکار',
+        desc: 'کد تایید با یک تماس تلفنی خودکار به موبایل کاربر ارسال می‌شود.',
+        monthly: true,
+        semiAnnually: true,
+        annually: true,
+        type: 'boolean'
+      },
+      {
+        title: 'دانلود شماره موبایل‌های مشتریان و ارسال پیامک تبلیغاتی',
+        monthly: true,
+        semiAnnually: true,
+        annually: true,
+        type: 'boolean',
+        desc:
+          'با استفاده از این امکان می‌توانید پروفایل مشتریان را دانلود کنید یا برای آنها پیامک‌های تبلیغاتی ارسال کنید.'
+      },
+      {
+        title: 'متن انتهای پیامک',
+        monthly: true,
+        semiAnnually: true,
+        annually: true,
+        type: 'boolean',
+        desc:
+          'با استفاده از این امکان میتوانید متن انتهای پیامک (از طرف...) را به نام مورد نظر خودتان تغییر دهید.'
+      }
+    ]
+  },
+  RESELLERS_TARIFFS: [
+    { from: 0, to: 1, free: 0, silver: 30000, gold: 50000, whiteLabel: 10000 },
+    { from: 2, to: 5, free: 0, silver: 25000, gold: 40000, whiteLabel: 10000 },
+    {
+      from: 6,
+      to: 100,
+      free: 0,
+      silver: 20000,
+      gold: 30000,
+      whiteLabel: 10000
+    }
+  ],
+  DEFAULT_HOTSPOT_HELP:
+    'برای اتصال به اینترنت، به شبکه وای فای متصل شوید. سپس با مرورگر کروم به سایت wifi.ir وارد شوید. پس از باز شدن صفحه با نام کاربری و رمز زیر به هات اسپات لاگین کنید.',
+  ENABLE_SENTRY: process.env.ENABLE_SENTRY === 'false',
+  SENTRY_RELEASE_TOKEN: process.env.SENTRY_RELEASE_TOKEN,
+  SENTRY_URL: process.env.SENTRY_URL,
+  ENABLE_DASHBOARD_SENTRY: process.env.ENABLE_DASHBOARD_SENTRY === 'true',
+  SENTRY_DASHBOARD_RELEASE_TOKEN: process.env.SENTRY_DASHBOARD_RELEASE_TOKEN,
+  SENTRY_DASHBOARD_URL: process.env.SENTRY_DASHBOARD_URL,
+  DEFAULT_SENTRY_URL: 'http://api.hotspotplus.ir/5',
+  ADMIN_OWNER_ID: 'Admin',
+  PERCENT_UNIT: 'percent',
+  TOMAN_UNIT: 'toman',
+  PERSIAN_COUPON_MESSAGE: 'کد تخفیف شما: {0} \n ارزش: {1} {2}',
+  PERSIAN_TOMAN_UNIT: 'تومان',
+  PERSIAN_PERCENT_UNIT: 'درصد',
+  ELASTIC_TYPE_USAGEREPORT: 'usagereport',
+  ELASTIC_INDEX_ACCOUNTING: 'accounting',
+
+  /**
+   * @return {string}
+   */
+  BUSINESS_PAYMENT_RETURN_URL: function() {
+    return (
+      process.env.CALCULATED_EXTERNAL_API_ADDRESS +
+      '/api/payment/business/return?{0}={1}'
+    );
+  },
+  /**
+   * @return {string}
+   */
+  EXTERNAL_PAYMENT_RETURN_URL: function() {
+    return (
+      process.env.CALCULATED_EXTERNAL_API_ADDRESS +
+      '/api/payment/external/return?{0}={1}'
+    );
+  },
+  /**
+   * @return {string}
+   */
+  CHARGE_PAYMENT_RETURN_URL: function() {
+    return (
+      process.env.CALCULATED_EXTERNAL_API_ADDRESS +
+      '/api/payment/charge/return?{0}={1}'
+    );
+  },
+  /**
+   * @return {string}
+   */
+  LOCAL_PAYMENT_RETURN_URL: function() {
+    return (
+      process.env.CALCULATED_EXTERNAL_API_ADDRESS +
+      '/api/payment/local/return?{0}={1}'
+    );
+  },
+  /**
+   * @return {string}
+   */
+  MEMBER_PAYMENT_RETURN_URL: function() {
+    return (
+      process.env.CALCULATED_EXTERNAL_API_ADDRESS +
+      '/api/payment/member/return?{0}={1}'
+    );
+  },
+  /**
+   * @return {string}
+   */
+  DROPBOX_REST_API: function() {
+    return process.env.CALCULATED_EXTERNAL_API_ADDRESS + '/api/dropBox';
+  },
+
+  /**
+   * @return {string}
+   */
+  BUY_LOCAL_SMS_CHARGE_RETURN: function() {
+    return (
+      process.env.CALCULATED_WEB_APP_ADDRESS +
+      mainPath +
+      '#/app/loading?payed={0}&desc={1}&license_updated=true'
+    );
+  },
+  /**
+   * @return {string}
+   */
+  BUY_LOCAL_PACKAGE_RETURN: function() {
+    return (
+      process.env.CALCULATED_WEB_APP_ADDRESS +
+      mainPath +
+      '#/app/loading?payed={0}&desc={1}&license_updated=true'
+    );
+  },
+  /**
+   * @return {string}
+   */
+  BUSINESS_PAYMENT_RESULT_URL: function() {
+    return (
+      process.env.CALCULATED_WEB_APP_ADDRESS +
+      mainPath +
+      '#/app/loading?payed={0}{1}'
+    );
+  },
+  /**
+   * @return {string}
+   */
+  LOCAL_PAYMENT_RESULT_URL: function() {
+    return (
+      process.env.CALCULATED_WEB_APP_ADDRESS +
+      mainPath +
+      '#/access/public/local'
+    );
+  },
+  /**
+   * @return {string}
+   */
+  MEMBER_PAYMENT_RESULT_URL: function() {
+    return (
+      process.env.CALCULATED_WEB_APP_ADDRESS +
+      mainPath +
+      '#/app/loading?payed={0}{1}'
+    );
+  },
+  /**
+   * @return {string}
+   */
+  DROPBOX_AUTHORISE_RESULT_URL: function() {
+    return (
+      process.env.CALCULATED_WEB_APP_ADDRESS +
+      mainPath +
+      '#/app/loading?dropbox={0}{1}'
+    );
+  },
+  /**
+   * @return {string}
+   */
+  HOTSPOT_PAYMENT_RETURN_URL: function() {
+    return (
+      process.env.CALCULATED_HOTSPOT_ADDRESS +
+      '/api/payment/hotspot/return?{0}={1}&password={password}&username={username}&businessId={businessId}&nasId={nasId}&host={host}&memberId={memberId}'
+    );
+  },
+  /**
+   * @return {string}
+   */
+  HOTSPOT_PAYMENT_WEB_RETURN_URL: function() {
+    return process.env.CALCULATED_HOTSPOT_ADDRESS + '/#!/home.html?{0}';
+  },
+  /**
+   * @return {string}
+   */
+  HOTSPOT_VERIFICATION_URL: function() {
+    return (
+      process.env.CALCULATED_HOTSPOT_ADDRESS +
+      '/#!/home.html?businessId={businessId}&nasId={nasId}&host={host}&verificationCode={verificationCode}&memberId={memberId}'
+    );
+  },
+  /**
+   * @return {string}
+   */
+  HOTSPOT_SIGNIN_URL: function() {
+    return (
+      process.env.CALCULATED_HOTSPOT_ADDRESS +
+      '/#!/home.html?businessId={businessId}&nasId={nasId}&host={host}&username={username}&password={password}&memberId={memberId}'
+    );
+  },
+  /**
+   * @return {string}
+   */
+  SHORTNER_URL: function() {
+    return process.env.CALCULATED_HOTSPOT_ADDRESS + '/a/';
+  },
+  /**
+   * @return {string}
+   */
+  DROPBOX_APP_KEY: function() {
+    return process.env.DROPBOX_APP_KEY;
+  },
+  /**
+   * @return {string}
+   */
+  DROPBOX_APP_SECRET: function() {
+    return process.env.DROPBOX_APP_SECRET;
+  },
+  LOG_WORKER_QUEUE: 'log-worker'
+};
