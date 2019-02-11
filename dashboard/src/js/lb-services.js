@@ -13,7 +13,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
 (function(window, angular, undefined) {
   'use strict';
 
-  var urlBase = "http://127.0.0.1:3000/api";
+  var urlBase = 'http://127.0.0.1:3000/api';
   var authHeader = 'authorization';
 
   function getHost(url) {
@@ -55,9 +55,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
   module.factory(
     "User",
     [
-      'LoopBackResource', 'LoopBackAuth', '$injector', '$q',
-      function(LoopBackResource, LoopBackAuth, $injector, $q) {
-        var R = LoopBackResource(
+      'LoopBackResource', 'LoopBackAuth', '$injector',
+      function(Resource, LoopBackAuth, $injector) {
+        var R = Resource(
         urlBase + "/Users/:id",
           { 'id': '@id' },
           {
@@ -1226,11 +1226,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
                   LoopBackAuth.currentUserData = response.data;
                   return response.resource;
                 },
-                responseError: function(responseError) {
-                  LoopBackAuth.clearUser();
-                  LoopBackAuth.clearStorage();
-                  return $q.reject(responseError);
-                },
               },
               __isGetCurrentUser__: true,
             },
@@ -1553,9 +1548,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
   module.factory(
     "RoleMapping",
     [
-      'LoopBackResource', 'LoopBackAuth', '$injector', '$q',
-      function(LoopBackResource, LoopBackAuth, $injector, $q) {
-        var R = LoopBackResource(
+      'LoopBackResource', 'LoopBackAuth', '$injector',
+      function(Resource, LoopBackAuth, $injector) {
+        var R = Resource(
         urlBase + "/RoleMappings/:id",
           { 'id': '@id' },
           {
@@ -2495,9 +2490,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
   module.factory(
     "Role",
     [
-      'LoopBackResource', 'LoopBackAuth', '$injector', '$q',
-      function(LoopBackResource, LoopBackAuth, $injector, $q) {
-        var R = LoopBackResource(
+      'LoopBackResource', 'LoopBackAuth', '$injector',
+      function(Resource, LoopBackAuth, $injector) {
+        var R = Resource(
         urlBase + "/Roles/:id",
           { 'id': '@id' },
           {
@@ -3725,9 +3720,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
   module.factory(
     "Business",
     [
-      'LoopBackResource', 'LoopBackAuth', '$injector', '$q',
-      function(LoopBackResource, LoopBackAuth, $injector, $q) {
-        var R = LoopBackResource(
+      'LoopBackResource', 'LoopBackAuth', '$injector',
+      function(Resource, LoopBackAuth, $injector) {
+        var R = Resource(
         urlBase + "/Businesses/:id",
           { 'id': '@id' },
           {
@@ -4196,6 +4191,33 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
                 'fk': '@fk',
               },
               url: urlBase + "/Businesses/:id/tickets/:fk",
+              method: "PUT",
+            },
+
+            // INTERNAL. Use Business.reports.findById() instead.
+            "prototype$__findById__reports": {
+              params: {
+                'fk': '@fk',
+              },
+              url: urlBase + "/Businesses/:id/reports/:fk",
+              method: "GET",
+            },
+
+            // INTERNAL. Use Business.reports.destroyById() instead.
+            "prototype$__destroyById__reports": {
+              params: {
+                'fk': '@fk',
+              },
+              url: urlBase + "/Businesses/:id/reports/:fk",
+              method: "DELETE",
+            },
+
+            // INTERNAL. Use Business.reports.updateById() instead.
+            "prototype$__updateById__reports": {
+              params: {
+                'fk': '@fk',
+              },
+              url: urlBase + "/Businesses/:id/reports/:fk",
               method: "PUT",
             },
 
@@ -4681,6 +4703,31 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
             // INTERNAL. Use Business.tickets.count() instead.
             "prototype$__count__tickets": {
               url: urlBase + "/Businesses/:id/tickets/count",
+              method: "GET",
+            },
+
+            // INTERNAL. Use Business.reports() instead.
+            "prototype$__get__reports": {
+              isArray: true,
+              url: urlBase + "/Businesses/:id/reports",
+              method: "GET",
+            },
+
+            // INTERNAL. Use Business.reports.create() instead.
+            "prototype$__create__reports": {
+              url: urlBase + "/Businesses/:id/reports",
+              method: "POST",
+            },
+
+            // INTERNAL. Use Business.reports.destroyAll() instead.
+            "prototype$__delete__reports": {
+              url: urlBase + "/Businesses/:id/reports",
+              method: "DELETE",
+            },
+
+            // INTERNAL. Use Business.reports.count() instead.
+            "prototype$__count__reports": {
+              url: urlBase + "/Businesses/:id/reports/count",
               method: "GET",
             },
 
@@ -6638,6 +6685,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
               method: "GET",
             },
 
+            // INTERNAL. Use Report.business() instead.
+            "::get::Report::business": {
+              url: urlBase + "/Reports/:id/business",
+              method: "GET",
+            },
+
             /**
              * @ngdoc method
              * @name lbServices.Business#getCurrent
@@ -6672,11 +6725,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
                 response: function(response) {
                   LoopBackAuth.currentUserData = response.data;
                   return response.resource;
-                },
-                responseError: function(responseError) {
-                  LoopBackAuth.clearUser();
-                  LoopBackAuth.clearStorage();
-                  return $q.reject(responseError);
                 },
               },
               __isGetCurrentUser__: true,
@@ -9543,6 +9591,341 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
           var action = TargetResource["::updateById::Business::tickets"];
           return action.apply(R, arguments);
         };
+    /**
+     * @ngdoc object
+     * @name lbServices.Business.reports
+     * @header lbServices.Business.reports
+     * @object
+     * @description
+     *
+     * The object `Business.reports` groups methods
+     * manipulating `Report` instances related to `Business`.
+     *
+     * Call {@link lbServices.Business#reports Business.reports()}
+     * to query all related instances.
+     */
+
+
+            /**
+             * @ngdoc method
+             * @name lbServices.Business#reports
+             * @methodOf lbServices.Business
+             *
+             * @description
+             *
+             * Queries reports of Business.
+             *
+             * @param {Object=} parameters Request parameters.
+             *
+             *  - `id` – `{*}` - Business id
+             *
+             *  - `options` – `{object=}` -
+             *
+             *  - `filter` – `{object=}` -
+             *
+             *  - `options` – `{object=}` -
+             *
+             * @param {function(Array.<Object>,Object)=} successCb
+             *   Success callback with two arguments: `value`, `responseHeaders`.
+             *
+             * @param {function(Object)=} errorCb Error callback with one argument:
+             *   `httpResponse`.
+             *
+             * @returns {Array.<Object>} An empty reference that will be
+             *   populated with the actual data once the response is returned
+             *   from the server.
+             *
+             * <em>
+             * (The remote method definition does not provide any description.
+             * This usually means the response is a `Report` object.)
+             * </em>
+             */
+        R.reports = function() {
+          var TargetResource = $injector.get("Report");
+          var action = TargetResource["::get::Business::reports"];
+          return action.apply(R, arguments);
+        };
+
+            /**
+             * @ngdoc method
+             * @name lbServices.Business.reports#count
+             * @methodOf lbServices.Business.reports
+             *
+             * @description
+             *
+             * Counts reports of Business.
+             *
+             * @param {Object=} parameters Request parameters.
+             *
+             *  - `id` – `{*}` - Business id
+             *
+             *  - `options` – `{object=}` -
+             *
+             *  - `where` – `{object=}` - Criteria to match model instances
+             *
+             *  - `options` – `{object=}` -
+             *
+             * @param {function(Object,Object)=} successCb
+             *   Success callback with two arguments: `value`, `responseHeaders`.
+             *
+             * @param {function(Object)=} errorCb Error callback with one argument:
+             *   `httpResponse`.
+             *
+             * @returns {Object} An empty reference that will be
+             *   populated with the actual data once the response is returned
+             *   from the server.
+             *
+             * Data properties:
+             *
+             *  - `count` – `{number=}` -
+             */
+        R.reports.count = function() {
+          var TargetResource = $injector.get("Report");
+          var action = TargetResource["::count::Business::reports"];
+          return action.apply(R, arguments);
+        };
+
+            /**
+             * @ngdoc method
+             * @name lbServices.Business.reports#create
+             * @methodOf lbServices.Business.reports
+             *
+             * @description
+             *
+             * Creates a new instance in reports of this model.
+             *
+             * @param {Object=} parameters Request parameters.
+             *
+             *  - `id` – `{*}` - Business id
+             *
+             * @param {Object} postData Request data.
+             *
+             *  - `options` – `{object=}` -
+             *
+             *  - `data` – `{object=}` -
+             *
+             *  - `options` – `{object=}` -
+             *
+             * @param {function(Object,Object)=} successCb
+             *   Success callback with two arguments: `value`, `responseHeaders`.
+             *
+             * @param {function(Object)=} errorCb Error callback with one argument:
+             *   `httpResponse`.
+             *
+             * @returns {Object} An empty reference that will be
+             *   populated with the actual data once the response is returned
+             *   from the server.
+             *
+             * <em>
+             * (The remote method definition does not provide any description.
+             * This usually means the response is a `Report` object.)
+             * </em>
+             */
+        R.reports.create = function() {
+          var TargetResource = $injector.get("Report");
+          var action = TargetResource["::create::Business::reports"];
+          return action.apply(R, arguments);
+        };
+
+            /**
+             * @ngdoc method
+             * @name lbServices.Business.reports#createMany
+             * @methodOf lbServices.Business.reports
+             *
+             * @description
+             *
+             * Creates a new instance in reports of this model.
+             *
+             * @param {Object=} parameters Request parameters.
+             *
+             *  - `id` – `{*}` - Business id
+             *
+             * @param {Object} postData Request data.
+             *
+             *  - `options` – `{object=}` -
+             *
+             *  - `data` – `{object=}` -
+             *
+             *  - `options` – `{object=}` -
+             *
+             * @param {function(Array.<Object>,Object)=} successCb
+             *   Success callback with two arguments: `value`, `responseHeaders`.
+             *
+             * @param {function(Object)=} errorCb Error callback with one argument:
+             *   `httpResponse`.
+             *
+             * @returns {Array.<Object>} An empty reference that will be
+             *   populated with the actual data once the response is returned
+             *   from the server.
+             *
+             * <em>
+             * (The remote method definition does not provide any description.
+             * This usually means the response is a `Report` object.)
+             * </em>
+             */
+        R.reports.createMany = function() {
+          var TargetResource = $injector.get("Report");
+          var action = TargetResource["::createMany::Business::reports"];
+          return action.apply(R, arguments);
+        };
+
+            /**
+             * @ngdoc method
+             * @name lbServices.Business.reports#destroyAll
+             * @methodOf lbServices.Business.reports
+             *
+             * @description
+             *
+             * Deletes all reports of this model.
+             *
+             * @param {Object=} parameters Request parameters.
+             *
+             *  - `id` – `{*}` - Business id
+             *
+             *  - `options` – `{object=}` -
+             *
+             *  - `where` – `{object=}` -
+             *
+             *  - `options` – `{object=}` -
+             *
+             * @param {function(Object,Object)=} successCb
+             *   Success callback with two arguments: `value`, `responseHeaders`.
+             *
+             * @param {function(Object)=} errorCb Error callback with one argument:
+             *   `httpResponse`.
+             *
+             * @returns {Object} An empty reference that will be
+             *   populated with the actual data once the response is returned
+             *   from the server.
+             *
+             * This method returns no data.
+             */
+        R.reports.destroyAll = function() {
+          var TargetResource = $injector.get("Report");
+          var action = TargetResource["::delete::Business::reports"];
+          return action.apply(R, arguments);
+        };
+
+            /**
+             * @ngdoc method
+             * @name lbServices.Business.reports#destroyById
+             * @methodOf lbServices.Business.reports
+             *
+             * @description
+             *
+             * Delete a related item by id for reports.
+             *
+             * @param {Object=} parameters Request parameters.
+             *
+             *  - `id` – `{*}` - Business id
+             *
+             *  - `options` – `{object=}` -
+             *
+             *  - `fk` – `{*}` - Foreign key for reports
+             *
+             *  - `options` – `{object=}` -
+             *
+             * @param {function(Object,Object)=} successCb
+             *   Success callback with two arguments: `value`, `responseHeaders`.
+             *
+             * @param {function(Object)=} errorCb Error callback with one argument:
+             *   `httpResponse`.
+             *
+             * @returns {Object} An empty reference that will be
+             *   populated with the actual data once the response is returned
+             *   from the server.
+             *
+             * This method returns no data.
+             */
+        R.reports.destroyById = function() {
+          var TargetResource = $injector.get("Report");
+          var action = TargetResource["::destroyById::Business::reports"];
+          return action.apply(R, arguments);
+        };
+
+            /**
+             * @ngdoc method
+             * @name lbServices.Business.reports#findById
+             * @methodOf lbServices.Business.reports
+             *
+             * @description
+             *
+             * Find a related item by id for reports.
+             *
+             * @param {Object=} parameters Request parameters.
+             *
+             *  - `id` – `{*}` - Business id
+             *
+             *  - `options` – `{object=}` -
+             *
+             *  - `fk` – `{*}` - Foreign key for reports
+             *
+             *  - `options` – `{object=}` -
+             *
+             * @param {function(Object,Object)=} successCb
+             *   Success callback with two arguments: `value`, `responseHeaders`.
+             *
+             * @param {function(Object)=} errorCb Error callback with one argument:
+             *   `httpResponse`.
+             *
+             * @returns {Object} An empty reference that will be
+             *   populated with the actual data once the response is returned
+             *   from the server.
+             *
+             * <em>
+             * (The remote method definition does not provide any description.
+             * This usually means the response is a `Report` object.)
+             * </em>
+             */
+        R.reports.findById = function() {
+          var TargetResource = $injector.get("Report");
+          var action = TargetResource["::findById::Business::reports"];
+          return action.apply(R, arguments);
+        };
+
+            /**
+             * @ngdoc method
+             * @name lbServices.Business.reports#updateById
+             * @methodOf lbServices.Business.reports
+             *
+             * @description
+             *
+             * Update a related item by id for reports.
+             *
+             * @param {Object=} parameters Request parameters.
+             *
+             *  - `id` – `{*}` - Business id
+             *
+             *  - `fk` – `{*}` - Foreign key for reports
+             *
+             * @param {Object} postData Request data.
+             *
+             *  - `options` – `{object=}` -
+             *
+             *  - `data` – `{object=}` -
+             *
+             *  - `options` – `{object=}` -
+             *
+             * @param {function(Object,Object)=} successCb
+             *   Success callback with two arguments: `value`, `responseHeaders`.
+             *
+             * @param {function(Object)=} errorCb Error callback with one argument:
+             *   `httpResponse`.
+             *
+             * @returns {Object} An empty reference that will be
+             *   populated with the actual data once the response is returned
+             *   from the server.
+             *
+             * <em>
+             * (The remote method definition does not provide any description.
+             * This usually means the response is a `Report` object.)
+             * </em>
+             */
+        R.reports.updateById = function() {
+          var TargetResource = $injector.get("Report");
+          var action = TargetResource["::updateById::Business::reports"];
+          return action.apply(R, arguments);
+        };
 
 
         return R;
@@ -9568,9 +9951,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
   module.factory(
     "Nas",
     [
-      'LoopBackResource', 'LoopBackAuth', '$injector', '$q',
-      function(LoopBackResource, LoopBackAuth, $injector, $q) {
-        var R = LoopBackResource(
+      'LoopBackResource', 'LoopBackAuth', '$injector',
+      function(Resource, LoopBackAuth, $injector) {
+        var R = Resource(
         urlBase + "/Nas/:id",
           { 'id': '@id' },
           {
@@ -11099,9 +11482,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
   module.factory(
     "FootTraffic",
     [
-      'LoopBackResource', 'LoopBackAuth', '$injector', '$q',
-      function(LoopBackResource, LoopBackAuth, $injector, $q) {
-        var R = LoopBackResource(
+      'LoopBackResource', 'LoopBackAuth', '$injector',
+      function(Resource, LoopBackAuth, $injector) {
+        var R = Resource(
         urlBase + "/FootTraffics/:id",
           { 'id': '@id' },
           {
@@ -12538,9 +12921,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
   module.factory(
     "Member",
     [
-      'LoopBackResource', 'LoopBackAuth', '$injector', '$q',
-      function(LoopBackResource, LoopBackAuth, $injector, $q) {
-        var R = LoopBackResource(
+      'LoopBackResource', 'LoopBackAuth', '$injector',
+      function(Resource, LoopBackAuth, $injector) {
+        var R = Resource(
         urlBase + "/Members/:id",
           { 'id': '@id' },
           {
@@ -15122,11 +15505,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
                   LoopBackAuth.currentUserData = response.data;
                   return response.resource;
                 },
-                responseError: function(responseError) {
-                  LoopBackAuth.clearUser();
-                  LoopBackAuth.clearStorage();
-                  return $q.reject(responseError);
-                },
               },
               __isGetCurrentUser__: true,
             },
@@ -16167,9 +16545,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
   module.factory(
     "Device",
     [
-      'LoopBackResource', 'LoopBackAuth', '$injector', '$q',
-      function(LoopBackResource, LoopBackAuth, $injector, $q) {
-        var R = LoopBackResource(
+      'LoopBackResource', 'LoopBackAuth', '$injector',
+      function(Resource, LoopBackAuth, $injector) {
+        var R = Resource(
         urlBase + "/Devices/:id",
           { 'id': '@id' },
           {
@@ -17029,9 +17407,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
   module.factory(
     "Campaign",
     [
-      'LoopBackResource', 'LoopBackAuth', '$injector', '$q',
-      function(LoopBackResource, LoopBackAuth, $injector, $q) {
-        var R = LoopBackResource(
+      'LoopBackResource', 'LoopBackAuth', '$injector',
+      function(Resource, LoopBackAuth, $injector) {
+        var R = Resource(
         urlBase + "/Campaigns/:id",
           { 'id': '@id' },
           {
@@ -18028,9 +18406,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
   module.factory(
     "InternetPlan",
     [
-      'LoopBackResource', 'LoopBackAuth', '$injector', '$q',
-      function(LoopBackResource, LoopBackAuth, $injector, $q) {
-        var R = LoopBackResource(
+      'LoopBackResource', 'LoopBackAuth', '$injector',
+      function(Resource, LoopBackAuth, $injector) {
+        var R = Resource(
         urlBase + "/InternetPlans/:id",
           { 'id': '@id' },
           {
@@ -19117,9 +19495,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
   module.factory(
     "Invoice",
     [
-      'LoopBackResource', 'LoopBackAuth', '$injector', '$q',
-      function(LoopBackResource, LoopBackAuth, $injector, $q) {
-        var R = LoopBackResource(
+      'LoopBackResource', 'LoopBackAuth', '$injector',
+      function(Resource, LoopBackAuth, $injector) {
+        var R = Resource(
         urlBase + "/Invoices/:id",
           { 'id': '@id' },
           {
@@ -20571,9 +20949,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
   module.factory(
     "Charge",
     [
-      'LoopBackResource', 'LoopBackAuth', '$injector', '$q',
-      function(LoopBackResource, LoopBackAuth, $injector, $q) {
-        var R = LoopBackResource(
+      'LoopBackResource', 'LoopBackAuth', '$injector',
+      function(Resource, LoopBackAuth, $injector) {
+        var R = Resource(
         urlBase + "/Charges/:id",
           { 'id': '@id' },
           {
@@ -21471,9 +21849,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
   module.factory(
     "ClientSession",
     [
-      'LoopBackResource', 'LoopBackAuth', '$injector', '$q',
-      function(LoopBackResource, LoopBackAuth, $injector, $q) {
-        var R = LoopBackResource(
+      'LoopBackResource', 'LoopBackAuth', '$injector',
+      function(Resource, LoopBackAuth, $injector) {
+        var R = Resource(
         urlBase + "/ClientSessions/:id",
           { 'id': '@id' },
           {
@@ -22733,9 +23111,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
   module.factory(
     "FileStorage",
     [
-      'LoopBackResource', 'LoopBackAuth', '$injector', '$q',
-      function(LoopBackResource, LoopBackAuth, $injector, $q) {
-        var R = LoopBackResource(
+      'LoopBackResource', 'LoopBackAuth', '$injector',
+      function(Resource, LoopBackAuth, $injector) {
+        var R = Resource(
         urlBase + "/FileStorages/:id",
           { 'id': '@id' },
           {
@@ -23340,34 +23718,34 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
               method: "POST",
             },
 
-            // INTERNAL. Use Report.fileStorage() instead.
-            "::get::Report::fileStorage": {
-              url: urlBase + "/Reports/:id/fileStorage",
+            // INTERNAL. Use Report.fileStorages() instead.
+            "::get::Report::fileStorages": {
+              url: urlBase + "/Reports/:id/fileStorages",
               method: "GET",
             },
 
-            // INTERNAL. Use Report.fileStorage.create() instead.
-            "::create::Report::fileStorage": {
-              url: urlBase + "/Reports/:id/fileStorage",
+            // INTERNAL. Use Report.fileStorages.create() instead.
+            "::create::Report::fileStorages": {
+              url: urlBase + "/Reports/:id/fileStorages",
               method: "POST",
             },
 
-            // INTERNAL. Use Report.fileStorage.createMany() instead.
-            "::createMany::Report::fileStorage": {
+            // INTERNAL. Use Report.fileStorages.createMany() instead.
+            "::createMany::Report::fileStorages": {
               isArray: true,
-              url: urlBase + "/Reports/:id/fileStorage",
+              url: urlBase + "/Reports/:id/fileStorages",
               method: "POST",
             },
 
-            // INTERNAL. Use Report.fileStorage.update() instead.
-            "::update::Report::fileStorage": {
-              url: urlBase + "/Reports/:id/fileStorage",
+            // INTERNAL. Use Report.fileStorages.update() instead.
+            "::update::Report::fileStorages": {
+              url: urlBase + "/Reports/:id/fileStorages",
               method: "PUT",
             },
 
-            // INTERNAL. Use Report.fileStorage.destroy() instead.
-            "::destroy::Report::fileStorage": {
-              url: urlBase + "/Reports/:id/fileStorage",
+            // INTERNAL. Use Report.fileStorages.destroy() instead.
+            "::destroy::Report::fileStorages": {
+              url: urlBase + "/Reports/:id/fileStorages",
               method: "DELETE",
             },
           }
@@ -23684,9 +24062,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
   module.factory(
     "Theme",
     [
-      'LoopBackResource', 'LoopBackAuth', '$injector', '$q',
-      function(LoopBackResource, LoopBackAuth, $injector, $q) {
-        var R = LoopBackResource(
+      'LoopBackResource', 'LoopBackAuth', '$injector',
+      function(Resource, LoopBackAuth, $injector) {
+        var R = Resource(
         urlBase + "/Themes/:id",
           { 'id': '@id' },
           {
@@ -24578,9 +24956,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
   module.factory(
     "Reseller",
     [
-      'LoopBackResource', 'LoopBackAuth', '$injector', '$q',
-      function(LoopBackResource, LoopBackAuth, $injector, $q) {
-        var R = LoopBackResource(
+      'LoopBackResource', 'LoopBackAuth', '$injector',
+      function(Resource, LoopBackAuth, $injector) {
+        var R = Resource(
         urlBase + "/Resellers/:id",
           { 'id': '@id' },
           {
@@ -26209,11 +26587,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
                   LoopBackAuth.currentUserData = response.data;
                   return response.resource;
                 },
-                responseError: function(responseError) {
-                  LoopBackAuth.clearUser();
-                  LoopBackAuth.clearStorage();
-                  return $q.reject(responseError);
-                },
               },
               __isGetCurrentUser__: true,
             },
@@ -27214,9 +27587,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
   module.factory(
     "Coupon",
     [
-      'LoopBackResource', 'LoopBackAuth', '$injector', '$q',
-      function(LoopBackResource, LoopBackAuth, $injector, $q) {
-        var R = LoopBackResource(
+      'LoopBackResource', 'LoopBackAuth', '$injector',
+      function(Resource, LoopBackAuth, $injector) {
+        var R = Resource(
         urlBase + "/Coupons/:id",
           { 'id': '@id' },
           {
@@ -28215,9 +28588,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
   module.factory(
     "Ticket",
     [
-      'LoopBackResource', 'LoopBackAuth', '$injector', '$q',
-      function(LoopBackResource, LoopBackAuth, $injector, $q) {
-        var R = LoopBackResource(
+      'LoopBackResource', 'LoopBackAuth', '$injector',
+      function(Resource, LoopBackAuth, $injector) {
+        var R = Resource(
         urlBase + "/Tickets/:id",
           { 'id': '@id' },
           {
@@ -29218,9 +29591,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
   module.factory(
     "Usage",
     [
-      'LoopBackResource', 'LoopBackAuth', '$injector', '$q',
-      function(LoopBackResource, LoopBackAuth, $injector, $q) {
-        var R = LoopBackResource(
+      'LoopBackResource', 'LoopBackAuth', '$injector',
+      function(Resource, LoopBackAuth, $injector) {
+        var R = Resource(
         urlBase + "/Usages/:id",
           { 'id': '@id' },
           {
@@ -30120,9 +30493,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
   module.factory(
     "Netflow",
     [
-      'LoopBackResource', 'LoopBackAuth', '$injector', '$q',
-      function(LoopBackResource, LoopBackAuth, $injector, $q) {
-        var R = LoopBackResource(
+      'LoopBackResource', 'LoopBackAuth', '$injector',
+      function(Resource, LoopBackAuth, $injector) {
+        var R = Resource(
         urlBase + "/Netflows/:id",
           { 'id': '@id' },
           {
@@ -30976,9 +31349,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
   module.factory(
     "Syslog",
     [
-      'LoopBackResource', 'LoopBackAuth', '$injector', '$q',
-      function(LoopBackResource, LoopBackAuth, $injector, $q) {
-        var R = LoopBackResource(
+      'LoopBackResource', 'LoopBackAuth', '$injector',
+      function(Resource, LoopBackAuth, $injector) {
+        var R = Resource(
         urlBase + "/Syslogs/:id",
           { 'id': '@id' },
           {
@@ -31832,9 +32205,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
   module.factory(
     "MemberGroup",
     [
-      'LoopBackResource', 'LoopBackAuth', '$injector', '$q',
-      function(LoopBackResource, LoopBackAuth, $injector, $q) {
-        var R = LoopBackResource(
+      'LoopBackResource', 'LoopBackAuth', '$injector',
+      function(Resource, LoopBackAuth, $injector) {
+        var R = Resource(
         urlBase + "/MemberGroups/:id",
           { 'id': '@id' },
           {
@@ -32734,9 +33107,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
   module.factory(
     "Report",
     [
-      'LoopBackResource', 'LoopBackAuth', '$injector', '$q',
-      function(LoopBackResource, LoopBackAuth, $injector, $q) {
-        var R = LoopBackResource(
+      'LoopBackResource', 'LoopBackAuth', '$injector',
+      function(Resource, LoopBackAuth, $injector) {
+        var R = Resource(
         urlBase + "/Reports/:id",
           { 'id': '@id' },
           {
@@ -32747,27 +33120,33 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
               method: "GET",
             },
 
-            // INTERNAL. Use Report.fileStorage() instead.
-            "prototype$__get__fileStorage": {
-              url: urlBase + "/Reports/:id/fileStorage",
+            // INTERNAL. Use Report.business() instead.
+            "prototype$__get__business": {
+              url: urlBase + "/Reports/:id/business",
               method: "GET",
             },
 
-            // INTERNAL. Use Report.fileStorage.create() instead.
-            "prototype$__create__fileStorage": {
-              url: urlBase + "/Reports/:id/fileStorage",
+            // INTERNAL. Use Report.fileStorages() instead.
+            "prototype$__get__fileStorages": {
+              url: urlBase + "/Reports/:id/fileStorages",
+              method: "GET",
+            },
+
+            // INTERNAL. Use Report.fileStorages.create() instead.
+            "prototype$__create__fileStorages": {
+              url: urlBase + "/Reports/:id/fileStorages",
               method: "POST",
             },
 
-            // INTERNAL. Use Report.fileStorage.update() instead.
-            "prototype$__update__fileStorage": {
-              url: urlBase + "/Reports/:id/fileStorage",
+            // INTERNAL. Use Report.fileStorages.update() instead.
+            "prototype$__update__fileStorages": {
+              url: urlBase + "/Reports/:id/fileStorages",
               method: "PUT",
             },
 
-            // INTERNAL. Use Report.fileStorage.destroy() instead.
-            "prototype$__destroy__fileStorage": {
-              url: urlBase + "/Reports/:id/fileStorage",
+            // INTERNAL. Use Report.fileStorages.destroy() instead.
+            "prototype$__destroy__fileStorages": {
+              url: urlBase + "/Reports/:id/fileStorages",
               method: "DELETE",
             },
 
@@ -33366,6 +33745,65 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
               method: "POST",
             },
 
+            // INTERNAL. Use Business.reports.findById() instead.
+            "::findById::Business::reports": {
+              params: {
+                'fk': '@fk',
+              },
+              url: urlBase + "/Businesses/:id/reports/:fk",
+              method: "GET",
+            },
+
+            // INTERNAL. Use Business.reports.destroyById() instead.
+            "::destroyById::Business::reports": {
+              params: {
+                'fk': '@fk',
+              },
+              url: urlBase + "/Businesses/:id/reports/:fk",
+              method: "DELETE",
+            },
+
+            // INTERNAL. Use Business.reports.updateById() instead.
+            "::updateById::Business::reports": {
+              params: {
+                'fk': '@fk',
+              },
+              url: urlBase + "/Businesses/:id/reports/:fk",
+              method: "PUT",
+            },
+
+            // INTERNAL. Use Business.reports() instead.
+            "::get::Business::reports": {
+              isArray: true,
+              url: urlBase + "/Businesses/:id/reports",
+              method: "GET",
+            },
+
+            // INTERNAL. Use Business.reports.create() instead.
+            "::create::Business::reports": {
+              url: urlBase + "/Businesses/:id/reports",
+              method: "POST",
+            },
+
+            // INTERNAL. Use Business.reports.createMany() instead.
+            "::createMany::Business::reports": {
+              isArray: true,
+              url: urlBase + "/Businesses/:id/reports",
+              method: "POST",
+            },
+
+            // INTERNAL. Use Business.reports.destroyAll() instead.
+            "::delete::Business::reports": {
+              url: urlBase + "/Businesses/:id/reports",
+              method: "DELETE",
+            },
+
+            // INTERNAL. Use Business.reports.count() instead.
+            "::count::Business::reports": {
+              url: urlBase + "/Businesses/:id/reports/count",
+              method: "GET",
+            },
+
             // INTERNAL. Use Member.reports.findById() instead.
             "::findById::Member::reports": {
               params: {
@@ -33713,29 +34151,69 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
           var action = TargetResource["::get::Report::member"];
           return action.apply(R, arguments);
         };
+
+            /**
+             * @ngdoc method
+             * @name lbServices.Report#business
+             * @methodOf lbServices.Report
+             *
+             * @description
+             *
+             * Fetches belongsTo relation business.
+             *
+             * @param {Object=} parameters Request parameters.
+             *
+             *  - `id` – `{*}` - Report id
+             *
+             *  - `options` – `{object=}` -
+             *
+             *  - `refresh` – `{boolean=}` -
+             *
+             *  - `options` – `{object=}` -
+             *
+             * @param {function(Object,Object)=} successCb
+             *   Success callback with two arguments: `value`, `responseHeaders`.
+             *
+             * @param {function(Object)=} errorCb Error callback with one argument:
+             *   `httpResponse`.
+             *
+             * @returns {Object} An empty reference that will be
+             *   populated with the actual data once the response is returned
+             *   from the server.
+             *
+             * <em>
+             * (The remote method definition does not provide any description.
+             * This usually means the response is a `Business` object.)
+             * </em>
+             */
+        R.business = function() {
+          var TargetResource = $injector.get("Business");
+          var action = TargetResource["::get::Report::business"];
+          return action.apply(R, arguments);
+        };
     /**
      * @ngdoc object
-     * @name lbServices.Report.fileStorage
-     * @header lbServices.Report.fileStorage
+     * @name lbServices.Report.fileStorages
+     * @header lbServices.Report.fileStorages
      * @object
      * @description
      *
-     * The object `Report.fileStorage` groups methods
+     * The object `Report.fileStorages` groups methods
      * manipulating `FileStorage` instances related to `Report`.
      *
-     * Call {@link lbServices.Report#fileStorage Report.fileStorage()}
+     * Call {@link lbServices.Report#fileStorages Report.fileStorages()}
      * to query all related instances.
      */
 
 
             /**
              * @ngdoc method
-             * @name lbServices.Report#fileStorage
+             * @name lbServices.Report#fileStorages
              * @methodOf lbServices.Report
              *
              * @description
              *
-             * Fetches hasOne relation fileStorage.
+             * Fetches hasOne relation fileStorages.
              *
              * @param {Object=} parameters Request parameters.
              *
@@ -33762,20 +34240,20 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `FileStorage` object.)
              * </em>
              */
-        R.fileStorage = function() {
+        R.fileStorages = function() {
           var TargetResource = $injector.get("FileStorage");
-          var action = TargetResource["::get::Report::fileStorage"];
+          var action = TargetResource["::get::Report::fileStorages"];
           return action.apply(R, arguments);
         };
 
             /**
              * @ngdoc method
-             * @name lbServices.Report.fileStorage#create
-             * @methodOf lbServices.Report.fileStorage
+             * @name lbServices.Report.fileStorages#create
+             * @methodOf lbServices.Report.fileStorages
              *
              * @description
              *
-             * Creates a new instance in fileStorage of this model.
+             * Creates a new instance in fileStorages of this model.
              *
              * @param {Object=} parameters Request parameters.
              *
@@ -33804,20 +34282,20 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `FileStorage` object.)
              * </em>
              */
-        R.fileStorage.create = function() {
+        R.fileStorages.create = function() {
           var TargetResource = $injector.get("FileStorage");
-          var action = TargetResource["::create::Report::fileStorage"];
+          var action = TargetResource["::create::Report::fileStorages"];
           return action.apply(R, arguments);
         };
 
             /**
              * @ngdoc method
-             * @name lbServices.Report.fileStorage#createMany
-             * @methodOf lbServices.Report.fileStorage
+             * @name lbServices.Report.fileStorages#createMany
+             * @methodOf lbServices.Report.fileStorages
              *
              * @description
              *
-             * Creates a new instance in fileStorage of this model.
+             * Creates a new instance in fileStorages of this model.
              *
              * @param {Object=} parameters Request parameters.
              *
@@ -33846,20 +34324,20 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `FileStorage` object.)
              * </em>
              */
-        R.fileStorage.createMany = function() {
+        R.fileStorages.createMany = function() {
           var TargetResource = $injector.get("FileStorage");
-          var action = TargetResource["::createMany::Report::fileStorage"];
+          var action = TargetResource["::createMany::Report::fileStorages"];
           return action.apply(R, arguments);
         };
 
             /**
              * @ngdoc method
-             * @name lbServices.Report.fileStorage#destroy
-             * @methodOf lbServices.Report.fileStorage
+             * @name lbServices.Report.fileStorages#destroy
+             * @methodOf lbServices.Report.fileStorages
              *
              * @description
              *
-             * Deletes fileStorage of this model.
+             * Deletes fileStorages of this model.
              *
              * @param {Object=} parameters Request parameters.
              *
@@ -33881,20 +34359,20 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * This method returns no data.
              */
-        R.fileStorage.destroy = function() {
+        R.fileStorages.destroy = function() {
           var TargetResource = $injector.get("FileStorage");
-          var action = TargetResource["::destroy::Report::fileStorage"];
+          var action = TargetResource["::destroy::Report::fileStorages"];
           return action.apply(R, arguments);
         };
 
             /**
              * @ngdoc method
-             * @name lbServices.Report.fileStorage#update
-             * @methodOf lbServices.Report.fileStorage
+             * @name lbServices.Report.fileStorages#update
+             * @methodOf lbServices.Report.fileStorages
              *
              * @description
              *
-             * Update fileStorage of this model.
+             * Update fileStorages of this model.
              *
              * @param {Object=} parameters Request parameters.
              *
@@ -33923,9 +34401,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `FileStorage` object.)
              * </em>
              */
-        R.fileStorage.update = function() {
+        R.fileStorages.update = function() {
           var TargetResource = $injector.get("FileStorage");
-          var action = TargetResource["::update::Report::fileStorage"];
+          var action = TargetResource["::update::Report::fileStorages"];
           return action.apply(R, arguments);
         };
 

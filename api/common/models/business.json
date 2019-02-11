@@ -147,6 +147,11 @@
       "type": "hasOne",
       "model": "Reseller",
       "foreignKey": ""
+    },
+    "reports": {
+      "type": "hasMany",
+      "model": "Report",
+      "foreignKey": ""
     }
   },
   "acls": [
@@ -326,6 +331,13 @@
       "principalId": "networkadmin",
       "permission": "ALLOW",
       "property": "destroyMembersById"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "networkadmin",
+      "permission": "ALLOW",
+      "property": "destroyReportsById"
     },
     {
       "accessType": "EXECUTE",

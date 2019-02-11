@@ -21,6 +21,10 @@
     "status": {
       "type": "string",
       "required": true
+    },
+    "username": {
+      "type": "string",
+      "required": true
     }
   },
   "validations": [],
@@ -30,7 +34,12 @@
       "model": "Member",
       "foreignKey": ""
     },
-    "fileStorage": {
+    "business": {
+      "type": "belongsTo",
+      "model": "Business",
+      "foreignKey": ""
+    },
+    "fileStorages": {
       "type": "hasOne",
       "model": "FileStorage",
       "foreignKey": ""
@@ -40,13 +49,7 @@
     {
       "accessType": "*",
       "principalType": "ROLE",
-      "principalId": "serviceMan",
-      "permission": "ALLOW"
-    } ,
-    {
-      "accessType": "*",
-      "principalType": "ROLE",
-      "principalId": "admin",
+      "principalId": "networkadmin",
       "permission": "ALLOW"
     }
   ],
