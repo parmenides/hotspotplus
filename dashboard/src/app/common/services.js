@@ -426,13 +426,13 @@ app
                 {
                   title: 'upload.fileList',
                   icon: 'fa-th-list',
-                  url: 'app/widgets/upload/tpl/fileListTabContent.html',
+                  url: 'app/widgets/upload/tpl/fileListTabContent.html'
                 },
                 {
                   title: 'upload.file',
                   icon: 'fa-upload',
-                  url: 'app/widgets/upload/tpl/uploadTabContent.html',
-                },
+                  url: 'app/widgets/upload/tpl/uploadTabContent.html'
+                }
               ];
               //upload file to data source
               $scope.DownloadUrlPrefix = Window.API_URL;
@@ -450,7 +450,7 @@ app
                 fileItem,
                 response,
                 status,
-                headers,
+                headers
               ) {
                 $scope.show = true;
                 $scope.status = 'list-group-item-success';
@@ -463,7 +463,7 @@ app
                 fileItem,
                 response,
                 status,
-                headers,
+                headers
               ) {
                 $scope.show = true;
                 $scope.status = 'list-group-item-danger';
@@ -474,13 +474,13 @@ app
               //get files from data source
               function getFiles(business) {
                 Files.getFilesByBusinessId(business).$promise.then(function(
-                  files,
+                  files
                 ) {
                   $scope.fileList = files.result;
                 }),
                   function(error) {
                     $log.error(
-                      'can not get files info from data source: ' + error,
+                      'can not get files info from data source: ' + error
                     );
                     appMessenger.showError('error.generalError');
                   };

@@ -18,20 +18,21 @@ module.exports = function (app) {
   var log = logger.createLogger()
 
   SystemConfig.getConfig()
-  createQueue((error) => {
+/*  createQueue((error) => {
     if (error) {
       log.error(error)
       throw error
     }
     addDefaultRolesAndUsers()
     createElasticMapping()
-  })
-
+  })*/
+  addDefaultRolesAndUsers()
+  createElasticMapping()
   function createQueue (cb) {
     amqp.connect(
       `amqp://${process.env.RABBITMQ_USERNAME}:${
         process.env.RABBITMQ_PASSWORD
-        }@hsp_rabbitmq`,
+        }@rabbitmq`,
       (error, amqpConnection) => {
         if (error) cb && cb(error)
         amqpConnection.createConfirmChannel((error, channel) => {

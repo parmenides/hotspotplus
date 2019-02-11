@@ -109,7 +109,7 @@ app.controller ( 'reportList', [
 					headerCellFilter: 'translate',
 					cellClass:        'center',
 					headerCellClass:  'headerCenter',
-					cellTemplate:     '<a class="btn btn-link" ng-class ="{\'disabled\': row.entity.status !== \'ready\' || !row.entity.fileStorageId  ,\'text-info\': row.entity.status === \'ready\' && row.entity.fileStorageId}" ' +
+					cellTemplate:     '<a class="btn btn-block" ng-class ="{\'disabled\': row.entity.status !== \'ready\' || !row.entity.fileStorageId  ,\'btn-info\': row.entity.status === \'ready\' && row.entity.fileStorageId}" ' +
 						                  'ng-click="grid.appScope.downloadReport(row)"><i class="fa  fa-download"></i></a>'
 				},
 				{
@@ -177,10 +177,10 @@ app.controller ( 'reportList', [
 								};
 								if ( param === 'ip' ) {
 									$scope.options.title = 'report.addIpReport';
-									$scope.options.reportType = 'ip';
+									$scope.options.reportType = 'netflow';
 								} else {
 									$scope.options.title = 'report.addSiteReport';
-									$scope.options.reportType = 'site';
+									$scope.options.reportType = 'syslog';
 								}
 								// Persian date picker methods
 								$scope.dateOptions = {
@@ -231,6 +231,7 @@ app.controller ( 'reportList', [
 										delete $scope.report.member;
 										$scope.report.memberId = memberId;
 										$scope.report.username = username;
+										$scope.report.type = $scope.options.reportType;
 										if ( $scope.report.from ) {
 											var from = new Date ( $scope.report.from );
 											$scope.report.from = from.getTime ();
@@ -244,7 +245,6 @@ app.controller ( 'reportList', [
 											$scope.report.to = new Date ().getTime ();
 										}
 										if ( !$scope.report.title ) {
-											//todo:fix bug on date
 											var time = new Date ( $scope.report.creationDate );
 											var year = PersianDateService.getFullYear ( time );
 											var month = PersianDateService.getMonth ( time ) + 1;
@@ -354,12 +354,22 @@ app.controller ( 'reportList', [
 
 		$scope.downloadReport = function ( row ) {
 			var reportId = row.entity.id;
-			if ( row.entity.fileStorageId ) {
-				var fileStorageId = row.entity.fileStorageId;
-
-			} else {
-				appMessenger.showError ( 'report.noReportsToDownload' )
-			}
+			Business.reports.findById({ id: businessId, fk: reportId }).$promise.then(
+				function(report) {
+					var fileStorageId = report.fileStorageId;
+					if ( report.fileStorageId ) {
+						window.location.href =
+							Window.API_URL +
+							'/api/file/download/{0}'
+								.replace('{0}', fileStorageId);
+					} else {
+						appMessenger.showError ( 'report.noReportsToDownload' )
+					}
+				},
+				function(error) {
+					appMessenger.showError ( 'report.noReportsToDownload' )
+				}
+			);
 		};
 
 		$scope.$watch ( 'paginationOptions.itemPerPage', function ( newValue, oldValue ) {
@@ -400,7 +410,7 @@ app.controller ( 'reportList', [
 				},
 				function ( error ) {
 					$log.error ( error );
-				},
+				}
 			);
 			Business.reports ( options ).$promise.then (
 				function ( reports ) {
@@ -408,8 +418,8 @@ app.controller ( 'reportList', [
 				},
 				function ( error ) {
 					$log.error ( error );
-				},
+				}
 			);
 		};
-	},
+	}
 ] );

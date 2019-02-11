@@ -25,6 +25,14 @@
     "username": {
       "type": "string",
       "required": true
+    },
+    "type": {
+      "type": "string",
+      "required": true
+    },
+    "fileStorageId": {
+      "type": "string",
+      "required": false
     }
   },
   "validations": [],
