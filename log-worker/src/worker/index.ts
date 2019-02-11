@@ -10,19 +10,16 @@ import { login } from '../utils/auth';
 import { file as tmpFile } from 'tmp-promise';
 import util from 'util';
 import syslog from './syslog';
+import { QUEUES } from '../typings';
 
 // Convert fs.readFile into Promise version of same
 
 if (!process.env.API_ADDRESS) {
   throw new Error('invalid env config');
 }
-const LOG_WORKER_QUEUE = process.env.LOG_WORKER_QUEUE;
 const log = logger.createLogger();
 const UPLOAD_API = `${process.env.API_ADDRESS}/api/file/upload`;
 const REPORT_API = `${process.env.API_ADDRESS}/api/Reports`;
-if (!LOG_WORKER_QUEUE) {
-  throw new Error('invalid settings');
-}
 
 if (
   !process.env.SERVICE_MAN_USERNAME ||
@@ -48,14 +45,14 @@ export interface ReportRequestTask {
 }
 
 const processLogRequest = async () => {
-  log.debug('At processing payment requests');
+  log.debug('log requests');
   const channel = await getRabbitMqChannel();
   process.once('SIGINT', async () => {
     await channel.close();
   });
 
   channel.consume(
-    LOG_WORKER_QUEUE,
+    QUEUES.LOG_WORKER_QUEUE,
     async (message) => {
       if (!message) {
         log.debug('empty message:', message);

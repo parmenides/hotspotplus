@@ -1,10 +1,12 @@
 version: '3.6'
 services:
   hotspotplusapi:
-    image: registry.gitlab.com/parmenides/hotspotplus/api:latest
+    build:
+      context: ${PWD}/api
     user: '${UID:-1000}:${GID:-1000}'
     restart: always
     container_name: apihotspotplus
+    command: npm run start:dev
     ports:
       - 3000:3000
     depends_on:

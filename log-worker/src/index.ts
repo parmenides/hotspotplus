@@ -6,6 +6,7 @@ import logger from './utils/logger';
 import logWorker from './worker';
 import { testRunner } from './test';
 import { addSyslogIndexTemplates } from './modules/initElasticsearch';
+import { addDefaultQueue } from './modules/initRabbitMq';
 
 //require('date-utils');
 const log = logger.createLogger();
@@ -29,15 +30,17 @@ app.use((req, resp, next) => {
   next();
 });
 
-app.listen(app.get('port'), () => {
+app.listen(app.get('port'), async () => {
   /*tslint:disable*/
+  console.log('Add default queues...');
+  await addDefaultQueue();
+  logWorker.processLogRequest();
   console.log(` App is running at http://localhost:${app.get('port')}`);
   log.info(` App is running at http://localhost:${app.get('port')}`);
 });
 
-logWorker.processLogRequest();
-testRunner();
-addSyslogIndexTemplates();
+//testRunner();
+//addSyslogIndexTemplates();
 
 process.on('uncaughtException', function(error) {
   console.error('Something bad happened here....');

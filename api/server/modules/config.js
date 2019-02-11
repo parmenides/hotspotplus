@@ -723,5 +723,5 @@ module.exports = {
   DROPBOX_APP_SECRET: function() {
     return process.env.DROPBOX_APP_SECRET;
   },
-  LOG_WORKER_QUEUE: 'LOG_WORKER_QUEUE'
+  LOG_WORKER_QUEUE: 'log-worker'
 };
