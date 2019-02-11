@@ -14,9 +14,6 @@ import { QUEUES } from '../typings';
 
 // Convert fs.readFile into Promise version of same
 
-if (!process.env.API_ADDRESS) {
-  throw new Error('invalid env config');
-}
 const log = logger.createLogger();
 const UPLOAD_API = `${process.env.API_ADDRESS}/api/file/upload`;
 const REPORT_API = `${process.env.API_ADDRESS}/api/Reports`;
