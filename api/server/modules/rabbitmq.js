@@ -10,7 +10,9 @@ module.exports.getRabbitMqChannel = function (cb) {
       process.env.RABBITMQ_PASSWORD
       }@rabbitmq`,
     (error, amqpConnection) => {
-      if (error) cb && cb(error)
+      if (error) {
+        cb && cb(error)
+      }
       amqpConnection.createConfirmChannel((error, channel) => {
         if (error) {
           return cb && cb(error)

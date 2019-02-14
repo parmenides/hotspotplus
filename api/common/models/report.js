@@ -8,6 +8,11 @@ module.exports = function (Report) {
   Report.observe('after save', function (ctx, next) {
     if (ctx.isNewInstance) {
       rabbitMq.getRabbitMqChannel((error, channel) => {
+        if(error){
+          log.error('send report request to q failed');
+          log.error(error);
+          throw error;
+        }
         var report = ctx.instance;
         var reportId = ctx.instance.id;
         const message = {
