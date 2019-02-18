@@ -1,30 +1,42 @@
-'use strict';
-var logger = require('../../server/modules/logger');
-var app = require('../../server/server');
-var log = logger.createLogger();
-var Q = require('q');
-var radiusPod = require('../../server/modules/radiusDisconnectService');
-var kafka = require('kafka-node');
-var config = require('../../server/modules/config');
+'use strict'
+var logger = require('../../server/modules/logger')
+var app = require('../../server/server')
+var log = logger.createLogger()
+var Q = require('q')
+var radiusPod = require('../../server/modules/radiusDisconnectService')
+var kafka = require('kafka-node')
+var config = require('../../server/modules/config')
 
 const kafkaClient = new kafka.KafkaClient({
   kafkaHost: process.env.KAFKA_IP + ':' + process.env.KAFKA_PORT
-});
-const kafkaProducer = new kafka.Producer(kafkaClient, { partitionerType: 2 });
+})
 
-kafkaProducer.on('ready', function() {
-  log.warn('Producer ready...');
-  kafkaClient.refreshMetadata([config.SESSION_TOPIC], function(error) {
-    log.debug('@refreshMetadata Error:', error);
-  });
-});
+const kafkaProducer = new kafka.Producer(kafkaClient, {partitionerType: 2})
 
-kafkaProducer.on('error', function(error) {
-  log.error('Producer preparation failed:', error);
-});
+kafkaProducer.on('ready', function () {
+  log.warn('Producer ready...')
+  kafkaClient.refreshMetadata([config.SESSION_TOPIC], function (error) {
+    log.debug('@refreshMetadata Error:', error)
+  })
+  kafkaProducer.send({
+    topic: config.SESSION_TOPIC,
+    messages: JSON.stringify({'message': 'sample'}),
+  }, function (error, data) {
+    if (error) {
+      log.error(`failed to send sample message to kafka topic: ${config.SESSION_TOPIC}`, error);
+      return;
+    }
+    log.debug('sample message sent', data);
+  })
 
-module.exports = function(ClientSession) {
-  ClientSession.saveLogSession = function(session) {
+})
+
+kafkaProducer.on('error', function (error) {
+  log.error('Producer preparation failed:', error)
+})
+
+module.exports = function (ClientSession) {
+  ClientSession.saveLogSession = function (session) {
     kafkaProducer.send(
       [
         {
@@ -32,17 +44,17 @@ module.exports = function(ClientSession) {
           messages: JSON.stringify(session)
         }
       ],
-      function(error, data) {
+      function (error, data) {
         if (error) {
-          log.error('Failed to add session to kafka: ', error);
-          return;
+          log.error('Failed to add session to kafka: ', error)
+          return
         }
-        log.debug('session added:', data);
+        log.debug('session added:', data)
       }
-    );
-  };
+    )
+  }
 
-  ClientSession.getOnlineUsers = function(
+  ClientSession.getOnlineUsers = function (
     startDate,
     businessId,
     skip,
@@ -50,56 +62,56 @@ module.exports = function(ClientSession) {
     cb
   ) {
     if (!businessId) {
-      return cb('Business Id not defined');
+      return cb('Business Id not defined')
     }
     if (!startDate) {
-      return cb('Start date is not defined');
+      return cb('Start date is not defined')
     }
     if (skip == null) {
-      skip = 0;
+      skip = 0
     }
     if (limit == null) {
-      limit = 10;
+      limit = 10
     }
-    startDate = startDate.toString();
+    startDate = startDate.toString()
     // find sessions of business
     /*fields: { memberId: true, ipId: true, creationDate: true, expiresAt: false, businessId: false },*/
-    var Usage = app.models.Usage;
+    var Usage = app.models.Usage
     ClientSession.find(
       {
-        where: { businessId: businessId },
+        where: {businessId: businessId},
         order: 'expiresAt DESC',
         limit: limit,
         skip: skip
       },
-      function(error, sessionList) {
+      function (error, sessionList) {
         if (error) {
-          log.error(error);
-          return cb(error);
+          log.error(error)
+          return cb(error)
         }
         // if no online users find, return no session
         if (sessionList.length == 0) {
-          return cb(null, { data: 'noSession' });
+          return cb(null, {data: 'noSession'})
         } else {
           // get owner info from getSubscriptionDate
           // create array of getSessionsReport aggregation function
-          log.debug('Sessions length', sessionList.length);
+          log.debug('Sessions length', sessionList.length)
           if (sessionList.length > 0) {
             Usage.getSessionUsage(sessionList)
-              .then(function(result) {
-                return cb(null, result);
+              .then(function (result) {
+                return cb(null, result)
               })
-              .fail(function(error) {
-                log.error(error);
-                return cb(error);
-              });
+              .fail(function (error) {
+                log.error(error)
+                return cb(error)
+              })
           } else {
-            return cb(null, { data: 'noReport' });
+            return cb(null, {data: 'noReport'})
           }
         }
       }
-    );
-  };
+    )
+  }
 
   ClientSession.remoteMethod('getOnlineUsers', {
     description: 'Get Online Users Report.',
@@ -125,26 +137,26 @@ module.exports = function(ClientSession) {
         required: false
       }
     ],
-    returns: { arg: 'result', type: 'Object' }
-  });
+    returns: {arg: 'result', type: 'Object'}
+  })
 
-  ClientSession.getOnlineSessionCount = function(businessId, cb) {
+  ClientSession.getOnlineSessionCount = function (businessId, cb) {
     if (!businessId) {
-      return cb('Business Id not defined');
+      return cb('Business Id not defined')
     }
-    log.debug('@getOnlineSessionCount : ', businessId);
-    ClientSession.find({ where: { businessId: businessId } }, function(
+    log.debug('@getOnlineSessionCount : ', businessId)
+    ClientSession.find({where: {businessId: businessId}}, function (
       error,
       count
     ) {
       if (error) {
-        log.error(error);
-        return cb(error);
+        log.error(error)
+        return cb(error)
       }
-      log.debug(count.length);
-      return cb(null, { count: count.length });
-    });
-  };
+      log.debug(count.length)
+      return cb(null, {count: count.length})
+    })
+  }
 
   ClientSession.remoteMethod('getOnlineSessionCount', {
     description: 'Get Online Sessions Count.',
@@ -155,39 +167,39 @@ module.exports = function(ClientSession) {
         required: true
       }
     ],
-    returns: { root: true }
-  });
+    returns: {root: true}
+  })
 
-  ClientSession.killOnlineSession = function(session, ctx, cb) {
-    log.debug('@killOnlineSession : ', session);
-    var businessId = ctx.currentUserId;
+  ClientSession.killOnlineSession = function (session, ctx, cb) {
+    log.debug('@killOnlineSession : ', session)
+    var businessId = ctx.currentUserId
     if (!session.memberId) {
-      return cb('memberId is not defined');
+      return cb('memberId is not defined')
     }
-    var memberId = session.memberId;
-    var sessionId = session.id;
+    var memberId = session.memberId
+    var sessionId = session.id
     ClientSession.findOne(
       {
         where: {
           and: [
-            { memberId: memberId },
-            { businessId: businessId },
-            { id: sessionId }
+            {memberId: memberId},
+            {businessId: businessId},
+            {id: sessionId}
           ]
         }
       },
-      function(error, loadedSession) {
+      function (error, loadedSession) {
         if (error) {
-          return cb(error);
+          return cb(error)
         }
         if (!loadedSession) {
-          return cb(new Error('session not found'));
+          return cb(new Error('session not found'))
         }
-        radiusPod.sendPod(loadedSession);
-        return cb(null, { ok: true, killedSession: loadedSession });
+        radiusPod.sendPod(loadedSession)
+        return cb(null, {ok: true, killedSession: loadedSession})
       }
-    );
-  };
+    )
+  }
 
   ClientSession.remoteMethod('killOnlineSession', {
     description: 'Kill Online Session',
@@ -197,8 +209,8 @@ module.exports = function(ClientSession) {
         type: 'object',
         required: true
       },
-      { arg: 'options', type: 'object', http: 'optionsFromRequest' }
+      {arg: 'options', type: 'object', http: 'optionsFromRequest'}
     ],
-    returns: { root: true }
-  });
-};
+    returns: {root: true}
+  })
+}
