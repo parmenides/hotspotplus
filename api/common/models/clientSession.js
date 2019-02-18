@@ -18,15 +18,17 @@ kafkaProducer.on('ready', function () {
   kafkaClient.refreshMetadata([config.SESSION_TOPIC], function (error) {
     log.debug('@refreshMetadata Error:', error)
   })
-  kafkaProducer.send({
-    topic: config.SESSION_TOPIC,
-    messages: JSON.stringify({'message': 'sample'}),
-  }, function (error, data) {
-    if (error) {
-      log.error(`failed to send sample message to kafka topic: ${config.SESSION_TOPIC}`, error);
-      return;
+  kafkaProducer.send([
+    {
+      topic: config.SESSION_TOPIC,
+      messages: JSON.stringify({'message': 'sample'}),
     }
-    log.debug('sample message sent', data);
+  ], function (error, data) {
+    if (error) {
+      log.error(`failed to send sample message to kafka topic: ${config.SESSION_TOPIC}`, error)
+      return
+    }
+    log.debug('sample message sent', data)
   })
 
 })
