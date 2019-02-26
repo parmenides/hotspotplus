@@ -176,10 +176,10 @@ app.controller ( 'reportList', [
 									saveBtnLabel:   'general.save'
 								};
 								if ( param === 'ip' ) {
-									$scope.options.title = 'report.addIpReport';
+									$scope.options.title = 'report.addNetflowReport';
 									$scope.options.reportType = 'netflow';
 								} else {
-									$scope.options.title = 'report.addSiteReport';
+									$scope.options.title = 'report.addSyslogReport';
 									$scope.options.reportType = 'syslog';
 								}
 								// Persian date picker methods
