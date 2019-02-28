@@ -109,7 +109,7 @@ services:
     image: 'bitnami/nginx:latest'
     restart: always
     ports:
-    - 8080:8080
+      - 8080:8080
     volumes:
       - ${PWD}/dashboard:/app
     networks:
@@ -236,20 +236,20 @@ services:
 #    networks:
 #      hotspotplusgate:
 #        ipv4_address: 172.20.0.80
-  radius:
-    image: 'registry.gitlab.com/parmenides/hspfreeradius/production:3.3'
-    restart: always
-    container_name: "hsp_radius_production"
-    logging:
-      driver: none
-    networks:
-      - hotspotplusgate
-    expose:
-      - "1812"
-      - "1813"
-    ports:
-      - "1812:1812/udp"
-      - "1813:1813/udp"
+#  radius:
+#    image: 'registry.gitlab.com/parmenides/hspfreeradius/production:3.3'
+#    restart: always
+#    container_name: "hsp_radius_production"
+#    logging:
+#      driver: none
+#    networks:
+#      - hotspotplusgate
+#    expose:
+#      - "1812"
+#      - "1813"
+#    ports:
+#      - "1812:1812/udp"
+#      - "1813:1813/udp"
 
 volumes:
   hsp_rabbitmq:
