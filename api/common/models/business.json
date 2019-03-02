@@ -354,6 +354,13 @@
       "property": "loadMembersUsernames"
     },
     {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "networkadmin",
+      "permission": "ALLOW",
+      "property": "loadNasTitles"
+    },
+    {
       "accessType": "*",
       "principalType": "ROLE",
       "principalId": "$everyone",

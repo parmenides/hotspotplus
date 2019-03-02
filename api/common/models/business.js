@@ -2647,4 +2647,48 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
 		returns: { root: true },
 	} );
 
+	Business.loadNasTitles = function ( businessId ) {
+		var Nas = app.models.Nas;
+		return Q.Promise ( function ( resolve, reject ) {
+			Nas.find (
+				{
+					where:  {
+						and: [
+							{ businessId: businessId }
+						]
+					},
+					fields: {
+						title: true,
+						id:       true
+					}
+				},
+				function ( error, nas ) {
+					if ( error ) {
+						log.error ( error );
+						return reject ( error );
+					}
+					if ( nas.length != 0 ) {
+						return resolve ( nas );
+					} else {
+						log.error ( 'nas not found' );
+						return reject ( 'nas not found' );
+					}
+				}
+			);
+		} );
+	};
+
+	Business.remoteMethod ( 'loadNasTitles', {
+		description: 'load nas by titles',
+		accepts:     [
+			{
+				arg:      'businessId',
+				type:     'string',
+				required: true
+			}
+		],
+		returns:     { arg:"nas", type: "Array" }
+
+	} );
+
 };

@@ -1171,7 +1171,7 @@
 	"source":                  "مبدا",
 	"destination":             "مقصد",
 	"protocol":                "پروتکل",
-	"library":                 "کتابخانه",
+	"nasTitle":                "عنوان روتر",
 	"domain":                  "دامنه",
 	"website":                 "وبسایت",
 	"method":                  "متد",
