@@ -11,6 +11,7 @@ import { file as tmpFile } from 'tmp-promise';
 import util from 'util';
 import syslog from './syslog';
 import { QUEUES } from '../typings';
+import momentTz from 'moment-timezone';
 
 // Convert fs.readFile into Promise version of same
 
@@ -41,7 +42,7 @@ export interface ReportRequestTask {
   reportRequestId: string;
 }
 
-const processLogRequest = async () => {
+export const processLogRequest = async () => {
   log.debug('At processing log requests');
   const channel = await getRabbitMqChannel();
   process.once('SIGINT', async () => {
@@ -59,9 +60,16 @@ const processLogRequest = async () => {
       const body = message.content.toString();
       log.debug(" [x] Received '%s'", body);
       const reportRequestTask: ReportRequestTask = JSON.parse(body);
+      const fromDate = momentTz.tz(reportRequestTask.fromDate, 'Europe/London');
+      const toDate = momentTz.tz(reportRequestTask.toDate, 'Europe/London');
 
       try {
-        const sessionData = await session.findSessions(reportRequestTask);
+        const sessionData = await session.findSessions({
+          businessId: reportRequestTask.businessId,
+          memberId: reportRequestTask.memberId,
+          fromDate,
+          toDate,
+        });
         log.debug(
           `Sessions: nasIps: ${sessionData.nasIpList} memberIps: ${
             sessionData.memberIpList
@@ -207,7 +215,4 @@ const updateReportRequest = async (reportId: string, fileStorageId: string) => {
       },
     },
   );
-};
-export default {
-  processLogRequest,
 };

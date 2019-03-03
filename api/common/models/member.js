@@ -8,7 +8,7 @@ var redis = require('redis');
 var redisClient = redis.createClient(config.REDIS.PORT, config.REDIS.HOST);
 var log = logger.createLogger();
 var aggregate = require('../../server/modules/aggregates');
-
+var momentTz = require('moment-timezone')
 var smsModule = require('../../server/modules/sms');
 
 var radiusAdaptor = require('../../server/modules/radiusAdaptor');
@@ -1437,6 +1437,7 @@ module.exports = function(Member) {
       username: RadiusRequest.getAttribute('username'),
       framedIpAddress: RadiusRequest.getAttribute('framedIpAddress'),
       businessId: businessId,
+      '@timestamp': momentTz.tz(Date.now(),'Europe/London'),
       memberId: memberId,
       creationDate: Date.now()
     };

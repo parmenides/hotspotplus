@@ -3,10 +3,11 @@ import dotenv from 'dotenv';
 import router from '../src/routes';
 import errorHandler from './utils/errorHandler';
 import logger from './utils/logger';
-import logWorker from './worker';
+import { processLogRequest } from './worker';
 import { testRunner } from './test';
 import { addSyslogIndexTemplates } from './modules/initElasticsearch';
 import { addDefaultQueue } from './modules/initRabbitMq';
+import { enrichLogs } from './worker/enrich';
 
 //require('date-utils');
 const log = logger.createLogger();
@@ -34,13 +35,14 @@ app.listen(app.get('port'), async () => {
   /*tslint:disable*/
   console.log('Add default queues...');
   await addDefaultQueue();
-  await logWorker.processLogRequest();
+  await processLogRequest();
+  await enrichLogs();
   console.log(`App is running at http://localhost:${app.get('port')}`);
   //await testRunner();
   log.info(` App is running at http://localhost:${app.get('port')}`);
 });
 
-//addSyslogIndexTemplates();
+addSyslogIndexTemplates();
 
 process.on('uncaughtException', function(error) {
   console.error('Something bad happened here....');

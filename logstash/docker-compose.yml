@@ -26,17 +26,17 @@ services:
       - ./syslog/syslog.conf:/usr/share/logstash/pipeline/syslog.conf
     networks:
       - hotspotplusgate
-  accountinglogstash:
-    image: 'docker.elastic.co/logstash/logstash:6.6.0'
-    restart: always
-    environment:
-      - XPACK_MONITORING_ENABLED=false
-    volumes:
-      - ./accounting/jvm.options:/usr/share/logstash/config/jvm.options
-      - ./accounting/logstash.yml:/usr/share/logstash/config/logstash.yml
-      - ./accounting/accounting.conf:/usr/share/logstash/pipeline/accounting.conf
-    networks:
-      - hotspotplusgate
+#  accountinglogstash:
+#    image: 'docker.elastic.co/logstash/logstash:6.6.0'
+#    restart: always
+#    environment:
+#      - XPACK_MONITORING_ENABLED=false
+#    volumes:
+#      - ./accounting/jvm.options:/usr/share/logstash/config/jvm.options
+#      - ./accounting/logstash.yml:/usr/share/logstash/config/logstash.yml
+#      - ./accounting/accounting.conf:/usr/share/logstash/pipeline/accounting.conf
+#    networks:
+#      - hotspotplusgate
   sessions:
     image: 'docker.elastic.co/logstash/logstash:6.6.0'
     restart: always

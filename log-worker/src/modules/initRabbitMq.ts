@@ -8,7 +8,7 @@ const LOG_REQUEST_RETRY_MS = Number(process.env.LOG_REQUEST_RETRY_MS);
 export const addDefaultQueue = async () => {
   try {
     const channel = await getRabbitMqChannel();
-    // Add card to accountNumber Queue
+    // Add log worker queue
     await channel.assertExchange(QUEUES.LOG_WORKER_EXCHANGE, 'fanout', {
       durable: true,
     });
@@ -22,7 +22,7 @@ export const addDefaultQueue = async () => {
       '',
     );
 
-    // Add Retry card to accountNumber Queue
+    // Add retry queue
     await channel.assertExchange(QUEUES.RETRY_LOG_WORKER_EXCHANGE, 'fanout', {
       durable: true,
     });
@@ -36,7 +36,43 @@ export const addDefaultQueue = async () => {
       QUEUES.RETRY_LOG_WORKER_EXCHANGE,
       '',
     );
-    log.debug('Default queues added');
+    log.debug('Default report queues added');
+
+    await channel.assertExchange(
+      QUEUES.LOG_ENRICHMENT_WORKER_QUEUE_EXCHANGE,
+      'fanout',
+      {
+        durable: true,
+      },
+    );
+    await channel.assertQueue(QUEUES.LOG_ENRICHMENT_WORKER_QUEUE, {
+      deadLetterExchange: QUEUES.RETRY_LOG_ENRICHMENT_WORKER_QUEUE_EXCHANGE,
+      durable: true,
+    });
+    await channel.bindQueue(
+      QUEUES.LOG_ENRICHMENT_WORKER_QUEUE,
+      QUEUES.LOG_ENRICHMENT_WORKER_QUEUE_EXCHANGE,
+      '',
+    );
+
+    // Add retry queue
+    await channel.assertExchange(
+      QUEUES.RETRY_LOG_ENRICHMENT_WORKER_QUEUE_EXCHANGE,
+      'fanout',
+      {
+        durable: true,
+      },
+    );
+    await channel.assertQueue(QUEUES.RETRY_LOG_ENRICHMENT_WORKER_QUEUE, {
+      deadLetterExchange: QUEUES.LOG_ENRICHMENT_WORKER_QUEUE_EXCHANGE,
+      durable: true,
+      messageTtl: LOG_REQUEST_RETRY_MS,
+    });
+    await channel.bindQueue(
+      QUEUES.RETRY_LOG_ENRICHMENT_WORKER_QUEUE,
+      QUEUES.RETRY_LOG_ENRICHMENT_WORKER_QUEUE_EXCHANGE,
+      '',
+    );
   } catch (error) {
     log.error(error);
     log.error('failed to add default queue');
