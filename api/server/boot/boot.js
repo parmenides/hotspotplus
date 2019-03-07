@@ -164,30 +164,9 @@ module.exports = function(app) {
       }
     );
 
-    var sessionLogMapping = {
-      mappings: {
-        report: {
-          properties: {
-            timestamp: { type: 'date' },
-            creationDate: { type: 'long' },
-            businessId: { type: 'keyword' },
-            memberId: { type: 'keyword' },
-            nasId: { type: 'keyword' },
-            nasIp: { type: 'keyword' },
-            groupIdentity: { type: 'keyword' },
-            groupIdentityId: { type: 'keyword' },
-            groupIdentityType: { type: 'keyword' },
-            mac: { type: 'keyword' },
-            username: { type: 'keyword' },
-            framedIpAddress: { type: 'keyword' }
-          }
-        }
-      }
-    };
-
     needle.put(
       config.ELASTIC_SESSION_REPORT_MAIN_CONTEXT,
-      sessionLogMapping,
+      {},
       { json: true },
       function(error, result, body) {
         if (error) {

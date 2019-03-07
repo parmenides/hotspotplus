@@ -49,6 +49,7 @@ export const enrichLogs = async () => {
           );
         } else if (reportType === 'netflow') {
           const result = await netflowModule.netflowGroupByIp(from, to);
+          //log.debug('netflowGroupByIp ', result);
           const ipData = getIpData(result);
           await searchAndUpdateReport(
             reportType,
@@ -113,9 +114,10 @@ const searchAndUpdateReport = async (
       if (groupedSessions.group_by_username.buckets.length === 1) {
         const a_session = groupedSessions.group_by_username.buckets[0];
         const username = a_session.key;
-        const nasId = a_session.extra.hits.hits[0]._source.nasId;
-        const memberId = a_session.extra.hits.hits[0]._source.memberId;
-        const businessId = a_session.extra.hits.hits[0]._source.businessId;
+        const nasId = groupedSessions.extra.hits.hits[0]._source.nasId;
+        const memberId = groupedSessions.extra.hits.hits[0]._source.memberId;
+        const businessId =
+          groupedSessions.extra.hits.hits[0]._source.businessId;
         const updateResult = await updateReportFunction(
           from,
           to,
@@ -128,6 +130,13 @@ const searchAndUpdateReport = async (
             username,
           },
         );
+
+        log.debug(`${reportType}  updating `, from, to, nasIp, memberIp, {
+          nasId,
+          memberId,
+          businessId,
+          username,
+        });
         log.debug(`${reportType} report update result`, updateResult);
       } else if (groupedSessions.group_by_username.buckets.length > 1) {
         const channel = await getRabbitMqChannel();

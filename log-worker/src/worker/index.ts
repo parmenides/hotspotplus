@@ -48,7 +48,6 @@ export const processLogRequest = async () => {
   process.once('SIGINT', async () => {
     await channel.close();
   });
-
   channel.consume(
     QUEUES.LOG_WORKER_QUEUE,
     async (message) => {
@@ -58,7 +57,7 @@ export const processLogRequest = async () => {
       }
 
       const body = message.content.toString();
-      log.debug(" [x] Received '%s'", body);
+      log.debug(" [x] Received Log Request '%s'", body);
       const reportRequestTask: ReportRequestTask = JSON.parse(body);
       const fromDate = momentTz.tz(reportRequestTask.fromDate, 'Europe/London');
       const toDate = momentTz.tz(reportRequestTask.toDate, 'Europe/London');

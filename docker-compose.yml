@@ -56,6 +56,7 @@ services:
     depends_on:
       - rabbitmq
     environment:
+      - ELASTICSEARCH_LOG_LEVEL=debug
       - LOG_REQUEST_RETRY_MS=300000
       - API_ADDRESS=http://hotspotplusapi:3000
       - SERVICE_MAN_USERNAME=pinTimeServiceMan
@@ -83,8 +84,8 @@ services:
     environment:
       - RABBITMQ_USERNAME=payam
       - RABBITMQ_PASSWORD=123
-    volumes:
-      - hsp_rabbitmq:/bitnami
+#    volumes:
+#      - hsp_rabbitmq:/bitnami
     networks:
       - hotspotplusgate
 #  logaggregator:

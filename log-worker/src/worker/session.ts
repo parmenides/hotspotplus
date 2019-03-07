@@ -79,7 +79,7 @@ const querySessions = async (
   size: number,
   sessionQuery: SessionQuery,
 ) => {
-  log.debug(`session query %j`, createSearchSessionQuery(sessionQuery));
+  //log.debug(`session query %j`, createSearchSessionQuery(sessionQuery));
   const result = await elasticClient.search({
     index: SESSION_LOG_INDEX,
     from,
@@ -131,10 +131,10 @@ const querySessionsByIp = async (
 ): Promise<SessionGroupByUsername> => {
   const fromDate = momentTz.tz(from, 'Europe/London');
   const toDate = momentTz.tz(to, 'Europe/London');
-  log.debug(
+  /*log.debug(
     `session query %j`,
     createSessionByIpQuery(nasIp, memberIp, fromDate, toDate),
-  );
+  );*/
 
   const result = await elasticClient.search({
     index: SESSION_LOG_INDEX,
@@ -151,25 +151,25 @@ interface SessionGroupByUsername {
     buckets: Array<{
       key: string;
       doc_count: number;
-      extra: {
-        hits: {
-          hits: Array<{
-            _source: {
-              nasIp: string;
-              username: string;
-              mac: string;
-              memberId: string;
-              framedIpAddress: string;
-              creationDate: number;
-              businessId: string;
-              '@version': string;
-              '@timestamp': string;
-              nasId: string;
-            };
-          }>;
-        };
-      };
     }>;
+  };
+  extra: {
+    hits: {
+      hits: Array<{
+        _source: {
+          nasIp: string;
+          username: string;
+          mac: string;
+          memberId: string;
+          framedIpAddress: string;
+          creationDate: number;
+          businessId: string;
+          '@version': string;
+          '@timestamp': string;
+          nasId: string;
+        };
+      }>;
+    };
   };
 }
 
@@ -210,11 +210,9 @@ const createSessionByIpQuery = (
           field: 'username',
         },
       },
-      aggs: {
-        extra: {
-          top_hits: {
-            size: 1,
-          },
+      extra: {
+        top_hits: {
+          size: 1,
         },
       },
     },

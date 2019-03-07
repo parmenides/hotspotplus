@@ -330,7 +330,7 @@ const createSyslogGroupByQuery = (fromDate: Moment, toDate: Moment) => {
       bool: {
         must_not: [
           {
-            terms: { enriched: true },
+            terms: { status: 'enriched' },
           },
         ],
         must: [
@@ -436,7 +436,7 @@ const createUsernameUpdateQuery = (
       bool: {
         must_not: [
           {
-            terms: { enriched: true },
+            terms: { status: 'enriched' },
           },
         ],
         must: [
@@ -466,7 +466,7 @@ const createUsernameUpdateQuery = (
       inline: `
             ctx._source['enrichDate'] = ${Date.now()};
             ctx._source['username'] = ${update.username};
-            ctx._source['enriched'] = true;
+            ctx._source['status'] = enriched;
             ctx._source['nasId'] = ${update.nasId};
             ctx._source['memberId'] = ${update.memberId};
             ctx._source['businessId'] = ${update.businessId};

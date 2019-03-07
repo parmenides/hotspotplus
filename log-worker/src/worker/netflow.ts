@@ -4,6 +4,7 @@ import momentTz from 'moment-timezone';
 import { Moment } from 'moment';
 import momentJ from 'moment-jalaali';
 import { UpdateDocumentByQueryResponse } from 'elasticsearch';
+import moment = require('moment');
 
 const NETFLOW_LOG_INDEX_PREFIX = `netflow-`;
 
@@ -260,12 +261,11 @@ interface RawNetflowReport {
 
 const netflowGroupByIp = async (from: number, to: number) => {
   const fromDate = momentTz.tz(from, 'Europe/London');
-  const fromDateCounter = momentTz.tz(from, 'Europe/London');
+  let fromDateCounter = momentTz.tz(from, 'Europe/London');
   const toDate = momentTz.tz(to, 'Europe/London');
 
   const daysBetweenInMs = toDate.diff(fromDateCounter);
   const days = Math.ceil(daysBetweenInMs / 86400000);
-
   const indexNames = [createNetflowIndexName(fromDateCounter)];
   for (let i = 0; i < days; i++) {
     fromDateCounter.add(1, 'days');
@@ -274,21 +274,23 @@ const netflowGroupByIp = async (from: number, to: number) => {
 
   let data: NetflowAggregateByIp[] = [];
 
-  log.debug('INDEXES:', indexNames);
+  log.debug('INDEXES for netflowGroupByIp:', indexNames);
   for (const indexName of indexNames) {
     try {
       const result = await aggregateNetflowByIp(indexName, fromDate, toDate);
+      //log.debug(result);
       data = data.concat(result);
     } catch (error) {
       if (error.status === 404) {
         log.warn(`${indexName} index not found`);
       } else {
+        log.error(error);
         log.error(error.status);
         throw error;
       }
     }
   }
-  log.debug(data.length);
+  //log.debug('NetflowGroupByIp Size ', data.length);
   return data;
 };
 
@@ -297,12 +299,17 @@ const aggregateNetflowByIp = async (
   fromDate: Moment,
   toDate: Moment,
 ) => {
-  const queryResult = await elasticClient.search({
-    index: netflowIndex,
-    size: 0,
-    body: createNetflowGroupByAggregate(fromDate, toDate),
-  });
-  return queryResult.aggregations;
+  try {
+    const queryResult = await elasticClient.search({
+      index: netflowIndex,
+      size: 0,
+      body: createNetflowGroupByAggregate(fromDate, toDate),
+    });
+    return queryResult.aggregations;
+  } catch (e) {
+    log.error(e);
+    throw e;
+  }
 };
 
 const createNetflowGroupByAggregate = (fromDate: Moment, toDate: Moment) => {
@@ -322,7 +329,7 @@ const createNetflowGroupByAggregate = (fromDate: Moment, toDate: Moment) => {
         ],
         must_not: [
           {
-            terms: { enriched: true },
+            terms: { status: ['enriched'] },
           },
         ],
       },
@@ -335,7 +342,7 @@ const createNetflowGroupByAggregate = (fromDate: Moment, toDate: Moment) => {
         aggs: {
           group_by_member_ip: {
             terms: {
-              field: 'netflow.src_port',
+              field: 'netflow.src_addr',
             },
           },
         },
@@ -391,6 +398,9 @@ const updateNetflows = async (
   log.debug('INDEXES:', indexNames);
   for (const indexName of indexNames) {
     try {
+      log.warn(
+        createNetflowUpdateQuery(fromDate, toDate, nasIp, memberIp, updates),
+      );
       const result = await elasticClient.updateByQuery({
         index: indexName,
         type: 'doc',
@@ -404,6 +414,7 @@ const updateNetflows = async (
           updates,
         ),
       });
+
       data = data.concat(result);
     } catch (error) {
       if (error.status === 404) {
@@ -435,7 +446,7 @@ const createNetflowUpdateQuery = (
       bool: {
         must_not: [
           {
-            terms: { enriched: true },
+            terms: { status: ['enriched'] },
           },
         ],
         must: [
@@ -449,12 +460,12 @@ const createNetflowUpdateQuery = (
           },
           {
             terms: {
-              nasIp: [nasIp],
+              host: [nasIp],
             },
           },
           {
             terms: {
-              memberIp: [memberIp],
+              'netflow.src_addr': [memberIp],
             },
           },
         ],
@@ -463,13 +474,12 @@ const createNetflowUpdateQuery = (
     script: {
       lang: 'painless',
       inline: `
-            ctx._source['enrichDate'] = ${Date.now()};
-            ctx._source['username'] = ${update.username};
-            ctx._source['enriched'] = true;
-            ctx._source['nasId'] = ${update.nasId};
-            ctx._source['memberId'] = ${update.memberId};
-            ctx._source['businessId'] = ${update.businessId};
-            `,
+      ctx._source['enrichDate']="${moment().format()}";
+      ctx._source['username']="${update.username}";
+      ctx._source['status']="enriched1";
+      ctx._source['nasId']="${update.nasId}";
+      ctx._source['memberId']="${update.memberId}";
+      ctx._source['businessId']="${update.businessId}"`,
     },
   };
 };

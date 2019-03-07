@@ -5,14 +5,20 @@ const log = logger.createLogger();
 
 export const addSyslogIndexTemplates = async () => {
   try {
+    const sessionResult = await elasticClient.indices.putTemplate({
+      name: 'session',
+      body: getSessionIndexTemplate(),
+    });
+    log.debug('session index template added:', sessionResult);
     const syslogResult = await elasticClient.indices.putTemplate({
       name: 'syslog',
       body: getSyslogIndexTemplate(),
     });
+
     log.debug('syslog index template added:', syslogResult);
     const netflowResult = await elasticClient.indices.putTemplate({
       name: 'netflow',
-      body: getNetflowIndexTempate(),
+      body: getNetflowIndexTemplate(),
     });
     log.debug('netflow index template added:', netflowResult);
   } catch (error) {
@@ -21,7 +27,7 @@ export const addSyslogIndexTemplates = async () => {
   }
 };
 
-const getNetflowIndexTempate = () => {
+const getNetflowIndexTemplate = () => {
   return {
     index_patterns: ['netflow*'],
     settings: {
@@ -74,6 +80,12 @@ const getNetflowIndexTempate = () => {
           },
           nasId: {
             type: 'keyword',
+          },
+          status: {
+            type: 'keyword',
+          },
+          enrichDate: {
+            type: 'date',
           },
           memberId: {
             type: 'keyword',
@@ -496,13 +508,7 @@ const getNetflowIndexTempate = () => {
             },
           },
           host: {
-            type: 'text',
-            fields: {
-              keyword: {
-                type: 'keyword',
-                ignore_above: 256,
-              },
-            },
+            type: 'keyword',
           },
           netflow: {
             properties: {
@@ -519,13 +525,7 @@ const getNetflowIndexTempate = () => {
                 },
               },
               dst_addr: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                type: 'keyword',
               },
               dst_as: {
                 type: 'long',
@@ -612,13 +612,7 @@ const getNetflowIndexTempate = () => {
                 type: 'long',
               },
               protocol_name: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                type: 'keyword',
               },
               sampling_algorithm: {
                 type: 'long',
@@ -627,13 +621,7 @@ const getNetflowIndexTempate = () => {
                 type: 'long',
               },
               src_addr: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                type: 'keyword',
               },
               src_as: {
                 type: 'long',
@@ -721,6 +709,66 @@ const getNetflowIndexTempate = () => {
   };
 };
 
+const getSessionIndexTemplate = () => {
+  return {
+    index_patterns: ['*session*'],
+    settings: {
+      analysis: {
+        analyzer: {
+          full_text_ngram: {
+            tokenizer: 'ngram_tokenizer',
+          },
+          domain_name_analyzer: {
+            filter: 'lowercase',
+            tokenizer: 'domain_name_tokenizer',
+            type: 'custom',
+          },
+          path_analyzer: {
+            tokenizer: 'path_tokenizer',
+          },
+        },
+        tokenizer: {
+          ngram_tokenizer: {
+            type: 'ngram',
+            min_gram: 3,
+            max_gram: 3,
+            token_chars: ['letter', 'digit'],
+          },
+          domain_name_tokenizer: {
+            type: 'PathHierarchy',
+            delimiter: '.',
+            reverse: true,
+          },
+          path_tokenizer: {
+            type: 'path_hierarchy',
+            delimiter: '-',
+            replacement: '/',
+            skip: 2,
+          },
+        },
+      },
+    },
+    mappings: {
+      doc: {
+        properties: {
+          timestamp: { type: 'date' },
+          creationDate: { type: 'long' },
+          businessId: { type: 'keyword' },
+          memberId: { type: 'keyword' },
+          nasId: { type: 'keyword' },
+          nasIp: { type: 'keyword' },
+          groupIdentity: { type: 'keyword' },
+          groupIdentityId: { type: 'keyword' },
+          groupIdentityType: { type: 'keyword' },
+          mac: { type: 'keyword' },
+          username: { type: 'keyword' },
+          framedIpAddress: { type: 'keyword' },
+        },
+      },
+    },
+  };
+};
+
 const getSyslogIndexTemplate = () => {
   return {
     index_patterns: ['syslog*'],
@@ -766,13 +814,7 @@ const getSyslogIndexTemplate = () => {
         properties: {
           timestamp: { type: 'date' },
           nasIp: {
-            type: 'text',
-            fields: {
-              keyword: {
-                type: 'keyword',
-                ignore_above: 256,
-              },
-            },
+            type: 'keyword',
           },
           username: {
             type: 'text',
@@ -782,6 +824,12 @@ const getSyslogIndexTemplate = () => {
                 analyzer: 'full_text_ngram',
               },
             },
+          },
+          status: {
+            type: 'keyword',
+          },
+          enrichDate: {
+            type: 'date',
           },
           nasId: {
             type: 'keyword',
@@ -798,46 +846,46 @@ const getSyslogIndexTemplate = () => {
           },
           query: {
             type: 'text',
+            fields: {
+              ngram: {
+                type: 'text',
+                analyzer: 'full_text_ngram',
+              },
+            },
           },
           params: {
             type: 'text',
+            fields: {
+              keyword: {
+                type: 'keyword',
+                ignore_above: 256,
+              },
+            },
           },
           message: {
             type: 'text',
+            fields: {
+              keyword: {
+                type: 'keyword',
+                ignore_above: 256,
+              },
+            },
           },
           protocol: {
-            type: 'text',
-            fields: {
-              keyword: {
-                type: 'keyword',
-                ignore_above: 256,
-              },
-            },
+            type: 'keyword',
           },
           memberIp: {
-            type: 'text',
-            fields: {
-              keyword: {
-                type: 'keyword',
-                ignore_above: 256,
-              },
-            },
+            type: 'keyword',
           },
           method: {
-            type: 'text',
-            fields: {
-              keyword: {
-                type: 'keyword',
-                ignore_above: 256,
-              },
-            },
+            type: 'keyword',
           },
           url: {
             type: 'text',
             fields: {
-              keyword: {
-                type: 'keyword',
-                ignore_above: 256,
+              ngram: {
+                type: 'text',
+                analyzer: 'full_text_ngram',
               },
             },
           },
