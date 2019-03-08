@@ -164,7 +164,7 @@ module.exports = function(app) {
       }
     );
 
-    needle.put(
+    /*needle.put(
       config.ELASTIC_SESSION_REPORT_MAIN_CONTEXT,
       {},
       { json: true },
@@ -180,7 +180,7 @@ module.exports = function(app) {
           body
         );
       }
-    );
+    );*/
 
     var chargeMapping = {
       mappings: {
