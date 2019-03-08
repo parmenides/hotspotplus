@@ -1,7 +1,7 @@
 import moment, { Moment } from 'moment';
 import { getRabbitMqChannel } from '../utils/rabbitmq';
-import { QUEUES } from '../typings';
-import { EnrichTask } from './enrich';
+import { QUEUES, REPORT_TYPE } from '../typings';
+import { EnrichTask } from '../typings/index';
 import logger from '../utils/logger';
 import { CronJob } from 'cron';
 
@@ -10,7 +10,7 @@ const log = logger.createLogger();
 export const addEnrichmentTasks = async (
   from: number,
   to: number,
-  reportType: string,
+  reportType: REPORT_TYPE,
 ) => {
   try {
     log.debug('addEnrichmentTasks');
@@ -52,7 +52,7 @@ export const addEnrichmentTasks = async (
 };
 
 const job = new CronJob('* 10 * * * *', function() {
-  log.debug('starting the job');
+  //log.debug('starting the job');
 });
 
 job.start();

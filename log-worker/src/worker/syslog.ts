@@ -4,14 +4,14 @@ import momentTz from 'moment-timezone';
 import { Moment } from 'moment';
 import momentJ from 'moment-jalaali';
 import { UpdateDocumentByQueryResponse } from 'elasticsearch';
+import {
+  RawSyslogReport,
+  SyslogAggregateByIp,
+  SyslogIpQueryData,
+} from '../typings';
 
 const SYSLOG_LOG_INDEX_PREFIX = `syslog-`;
 const log = logger.createLogger();
-
-interface SyslogIpQueryData {
-  memberIpList: string[];
-  nasIpList: string[];
-}
 
 const getSyslogReports = async (
   username: string,
@@ -40,7 +40,9 @@ const getSyslogReports = async (
         toDate,
         syslogIpQueryData,
       );
-      data = data.concat(result);
+      if (result) {
+        data = data.concat(result);
+      }
     } catch (error) {
       if (error.status === 404) {
         log.warn(`${indexName} index not found`);
@@ -92,7 +94,13 @@ const getSyslogByIndex = async (
   fromDate: Moment,
   toDate: Moment,
   syslogIpQueryData: SyslogIpQueryData,
-) => {
+): Promise<undefined | { _source: any }[]> => {
+  const exist = await elasticClient.indices.exists({
+    index: syslogIndex,
+  });
+  if (!exist) {
+    return;
+  }
   log.debug(
     `query from ${syslogIndex} from ${fromDate.format()} to ${toDate.format()} for %j`,
     syslogIpQueryData,
@@ -241,41 +249,6 @@ const createCountSyslogQuery = (
   };
 };
 
-interface RawSyslogReport {
-  _source: {
-    query: string;
-    '@timestamp': string;
-    params: string;
-    message: string;
-    method: string;
-    url: string;
-    protocol: string;
-    path: string;
-    domain: string;
-    hostGeoIp: any;
-    memberIp: string;
-    nasIp: string;
-  };
-}
-
-export interface SyslogAggregateByIp {
-  group_by_nas_ip: {
-    doc_count_error_upper_bound: number;
-    sum_other_doc_count: number;
-    buckets: [
-      {
-        key: string;
-        doc_count: number;
-        group_by_member_ip: {
-          doc_count_error_upper_bound: number;
-          sum_other_doc_count: number;
-          buckets: Array<{ key: string; doc_count: number }>;
-        };
-      }
-    ];
-  };
-}
-
 const syslogGroupByIp = async (from: number, to: number) => {
   const fromDate = momentTz.tz(from, 'Europe/London');
   const fromDateCounter = momentTz.tz(from, 'Europe/London');
@@ -296,7 +269,9 @@ const syslogGroupByIp = async (from: number, to: number) => {
     try {
       const result = await aggregateSyslogByIp(indexName, fromDate, toDate);
 
-      data = data.concat(result);
+      if (result) {
+        data = data.concat(result);
+      }
     } catch (error) {
       if (error.status === 404) {
         log.warn(`${indexName} index not found`);
@@ -311,12 +286,19 @@ const syslogGroupByIp = async (from: number, to: number) => {
 };
 
 const aggregateSyslogByIp = async (
-  netflowIndex: string,
+  syslogIndex: string,
   fromDate: Moment,
   toDate: Moment,
-) => {
+): Promise<undefined | SyslogAggregateByIp> => {
+  const exist = await elasticClient.indices.exists({
+    index: syslogIndex,
+  });
+  if (!exist) {
+    return;
+  }
+
   const queryResult = await elasticClient.search({
-    index: netflowIndex,
+    index: syslogIndex,
     size: 0,
     body: createSyslogGroupByQuery(fromDate, toDate),
   });
@@ -330,10 +312,10 @@ const createSyslogGroupByQuery = (fromDate: Moment, toDate: Moment) => {
       bool: {
         must_not: [
           {
-            terms: { status: 'enriched' },
+            term: { status: 'enriched' },
           },
         ],
-        must: [
+        filter: [
           {
             range: {
               '@timestamp': {
@@ -436,10 +418,10 @@ const createUsernameUpdateQuery = (
       bool: {
         must_not: [
           {
-            terms: { status: 'enriched' },
+            term: { status: 'enriched' },
           },
         ],
-        must: [
+        filter: [
           {
             range: {
               '@timestamp': {
@@ -449,13 +431,13 @@ const createUsernameUpdateQuery = (
             },
           },
           {
-            terms: {
-              nasIp: [nasIp],
+            term: {
+              nasIp: nasIp,
             },
           },
           {
-            terms: {
-              memberIp: [memberIp],
+            term: {
+              memberIp: memberIp,
             },
           },
         ],
@@ -464,12 +446,11 @@ const createUsernameUpdateQuery = (
     script: {
       lang: 'painless',
       inline: `
-            ctx._source['enrichDate'] = ${Date.now()};
-            ctx._source['username'] = ${update.username};
-            ctx._source['status'] = enriched;
-            ctx._source['nasId'] = ${update.nasId};
-            ctx._source['memberId'] = ${update.memberId};
-            ctx._source['businessId'] = ${update.businessId};
+            ctx._source['username'] = "${update.username}";
+            ctx._source['status'] = "enriched5";
+            ctx._source['nasId'] = "${update.nasId}";
+            ctx._source['memberId'] = "${update.memberId}";
+            ctx._source['businessId'] = "${update.businessId}";
             `,
     },
   };

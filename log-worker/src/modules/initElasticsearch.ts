@@ -71,6 +71,7 @@ const getNetflowIndexTemplate = () => {
         properties: {
           username: {
             type: 'text',
+            fielddata: true,
             fields: {
               ngram: {
                 type: 'text',
@@ -818,6 +819,7 @@ const getSyslogIndexTemplate = () => {
           },
           username: {
             type: 'text',
+            fielddata: true,
             fields: {
               ngram: {
                 type: 'text',

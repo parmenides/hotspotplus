@@ -10,7 +10,7 @@ import { login } from '../utils/auth';
 import { file as tmpFile } from 'tmp-promise';
 import util from 'util';
 import syslog from './syslog';
-import { QUEUES } from '../typings';
+import { QUEUES, REPORT_TYPE } from '../typings';
 import momentTz from 'moment-timezone';
 
 // Convert fs.readFile into Promise version of same
@@ -27,13 +27,8 @@ if (
   throw new Error('invalid auth env variables');
 }
 
-export enum ReportType {
-  NETFLOW = 'netflow',
-  SYSLOG = 'syslog',
-}
-
 export interface ReportRequestTask {
-  reportType: ReportType;
+  reportType: REPORT_TYPE;
   username: string;
   fromDate: number;
   toDate: number;
@@ -76,7 +71,7 @@ export const processLogRequest = async () => {
         );
         let reports: any;
         let fields: string[];
-        if (reportRequestTask.reportType === ReportType.NETFLOW) {
+        if (reportRequestTask.reportType === REPORT_TYPE.NETFLOW) {
           reports = await netflow.getNetflowReports(
             reportRequestTask.username,
             reportRequestTask.fromDate,
@@ -87,7 +82,7 @@ export const processLogRequest = async () => {
             },
           );
           fields = getNetflowFields();
-        } else if (reportRequestTask.reportType === ReportType.SYSLOG) {
+        } else if (reportRequestTask.reportType === REPORT_TYPE.SYSLOG) {
           reports = await syslog.getSyslogReports(
             reportRequestTask.username,
             reportRequestTask.fromDate,

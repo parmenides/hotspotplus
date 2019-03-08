@@ -1,7 +1,6 @@
 import { getRabbitMqChannel } from './utils/rabbitmq';
-import { ReportRequestTask, ReportType } from './worker';
 import { ancestorWhere } from 'tslint';
-import { QUEUES } from './typings';
+import { QUEUES, REPORT_TYPE } from './typings';
 import { addEnrichmentTasks } from './worker/scheduler';
 import momentTz from 'moment-timezone';
 
@@ -27,5 +26,6 @@ export const testRunner = async () => {
   //     Buffer.from(JSON.stringify(message)),
   // );
   // await channel.close();
-  await addEnrichmentTasks(from, to, ReportType.NETFLOW);
+  // await channel.close();
+  await addEnrichmentTasks(from, to, 'syslog' as REPORT_TYPE.SYSLOG);
 };

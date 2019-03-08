@@ -1,17 +1,19 @@
-import netflowModule, { NetflowAggregateByIp } from './netflow';
-import syslogModule, { SyslogAggregateByIp } from './syslog';
+import netflowModule from './netflow';
+import syslogModule from './syslog';
 import sessionModule from './session';
 import { getRabbitMqChannel } from '../utils/rabbitmq';
-import { QUEUES } from '../typings';
+import {
+  EnrichTask,
+  NetflowAggregateByIp,
+  QUEUES,
+  REPORT_TYPE,
+  SyslogAggregateByIp,
+} from '../typings';
 import logger from '../utils/logger';
+import { UpdateDocumentByQueryResponse } from 'elasticsearch';
+import moment = require('moment');
 
 const log = logger.createLogger();
-
-export interface EnrichTask {
-  from: number;
-  to: number;
-  reportType: string;
-}
 
 export const enrichLogs = async () => {
   log.debug('At processing enrichment requests');
@@ -37,27 +39,14 @@ export const enrichLogs = async () => {
         const to = enrichTask.to;
         const reportType = enrichTask.reportType;
 
-        if (reportType === 'syslog') {
+        if (reportType === REPORT_TYPE.SYSLOG) {
           const result = await syslogModule.syslogGroupByIp(from, to);
           const ipData = getIpData(result);
-          await searchAndUpdateReport(
-            reportType,
-            ipData,
-            syslogModule.updateSyslogs,
-            from,
-            to,
-          );
-        } else if (reportType === 'netflow') {
+          await searchAndUpdateReport(reportType, ipData, from, to);
+        } else if (reportType === REPORT_TYPE.NETFLOW) {
           const result = await netflowModule.netflowGroupByIp(from, to);
-          //log.debug('netflowGroupByIp ', result);
           const ipData = getIpData(result);
-          await searchAndUpdateReport(
-            reportType,
-            ipData,
-            netflowModule.updateNetflows,
-            from,
-            to,
-          );
+          await searchAndUpdateReport(reportType, ipData, from, to);
         } else {
           log.warn('unknown enrichment type:', reportType);
           channel.ack(message);
@@ -96,9 +85,8 @@ const getIpData = (
 };
 
 const searchAndUpdateReport = async (
-  reportType: string,
+  reportType: REPORT_TYPE,
   ipData: { nasIp: string; memberIpList: string[] }[],
-  updateReportFunction: Function,
   from: number,
   to: number,
 ) => {
@@ -111,6 +99,9 @@ const searchAndUpdateReport = async (
         from,
         to,
       );
+      if (groupedSessions.group_by_username.buckets.length > 0) {
+        log.warn('sessions: ', groupedSessions);
+      }
       if (groupedSessions.group_by_username.buckets.length === 1) {
         const a_session = groupedSessions.group_by_username.buckets[0];
         const username = a_session.key;
@@ -118,11 +109,43 @@ const searchAndUpdateReport = async (
         const memberId = groupedSessions.extra.hits.hits[0]._source.memberId;
         const businessId =
           groupedSessions.extra.hits.hits[0]._source.businessId;
-        const updateResult = await updateReportFunction(
-          from,
-          to,
-          nasIp,
-          memberIp,
+        let updateResult: UpdateDocumentByQueryResponse[];
+        if (reportType === REPORT_TYPE.SYSLOG) {
+          updateResult = await syslogModule.updateSyslogs(
+            from,
+            to,
+            nasIp,
+            memberIp,
+            {
+              nasId,
+              memberId,
+              businessId,
+              username,
+            },
+          );
+        } else if (reportType === REPORT_TYPE.NETFLOW) {
+          updateResult = await netflowModule.updateNetflows(
+            from,
+            to,
+            nasIp,
+            memberIp,
+            {
+              nasId,
+              memberId,
+              businessId,
+              username,
+            },
+          );
+        } else {
+          throw new Error(`invalid report type: ${reportType}`);
+        }
+
+        log.debug(
+          `updating ${reportType} report for ${username}  user, from:${moment(
+            from,
+          ).format('YYYY.MM.DD HH:MM')} to:${moment(to).format(
+            'YYYY.MM.DD HH:MM',
+          )} router IP:${nasIp} member IP:${memberIp}`,
           {
             nasId,
             memberId,
@@ -130,14 +153,7 @@ const searchAndUpdateReport = async (
             username,
           },
         );
-
-        log.debug(`${reportType}  updating `, from, to, nasIp, memberIp, {
-          nasId,
-          memberId,
-          businessId,
-          username,
-        });
-        log.debug(`${reportType} report update result`, updateResult);
+        //log.debug(`update result`, updateResult);
       } else if (groupedSessions.group_by_username.buckets.length > 1) {
         const channel = await getRabbitMqChannel();
         //split range in two;

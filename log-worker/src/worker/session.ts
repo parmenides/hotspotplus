@@ -132,15 +132,22 @@ const querySessionsByIp = async (
   const fromDate = momentTz.tz(from, 'Europe/London');
   const toDate = momentTz.tz(to, 'Europe/London');
   /*log.debug(
-    `session query %j`,
-    createSessionByIpQuery(nasIp, memberIp, fromDate, toDate),
-  );*/
+        `session query %j`,
+        createSessionByIpQuery(nasIp, memberIp, fromDate, toDate),
+      );*/
 
   const result = await elasticClient.search({
     index: SESSION_LOG_INDEX,
     size: 0,
     body: createSessionByIpQuery(nasIp, memberIp, fromDate, toDate),
   });
+  if (result.aggregations.group_by_username.buckets.length > 0) {
+    log.warn(
+      'query session: %j  result:',
+      createSessionByIpQuery(nasIp, memberIp, fromDate, toDate),
+      JSON.stringify(result),
+    );
+  }
   return result.aggregations as SessionGroupByUsername;
 };
 

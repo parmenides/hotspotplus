@@ -4,16 +4,15 @@ import momentTz from 'moment-timezone';
 import { Moment } from 'moment';
 import momentJ from 'moment-jalaali';
 import { UpdateDocumentByQueryResponse } from 'elasticsearch';
-import moment = require('moment');
+import {
+  NetflowAggregateByIp,
+  NetflowIpQueryData,
+  RawNetflowReport,
+} from '../typings';
 
 const NETFLOW_LOG_INDEX_PREFIX = `netflow-`;
 
 const log = logger.createLogger();
-
-interface NetflowIpQueryData {
-  memberIpList: string[];
-  nasIpList: string[];
-}
 
 const getNetflowReports = async (
   username: string,
@@ -36,7 +35,7 @@ const getNetflowReports = async (
 
   let data: RawNetflowReport[] = [];
 
-  log.debug('INDEXES:', indexNames);
+  log.debug('INDEXES============:', indexNames);
   for (const indexName of indexNames) {
     try {
       const result = await getNetflowsByIndex(
@@ -45,7 +44,9 @@ const getNetflowReports = async (
         toDate,
         netflowIpQueryData,
       );
-      data = data.concat(result);
+      if (result) {
+        data = data.concat(result);
+      }
     } catch (error) {
       if (error.status === 404) {
         log.warn(`${indexName} index not found`);
@@ -102,7 +103,13 @@ const getNetflowsByIndex = async (
   fromDate: Moment,
   toDate: Moment,
   netflowIpQueryData: NetflowIpQueryData,
-) => {
+): Promise<undefined | { _source: any }[]> => {
+  const exist = await elasticClient.indices.exists({
+    index: netflowIndex,
+  });
+  if (!exist) {
+    return;
+  }
   const countResponse = await countNetflowReportByIndex(
     netflowIndex,
     fromDate,
@@ -111,9 +118,7 @@ const getNetflowsByIndex = async (
   );
 
   const totalLogs = countResponse.count;
-  log.debug(totalLogs);
   const maxResultSize = 500;
-  log.debug(Math.ceil(totalLogs / maxResultSize));
   const partsLen =
     totalLogs > maxResultSize ? Math.ceil(totalLogs / maxResultSize) : 1;
 
@@ -137,6 +142,7 @@ const getNetflowsByIndex = async (
       }
       from = from + maxResultSize;
     } catch (error) {
+      log.error('error @getNetflowsByIndex');
       log.error(error);
       throw error;
     }
@@ -207,58 +213,6 @@ const createNetflowQuery = (
   };
 };
 
-interface RawNetflowReport {
-  _source: {
-    netflow: {
-      tos: number;
-      xlate_dst_port: number;
-      src_port: number;
-      xlate_dst_addr_ipv4: string;
-      src_addr: string;
-      dst_mac: string;
-      dst_locality: string;
-      protocol_name: string;
-      tcp_flag_tags: any[];
-      flowset_id: number;
-      xlate_src_addr_ipv4: string;
-      tcp_flags: number;
-      packets: 1;
-      src_locality: string;
-      protocol: number;
-      dst_addr: string;
-      next_hop: string;
-      src_mac: string;
-      flow_seq_num: number;
-      input_snmp: number;
-      src_mask_len: number;
-      src_port_name: string;
-      output_snmp: number;
-      out_src_mac: string;
-      last_switched: string;
-      xlate_src_port: number;
-      dst_port_name: string;
-      dst_port: number;
-      bytes: number;
-      version: string;
-      first_switched: string;
-      dst_mask_len: number;
-      flow_locality: string;
-      tcp_flags_label: string;
-    };
-    '@version': string;
-    geoip_dst: {
-      autonomous_system: string;
-    };
-    host: string;
-    geoip_src: {
-      autonomous_system: string;
-    };
-    type: string;
-    tags: string[];
-    '@timestamp': string;
-  };
-}
-
 const netflowGroupByIp = async (from: number, to: number) => {
   const fromDate = momentTz.tz(from, 'Europe/London');
   let fromDateCounter = momentTz.tz(from, 'Europe/London');
@@ -279,7 +233,9 @@ const netflowGroupByIp = async (from: number, to: number) => {
     try {
       const result = await aggregateNetflowByIp(indexName, fromDate, toDate);
       //log.debug(result);
-      data = data.concat(result);
+      if (result) {
+        data = data.concat(result);
+      }
     } catch (error) {
       if (error.status === 404) {
         log.warn(`${indexName} index not found`);
@@ -298,8 +254,15 @@ const aggregateNetflowByIp = async (
   netflowIndex: string,
   fromDate: Moment,
   toDate: Moment,
-) => {
+): Promise<undefined | NetflowAggregateByIp> => {
   try {
+    const exist = await elasticClient.indices.exists({
+      index: netflowIndex,
+    });
+    if (!exist) {
+      return;
+    }
+
     const queryResult = await elasticClient.search({
       index: netflowIndex,
       size: 0,
@@ -307,6 +270,7 @@ const aggregateNetflowByIp = async (
     });
     return queryResult.aggregations;
   } catch (e) {
+    log.error('error @aggregateNetflowByIp');
     log.error(e);
     throw e;
   }
@@ -329,11 +293,12 @@ const createNetflowGroupByAggregate = (fromDate: Moment, toDate: Moment) => {
         ],
         must_not: [
           {
-            terms: { status: ['enriched'] },
+            term: { status: 'enriched' },
           },
         ],
       },
     },
+
     aggs: {
       group_by_nas_ip: {
         terms: {
@@ -350,24 +315,6 @@ const createNetflowGroupByAggregate = (fromDate: Moment, toDate: Moment) => {
     },
   };
 };
-
-export interface NetflowAggregateByIp {
-  group_by_nas_ip: {
-    doc_count_error_upper_bound: number;
-    sum_other_doc_count: number;
-    buckets: [
-      {
-        key: string;
-        doc_count: number;
-        group_by_member_ip: {
-          doc_count_error_upper_bound: number;
-          sum_other_doc_count: number;
-          buckets: Array<{ key: string; doc_count: number }>;
-        };
-      }
-    ];
-  };
-}
 
 const updateNetflows = async (
   from: number,
@@ -398,9 +345,6 @@ const updateNetflows = async (
   log.debug('INDEXES:', indexNames);
   for (const indexName of indexNames) {
     try {
-      log.warn(
-        createNetflowUpdateQuery(fromDate, toDate, nasIp, memberIp, updates),
-      );
       const result = await elasticClient.updateByQuery({
         index: indexName,
         type: 'doc',
@@ -420,6 +364,7 @@ const updateNetflows = async (
       if (error.status === 404) {
         log.warn(`${indexName} index not found`);
       } else {
+        log.error('error @updateNetflows');
         log.error(error.status);
         throw error;
       }
@@ -446,10 +391,11 @@ const createNetflowUpdateQuery = (
       bool: {
         must_not: [
           {
-            terms: { status: ['enriched'] },
+            term: { status: 'enriched' },
           },
         ],
-        must: [
+        filter: [
+          { term: { host: nasIp } },
           {
             range: {
               '@timestamp': {
@@ -458,25 +404,27 @@ const createNetflowUpdateQuery = (
               },
             },
           },
+        ],
+        should: [
           {
-            terms: {
-              host: [nasIp],
+            term: {
+              'netflow.src_addr': memberIp,
             },
           },
           {
-            terms: {
-              'netflow.src_addr': [memberIp],
+            term: {
+              'netflow.dst_addr': memberIp,
             },
           },
         ],
+        minimum_should_match: 1,
       },
     },
     script: {
       lang: 'painless',
       inline: `
-      ctx._source['enrichDate']="${moment().format()}";
       ctx._source['username']="${update.username}";
-      ctx._source['status']="enriched1";
+      ctx._source['status']="enriched3";
       ctx._source['nasId']="${update.nasId}";
       ctx._source['memberId']="${update.memberId}";
       ctx._source['businessId']="${update.businessId}"`,
