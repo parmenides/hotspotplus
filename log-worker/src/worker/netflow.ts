@@ -6,7 +6,8 @@ import momentJ from 'moment-jalaali';
 import { UpdateDocumentByQueryResponse } from 'elasticsearch';
 import {
   NetflowAggregateByIp,
-  NetflowIpQueryData,
+  NetflowReportQueryParams,
+  NetflowReportRequestTask,
   RawNetflowReport,
 } from '../typings';
 
@@ -15,14 +16,14 @@ const NETFLOW_LOG_INDEX_PREFIX = `netflow-`;
 const log = logger.createLogger();
 
 const getNetflowReports = async (
-  username: string,
-  from: number,
-  to: number,
-  netflowIpQueryData: NetflowIpQueryData,
+  reportRequestTask: NetflowReportRequestTask,
 ) => {
-  const fromDate = momentTz.tz(from, 'Europe/London');
-  const fromDateCounter = momentTz.tz(from, 'Europe/London');
-  const toDate = momentTz.tz(to, 'Europe/London');
+  const fromDate = momentTz.tz(reportRequestTask.fromDate, 'Europe/London');
+  const fromDateCounter = momentTz.tz(
+    reportRequestTask.fromDate,
+    'Europe/London',
+  );
+  const toDate = momentTz.tz(reportRequestTask.toDate, 'Europe/London');
 
   const daysBetweenInMs = toDate.diff(fromDateCounter);
   const days = Math.ceil(daysBetweenInMs / 86400000);
@@ -35,15 +36,19 @@ const getNetflowReports = async (
 
   let data: RawNetflowReport[] = [];
 
-  log.debug('INDEXES============:', indexNames);
   for (const indexName of indexNames) {
     try {
-      const result = await getNetflowsByIndex(
-        indexName,
+      const result = await getNetflowsByIndex(indexName, {
         fromDate,
         toDate,
-        netflowIpQueryData,
-      );
+        srcAddress: reportRequestTask.srcAddress,
+        srcPort: reportRequestTask.srcPort,
+        username: reportRequestTask.username,
+        dstAddress: reportRequestTask.dstAddress,
+        dstPort: reportRequestTask.dstPort,
+        nasId: reportRequestTask.nasId,
+        protocol: reportRequestTask.protocol,
+      });
       if (result) {
         data = data.concat(result);
       }
@@ -59,13 +64,10 @@ const getNetflowReports = async (
   //log.debug('log', data);
   log.debug(data.length);
   //log.debug(formattedResult);
-  return formatReports(username, data);
+  return formatReports(data);
 };
 
-const formatReports = (
-  username: string,
-  rawNetflowReports: RawNetflowReport[],
-) => {
+const formatReports = (rawNetflowReports: RawNetflowReport[]) => {
   return rawNetflowReports.map((rawReport) => {
     const localDate = momentTz.tz(
       rawReport._source['@timestamp'],
@@ -74,7 +76,8 @@ const formatReports = (
     const jalaaliDate = momentJ(localDate);
 
     return {
-      username,
+      nasId: rawReport._source.nasId,
+      username: rawReport._source.username,
       date: getJalaaliDate(jalaaliDate),
       src_addr: rawReport._source.netflow.src_addr,
       src_port: rawReport._source.netflow.src_port,
@@ -100,10 +103,8 @@ const createNetflowIndexName = (fromDate: Moment) => {
 
 const getNetflowsByIndex = async (
   netflowIndex: string,
-  fromDate: Moment,
-  toDate: Moment,
-  netflowIpQueryData: NetflowIpQueryData,
-): Promise<undefined | { _source: any }[]> => {
+  netflowReportQueryParams: NetflowReportQueryParams,
+): Promise<undefined | Array<{ _source: any }>> => {
   const exist = await elasticClient.indices.exists({
     index: netflowIndex,
   });
@@ -112,9 +113,7 @@ const getNetflowsByIndex = async (
   }
   const countResponse = await countNetflowReportByIndex(
     netflowIndex,
-    fromDate,
-    toDate,
-    netflowIpQueryData,
+    netflowReportQueryParams,
   );
 
   const totalLogs = countResponse.count;
@@ -123,24 +122,22 @@ const getNetflowsByIndex = async (
     totalLogs > maxResultSize ? Math.ceil(totalLogs / maxResultSize) : 1;
 
   const parts = new Array(partsLen);
-  let from = 0;
+  let startFrom = 0;
   let result: Array<{ _source: any }> = [];
   for (const i of parts) {
     try {
       const queryResult = await queryNetflowReports(
         netflowIndex,
-        from,
+        startFrom,
         maxResultSize,
-        fromDate,
-        toDate,
-        netflowIpQueryData,
+        netflowReportQueryParams,
       );
       if (queryResult.hits) {
         result = result.concat(queryResult.hits.hits);
       } else {
         log.warn(queryResult);
       }
-      from = from + maxResultSize;
+      startFrom = startFrom + maxResultSize;
     } catch (error) {
       log.error('error @getNetflowsByIndex');
       log.error(error);
@@ -152,62 +149,112 @@ const getNetflowsByIndex = async (
 
 const countNetflowReportByIndex = async (
   indexName: string,
-  fromDate: Moment,
-  toDate: Moment,
-  netflowIpQueryData: NetflowIpQueryData,
+  netflowReportQueryParams: NetflowReportQueryParams,
 ) => {
   const result = await elasticClient.count({
     index: indexName,
-    body: createNetflowQuery(fromDate, toDate, netflowIpQueryData),
+    body: createNetflowQuery(netflowReportQueryParams),
   });
   return result;
 };
 
 const queryNetflowReports = async (
   indexName: string,
-  fromIndex: number,
+  startFrom: number,
   size: number,
-  fromDate: Moment,
-  toDate: Moment,
-  netflowIpQueryData: NetflowIpQueryData,
+  netflowReportQueryParams: NetflowReportQueryParams,
 ) => {
   const result = await elasticClient.search({
     index: indexName,
-    from: fromIndex,
+    from: startFrom,
     size,
-    body: createNetflowQuery(fromDate, toDate, netflowIpQueryData),
+    body: createNetflowQuery(netflowReportQueryParams),
   });
   return result;
 };
 
 const createNetflowQuery = (
-  fromDate: Moment,
-  toDate: Moment,
-  netflowIpQueryData: NetflowIpQueryData,
+  netflowReportQueryParams: NetflowReportQueryParams,
 ) => {
+  const filter = [];
+  const must = [];
+
+  filter.push({
+    term: {
+      status: 'enriched',
+    },
+  });
+
+  filter.push({
+    range: {
+      '@timestamp': {
+        gte: netflowReportQueryParams.fromDate.format(),
+        lte: netflowReportQueryParams.toDate.format(),
+      },
+    },
+  });
+
+  if (netflowReportQueryParams.protocol) {
+    filter.push({
+      term: {
+        'netflow.protocol_name': netflowReportQueryParams.protocol,
+      },
+    });
+  }
+
+  if (netflowReportQueryParams.srcPort) {
+    filter.push({
+      term: {
+        'netflow.src_port': netflowReportQueryParams.srcPort,
+      },
+    });
+  }
+
+  if (netflowReportQueryParams.srcAddress) {
+    filter.push({
+      term: {
+        'netflow.src_address': netflowReportQueryParams.srcAddress,
+      },
+    });
+  }
+
+  if (netflowReportQueryParams.dstPort) {
+    filter.push({
+      term: {
+        'netflow.dst_port': netflowReportQueryParams.dstPort,
+      },
+    });
+  }
+
+  if (netflowReportQueryParams.dstAddress) {
+    filter.push({
+      term: {
+        'netflow.dst_address': netflowReportQueryParams.dstAddress,
+      },
+    });
+  }
+
+  if (netflowReportQueryParams.nasId) {
+    filter.push({
+      term: {
+        nasId: netflowReportQueryParams.nasId,
+      },
+    });
+  }
+
+  if (netflowReportQueryParams.username) {
+    must.push({
+      match: {
+        username: netflowReportQueryParams.username,
+      },
+    });
+  }
+
   return {
     query: {
       bool: {
-        must: [
-          {
-            terms: {
-              host: netflowIpQueryData.nasIpList,
-            },
-          },
-          {
-            terms: {
-              'netflow.src_addr': netflowIpQueryData.memberIpList,
-            },
-          },
-          {
-            range: {
-              '@timestamp': {
-                gte: fromDate.format(),
-                lte: toDate.format(),
-              },
-            },
-          },
-        ],
+        must,
+        filter,
       },
     },
   };
@@ -215,7 +262,7 @@ const createNetflowQuery = (
 
 const netflowGroupByIp = async (from: number, to: number) => {
   const fromDate = momentTz.tz(from, 'Europe/London');
-  let fromDateCounter = momentTz.tz(from, 'Europe/London');
+  const fromDateCounter = momentTz.tz(from, 'Europe/London');
   const toDate = momentTz.tz(to, 'Europe/London');
 
   const daysBetweenInMs = toDate.diff(fromDateCounter);
@@ -424,7 +471,7 @@ const createNetflowUpdateQuery = (
       lang: 'painless',
       inline: `
       ctx._source['username']="${update.username}";
-      ctx._source['status']="enriched3";
+      ctx._source['status']="enriched";
       ctx._source['nasId']="${update.nasId}";
       ctx._source['memberId']="${update.memberId}";
       ctx._source['businessId']="${update.businessId}"`,

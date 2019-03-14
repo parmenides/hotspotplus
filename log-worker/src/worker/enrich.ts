@@ -77,16 +77,16 @@ const getIpData = (
     }
   }
 
-  const ipData = [];
-  for (const nasIp in ips) {
-    ipData.push({ nasIp: nasIp, memberIpList: ips[nasIp] });
-  }
+  const ipData: Array<{ nasIp: string; memberIpList: string[] }> = [];
+  Object.keys(ips).forEach((nasIp) => {
+    ipData.push({ nasIp, memberIpList: ips[nasIp] });
+  });
   return ipData;
 };
 
 const searchAndUpdateReport = async (
   reportType: REPORT_TYPE,
-  ipData: { nasIp: string; memberIpList: string[] }[],
+  ipData: Array<{ nasIp: string; memberIpList: string[] }>,
   from: number,
   to: number,
 ) => {
@@ -103,8 +103,8 @@ const searchAndUpdateReport = async (
         log.warn('sessions: ', groupedSessions);
       }
       if (groupedSessions.group_by_username.buckets.length === 1) {
-        const a_session = groupedSessions.group_by_username.buckets[0];
-        const username = a_session.key;
+        const session = groupedSessions.group_by_username.buckets[0];
+        const username = session.key;
         const nasId = groupedSessions.extra.hits.hits[0]._source.nasId;
         const memberId = groupedSessions.extra.hits.hits[0]._source.memberId;
         const businessId =
@@ -159,24 +159,24 @@ const searchAndUpdateReport = async (
         //split range in two;
         const newTo = from + (to - from) / 2;
 
-        const re_queue_task_first: EnrichTask = {
-          from: from,
+        const reQueueOne: EnrichTask = {
+          from,
           to: newTo,
           reportType,
         };
         await channel.sendToQueue(
           QUEUES.RETRY_LOG_ENRICHMENT_WORKER_QUEUE,
-          Buffer.from(JSON.stringify(re_queue_task_first)),
+          Buffer.from(JSON.stringify(reQueueOne)),
         );
 
-        const re_queue_task_second: EnrichTask = {
+        const reQueueTwo: EnrichTask = {
           from: newTo,
           to,
           reportType,
         };
         await channel.sendToQueue(
           QUEUES.RETRY_LOG_ENRICHMENT_WORKER_QUEUE,
-          Buffer.from(JSON.stringify(re_queue_task_second)),
+          Buffer.from(JSON.stringify(reQueueTwo)),
         );
       }
     }

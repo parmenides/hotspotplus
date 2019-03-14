@@ -1,4 +1,6 @@
 //
+import { Moment } from 'moment';
+
 export enum QUEUES {
   LOG_ENRICHMENT_WORKER_QUEUE = 'log-worker',
   LOG_ENRICHMENT_WORKER_QUEUE_EXCHANGE = 'log-worker-ex',
@@ -23,6 +25,7 @@ export enum REPORT_TYPE {
 
 export interface RawSyslogReport {
   _source: {
+    username: string;
     query: string;
     '@timestamp': string;
     params: string;
@@ -83,8 +86,33 @@ export interface NetflowIpQueryData {
   memberIpList: string[];
   nasIpList: string[];
 }
+
+export interface NetflowReportQueryParams {
+  fromDate: Moment;
+  toDate: Moment;
+  username?: string;
+  dstAddress?: string;
+  dstPort?: number;
+  srcAddress?: string;
+  srcPort?: number;
+  protocol?: string;
+  nasId?: string;
+}
+
+export interface SyslogReportQueryParams {
+  fromDate: Moment;
+  toDate: Moment;
+  username?: string;
+  url?: string;
+  domain?: string;
+  method?: string;
+  nasId?: string;
+}
+
 export interface RawNetflowReport {
   _source: {
+    username: string;
+    nasId: string;
     netflow: {
       tos: number;
       xlate_dst_port: number;
@@ -133,4 +161,30 @@ export interface RawNetflowReport {
     tags: string[];
     '@timestamp': string;
   };
+}
+
+export interface GeneralReportRequestTask {
+  reportType: REPORT_TYPE;
+  businessId: string;
+  reportRequestId: string;
+  fromDate?: number;
+  toDate?: number;
+  nasTitle?: string;
+  nasId?: string;
+}
+
+export interface NetflowReportRequestTask extends GeneralReportRequestTask {
+  username?: string;
+  dstAddress?: string;
+  dstPort?: number;
+  srcAddress?: string;
+  srcPort?: number;
+  protocol?: string;
+}
+
+export interface SyslogReportRequestTask extends GeneralReportRequestTask {
+  domain?: string;
+  username?: string;
+  url?: string;
+  method?: string;
 }

@@ -20,7 +20,7 @@ export const addEnrichmentTasks = async (
 
     const duration = moment.duration(toDate.diff(fromDate));
     const hours = Math.ceil(duration.asHours());
-    const taskLen: Array<any> = new Array(hours);
+    const taskLen: any[] = new Array(hours);
     for (const t of taskLen) {
       const start = fromDate.valueOf();
       fromDate.add({

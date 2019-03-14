@@ -28,4 +28,5 @@ export const testRunner = async () => {
   // await channel.close();
   // await channel.close();
   await addEnrichmentTasks(from, to, 'syslog' as REPORT_TYPE.SYSLOG);
+  await addEnrichmentTasks(from, to, 'netflow' as REPORT_TYPE.NETFLOW);
 };

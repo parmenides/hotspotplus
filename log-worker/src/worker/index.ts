@@ -10,7 +10,13 @@ import { login } from '../utils/auth';
 import { file as tmpFile } from 'tmp-promise';
 import util from 'util';
 import syslog from './syslog';
-import { QUEUES, REPORT_TYPE } from '../typings';
+import {
+  GeneralReportRequestTask,
+  NetflowReportRequestTask,
+  QUEUES,
+  REPORT_TYPE,
+  SyslogReportRequestTask,
+} from '../typings';
 import momentTz from 'moment-timezone';
 
 // Convert fs.readFile into Promise version of same
@@ -25,16 +31,6 @@ if (
   !process.env.API_ADDRESS
 ) {
   throw new Error('invalid auth env variables');
-}
-
-export interface ReportRequestTask {
-  reportType: REPORT_TYPE;
-  username: string;
-  fromDate: number;
-  toDate: number;
-  memberId: string;
-  businessId: string;
-  reportRequestId: string;
 }
 
 export const processLogRequest = async () => {
@@ -53,44 +49,30 @@ export const processLogRequest = async () => {
 
       const body = message.content.toString();
       log.debug(" [x] Received Log Request '%s'", body);
-      const reportRequestTask: ReportRequestTask = JSON.parse(body);
-      const fromDate = momentTz.tz(reportRequestTask.fromDate, 'Europe/London');
-      const toDate = momentTz.tz(reportRequestTask.toDate, 'Europe/London');
+      const generalReportRequestTask: GeneralReportRequestTask = JSON.parse(
+        body,
+      );
+
+      if (!generalReportRequestTask.toDate) {
+        generalReportRequestTask.toDate = Date.now();
+      }
+      // create fromDate 1 year before from Date
+      if (!generalReportRequestTask.fromDate) {
+        generalReportRequestTask.fromDate =
+          generalReportRequestTask.toDate - 31539999 * 1000;
+      }
 
       try {
-        const sessionData = await session.findSessions({
-          businessId: reportRequestTask.businessId,
-          memberId: reportRequestTask.memberId,
-          fromDate,
-          toDate,
-        });
-        log.debug(
-          `Sessions: nasIps: ${sessionData.nasIpList} memberIps: ${
-            sessionData.memberIpList
-          }`,
-        );
         let reports: any;
         let fields: string[];
-        if (reportRequestTask.reportType === REPORT_TYPE.NETFLOW) {
+        if (generalReportRequestTask.reportType === REPORT_TYPE.NETFLOW) {
           reports = await netflow.getNetflowReports(
-            reportRequestTask.username,
-            reportRequestTask.fromDate,
-            reportRequestTask.toDate,
-            {
-              nasIpList: sessionData.nasIpList,
-              memberIpList: sessionData.memberIpList,
-            },
+            generalReportRequestTask as NetflowReportRequestTask,
           );
           fields = getNetflowFields();
-        } else if (reportRequestTask.reportType === REPORT_TYPE.SYSLOG) {
+        } else if (generalReportRequestTask.reportType === REPORT_TYPE.SYSLOG) {
           reports = await syslog.getSyslogReports(
-            reportRequestTask.username,
-            reportRequestTask.fromDate,
-            reportRequestTask.toDate,
-            {
-              nasIpList: sessionData.nasIpList,
-              memberIpList: sessionData.memberIpList,
-            },
+            generalReportRequestTask as SyslogReportRequestTask,
           );
           fields = getSyslogFields();
         } else {
@@ -100,8 +82,8 @@ export const processLogRequest = async () => {
         const csvReport = jsonToCsv(fields, reports);
         log.debug(csvReport);
         await uploadReport(
-          reportRequestTask.reportRequestId,
-          reportRequestTask.businessId,
+          generalReportRequestTask.reportRequestId,
+          generalReportRequestTask.businessId,
           csvReport,
         );
         channel.ack(message);
