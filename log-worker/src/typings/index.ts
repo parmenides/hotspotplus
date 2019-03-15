@@ -59,11 +59,6 @@ export interface SyslogAggregateByIp {
   };
 }
 
-export interface SyslogIpQueryData {
-  memberIpList: string[];
-  nasIpList: string[];
-}
-
 export interface NetflowAggregateByIp {
   group_by_nas_ip: {
     doc_count_error_upper_bound: number;
@@ -80,11 +75,6 @@ export interface NetflowAggregateByIp {
       }
     ];
   };
-}
-
-export interface NetflowIpQueryData {
-  memberIpList: string[];
-  nasIpList: string[];
 }
 
 export interface NetflowReportQueryParams {

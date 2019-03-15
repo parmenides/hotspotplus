@@ -20,11 +20,11 @@ export const addEnrichmentTasks = async (
 
     const duration = moment.duration(toDate.diff(fromDate));
     const hours = Math.ceil(duration.asHours());
-    const taskLen: any[] = new Array(hours);
+    const taskLen: any[] = new Array(hours * 12);
     for (const t of taskLen) {
       const start = fromDate.valueOf();
       fromDate.add({
-        hours: 1,
+        minutes: 5,
       });
       const end = fromDate.valueOf();
       const enrichTask: EnrichTask = {

@@ -5,10 +5,8 @@ import { Moment } from 'moment';
 import momentJ from 'moment-jalaali';
 import { UpdateDocumentByQueryResponse } from 'elasticsearch';
 import {
-  NetflowReportRequestTask,
   RawSyslogReport,
   SyslogAggregateByIp,
-  SyslogIpQueryData,
   SyslogReportQueryParams,
   SyslogReportRequestTask,
 } from '../typings';

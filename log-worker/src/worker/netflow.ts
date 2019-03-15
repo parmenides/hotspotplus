@@ -279,7 +279,7 @@ const netflowGroupByIp = async (from: number, to: number) => {
   for (const indexName of indexNames) {
     try {
       const result = await aggregateNetflowByIp(indexName, fromDate, toDate);
-      //log.debug(result);
+
       if (result) {
         data = data.concat(result);
       }
@@ -375,6 +375,7 @@ const updateNetflows = async (
     username: string;
   },
 ) => {
+  log.debug('************');
   const fromDate = momentTz.tz(from, 'Europe/London');
   const fromDateCounter = momentTz.tz(from, 'Europe/London');
   const toDate = momentTz.tz(to, 'Europe/London');
@@ -387,9 +388,8 @@ const updateNetflows = async (
     fromDateCounter.add(1, 'days');
     indexNames.push(createNetflowIndexName(fromDateCounter));
   }
-
   let data: UpdateDocumentByQueryResponse[] = [];
-  log.debug('INDEXES:', indexNames);
+  //log.debug('INDEXES:', indexNames);
   for (const indexName of indexNames) {
     try {
       const result = await elasticClient.updateByQuery({
@@ -405,7 +405,6 @@ const updateNetflows = async (
           updates,
         ),
       });
-
       data = data.concat(result);
     } catch (error) {
       if (error.status === 404) {

@@ -178,6 +178,14 @@ const searchAndUpdateReport = async (
           QUEUES.RETRY_LOG_ENRICHMENT_WORKER_QUEUE,
           Buffer.from(JSON.stringify(reQueueTwo)),
         );
+      } else if (groupedSessions.group_by_username.buckets.length === 0) {
+        log.warn(
+          `nothing to update  ${reportType} from:${moment(from).format(
+            'YYYY.MM.DD HH:MM',
+          )} to:${moment(to).format(
+            'YYYY.MM.DD HH:MM',
+          )} router IP:${nasIp} member IP:${memberIp}`,
+        );
       }
     }
   }

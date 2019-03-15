@@ -13,7 +13,6 @@ interface SessionQuery {
   memberId?: string;
   businessId?: string;
 }
-
 interface IpData {
   nasIp: string;
   framedIpAddress: string;

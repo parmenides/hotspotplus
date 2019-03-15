@@ -8,8 +8,8 @@ export const testRunner = async () => {
   const channel = await getRabbitMqChannel();
   const LOG_WORKER_QUEUE = QUEUES.LOG_WORKER_QUEUE;
 
-  const from = new Date('2019-03-02T00:00:00').getTime();
-  const to = new Date('2019-03-04T23:59:59').getTime();
+  const from = new Date('2019-03-01T00:00:00').getTime();
+  const to = new Date('2019-03-05T23:59:59').getTime();
 
   // const message: ReportRequestTask = {
   //     reportType: ReportType.SYSLOG,
@@ -27,6 +27,6 @@ export const testRunner = async () => {
   // );
   // await channel.close();
   // await channel.close();
-  await addEnrichmentTasks(from, to, 'syslog' as REPORT_TYPE.SYSLOG);
+  //await addEnrichmentTasks(from, to, 'syslog' as REPORT_TYPE.SYSLOG);
   await addEnrichmentTasks(from, to, 'netflow' as REPORT_TYPE.NETFLOW);
 };
