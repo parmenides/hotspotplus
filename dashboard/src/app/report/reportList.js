@@ -152,122 +152,135 @@ app.controller ( 'reportList', [
 			Business.loadMembersUsernames ( { businessId: businessId } ).$promise.then (
 				function ( result ) {
 					$scope.members = result.members;
-					$scope.report = {
-						status:       'scheduled',
-						creationDate: new Date ().getTime (),
-						from:         new Date ().getTime () - 7 * 24 * 60 * 60 * 1000,
-						to:           new Date ().getTime (),
-						businessId:   businessId
-					};
-					$uibModal.open ( {
-						backdrop:      true,
-						animation:     true,
-						keyboard:      true,
-						backdropClick: true,
-						size:          'md',
-						scope:         $scope,
-						templateUrl:   PREFIX + 'app/report/tpl/reportForm.html',
-						controller:    [
-							'$scope',
-							'$uibModalInstance',
-							function ( $scope, $uibModalInstance ) {
-								$scope.options = {
-									cancelBtnLabel: 'general.cancel',
-									saveBtnLabel:   'general.save'
-								};
-								if ( param === 'ip' ) {
-									$scope.options.title = 'report.addIpReport';
-									$scope.options.reportType = 'netflow';
-								} else {
-									$scope.options.title = 'report.addSiteReport';
-									$scope.options.reportType = 'syslog';
-								}
-								// Persian date picker methods
-								$scope.dateOptions = {
-									formatYear:  'yy',
-									startingDay: 6
-								};
-								$scope.dateFormats = [
-									'dd-MMMM-yyyy',
-									'yyyy/MM/dd',
-									'dd.MM.yyyy',
-									'shortDate'
-								];
-								$scope.dateFormat = $scope.dateFormats[ 0 ];
-								$scope.disabled = function ( date, mode ) {
-									return mode === 'day' && date.getDay () === 5;
-								};
-								$scope.startDateCalendar = function ( $event ) {
-									$event.preventDefault ();
-									$event.stopPropagation ();
-									$scope.startDateCalendarIsOpen = true;
-									$scope.endDateCalendarIsOpen = false;
-								};
-								$scope.endDateCalendar = function ( $event ) {
-									$event.preventDefault ();
-									$event.stopPropagation ();
-									$scope.endDateCalendarIsOpen = true;
-									$scope.startDateCalendarIsOpen = false;
-								};
+					Business.loadNasTitles ( { businessId: businessId } ).$promise.then (
+						function ( result ) {
+							$scope.nas = result.nas;
+							$scope.report = {
+								status:       'scheduled',
+								creationDate: new Date ().getTime (),
+								from:         new Date ().getTime () - 7 * 24 * 60 * 60 * 1000,
+								to:           new Date ().getTime (),
+								businessId:   businessId
+							};
+							$uibModal.open ( {
+								backdrop:      true,
+								animation:     true,
+								keyboard:      true,
+								backdropClick: true,
+								size:          'md',
+								scope:         $scope,
+								templateUrl:   PREFIX + 'app/report/tpl/reportForm.html',
+								controller:    [
+									'$scope',
+									'$uibModalInstance',
+									function ( $scope, $uibModalInstance ) {
+										$scope.options = {
+											cancelBtnLabel: 'general.cancel',
+											saveBtnLabel:   'general.save'
+										};
+										if ( param === 'ip' ) {
+											$scope.options.title = 'report.addNetflowReport';
+											$scope.options.reportType = 'netflow';
+										} else {
+											$scope.options.title = 'report.addSyslogReport';
+											$scope.options.reportType = 'syslog';
+										}
+										// Persian date picker methods
+										$scope.dateOptions = {
+											formatYear:  'yy',
+											startingDay: 6
+										};
+										$scope.dateFormats = [
+											'dd-MMMM-yyyy',
+											'yyyy/MM/dd',
+											'dd.MM.yyyy',
+											'shortDate'
+										];
+										$scope.dateFormat = $scope.dateFormats[ 0 ];
+										$scope.disabled = function ( date, mode ) {
+											return mode === 'day' && date.getDay () === 5;
+										};
+										$scope.startDateCalendar = function ( $event ) {
+											$event.preventDefault ();
+											$event.stopPropagation ();
+											$scope.startDateCalendarIsOpen = true;
+											$scope.endDateCalendarIsOpen = false;
+										};
+										$scope.endDateCalendar = function ( $event ) {
+											$event.preventDefault ();
+											$event.stopPropagation ();
+											$scope.endDateCalendarIsOpen = true;
+											$scope.startDateCalendarIsOpen = false;
+										};
 
-								// --> for calendar bug
-								$scope.$watch ( 'report.from', function ( newValue, oldValue ) {
-									$scope.startDateCalendarIsOpen = false;
-								} );
-								$scope.$watch ( 'report.to', function ( newValue, oldValue ) {
-									$scope.endDateCalendarIsOpen = false;
-								} );
-								$scope.resetCalendar = function () {
-									$scope.endDateCalendarIsOpen = false;
-									$scope.startDateCalendarIsOpen = false;
-								};
-								$scope.cancel = function () {
-									$uibModalInstance.close ();
-								};
-								$scope.save = function () {
-									if ( $scope.report.member && $scope.report.member.id ) {
-										var memberId = $scope.report.member.id;
-										var username = $scope.report.member.username;
-										delete $scope.report.member;
-										$scope.report.memberId = memberId;
-										$scope.report.username = username;
-										$scope.report.type = $scope.options.reportType;
-										if ( $scope.report.from ) {
-											var from = new Date ( $scope.report.from );
-											$scope.report.from = from.getTime ();
-										} else {
-											$scope.report.from = new Date ().getTime () - 7 * 24 * 60 * 60 * 1000;
-										}
-										if ( $scope.report.to ) {
-											var to = new Date ( $scope.report.to );
-											$scope.report.to = to.getTime ();
-										} else {
-											$scope.report.to = new Date ().getTime ();
-										}
-										if ( !$scope.report.title ) {
-											var time = new Date ( $scope.report.creationDate );
-											var year = PersianDateService.getFullYear ( time );
-											var month = PersianDateService.getMonth ( time ) + 1;
-											var day = PersianDateService.getDate ( time );
-											$scope.report.title = username + '_' + year + '_' + month + '_' + day;
-										}
-										Business.reports.create ( { id: businessId }, $scope.report ).$promise.then (
-											function ( res ) {
-												appMessenger.showSuccess ( 'report.createSuccessFull' );
-												getPage ();
-												$uibModalInstance.close ()
-											},
-											function ( err ) {
-												appMessenger.showError ( 'report.createUnSuccessFull' );
+										// --> for calendar bug
+										$scope.$watch ( 'report.from', function ( newValue, oldValue ) {
+											$scope.startDateCalendarIsOpen = false;
+										} );
+										$scope.$watch ( 'report.to', function ( newValue, oldValue ) {
+											$scope.endDateCalendarIsOpen = false;
+										} );
+										$scope.resetCalendar = function () {
+											$scope.endDateCalendarIsOpen = false;
+											$scope.startDateCalendarIsOpen = false;
+										};
+										$scope.cancel = function () {
+											$uibModalInstance.close ();
+										};
+										$scope.save = function () {
+											if ( $scope.report.member && $scope.report.member.id && $scope.report.nas && $scope.report.nas.id ) {
+												var memberId = $scope.report.member.id;
+												var username = $scope.report.member.username;
+												var nasId = $scope.report.nas.id;
+												var nasTitle = $scope.report.nas.title;
+												delete $scope.report.member;
+												delete $scope.report.nas;
+												$scope.report.memberId = memberId;
+												$scope.report.username = username;
+												$scope.report.nasId = nasId;
+												$scope.report.nasTitle = nasTitle;
+												$scope.report.type = $scope.options.reportType;
+												if ( $scope.report.from ) {
+													var from = new Date ( $scope.report.from );
+													$scope.report.from = from.getTime ();
+												} else {
+													$scope.report.from = new Date ().getTime () - 7 * 24 * 60 * 60 * 1000;
+												}
+												if ( $scope.report.to ) {
+													var to = new Date ( $scope.report.to );
+													$scope.report.to = to.getTime ();
+												} else {
+													$scope.report.to = new Date ().getTime ();
+												}
+												if ( !$scope.report.title ) {
+													var time = new Date ( $scope.report.creationDate );
+													var year = PersianDateService.getFullYear ( time );
+													var month = PersianDateService.getMonth ( time ) + 1;
+													var day = PersianDateService.getDate ( time );
+													$scope.report.title = username + '_' + year + '_' + month + '_' + day;
+												}
+												Business.reports.create ( { id: businessId }, $scope.report ).$promise.then (
+													function ( res ) {
+														appMessenger.showSuccess ( 'report.createSuccessFull' );
+														getPage ();
+														$uibModalInstance.close ()
+													},
+													function ( err ) {
+														appMessenger.showError ( 'report.createUnSuccessFull' );
+													}
+												);
+											} else {
+												appMessenger.showError ( 'report.enterUserName' );
 											}
-										);
-									} else {
-										appMessenger.showError ( 'report.enterUserName' );
+										};
 									}
-								};
-							}
-						]
-					} );
+								]
+							} );
+						},
+						function ( error ) {
+							$log.error ( error );
+						}
+					);
 				},
 				function ( error ) {
 					$log.error ( error );
@@ -400,7 +413,6 @@ app.controller ( 'reportList', [
 				($scope.paginationOptions.pageNumber - 1) *
 				$scope.paginationOptions.itemPerPage;
 			options.filter.limit = $scope.paginationOptions.itemPerPage;
-			options.filter.fields = { internetPlanHistory: false };
 			Business.reports
 				.count ( { id: businessId, where: inputFilter } )
 				.$promise.then (
