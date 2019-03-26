@@ -267,5 +267,5 @@ volumes:
     driver: local
 
 networks:
-  hotspotplusgate:
-    external: true
+   hotspotplusgate:
+     external: true

@@ -13,6 +13,7 @@ interface SessionQuery {
   memberId?: string;
   businessId?: string;
 }
+
 interface IpData {
   nasIp: string;
   framedIpAddress: string;
@@ -130,10 +131,10 @@ const querySessionsByIp = async (
 ): Promise<SessionGroupByUsername> => {
   const fromDate = momentTz.tz(from, 'Europe/London');
   const toDate = momentTz.tz(to, 'Europe/London');
-  /*log.debug(
-        `session query %j`,
-        createSessionByIpQuery(nasIp, memberIp, fromDate, toDate),
-      );*/
+  log.debug(
+    `session query %j`,
+    createSessionByIpQuery(nasIp, memberIp, fromDate, toDate),
+  );
 
   const result = await elasticClient.search({
     index: SESSION_LOG_INDEX,

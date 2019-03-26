@@ -1,7 +1,6 @@
 import logger from '../utils/logger';
 import { getRabbitMqChannel } from '../utils/rabbitmq';
 import netflow from './netflow';
-import session from './session';
 import { createHttpClient } from '../utils/httpClient';
 import { Parser as Json2CsvParser } from 'json2csv';
 import fs from 'fs';
@@ -17,7 +16,6 @@ import {
   REPORT_TYPE,
   SyslogReportRequestTask,
 } from '../typings';
-import momentTz from 'moment-timezone';
 
 // Convert fs.readFile into Promise version of same
 
@@ -78,6 +76,7 @@ export const processLogRequest = async () => {
         } else {
           throw new Error('invalid report type');
         }
+        log.debug('#######################');
         log.debug(reports);
         const csvReport = jsonToCsv(fields, reports);
         log.debug(csvReport);
@@ -89,7 +88,9 @@ export const processLogRequest = async () => {
         channel.ack(message);
       } catch (error) {
         log.error(error);
-        channel.nack(message, false, false);
+        //todo remove me after test
+        channel.ack(message);
+        //channel.nack(message, false, false);
       }
     },
     { noAck: false },

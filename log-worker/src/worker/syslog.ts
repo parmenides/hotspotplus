@@ -14,26 +14,30 @@ import {
 const SYSLOG_LOG_INDEX_PREFIX = `syslog-`;
 const log = logger.createLogger();
 
-const getSyslogReports = async (
-  syslogReportRequestTask: SyslogReportRequestTask,
-) => {
-  const fromDateCounter = momentTz.tz(
-    syslogReportRequestTask.fromDate,
-    'Europe/London',
-  );
-  const fromDate = momentTz.tz(
-    syslogReportRequestTask.fromDate,
-    'Europe/London',
-  );
-  const toDate = momentTz.tz(syslogReportRequestTask.toDate, 'Europe/London');
-  const daysBetweenInMs = toDate.diff(fromDateCounter);
-  const days = Math.ceil(daysBetweenInMs / 86400000);
-
+const getIndexNames = (from: Moment, to: Moment) => {
+  const fromDateCounter = from.clone();
+  const diffBetweenInMs = to.diff(fromDateCounter);
+  let days = 0;
+  if (diffBetweenInMs > 86400000) {
+    days = Math.ceil(diffBetweenInMs / 86400000);
+  }
   const indexNames = [createSyslogIndexName(fromDateCounter)];
   for (let i = 0; i < days; i++) {
     fromDateCounter.add(1, 'days');
     indexNames.push(createSyslogIndexName(fromDateCounter));
   }
+  return indexNames;
+};
+
+const getSyslogReports = async (
+  syslogReportRequestTask: SyslogReportRequestTask,
+) => {
+  const fromDate = momentTz.tz(
+    syslogReportRequestTask.fromDate,
+    'Europe/London',
+  );
+  const toDate = momentTz.tz(syslogReportRequestTask.toDate, 'Europe/London');
+  const indexNames = getIndexNames(fromDate, toDate);
   let data: RawSyslogReport[] = [];
   log.debug('indexes: ', indexNames);
   for (const indexName of indexNames) {
@@ -173,31 +177,31 @@ const querySyslogReports = async (
 const createSyslogQuery = (
   syslogReportQueryParams: SyslogReportQueryParams,
 ) => {
-  const must = [];
+  const filter = [];
   if (syslogReportQueryParams.domain) {
-    must.push({
-      match: {
+    filter.push({
+      wildcard: {
         domain: syslogReportQueryParams.domain,
       },
     });
   }
 
   if (syslogReportQueryParams.username) {
-    must.push({
-      match: {
+    filter.push({
+      wildcard: {
         username: syslogReportQueryParams.username,
       },
     });
   }
+
   if (syslogReportQueryParams.url) {
-    must.push({
-      match: {
+    filter.push({
+      wildcard: {
         url: syslogReportQueryParams.url,
       },
     });
   }
 
-  const filter = [];
   filter.push({
     term: {
       status: 'enriched',
@@ -220,6 +224,7 @@ const createSyslogQuery = (
       },
     });
   }
+
   if (syslogReportQueryParams.nasId) {
     filter.push({
       term: {
@@ -231,7 +236,6 @@ const createSyslogQuery = (
   return {
     query: {
       bool: {
-        must,
         filter,
       },
     },
@@ -271,17 +275,8 @@ const createCountSyslogQuery = (
 
 const syslogGroupByIp = async (from: number, to: number) => {
   const fromDate = momentTz.tz(from, 'Europe/London');
-  const fromDateCounter = momentTz.tz(from, 'Europe/London');
   const toDate = momentTz.tz(to, 'Europe/London');
-
-  const daysBetweenInMs = toDate.diff(fromDateCounter);
-  const days = Math.ceil(daysBetweenInMs / 86400000);
-
-  const indexNames = [createSyslogIndexName(fromDateCounter)];
-  for (let i = 0; i < days; i++) {
-    fromDateCounter.add(1, 'days');
-    indexNames.push(createSyslogIndexName(fromDateCounter));
-  }
+  const indexNames = getIndexNames(fromDate, toDate);
 
   let data: SyslogAggregateByIp[] = [];
   log.debug('INDEXES:', indexNames);
@@ -377,18 +372,8 @@ const updateSyslogs = async (
   },
 ) => {
   const fromDate = momentTz.tz(from, 'Europe/London');
-  const fromDateCounter = momentTz.tz(from, 'Europe/London');
   const toDate = momentTz.tz(to, 'Europe/London');
-
-  const daysBetweenInMs = toDate.diff(fromDateCounter);
-  const days = Math.ceil(daysBetweenInMs / 86400000);
-
-  const indexNames = [createSyslogIndexName(fromDateCounter)];
-  for (let i = 0; i < days; i++) {
-    fromDateCounter.add(1, 'days');
-    indexNames.push(createSyslogIndexName(fromDateCounter));
-  }
-
+  const indexNames = getIndexNames(fromDate, toDate);
   let data: UpdateDocumentByQueryResponse[] = [];
   log.debug('INDEXES:', indexNames);
   for (const index of indexNames) {

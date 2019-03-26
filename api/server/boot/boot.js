@@ -209,7 +209,7 @@ module.exports = function(app) {
       }
     );
 
-    var netflowMapping = {
+   /* var netflowMapping = {
       mappings: {
         report: {
           properties: {
@@ -314,7 +314,7 @@ module.exports = function(app) {
         }
         log.info('syslog mapping mapping created', body);
       }
-    );
+    );*/
   }
 
   //radius.startRadius ();

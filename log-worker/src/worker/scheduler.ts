@@ -1,7 +1,6 @@
 import moment, { Moment } from 'moment';
 import { getRabbitMqChannel } from '../utils/rabbitmq';
-import { QUEUES, REPORT_TYPE } from '../typings';
-import { EnrichTask } from '../typings/index';
+import { QUEUES, REPORT_TYPE, EnrichTask } from '../typings';
 import logger from '../utils/logger';
 import { CronJob } from 'cron';
 
@@ -20,12 +19,14 @@ export const addEnrichmentTasks = async (
 
     const duration = moment.duration(toDate.diff(fromDate));
     const hours = Math.ceil(duration.asHours());
-    const taskLen: any[] = new Array(hours * 12);
+    const RUN_TASK_EVERY_MINUTES = 5;
+    const taskLen: any[] = new Array(hours * (60 / RUN_TASK_EVERY_MINUTES));
     for (const t of taskLen) {
       const start = fromDate.valueOf();
       fromDate.add({
-        minutes: 5,
+        minutes: RUN_TASK_EVERY_MINUTES,
       });
+
       const end = fromDate.valueOf();
       const enrichTask: EnrichTask = {
         from: start,

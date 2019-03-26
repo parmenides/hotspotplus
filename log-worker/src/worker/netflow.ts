@@ -15,25 +15,28 @@ const NETFLOW_LOG_INDEX_PREFIX = `netflow-`;
 
 const log = logger.createLogger();
 
-const getNetflowReports = async (
-  reportRequestTask: NetflowReportRequestTask,
-) => {
-  const fromDate = momentTz.tz(reportRequestTask.fromDate, 'Europe/London');
-  const fromDateCounter = momentTz.tz(
-    reportRequestTask.fromDate,
-    'Europe/London',
-  );
-  const toDate = momentTz.tz(reportRequestTask.toDate, 'Europe/London');
+const getIndexNames = (from: Moment, to: Moment) => {
+  const fromDateCounter = from.clone();
+  const diffBetweenInMs = to.diff(fromDateCounter);
+  let days = 0;
+  if (diffBetweenInMs > 86400000) {
+    days = Math.ceil(diffBetweenInMs / 86400000);
+  }
 
-  const daysBetweenInMs = toDate.diff(fromDateCounter);
-  const days = Math.ceil(daysBetweenInMs / 86400000);
-
-  const indexNames = [createNetflowIndexName(fromDateCounter)];
+  const indexNames: string[] = [createNetflowIndexName(fromDateCounter)];
   for (let i = 0; i < days; i++) {
     fromDateCounter.add(1, 'days');
     indexNames.push(createNetflowIndexName(fromDateCounter));
   }
+  return indexNames;
+};
 
+const getNetflowReports = async (
+  reportRequestTask: NetflowReportRequestTask,
+) => {
+  const fromDate = momentTz.tz(reportRequestTask.fromDate, 'Europe/London');
+  const toDate = momentTz.tz(reportRequestTask.toDate, 'Europe/London');
+  const indexNames = getIndexNames(fromDate, toDate);
   let data: RawNetflowReport[] = [];
 
   for (const indexName of indexNames) {
@@ -170,6 +173,7 @@ const queryNetflowReports = async (
     size,
     body: createNetflowQuery(netflowReportQueryParams),
   });
+  log.error(createNetflowQuery(netflowReportQueryParams));
   return result;
 };
 
@@ -177,7 +181,6 @@ const createNetflowQuery = (
   netflowReportQueryParams: NetflowReportQueryParams,
 ) => {
   const filter = [];
-  const must = [];
 
   filter.push({
     term: {
@@ -194,17 +197,23 @@ const createNetflowQuery = (
     },
   });
 
-  if (netflowReportQueryParams.protocol) {
+  if (netflowReportQueryParams.protocol === 'tcp') {
     filter.push({
       term: {
-        'netflow.protocol_name': netflowReportQueryParams.protocol,
+        'netflow.protocol': '6',
+      },
+    });
+  } else if (netflowReportQueryParams.protocol === 'udp') {
+    filter.push({
+      term: {
+        'netflow.protocol': '17',
       },
     });
   }
 
   if (netflowReportQueryParams.srcPort) {
     filter.push({
-      term: {
+      wildcard: {
         'netflow.src_port': netflowReportQueryParams.srcPort,
       },
     });
@@ -212,15 +221,15 @@ const createNetflowQuery = (
 
   if (netflowReportQueryParams.srcAddress) {
     filter.push({
-      term: {
-        'netflow.src_address': netflowReportQueryParams.srcAddress,
+      wildcard: {
+        'netflow.src_addr': netflowReportQueryParams.srcAddress,
       },
     });
   }
 
   if (netflowReportQueryParams.dstPort) {
     filter.push({
-      term: {
+      wildcard: {
         'netflow.dst_port': netflowReportQueryParams.dstPort,
       },
     });
@@ -228,8 +237,8 @@ const createNetflowQuery = (
 
   if (netflowReportQueryParams.dstAddress) {
     filter.push({
-      term: {
-        'netflow.dst_address': netflowReportQueryParams.dstAddress,
+      wildcard: {
+        'netflow.dst_addr': netflowReportQueryParams.dstAddress,
       },
     });
   }
@@ -243,8 +252,8 @@ const createNetflowQuery = (
   }
 
   if (netflowReportQueryParams.username) {
-    must.push({
-      match: {
+    filter.push({
+      wildcard: {
         username: netflowReportQueryParams.username,
       },
     });
@@ -253,7 +262,6 @@ const createNetflowQuery = (
   return {
     query: {
       bool: {
-        must,
         filter,
       },
     },
@@ -262,17 +270,9 @@ const createNetflowQuery = (
 
 const netflowGroupByIp = async (from: number, to: number) => {
   const fromDate = momentTz.tz(from, 'Europe/London');
-  const fromDateCounter = momentTz.tz(from, 'Europe/London');
   const toDate = momentTz.tz(to, 'Europe/London');
 
-  const daysBetweenInMs = toDate.diff(fromDateCounter);
-  const days = Math.ceil(daysBetweenInMs / 86400000);
-  const indexNames = [createNetflowIndexName(fromDateCounter)];
-  for (let i = 0; i < days; i++) {
-    fromDateCounter.add(1, 'days');
-    indexNames.push(createNetflowIndexName(fromDateCounter));
-  }
-
+  const indexNames = getIndexNames(fromDate, toDate);
   let data: NetflowAggregateByIp[] = [];
 
   log.debug('INDEXES for netflowGroupByIp:', indexNames);
@@ -375,19 +375,9 @@ const updateNetflows = async (
     username: string;
   },
 ) => {
-  log.debug('************');
   const fromDate = momentTz.tz(from, 'Europe/London');
-  const fromDateCounter = momentTz.tz(from, 'Europe/London');
   const toDate = momentTz.tz(to, 'Europe/London');
-
-  const daysBetweenInMs = toDate.diff(fromDateCounter);
-  const days = Math.ceil(daysBetweenInMs / 86400000);
-
-  const indexNames = [createNetflowIndexName(fromDateCounter)];
-  for (let i = 0; i < days; i++) {
-    fromDateCounter.add(1, 'days');
-    indexNames.push(createNetflowIndexName(fromDateCounter));
-  }
+  const indexNames = getIndexNames(fromDate, toDate);
   let data: UpdateDocumentByQueryResponse[] = [];
   //log.debug('INDEXES:', indexNames);
   for (const indexName of indexNames) {

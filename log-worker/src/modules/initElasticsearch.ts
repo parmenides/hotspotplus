@@ -70,14 +70,7 @@ const getNetflowIndexTemplate = () => {
       doc: {
         properties: {
           username: {
-            type: 'text',
-            fielddata: true,
-            fields: {
-              ngram: {
-                type: 'text',
-                analyzer: 'full_text_ngram',
-              },
-            },
+            type: 'keyword',
           },
           nasId: {
             type: 'keyword',
@@ -107,404 +100,195 @@ const getNetflowIndexTemplate = () => {
             },
           },
           geoip: {
+            enabled: false,
             properties: {
               as_org: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
               asn: {
-                type: 'long',
+                enabled: false,
               },
               autonomous_system: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
               city_name: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
               continent_code: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
               country_code2: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
               country_code3: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
               country_name: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
               dma_code: {
-                type: 'long',
+                enabled: false,
               },
               ip: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
               latitude: {
-                type: 'float',
+                enabled: false,
               },
               location: {
+                enabled: false,
                 properties: {
                   lat: {
-                    type: 'float',
+                    enabled: false,
                   },
                   lon: {
-                    type: 'float',
+                    enabled: false,
                   },
                 },
               },
               longitude: {
-                type: 'float',
+                enabled: false,
               },
               postal_code: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
               region_code: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
               region_name: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
               timezone: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
             },
           },
           geoip_dst: {
+            enabled: false,
             properties: {
               as_org: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
               asn: {
-                type: 'long',
+                enabled: false,
               },
               autonomous_system: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
               city_name: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
               continent_code: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
               country_code2: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
               country_code3: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
               country_name: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
               dma_code: {
-                type: 'long',
+                enabled: false,
               },
               ip: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
               latitude: {
-                type: 'float',
+                enabled: false,
               },
               location: {
+                enabled: false,
                 properties: {
                   lat: {
-                    type: 'float',
+                    enabled: false,
                   },
                   lon: {
-                    type: 'float',
+                    enabled: false,
                   },
                 },
               },
+
               longitude: {
-                type: 'float',
+                enabled: false,
               },
               postal_code: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
               region_code: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
               region_name: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
               timezone: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
             },
           },
           geoip_src: {
+            enabled: false,
             properties: {
               as_org: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
               asn: {
-                type: 'long',
+                enabled: false,
               },
               autonomous_system: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
               city_name: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
               continent_code: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
               country_code2: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
               country_code3: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
               country_name: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
               dma_code: {
-                type: 'long',
+                enabled: false,
               },
               ip: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
               latitude: {
-                type: 'float',
+                enabled: false,
               },
               location: {
+                enabled: false,
                 properties: {
                   lat: {
-                    type: 'float',
+                    enabled: false,
                   },
                   lon: {
-                    type: 'float',
+                    enabled: false,
                   },
                 },
               },
               longitude: {
-                type: 'float',
+                enabled: false,
               },
               postal_code: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
               region_code: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
               region_name: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
               timezone: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
             },
           },
@@ -514,34 +298,22 @@ const getNetflowIndexTemplate = () => {
           netflow: {
             properties: {
               bytes: {
-                type: 'long',
+                enabled: false,
               },
               direction: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
               dst_addr: {
                 type: 'keyword',
               },
               dst_as: {
-                type: 'long',
+                enabled: false,
               },
               dst_locality: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
               dst_mask_len: {
-                type: 'long',
+                enabled: false,
               },
               dst_port: {
                 type: 'long',
@@ -556,58 +328,40 @@ const getNetflowIndexTemplate = () => {
                 },
               },
               engine_id: {
-                type: 'long',
+                enabled: false,
               },
               engine_type: {
-                type: 'long',
+                enabled: false,
               },
               first_switched: {
-                type: 'date',
+                enabled: false,
               },
               flow_locality: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
               flow_records: {
-                type: 'long',
+                enabled: false,
               },
               flow_seq_num: {
-                type: 'long',
+                enabled: false,
               },
               input_snmp: {
-                type: 'long',
+                enabled: false,
               },
               ip_version: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
               last_switched: {
-                type: 'date',
+                enabled: false,
               },
               next_hop: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
               output_snmp: {
-                type: 'long',
+                enabled: false,
               },
               packets: {
-                type: 'long',
+                enabled: false,
               },
               protocol: {
                 type: 'long',
@@ -616,28 +370,22 @@ const getNetflowIndexTemplate = () => {
                 type: 'keyword',
               },
               sampling_algorithm: {
-                type: 'long',
+                enabled: false,
               },
               sampling_interval: {
-                type: 'long',
+                enabled: false,
               },
               src_addr: {
                 type: 'keyword',
               },
               src_as: {
-                type: 'long',
+                enabled: false,
               },
               src_locality: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
               src_mask_len: {
-                type: 'long',
+                enabled: false,
               },
               src_port: {
                 type: 'long',
@@ -652,37 +400,19 @@ const getNetflowIndexTemplate = () => {
                 },
               },
               tcp_flag_tags: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
               tcp_flags: {
-                type: 'long',
+                enabled: false,
               },
               tcp_flags_label: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
               tos: {
-                type: 'long',
+                enabled: false,
               },
               version: {
-                type: 'text',
-                fields: {
-                  keyword: {
-                    type: 'keyword',
-                    ignore_above: 256,
-                  },
-                },
+                enabled: false,
               },
             },
           },
@@ -778,6 +508,8 @@ const getSyslogIndexTemplate = () => {
         analyzer: {
           full_text_ngram: {
             tokenizer: 'ngram_tokenizer',
+            type: 'custom',
+            filter: ['lowercase'],
           },
           domain_name_analyzer: {
             filter: 'lowercase',
@@ -792,8 +524,8 @@ const getSyslogIndexTemplate = () => {
           ngram_tokenizer: {
             type: 'ngram',
             min_gram: 3,
-            max_gram: 3,
-            token_chars: ['letter', 'digit'],
+            max_gram: 10,
+            token_chars: ['letter', 'digit', 'punctuation', 'symbol'],
           },
           domain_name_tokenizer: {
             type: 'PathHierarchy',
@@ -818,14 +550,7 @@ const getSyslogIndexTemplate = () => {
             type: 'keyword',
           },
           username: {
-            type: 'text',
-            fielddata: true,
-            fields: {
-              ngram: {
-                type: 'text',
-                analyzer: 'full_text_ngram',
-              },
-            },
+            type: 'keyword',
           },
           status: {
             type: 'keyword',
@@ -843,35 +568,16 @@ const getSyslogIndexTemplate = () => {
             type: 'keyword',
           },
           path: {
-            type: 'text',
-            analyzer: 'path_analyzer',
+            enabled: false,
           },
           query: {
-            type: 'text',
-            fields: {
-              ngram: {
-                type: 'text',
-                analyzer: 'full_text_ngram',
-              },
-            },
+            enabled: false,
           },
           params: {
-            type: 'text',
-            fields: {
-              keyword: {
-                type: 'keyword',
-                ignore_above: 256,
-              },
-            },
+            enabled: false,
           },
           message: {
-            type: 'text',
-            fields: {
-              keyword: {
-                type: 'keyword',
-                ignore_above: 256,
-              },
-            },
+            enabled: false,
           },
           protocol: {
             type: 'keyword',
@@ -884,25 +590,28 @@ const getSyslogIndexTemplate = () => {
           },
           url: {
             type: 'text',
-            fields: {
-              ngram: {
-                type: 'text',
-                analyzer: 'full_text_ngram',
-              },
-            },
+            analyzer: 'full_text_ngram',
+            term_vector: 'yes',
+            search_analyzer: 'standard',
           },
           domain: {
-            type: 'text',
-            analyzer: 'domain_name_analyzer',
+            type: 'keyword',
           },
           hostGeoIp: {
+            enabled: false,
             properties: {
               location: {
-                type: 'geo_point',
+                enabled: false,
               },
-              timezone: { type: 'keyword' },
-              city_name: { type: 'keyword' },
-              country_name: { type: 'keyword' },
+              timezone: {
+                enabled: false,
+              },
+              city_name: {
+                enabled: false,
+              },
+              country_name: {
+                enabled: false,
+              },
             },
           },
         },
