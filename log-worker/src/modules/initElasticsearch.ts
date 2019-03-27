@@ -32,6 +32,13 @@ const getNetflowIndexTemplate = () => {
     index_patterns: ['netflow*'],
     settings: {
       analysis: {
+        normalizer: {
+          my_normalizer: {
+            type: 'custom',
+            char_filter: [],
+            filter: ['lowercase'],
+          },
+        },
         analyzer: {
           full_text_ngram: {
             tokenizer: 'ngram_tokenizer',
@@ -71,9 +78,14 @@ const getNetflowIndexTemplate = () => {
         properties: {
           username: {
             type: 'keyword',
+            normalizer: 'my_normalizer',
           },
           nasId: {
             type: 'keyword',
+          },
+          mac: {
+            type: 'keyword',
+            normalizer: 'my_normalizer',
           },
           status: {
             type: 'keyword',
@@ -505,6 +517,13 @@ const getSyslogIndexTemplate = () => {
     index_patterns: ['syslog*'],
     settings: {
       analysis: {
+        normalizer: {
+          my_normalizer: {
+            type: 'custom',
+            char_filter: [],
+            filter: ['lowercase'],
+          },
+        },
         analyzer: {
           full_text_ngram: {
             tokenizer: 'ngram_tokenizer',
@@ -551,6 +570,7 @@ const getSyslogIndexTemplate = () => {
           },
           username: {
             type: 'keyword',
+            normalizer: 'my_normalizer',
           },
           status: {
             type: 'keyword',
@@ -581,18 +601,22 @@ const getSyslogIndexTemplate = () => {
           },
           protocol: {
             type: 'keyword',
+            normalizer: 'my_normalizer',
           },
           memberIp: {
             type: 'keyword',
           },
           method: {
             type: 'keyword',
+            normalizer: 'my_normalizer',
           },
           url: {
             type: 'keyword',
+            normalizer: 'my_normalizer',
           },
           domain: {
             type: 'keyword',
+            normalizer: 'my_normalizer',
           },
           hostGeoIp: {
             enabled: false,
