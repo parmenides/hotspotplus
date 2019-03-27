@@ -80,23 +80,23 @@ export interface NetflowAggregateByIp {
 export interface NetflowReportQueryParams {
   fromDate: Moment;
   toDate: Moment;
-  username?: string;
-  dstAddress?: string;
-  dstPort?: number;
-  srcAddress?: string;
-  srcPort?: number;
+  username?: string[];
+  dstAddress?: string[];
+  dstPort?: string[];
+  srcAddress?: string[];
+  srcPort?: string[];
   protocol?: string;
-  nasId?: string;
+  nasId?: string[];
 }
 
 export interface SyslogReportQueryParams {
   fromDate: Moment;
   toDate: Moment;
-  username?: string;
+  username?: string[];
   url?: string;
-  domain?: string;
-  method?: string;
-  nasId?: string;
+  domain?: string[];
+  method?: string[];
+  nasId?: string[];
 }
 
 export interface RawNetflowReport {
@@ -160,21 +160,21 @@ export interface GeneralReportRequestTask {
   fromDate?: number;
   toDate?: number;
   nasTitle?: string;
-  nasId?: string;
+  nasId?: string[];
 }
 
 export interface NetflowReportRequestTask extends GeneralReportRequestTask {
-  username?: string;
-  dstAddress?: string;
-  dstPort?: number;
-  srcAddress?: string;
-  srcPort?: number;
+  username?: string[];
+  dstAddress?: string[];
+  dstPort?: string[];
+  srcAddress?: string[];
+  srcPort?: string[];
   protocol?: string;
 }
 
 export interface SyslogReportRequestTask extends GeneralReportRequestTask {
-  domain?: string;
-  username?: string;
+  domain?: string[];
+  username?: string[];
   url?: string;
-  method?: string;
+  method?: string[];
 }

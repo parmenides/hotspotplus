@@ -212,51 +212,61 @@ const createNetflowQuery = (
   }
 
   if (netflowReportQueryParams.srcPort) {
-    filter.push({
-      wildcard: {
-        'netflow.src_port': netflowReportQueryParams.srcPort,
-      },
-    });
+    for (const srcPort of netflowReportQueryParams.srcPort) {
+      filter.push({
+        wildcard: {
+          'netflow.src_port': srcPort,
+        },
+      });
+    }
   }
 
   if (netflowReportQueryParams.srcAddress) {
-    filter.push({
-      wildcard: {
-        'netflow.src_addr': netflowReportQueryParams.srcAddress,
-      },
-    });
+    for (const srcAddress of netflowReportQueryParams.srcAddress) {
+      filter.push({
+        wildcard: {
+          'netflow.src_addr': srcAddress,
+        },
+      });
+    }
   }
 
   if (netflowReportQueryParams.dstPort) {
-    filter.push({
-      wildcard: {
-        'netflow.dst_port': netflowReportQueryParams.dstPort,
-      },
-    });
+    for (const dstPort of netflowReportQueryParams.dstPort) {
+      filter.push({
+        wildcard: {
+          'netflow.dst_port': dstPort,
+        },
+      });
+    }
   }
 
   if (netflowReportQueryParams.dstAddress) {
-    filter.push({
-      wildcard: {
-        'netflow.dst_addr': netflowReportQueryParams.dstAddress,
-      },
-    });
+    for (const dstAddress of netflowReportQueryParams.dstAddress) {
+      filter.push({
+        wildcard: {
+          'netflow.dst_addr': dstAddress,
+        },
+      });
+    }
   }
 
   if (netflowReportQueryParams.nasId) {
     filter.push({
-      term: {
+      terms: {
         nasId: netflowReportQueryParams.nasId,
       },
     });
   }
 
   if (netflowReportQueryParams.username) {
-    filter.push({
-      wildcard: {
-        username: netflowReportQueryParams.username,
-      },
-    });
+    for (const username of netflowReportQueryParams.username) {
+      filter.push({
+        wildcard: {
+          username,
+        },
+      });
+    }
   }
 
   return {

@@ -13,20 +13,20 @@ services:
 #      - ./netflow/netflow.conf:/usr/share/logstash/pipeline/netflow.conf
 #    networks:
 #      - hotspotplusgate
-  syslog:
-    image: 'docker.elastic.co/logstash/logstash:6.6.0'
-    restart: always
-    ports:
-      - 9000:9000/tcp
-      - 9000:9000/udp
-    environment:
-      - XPACK_MONITORING_ENABLED=false
-    volumes:
-      - ./syslog/jvm.options:/usr/share/logstash/config/jvm.options
-      - ./syslog/logstash.yml:/usr/share/logstash/config/logstash.yml
-      - ./syslog/syslog.conf:/usr/share/logstash/pipeline/syslog.conf
-    networks:
-      - hotspotplusgate
+#  syslog:
+#    image: 'docker.elastic.co/logstash/logstash:6.6.0'
+#    restart: always
+#    ports:
+#      - 9000:9000/tcp
+#      - 9000:9000/udp
+#    environment:
+#      - XPACK_MONITORING_ENABLED=false
+#    volumes:
+#      - ./syslog/jvm.options:/usr/share/logstash/config/jvm.options
+#      - ./syslog/logstash.yml:/usr/share/logstash/config/logstash.yml
+#      - ./syslog/syslog.conf:/usr/share/logstash/pipeline/syslog.conf
+#    networks:
+#      - hotspotplusgate
 #  accountinglogstash:
 #    image: 'docker.elastic.co/logstash/logstash:6.6.0'
 #    restart: always
@@ -38,17 +38,17 @@ services:
 #      - ./accounting/accounting.conf:/usr/share/logstash/pipeline/accounting.conf
 #    networks:
 #      - hotspotplusgate
-#  sessions:
-#    image: 'docker.elastic.co/logstash/logstash:6.6.0'
-#    restart: always
-#    environment:
-#      - XPACK_MONITORING_ENABLED=false
-#    volumes:
-#      - ./sessions/jvm.options:/usr/share/logstash/config/jvm.options
-#      - ./sessions/logstash.yml:/usr/share/logstash/config/logstash.yml
-#      - ./sessions/sessions.conf:/usr/share/logstash/pipeline/sessions.conf
-#    networks:
-#      - hotspotplusgate
+  sessions:
+    image: 'docker.elastic.co/logstash/logstash:6.6.0'
+    restart: always
+    environment:
+      - XPACK_MONITORING_ENABLED=false
+    volumes:
+      - ./sessions/jvm.options:/usr/share/logstash/config/jvm.options
+      - ./sessions/logstash.yml:/usr/share/logstash/config/logstash.yml
+      - ./sessions/sessions.conf:/usr/share/logstash/pipeline/sessions.conf
+    networks:
+      - hotspotplusgate
 
 networks:
   hotspotplusgate:

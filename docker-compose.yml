@@ -48,46 +48,46 @@ services:
       - ${PWD}/api-license/key:/key
     networks:
       - hotspotplusgate
-  logworker:
-    build:
-      context: ./log-worker
-    user: '${UID:-1000}:${GID:-1000}'
-    command: npm run start:dev
-    depends_on:
-      - rabbitmq
-    environment:
-      - ELASTICSEARCH_LOG_LEVEL=debug
-      - LOG_REQUEST_RETRY_MS=300000
-      - API_ADDRESS=http://hotspotplusapi:3000
-      - SERVICE_MAN_USERNAME=pinTimeServiceMan
-      - SERVICE_MAN_PASSWORD=#123aaa)
-      - RABBITMQ_USERNAME=payam
-      - RABBITMQ_PASSWORD=123
-      - REDIS_PORT=6379
-      - REDIS_HOST=hsp_redis
-      - ELASTIC_INDEX_PREFIX=hotspotplus
-      - ELASTIC_IP=hsp_elasticsearch
-      - ELASTIC_PORT=9200
-      - LOG_LEVEL=debug
-      - LOG_PATH=/logs/log-worker.log
-    volumes:
-      - ${PWD}/log-worker/dist/log.worker.js:/usr/src/app/log.worker.js
-      - ${PWD}/log-worker/node_modules:/usr/src/app/node_modules
-      - ${PWD}/log-worker/logs:/logs
-    networks:
-    - hotspotplusgate
-  rabbitmq:
-    image: 'bitnami/rabbitmq:3.7.10-ol-7-r2'
-    ports:
-      - 15672:15672
-    container_name: rabbitmq
-    environment:
-      - RABBITMQ_USERNAME=payam
-      - RABBITMQ_PASSWORD=123
+#  logworker:
+#    build:
+#      context: ./log-worker
+#    user: '${UID:-1000}:${GID:-1000}'
+#    command: npm run start:dev
+#    depends_on:
+#      - rabbitmq
+#    environment:
+#      - ELASTICSEARCH_LOG_LEVEL=debug
+#      - LOG_REQUEST_RETRY_MS=300000
+#      - API_ADDRESS=http://hotspotplusapi:3000
+#      - SERVICE_MAN_USERNAME=pinTimeServiceMan
+#      - SERVICE_MAN_PASSWORD=#123aaa)
+#      - RABBITMQ_USERNAME=payam
+#      - RABBITMQ_PASSWORD=123
+#      - REDIS_PORT=6379
+#      - REDIS_HOST=hsp_redis
+#      - ELASTIC_INDEX_PREFIX=hotspotplus
+#      - ELASTIC_IP=hsp_elasticsearch
+#      - ELASTIC_PORT=9200
+#      - LOG_LEVEL=debug
+#      - LOG_PATH=/logs/log-worker.log
 #    volumes:
-#      - hsp_rabbitmq:/bitnami
-    networks:
-      - hotspotplusgate
+#      - ${PWD}/log-worker/dist/log.worker.js:/usr/src/app/log.worker.js
+#      - ${PWD}/log-worker/node_modules:/usr/src/app/node_modules
+#      - ${PWD}/log-worker/logs:/logs
+#    networks:
+#    - hotspotplusgate
+#  rabbitmq:
+#    image: 'bitnami/rabbitmq:3.7.10-ol-7-r2'
+#    ports:
+#      - 15672:15672
+#    container_name: rabbitmq
+#    environment:
+#      - RABBITMQ_USERNAME=payam
+#      - RABBITMQ_PASSWORD=123
+##    volumes:
+##      - hsp_rabbitmq:/bitnami
+#    networks:
+#      - hotspotplusgate
 #  logaggregator:
 #    build:
 #      context: ${PWD}/log-aggregator
@@ -208,49 +208,49 @@ services:
 #    networks:
 #      hotspotplusgate:
 #       ipv4_address: 172.20.0.21
-#  zookeeper:
-#    image: 'bitnami/zookeeper:latest'
-#    restart: always
-#    container_name: 'hsp_zookeeper'
-#    environment:
-#      - ALLOW_ANONYMOUS_LOGIN=yes
-#    expose:
-#      - '2181'
-#    networks:
-#      - hotspotplusgate
-#  kafka:
-#    image: 'bitnami/kafka:latest'
-#    restart: always
-#    container_name: 'kafka'
-#    depends_on:
-#      - zookeeper
-#    environment:
-#      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
-#      - KAFKA_LOG_RETENTION_HOURS=72
-#      - ALLOW_ANONYMOUS_LOGIN=yes
-#      - ALLOW_PLAINTEXT_LISTENER=yes
-#      - KAFKA_ZOOKEEPER_CONNECT=hsp_zookeeper:2181
-#    expose:
-#      - '9092'
-#    volumes:
-#      - kafka:/bitnami/kafka
-#    networks:
-#      hotspotplusgate:
-#        ipv4_address: 172.20.0.80
-#  radius:
-#    image: 'registry.gitlab.com/parmenides/hspfreeradius/production:3.3'
-#    restart: always
-#    container_name: "hsp_radius_production"
-#    logging:
-#      driver: none
-#    networks:
-#      - hotspotplusgate
-#    expose:
-#      - "1812"
-#      - "1813"
-#    ports:
-#      - "1812:1812/udp"
-#      - "1813:1813/udp"
+  zookeeper:
+    image: 'bitnami/zookeeper:latest'
+    restart: always
+    container_name: 'hsp_zookeeper'
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    expose:
+      - '2181'
+    networks:
+      - hotspotplusgate
+  kafka:
+    image: 'bitnami/kafka:latest'
+    restart: always
+    container_name: 'kafka'
+    depends_on:
+      - zookeeper
+    environment:
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+      - KAFKA_LOG_RETENTION_HOURS=72
+      - ALLOW_ANONYMOUS_LOGIN=yes
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_ZOOKEEPER_CONNECT=hsp_zookeeper:2181
+    expose:
+      - '9092'
+    volumes:
+      - kafka:/bitnami/kafka
+    networks:
+      hotspotplusgate:
+        ipv4_address: 172.20.0.80
+  radius:
+    image: 'registry.gitlab.com/parmenides/hspfreeradius/production:3.3'
+    restart: always
+    container_name: "hsp_radius_production"
+    logging:
+      driver: none
+    networks:
+      - hotspotplusgate
+    expose:
+      - "1812"
+      - "1813"
+    ports:
+      - "1812:1812/udp"
+      - "1813:1813/udp"
 
 volumes:
   hsp_rabbitmq:

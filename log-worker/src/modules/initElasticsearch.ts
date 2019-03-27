@@ -47,10 +47,10 @@ const getNetflowIndexTemplate = () => {
         },
         tokenizer: {
           ngram_tokenizer: {
-            type: 'ngram',
+            type: 'nGram',
             min_gram: 3,
-            max_gram: 3,
-            token_chars: ['letter', 'digit'],
+            max_gram: 12,
+            token_chars: ['letter', 'digit', 'punctuation', 'symbol'],
           },
           domain_name_tokenizer: {
             type: 'PathHierarchy',
@@ -460,10 +460,10 @@ const getSessionIndexTemplate = () => {
         },
         tokenizer: {
           ngram_tokenizer: {
-            type: 'ngram',
+            type: 'nGram',
             min_gram: 3,
-            max_gram: 3,
-            token_chars: ['letter', 'digit'],
+            max_gram: 12,
+            token_chars: ['letter', 'digit', 'punctuation', 'symbol'],
           },
           domain_name_tokenizer: {
             type: 'PathHierarchy',
@@ -522,9 +522,9 @@ const getSyslogIndexTemplate = () => {
         },
         tokenizer: {
           ngram_tokenizer: {
-            type: 'ngram',
+            type: 'nGram',
             min_gram: 3,
-            max_gram: 10,
+            max_gram: 12,
             token_chars: ['letter', 'digit', 'punctuation', 'symbol'],
           },
           domain_name_tokenizer: {
@@ -589,10 +589,7 @@ const getSyslogIndexTemplate = () => {
             type: 'keyword',
           },
           url: {
-            type: 'text',
-            analyzer: 'full_text_ngram',
-            term_vector: 'yes',
-            search_analyzer: 'standard',
+            type: 'keyword',
           },
           domain: {
             type: 'keyword',

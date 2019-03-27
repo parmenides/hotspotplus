@@ -179,11 +179,13 @@ const createSyslogQuery = (
 ) => {
   const filter = [];
   if (syslogReportQueryParams.domain) {
-    filter.push({
-      wildcard: {
-        domain: syslogReportQueryParams.domain,
-      },
-    });
+    for (const domain of syslogReportQueryParams.domain) {
+      filter.push({
+        wildcard: {
+          domain,
+        },
+      });
+    }
   }
 
   if (syslogReportQueryParams.username) {
