@@ -18,6 +18,8 @@ const log = logger.createLogger();
 export const enrichLogs = async () => {
   log.debug('At processing enrichment requests');
   const channel = await getRabbitMqChannel();
+  channel.prefetch(5, true);
+
   process.once('SIGINT', async () => {
     await channel.close();
   });
@@ -31,10 +33,11 @@ export const enrichLogs = async () => {
       }
 
       const body = message.content.toString();
-      log.debug(" [x] enrichment message received '%s'", body);
-      const enrichTask: EnrichTask = JSON.parse(body);
 
       try {
+        log.debug(" [x] enrichment message received '%s'", body);
+        const enrichTask: EnrichTask = JSON.parse(body);
+
         const from = enrichTask.from;
         const to = enrichTask.to;
         const reportType = enrichTask.reportType;
@@ -52,9 +55,10 @@ export const enrichLogs = async () => {
           channel.ack(message);
           return;
         }
+
+        //log.debug('task finished...');
         channel.ack(message);
       } catch (error) {
-        channel.ack(message);
         log.error(error);
         channel.nack(message, false, false);
       }
@@ -91,6 +95,10 @@ const searchAndUpdateReport = async (
   from: number,
   to: number,
 ) => {
+  if (ipData.length === 0) {
+    return;
+  }
+  log.debug(`going to update reports: `, ipData);
   for (const flowData of ipData) {
     const nasIp = flowData.nasIp;
     for (const memberIp of flowData.memberIpList) {
@@ -107,6 +115,7 @@ const searchAndUpdateReport = async (
         const session = groupedSessions.group_by_username.buckets[0];
         const username = session.key;
         const nasId = groupedSessions.extra.hits.hits[0]._source.nasId;
+        const mac = groupedSessions.extra.hits.hits[0]._source.mac;
         const memberId = groupedSessions.extra.hits.hits[0]._source.memberId;
         const businessId =
           groupedSessions.extra.hits.hits[0]._source.businessId;
@@ -119,6 +128,7 @@ const searchAndUpdateReport = async (
             memberIp,
             {
               nasId,
+              mac,
               memberId,
               businessId,
               username,
@@ -132,6 +142,7 @@ const searchAndUpdateReport = async (
             memberIp,
             {
               nasId,
+              mac,
               memberId,
               businessId,
               username,
@@ -156,6 +167,7 @@ const searchAndUpdateReport = async (
         );
         //log.debug(`update result`, updateResult);
       } else if (groupedSessions.group_by_username.buckets.length > 1) {
+        log.debug('more than two up found going to split time range');
         const channel = await getRabbitMqChannel();
         //split range in two;
         const newTo = from + (to - from) / 2;

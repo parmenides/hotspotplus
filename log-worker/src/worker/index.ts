@@ -34,6 +34,7 @@ if (
 export const processLogRequest = async () => {
   log.debug('At processing log requests');
   const channel = await getRabbitMqChannel();
+  channel.prefetch(2, true);
   process.once('SIGINT', async () => {
     await channel.close();
   });
@@ -101,15 +102,12 @@ const getNetflowFields = () => {
   return [
     'username',
     'date',
+    'mac',
     'src_addr',
     'src_port',
-    'src_port_name',
-    'src_mac',
     'dst_addr',
     'dst_port',
-    'dst_port_name',
-    'dst_mac',
-    'protocol_name',
+    'protocol',
     '@timestamp',
   ];
 };

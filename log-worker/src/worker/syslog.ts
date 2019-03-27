@@ -179,18 +179,16 @@ const createSyslogQuery = (
 ) => {
   const filter = [];
   if (syslogReportQueryParams.domain) {
-    for (const domain of syslogReportQueryParams.domain) {
-      filter.push({
-        wildcard: {
-          domain,
-        },
-      });
-    }
+    filter.push({
+      wildcard: {
+        domain: syslogReportQueryParams.domain,
+      },
+    });
   }
 
   if (syslogReportQueryParams.username) {
     filter.push({
-      wildcard: {
+      terms: {
         username: syslogReportQueryParams.username,
       },
     });
@@ -221,7 +219,7 @@ const createSyslogQuery = (
 
   if (syslogReportQueryParams.method) {
     filter.push({
-      term: {
+      terms: {
         method: syslogReportQueryParams.method,
       },
     });
@@ -229,7 +227,7 @@ const createSyslogQuery = (
 
   if (syslogReportQueryParams.nasId) {
     filter.push({
-      term: {
+      terms: {
         nasId: syslogReportQueryParams.nasId,
       },
     });
@@ -281,7 +279,6 @@ const syslogGroupByIp = async (from: number, to: number) => {
   const indexNames = getIndexNames(fromDate, toDate);
 
   let data: SyslogAggregateByIp[] = [];
-  log.debug('INDEXES:', indexNames);
   for (const indexName of indexNames) {
     try {
       const result = await aggregateSyslogByIp(indexName, fromDate, toDate);
@@ -298,7 +295,7 @@ const syslogGroupByIp = async (from: number, to: number) => {
       }
     }
   }
-  log.debug(data.length);
+  log.debug('syslog group by ip result length: ', data.length);
   return data;
 };
 
@@ -368,6 +365,7 @@ const updateSyslogs = async (
   memberIp: string,
   updates: {
     nasId: string;
+    mac: string;
     businessId: string;
     memberId: string;
     username: string;
@@ -415,6 +413,7 @@ const createUsernameUpdateQuery = (
   memberIp: string,
   update: {
     nasId: string;
+    mac: string;
     businessId: string;
     memberId: string;
     username: string;
@@ -456,6 +455,7 @@ const createUsernameUpdateQuery = (
             ctx._source['username'] = "${update.username}";
             ctx._source['status'] = "enriched";
             ctx._source['nasId'] = "${update.nasId}";
+            ctx._source['mac'] = "${update.mac}";
             ctx._source['memberId'] = "${update.memberId}";
             ctx._source['businessId'] = "${update.businessId}";
             `,
@@ -466,6 +466,5 @@ const createUsernameUpdateQuery = (
 export default {
   syslogGroupByIp,
   updateSyslogs,
-  getSyslogByIndex,
   getSyslogReports,
 };

@@ -35,7 +35,7 @@ app.listen(app.get('port'), async () => {
   /*tslint:disable*/
   console.log('Add default queues...');
   await addDefaultQueue();
-  //await processLogRequest();
+  await processLogRequest();
   await enrichLogs();
   console.log(`App is running at http://localhost:${app.get('port')}`);
   await testRunner();

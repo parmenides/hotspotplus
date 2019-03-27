@@ -10,6 +10,7 @@ import {
   NetflowReportRequestTask,
   RawNetflowReport,
 } from '../typings';
+import moment = require('moment');
 
 const NETFLOW_LOG_INDEX_PREFIX = `netflow-`;
 
@@ -77,21 +78,26 @@ const formatReports = (rawNetflowReports: RawNetflowReport[]) => {
       'Asia/Tehran',
     );
     const jalaaliDate = momentJ(localDate);
+    const zeroTz = momentTz.tz(rawReport._source['@timestamp'], 'Asia/Tehran');
 
+    let protocolString = '';
+    if (rawReport._source.netflow.protocol === '6') {
+      protocolString = 'tcp';
+    }
+    if (rawReport._source.netflow.protocol === '17') {
+      protocolString = 'udp';
+    }
     return {
       nasId: rawReport._source.nasId,
       username: rawReport._source.username,
+      mac: rawReport._source.mac,
       date: getJalaaliDate(jalaaliDate),
       src_addr: rawReport._source.netflow.src_addr,
       src_port: rawReport._source.netflow.src_port,
-      src_port_name: rawReport._source.netflow.src_port_name,
-      src_mac: rawReport._source.netflow.src_mac,
       dst_addr: rawReport._source.netflow.dst_addr,
       dst_port: rawReport._source.netflow.dst_port,
-      dst_port_name: rawReport._source.netflow.dst_port_name,
-      dst_mac: rawReport._source.netflow.dst_mac,
-      protocol_name: rawReport._source.netflow.protocol_name,
-      '@timestamp': rawReport._source['@timestamp'],
+      protocol: protocolString,
+      '@timestamp': zeroTz.format('YYYY/MM/DD HH:mm'),
     };
   });
 };
@@ -173,7 +179,6 @@ const queryNetflowReports = async (
     size,
     body: createNetflowQuery(netflowReportQueryParams),
   });
-  log.error(createNetflowQuery(netflowReportQueryParams));
   return result;
 };
 
@@ -212,43 +217,35 @@ const createNetflowQuery = (
   }
 
   if (netflowReportQueryParams.srcPort) {
-    for (const srcPort of netflowReportQueryParams.srcPort) {
-      filter.push({
-        wildcard: {
-          'netflow.src_port': srcPort,
-        },
-      });
-    }
+    filter.push({
+      terms: {
+        'netflow.src_port': netflowReportQueryParams.srcPort,
+      },
+    });
   }
 
   if (netflowReportQueryParams.srcAddress) {
-    for (const srcAddress of netflowReportQueryParams.srcAddress) {
-      filter.push({
-        wildcard: {
-          'netflow.src_addr': srcAddress,
-        },
-      });
-    }
+    filter.push({
+      terms: {
+        'netflow.src_addr': netflowReportQueryParams.srcAddress,
+      },
+    });
   }
 
   if (netflowReportQueryParams.dstPort) {
-    for (const dstPort of netflowReportQueryParams.dstPort) {
-      filter.push({
-        wildcard: {
-          'netflow.dst_port': dstPort,
-        },
-      });
-    }
+    filter.push({
+      terms: {
+        'netflow.dst_port': netflowReportQueryParams.dstPort,
+      },
+    });
   }
 
   if (netflowReportQueryParams.dstAddress) {
-    for (const dstAddress of netflowReportQueryParams.dstAddress) {
-      filter.push({
-        wildcard: {
-          'netflow.dst_addr': dstAddress,
-        },
-      });
-    }
+    filter.push({
+      terms: {
+        'netflow.dst_addr': netflowReportQueryParams.dstAddress,
+      },
+    });
   }
 
   if (netflowReportQueryParams.nasId) {
@@ -260,13 +257,11 @@ const createNetflowQuery = (
   }
 
   if (netflowReportQueryParams.username) {
-    for (const username of netflowReportQueryParams.username) {
-      filter.push({
-        wildcard: {
-          username,
-        },
-      });
-    }
+    filter.push({
+      terms: {
+        username: netflowReportQueryParams.username,
+      },
+    });
   }
 
   return {
@@ -285,7 +280,6 @@ const netflowGroupByIp = async (from: number, to: number) => {
   const indexNames = getIndexNames(fromDate, toDate);
   let data: NetflowAggregateByIp[] = [];
 
-  log.debug('INDEXES for netflowGroupByIp:', indexNames);
   for (const indexName of indexNames) {
     try {
       const result = await aggregateNetflowByIp(indexName, fromDate, toDate);
@@ -303,7 +297,7 @@ const netflowGroupByIp = async (from: number, to: number) => {
       }
     }
   }
-  //log.debug('NetflowGroupByIp Size ', data.length);
+  log.debug('netflow group by ip result length: ', data.length);
   return data;
 };
 
@@ -380,6 +374,7 @@ const updateNetflows = async (
   memberIp: string,
   updates: {
     nasId: string;
+    mac: string;
     businessId: string;
     memberId: string;
     username: string;
@@ -427,6 +422,7 @@ const createNetflowUpdateQuery = (
   memberIp: string,
   update: {
     nasId: string;
+    mac: string;
     businessId: string;
     memberId: string;
     username: string;
@@ -472,6 +468,7 @@ const createNetflowUpdateQuery = (
       ctx._source['username']="${update.username}";
       ctx._source['status']="enriched";
       ctx._source['nasId']="${update.nasId}";
+      ctx._source['mac']="${update.mac}";
       ctx._source['memberId']="${update.memberId}";
       ctx._source['businessId']="${update.businessId}"`,
     },
