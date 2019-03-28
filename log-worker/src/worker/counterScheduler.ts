@@ -1,4 +1,3 @@
-import moment, { Moment } from 'moment';
 import logger from '../utils/logger';
 import { CronJob } from 'cron';
 import { login } from '../utils/auth';
@@ -71,8 +70,9 @@ const updateBusiness = async (businessId: string, update: {}) => {
   });
 };
 
-const job = new CronJob('* 10 * * * *', function() {
-  //log.debug('starting the job');
+const job = new CronJob('0 */2 * * *', async () => {
+  await countAndUpdateBusinessReports();
+  log.debug('report count updated as scheduled', new Date());
 });
 
 job.start();
