@@ -502,6 +502,7 @@ const getSessionIndexTemplate = () => {
           businessId: { type: 'keyword' },
           memberId: { type: 'keyword' },
           nasId: { type: 'keyword' },
+          nasTitle: { enabled: false },
           nasIp: { type: 'keyword' },
           groupIdentity: { type: 'keyword' },
           groupIdentityId: { type: 'keyword' },
@@ -567,7 +568,9 @@ const getSyslogIndexTemplate = () => {
     mappings: {
       doc: {
         properties: {
-          timestamp: { type: 'date' },
+          timestamp: {
+            type: 'date',
+          },
           nasIp: {
             type: 'keyword',
           },
@@ -587,7 +590,6 @@ const getSyslogIndexTemplate = () => {
           nasTitle: {
             enabled: false,
           },
-
           memberId: {
             type: 'keyword',
           },

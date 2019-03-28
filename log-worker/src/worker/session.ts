@@ -165,6 +165,7 @@ interface SessionGroupByUsername {
       hits: Array<{
         _source: {
           nasIp: string;
+          nasTitle: string;
           username: string;
           mac: string;
           memberId: string;

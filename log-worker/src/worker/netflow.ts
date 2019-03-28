@@ -12,6 +12,7 @@ import {
 } from '../typings';
 import moment = require('moment');
 import _ from 'lodash';
+import { ancestorWhere } from 'tslint';
 
 const NETFLOW_LOG_INDEX_PREFIX = `netflow-`;
 
@@ -31,6 +32,42 @@ const getIndexNames = (from: Moment, to: Moment) => {
     indexNames.push(createNetflowIndexName(fromDateCounter));
   }
   return indexNames;
+};
+
+const countBusinessReports = async (from: number, to: number) => {
+  const fromDate = momentTz.tz(from, 'Europe/London');
+  const toDate = momentTz.tz(to, 'Europe/London');
+  const indexNames = getIndexNames(fromDate, toDate);
+  let reportCounts: Array<{ key: string; doc_count: number }> = [];
+  for (const index of indexNames) {
+    const exist = await elasticClient.indices.exists({
+      index,
+    });
+    if (exist) {
+      const response = await elasticClient.search({
+        index,
+        body: createNetflowGroupByBusinessId(),
+      });
+      if (
+        response.aggregations.group_by_business_id &&
+        response.aggregations.group_by_business_id.buckets
+      ) {
+        reportCounts = reportCounts.concat(
+          response.aggregations.group_by_business_id.buckets,
+        );
+      }
+    }
+  }
+  const businessReportCount: { [key: string]: number } = {};
+  for (const reportCount of reportCounts) {
+    businessReportCount[reportCount.key] =
+      businessReportCount[reportCount.key] || 0;
+    businessReportCount[reportCount.key] =
+      businessReportCount[reportCount.key] + reportCount.doc_count;
+  }
+  log.error('2783648723647263478627486278634728643');
+  log.error(businessReportCount);
+  return businessReportCount;
 };
 
 const getNetflowReports = async (
@@ -362,6 +399,19 @@ const createNetflowGroupByAggregate = (fromDate: Moment, toDate: Moment) => {
   };
 };
 
+const createNetflowGroupByBusinessId = () => {
+  return {
+    size: 0,
+    aggs: {
+      group_by_business_id: {
+        terms: {
+          field: 'businessId',
+        },
+      },
+    },
+  };
+};
+
 const updateNetflows = async (
   from: number,
   to: number,
@@ -369,6 +419,7 @@ const updateNetflows = async (
   memberIp: string,
   updates: {
     nasId: string;
+    nasTitle: string;
     mac: string;
     businessId: string;
     memberId: string;
@@ -417,6 +468,7 @@ const createNetflowUpdateQuery = (
   memberIp: string,
   update: {
     nasId: string;
+    nasTitle: string;
     mac: string;
     businessId: string;
     memberId: string;
@@ -463,6 +515,7 @@ const createNetflowUpdateQuery = (
       ctx._source['username']="${update.username}";
       ctx._source['status']="enriched";
       ctx._source['nasId']="${update.nasId}";
+      ctx._source['nasTitle']="${update.nasTitle}";
       ctx._source['mac']="${update.mac}";
       ctx._source['memberId']="${update.memberId}";
       ctx._source['businessId']="${update.businessId}"`,
@@ -474,4 +527,5 @@ export default {
   updateNetflows,
   netflowGroupByIp,
   getNetflowReports,
+  countBusinessReports,
 };

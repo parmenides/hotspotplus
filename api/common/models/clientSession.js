@@ -45,6 +45,7 @@ kafkaProducer.on('error', function(error) {
 });
 
 module.exports = function(ClientSession) {
+
   ClientSession.saveLogSession = function(session) {
     kafkaProducer.send(
       [

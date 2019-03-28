@@ -1429,6 +1429,7 @@ module.exports = function(Member) {
     const nas = RadiusRequest.nas;
     const session = {
       nasId: nas.id,
+      nasTitle: nas.title,
       nasIp: RadiusRequest.getNasIp(),
       groupIdentity: groupIdentity,
       groupIdentityId: groupIdentityId,

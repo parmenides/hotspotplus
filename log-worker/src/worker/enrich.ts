@@ -115,6 +115,7 @@ const searchAndUpdateReport = async (
         const session = groupedSessions.group_by_username.buckets[0];
         const username = session.key;
         const nasId = groupedSessions.extra.hits.hits[0]._source.nasId;
+        const nasTitle = groupedSessions.extra.hits.hits[0]._source.nasTitle;
         const mac = groupedSessions.extra.hits.hits[0]._source.mac;
         const memberId = groupedSessions.extra.hits.hits[0]._source.memberId;
         const businessId =
@@ -128,6 +129,7 @@ const searchAndUpdateReport = async (
             memberIp,
             {
               nasId,
+              nasTitle,
               mac,
               memberId,
               businessId,
@@ -142,6 +144,7 @@ const searchAndUpdateReport = async (
             memberIp,
             {
               nasId,
+              nasTitle,
               mac,
               memberId,
               businessId,
