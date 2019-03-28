@@ -3,6 +3,7 @@ import elasticClient from '../utils/elastic';
 import momentTz from 'moment-timezone';
 import { Moment } from 'moment';
 import momentJ from 'moment-jalaali';
+
 import { UpdateDocumentByQueryResponse } from 'elasticsearch';
 import {
   RawSyslogReport,
@@ -10,6 +11,7 @@ import {
   SyslogReportQueryParams,
   SyslogReportRequestTask,
 } from '../typings';
+import _ from 'lodash';
 
 const SYSLOG_LOG_INDEX_PREFIX = `syslog-`;
 const log = logger.createLogger();
@@ -70,23 +72,26 @@ const getSyslogReports = async (
 };
 
 const formatReports = (rawSyslogReports: RawSyslogReport[]) => {
-  return rawSyslogReports.map((rawReport) => {
+  const formatted = rawSyslogReports.map((rawReport) => {
     const localDate = momentTz.tz(
       rawReport._source['@timestamp'],
       'Asia/Tehran',
     );
+    const zeroTz = momentTz.tz(rawReport._source['@timestamp'], 'Asia/Tehran');
     const jalaaliDate = momentJ(localDate);
     return {
-      username: rawReport._source.username,
-      date: getJalaaliDate(jalaaliDate),
-      domain: rawReport._source.domain,
-      memberIp: rawReport._source.memberIp,
-      nasIp: rawReport._source.nasIp,
-      method: rawReport._source.method,
-      url: rawReport._source.url,
-      '@timestamp': rawReport._source['@timestamp'],
+      Router: rawReport._source.nasTitle,
+      Username: rawReport._source.username,
+      IP: rawReport._source.memberIp,
+      Mac: rawReport._source.mac,
+      Jalali_Date: getJalaaliDate(jalaaliDate),
+      Http_Method: rawReport._source.method,
+      Domain: rawReport._source.domain,
+      Url: rawReport._source.url,
+      Gregorian_Date: zeroTz.format('YYYY/MM/DD HH:mm'),
     };
   });
+  return _.sortBy(formatted, ['Router', 'Username', 'Jalali_Date', 'Domain']);
 };
 
 const getJalaaliDate = (date: Moment) => {
@@ -96,7 +101,6 @@ const getJalaaliDate = (date: Moment) => {
 export const createSyslogIndexName = (fromDate: Moment) => {
   return `${SYSLOG_LOG_INDEX_PREFIX}${fromDate.format('YYYY.MM.DD')}`;
 };
-
 const getSyslogByIndex = async (
   syslogIndex: string,
   syslogReportQueryParams: SyslogReportQueryParams,
@@ -127,12 +131,13 @@ const getSyslogByIndex = async (
   let result: Array<{ _source: any }> = [];
   for (const i of parts) {
     try {
-      const queryResult = await querySyslogReports(
-        syslogIndex,
+      const queryResult = await elasticClient.search({
+        index: syslogIndex,
         from,
-        maxResultSize,
-        syslogReportQueryParams,
-      );
+        size: maxResultSize,
+        body: createSyslogQuery(syslogReportQueryParams),
+      });
+
       if (queryResult.hits) {
         result = result.concat(queryResult.hits.hits);
       } else {
@@ -159,21 +164,6 @@ const countSyslogReportByIndex = async (
   return result;
 };
 
-const querySyslogReports = async (
-  indexName: string,
-  startFrom: number,
-  size: number,
-  syslogReportQueryParams: SyslogReportQueryParams,
-) => {
-  const result = await elasticClient.search({
-    index: indexName,
-    from: startFrom,
-    size,
-    body: createSyslogQuery(syslogReportQueryParams),
-  });
-  return result;
-};
-
 const createSyslogQuery = (
   syslogReportQueryParams: SyslogReportQueryParams,
 ) => {
@@ -188,7 +178,7 @@ const createSyslogQuery = (
 
   if (syslogReportQueryParams.username) {
     filter.push({
-      terms: {
+      wildcard: {
         username: syslogReportQueryParams.username,
       },
     });

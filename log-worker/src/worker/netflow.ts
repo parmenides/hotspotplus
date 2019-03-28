@@ -11,6 +11,7 @@ import {
   RawNetflowReport,
 } from '../typings';
 import moment = require('moment');
+import _ from 'lodash';
 
 const NETFLOW_LOG_INDEX_PREFIX = `netflow-`;
 
@@ -72,7 +73,7 @@ const getNetflowReports = async (
 };
 
 const formatReports = (rawNetflowReports: RawNetflowReport[]) => {
-  return rawNetflowReports.map((rawReport) => {
+  const formatted = rawNetflowReports.map((rawReport) => {
     const localDate = momentTz.tz(
       rawReport._source['@timestamp'],
       'Asia/Tehran',
@@ -89,17 +90,25 @@ const formatReports = (rawNetflowReports: RawNetflowReport[]) => {
     }
     return {
       nasId: rawReport._source.nasId,
-      username: rawReport._source.username,
-      mac: rawReport._source.mac,
-      date: getJalaaliDate(jalaaliDate),
-      src_addr: rawReport._source.netflow.src_addr,
-      src_port: rawReport._source.netflow.src_port,
-      dst_addr: rawReport._source.netflow.dst_addr,
-      dst_port: rawReport._source.netflow.dst_port,
-      protocol: protocolString,
-      '@timestamp': zeroTz.format('YYYY/MM/DD HH:mm'),
+      Router: rawReport._source.nasTitle,
+      Username: rawReport._source.username,
+      Mac: rawReport._source.mac,
+      Jalali_Date: getJalaaliDate(jalaaliDate),
+      Src_Addr: rawReport._source.netflow.src_addr,
+      Src_Port: rawReport._source.netflow.src_port,
+      Dst_Addr: rawReport._source.netflow.dst_addr,
+      Dst_Port: rawReport._source.netflow.dst_port,
+      Protocol: protocolString,
+      Gregorian_Date: zeroTz.format('YYYY/MM/DD HH:mm'),
     };
   });
+  return _.sortBy(formatted, [
+    'Router',
+    'Username',
+    'Jalali_Date',
+    'Src_Addr',
+    'Src_Port',
+  ]);
 };
 
 const getJalaaliDate = (date: Moment) => {
@@ -135,12 +144,13 @@ const getNetflowsByIndex = async (
   let result: Array<{ _source: any }> = [];
   for (const i of parts) {
     try {
-      const queryResult = await queryNetflowReports(
-        netflowIndex,
-        startFrom,
-        maxResultSize,
-        netflowReportQueryParams,
-      );
+      const queryResult = await elasticClient.search({
+        index: netflowIndex,
+        from: startFrom,
+        size: maxResultSize,
+        body: createNetflowQuery(netflowReportQueryParams),
+      });
+
       if (queryResult.hits) {
         result = result.concat(queryResult.hits.hits);
       } else {
@@ -162,21 +172,6 @@ const countNetflowReportByIndex = async (
 ) => {
   const result = await elasticClient.count({
     index: indexName,
-    body: createNetflowQuery(netflowReportQueryParams),
-  });
-  return result;
-};
-
-const queryNetflowReports = async (
-  indexName: string,
-  startFrom: number,
-  size: number,
-  netflowReportQueryParams: NetflowReportQueryParams,
-) => {
-  const result = await elasticClient.search({
-    index: indexName,
-    from: startFrom,
-    size,
     body: createNetflowQuery(netflowReportQueryParams),
   });
   return result;
@@ -226,7 +221,7 @@ const createNetflowQuery = (
 
   if (netflowReportQueryParams.srcAddress) {
     filter.push({
-      terms: {
+      wildcard: {
         'netflow.src_addr': netflowReportQueryParams.srcAddress,
       },
     });
@@ -242,7 +237,7 @@ const createNetflowQuery = (
 
   if (netflowReportQueryParams.dstAddress) {
     filter.push({
-      terms: {
+      wildcard: {
         'netflow.dst_addr': netflowReportQueryParams.dstAddress,
       },
     });
@@ -258,7 +253,7 @@ const createNetflowQuery = (
 
   if (netflowReportQueryParams.username) {
     filter.push({
-      terms: {
+      wildcard: {
         username: netflowReportQueryParams.username,
       },
     });

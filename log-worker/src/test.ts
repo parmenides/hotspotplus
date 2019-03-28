@@ -20,8 +20,6 @@ export const testRunner = async () => {
     reportRequestId: '123123123123',
     businessId: '3724627346278346',
     reportType: REPORT_TYPE.SYSLOG,
-    url: '*.css',
-    domain: 'www*',
   };
   console.log('add test task', message);
   await channel.sendToQueue(

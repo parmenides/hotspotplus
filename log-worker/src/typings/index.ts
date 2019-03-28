@@ -26,6 +26,9 @@ export enum REPORT_TYPE {
 export interface RawSyslogReport {
   _source: {
     username: string;
+    nasId: string;
+    mac: string;
+    nasTitle: string;
     query: string;
     '@timestamp': string;
     params: string;
@@ -80,10 +83,10 @@ export interface NetflowAggregateByIp {
 export interface NetflowReportQueryParams {
   fromDate: Moment;
   toDate: Moment;
-  username?: string[];
-  dstAddress?: string[];
+  username?: string;
+  dstAddress?: string;
   dstPort?: string[];
-  srcAddress?: string[];
+  srcAddress?: string;
   srcPort?: string[];
   protocol?: string;
   nasId?: string[];
@@ -92,7 +95,7 @@ export interface NetflowReportQueryParams {
 export interface SyslogReportQueryParams {
   fromDate: Moment;
   toDate: Moment;
-  username?: string[];
+  username?: string;
   url?: string;
   domain?: string;
   method?: string[];
@@ -104,6 +107,7 @@ export interface RawNetflowReport {
     username: string;
     mac: string;
     nasId: string;
+    nasTitle: string;
     netflow: {
       src_port: string;
       protocol: string;
@@ -138,17 +142,17 @@ export interface GeneralReportRequestTask {
 }
 
 export interface NetflowReportRequestTask extends GeneralReportRequestTask {
-  username?: string[];
-  dstAddress?: string[];
+  username?: string;
+  dstAddress?: string;
   dstPort?: string[];
-  srcAddress?: string[];
+  srcAddress?: string;
   srcPort?: string[];
   protocol?: string;
 }
 
 export interface SyslogReportRequestTask extends GeneralReportRequestTask {
   domain?: string;
-  username?: string[];
+  username?: string;
   url?: string;
   method?: string[];
 }

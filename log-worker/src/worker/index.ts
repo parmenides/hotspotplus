@@ -4,6 +4,7 @@ import netflow from './netflow';
 import { createHttpClient } from '../utils/httpClient';
 import { Parser as Json2CsvParser } from 'json2csv';
 import fs from 'fs';
+import _ from 'lodash';
 import request from 'request-promise';
 import { login } from '../utils/auth';
 import { file as tmpFile } from 'tmp-promise';
@@ -77,6 +78,7 @@ export const processLogRequest = async () => {
         } else {
           throw new Error('invalid report type');
         }
+
         log.debug('#######################');
         log.debug(reports);
         const csvReport = jsonToCsv(fields, reports);
@@ -100,24 +102,35 @@ export const processLogRequest = async () => {
 
 const getNetflowFields = () => {
   return [
-    'username',
-    'date',
-    'mac',
-    'src_addr',
-    'src_port',
-    'dst_addr',
-    'dst_port',
-    'protocol',
-    '@timestamp',
+    'Router',
+    'Username',
+    'Jalali_Date',
+    'Mac',
+    'Src_Addr',
+    'Src_Port',
+    'Dst_Addr',
+    'Dst_Port',
+    'Protocol',
+    'Gregorian_Date',
   ];
 };
 
 const getSyslogFields = () => {
-  return ['username', 'date', 'domain', 'method', 'url', '@timestamp'];
+  return [
+    'Router',
+    'Username',
+    'IP',
+    'Mac',
+    'Jalali_Date',
+    'Http_Method',
+    'Domain',
+    'Url',
+    'Gregorian_Date',
+  ];
 };
-const jsonToCsv = (fields: string[], jsonData: any) => {
+const jsonToCsv = (fields: string[], jsonData: any[]) => {
   try {
-    const opts = { fields };
+    const opts = { fields, defaultValue: 'N/A' };
     const json2CsvParser = new Json2CsvParser(opts);
     const csvReport = json2CsvParser.parse(jsonData);
     return csvReport;

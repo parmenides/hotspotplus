@@ -33,7 +33,7 @@ const getNetflowIndexTemplate = () => {
     settings: {
       analysis: {
         normalizer: {
-          my_normalizer: {
+          lowercase_normalizer: {
             type: 'custom',
             char_filter: [],
             filter: ['lowercase'],
@@ -78,14 +78,17 @@ const getNetflowIndexTemplate = () => {
         properties: {
           username: {
             type: 'keyword',
-            normalizer: 'my_normalizer',
+            normalizer: 'lowercase_normalizer',
           },
           nasId: {
             type: 'keyword',
           },
+          nasTitle: {
+            enabled: false,
+          },
           mac: {
             type: 'keyword',
-            normalizer: 'my_normalizer',
+            normalizer: 'lowercase_normalizer',
           },
           status: {
             type: 'keyword',
@@ -518,7 +521,7 @@ const getSyslogIndexTemplate = () => {
     settings: {
       analysis: {
         normalizer: {
-          my_normalizer: {
+          lowercase_normalizer: {
             type: 'custom',
             char_filter: [],
             filter: ['lowercase'],
@@ -570,7 +573,7 @@ const getSyslogIndexTemplate = () => {
           },
           username: {
             type: 'keyword',
-            normalizer: 'my_normalizer',
+            normalizer: 'lowercase_normalizer',
           },
           status: {
             type: 'keyword',
@@ -581,6 +584,10 @@ const getSyslogIndexTemplate = () => {
           nasId: {
             type: 'keyword',
           },
+          nasTitle: {
+            enabled: false,
+          },
+
           memberId: {
             type: 'keyword',
           },
@@ -601,22 +608,22 @@ const getSyslogIndexTemplate = () => {
           },
           protocol: {
             type: 'keyword',
-            normalizer: 'my_normalizer',
+            normalizer: 'lowercase_normalizer',
           },
           memberIp: {
             type: 'keyword',
           },
           method: {
             type: 'keyword',
-            normalizer: 'my_normalizer',
+            normalizer: 'lowercase_normalizer',
           },
           url: {
             type: 'keyword',
-            normalizer: 'my_normalizer',
+            normalizer: 'lowercase_normalizer',
           },
           domain: {
             type: 'keyword',
-            normalizer: 'my_normalizer',
+            normalizer: 'lowercase_normalizer',
           },
           hostGeoIp: {
             enabled: false,
