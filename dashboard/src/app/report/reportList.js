@@ -17,6 +17,7 @@ app.controller ( 'reportList', [
 	'PREFIX',
 	'appMessenger',
 	'PersianDateService',
+	'englishNumberFilter',
 	function (
 		$scope,
 		$state,
@@ -31,14 +32,23 @@ app.controller ( 'reportList', [
 		$uibModal,
 		PREFIX,
 		appMessenger,
-		PersianDateService
+		PersianDateService,
+		englishNumberFilter
 	) {
 		var businessId = Session.business.id;
+		$scope.syslogReportCount = 0;
+		$scope.netflowReportCount = 0;
+		if ( Session.business.netflowReportCount ) {
+			$scope.netflowReportCount = Session.business.netflowReportCount
+		}
+		if ( Session.business.syslogReportCount ) {
+			$scope.syslogReportCount = Session.business.syslogReportCount
+		}
 
 		$scope.paginationOptions = {
 			pageNumber:  1,
 			itemPerPage: 10,
-			sort:        null,
+			sort:        null
 		};
 		$scope.gridOptions = {
 			enableSorting:            true,
@@ -77,7 +87,7 @@ app.controller ( 'reportList', [
 					enableColumnMenu: false,
 					headerCellFilter: 'translate',
 					cellTemplate:
-					                  '<div class="ui-grid-cell-contents">{{row.entity.from |  persianDate : "fullDate" | translateNumber }}{{"general.,"| translate}}&nbsp;{{"general.hour"| translate}}:&nbsp;{{row.entity.from |  date : "HH:mm" | translateNumber }}</div>',
+					                  '<div class="ui-grid-cell-contents" ng-if="row.entity.from">{{row.entity.from |  persianDate : "fullDate" | translateNumber }}{{"general.,"| translate}}&nbsp;{{"general.hour"| translate}}:&nbsp;{{row.entity.from |  date : "HH:mm" | translateNumber }}</div>',
 
 				},
 				{
@@ -89,7 +99,7 @@ app.controller ( 'reportList', [
 					enableColumnMenu: false,
 					headerCellFilter: 'translate',
 					cellTemplate:
-					                  '<div class="ui-grid-cell-contents">{{row.entity.to |  persianDate : "fullDate" | translateNumber }}{{"general.,"| translate}}&nbsp;{{"general.hour"| translate}}:&nbsp;{{row.entity.to |  date : "HH:mm" | translateNumber }}</div>'
+					                  '<div class="ui-grid-cell-contents" ng-if="row.entity.to">{{row.entity.to |  persianDate : "fullDate" | translateNumber }}{{"general.,"| translate}}&nbsp;{{"general.hour"| translate}}:&nbsp;{{row.entity.to |  date : "HH:mm" | translateNumber }}</div>'
 				},
 				{
 					displayName:      'report.status',
@@ -140,14 +150,6 @@ app.controller ( 'reportList', [
 			}
 		};
 
-		$scope.modelOptions = {
-			debounce:     {
-				default: 500,
-				blur:    250
-			},
-			getterSetter: true
-		};
-
 		$scope.addReport = function ( param ) {
 			Business.loadMembersUsernames ( { businessId: businessId } ).$promise.then (
 				function ( result ) {
@@ -158,8 +160,6 @@ app.controller ( 'reportList', [
 							$scope.report = {
 								status:       'scheduled',
 								creationDate: new Date ().getTime (),
-								from:         new Date ().getTime () - 7 * 24 * 60 * 60 * 1000,
-								to:           new Date ().getTime (),
 								businessId:   businessId
 							};
 							$uibModal.open ( {
@@ -185,6 +185,7 @@ app.controller ( 'reportList', [
 											$scope.options.title = 'report.addSyslogReport';
 											$scope.options.reportType = 'syslog';
 										}
+										$scope.protocols = [ 'TCP', 'UDP', 'TCP UDP' ];
 										// Persian date picker methods
 										$scope.dateOptions = {
 											formatYear:  'yy',
@@ -212,7 +213,6 @@ app.controller ( 'reportList', [
 											$scope.endDateCalendarIsOpen = true;
 											$scope.startDateCalendarIsOpen = false;
 										};
-
 										// --> for calendar bug
 										$scope.$watch ( 'report.from', function ( newValue, oldValue ) {
 											$scope.startDateCalendarIsOpen = false;
@@ -228,50 +228,48 @@ app.controller ( 'reportList', [
 											$uibModalInstance.close ();
 										};
 										$scope.save = function () {
-											if ( $scope.report.member && $scope.report.member.id && $scope.report.nas && $scope.report.nas.id ) {
-												var memberId = $scope.report.member.id;
-												var username = $scope.report.member.username;
-												var nasId = $scope.report.nas.id;
-												var nasTitle = $scope.report.nas.title;
-												delete $scope.report.member;
-												delete $scope.report.nas;
-												$scope.report.memberId = memberId;
-												$scope.report.username = username;
-												$scope.report.nasId = nasId;
-												$scope.report.nasTitle = nasTitle;
-												$scope.report.type = $scope.options.reportType;
-												if ( $scope.report.from ) {
-													var from = new Date ( $scope.report.from );
-													$scope.report.from = from.getTime ();
-												} else {
-													$scope.report.from = new Date ().getTime () - 7 * 24 * 60 * 60 * 1000;
-												}
-												if ( $scope.report.to ) {
-													var to = new Date ( $scope.report.to );
-													$scope.report.to = to.getTime ();
-												} else {
-													$scope.report.to = new Date ().getTime ();
-												}
-												if ( !$scope.report.title ) {
-													var time = new Date ( $scope.report.creationDate );
-													var year = PersianDateService.getFullYear ( time );
-													var month = PersianDateService.getMonth ( time ) + 1;
-													var day = PersianDateService.getDate ( time );
-													$scope.report.title = username + '_' + year + '_' + month + '_' + day;
-												}
-												Business.reports.create ( { id: businessId }, $scope.report ).$promise.then (
-													function ( res ) {
-														appMessenger.showSuccess ( 'report.createSuccessFull' );
-														getPage ();
-														$uibModalInstance.close ()
-													},
-													function ( err ) {
-														appMessenger.showError ( 'report.createUnSuccessFull' );
-													}
-												);
-											} else {
-												appMessenger.showError ( 'report.enterUserName' );
+											var memberId = $scope.report.member[0].id;
+											var username = $scope.report.member[0].username;
+											delete $scope.report.member;
+											$scope.report.memberId = memberId;
+											$scope.report.username = username;
+											$scope.report.type = $scope.options.reportType;
+											if ( $scope.report.from ) {
+												var from = new Date ( $scope.report.from );
+												$scope.report.from = from.getTime ();
 											}
+											if ( $scope.report.to ) {
+												var to = new Date ( $scope.report.to );
+												$scope.report.to = to.getTime ();
+											}
+											if ( !$scope.report.title ) {
+												var time = new Date ( $scope.report.creationDate );
+												var year = PersianDateService.getFullYear ( time );
+												var month = PersianDateService.getMonth ( time ) + 1;
+												var day = PersianDateService.getDate ( time );
+												$scope.report.title = username + '_' + year + '_' + month + '_' + day;
+											}
+											if ( $scope.report.method ) {
+												$scope.report.method = $scope.report.method.split ( " " );
+											}
+											if ( $scope.report.dstPort ) {
+												$scope.report.dstPort = englishNumberFilter ( $scope.report.dstPort );
+												$scope.report.dstPort = $scope.report.dstPort.split ( " " );
+											}
+											if ( $scope.report.srcPort ) {
+												$scope.report.srcPort = englishNumberFilter ( $scope.report.srcPort );
+												$scope.report.srcPort = $scope.report.srcPort.split ( " " );
+											}
+											Business.reports.create ( { id: businessId }, $scope.report ).$promise.then (
+												function ( res ) {
+													appMessenger.showSuccess ( 'report.createSuccessFull' );
+													$uibModalInstance.close ();
+													getPage ();
+												},
+												function ( err ) {
+													appMessenger.showError ( 'report.createUnSuccessFull' );
+												}
+											);
 										};
 									}
 								]
@@ -367,19 +365,19 @@ app.controller ( 'reportList', [
 
 		$scope.downloadReport = function ( row ) {
 			var reportId = row.entity.id;
-			Business.reports.findById({ id: businessId, fk: reportId }).$promise.then(
-				function(report) {
+			Business.reports.findById ( { id: businessId, fk: reportId } ).$promise.then (
+				function ( report ) {
 					var fileStorageId = report.fileStorageId;
 					if ( report.fileStorageId ) {
 						window.location.href =
 							Window.API_URL +
 							'/api/file/download/{0}'
-								.replace('{0}', fileStorageId);
+								.replace ( '{0}', fileStorageId );
 					} else {
 						appMessenger.showError ( 'report.noReportsToDownload' )
 					}
 				},
-				function(error) {
+				function ( error ) {
 					appMessenger.showError ( 'report.noReportsToDownload' )
 				}
 			);

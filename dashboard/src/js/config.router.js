@@ -258,6 +258,7 @@ app.config([
           'ui.grid.selection',
           'ui.grid.resizeColumns',
           'ui.bootstrap.persian.datepicker',
+          'oi.select',
           PREFIX + 'app/report/reportList.js',
         ]),
       })

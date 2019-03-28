@@ -210,6 +210,11 @@ angular
       name: 'chart.js',
       files: ['../libs/angular/angular-chart/angular-chart.min.js'],
     },
+    {
+      name: 'oi.select',
+      files: ['../libs/assets/oi.select-master/select.min.css',
+        '../libs/assets/oi.select-master/select-tpls.min.js'],
+    },
   ])
   // oclazyload config
   .config([

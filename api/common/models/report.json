@@ -12,11 +12,11 @@
     },
     "from": {
       "type": "number",
-      "required": true
+      "required": false
     },
     "to": {
       "type": "number",
-      "required": true
+      "required": false
     },
     "status": {
       "type": "string",
@@ -24,11 +24,11 @@
     },
     "username": {
       "type": "string",
-      "required": true
+      "required": false
     },
     "type": {
       "type": "string",
-      "required": true
+      "required": false
     },
     "fileStorageId": {
       "type": "string",
