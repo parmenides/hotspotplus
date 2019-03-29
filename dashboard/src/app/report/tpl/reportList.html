@@ -4,6 +4,25 @@
     </div>
     <div class="hbox hbox-auto-xs hbox-auto-sm">
         <div class="col wrapper-md">
+            <div class="row row-sm text-center">
+                <div class="col-xs-6">
+                    <div class="panel padder-v item">
+                        <div class="h1 text-primary font-thin h1">{{netflowReportCount | translateNumber}}</div>
+                        <span class="text-muted text-xs">{{"report.totalNetflowReport"|translate}}</span>
+                    </div>
+                </div>
+                <div class="col-xs-6">
+                    <div class="panel padder-v item">
+                        <div class="h1 text-info font-thin h1">{{syslogReportCount | translateNumber}}</div>
+                        <span class="text-muted text-xs">{{"report.totalSyslogReport"|translate}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="hbox hbox-auto-xs hbox-auto-sm">
+
+        <div class="col wrapper-md">
             <div class="row">
                 <div class="clearfix m-b col-sm-8">
                     <button type="button" class="btn btn-sm btn-primary btn-addon" ng-click="addReport('ip')">
