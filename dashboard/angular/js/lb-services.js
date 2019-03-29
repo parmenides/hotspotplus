@@ -13,7 +13,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
 (function(window, angular, undefined) {
   'use strict';
 
-  var urlBase = "/api";
+  var urlBase = "http://127.0.0.1:3000/api";
   var authHeader = 'authorization';
 
   function getHost(url) {
@@ -6624,6 +6624,43 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              */
             "destroyReportsById": {
               url: urlBase + "/Businesses/destroyReportsById",
+              method: "POST",
+            },
+
+            /**
+             * @ngdoc method
+             * @name lbServices.Business#loadNasTitles
+             * @methodOf lbServices.Business
+             *
+             * @description
+             *
+             * load nas by titles
+             *
+             * @param {Object=} parameters Request parameters.
+             *
+             *   This method does not accept any parameters.
+             *   Supply an empty object or omit this argument altogether.
+             *
+             * @param {Object} postData Request data.
+             *
+             *  - `businessId` – `{string}` -
+             *
+             * @param {function(Object,Object)=} successCb
+             *   Success callback with two arguments: `value`, `responseHeaders`.
+             *
+             * @param {function(Object)=} errorCb Error callback with one argument:
+             *   `httpResponse`.
+             *
+             * @returns {Object} An empty reference that will be
+             *   populated with the actual data once the response is returned
+             *   from the server.
+             *
+             * Data properties:
+             *
+             *  - `nas` – `{Array=}` -
+             */
+            "loadNasTitles": {
+              url: urlBase + "/Businesses/loadNasTitles",
               method: "POST",
             },
 
@@ -24166,6 +24203,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * @param {Object} postData Request data.
              *
              *  - `businessId` – `{string}` -
+             *
+             *  - `fileType` – `{string}` -
              *
              * @param {function(Object,Object)=} successCb
              *   Success callback with two arguments: `value`, `responseHeaders`.

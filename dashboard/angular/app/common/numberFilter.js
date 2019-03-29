@@ -125,7 +125,8 @@ app.filter('getYear', [
 
 app.filter('translateDate', [
   '$translate',
-  function($translate) {
+  'PersianDateService',
+  function($translate,PersianDateService) {
     return function(epoch) {
       var date = new Date(Number(epoch));
       var locale = $translate.use();
@@ -138,13 +139,7 @@ app.filter('translateDate', [
           date.getDate()
         );
       } else {
-        return (
-          date.getJalaliFullYear() +
-          '/' +
-          (date.getJalaliMonth() + 1) +
-          '/' +
-          date.getJalaliDate()
-        );
+        return PersianDateService.getFullYear(date) +'/'+ (PersianDateService.getMonth(date) + 1) + '/'   + PersianDateService.getDate(date);
       }
     };
   }
