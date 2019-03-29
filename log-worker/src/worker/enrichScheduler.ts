@@ -52,8 +52,8 @@ export const addEnrichmentTasks = async (
   }
 };
 
-const job = new CronJob('* 10 * * * *', function() {
-  //log.debug('starting the job');
+const job = new CronJob('0 */4 * * *', ()=> {
+
 });
 
 job.start();
