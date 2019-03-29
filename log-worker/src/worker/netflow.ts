@@ -65,8 +65,6 @@ const countBusinessReports = async (from: number, to: number) => {
     businessReportCount[reportCount.key] =
       businessReportCount[reportCount.key] + reportCount.doc_count;
   }
-  log.error('2783648723647263478627486278634728643');
-  log.error(businessReportCount);
   return businessReportCount;
 };
 

@@ -4,7 +4,6 @@
 
 import logger from './logger';
 import { createHttpClient } from './httpClient';
-
 if (
   !process.env.SERVICE_MAN_USERNAME ||
   !process.env.SERVICE_MAN_PASSWORD ||
