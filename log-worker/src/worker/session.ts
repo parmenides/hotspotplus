@@ -229,5 +229,4 @@ const createSessionByIpQuery = (
 
 export default {
   querySessionsByIp,
-  findSessions,
 };

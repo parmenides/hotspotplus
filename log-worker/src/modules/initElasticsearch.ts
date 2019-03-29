@@ -3,19 +3,20 @@ import elasticClient from '../utils/elastic';
 
 const log = logger.createLogger();
 
-export const addSyslogIndexTemplates = async () => {
+export const addElasticIndexTemplates = async () => {
   try {
     const sessionResult = await elasticClient.indices.putTemplate({
       name: 'session',
       body: getSessionIndexTemplate(),
     });
-    log.debug('session index template added:', sessionResult);
+    log.debug('Session index template added:', sessionResult);
+
     const syslogResult = await elasticClient.indices.putTemplate({
       name: 'syslog',
       body: getSyslogIndexTemplate(),
     });
-
     log.debug('syslog index template added:', syslogResult);
+
     const netflowResult = await elasticClient.indices.putTemplate({
       name: 'netflow',
       body: getNetflowIndexTemplate(),

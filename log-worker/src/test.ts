@@ -28,7 +28,7 @@ export const testRunner = async () => {
     Buffer.from(JSON.stringify(message)),
   );
   await channel.close();*/
-  const res = await countAndUpdateBusinessReports();
+  //const res = await countAndUpdateBusinessReports();
 
   // await channel.close();;;
   //await addEnrichmentTasks(from, to, 'syslog' as REPORT_TYPE.SYSLOG);
