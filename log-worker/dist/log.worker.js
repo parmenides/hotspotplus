@@ -106,7 +106,7 @@ eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nconst 
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-eval("\nvar __importDefault = (this && this.__importDefault) || function (mod) {\n    return (mod && mod.__esModule) ? mod : { \"default\": mod };\n};\nObject.defineProperty(exports, \"__esModule\", { value: true });\nconst express_1 = __importDefault(__webpack_require__(/*! express */ \"express\"));\nconst dotenv_1 = __importDefault(__webpack_require__(/*! dotenv */ \"dotenv\"));\nconst routes_1 = __importDefault(__webpack_require__(/*! ../src/routes */ \"./routes/index.ts\"));\nconst errorHandler_1 = __importDefault(__webpack_require__(/*! ./utils/errorHandler */ \"./utils/errorHandler.ts\"));\nconst logger_1 = __importDefault(__webpack_require__(/*! ./utils/logger */ \"./utils/logger.ts\"));\nconst worker_1 = __webpack_require__(/*! ./worker */ \"./worker/index.ts\");\nconst test_1 = __webpack_require__(/*! ./test */ \"./test.ts\");\nconst initElasticsearch_1 = __webpack_require__(/*! ./modules/initElasticsearch */ \"./modules/initElasticsearch.ts\");\nconst initRabbitMq_1 = __webpack_require__(/*! ./modules/initRabbitMq */ \"./modules/initRabbitMq.ts\");\nconst enrich_1 = __webpack_require__(/*! ./worker/enrich */ \"./worker/enrich.ts\");\n//require('date-utils');\nconst log = logger_1.default.createLogger();\n//hey you\ndotenv_1.default.load();\nconst app = express_1.default();\napp.set('port', process.env.PORT || 3000);\napp.use(express_1.default.json());\napp.use(express_1.default.urlencoded({ extended: false }));\napp.use('/', routes_1.default);\napp.use(errorHandler_1.default);\napp.use((req, resp, next) => {\n    log.debug('####### Request Log #######');\n    log.debug('Path:', req.path);\n    log.debug('Query:', req.query);\n    log.debug('Methods:', req.method);\n    log.debug('Body %j', req.body);\n    next();\n});\napp.listen(app.get('port'), async () => {\n    /*tslint:disable*/\n    console.log('Add default queues...');\n    await initRabbitMq_1.addDefaultQueue();\n    await worker_1.processLogRequest();\n    await enrich_1.enrichLogs();\n    console.log(`App is running at http://localhost:${app.get('port')}`);\n    await test_1.testRunner();\n    log.info(` App is running at http://localhost:${app.get('port')}`);\n});\ninitElasticsearch_1.addSyslogIndexTemplates();\nprocess.on('uncaughtException', function (error) {\n    console.error('Something bad happened here....');\n    console.error(error);\n    console.error(error.stack);\n    log.error(error);\n    log.error(error.stack);\n});\n\n\n//# sourceURL=file:////Users/payamyousefi/projects/hotspotplus/log-worker/src/index.ts");
+eval("\nvar __importDefault = (this && this.__importDefault) || function (mod) {\n    return (mod && mod.__esModule) ? mod : { \"default\": mod };\n};\nObject.defineProperty(exports, \"__esModule\", { value: true });\nconst express_1 = __importDefault(__webpack_require__(/*! express */ \"express\"));\nconst dotenv_1 = __importDefault(__webpack_require__(/*! dotenv */ \"dotenv\"));\nconst routes_1 = __importDefault(__webpack_require__(/*! ../src/routes */ \"./routes/index.ts\"));\nconst errorHandler_1 = __importDefault(__webpack_require__(/*! ./utils/errorHandler */ \"./utils/errorHandler.ts\"));\nconst logger_1 = __importDefault(__webpack_require__(/*! ./utils/logger */ \"./utils/logger.ts\"));\nconst worker_1 = __webpack_require__(/*! ./worker */ \"./worker/index.ts\");\nconst initElasticsearch_1 = __webpack_require__(/*! ./modules/initElasticsearch */ \"./modules/initElasticsearch.ts\");\nconst initRabbitMq_1 = __webpack_require__(/*! ./modules/initRabbitMq */ \"./modules/initRabbitMq.ts\");\nconst enrich_1 = __webpack_require__(/*! ./worker/enrich */ \"./worker/enrich.ts\");\n//require('date-utils');\nconst log = logger_1.default.createLogger();\n//hey you\ndotenv_1.default.load();\nconst app = express_1.default();\napp.set('port', process.env.PORT || 3000);\napp.use(express_1.default.json());\napp.use(express_1.default.urlencoded({ extended: false }));\napp.use('/', routes_1.default);\napp.use(errorHandler_1.default);\napp.use((req, resp, next) => {\n    log.debug('####### Request Log #######');\n    log.debug('Path:', req.path);\n    log.debug('Query:', req.query);\n    log.debug('Methods:', req.method);\n    log.debug('Body %j', req.body);\n    next();\n});\napp.listen(app.get('port'), async () => {\n    /*tslint:disable*/\n    console.log('Add default queues...');\n    await initRabbitMq_1.addDefaultQueue();\n    await worker_1.processLogRequest();\n    await enrich_1.enrichLogs();\n    console.log(`App is running at http://localhost:${app.get('port')}`);\n    //await testRunner();\n    log.info(` App is running at http://localhost:${app.get('port')}`);\n});\ninitElasticsearch_1.addSyslogIndexTemplates();\nprocess.on('uncaughtException', function (error) {\n    console.error('Something bad happened here....');\n    console.error(error);\n    console.error(error.stack);\n    log.error(error);\n    log.error(error.stack);\n});\n\n\n//# sourceURL=file:////Users/payamyousefi/projects/hotspotplus/log-worker/src/index.ts");
 
 /***/ }),
 
@@ -143,18 +143,6 @@ eval("\nvar __importDefault = (this && this.__importDefault) || function (mod) {
 
 "use strict";
 eval("\nvar __importDefault = (this && this.__importDefault) || function (mod) {\n    return (mod && mod.__esModule) ? mod : { \"default\": mod };\n};\nObject.defineProperty(exports, \"__esModule\", { value: true });\nconst express_promise_router_1 = __importDefault(__webpack_require__(/*! express-promise-router */ \"express-promise-router\"));\nconst controllers_1 = __importDefault(__webpack_require__(/*! ../controllers */ \"./controllers/index.ts\"));\nconst router = express_promise_router_1.default();\nrouter.get('/health', controllers_1.default.health);\nexports.default = router;\n\n\n//# sourceURL=file:////Users/payamyousefi/projects/hotspotplus/log-worker/src/routes/index.ts");
-
-/***/ }),
-
-/***/ "./test.ts":
-/*!*****************!*\
-  !*** ./test.ts ***!
-  \*****************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nconst rabbitmq_1 = __webpack_require__(/*! ./utils/rabbitmq */ \"./utils/rabbitmq.ts\");\nconst typings_1 = __webpack_require__(/*! ./typings */ \"./typings/index.ts\");\nconst counterScheduler_1 = __webpack_require__(/*! ./worker/counterScheduler */ \"./worker/counterScheduler.ts\");\nexports.testRunner = async () => {\n    const channel = await rabbitmq_1.getRabbitMqChannel();\n    const LOG_WORKER_QUEUE = typings_1.QUEUES.LOG_WORKER_QUEUE;\n    const from = new Date('2019-03-25T00:00:00').getTime();\n    const to = new Date('2019-03-28T23:59:59').getTime();\n    /*const message: SyslogReportRequestTask = {\n      reportRequestId: '123123123123',\n      businessId: '3724627346278346',\n      reportType: REPORT_TYPE.SYSLOG,\n    };\n    console.log('add test task', message);\n    await channel.sendToQueue(\n      LOG_WORKER_QUEUE,\n      Buffer.from(JSON.stringify(message)),\n    );\n    await channel.close();*/\n    const res = await counterScheduler_1.countAndUpdateBusinessReports();\n    // await channel.close();;;\n    //await addEnrichmentTasks(from, to, 'syslog' as REPORT_TYPE.SYSLOG);\n    //await addEnrichmentTasks(from, to, 'netflow' as REPORT_TYPE.NETFLOW);\n};\n\n\n//# sourceURL=file:////Users/payamyousefi/projects/hotspotplus/log-worker/src/test.ts");
 
 /***/ }),
 
@@ -239,18 +227,6 @@ eval("\nvar __importDefault = (this && this.__importDefault) || function (mod) {
 
 "use strict";
 eval("\nvar __importDefault = (this && this.__importDefault) || function (mod) {\n    return (mod && mod.__esModule) ? mod : { \"default\": mod };\n};\nObject.defineProperty(exports, \"__esModule\", { value: true });\nconst amqplib_1 = __importDefault(__webpack_require__(/*! amqplib */ \"amqplib\"));\nif (!process.env.RABBITMQ_USERNAME || !process.env.RABBITMQ_PASSWORD) {\n    throw new Error('invalid rabbit credentials');\n}\nlet connection;\nexports.getRabbitMqConnection = async () => {\n    if (connection !== undefined) {\n        return connection;\n    }\n    connection = await amqplib_1.default.connect(`amqp://${process.env.RABBITMQ_USERNAME}:${process.env.RABBITMQ_PASSWORD}@rabbitmq`);\n    return connection;\n};\nexports.getRabbitMqChannel = async () => {\n    const amqpConnection = await exports.getRabbitMqConnection();\n    return amqpConnection.createConfirmChannel();\n};\n\n\n//# sourceURL=file:////Users/payamyousefi/projects/hotspotplus/log-worker/src/utils/rabbitmq.ts");
-
-/***/ }),
-
-/***/ "./worker/counterScheduler.ts":
-/*!************************************!*\
-  !*** ./worker/counterScheduler.ts ***!
-  \************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-eval("\nvar __importDefault = (this && this.__importDefault) || function (mod) {\n    return (mod && mod.__esModule) ? mod : { \"default\": mod };\n};\nObject.defineProperty(exports, \"__esModule\", { value: true });\nconst logger_1 = __importDefault(__webpack_require__(/*! ../utils/logger */ \"./utils/logger.ts\"));\nconst cron_1 = __webpack_require__(/*! cron */ \"cron\");\nconst auth_1 = __webpack_require__(/*! ../utils/auth */ \"./utils/auth.ts\");\nconst httpClient_1 = __webpack_require__(/*! ../utils/httpClient */ \"./utils/httpClient.ts\");\nconst netflow_1 = __importDefault(__webpack_require__(/*! ../worker/netflow */ \"./worker/netflow.ts\"));\nconst syslog_1 = __importDefault(__webpack_require__(/*! ../worker/syslog */ \"./worker/syslog.ts\"));\nconst moment_timezone_1 = __importDefault(__webpack_require__(/*! moment-timezone */ \"moment-timezone\"));\nconst BUSINESS_API = `${process.env.API_ADDRESS}/api/Businesses`;\nconst log = logger_1.default.createLogger();\nexports.countAndUpdateBusinessReports = async () => {\n    const to = moment_timezone_1.default.tz(Date.now(), 'Asia/Tehran');\n    to.add({ days: 1 });\n    to.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });\n    const from = to.clone().subtract({ days: 10 });\n    const netflowBusinessReportCount = await netflow_1.default.countBusinessReports(from.valueOf(), to.valueOf());\n    const netflowReportsArray = [];\n    for (let businessId in netflowBusinessReportCount) {\n        netflowReportsArray.push({\n            businessId,\n            count: netflowBusinessReportCount[businessId],\n        });\n    }\n    for (const report of netflowReportsArray) {\n        try {\n            await updateBusiness(report.businessId, {\n                netflowReportCount: report.count,\n            });\n        }\n        catch (e) {\n            log.error(e);\n        }\n    }\n    const businessReportCount = await syslog_1.default.countBusinessReports(from.valueOf(), to.valueOf());\n    const reportsArray = [];\n    for (let businessId in businessReportCount) {\n        reportsArray.push({ businessId, count: businessReportCount[businessId] });\n    }\n    for (const report of reportsArray) {\n        try {\n            await updateBusiness(report.businessId, {\n                syslogReportCount: report.count,\n            });\n        }\n        catch (e) {\n            log.error(e);\n        }\n    }\n};\nconst updateBusiness = async (businessId, update) => {\n    const token = await auth_1.login(\n    // @ts-ignore\n    process.env.SERVICE_MAN_USERNAME, process.env.SERVICE_MAN_PASSWORD);\n    const httpClient = httpClient_1.createHttpClient(`${BUSINESS_API}`);\n    await httpClient.patch(`/${businessId}`, update, {\n        headers: {\n            authorization: token,\n        },\n    });\n};\nconst job = new cron_1.CronJob('0 */2 * * *', async () => {\n    await exports.countAndUpdateBusinessReports();\n    log.debug('report count updated as scheduled', new Date());\n});\njob.start();\n\n\n//# sourceURL=file:////Users/payamyousefi/projects/hotspotplus/log-worker/src/worker/counterScheduler.ts");
 
 /***/ }),
 
@@ -344,17 +320,6 @@ eval("module.exports = require(\"axios\");\n\n//# sourceURL=file:///external%252
 /***/ (function(module, exports) {
 
 eval("module.exports = require(\"bunyan\");\n\n//# sourceURL=file:///external%2520%2522bunyan%2522");
-
-/***/ }),
-
-/***/ "cron":
-/*!***********************!*\
-  !*** external "cron" ***!
-  \***********************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("module.exports = require(\"cron\");\n\n//# sourceURL=file:///external%2520%2522cron%2522");
 
 /***/ }),
 
