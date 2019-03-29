@@ -1202,7 +1202,7 @@
 	"totalSyslogReport":       " مجموع گزارش سایت در ۱۰ روز گذشته",
 	"createSuccessFull":       "درخواست گزارش با موفقیت انجام شد.",
 	"createUnSuccessFull":     "درخواست گزارش با خطا مواجه شد.",
-	"noReportToRemove":        "گزارشی برای حذف وجود ندارد.",
+	"noReportToRemove":        "ابتدا گزارش مورد نظر برای حذف را انتخاب کنید.",
 	"removeUnSuccessFull":     "حذف گزارش با خطا مواجه شد.",
 	"removeSuccessFull":       "حذف گزارش با موفقیت انجام شد.",
 	"selectUserName":          " لطفا نام کاربری را از نامهای کاربری موجود انتخاب کنید.",
