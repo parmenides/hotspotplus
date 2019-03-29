@@ -1,20 +1,20 @@
-import moment, { Moment } from 'moment';
-import { getRabbitMqChannel } from '../utils/rabbitmq';
-import { QUEUES, REPORT_TYPE, EnrichTask } from '../typings';
+import moment, {Moment} from 'moment';
+import {getRabbitMqChannel} from '../utils/rabbitmq';
+import {EnrichTask, QUEUES, REPORT_TYPE} from '../typings';
 import logger from '../utils/logger';
-import { CronJob } from 'cron';
+import {CronJob} from 'cron';
 
 const log = logger.createLogger();
-
+const ENRICHMENT_SCOPE = Number(process.env.ENRICHMENT_SCOPE);
 export const addEnrichmentTasks = async (
-  from: number,
-  to: number,
   reportType: REPORT_TYPE,
 ) => {
   try {
-    log.debug('addEnrichmentTasks');
-    const fromDate: Moment = moment(from);
-    const toDate: Moment = moment(to);
+    log.debug('Add Enrichment Tasks: ',REPORT_TYPE);
+    const now = Date.now();
+    const toDate: Moment = moment(now);
+    const fromDate = toDate.clone().subtract({minute:ENRICHMENT_SCOPE});
+
     const channel = await getRabbitMqChannel();
 
     const duration = moment.duration(toDate.diff(fromDate));
@@ -52,8 +52,9 @@ export const addEnrichmentTasks = async (
   }
 };
 
-const job = new CronJob('0 */4 * * *', ()=> {
-
+const job = new CronJob('0 */1 * * *', async ()=> {
+  await addEnrichmentTasks(REPORT_TYPE.NETFLOW);
+  await addEnrichmentTasks(REPORT_TYPE.SYSLOG);
 });
 
 job.start();
