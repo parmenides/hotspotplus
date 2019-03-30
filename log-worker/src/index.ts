@@ -8,6 +8,8 @@ import { testRunner } from './test';
 import { addElasticIndexTemplates } from './modules/initElasticsearch';
 import { addDefaultQueue } from './modules/initRabbitMq';
 import { enrichLogs } from './worker/enrich';
+import {startEnrichScheduler} from "./worker/enrichScheduler";
+import {startCounterScheduler} from "./worker/counterScheduler";
 
 //require('date-utils');
 const log = logger.createLogger();
@@ -38,6 +40,8 @@ app.listen(app.get('port'), async () => {
   await addDefaultQueue();
   await processLogRequest();
   await enrichLogs();
+  await startEnrichScheduler();
+  await startCounterScheduler();
   console.log(`App is running at http://localhost:${app.get('port')}`);
   //await testRunner();
   log.info(` App is running at http://localhost:${app.get('port')}`);
