@@ -10,13 +10,12 @@ var Json2csvParser = require('json2csv').Parser;
 var logger = require('./modules/logger');
 
 var log = logger.createLogger();
-var elasticURL = 'http://' + process.env.ELASTIC_IP + ':' + process.env.ELASTIC_PORT;
+var elasticURL = `http://${process.env.ELASTIC_IP}:${process.env.ELASTIC_PORT}`;
 var ELASTIC_NETFLOW_REPORT = `${elasticURL}/${process.env.ELASTIC_INDEX_PREFIX}netflow/report`;
 var ELASTIC_SYSLOG_REPORT = `${elasticURL}/${process.env.ELASTIC_INDEX_PREFIX}syslog/report`;
 var businessSize = process.env.BUSINESS_SIZE;
 var API_ADDRESS = utility.getApiAddress();
-var BUSINESS_GET_REST_API =
-  API_ADDRESS + '/api/Businesses/{0}?access_token={1}';
+var BUSINESS_GET_REST_API =`${API_ADDRESS}/api/Businesses/{0}?access_token={1}`;
 var fileRows = process.env.FILES_ROWS;
 
 function getBusinessList(options) {
