@@ -2,6 +2,7 @@ import logger from '../utils/logger';
 import elasticClient from '../utils/elastic';
 import momentTz from 'moment-timezone';
 import { Moment } from 'moment';
+import { LOGGER_TIME_ZONE } from '../typings';
 
 const SESSION_LOG_INDEX = `${process.env.ELASTIC_INDEX_PREFIX}sessions`;
 
@@ -126,11 +127,11 @@ const createSearchSessionQuery = (sessionQuery: SessionQuery) => {
 const querySessionsByIp = async (
   nasIp: string,
   memberIp: string,
-  from: number,
-  to: number,
+  from: Moment,
+  to: Moment,
 ): Promise<SessionGroupByUsername> => {
-  const fromDate = momentTz.tz(from, 'Europe/London');
-  const toDate = momentTz.tz(to, 'Europe/London');
+  const fromDate = momentTz.tz(from, LOGGER_TIME_ZONE);
+  const toDate = momentTz.tz(to, LOGGER_TIME_ZONE);
   log.debug(
     `session query %j`,
     createSessionByIpQuery(nasIp, memberIp, fromDate, toDate),

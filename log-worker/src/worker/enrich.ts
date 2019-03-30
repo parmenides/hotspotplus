@@ -4,6 +4,7 @@ import sessionModule from './session';
 import { getRabbitMqChannel } from '../utils/rabbitmq';
 import {
   EnrichTask,
+  LOGGER_TIME_ZONE,
   NetflowAggregateByIp,
   QUEUES,
   REPORT_TYPE,
@@ -12,6 +13,8 @@ import {
 import logger from '../utils/logger';
 import { UpdateDocumentByQueryResponse } from 'elasticsearch';
 import moment = require('moment');
+import { Moment } from 'moment-jalaali';
+import momentTz from 'moment-timezone';
 
 const log = logger.createLogger();
 
@@ -90,8 +93,8 @@ const getIpData = (
 const searchAndUpdateReport = async (
   reportType: REPORT_TYPE,
   ipData: Array<{ nasIp: string; memberIpList: string[] }>,
-  from: number,
-  to: number,
+  from: Moment,
+  to: Moment,
 ) => {
   if (ipData.length === 0) {
     return;
@@ -171,7 +174,10 @@ const searchAndUpdateReport = async (
         log.debug('more than two up found going to split time range');
         const channel = await getRabbitMqChannel();
         //split range in two;
-        const newTo = from + (to - from) / 2;
+        const newTo = momentTz.tz(
+          from.valueOf() + (to.valueOf() - from.valueOf()) / 2,
+          LOGGER_TIME_ZONE,
+        );
 
         const reQueueOne: EnrichTask = {
           from,
@@ -194,10 +200,8 @@ const searchAndUpdateReport = async (
         );
       } else if (groupedSessions.group_by_username.buckets.length === 0) {
         log.warn(
-          `nothing to update  ${reportType} from:${moment(from).format(
-            'YYYY.MM.DD HH:MM',
-          )} to:${moment(to).format(
-            'YYYY.MM.DD HH:MM',
+          `nothing to update  ${reportType} from:${moment(from)} to:${moment(
+            to,
           )} router IP:${nasIp} member IP:${memberIp}`,
         );
       }

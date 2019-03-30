@@ -12,11 +12,14 @@ import util from 'util';
 import syslog from './syslog';
 import {
   GeneralReportRequestTask,
+  LOGGER_TIME_ZONE,
   NetflowReportRequestTask,
   QUEUES,
   REPORT_TYPE,
   SyslogReportRequestTask,
 } from '../typings';
+import moment = require('moment');
+import momentTz = require('moment-timezone');
 
 // Convert fs.readFile into Promise version of same
 
@@ -53,13 +56,26 @@ export const processLogRequest = async () => {
         body,
       );
 
-      if (!generalReportRequestTask.toDate) {
-        generalReportRequestTask.toDate = Date.now();
+      if (!generalReportRequestTask.to) {
+        generalReportRequestTask.toDate = moment(LOGGER_TIME_ZONE);
+      } else {
+        generalReportRequestTask.toDate = momentTz.tz(
+          generalReportRequestTask.to,
+          LOGGER_TIME_ZONE,
+        );
       }
+
       // create fromDate 1 year before from Date
-      if (!generalReportRequestTask.fromDate) {
-        generalReportRequestTask.fromDate =
-          generalReportRequestTask.toDate - 31539999 * 1000;
+      if (!generalReportRequestTask.from) {
+        generalReportRequestTask.fromDate = momentTz.tz(
+          generalReportRequestTask.toDate.valueOf() - 31539999 * 1000,
+          LOGGER_TIME_ZONE,
+        );
+      } else {
+        generalReportRequestTask.fromDate = momentTz.tz(
+          generalReportRequestTask.from - 31539999 * 1000,
+          LOGGER_TIME_ZONE,
+        );
       }
 
       try {
@@ -79,7 +95,6 @@ export const processLogRequest = async () => {
           throw new Error('invalid report type');
         }
 
-        log.debug('#######################');
         log.debug(reports);
         const csvReport = jsonToCsv(fields, reports);
         log.debug(csvReport);

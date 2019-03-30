@@ -5,6 +5,7 @@ import { Moment } from 'moment';
 import momentJ from 'moment-jalaali';
 import { UpdateDocumentByQueryResponse } from 'elasticsearch';
 import {
+  LOGGER_TIME_ZONE,
   NetflowAggregateByIp,
   NetflowReportQueryParams,
   NetflowReportRequestTask,
@@ -34,9 +35,7 @@ const getIndexNames = (from: Moment, to: Moment) => {
   return indexNames;
 };
 
-const countBusinessReports = async (from: number, to: number) => {
-  const fromDate = momentTz.tz(from, 'Europe/London');
-  const toDate = momentTz.tz(to, 'Europe/London');
+const countBusinessReports = async (fromDate: Moment, toDate: Moment) => {
   const indexNames = getIndexNames(fromDate, toDate);
   let reportCounts: Array<{ key: string; doc_count: number }> = [];
   for (const index of indexNames) {
@@ -71,8 +70,8 @@ const countBusinessReports = async (from: number, to: number) => {
 const getNetflowReports = async (
   reportRequestTask: NetflowReportRequestTask,
 ) => {
-  const fromDate = momentTz.tz(reportRequestTask.fromDate, 'Europe/London');
-  const toDate = momentTz.tz(reportRequestTask.toDate, 'Europe/London');
+  const fromDate = momentTz.tz(reportRequestTask.fromDate, LOGGER_TIME_ZONE);
+  const toDate = momentTz.tz(reportRequestTask.toDate, LOGGER_TIME_ZONE);
   const indexNames = getIndexNames(fromDate, toDate);
   let data: RawNetflowReport[] = [];
 
@@ -114,7 +113,10 @@ const formatReports = (rawNetflowReports: RawNetflowReport[]) => {
       'Asia/Tehran',
     );
     const jalaaliDate = momentJ(localDate);
-    const zeroTz = momentTz.tz(rawReport._source['@timestamp'], 'Asia/Tehran');
+    const gregorianDate = momentTz.tz(
+      rawReport._source['@timestamp'],
+      'Asia/Tehran',
+    );
 
     let protocolString = '';
     if (rawReport._source.netflow.protocol === '6') {
@@ -134,7 +136,7 @@ const formatReports = (rawNetflowReports: RawNetflowReport[]) => {
       Dst_Addr: rawReport._source.netflow.dst_addr,
       Dst_Port: rawReport._source.netflow.dst_port,
       Protocol: protocolString,
-      Gregorian_Date: zeroTz.format('YYYY/MM/DD HH:mm'),
+      Gregorian_Date: gregorianDate.format('YYYY/MM/DD HH:mm'),
     };
   });
   return _.sortBy(formatted, [
@@ -303,10 +305,7 @@ const createNetflowQuery = (
   };
 };
 
-const netflowGroupByIp = async (from: number, to: number) => {
-  const fromDate = momentTz.tz(from, 'Europe/London');
-  const toDate = momentTz.tz(to, 'Europe/London');
-
+const netflowGroupByIp = async (fromDate: Moment, toDate: Moment) => {
   const indexNames = getIndexNames(fromDate, toDate);
   let data: NetflowAggregateByIp[] = [];
 
@@ -411,8 +410,8 @@ const createNetflowGroupByBusinessId = () => {
 };
 
 const updateNetflows = async (
-  from: number,
-  to: number,
+  fromDate: Moment,
+  toDate: Moment,
   nasIp: string,
   memberIp: string,
   updates: {
@@ -424,8 +423,6 @@ const updateNetflows = async (
     username: string;
   },
 ) => {
-  const fromDate = momentTz.tz(from, 'Europe/London');
-  const toDate = momentTz.tz(to, 'Europe/London');
   const indexNames = getIndexNames(fromDate, toDate);
   let data: UpdateDocumentByQueryResponse[] = [];
   //log.debug('INDEXES:', indexNames);

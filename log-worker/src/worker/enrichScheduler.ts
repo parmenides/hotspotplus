@@ -1,18 +1,21 @@
 import moment, { Moment } from 'moment';
 import { getRabbitMqChannel } from '../utils/rabbitmq';
-import { EnrichTask, QUEUES, REPORT_TYPE } from '../typings';
+import { EnrichTask, LOGGER_TIME_ZONE, QUEUES, REPORT_TYPE } from '../typings';
 import logger from '../utils/logger';
 import { CronJob } from 'cron';
+import momentTz from 'moment-timezone';
 
 const log = logger.createLogger();
 const ENRICHMENT_SCOPE = Number(process.env.ENRICHMENT_SCOPE);
 export const addEnrichmentTasks = async (reportType: REPORT_TYPE) => {
   try {
-    log.debug('Add Enrichment Tasks: ', REPORT_TYPE);
-    const now = Date.now();
-    const toDate: Moment = moment(now);
-    const fromDate = toDate.clone().subtract({ minute: ENRICHMENT_SCOPE });
+    const toDate = momentTz.tz(LOGGER_TIME_ZONE);
+    const fromDate = toDate.clone();
+    fromDate.subtract({ minute: ENRICHMENT_SCOPE });
 
+    log.debug(
+      `Add enrichment scope for : ${REPORT_TYPE} from ${fromDate} to ${toDate}`,
+    );
     const channel = await getRabbitMqChannel();
 
     const duration = moment.duration(toDate.diff(fromDate));
@@ -20,12 +23,12 @@ export const addEnrichmentTasks = async (reportType: REPORT_TYPE) => {
     const RUN_TASK_EVERY_MINUTES = 5;
     const taskLen: any[] = new Array(hours * (60 / RUN_TASK_EVERY_MINUTES));
     for (const t of taskLen) {
-      const start = fromDate.valueOf();
+      const start = fromDate.clone();
+
       fromDate.add({
         minutes: RUN_TASK_EVERY_MINUTES,
       });
-
-      const end = fromDate.valueOf();
+      const end = fromDate.clone();
       const enrichTask: EnrichTask = {
         from: start,
         to: end,

@@ -6,6 +6,7 @@ import momentJ from 'moment-jalaali';
 
 import { UpdateDocumentByQueryResponse } from 'elasticsearch';
 import {
+  LOGGER_TIME_ZONE,
   RawSyslogReport,
   SyslogAggregateByIp,
   SyslogReportQueryParams,
@@ -36,9 +37,9 @@ const getSyslogReports = async (
 ) => {
   const fromDate = momentTz.tz(
     syslogReportRequestTask.fromDate,
-    'Europe/London',
+    LOGGER_TIME_ZONE,
   );
-  const toDate = momentTz.tz(syslogReportRequestTask.toDate, 'Europe/London');
+  const toDate = momentTz.tz(syslogReportRequestTask.toDate, LOGGER_TIME_ZONE);
   const indexNames = getIndexNames(fromDate, toDate);
   let data: RawSyslogReport[] = [];
   log.debug('indexes: ', indexNames);
@@ -77,7 +78,10 @@ const formatReports = (rawSyslogReports: RawSyslogReport[]) => {
       rawReport._source['@timestamp'],
       'Asia/Tehran',
     );
-    const zeroTz = momentTz.tz(rawReport._source['@timestamp'], 'Asia/Tehran');
+    const gregorianDate = momentTz.tz(
+      rawReport._source['@timestamp'],
+      'Asia/Tehran',
+    );
     const jalaaliDate = momentJ(localDate);
     return {
       Router: rawReport._source.nasTitle,
@@ -88,7 +92,7 @@ const formatReports = (rawSyslogReports: RawSyslogReport[]) => {
       Http_Method: rawReport._source.method,
       Domain: rawReport._source.domain,
       Url: rawReport._source.url,
-      Gregorian_Date: zeroTz.format('YYYY/MM/DD HH:mm'),
+      Gregorian_Date: gregorianDate.format('YYYY/MM/DD HH:mm'),
     };
   });
   return _.sortBy(formatted, ['Router', 'Username', 'Jalali_Date', 'Domain']);
@@ -231,41 +235,8 @@ const createSyslogQuery = (
     },
   };
 };
-/*
-const createCountSyslogQuery = (
-    syslogReportQueryParams: SyslogReportQueryParams
-) => {
-    return {
-        query: {
-            bool: {
-                must: [
-                    {
-                        terms: {
-                            nasIp: syslogIpQueryData.nasIpList,
-                        },
-                    },
-                    {
-                        terms: {
-                            memberIp: syslogIpQueryData.memberIpList,
-                        },
-                    },
-                    {
-                        range: {
-                            '@timestamp': {
-                                gte: fromDate.format(),
-                                lte: toDate.format(),
-                            },
-                        },
-                    },
-                ],
-            },
-        },
-    };
-};*/
 
-const syslogGroupByIp = async (from: number, to: number) => {
-  const fromDate = momentTz.tz(from, 'Europe/London');
-  const toDate = momentTz.tz(to, 'Europe/London');
+const syslogGroupByIp = async (fromDate: Moment, toDate: Moment) => {
   const indexNames = getIndexNames(fromDate, toDate);
 
   let data: SyslogAggregateByIp[] = [];
@@ -349,8 +320,8 @@ const createSyslogGroupByQuery = (fromDate: Moment, toDate: Moment) => {
 };
 
 const updateSyslogs = async (
-  from: number,
-  to: number,
+  fromDate: Moment,
+  toDate: Moment,
   nasIp: string,
   memberIp: string,
   updates: {
@@ -362,8 +333,6 @@ const updateSyslogs = async (
     username: string;
   },
 ) => {
-  const fromDate = momentTz.tz(from, 'Europe/London');
-  const toDate = momentTz.tz(to, 'Europe/London');
   const indexNames = getIndexNames(fromDate, toDate);
   let data: UpdateDocumentByQueryResponse[] = [];
   log.debug('INDEXES:', indexNames);
@@ -456,9 +425,7 @@ const createUsernameUpdateQuery = (
   };
 };
 
-const countBusinessReports = async (from: number, to: number) => {
-  const fromDate = momentTz.tz(from, 'Europe/London');
-  const toDate = momentTz.tz(to, 'Europe/London');
+const countBusinessReports = async (fromDate: Moment, toDate: Moment) => {
   const indexNames = getIndexNames(fromDate, toDate);
   let reportCounts: Array<{ key: string; doc_count: number }> = [];
   for (const index of indexNames) {

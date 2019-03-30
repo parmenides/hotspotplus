@@ -5,23 +5,24 @@ import { createHttpClient } from '../utils/httpClient';
 import netflowModule from '../worker/netflow';
 import syslogModule from '../worker/syslog';
 import momentTz from 'moment-timezone';
+import { LOGGER_TIME_ZONE } from '../typings';
 
 const BUSINESS_API = `${process.env.API_ADDRESS}/api/Businesses`;
 
 const log = logger.createLogger();
 
 export const countAndUpdateBusinessReports = async () => {
-  const to = momentTz.tz(Date.now(), 'Asia/Tehran');
+  const to = momentTz.tz(Date.now(), LOGGER_TIME_ZONE);
   to.add({ days: 1 });
   to.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
   const from = to.clone().subtract({ days: 10 });
 
   const netflowBusinessReportCount = await netflowModule.countBusinessReports(
-    from.valueOf(),
-    to.valueOf(),
+    from,
+    to,
   );
   const netflowReportsArray: Array<{ businessId: string; count: number }> = [];
-  for (let businessId in netflowBusinessReportCount) {
+  for (const businessId in netflowBusinessReportCount) {
     netflowReportsArray.push({
       businessId,
       count: netflowBusinessReportCount[businessId],
@@ -37,12 +38,9 @@ export const countAndUpdateBusinessReports = async () => {
     }
   }
 
-  const businessReportCount = await syslogModule.countBusinessReports(
-    from.valueOf(),
-    to.valueOf(),
-  );
+  const businessReportCount = await syslogModule.countBusinessReports(from, to);
   const reportsArray: Array<{ businessId: string; count: number }> = [];
-  for (let businessId in businessReportCount) {
+  for (const businessId in businessReportCount) {
     reportsArray.push({ businessId, count: businessReportCount[businessId] });
   }
   for (const report of reportsArray) {

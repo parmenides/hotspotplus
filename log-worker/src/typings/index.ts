@@ -1,6 +1,8 @@
 //
 import { Moment } from 'moment';
 
+export const LOGGER_TIME_ZONE = 'Europe/London';
+
 export enum QUEUES {
   LOG_ENRICHMENT_WORKER_QUEUE = 'log-enrichment',
   LOG_ENRICHMENT_WORKER_QUEUE_EXCHANGE = 'log-enrichment-ex',
@@ -13,8 +15,8 @@ export enum QUEUES {
 }
 
 export interface EnrichTask {
-  from: number;
-  to: number;
+  from: Moment;
+  to: Moment;
   reportType: REPORT_TYPE;
 }
 
@@ -135,8 +137,10 @@ export interface GeneralReportRequestTask {
   reportType: REPORT_TYPE;
   businessId: string;
   reportRequestId: string;
-  fromDate?: number;
-  toDate?: number;
+  fromDate?: Moment;
+  toDate?: Moment;
+  from?: number;
+  to?: number;
   nasTitle?: string;
   nasId?: string[];
 }
