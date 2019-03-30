@@ -137,8 +137,8 @@ export interface GeneralReportRequestTask {
   reportType: REPORT_TYPE;
   businessId: string;
   reportRequestId: string;
-  fromDate?: Moment;
-  toDate?: Moment;
+  fromDate: Moment;
+  toDate: Moment;
   from?: number;
   to?: number;
   nasTitle?: string;

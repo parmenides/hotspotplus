@@ -70,8 +70,8 @@ const countBusinessReports = async (fromDate: Moment, toDate: Moment) => {
 const getNetflowReports = async (
   reportRequestTask: NetflowReportRequestTask,
 ) => {
-  const fromDate = momentTz.tz(reportRequestTask.fromDate, LOGGER_TIME_ZONE);
-  const toDate = momentTz.tz(reportRequestTask.toDate, LOGGER_TIME_ZONE);
+  const fromDate = reportRequestTask.fromDate;
+  const toDate = reportRequestTask.toDate;
   const indexNames = getIndexNames(fromDate, toDate);
   let data: RawNetflowReport[] = [];
 

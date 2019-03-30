@@ -35,11 +35,8 @@ const getIndexNames = (from: Moment, to: Moment) => {
 const getSyslogReports = async (
   syslogReportRequestTask: SyslogReportRequestTask,
 ) => {
-  const fromDate = momentTz.tz(
-    syslogReportRequestTask.fromDate,
-    LOGGER_TIME_ZONE,
-  );
-  const toDate = momentTz.tz(syslogReportRequestTask.toDate, LOGGER_TIME_ZONE);
+  const fromDate = syslogReportRequestTask.fromDate;
+  const toDate = syslogReportRequestTask.toDate;
   const indexNames = getIndexNames(fromDate, toDate);
   let data: RawSyslogReport[] = [];
   log.debug('indexes: ', indexNames);
