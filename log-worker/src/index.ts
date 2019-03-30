@@ -8,8 +8,8 @@ import { testRunner } from './test';
 import { addElasticIndexTemplates } from './modules/initElasticsearch';
 import { addDefaultQueue } from './modules/initRabbitMq';
 import { enrichLogs } from './worker/enrich';
-import {startEnrichScheduler} from "./worker/enrichScheduler";
-import {startCounterScheduler} from "./worker/counterScheduler";
+import { startEnrichScheduler } from './worker/enrichScheduler';
+import { startCounterScheduler } from './worker/counterScheduler';
 
 //require('date-utils');
 const log = logger.createLogger();
