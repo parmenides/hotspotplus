@@ -7,7 +7,7 @@ get_latest_commit(){
 }
 
 build_image(){
-    docker build -t ${CI_REGISTRY_IMAGE}/dashboard:latest -t ${CI_REGISTRY_IMAGE}/dashboard:${CI_COMMIT_TAG} -f ./dashboard/Dockerfile.build ./dashboard
+    docker build --no-cache -t ${CI_REGISTRY_IMAGE}/dashboard:latest -t ${CI_REGISTRY_IMAGE}/dashboard:${CI_COMMIT_TAG} -f ./dashboard/Dockerfile.build ./dashboard
     docker push ${CI_REGISTRY_IMAGE}/dashboard:${CI_COMMIT_TAG}
     docker push ${CI_REGISTRY_IMAGE}/dashboard:latest
 }
