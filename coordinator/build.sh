@@ -7,7 +7,7 @@ get_latest_commit(){
 }
 
 build_image(){
-    docker build -t ${CI_REGISTRY_IMAGE}/coordinator:latest -t ${CI_REGISTRY_IMAGE}/coordinator:${CI_COMMIT_TAG} -f ./coordinator/Dockerfile.build ./coordinator
+    docker build  --no-cache -t ${CI_REGISTRY_IMAGE}/coordinator:latest -t ${CI_REGISTRY_IMAGE}/coordinator:${CI_COMMIT_TAG} -f ./coordinator/Dockerfile.build ./coordinator
     docker push ${CI_REGISTRY_IMAGE}/coordinator:${CI_COMMIT_TAG}
     docker push ${CI_REGISTRY_IMAGE}/coordinator:latest
 }

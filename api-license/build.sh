@@ -7,7 +7,7 @@ get_latest_commit(){
 }
 
 build_image(){
-    docker build -t ${CI_REGISTRY_IMAGE}/apilicense:latest -t ${CI_REGISTRY_IMAGE}/apilicense:${CI_COMMIT_TAG} -f ./api-license/Dockerfile.build ./api-license
+    docker build  --no-cache -t ${CI_REGISTRY_IMAGE}/apilicense:latest -t ${CI_REGISTRY_IMAGE}/apilicense:${CI_COMMIT_TAG} -f ./api-license/Dockerfile.build ./api-license
     docker push ${CI_REGISTRY_IMAGE}/apilicense:${CI_COMMIT_TAG}
     docker push ${CI_REGISTRY_IMAGE}/apilicense:latest
 }

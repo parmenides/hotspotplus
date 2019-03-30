@@ -7,7 +7,7 @@ get_latest_commit(){
 }
 
 build_image(){
-    docker build -t ${CI_REGISTRY_IMAGE}/logaggregator:latest -t ${CI_REGISTRY_IMAGE}/logaggregator:${CI_COMMIT_TAG} -f ./log-aggregator/Dockerfile.build ./log-aggregator
+    docker build  --no-cache -t ${CI_REGISTRY_IMAGE}/logaggregator:latest -t ${CI_REGISTRY_IMAGE}/logaggregator:${CI_COMMIT_TAG} -f ./log-aggregator/Dockerfile.build ./log-aggregator
     docker push ${CI_REGISTRY_IMAGE}/logaggregator:${CI_COMMIT_TAG}
     docker push ${CI_REGISTRY_IMAGE}/logaggregator:latest
 }

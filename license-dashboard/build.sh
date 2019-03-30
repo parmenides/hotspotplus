@@ -7,7 +7,7 @@ get_latest_commit(){
 }
 
 build_image(){
-    docker build -t ${CI_REGISTRY_IMAGE}/licensedashboard:latest -t ${CI_REGISTRY_IMAGE}/licensedashboard:${CI_COMMIT_TAG} -f ./license-dashboard/Dockerfile.build ./license-dashboard
+    docker build  --no-cache -t ${CI_REGISTRY_IMAGE}/licensedashboard:latest -t ${CI_REGISTRY_IMAGE}/licensedashboard:${CI_COMMIT_TAG} -f ./license-dashboard/Dockerfile.build ./license-dashboard
     docker push ${CI_REGISTRY_IMAGE}/licensedashboard:${CI_COMMIT_TAG}
     docker push ${CI_REGISTRY_IMAGE}/licensedashboard:latest
 }

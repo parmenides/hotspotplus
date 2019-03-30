@@ -7,7 +7,7 @@ get_latest_commit(){
 }
 
 build_image(){
-    docker build -t ${CI_REGISTRY_IMAGE}/hotspot:latest -t ${CI_REGISTRY_IMAGE}/hotspot:${CI_COMMIT_TAG} -f ./hotspot/Dockerfile.build ./hotspot
+    docker build  --no-cache  -t ${CI_REGISTRY_IMAGE}/hotspot:latest -t ${CI_REGISTRY_IMAGE}/hotspot:${CI_COMMIT_TAG} -f ./hotspot/Dockerfile.build ./hotspot
     docker push ${CI_REGISTRY_IMAGE}/hotspot:${CI_COMMIT_TAG}
     docker push ${CI_REGISTRY_IMAGE}/hotspot:latest
 }

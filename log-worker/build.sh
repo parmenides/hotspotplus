@@ -7,7 +7,7 @@ get_latest_commit(){
 }
 
 build_image(){
-    docker build -t ${CI_REGISTRY_IMAGE}/logworker:latest -t ${CI_REGISTRY_IMAGE}/logworker:${CI_COMMIT_TAG} -f ./log-worker/Dockerfile.build ./log-worker
+    docker build  --no-cache -t ${CI_REGISTRY_IMAGE}/logworker:latest -t ${CI_REGISTRY_IMAGE}/logworker:${CI_COMMIT_TAG} -f ./log-worker/Dockerfile.build ./log-worker
     docker push ${CI_REGISTRY_IMAGE}/logworker:${CI_COMMIT_TAG}
     docker push ${CI_REGISTRY_IMAGE}/logworker:latest
 }
