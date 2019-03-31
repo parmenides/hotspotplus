@@ -34,25 +34,24 @@ export const enrichLogs = async () => {
         log.debug('empty message:', message);
         throw new Error('empty message');
       }
-
       const body = message.content.toString();
 
       try {
         log.debug(" [x] enrichment message received '%s'", body);
         const enrichTask: EnrichTask = JSON.parse(body);
 
-        const from = enrichTask.from;
-        const to = enrichTask.to;
+        const fromDATE = moment(enrichTask.from);
+        const toDate = moment(enrichTask.to);
         const reportType = enrichTask.reportType;
 
         if (reportType === REPORT_TYPE.SYSLOG) {
-          const result = await syslogModule.syslogGroupByIp(from, to);
+          const result = await syslogModule.syslogGroupByIp(fromDATE, toDate);
           const ipData = getIpData(result);
-          await searchAndUpdateReport(reportType, ipData, from, to);
+          await searchAndUpdateReport(reportType, ipData, fromDATE, toDate);
         } else if (reportType === REPORT_TYPE.NETFLOW) {
-          const result = await netflowModule.netflowGroupByIp(from, to);
+          const result = await netflowModule.netflowGroupByIp(fromDATE, toDate);
           const ipData = getIpData(result);
-          await searchAndUpdateReport(reportType, ipData, from, to);
+          await searchAndUpdateReport(reportType, ipData, fromDATE, toDate);
         } else {
           log.warn('unknown enrichment type:', reportType);
           channel.ack(message);
