@@ -171,16 +171,19 @@ const getNetflowsByIndex = async (
     netflowReportQueryParams,
   );
 
+  log.debug(`index ${netflowIndex} total result size: ${countResponse}`);
   const totalLogs = countResponse.count;
   const maxResultSize = 500;
   const partsLen =
     totalLogs > maxResultSize ? Math.ceil(totalLogs / maxResultSize) : 1;
 
+  log.debug(`query parts: ${partsLen}`);
   const parts = new Array(partsLen);
   let startFrom = 0;
   let result: Array<{ _source: any }> = [];
   for (const i of parts) {
     try {
+      log.debug(`query from ${startFrom} size: ${maxResultSize}`);
       const queryResult = await elasticClient.search({
         index: netflowIndex,
         from: startFrom,
