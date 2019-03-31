@@ -57,7 +57,7 @@ export const processLogRequest = async () => {
       );
 
       if (!generalReportRequestTask.to) {
-        generalReportRequestTask.toDate = moment(LOGGER_TIME_ZONE);
+        generalReportRequestTask.toDate = momentTz.tz(LOGGER_TIME_ZONE);
       } else {
         generalReportRequestTask.toDate = momentTz.tz(
           generalReportRequestTask.to,
