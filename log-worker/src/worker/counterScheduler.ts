@@ -5,7 +5,8 @@ import { createHttpClient } from '../utils/httpClient';
 import netflowModule from '../worker/netflow';
 import syslogModule from '../worker/syslog';
 import momentTz from 'moment-timezone';
-import { LOGGER_TIME_ZONE } from '../typings';
+import { LOGGER_TIME_ZONE, REPORT_TYPE } from '../typings';
+import { addEnrichmentTasks } from './enrichScheduler';
 
 const BUSINESS_API = `${process.env.API_ADDRESS}/api/Businesses`;
 
@@ -76,3 +77,7 @@ export const startCounterScheduler = () => {
 
   job.start();
 };
+
+if (process.env.START_MANUAL_COUNTER === 'true') {
+  countAndUpdateBusinessReports();
+}
