@@ -61,3 +61,8 @@ export const startEnrichScheduler = () => {
 
   job.start();
 };
+
+if (process.env.START_MANUAL_ENRICHMENT === 'true') {
+  addEnrichmentTasks(REPORT_TYPE.NETFLOW);
+  addEnrichmentTasks(REPORT_TYPE.SYSLOG);
+}
