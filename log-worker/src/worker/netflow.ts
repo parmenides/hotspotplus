@@ -178,19 +178,37 @@ const getNetflowsByIndex = async (
     totalLogs > maxResultSize ? Math.ceil(totalLogs / maxResultSize) : 1;
 
   log.debug(`query parts: ${partsLen}`);
+  const scrollTtl = '5m';
+  const scrollResult = await elasticClient.search({
+    scroll: scrollTtl,
+    index: netflowIndex,
+    size: maxResultSize,
+    body: createNetflowQuery(netflowReportQueryParams),
+  });
+  log.debug('scrollResult: ', scrollResult);
+
+  if (!scrollResult._scroll_id) {
+    throw new Error('invalid scrollId ');
+  }
+  let scrollId = scrollResult._scroll_id;
+  const allScrollId = [scrollId];
   const parts = new Array(partsLen);
   let startFrom = 0;
   let result: Array<{ _source: any }> = [];
+
   for (const i of parts) {
     try {
       log.debug(`query from ${startFrom} size: ${maxResultSize}`);
-      const queryResult = await elasticClient.search({
-        index: netflowIndex,
-        from: startFrom,
-        size: maxResultSize,
-        body: createNetflowQuery(netflowReportQueryParams),
+      const queryResult = await elasticClient.scroll({
+        scrollId: scrollId,
+        scroll: scrollTtl,
       });
 
+      if (queryResult._scroll_id) {
+        log.debug('new scroll id : ', queryResult._scroll_id);
+        scrollId = queryResult._scroll_id;
+        allScrollId.push(scrollId);
+      }
       if (queryResult.hits) {
         result = result.concat(queryResult.hits.hits);
       } else {
@@ -203,6 +221,10 @@ const getNetflowsByIndex = async (
       throw error;
     }
   }
+  log.debug('ids', allScrollId);
+  await elasticClient.clearScroll({
+    scrollId: allScrollId,
+  });
   return result;
 };
 
