@@ -12,17 +12,8 @@ module.exports = function(Report) {
           log.error(error);
           throw error;
         }
-        var report = ctx.instance;
-        var reportId = ctx.instance.id;
-        const message = {
-          reportType: report.type,
-          username: report.username,
-          fromDate: report.from,
-          toDate: report.to,
-          businessId: report.businessId,
-          reportRequestId: reportId,
-          memberId: report.memberId
-        };
+        var message = ctx.instance;
+        message.reportRequestId = ctx.instance.id;
 
         channel.sendToQueue(
           config.LOG_WORKER_QUEUE,

@@ -209,7 +209,7 @@ const getNetflowsByIndex = async (
         scroll: scrollTtl,
       });
 
-      if (queryResult._scroll_id) {
+      if (queryResult._scroll_id && queryResult._scroll_id !== scrollId) {
         log.debug('new scroll id : ', queryResult._scroll_id);
         scrollId = queryResult._scroll_id;
         allScrollId.push(scrollId);
