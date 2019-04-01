@@ -179,6 +179,7 @@ const getNetflowsByIndex = async (
 
   log.debug(`query parts: ${partsLen}`);
   const scrollTtl = '5m';
+  let result: Array<{ _source: any }> = [];
   const query = createNetflowQuery(netflowReportQueryParams);
   const scrollResult = await elasticClient.search({
     scroll: scrollTtl,
@@ -186,10 +187,11 @@ const getNetflowsByIndex = async (
     size: maxResultSize,
     body: query,
   });
+  if (scrollResult.hits) {
+    result.concat(scrollResult.hits.hits);
+  }
   log.debug('netflow query: %s', query);
   log.debug(query);
-  log.debug('scrollResult %s ', scrollResult);
-  log.debug(scrollResult);
 
   if (!scrollResult._scroll_id) {
     throw new Error('invalid scrollId ');
@@ -198,7 +200,6 @@ const getNetflowsByIndex = async (
   const allScrollId = [scrollId];
   const parts = new Array(partsLen);
   let startFrom = 0;
-  let result: Array<{ _source: any }> = [];
 
   for (const i of parts) {
     try {
@@ -206,7 +207,6 @@ const getNetflowsByIndex = async (
       const queryResult = await elasticClient.scroll({
         scrollId: scrollId,
         scroll: scrollTtl,
-        body: query,
       });
 
       if (queryResult._scroll_id) {
