@@ -178,7 +178,7 @@ eval("\n/**\n * Created by hamidehnouri on 9/21/2016 AD.\n */\nvar __importDefau
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-eval("\nvar __importDefault = (this && this.__importDefault) || function (mod) {\n    return (mod && mod.__esModule) ? mod : { \"default\": mod };\n};\nObject.defineProperty(exports, \"__esModule\", { value: true });\nconst elasticsearch_1 = __importDefault(__webpack_require__(/*! elasticsearch */ \"elasticsearch\"));\nconst elastic = new elasticsearch_1.default.Client({\n    // @ts-ignore\n    hosts: `${process.env.ELASTIC_IP}:${process.env.ELASTIC_PORT}`,\n    apiVersion: '6.6',\n    log: process.env.ELASTICSEARCH_LOG_LEVEL || 'info',\n});\nexports.default = elastic;\n\n\n//# sourceURL=file:////Users/payamyousefi/projects/hotspotplus/log-worker/src/utils/elastic.ts");
+eval("\nvar __importDefault = (this && this.__importDefault) || function (mod) {\n    return (mod && mod.__esModule) ? mod : { \"default\": mod };\n};\nObject.defineProperty(exports, \"__esModule\", { value: true });\nconst elasticsearch_1 = __importDefault(__webpack_require__(/*! elasticsearch */ \"elasticsearch\"));\nconst elastic = new elasticsearch_1.default.Client({\n    // @ts-ignore\n    hosts: `${process.env.ELASTIC_IP}:${process.env.ELASTIC_PORT}`,\n    apiVersion: '6.7',\n    log: process.env.ELASTICSEARCH_LOG_LEVEL || 'info',\n});\nexports.default = elastic;\n\n\n//# sourceURL=file:////Users/payamyousefi/projects/hotspotplus/log-worker/src/utils/elastic.ts");
 
 /***/ }),
 
