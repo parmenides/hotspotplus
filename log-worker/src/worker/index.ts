@@ -73,10 +73,16 @@ export const processLogRequest = async () => {
         );
       } else {
         generalReportRequestTask.fromDate = momentTz.tz(
-          generalReportRequestTask.from - 31539999 * 1000,
+          generalReportRequestTask.from,
           LOGGER_TIME_ZONE,
         );
       }
+      log.debug(
+        `Create ${generalReportRequestTask.type} report from ${
+          generalReportRequestTask.from
+        } to ${generalReportRequestTask.to}`,
+        JSON.stringify(generalReportRequestTask),
+      );
 
       try {
         let reports: any;
@@ -96,9 +102,8 @@ export const processLogRequest = async () => {
         }
 
         log.debug(`index one of result size: ${reports.length}`);
-        log.debug(`index one of result:`, reports[1]);
+        log.debug(`index one of result:`, JSON.stringify(reports[1]));
         const csvReport = jsonToCsv(fields, reports);
-        log.debug(csvReport);
         await uploadReport(
           generalReportRequestTask.reportRequestId,
           generalReportRequestTask.businessId,
