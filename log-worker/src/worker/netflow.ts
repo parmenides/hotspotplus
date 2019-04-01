@@ -171,9 +171,7 @@ const getNetflowsByIndex = async (
     netflowReportQueryParams,
   );
 
-  log.debug(
-    `index ${netflowIndex} total result size: ${JSON.stringify(countResponse)}`,
-  );
+  log.debug(`index ${netflowIndex} total result size: ${countResponse.count}`);
   const totalLogs = countResponse.count;
   const maxResultSize = 500;
   const partsLen =
@@ -193,7 +191,7 @@ const getNetflowsByIndex = async (
     result.concat(scrollResult.hits.hits);
   }
   log.debug('netflow query: %j', query);
-  log.debug(query);
+  log.debug(result);
 
   if (!scrollResult._scroll_id) {
     throw new Error('invalid scrollId ');
@@ -210,6 +208,7 @@ const getNetflowsByIndex = async (
         scrollId: scrollId,
         scroll: scrollTtl,
       });
+      log.debug(queryResult);
 
       if (queryResult._scroll_id && queryResult._scroll_id !== scrollId) {
         log.debug('new scroll id : ', queryResult._scroll_id);
