@@ -95,7 +95,8 @@ export const processLogRequest = async () => {
           throw new Error('invalid report type');
         }
 
-        log.debug(reports);
+        log.debug(`index one of result size: ${reports.length}`);
+        log.debug(`index one of result:`, reports[1]);
         const csvReport = jsonToCsv(fields, reports);
         log.debug(csvReport);
         await uploadReport(

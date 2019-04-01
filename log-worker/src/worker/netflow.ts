@@ -185,6 +185,7 @@ const getNetflowsByIndex = async (
     size: maxResultSize,
     body: createNetflowQuery(netflowReportQueryParams),
   });
+  log.debug('scrollResult: ', createNetflowQuery(netflowReportQueryParams));
   log.debug('scrollResult: ', scrollResult);
 
   if (!scrollResult._scroll_id) {
