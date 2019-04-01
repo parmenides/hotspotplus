@@ -74,34 +74,27 @@ const getNetflowReports = async (
   const toDate = reportRequestTask.toDate;
   const indexNames = getIndexNames(fromDate, toDate);
   let data: RawNetflowReport[] = [];
-
-  for (const indexName of indexNames) {
-    try {
-      const result = await getNetflowsByIndex(indexName, {
-        fromDate,
-        toDate,
-        srcAddress: reportRequestTask.srcAddress,
-        srcPort: reportRequestTask.srcPort,
-        username: reportRequestTask.username,
-        dstAddress: reportRequestTask.dstAddress,
-        dstPort: reportRequestTask.dstPort,
-        nasId: reportRequestTask.nasId,
-        protocol: reportRequestTask.protocol,
-      });
-      if (result) {
-        data = data.concat(result);
-      }
-    } catch (error) {
-      if (error.status === 404) {
-        log.warn(`${indexName} index not found`);
-      } else {
-        log.error(error.status);
-        throw error;
-      }
+  try {
+    const result = await getNetflowsByIndex(indexNames, {
+      fromDate,
+      toDate,
+      srcAddress: reportRequestTask.srcAddress,
+      srcPort: reportRequestTask.srcPort,
+      username: reportRequestTask.username,
+      dstAddress: reportRequestTask.dstAddress,
+      dstPort: reportRequestTask.dstPort,
+      nasId: reportRequestTask.nasId,
+      protocol: reportRequestTask.protocol,
+    });
+    if (result) {
+      data = data.concat(result);
     }
+  } catch (error) {
+    log.error(error.status);
+    throw error;
   }
-  //log.debug('log', data);
   log.debug(data.length);
+  log.debug(data);
   //log.debug(formattedResult);
   return formatReports(data);
 };
@@ -157,21 +150,23 @@ const createNetflowIndexName = (fromDate: Moment) => {
 };
 
 const getNetflowsByIndex = async (
-  netflowIndex: string,
+  netflowIndexList: string[],
   netflowReportQueryParams: NetflowReportQueryParams,
 ): Promise<undefined | Array<{ _source: any }>> => {
   const exist = await elasticClient.indices.exists({
-    index: netflowIndex,
+    index: netflowIndexList,
   });
   if (!exist) {
     return;
   }
   const countResponse = await countNetflowReportByIndex(
-    netflowIndex,
+    netflowIndexList,
     netflowReportQueryParams,
   );
 
-  log.debug(`index ${netflowIndex} total result size: ${countResponse.count}`);
+  log.debug(
+    `index ${netflowIndexList} total result size: ${countResponse.count}`,
+  );
   const totalLogs = countResponse.count;
   // if(totalLogs===0){
   //   return;
@@ -187,7 +182,7 @@ const getNetflowsByIndex = async (
   const query = createNetflowQuery(netflowReportQueryParams);
   const scrollResult = await elasticClient.search({
     scroll: scrollTtl,
-    index: netflowIndex,
+    index: netflowIndexList,
     size: maxResultSize,
     body: query,
   });
@@ -232,14 +227,14 @@ const getNetflowsByIndex = async (
     }
   }
   log.debug('ids', allScrollId);
-  /*await elasticClient.clearScroll({
+  await elasticClient.clearScroll({
     scrollId: allScrollId,
-  });*/
+  });
   return result;
 };
 
 const countNetflowReportByIndex = async (
-  indexName: string,
+  indexName: string[],
   netflowReportQueryParams: NetflowReportQueryParams,
 ) => {
   const result = await elasticClient.count({
