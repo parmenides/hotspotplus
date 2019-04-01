@@ -134,7 +134,7 @@ export interface RawNetflowReport {
 }
 
 export interface GeneralReportRequestTask {
-  reportType: REPORT_TYPE;
+  type: REPORT_TYPE;
   businessId: string;
   reportRequestId: string;
   fromDate: Moment;

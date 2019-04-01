@@ -81,12 +81,12 @@ export const processLogRequest = async () => {
       try {
         let reports: any;
         let fields: string[];
-        if (generalReportRequestTask.reportType === REPORT_TYPE.NETFLOW) {
+        if (generalReportRequestTask.type === REPORT_TYPE.NETFLOW) {
           reports = await netflow.getNetflowReports(
             generalReportRequestTask as NetflowReportRequestTask,
           );
           fields = getNetflowFields();
-        } else if (generalReportRequestTask.reportType === REPORT_TYPE.SYSLOG) {
+        } else if (generalReportRequestTask.type === REPORT_TYPE.SYSLOG) {
           reports = await syslog.getSyslogReports(
             generalReportRequestTask as SyslogReportRequestTask,
           );
