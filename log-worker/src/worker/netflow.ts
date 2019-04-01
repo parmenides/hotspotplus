@@ -173,12 +173,16 @@ const getNetflowsByIndex = async (
 
   log.debug(`index ${netflowIndex} total result size: ${countResponse.count}`);
   const totalLogs = countResponse.count;
+  // if(totalLogs===0){
+  //   return;
+  // }
+
   const maxResultSize = 500;
   const partsLen =
     totalLogs > maxResultSize ? Math.ceil(totalLogs / maxResultSize) : 1;
 
   log.debug(`query parts: ${partsLen}`);
-  const scrollTtl = '5m';
+  const scrollTtl = '1m';
   let result: Array<{ _source: any }> = [];
   const query = createNetflowQuery(netflowReportQueryParams);
   const scrollResult = await elasticClient.search({
@@ -228,9 +232,9 @@ const getNetflowsByIndex = async (
     }
   }
   log.debug('ids', allScrollId);
-  await elasticClient.clearScroll({
+  /*await elasticClient.clearScroll({
     scrollId: allScrollId,
-  });
+  });*/
   return result;
 };
 
