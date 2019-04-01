@@ -102,7 +102,7 @@ export const processLogRequest = async () => {
         }
 
         log.debug(`index one of result size: ${reports.length}`);
-        log.debug(`index one of result:`, JSON.stringify(reports[1]));
+        log.debug(`all result:`, reports);
         const csvReport = jsonToCsv(fields, reports);
         await uploadReport(
           generalReportRequestTask.reportRequestId,
@@ -113,8 +113,8 @@ export const processLogRequest = async () => {
       } catch (error) {
         log.error(error);
         //todo remove me after test
-        channel.ack(message);
-        //channel.nack(message, false, false);
+        //channel.ack(message);
+        channel.nack(message, false, false);
       }
     },
     { noAck: false },

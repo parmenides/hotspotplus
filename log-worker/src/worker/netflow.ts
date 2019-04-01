@@ -171,7 +171,9 @@ const getNetflowsByIndex = async (
     netflowReportQueryParams,
   );
 
-  log.debug(`index ${netflowIndex} total result size: ${countResponse}`);
+  log.debug(
+    `index ${netflowIndex} total result size: ${JSON.stringify(countResponse)}`,
+  );
   const totalLogs = countResponse.count;
   const maxResultSize = 500;
   const partsLen =
