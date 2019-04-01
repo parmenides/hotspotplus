@@ -190,7 +190,7 @@ const getNetflowsByIndex = async (
   if (scrollResult.hits) {
     result.concat(scrollResult.hits.hits);
   }
-  log.debug('netflow query: %s', query);
+  log.debug('netflow query: %j', query);
   log.debug(query);
 
   if (!scrollResult._scroll_id) {
@@ -264,18 +264,27 @@ const createNetflowQuery = (
     },
   });
 
-  if (netflowReportQueryParams.protocol === 'tcp') {
-    filter.push({
-      term: {
-        'netflow.protocol': '6',
-      },
-    });
-  } else if (netflowReportQueryParams.protocol === 'udp') {
-    filter.push({
-      term: {
-        'netflow.protocol': '17',
-      },
-    });
+  if (netflowReportQueryParams.protocol) {
+    const protocol = netflowReportQueryParams.protocol.toLowerCase();
+    if (protocol === 'tcp') {
+      filter.push({
+        term: {
+          'netflow.protocol': '6',
+        },
+      });
+    } else if (protocol === 'udp') {
+      filter.push({
+        term: {
+          'netflow.protocol': '17',
+        },
+      });
+    } else if (protocol === 'tcp/udp') {
+      filter.push({
+        terms: {
+          'netflow.protocol': ['17', '16'],
+        },
+      });
+    }
   }
 
   if (netflowReportQueryParams.srcPort) {

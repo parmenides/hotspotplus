@@ -79,8 +79,8 @@ export const processLogRequest = async () => {
       }
       log.debug(
         `Create ${generalReportRequestTask.type} report from ${
-          generalReportRequestTask.from
-        } to ${generalReportRequestTask.to}`,
+          generalReportRequestTask.fromDate
+        } to ${generalReportRequestTask.toDate}`,
         JSON.stringify(generalReportRequestTask),
       );
 
