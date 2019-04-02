@@ -195,10 +195,7 @@ const getNetflowsByIndex = async (
   if (scrollResult.hits) {
     result = result.concat(scrollResult.hits.hits);
   }
-  log.debug('scrollResult:');
-  log.debug(scrollResult);
   log.debug('netflow query: %j', query);
-  log.debug(result);
 
   if (!scrollResult._scroll_id) {
     throw new Error('invalid scrollId ');
@@ -216,8 +213,6 @@ const getNetflowsByIndex = async (
         method: 'post',
         scroll: scrollTtl,
       });
-      log.debug(queryResult);
-
       if (queryResult._scroll_id && queryResult._scroll_id !== scrollId) {
         log.debug('new scroll id : ', queryResult._scroll_id);
         scrollId = queryResult._scroll_id;
@@ -236,11 +231,10 @@ const getNetflowsByIndex = async (
     }
   }
   log.debug('ids', allScrollId);
-  // const clearanceRes = await elasticClient.clearScroll({
-  //   scrollId: scrollId,
-  // });
-  //log.debug('clear: ');
-  //log.debug(clearanceRes);
+  const clearanceRes = await elasticClient.clearScroll({
+    scrollId: allScrollId,
+  });
+  log.debug('clear: ', clearanceRes);
   return result;
 };
 
@@ -292,7 +286,7 @@ const createNetflowQuery = (
     } else if (protocol === 'tcp/udp') {
       filter.push({
         terms: {
-          'netflow.protocol': ['17', '16'],
+          'netflow.protocol': ['17', '6'],
         },
       });
     }
