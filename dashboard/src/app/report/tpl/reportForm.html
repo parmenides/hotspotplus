@@ -72,7 +72,7 @@
                         </p>
                     </div>
                 </div>
-                <div ng-if="options.type === 'netflow'">
+                <div ng-if="options.reportType === 'netflow'">
                     <div class="form-group">
                         <label class="col-sm-3 control-label">{{ "report.protocol" | translate }}</label>
                         <div class="col-sm-8">
@@ -110,7 +110,7 @@
                         </div>
                     </div>
                 </div>
-                <div ng-if="options.type === 'syslog'">
+                <div ng-if="options.reportType === 'syslog'">
                     <div class="form-group">
                         <label class="col-sm-3 control-label">{{ "report.domain" | translate }}</label>
                         <div class="col-sm-8">
