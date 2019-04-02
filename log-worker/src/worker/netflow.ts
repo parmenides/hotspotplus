@@ -233,11 +233,11 @@ const getNetflowsByIndex = async (
     }
   }
   log.debug('ids', allScrollId);
-  const clearanceRes = await elasticClient.clearScroll({
-    scrollId: scrollId,
-  });
-  log.debug('clear: ');
-  log.debug(clearanceRes);
+  // const clearanceRes = await elasticClient.clearScroll({
+  //   scrollId: scrollId,
+  // });
+  //log.debug('clear: ');
+  //log.debug(clearanceRes);
   return result;
 };
 
