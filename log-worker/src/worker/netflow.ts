@@ -198,6 +198,8 @@ const getNetflowsByIndex = async (
   if (scrollResult.hits) {
     result.concat(scrollResult.hits.hits);
   }
+  log.debug('scrollResult:');
+  log.debug(scrollResult);
   log.debug('netflow query: %j', query);
   log.debug(result);
 
