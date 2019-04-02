@@ -190,6 +190,7 @@ const getNetflowsByIndex = async (
     index: netflowIndex,
     size: maxResultSize,
     body: query,
+    ignore: [404],
   });
   if (scrollResult.hits) {
     result.concat(scrollResult.hits.hits);
@@ -345,7 +346,7 @@ const createNetflowQuery = (
   return {
     query: {
       bool: {
-        filter,
+        must: filter,
       },
     },
   };
