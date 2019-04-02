@@ -166,11 +166,10 @@ const getNetflowsByIndex = async (
   if (!exist) {
     return;
   }
-  const countResponse = await countNetflowReportByIndex(
-    netflowIndex,
-    netflowReportQueryParams,
-  );
-
+  const countResponse = await elasticClient.count({
+    index: netflowIndex,
+    body: createNetflowQuery(netflowReportQueryParams),
+  });
   log.debug(`index ${netflowIndex} total result size: ${countResponse.count}`);
   const totalLogs = countResponse.count;
   // if(totalLogs===0){
@@ -187,16 +186,14 @@ const getNetflowsByIndex = async (
   const query = createNetflowQuery(netflowReportQueryParams);
   const scrollResult = await elasticClient.search({
     scroll: scrollTtl,
-    method: 'post',
     index: netflowIndex,
-    requestCache: false,
     size: maxResultSize,
     sort: ['_doc'],
     body: query,
     ignore: [404],
   });
   if (scrollResult.hits) {
-    result.concat(scrollResult.hits.hits);
+    result = result.concat(scrollResult.hits.hits);
   }
   log.debug('scrollResult:');
   log.debug(scrollResult);
