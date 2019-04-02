@@ -187,7 +187,11 @@ const getNetflowsByIndex = async (
   const query = createNetflowQuery(netflowReportQueryParams);
   const scrollResult = await elasticClient.search({
     scroll: scrollTtl,
+    method: 'post',
     index: netflowIndex,
+    requestCache: false,
+    size: maxResultSize,
+    sort: ['_doc'],
     body: query,
     ignore: [404],
   });
@@ -210,7 +214,7 @@ const getNetflowsByIndex = async (
       log.debug(`query from ${startFrom} size: ${maxResultSize}`);
       const queryResult = await elasticClient.scroll({
         scrollId: scrollId,
-
+        method: 'post',
         scroll: scrollTtl,
       });
       log.debug(queryResult);
