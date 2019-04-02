@@ -163,25 +163,31 @@ const getNetflowsByIndex = async (
   const exist = await elasticClient.indices.exists({
     index: netflowIndex,
   });
+
   if (!exist) {
     return;
   }
+
+  log.debug(
+    `query from ${netflowIndex} from ${netflowReportQueryParams.fromDate.format()} to ${netflowReportQueryParams.toDate.format()}`,
+  );
+
   const countResponse = await elasticClient.count({
     index: netflowIndex,
     body: createNetflowQuery(netflowReportQueryParams),
   });
-  log.debug(`index ${netflowIndex} total result size: ${countResponse.count}`);
+
   const totalLogs = countResponse.count;
-  // if(totalLogs===0){
-  //   return;
-  // }
+  if (totalLogs === 0) {
+    return;
+  }
 
   const maxResultSize = 500;
   const partsLen =
     totalLogs > maxResultSize ? Math.ceil(totalLogs / maxResultSize) : 1;
 
   log.debug(`query parts: ${partsLen}`);
-  const scrollTtl = '1m';
+  const scrollTtl = '2m';
   let result: Array<{ _source: any }> = [];
   const query = createNetflowQuery(netflowReportQueryParams);
   const scrollResult = await elasticClient.search({
@@ -203,14 +209,11 @@ const getNetflowsByIndex = async (
   let scrollId = scrollResult._scroll_id;
   const allScrollId = [scrollId];
   const parts = new Array(partsLen);
-  let startFrom = 0;
 
   for (const i of parts) {
     try {
-      log.debug(`query from ${startFrom} size: ${maxResultSize}`);
       const queryResult = await elasticClient.scroll({
         scrollId: scrollId,
-        method: 'post',
         scroll: scrollTtl,
       });
       if (queryResult._scroll_id && queryResult._scroll_id !== scrollId) {
@@ -223,7 +226,6 @@ const getNetflowsByIndex = async (
       } else {
         log.warn(queryResult);
       }
-      startFrom = startFrom + maxResultSize;
     } catch (error) {
       log.error('error @getNetflowsByIndex');
       log.error(error);
@@ -235,17 +237,6 @@ const getNetflowsByIndex = async (
     scrollId: allScrollId,
   });
   log.debug('clear: ', clearanceRes);
-  return result;
-};
-
-const countNetflowReportByIndex = async (
-  indexName: string,
-  netflowReportQueryParams: NetflowReportQueryParams,
-) => {
-  const result = await elasticClient.count({
-    index: indexName,
-    body: createNetflowQuery(netflowReportQueryParams),
-  });
   return result;
 };
 

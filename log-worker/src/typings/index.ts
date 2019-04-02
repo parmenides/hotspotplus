@@ -139,6 +139,7 @@ export interface GeneralReportRequestTask {
   reportRequestId: string;
   fromDate: Moment;
   toDate: Moment;
+  username?: string;
   from?: number;
   to?: number;
   nasTitle?: string;
@@ -146,7 +147,6 @@ export interface GeneralReportRequestTask {
 }
 
 export interface NetflowReportRequestTask extends GeneralReportRequestTask {
-  username?: string;
   dstAddress?: string;
   dstPort?: string[];
   srcAddress?: string;
@@ -156,7 +156,6 @@ export interface NetflowReportRequestTask extends GeneralReportRequestTask {
 
 export interface SyslogReportRequestTask extends GeneralReportRequestTask {
   domain?: string;
-  username?: string;
   url?: string;
   method?: string[];
 }

@@ -112,56 +112,74 @@ const getSyslogByIndex = async (
   if (!exist) {
     return;
   }
+
+  const query = createSyslogQuery(syslogReportQueryParams);
+  const countResponse = await elasticClient.count({
+    index: syslogIndex,
+    body: query,
+  });
   log.debug(
     `query from ${syslogIndex} from ${syslogReportQueryParams.fromDate.format()} to ${syslogReportQueryParams.toDate.format()}`,
   );
-  const countResponse = await countSyslogReportByIndex(
-    syslogIndex,
-    syslogReportQueryParams,
-  );
 
   const totalLogs = countResponse.count;
-  log.debug(`total logs ${totalLogs}`);
+  if (totalLogs === 0) {
+    return;
+  }
+
+  let result: Array<{ _source: any }> = [];
+  const scrollTtl = '2m';
   const maxResultSize = 500;
-  log.debug(Math.ceil(totalLogs / maxResultSize));
+  log.debug(`total logs count ${totalLogs}`);
+  const scrollResult = await elasticClient.search({
+    scroll: scrollTtl,
+    index: syslogIndex,
+    size: maxResultSize,
+    sort: ['_doc'],
+    body: query,
+    ignore: [404],
+  });
+
+  if (!scrollResult._scroll_id) {
+    throw new Error('invalid scrollId ');
+  }
+  let scrollId = scrollResult._scroll_id;
+  const allScrollId = [scrollId];
+  if (scrollResult.hits) {
+    result = result.concat(scrollResult.hits.hits);
+  }
+
   const partsLen =
     totalLogs > maxResultSize ? Math.ceil(totalLogs / maxResultSize) : 1;
-
+  log.debug(`query parts: ${partsLen}`);
   const parts = new Array(partsLen);
-  let from = 0;
-  let result: Array<{ _source: any }> = [];
   for (const i of parts) {
     try {
-      const queryResult = await elasticClient.search({
-        index: syslogIndex,
-        from,
-        size: maxResultSize,
-        body: createSyslogQuery(syslogReportQueryParams),
+      const queryResult = await elasticClient.scroll({
+        scrollId: scrollId,
+        scroll: scrollTtl,
       });
 
+      if (queryResult._scroll_id && queryResult._scroll_id !== scrollId) {
+        log.debug('new scroll id : ', queryResult._scroll_id);
+        scrollId = queryResult._scroll_id;
+        allScrollId.push(scrollId);
+      }
       if (queryResult.hits) {
         result = result.concat(queryResult.hits.hits);
       } else {
         log.warn(queryResult);
       }
-      log.warn(queryResult);
-      from = from + maxResultSize;
     } catch (error) {
       log.error(error);
       throw error;
     }
   }
-  return result;
-};
-
-const countSyslogReportByIndex = async (
-  indexName: string,
-  syslogReportQueryParams: SyslogReportQueryParams,
-) => {
-  const result = await elasticClient.count({
-    index: indexName,
-    body: createSyslogQuery(syslogReportQueryParams),
+  log.debug('ids:', allScrollId);
+  const clearanceRes = await elasticClient.clearScroll({
+    scrollId: allScrollId,
   });
+  log.debug('clear: ', clearanceRes);
   return result;
 };
 
