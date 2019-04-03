@@ -14,7 +14,7 @@ var log = logger.createLogger();
 var ndjson = require('ndjson');
 var RAVEN_SERVER_ADDRESS = process.env.SENTRY_URL;
 var elasticURL =
-  'http://' + process.env.ELASTIC_IP + ':' + process.env.ELASTIC_PORT;
+  'http://' + process.env.ELASTIC_IP + ':' + process.env.ELASTIC_PORT+'/';
 
 Date.myNewDate = function() {
   var myNow = new Date();

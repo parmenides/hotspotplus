@@ -4,7 +4,7 @@
 
 var SMS_API_KEY = process.env.SMS_API_KEY;
 var elasticURL =
-  'http://' + process.env.ELASTIC_IP + ':' + process.env.ELASTIC_PORT;
+  'http://' + process.env.ELASTIC_IP + ':' + process.env.ELASTIC_PORT+'/';
 
 module.exports = {
   ELASTIC_LICENSE_CHARGE:

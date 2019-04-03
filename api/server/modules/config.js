@@ -10,7 +10,7 @@ var mikrotik_hotspot_script_path = path.join(
   '/routers/mikrotik/html'
 );
 var elasticURL =
-  'http://' + process.env.ELASTIC_IP + ':' + process.env.ELASTIC_PORT;
+  'http://' + process.env.ELASTIC_IP + ':' + process.env.ELASTIC_PORT+'/';
 // "7A706844375A7964785A3452317054583841535548413D3D";
 // "7A706844375A7964785A3452317054583841535548413D3D";
 var SMS_API_KEY = process.env.SMS_API_KEY;

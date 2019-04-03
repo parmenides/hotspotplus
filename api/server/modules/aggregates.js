@@ -6,7 +6,7 @@ var log = logger.createLogger();
 var needle = require('needle');
 var utility = require('./utility');
 var elasticURL =
-  'http://' + process.env.ELASTIC_IP + ':' + process.env.ELASTIC_PORT;
+  'http://' + process.env.ELASTIC_IP + ':' + process.env.ELASTIC_PORT+'/';
 var ELASTIC_ACCOUNTING_USAGE_SEARCH =
   elasticURL +
   process.env.ELASTIC_INDEX_PREFIX +

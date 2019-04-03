@@ -4,7 +4,7 @@ var log = logger.createLogger();
 var needle = require('needle');
 var utility = require('./utility');
 var elasticURL =
-  'http://' + process.env.ELASTIC_IP + ':' + process.env.ELASTIC_PORT;
+  'http://' + process.env.ELASTIC_IP + ':' + process.env.ELASTIC_PORT + '/';
 var ELASTIC_ACCOUNTING_USAGE_SEARCH =
   elasticURL +
   process.env.ELASTIC_INDEX_PREFIX +
@@ -25,21 +25,7 @@ var ELASTIC_SYSLOG_REPORT_INDEX =
 var ELASTIC_NETFLOW_REPORT_INDEX =
   elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'netflow/report';
 
-var FOOT_TRAFFIC_PATH =
-  elasticURL +
-  process.env.ELASTIC_INDEX_PREFIX +
-  'foottraffic/foottraffic/{0}{1}';
-var MEMBER_PATH =
-  elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'member/member/{0}';
-var minSignal = process.env.MIN_SIGNAL_STRENGTH_DEFAULT;
-var DEVICE_VENDOR_NAME = process.env.DEVICE_VENDOR_NAME;
-var DEVICE_VENDOR_PHRASE = process.env.DEVICE_VENDOR_PHRASE;
 var partitionsNumber = process.env.NUM_PARTITIONS;
-var redis = require('redis');
-var redisClient = redis.createClient(
-  process.env.REDIS_PORT,
-  process.env.REDIS_HOST
-);
 var self = this;
 /* Return Max of Session Time & Download & Upload for Business Base on Member
  startDate: Date

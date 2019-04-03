@@ -7,7 +7,7 @@ var logger = require('../../server/modules/logger');
 var needle = require('needle');
 var aggregate = require('../../server/modules/aggregates');
 var elasticURL =
-  'http://' + process.env.ELASTIC_IP + ':' + process.env.ELASTIC_PORT;
+  'http://' + process.env.ELASTIC_IP + ':' + process.env.ELASTIC_PORT+'/';
 var ELASTIC_CHARGE_PATH =
   elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'charge/charge';
 
