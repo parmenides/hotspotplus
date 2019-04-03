@@ -12,6 +12,7 @@ import util from 'util';
 import syslog from './syslog';
 import {
   GeneralReportRequestTask,
+  LOCAL_TIME_ZONE,
   LOGGER_TIME_ZONE,
   NetflowReportRequestTask,
   QUEUES,
@@ -58,6 +59,10 @@ export const processLogRequest = async () => {
 
       if (!generalReportRequestTask.to) {
         generalReportRequestTask.toDate = momentTz.tz(LOGGER_TIME_ZONE);
+        generalReportRequestTask.to = momentTz(
+          generalReportRequestTask.toDate,
+          LOCAL_TIME_ZONE,
+        ).valueOf();
       } else {
         generalReportRequestTask.toDate = momentTz.tz(
           generalReportRequestTask.to,
@@ -71,6 +76,10 @@ export const processLogRequest = async () => {
           generalReportRequestTask.toDate.valueOf() - 31539999 * 1000,
           LOGGER_TIME_ZONE,
         );
+        generalReportRequestTask.from = momentTz(
+          generalReportRequestTask.fromDate,
+          LOCAL_TIME_ZONE,
+        ).valueOf();
       } else {
         generalReportRequestTask.fromDate = momentTz.tz(
           generalReportRequestTask.from,
@@ -102,13 +111,8 @@ export const processLogRequest = async () => {
         }
 
         log.debug(`index one of result size: ${reports.length}`);
-        log.debug(`all result:`, reports);
         const csvReport = jsonToCsv(fields, reports);
-        await uploadReport(
-          generalReportRequestTask.reportRequestId,
-          generalReportRequestTask.businessId,
-          csvReport,
-        );
+        await uploadReport(generalReportRequestTask, csvReport);
         channel.ack(message);
       } catch (error) {
         log.error(error);
@@ -165,8 +169,7 @@ const writeFile = util.promisify(fs.writeFile);
 const closeFile = util.promisify(fs.close);
 const unlink = util.promisify(fs.unlink);
 const uploadReport = async (
-  reportId: string,
-  businessId: string,
+  reportRequest: GeneralReportRequestTask,
   csv: string,
 ) => {
   const reportFile = await tmpFile();
@@ -190,7 +193,7 @@ const uploadReport = async (
         'multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW',
     },
     formData: {
-      businessId,
+      businessId: reportRequest.businessId,
       myfile: {
         value: fs.createReadStream(reportFile.path),
         options: { filename: 'report.csv', contentType: 'text/csv' },
@@ -200,28 +203,31 @@ const uploadReport = async (
   const response: string = await request(options);
   await unlink(reportFile.path);
   const data: { fileId: string } = JSON.parse(response);
-  await updateReportRequest(reportId, data.fileId);
+  await updateReportRequest(reportRequest, data.fileId);
 };
 
-const updateReportRequest = async (reportId: string, fileStorageId: string) => {
+const updateReportRequest = async (
+  reportRequest: GeneralReportRequestTask,
+  fileStorageId: string,
+) => {
   const token = await login(
     // @ts-ignore
     process.env.SERVICE_MAN_USERNAME,
     process.env.SERVICE_MAN_PASSWORD,
   );
-  log.debug('report:', reportId);
+  log.debug('report:', reportRequest.id);
   log.debug('file:', fileStorageId);
+  const update = {
+    status: 'ready',
+    fileStorageId,
+    from: reportRequest.from,
+    to: reportRequest.to,
+  };
+
   const httpClient = createHttpClient(`${REPORT_API}`);
-  await httpClient.patch(
-    `/${reportId}`,
-    {
-      status: 'ready',
-      fileStorageId,
+  await httpClient.patch(`/${reportRequest.id}`, update, {
+    headers: {
+      authorization: token,
     },
-    {
-      headers: {
-        authorization: token,
-      },
-    },
-  );
+  });
 };

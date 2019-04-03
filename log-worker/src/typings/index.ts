@@ -2,6 +2,7 @@
 import { Moment } from 'moment';
 
 export const LOGGER_TIME_ZONE = 'Europe/London';
+export const LOCAL_TIME_ZONE = 'Asia/Tehran';
 
 export enum QUEUES {
   LOG_ENRICHMENT_WORKER_QUEUE = 'log-enrichment',
@@ -136,7 +137,7 @@ export interface RawNetflowReport {
 export interface GeneralReportRequestTask {
   type: REPORT_TYPE;
   businessId: string;
-  reportRequestId: string;
+  id: string;
   fromDate: Moment;
   toDate: Moment;
   username?: string;

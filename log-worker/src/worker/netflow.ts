@@ -5,6 +5,7 @@ import { Moment } from 'moment';
 import momentJ from 'moment-jalaali';
 import { UpdateDocumentByQueryResponse } from 'elasticsearch';
 import {
+  LOCAL_TIME_ZONE,
   LOGGER_TIME_ZONE,
   NetflowAggregateByIp,
   NetflowReportQueryParams,
@@ -110,12 +111,12 @@ const formatReports = (rawNetflowReports: RawNetflowReport[]) => {
   const formatted = rawNetflowReports.map((rawReport) => {
     const localDate = momentTz.tz(
       rawReport._source['@timestamp'],
-      'Asia/Tehran',
+      LOCAL_TIME_ZONE,
     );
     const jalaaliDate = momentJ(localDate);
     const gregorianDate = momentTz.tz(
       rawReport._source['@timestamp'],
-      'Asia/Tehran',
+      LOCAL_TIME_ZONE,
     );
 
     let protocolString = '';

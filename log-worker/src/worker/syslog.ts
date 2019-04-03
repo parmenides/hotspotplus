@@ -6,6 +6,7 @@ import momentJ from 'moment-jalaali';
 
 import { UpdateDocumentByQueryResponse } from 'elasticsearch';
 import {
+  LOCAL_TIME_ZONE,
   LOGGER_TIME_ZONE,
   RawSyslogReport,
   SyslogAggregateByIp,
@@ -73,11 +74,11 @@ const formatReports = (rawSyslogReports: RawSyslogReport[]) => {
   const formatted = rawSyslogReports.map((rawReport) => {
     const localDate = momentTz.tz(
       rawReport._source['@timestamp'],
-      'Asia/Tehran',
+      LOCAL_TIME_ZONE,
     );
     const gregorianDate = momentTz.tz(
       rawReport._source['@timestamp'],
-      'Asia/Tehran',
+      LOCAL_TIME_ZONE,
     );
     const jalaaliDate = momentJ(localDate);
     return {

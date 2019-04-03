@@ -13,7 +13,6 @@ module.exports = function(Report) {
           throw error;
         }
         var message = ctx.instance;
-        message.reportRequestId = ctx.instance.id;
 
         channel.sendToQueue(
           config.LOG_WORKER_QUEUE,
