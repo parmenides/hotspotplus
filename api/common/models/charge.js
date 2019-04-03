@@ -9,7 +9,7 @@ var aggregate = require('../../server/modules/aggregates');
 var elasticURL =
   'http://' + process.env.ELASTIC_IP + ':' + process.env.ELASTIC_PORT+'/';
 var ELASTIC_CHARGE_PATH =
-  elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'charge/charge';
+  elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'charge';
 
 module.exports = function(Charge) {
   var log = logger.createLogger();

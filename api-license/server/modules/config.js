@@ -10,7 +10,7 @@ module.exports = {
   ELASTIC_LICENSE_CHARGE:
     elasticURL +
     process.env.ELASTIC_INDEX_PREFIX +
-    'licensecharge/licensecharge',
+    'licensecharge',
   ELASTIC_LICENSE_CHARGE_MAIN_CONTEXT:
     elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'licensecharge',
   LICENSE_TYPE_CHARGE: 'licenseCharge',

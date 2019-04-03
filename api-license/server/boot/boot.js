@@ -9,9 +9,9 @@ module.exports = function(app) {
   var Role = app.models.Role;
 
   addDefaultRolesAndUsers();
-  addElasticIndex();
+  //addElasticIndex();
 
-  function addElasticIndex() {
+  /*function addElasticIndex() {
     var chargeMapping = {
       mappings: {
         charge: {
@@ -39,7 +39,7 @@ module.exports = function(app) {
         log.info('charge mapping mapping created', body);
       }
     );
-  }
+  }*/
 
   function addDefaultRolesAndUsers() {
     log.debug('all roles added');

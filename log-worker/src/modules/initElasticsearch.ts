@@ -5,6 +5,18 @@ const log = logger.createLogger();
 
 export const addElasticIndexTemplates = async () => {
   try {
+    const chargeResult = await elasticClient.indices.putTemplate({
+      name: 'accounting',
+      body: getChargeIndexTemplate(),
+    });
+    log.debug('Charge index template added:', chargeResult);
+
+    const accountingResult = await elasticClient.indices.putTemplate({
+      name: 'accounting',
+      body: getAccountingIndexTemplate(),
+    });
+    log.debug('Accounting index template added:', accountingResult);
+
     const sessionResult = await elasticClient.indices.putTemplate({
       name: 'session',
       body: getSessionIndexTemplate(),
@@ -15,13 +27,13 @@ export const addElasticIndexTemplates = async () => {
       name: 'syslog',
       body: getSyslogIndexTemplate(),
     });
-    log.debug('syslog index template added:', syslogResult);
+    log.debug('Syslog index template added:', syslogResult);
 
     const netflowResult = await elasticClient.indices.putTemplate({
       name: 'netflow',
       body: getNetflowIndexTemplate(),
     });
-    log.debug('netflow index template added:', netflowResult);
+    log.debug('Netflow index template added:', netflowResult);
   } catch (error) {
     log.error(error);
     throw error;
@@ -450,6 +462,47 @@ const getNetflowIndexTemplate = () => {
               },
             },
           },
+        },
+      },
+    },
+  };
+};
+
+const getChargeIndexTemplate = () => {
+  return {
+    index_patterns: ['*charge*'],
+    mappings: {
+      doc: {
+        properties: {
+          timestamp: { type: 'date' },
+          businessId: { type: 'keyword' },
+          forThe: { type: 'keyword' },
+          type: { type: 'keyword' },
+          amount: { type: 'integer' },
+          date: { type: 'long' },
+        },
+      },
+    },
+  };
+};
+
+const getAccountingIndexTemplate = () => {
+  return {
+    index_patterns: ['*accounting*'],
+    mappings: {
+      doc: {
+        properties: {
+          timestamp: { type: 'date' },
+          businessId: { type: 'keyword' },
+          memberId: { type: 'keyword' },
+          sessionId: { type: 'keyword' },
+          nasId: { type: 'keyword' },
+          mac: { type: 'keyword' },
+          creationDate: { type: 'long' },
+          sessionTime: { type: 'long' },
+          totalUsage: { type: 'long' },
+          download: { type: 'long' },
+          upload: { type: 'long' },
         },
       },
     },

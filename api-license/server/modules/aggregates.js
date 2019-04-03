@@ -8,18 +8,18 @@ var elasticURL =
 var ELASTIC_ACCOUNTING_USAGE_SEARCH =
   elasticURL +
   process.env.ELASTIC_INDEX_PREFIX +
-  'accounting/usagereport/{0}{1}';
+  'accounting/{0}{1}';
 var ELASTIC_SESSION_LOG =
   elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'sessions/report/{0}';
 var ELASTIC_ACCOUNTING_INDEX =
-  elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'accounting/usagereport';
+  elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'accounting';
 
 var ELASTIC_CHARGE_SEARCH =
-  elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'charge/charge/_search';
+  elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'charge/_search';
 var ELASTIC_LICENS_CHARGE_SEARCH =
   elasticURL +
   process.env.ELASTIC_INDEX_PREFIX +
-  'licensecharge/licensecharge/_search';
+  'licensecharge/_search';
 var ELASTIC_SYSLOG_REPORT_INDEX =
   elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'syslog/report';
 var ELASTIC_NETFLOW_REPORT_INDEX =

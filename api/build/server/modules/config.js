@@ -198,15 +198,15 @@ module.exports = {
   ELASTIC_CHARGE_MAIN_CONTEXT:
     elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'charge',
   ELASTIC_CHARGE_SEARCH:
-    elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'charge/charge/_search',
+    elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'charge/_search',
   ELASTIC_ACCOUNTING_MAIN_CONTEXT:
     elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'accounting',
   ELASTIC_ACCOUNTING_USAGE:
-    elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'accounting/usagereport',
+    elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'accounting',
   ELASTIC_ACCOUNTING_USAGE_SEARCH:
     elasticURL +
     process.env.ELASTIC_INDEX_PREFIX +
-    'accounting/usagereport/{0}{1}',
+    'accounting/{0}{1}',
   ELASTIC_SYSLOG_MAIN_CONTEXT:
     elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'syslog',
   ELASTIC_SYSLOG_REPORT:
@@ -557,8 +557,6 @@ module.exports = {
   PERSIAN_COUPON_MESSAGE: 'کد تخفیف شما: {0} \n ارزش: {1} {2}',
   PERSIAN_TOMAN_UNIT: 'تومان',
   PERSIAN_PERCENT_UNIT: 'درصد',
-  ELASTIC_TYPE_USAGEREPORT: 'usagereport',
-  ELASTIC_INDEX_ACCOUNTING: 'accounting',
 
   /**
    * @return {string}

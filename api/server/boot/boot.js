@@ -18,7 +18,7 @@ module.exports = function(app) {
 
   SystemConfig.getConfig();
   addDefaultRolesAndUsers();
-  createElasticMapping();
+  //createElasticMapping();
 
   log.debug('App started');
   utility.sendMessage('Server started', { fileName: 'boot.js' });
@@ -127,7 +127,7 @@ module.exports = function(app) {
     });
   }
 
-  function createElasticMapping() {
+  /*function createElasticMapping() {
     var accountingMapping = {
       mappings: {
         usagereport: {
@@ -164,7 +164,7 @@ module.exports = function(app) {
       }
     );
 
-    /*needle.put(
+    /!*needle.put(
       config.ELASTIC_SESSION_REPORT_MAIN_CONTEXT,
       {},
       { json: true },
@@ -180,7 +180,7 @@ module.exports = function(app) {
           body
         );
       }
-    );*/
+    );*!/
 
     var chargeMapping = {
       mappings: {
@@ -209,7 +209,7 @@ module.exports = function(app) {
       }
     );
 
-   /* var netflowMapping = {
+   /!* var netflowMapping = {
       mappings: {
         report: {
           properties: {
@@ -314,8 +314,8 @@ module.exports = function(app) {
         }
         log.info('syslog mapping mapping created', body);
       }
-    );*/
-  }
+    );*!/
+  }*/
 
   //radius.startRadius ();
   utility.installRaven();

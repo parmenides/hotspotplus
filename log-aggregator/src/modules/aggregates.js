@@ -7,9 +7,9 @@ var elasticURL =
 var ELASTIC_ACCOUNTING_USAGE_SEARCH =
   elasticURL +
   process.env.ELASTIC_INDEX_PREFIX +
-  'accounting/usagereport/{0}{1}'
+  'accounting/{0}{1}'
 var ELASTIC_ACCOUNTING_INDEX =
-  elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'accounting/usagereport'
+  elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'accounting'
 
 var ELASTIC_SYSLOG_REPORT_INDEX =
   elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'syslog/report'
