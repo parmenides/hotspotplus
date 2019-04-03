@@ -19,7 +19,7 @@ var ELASTIC_CHARGE_SEARCH =
 var ELASTIC_LICENS_CHARGE_SEARCH =
   elasticURL +
   process.env.ELASTIC_INDEX_PREFIX +
-  'licensecharge/licensecharge/_search';
+  'licensecharge/_search';
 var ELASTIC_SYSLOG_REPORT_INDEX =
   elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'syslog/report';
 var ELASTIC_NETFLOW_REPORT_INDEX =
