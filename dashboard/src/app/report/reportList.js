@@ -40,12 +40,22 @@ app.controller('reportList', [
     var businessId = Session.business.id
     $scope.syslogReportCount = 0
     $scope.netflowReportCount = 0
-    if (Session.business.netflowReportCount) {
-      $scope.netflowReportCount = Session.business.netflowReportCount
-    }
-    if (Session.business.syslogReportCount) {
-      $scope.syslogReportCount = Session.business.syslogReportCount
-    }
+
+    Business.findById({ id: businessId }).$promise.then(
+      function(business) {
+        $scope.business = business;
+        if (business.netflowReportCount) {
+          $scope.netflowReportCount = business.netflowReportCount
+        }
+        if (business.syslogReportCount) {
+          $scope.syslogReportCount = business.syslogReportCount
+        }
+      },
+      function(err) {
+        appMessenger.showError('error.generalError');
+      }
+    );
+
 
     $scope.paginationOptions = {
       pageNumber: 1,
