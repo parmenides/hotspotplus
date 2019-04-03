@@ -83,12 +83,15 @@ app.controller('reportList', [
           headerCellFilter: 'translate',
         },
         {
-          displayName: 'report.username',
-          field: 'username',
+          displayName: 'report.reportType',
+          field: 'type',
           enableHiding: false,
           enableSorting: false,
           enableColumnMenu: false,
           headerCellFilter: 'translate',
+          cellTemplate:
+            '<div class="ui-grid-cell-contents" ng-if="row.entity.from">{{"report." + row.entity.type  | translate }}</div>',
+
         },
         {
           displayName: 'report.from',
