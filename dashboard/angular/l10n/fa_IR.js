@@ -1164,6 +1164,9 @@
 	"messageSentUnSuccessFull": "خطا در ارسال پیام"
   },
   "report":       {
+	"reportType":                "نام کاربری",
+	"netflow":                "گزارش آی‌پی",
+	"syslog":                "گزارش سایت",
 	"username":                "نام کاربری",
 	"destinationUser":         "کاربر مقصد",
 	"sourceUser":              "کاربر مبدا",
