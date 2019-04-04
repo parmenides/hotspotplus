@@ -1,0 +1,77 @@
+{
+  "name": "Report",
+  "base": "Generic",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "from": {
+      "type": "number",
+      "required": false
+    },
+    "to": {
+      "type": "number",
+      "required": false
+    },
+    "status": {
+      "type": "string",
+      "required": true
+    },
+    "username": {
+      "type": "string",
+      "required": false
+    },
+    "type": {
+      "type": "string",
+      "required": false
+    },
+    "fileStorageId": {
+      "type": "string",
+      "required": false
+    }
+  },
+  "validations": [],
+  "relations": {
+    "member": {
+      "type": "belongsTo",
+      "model": "Member",
+      "foreignKey": ""
+    },
+    "fileStorage": {
+      "type": "hasOne",
+      "model": "FileStorage",
+      "foreignKey": ""
+    },
+    "businesses": {
+      "type": "hasOne",
+      "model": "Business",
+      "foreignKey": ""
+    }
+  },
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "networkadmin",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "serviceMan",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "admin",
+      "permission": "ALLOW"
+    }
+  ],
+  "methods": {}
+}
