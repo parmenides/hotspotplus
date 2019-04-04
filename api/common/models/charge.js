@@ -4,10 +4,7 @@ var Q = require('q');
 var config = require('../../server/modules/config.js');
 var smsModule = require('../../server/modules/sms');
 var logger = require('../../server/modules/logger');
-var needle = require('needle');
 var aggregate = require('../../server/modules/aggregates');
-var elasticURL =
-  'http://' + process.env.ELASTIC_IP + ':' + process.env.ELASTIC_PORT+'/';
 const {Client} = require('@elastic/elasticsearch')
 const elasticClient = new Client({
   node: `http://${process.env.ELASTIC_IP}:${process.env.ELASTIC_PORT}`,
@@ -15,8 +12,6 @@ const elasticClient = new Client({
   log: process.env.ELASTICSEARCH_LOG_LEVEL || 'info',
 })
 const CHARGE_INDEX = process.env.ELASTIC_INDEX_PREFIX + 'charge';
-var ELASTIC_CHARGE_PATH =
-  elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'charge';
 
 module.exports = function(Charge) {
   var log = logger.createLogger();
