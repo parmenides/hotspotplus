@@ -6,7 +6,7 @@ const log = logger.createLogger();
 export const addElasticIndexTemplates = async () => {
   try {
     const chargeResult = await elasticClient.indices.putTemplate({
-      name: 'accounting',
+      name: 'charge',
       body: getChargeIndexTemplate(),
     });
     log.debug('Charge index template added:', chargeResult);
