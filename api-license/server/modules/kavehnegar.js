@@ -23,7 +23,7 @@ module.exports.sendMessageToKavehnegar = function(
   data.token10 = token10;
   data.template = template;
   log.debug(LOOKUP_SMS_PROVIDER);
-  return needle('post', LOOKUP_SMS_PROVIDER, data).then(function(result) {
+  return needle.post( LOOKUP_SMS_PROVIDER, data).then(function(result) {
     var body = result.body;
     log.debug('Response:', typeof body);
     log.debug('Response:', body);
@@ -51,7 +51,7 @@ module.exports.sendGroupMessageToKavehnegar = function(
   data.message = message;
   log.debug(GROUP_SMS_PROVIDER);
   log.debug(data);
-  return needle('post', GROUP_SMS_PROVIDER, data).then(function(result) {
+  return needle.post(GROUP_SMS_PROVIDER, data).then(function(result) {
     var body = result.body;
     log.debug('Response:', body);
     if (body && body.return && body.return.status !== 200) {
