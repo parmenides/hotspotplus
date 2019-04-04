@@ -4,7 +4,7 @@ var log = logger.createLogger()
 
 const ACCOUNTING_INDEX = `${process.env.ELASTIC_INDEX_PREFIX}accounting`
 const CHARGE_INDEX = `${process.env.ELASTIC_INDEX_PREFIX}charge`
-const {Client} = require('@elastic/elasticsearch@6')
+const {Client} = require('@elastic/elasticsearch')
 const elasticClient = new Client({node: `http://${process.env.ELASTIC_IP}:${process.env.ELASTIC_PORT}`})
 
 var self = this
