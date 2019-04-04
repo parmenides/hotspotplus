@@ -1,8 +1,12 @@
 var Q = require('q')
 var logger = require('./logger')
 var log = logger.createLogger()
-const {Client} = require('@elastic/elasticsearch@6')
-const elasticClient = new Client({node: `http://${process.env.ELASTIC_IP}:${process.env.ELASTIC_PORT}`})
+const {Client} = require('@elastic/elasticsearch')
+const elasticClient = new Client({
+  node: `http://${process.env.ELASTIC_IP}:${process.env.ELASTIC_PORT}`,
+  apiVersion: '6.7',
+  log: process.env.ELASTICSEARCH_LOG_LEVEL || 'info',
+})
 const ACCOUNTING_INDEX = `${process.env.ELASTIC_INDEX_PREFIX}accounting`
 
 module.exports.deleteBySessionId = function (
