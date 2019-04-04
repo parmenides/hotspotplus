@@ -8,6 +8,13 @@ var needle = require('needle');
 var aggregate = require('../../server/modules/aggregates');
 var elasticURL =
   'http://' + process.env.ELASTIC_IP + ':' + process.env.ELASTIC_PORT+'/';
+const {Client} = require('@elastic/elasticsearch')
+const elasticClient = new Client({
+  node: `http://${process.env.ELASTIC_IP}:${process.env.ELASTIC_PORT}`,
+  apiVersion: '6.7',
+  log: process.env.ELASTICSEARCH_LOG_LEVEL || 'info',
+})
+const CHARGE_INDEX = process.env.ELASTIC_INDEX_PREFIX + 'charge';
 var ELASTIC_CHARGE_PATH =
   elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'charge';
 
@@ -31,15 +38,6 @@ module.exports = function(Charge) {
 
   Charge.addCharge = function(aCharge) {
     return Q.Promise(function(resolve, reject) {
-      if (utility.isMongoDbStorage()) {
-        Charge.create(aCharge, function(error) {
-          if (error) {
-            log.error(error);
-            return reject(error);
-          }
-          return resolve();
-        });
-      } else {
         var ownerMobile = aCharge.notifyOwner;
         log.debug(aCharge);
         var charge = {
@@ -50,15 +48,15 @@ module.exports = function(Charge) {
           date: aCharge.date,
           timestamp: new Date().getTime()
         };
-        needle.post(ELASTIC_CHARGE_PATH, charge, { json: true }, function(
-          error,
-          result
-        ) {
+        elasticClient.index({
+          index:CHARGE_INDEX,
+          body:charge
+        },(error,result)=>{
           if (error) {
             log.error(error);
             return reject(error);
           }
-          log.debug('charged: ', result.body._id);
+          log.debug('charged: ', result);
           if (aCharge.amount > 0 && ownerMobile) {
             smsModule.send({
               token1: aCharge.amount,
@@ -67,8 +65,7 @@ module.exports = function(Charge) {
             });
           }
           return resolve();
-        });
-      }
+        })
     });
   };
 

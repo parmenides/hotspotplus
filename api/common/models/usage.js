@@ -27,15 +27,7 @@ kafkaProducer.on('error', function(error) {
 module.exports = function(Usage) {
   Usage.addUsageReport = function(usage) {
     return Q.Promise(function(resolve, reject) {
-      if (utility.isMongoDbStorage()) {
-        Usage.create(usage, function(error) {
-          if (error) {
-            log.error(error);
-            return reject(error);
-          }
-          return resolve();
-        });
-      } else {
+
         //ELASTIC_USAGE_REPORT_QUEUE.add ( usage );
         kafkaProducer.send(
           [
@@ -53,7 +45,6 @@ module.exports = function(Usage) {
           }
         );
         return resolve();
-      }
     });
   };
 
@@ -66,16 +57,7 @@ module.exports = function(Usage) {
     monthDays
   ) {
     return Q.Promise(function(resolve, reject) {
-      if (utility.isMongoDbStorage()) {
-        aggregate
-          .getBusinessDailyUsageReport(businessId, startDate, endDate)
-          .then(function(result) {
-            return resolve(result);
-          })
-          .fail(function(error) {
-            return reject(error);
-          });
-      } else {
+
         offset = -offset * config.AGGREGATE.HOUR_MILLISECONDS;
         log.debug('@getTrafficUsage from elastic');
         aggregate
@@ -144,7 +126,6 @@ module.exports = function(Usage) {
             log.error(error);
             return reject(error);
           });
-      }
     });
   };
 

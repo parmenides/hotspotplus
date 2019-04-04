@@ -415,13 +415,7 @@ exports.sendMessage = function(error, options, moduleName) {
   });
 };
 
-exports.isMongoDbStorage = function() {
-  return false;
-};
 
-exports.isElasticStorage = function() {
-  return true;
-};
 
 exports.printJobQueueStates = function(logger, thqQueue, queueName) {
   thqQueue.getJobCounts().then(function(result) {

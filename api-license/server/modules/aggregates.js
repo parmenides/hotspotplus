@@ -6,7 +6,11 @@ const ACCOUNTING_INDEX = `${process.env.ELASTIC_INDEX_PREFIX}accounting`
 const CHARGE_INDEX = `${process.env.ELASTIC_INDEX_PREFIX}charge`
 const LICENSE_CHARGE_INDEX = `${process.env.ELASTIC_INDEX_PREFIX}licensecharge`
 const {Client} = require('@elastic/elasticsearch')
-const elasticClient = new Client({node: `http://${process.env.ELASTIC_IP}:${process.env.ELASTIC_PORT}`})
+const elasticClient = new Client({
+  node: `http://${process.env.ELASTIC_IP}:${process.env.ELASTIC_PORT}`,
+  apiVersion: '6.7',
+  log: process.env.ELASTICSEARCH_LOG_LEVEL || 'info',
+})
 
 var self = this
 /* Return Max of Session Time & Download & Upload for Business Base on Member

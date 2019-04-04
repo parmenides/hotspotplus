@@ -8,12 +8,6 @@ module.exports = function(Generic) {
   };
   var log = Generic.getLogger();
 
-  Generic.isMongoDbStorage = function() {
-    return false;
-  };
-  Generic.isElasticStorage = function() {
-    return true;
-  };
   Generic.getCurrentUserId = function(ctx) {
     const token = ctx && ctx.accessToken;
     const userId = token && token.userId;
