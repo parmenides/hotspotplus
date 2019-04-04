@@ -1657,7 +1657,7 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
 			var endDate = new Date ( services.expiresAt );
 			//endDate.addMonths ( totalDurationInMonths );
 			//endDate.addDays ( config.THRESHOLD_BEFORE_BLOCKING_SERVICE_IN_DAYS );
-			if ( now.between ( fromDate, endDate ) ) {
+			if ( now.isBefore ( endDate ) ) {
 				log.warn (
 					'This business has valid subscription ',
 					business.title,
