@@ -372,6 +372,7 @@ const aggregateNetflowByIp = async (
   toDate: Moment,
 ): Promise<undefined | NetflowAggregateByIp> => {
   try {
+    await elasticClient.search({});
     const exist = await elasticClient.indices.exists({
       index: netflowIndex,
     });

@@ -1,88 +1,75 @@
 var Q = require('q')
 var logger = require('./logger')
 var log = logger.createLogger()
-var needle = require('needle')
-var elasticURL =
-  'http://' + process.env.ELASTIC_IP + ':' + process.env.ELASTIC_PORT + '/'
-var ELASTIC_ACCOUNTING_USAGE_SEARCH =
-  elasticURL +
-  process.env.ELASTIC_INDEX_PREFIX +
-  'accounting/{0}{1}'
-var ELASTIC_ACCOUNTING_INDEX =
-  elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'accounting'
-
-var ELASTIC_SYSLOG_REPORT_INDEX =
-  elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'syslog/report'
-var ELASTIC_NETFLOW_REPORT_INDEX =
-  elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'netflow/report'
-
+const {Client} = require('@elastic/elasticsearch@6')
+const elasticClient = new Client({node: `http://${process.env.ELASTIC_IP}:${process.env.ELASTIC_PORT}`})
+const ACCOUNTING_INDEX = `${process.env.ELASTIC_INDEX_PREFIX}accounting`
 
 module.exports.deleteBySessionId = function (
   fromDateInMs,
   toDateInMs,
-  sessionId,
+  sessionId
 ) {
   return Q.Promise(function (resolve, reject) {
     if (!sessionId) {
       return reject('sessionId not defined')
     }
-    var query = {
+    const query = {
       query: {
         bool: {
           must_not: {
             terms: {
-              accStatusType: [0],
-            },
+              accStatusType: [0]
+            }
           },
           must: [
             {
               term: {
-                sessionId: sessionId,
-              },
+                sessionId: sessionId
+              }
             },
             {
               range: {
                 creationDate: {
                   gte: fromDateInMs,
-                  lte: toDateInMs + 1000,
-                },
-              },
-            },
-          ],
-        },
-      },
+                  lte: toDateInMs + 1000
+                }
+              }
+            }
+          ]
+        }
+      }
     }
-    needle.post(
-      ELASTIC_ACCOUNTING_USAGE_SEARCH.replace('{0}{1}', '_delete_by_query'),
-      query,
-      {json: true},
-      function (error, response, body) {
-        if (error) {
-          log.error('@deleteBySessionId: ', error)
-          return reject(error)
-        }
-
-        if (!body || body.deleted == undefined) {
-          log.error('delete failed: ', body)
-          log.error(query)
-          return reject('delete failed')
-        }
-        if (body.deleted === 0) {
-          log.warn('no document deleted for this session', sessionId)
-          log.error(query)
-        } else {
-          log.debug(
-            'Docs deleted for this session:',
-            sessionId,
-            ' : ',
-            body.deleted,
-          )
-        }
-        return resolve(body)
-      },
-    )
+    elasticClient.deleteByQuery({
+      index: ACCOUNTING_INDEX,
+      body: query
+    }, (error, response) => {
+      if (error) {
+        log.error('@deleteBySessionId: ', error)
+        return reject(error)
+      }
+      const body = response.body
+      if (!body || body.deleted === undefined) {
+        log.error('delete failed: ', body)
+        log.error(query)
+        return reject('delete failed')
+      }
+      if (body.deleted === 0) {
+        log.warn('no document deleted for this session', sessionId)
+        log.error(query)
+      } else {
+        log.debug(
+          'Docs deleted for this session:',
+          sessionId,
+          ' : ',
+          body.deleted
+        )
+      }
+      return resolve(body)
+    })
   })
 }
+
 
 module.exports.cleanupDoc = function (docType, fromDateInMs, toDateInMs) {
   return Q.Promise(function (resolve, reject) {
@@ -91,13 +78,7 @@ module.exports.cleanupDoc = function (docType, fromDateInMs, toDateInMs) {
     }
     var SELECTED_INDEX
     if (docType === 'accounting') {
-      SELECTED_INDEX = ELASTIC_ACCOUNTING_INDEX
-    } else if (docType === 'netflow') {
-      SELECTED_INDEX = ELASTIC_NETFLOW_REPORT_INDEX
-    } else if (docType === 'syslog') {
-      SELECTED_INDEX = ELASTIC_SYSLOG_REPORT_INDEX
-    } else {
-      return reject('invalid doc type')
+      SELECTED_INDEX = ACCOUNTING_INDEX
     }
     var query = {
       query: {
@@ -107,62 +88,62 @@ module.exports.cleanupDoc = function (docType, fromDateInMs, toDateInMs) {
               range: {
                 creationDate: {
                   gte: fromDateInMs,
-                  lte: toDateInMs,
-                },
-              },
-            },
-          ],
-        },
-      },
+                  lte: toDateInMs
+                }
+              }
+            }
+          ]
+        }
+      }
     }
-    needle.post(
-      SELECTED_INDEX.replace('{0}{1}', '_delete_by_query'),
-      query,
-      {json: true},
-      function (error, response, body) {
-        if (error) {
-          log.error('@cleanupElastic: ', error)
-          return reject(error)
-        }
 
-        if (!body || body.deleted == undefined) {
-          log.error('cleanupElastic failed: ', body)
-          log.error(query)
-          return reject('cleanupElastic failed')
-        }
-        if (body.deleted === 0) {
-          log.warn('nothing to clean up')
-          log.error(query)
-        } else {
-          log.debug('Docs cleaned up:', body.deleted)
-        }
-        return resolve(body)
-      },
-    )
+    elasticClient.deleteByQuery({
+      index: SELECTED_INDEX,
+      body: query
+    }, (error, response) => {
+      if (error) {
+        log.error('@cleanupElastic: ', error)
+        return reject(error)
+      }
+      const body = response.body
+      if (!body || body.deleted === undefined) {
+        log.error('cleanupElastic failed: ', body)
+        log.error(query)
+        return reject('cleanupElastic failed')
+      }
+      if (body.deleted === 0) {
+        log.warn('nothing to clean up')
+        log.error(query)
+      } else {
+        log.debug('Docs cleaned up:', body.deleted)
+      }
+      return resolve(body)
+    })
   })
 }
 
+
 module.exports.addAccountingDoc = function (doc) {
   return Q.Promise(function (resolve, reject) {
-    needle.post(ELASTIC_ACCOUNTING_INDEX, doc, {json: true}, function (
-      error,
-      result,
-      body,
-    ) {
+    elasticClient.index({
+      index: ACCOUNTING_INDEX,
+      body: doc
+    }, (error, response) => {
       if (error) {
         log.error(error)
         return reject(error)
       }
+      const body = response.body
       if (!body || !body._id) {
         log.error(body)
         return reject('body result is empty')
       }
       log.debug('usage report created: ', body)
       return resolve()
+
     })
   })
 }
-
 module.exports.getAllSessions = function (startDate, endDate, size) {
   return Q.Promise(function (resolve, reject) {
     if (!startDate) {
@@ -173,64 +154,65 @@ module.exports.getAllSessions = function (startDate, endDate, size) {
     }
     size = size || 10000
     var query = {
-      size: size,
       query: {
         bool: {
           must_not: {
             terms: {
-              accStatusType: [0],
-            },
+              accStatusType: [0]
+            }
           },
           must: [
             {
               range: {
                 creationDate: {
                   gte: startDate,
-                  lte: endDate,
-                },
-              },
-            },
-          ],
-        },
+                  lte: endDate
+                }
+              }
+            }
+          ]
+        }
       },
       aggs: {
         sessions: {
           terms: {
             field: 'sessionId',
-            size: size,
-          },
-        },
-      },
+            size: size
+          }
+        }
+      }
     }
-    needle.post(
-      ELASTIC_ACCOUNTING_USAGE_SEARCH.replace('{0}{1}', '_search'),
-      query,
-      {json: true},
-      function (error, response, body) {
-        if (error) {
-          log.error('@getAllSessions: ', error)
-          return reject(error)
-        }
-        if (
-          !body ||
-          !body.aggregations ||
-          !body.aggregations.sessions ||
-          !response.body.aggregations.sessions.buckets
-        ) {
-          log.warn('aggregation result is empty: ', body)
-          log.warn(query)
-          return resolve([])
-        }
-        var buckets = response.body.aggregations.sessions.buckets
-        var sessionIds = []
-        for (var i = 0; i < buckets.length; i++) {
-          sessionIds.push(buckets[i].key)
-        }
-        return resolve(sessionIds)
-      },
-    )
+    elasticClient.search({
+      index: ACCOUNTING_INDEX,
+      body: query,
+      size: size
+    }, (error, response) => {
+      if (error) {
+        log.error('@getAllSessions: ', error)
+        return reject(error)
+      }
+      const body = response.body
+      if (
+        !body ||
+        !body.aggregations ||
+        !body.aggregations.sessions ||
+        !body.aggregations.sessions.buckets
+      ) {
+        log.warn('aggregation result is empty: ', body)
+        log.warn(query)
+        return resolve([])
+      }
+      var buckets = body.aggregations.sessions.buckets
+      var sessionIds = []
+      for (var i = 0; i < buckets.length; i++) {
+        sessionIds.push(buckets[i].key)
+      }
+      return resolve(sessionIds)
+    })
   })
 }
+
+
 
 module.exports.getAggregatedUsageBySessionId = function (sessionId) {
   return Q.Promise(function (resolve, reject) {
@@ -239,42 +221,41 @@ module.exports.getAggregatedUsageBySessionId = function (sessionId) {
     }
     var size = 0
     var query = {
-      size: size,
       query: {
         term: {
-          sessionId: sessionId,
-        },
+          sessionId: sessionId
+        }
       },
       aggs: {
         sessionTime: {
           max: {
-            field: 'sessionTime',
-          },
+            field: 'sessionTime'
+          }
         },
         download: {
           max: {
-            field: 'download',
-          },
+            field: 'download'
+          }
         },
         upload: {
           max: {
-            field: 'upload',
-          },
+            field: 'upload'
+          }
         },
         creationDate: {
           max: {
-            field: 'creationDate',
-          },
+            field: 'creationDate'
+          }
         },
         minCreationDate: {
           min: {
-            field: 'creationDate',
-          },
+            field: 'creationDate'
+          }
         },
         accountingDoc: {
           terms: {
             field: 'sessionId',
-            size: 1,
+            size: 1
           },
           aggs: {
             lastAccountingDoc: {
@@ -286,70 +267,65 @@ module.exports.getAggregatedUsageBySessionId = function (sessionId) {
                     'username',
                     'memberId',
                     'mac',
-                    'creationDateObj',
-                  ],
+                    'creationDateObj'
+                  ]
                 },
-                size: 1,
-              },
-            },
-          },
-        },
-      },
+                size: 1
+              }
+            }
+          }
+        }
+      }
     }
-    needle.post(
-      ELASTIC_ACCOUNTING_USAGE_SEARCH.replace('{0}{1}', '_search'),
-      query,
-      {json: true},
-      function (error, response, body) {
-        if (error) {
-          log.error('@getAllSessions: ', error)
-          return reject(error)
-        }
+    elasticClient.search({
+      index: ACCOUNTING_INDEX,
+      size: size,
+      body: query
+    }, (error, response) => {
+      if (error) {
+        log.error('@getAllSessions: ', error)
+        return reject(error)
+      }
 
-        if (!body || !body.aggregations) {
-          log.warn('aggregation result is empty: ', body)
-          log.warn(query)
-          return reject('invalid response')
-        }
-        var aggregations = body.aggregations
+      const body = response.body
+      const aggregations = body.aggregations
 
-        if (
-          !aggregations.download ||
-          aggregations.download.value == undefined ||
-          !aggregations.upload ||
-          aggregations.upload.value == undefined
-        ) {
-          log.warn('session data not found:', body)
-          log.warn(query)
-          return reject('data not found for this session')
-        }
+      if (
+        !aggregations.download ||
+        aggregations.download.value === undefined ||
+        !aggregations.upload ||
+        aggregations.upload.value === undefined
+      ) {
+        log.warn('session data not found:', body)
+        log.warn(query)
+        return reject('data not found for this session')
+      }
 
-        if (
-          !aggregations.accountingDoc ||
-          !aggregations.accountingDoc.buckets ||
-          aggregations.accountingDoc.buckets.length === 0
-        ) {
-          return reject('top heat aggregated result is empty')
-        }
+      if (
+        !aggregations.accountingDoc ||
+        !aggregations.accountingDoc.buckets ||
+        aggregations.accountingDoc.buckets.length === 0
+      ) {
+        return reject('top heat aggregated result is empty')
+      }
 
-        var result =
-          aggregations.accountingDoc.buckets[0].lastAccountingDoc.hits.hits[0]
-            ._source
-        result.accStatusType = 0
-        result.sessionId = sessionId
-        result.download = aggregations.download.value
-        result.upload = aggregations.upload.value
-        result.totalUsage = result.upload + result.download
-        result.sessionTime = aggregations.sessionTime.value
-        result.creationDate = aggregations.creationDate.value
-        return resolve({
-          aggregatedResult: result,
-          range: {
-            fromDateInMs: aggregations.minCreationDate.value,
-            toDateInMs: result.creationDate,
-          },
-        })
-      },
-    )
+      var result =
+        aggregations.accountingDoc.buckets[0].lastAccountingDoc.hits.hits[0]
+          ._source
+      result.accStatusType = 0
+      result.sessionId = sessionId
+      result.download = aggregations.download.value
+      result.upload = aggregations.upload.value
+      result.totalUsage = result.upload + result.download
+      result.sessionTime = aggregations.sessionTime.value
+      result.creationDate = aggregations.creationDate.value
+      return resolve({
+        aggregatedResult: result,
+        range: {
+          fromDateInMs: aggregations.minCreationDate.value,
+          toDateInMs: result.creationDate
+        }
+      })
+    })
   })
 }

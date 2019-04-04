@@ -9,8 +9,6 @@ var mikrotik_hotspot_script_path = path.join(
   __dirname,
   '/routers/mikrotik/html'
 );
-var elasticURL =
-  'http://' + process.env.ELASTIC_IP + ':' + process.env.ELASTIC_PORT+'/';
 // "7A706844375A7964785A3452317054583841535548413D3D";
 // "7A706844375A7964785A3452317054583841535548413D3D";
 var SMS_API_KEY = process.env.SMS_API_KEY;
@@ -46,11 +44,6 @@ module.exports = {
   ROUTER: {
     ROUTER_CONFIG: 'templates/router_config.lua'
   },
-  STORAGES: {
-    MONGODB: 'mongodb',
-    ELASTICSEARCH: 'elasticsearch'
-  },
-  DEFAULT_LICENSE_DURATION_IN_DAYS: 365 * 2,
   DEFAULT_ONLINE_USER: 120,
   KAVEHNEGAR_DEFAULT_SMS_CREDIT: 0,
   KAVEHNEGAR_SMS_PLAN_ID: 'hotspotplus',
@@ -59,14 +52,10 @@ module.exports = {
     'http://api.kavenegar.com/v1/' + SMS_API_KEY + '/client/add.json',
   KAVEHNEGAR_LOAD_CUSTOMER:
     'http://api.kavenegar.com/v1/' + SMS_API_KEY + '/client/fetch.json',
-  GOOGLE_URL_SHORTNER_API: 'AIzaSyBP7KUMF-sRhDqhZC50_AA9oJ8GAeuiwnk',
   HOTSPOT_VERIFICATION_MESSAGE_TEMPLATE: 'sendVerificationCodeThenCall',
   HOTSPOT_VERIFICATION_MESSAGE_TEMPLATE_BY_CALL: 'sendVerificationCodeCallOnly',
-  APP_VERIFICATION_CODE: 'appVerificationCode',
-  ROUTER_OFFLINE_MESSAGE_TEMPLATE: 'routerOffline',
-  SMS_CREDIT_RUNOUT_MESSAGE_TEMPLATE: 'smsCreditRunOut',
+
   PASSWORD_RESET_TEMPLATE: 'passwordReset',
-  SUBSCRIPTION_IS_ENDING_MESSAGE_TEMPLATE: 'subscriptionIsEnding',
   HOTSPOT_CREDENTIALS_URL_MESSAGE_TEMPLATE: 'hotspotPlusHotspotCredentialsURL',
   HOTSPOT_CREDENTIALS_MESSAGE_TEMPLATE: 'hotspotPlusHotspotCredentials',
   REGISTRATION_MESSAGE_TEMPLATE: 'hotspotPlusRegistrationSMS',
@@ -75,13 +64,6 @@ module.exports = {
   PAYMENT_GATEWAY_INTERNET_PLAN_PAYMENT_DESC: 'خرید اینترنت',
   PAYMENT_GATEWAY_INTERNET_BULK_PAYMENT_DESC: 'خرید حجم اینترنت',
   PAYMENT_GATEWAY_DEFAULT_DESC: 'خرید اعتبار از سایت هات اسپات پلاس',
-  couponCodeMessage:
-    'برای دریافت هدیه ی خود لطفا به وای فای {wifi} متصل شوید و سپس بر روی لینک زیر کلیک کنید.',
-  simpleMessage:
-    'برای تایید عضویت خود لطفا به وای فای {wifi} متصل شوید و سپس بر روی لینک زیر کلیک کنید.',
-  hotspotCredentialMessage:
-    ' شما میتوانید با نام کاربری {username} و رمز عبور {password} به اینترنت متصل شوید و یا برای اتصال خودکار بر روی لینک زیر کلیک کنید.',
-  HOTSPOT_HOME_URL: 'http://msn.com',
   DROPBOX_AUTHORISE_URL:
     'https://www.dropbox.com/1/oauth2/authorize?client_id={0}&response_type=code&redirect_uri={1}&state={2}',
   SHORT_VERIFICATION_URL_EXPIRES_AT: 60 * 60,
@@ -149,7 +131,6 @@ module.exports = {
   },
   ACCOUNTING_TOPIC: 'accountingTopic',
   SESSION_TOPIC: 'sessionTopic',
-  ELASTIC_BULK_INSERT: 'ELASTIC_BULK_INSERT',
   REPORT_GET_LOGS: 'REPORT_GET_LOGS',
   DEFAULT_AGGREGATION_SIZE: 10,
   TSHARK_TRANSFORM_COMMAND:
@@ -191,35 +172,6 @@ module.exports = {
   DEFAULT_RESELLER_ONLINE_USERS: 0,
   DEFAULT_RESELLER_DURATION_MONTHS: 0,
   DEFAULT_RESELLER_PLAN_TYPE: 'static',
-  ELASTIC_SESSION_REPORT_MAIN_CONTEXT:
-    elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'sessions',
-  ELASTIC_SESSION_REPORT:
-    elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'sessions/report',
-  ELASTIC_CHARGE_MAIN_CONTEXT:
-    elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'charge',
-  ELASTIC_CHARGE_SEARCH:
-    elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'charge/_search',
-  ELASTIC_ACCOUNTING_MAIN_CONTEXT:
-    elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'accounting',
-  ELASTIC_ACCOUNTING_USAGE:
-    elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'accounting',
-  ELASTIC_ACCOUNTING_USAGE_SEARCH:
-    elasticURL +
-    process.env.ELASTIC_INDEX_PREFIX +
-    'accounting/{0}{1}',
-  ELASTIC_SYSLOG_MAIN_CONTEXT:
-    elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'syslog',
-  ELASTIC_SYSLOG_REPORT:
-    elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'syslog/report',
-  ELASTIC_NETFLOW_MAIN_CONTEXT:
-    elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'netflow',
-  ELASTIC_NETFLOW_REPORT:
-    elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'netflow/report',
-  ELASTIC_TEST_PATH:
-    elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'test/test/',
-  ELASTIC_BULK: elasticURL + process.env.ELASTIC_INDEX_PREFIX + '{0}/{1}/_bulk',
-  ELASTIC_DELETE_BY_QUERY:
-    elasticURL + process.env.ELASTIC_INDEX_PREFIX + '{0}/{1}/_delete_by_query',
   VOUCHER_TEMPLATE_PATH: templatesPath + 'memberPrintTemplate.dust.html',
   SCRIPTS: {
     MIKROTIK_DYNAMIC_IP_SCRIPT:
