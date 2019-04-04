@@ -302,6 +302,7 @@ module.exports.getLicenseBalance = function(licenseId) {
     if (!licenseId) {
       return reject('licenseId is undefined');
     }
+    log.debug('get license balance ',ELASTIC_LICENS_CHARGE_SEARCH);
     try {
       needle.post(
         ELASTIC_LICENS_CHARGE_SEARCH,

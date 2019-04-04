@@ -1445,9 +1445,8 @@ module.exports = function ( Business ) {
 										},
 										{ json: true },
 										function ( error, response, body ) {
-											log.debug ( '@loginToLicenseServer', response.body );
-											log.debug ( '@loginToLicenseServer', response.statusCode );
-
+											log.debug ( 'load charge result: ', response.body );
+											log.debug ( 'load charge code: ', response.statusCode );
 											if ( error ) {
 												log.error ( error );
 												return cb ( new Error ( 'failed to load charges' ) );
@@ -1455,6 +1454,10 @@ module.exports = function ( Business ) {
 											if ( response.statusCode !== 200 ) {
 												log.error ( body );
 												return cb ( new Error ( 'failed to load charges' ) );
+											}
+											if(body.remaincredit===undefined){
+												log.error('failed to load sms credit ',body);
+												throw new Error('failed to load credit ',body)
 											}
 											return cb ( null, { balance: body.remaincredit } );
 										},
