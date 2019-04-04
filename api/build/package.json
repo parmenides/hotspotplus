@@ -77,7 +77,7 @@
     "mongodb": "^2.2.10",
     "multer": "^1.2.0",
     "ndjson": "^1.5.0",
-    "needle": "1.5.1",
+    "needle": "^2.2.4",
     "node-rsa": "^1.0.0",
     "nodejs-license-file": "^4.0.0",
     "payir": "^1.0.0",
