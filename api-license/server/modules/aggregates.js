@@ -4,6 +4,7 @@ var log = logger.createLogger()
 
 const ACCOUNTING_INDEX = `${process.env.ELASTIC_INDEX_PREFIX}accounting`
 const CHARGE_INDEX = `${process.env.ELASTIC_INDEX_PREFIX}charge`
+const LICENSE_CHARGE_INDEX = `${process.env.ELASTIC_INDEX_PREFIX}licensecharge`
 const {Client} = require('@elastic/elasticsearch')
 const elasticClient = new Client({node: `http://${process.env.ELASTIC_IP}:${process.env.ELASTIC_PORT}`})
 
@@ -270,10 +271,11 @@ module.exports.getLicenseBalance = function (licenseId) {
     if (!licenseId) {
       return reject('licenseId is undefined')
     }
-    log.debug('get license balance ', CHARGE_INDEX)
+
+    log.debug('get license balance ', LICENSE_CHARGE_INDEX)
     try {
       elasticClient.search({
-        index: CHARGE_INDEX,
+        index: LICENSE_CHARGE_INDEX,
         body: {
           query: {
             term: {
