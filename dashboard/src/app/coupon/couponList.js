@@ -219,7 +219,7 @@ app.controller('couponList', [
                     }
                   );
                 } else {
-                  Coupon.prototype$updateAttributes(
+                  Coupon.prototype$patchAttributes(
                     { id: $scope.coupon.id },
                     $scope.coupon
                   ).$promise.then(
@@ -334,7 +334,7 @@ app.controller('couponList', [
                         $uibModalInstance.close();
                       };
                       $scope.yes = function() {
-                        Coupon.prototype$updateAttributes(
+                        Coupon.prototype$patchAttributes(
                           {
                             id: couponId
                           },

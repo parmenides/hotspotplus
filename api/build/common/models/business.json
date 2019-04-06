@@ -351,6 +351,13 @@
       "principalType": "ROLE",
       "principalId": "networkadmin",
       "permission": "ALLOW",
+      "property": "paypingAuthorization"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "networkadmin",
+      "permission": "ALLOW",
       "property": "loadMembersUsernames"
     },
     {

@@ -2,31 +2,35 @@
  * Created by payamyousefi on 4/13/15.
  */
 
-var path = require('path');
-var templatesPath = path.join(__dirname, '/../../templates/');
-var setup_script_path = path.join(__dirname, '/routers/mikrotik/');
+var path = require('path')
+var templatesPath = path.join(__dirname, '/../../templates/')
+var setup_script_path = path.join(__dirname, '/routers/mikrotik/')
 var mikrotik_hotspot_script_path = path.join(
   __dirname,
   '/routers/mikrotik/html'
-);
+)
 // "7A706844375A7964785A3452317054583841535548413D3D";
 // "7A706844375A7964785A3452317054583841535548413D3D";
-var SMS_API_KEY = process.env.SMS_API_KEY;
-var mainPath = '/';
+var SMS_API_KEY = process.env.SMS_API_KEY
+var mainPath = '/'
 if (process.env.APP_STATUS === 'dev') {
-  mainPath = '/src/index.html';
+  mainPath = '/src/index.html'
 } else if (process.env.APP_STATUS === 'sandbox') {
-  mainPath = '/index.html';
+  mainPath = '/index.html'
 }
-var hotspotTemplates = require('./hotspotTemplates');
+var hotspotTemplates = require('./hotspotTemplates')
 var DEFAULT_ACCOUNTING_UPDATE_INTERVAL_SECONDS =
-  process.env.DEFAULT_ACCOUNTING_UPDATE_INTERVAL_SECONDS || 60;
+  process.env.DEFAULT_ACCOUNTING_UPDATE_INTERVAL_SECONDS || 60
 var FAST_ACCOUNTING_UPDATE_INTERVAL_SECONDS =
-  process.env.FAST_ACCOUNTING_UPDATE_INTERVAL_SECONDS || 60;
+  process.env.FAST_ACCOUNTING_UPDATE_INTERVAL_SECONDS || 60
 
-var CONFIG_SERVER_URL = process.env.CONFIG_SERVER_URL;
+var CONFIG_SERVER_URL = process.env.CONFIG_SERVER_URL
 module.exports = {
   VERSION: '1.3',
+  PAYPING_APP_CLIENT_ID: '54f031a4-4178-4dcd-9e2f-d4db810911d2',
+  PAYPING_APP_TOKEN: '88f4d816-47b9-4180-9be5-eec78d802cc0',
+  PAYPING_AUTH_RETURN_URL: 'https://my.prohotspotplus.com/api/payping',
+  PAYPING_APP_REQUESTED_SCOPES: 'openid profile nationalcode phone pay.read pay.write',
   SMS_SIGNATURE: process.env.SMS_SIGNATURE,
   PASSWORD_PREFIX: process.env.PASSWORD_PREFIX,
   SYSTEM_ID_PATH: process.env.SYSTEM_ID_PATH,
@@ -302,32 +306,32 @@ module.exports = {
         service: {
           allowedOnlineUsers: 120,
           features: [
-            { title: 'قابلیت ثبت نامحدود کاربر' },
-            { title: ' کابر آنلاین همزمان، ۱۲۰ کلاینت' },
-            { title: 'اتصال به درگاه پرداخت مستقل' },
-            { title: 'پنل مستقل کاربران' },
-            { title: 'پشتیبانی از طریق تیکت' }
+            {title: 'قابلیت ثبت نامحدود کاربر'},
+            {title: ' کابر آنلاین همزمان، ۱۲۰ کلاینت'},
+            {title: 'اتصال به درگاه پرداخت مستقل'},
+            {title: 'پنل مستقل کاربران'},
+            {title: 'پشتیبانی از طریق تیکت'}
           ]
         },
         modules: {
           sms: {
             title: 'ارسال پیامک',
             features: [
-              { title: 'ارسال پیامک تایید هویت' },
-              { title: 'ارسال پیامک انبوه به کاربران' },
-              { title: 'هزینه هر یک پیامک ۱۳ تومان' }
+              {title: 'ارسال پیامک تایید هویت'},
+              {title: 'ارسال پیامک انبوه به کاربران'},
+              {title: 'هزینه هر یک پیامک ۱۳ تومان'}
             ]
           },
           log: {
             title: 'ثبت لاگ وب سایت و آی پی',
             features: [
-              { title: 'ثبت لاگ بر اساس آی پی و پورت' },
-              { title: 'ثبت لاگ بازدید وب سایت' }
+              {title: 'ثبت لاگ بر اساس آی پی و پورت'},
+              {title: 'ثبت لاگ بازدید وب سایت'}
             ]
           },
           support: {
             title: 'پشتیبانی',
-            features: [{ title: 'پشتیبانی از طریق تیکت' }]
+            features: [{title: 'پشتیبانی از طریق تیکت'}]
           }
         }
       },
@@ -346,32 +350,32 @@ module.exports = {
         service: {
           allowedOnlineUsers: 120,
           features: [
-            { title: 'قابلیت ثبت نامحدود کاربر' },
-            { title: ' کابر آنلاین همزمان، ۱۲۰ کلاینت' },
-            { title: 'اتصال به درگاه پرداخت مستقل' },
-            { title: 'پنل مستقل کاربران' },
-            { title: 'پشتیبانی از طریق تیکت' }
+            {title: 'قابلیت ثبت نامحدود کاربر'},
+            {title: ' کابر آنلاین همزمان، ۱۲۰ کلاینت'},
+            {title: 'اتصال به درگاه پرداخت مستقل'},
+            {title: 'پنل مستقل کاربران'},
+            {title: 'پشتیبانی از طریق تیکت'}
           ]
         },
         modules: {
           sms: {
             title: 'ارسال پیامک',
             features: [
-              { title: 'ارسال پیامک تایید هویت' },
-              { title: 'ارسال پیامک انبوه به کاربران' },
-              { title: 'هزینه هر یک پیامک ۱۳ تومان' }
+              {title: 'ارسال پیامک تایید هویت'},
+              {title: 'ارسال پیامک انبوه به کاربران'},
+              {title: 'هزینه هر یک پیامک ۱۳ تومان'}
             ]
           },
           log: {
             title: 'ثبت لاگ وب سایت و آی پی',
             features: [
-              { title: 'ثبت لاگ بر اساس آی پی و پورت' },
-              { title: 'ثبت لاگ بازدید وب سایت' }
+              {title: 'ثبت لاگ بر اساس آی پی و پورت'},
+              {title: 'ثبت لاگ بازدید وب سایت'}
             ]
           },
           support: {
             title: 'پشتیبانی',
-            features: [{ title: 'پشتیبانی از طریق تیکت' }]
+            features: [{title: 'پشتیبانی از طریق تیکت'}]
           }
         }
       }
@@ -483,8 +487,8 @@ module.exports = {
     ]
   },
   RESELLERS_TARIFFS: [
-    { from: 0, to: 1, free: 0, silver: 30000, gold: 50000, whiteLabel: 10000 },
-    { from: 2, to: 5, free: 0, silver: 25000, gold: 40000, whiteLabel: 10000 },
+    {from: 0, to: 1, free: 0, silver: 30000, gold: 50000, whiteLabel: 10000},
+    {from: 2, to: 5, free: 0, silver: 25000, gold: 40000, whiteLabel: 10000},
     {
       from: 6,
       to: 100,
@@ -513,165 +517,165 @@ module.exports = {
   /**
    * @return {string}
    */
-  BUSINESS_PAYMENT_RETURN_URL: function() {
+  BUSINESS_PAYMENT_RETURN_URL: function () {
     return (
       process.env.CALCULATED_EXTERNAL_API_ADDRESS +
       '/api/payment/business/return?{0}={1}'
-    );
+    )
   },
   /**
    * @return {string}
    */
-  EXTERNAL_PAYMENT_RETURN_URL: function() {
+  EXTERNAL_PAYMENT_RETURN_URL: function () {
     return (
       process.env.CALCULATED_EXTERNAL_API_ADDRESS +
       '/api/payment/external/return?{0}={1}'
-    );
+    )
   },
   /**
    * @return {string}
    */
-  CHARGE_PAYMENT_RETURN_URL: function() {
+  CHARGE_PAYMENT_RETURN_URL: function () {
     return (
       process.env.CALCULATED_EXTERNAL_API_ADDRESS +
       '/api/payment/charge/return?{0}={1}'
-    );
+    )
   },
   /**
    * @return {string}
    */
-  LOCAL_PAYMENT_RETURN_URL: function() {
+  LOCAL_PAYMENT_RETURN_URL: function () {
     return (
       process.env.CALCULATED_EXTERNAL_API_ADDRESS +
       '/api/payment/local/return?{0}={1}'
-    );
+    )
   },
   /**
    * @return {string}
    */
-  MEMBER_PAYMENT_RETURN_URL: function() {
+  MEMBER_PAYMENT_RETURN_URL: function () {
     return (
       process.env.CALCULATED_EXTERNAL_API_ADDRESS +
       '/api/payment/member/return?{0}={1}'
-    );
+    )
   },
   /**
    * @return {string}
    */
-  DROPBOX_REST_API: function() {
-    return process.env.CALCULATED_EXTERNAL_API_ADDRESS + '/api/dropBox';
+  DROPBOX_REST_API: function () {
+    return process.env.CALCULATED_EXTERNAL_API_ADDRESS + '/api/dropBox'
   },
 
   /**
    * @return {string}
    */
-  BUY_LOCAL_SMS_CHARGE_RETURN: function() {
+  BUY_LOCAL_SMS_CHARGE_RETURN: function () {
     return (
       process.env.CALCULATED_WEB_APP_ADDRESS +
       mainPath +
       '#/app/loading?payed={0}&desc={1}&license_updated=true'
-    );
+    )
   },
   /**
    * @return {string}
    */
-  BUY_LOCAL_PACKAGE_RETURN: function() {
+  BUY_LOCAL_PACKAGE_RETURN: function () {
     return (
       process.env.CALCULATED_WEB_APP_ADDRESS +
       mainPath +
       '#/app/loading?payed={0}&desc={1}&license_updated=true'
-    );
+    )
   },
   /**
    * @return {string}
    */
-  BUSINESS_PAYMENT_RESULT_URL: function() {
+  BUSINESS_PAYMENT_RESULT_URL: function () {
     return (
       process.env.CALCULATED_WEB_APP_ADDRESS +
       mainPath +
       '#/app/loading?payed={0}{1}'
-    );
+    )
   },
   /**
    * @return {string}
    */
-  LOCAL_PAYMENT_RESULT_URL: function() {
+  LOCAL_PAYMENT_RESULT_URL: function () {
     return (
       process.env.CALCULATED_WEB_APP_ADDRESS +
       mainPath +
       '#/access/public/local'
-    );
+    )
   },
   /**
    * @return {string}
    */
-  MEMBER_PAYMENT_RESULT_URL: function() {
+  MEMBER_PAYMENT_RESULT_URL: function () {
     return (
       process.env.CALCULATED_WEB_APP_ADDRESS +
       mainPath +
       '#/app/loading?payed={0}{1}'
-    );
+    )
   },
   /**
    * @return {string}
    */
-  DROPBOX_AUTHORISE_RESULT_URL: function() {
+  DROPBOX_AUTHORISE_RESULT_URL: function () {
     return (
       process.env.CALCULATED_WEB_APP_ADDRESS +
       mainPath +
       '#/app/loading?dropbox={0}{1}'
-    );
+    )
   },
   /**
    * @return {string}
    */
-  HOTSPOT_PAYMENT_RETURN_URL: function() {
+  HOTSPOT_PAYMENT_RETURN_URL: function () {
     return (
       process.env.CALCULATED_HOTSPOT_ADDRESS +
       '/api/payment/hotspot/return?{0}={1}&password={password}&username={username}&businessId={businessId}&nasId={nasId}&host={host}&memberId={memberId}'
-    );
+    )
   },
   /**
    * @return {string}
    */
-  HOTSPOT_PAYMENT_WEB_RETURN_URL: function() {
-    return process.env.CALCULATED_HOTSPOT_ADDRESS + '/#!/home.html?{0}';
+  HOTSPOT_PAYMENT_WEB_RETURN_URL: function () {
+    return process.env.CALCULATED_HOTSPOT_ADDRESS + '/#!/home.html?{0}'
   },
   /**
    * @return {string}
    */
-  HOTSPOT_VERIFICATION_URL: function() {
+  HOTSPOT_VERIFICATION_URL: function () {
     return (
       process.env.CALCULATED_HOTSPOT_ADDRESS +
       '/#!/home.html?businessId={businessId}&nasId={nasId}&host={host}&verificationCode={verificationCode}&memberId={memberId}'
-    );
+    )
   },
   /**
    * @return {string}
    */
-  HOTSPOT_SIGNIN_URL: function() {
+  HOTSPOT_SIGNIN_URL: function () {
     return (
       process.env.CALCULATED_HOTSPOT_ADDRESS +
       '/#!/home.html?businessId={businessId}&nasId={nasId}&host={host}&username={username}&password={password}&memberId={memberId}'
-    );
+    )
   },
   /**
    * @return {string}
    */
-  SHORTNER_URL: function() {
-    return process.env.CALCULATED_HOTSPOT_ADDRESS + '/a/';
+  SHORTNER_URL: function () {
+    return process.env.CALCULATED_HOTSPOT_ADDRESS + '/a/'
   },
   /**
    * @return {string}
    */
-  DROPBOX_APP_KEY: function() {
-    return process.env.DROPBOX_APP_KEY;
+  DROPBOX_APP_KEY: function () {
+    return process.env.DROPBOX_APP_KEY
   },
   /**
    * @return {string}
    */
-  DROPBOX_APP_SECRET: function() {
-    return process.env.DROPBOX_APP_SECRET;
+  DROPBOX_APP_SECRET: function () {
+    return process.env.DROPBOX_APP_SECRET
   },
   LOG_WORKER_QUEUE: 'log-worker'
-};
+}

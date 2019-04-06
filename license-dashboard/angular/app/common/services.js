@@ -314,7 +314,7 @@ app.service ( 'genericService', [ '$uibModal', '$log', '$q', '$location', 'PREFI
 												}
 											}
 										} );
-										Business.prototype$updateAttributes ( { id: businessId }, { themeConfig: options.businessThemeConfig } ).$promise.then ( function ( res ) {
+										Business.prototype$patchAttributes ( { id: businessId }, { themeConfig: options.businessThemeConfig } ).$promise.then ( function ( res ) {
 												appMessenger.showSuccess ( 'upload.removeSuccessFull' );
 												options.saveCallback && options.saveCallback ( option );
 												$uibModalInstance.close ()

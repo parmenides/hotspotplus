@@ -24,7 +24,7 @@ app.controller('wifiSettings', [
 
     $scope.save = function() {
       $scope.business.wifi.uploadSpeed = $scope.business.wifi.downloadSpeed;
-      Business.prototype$updateAttributes(
+      Business.prototype$patchAttributes(
         { id: businessId },
         $scope.business
       ).$promise.then(

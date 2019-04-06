@@ -287,7 +287,7 @@ app.controller('resellerList', [
                     }
                   );
                 } else {
-                  Reseller.prototype$updateAttributes(
+                  Reseller.prototype$patchAttributes(
                     { id: $scope.reseller.id },
                     $scope.reseller
                   ).$promise.then(
@@ -339,7 +339,7 @@ app.controller('resellerList', [
               $scope.yes = function() {
                 var active = reseller.active;
                 active = !active;
-                Reseller.prototype$updateAttributes(
+                Reseller.prototype$patchAttributes(
                   {
                     id: resellerId
                   },

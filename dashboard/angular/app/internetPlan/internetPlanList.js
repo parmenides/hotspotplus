@@ -378,7 +378,7 @@ app.controller('internetPlanList', [
                   autoAssign: $scope.defaultInternetPlan.autoAssign
                 };
               }
-              Business.prototype$updateAttributes(
+              Business.prototype$patchAttributes(
                 { id: businessId },
                 { defaultInternetPlan: defaultInternetPlan }
               ).$promise.then(

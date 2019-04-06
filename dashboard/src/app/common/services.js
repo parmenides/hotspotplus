@@ -538,7 +538,7 @@ app
                                 }
                               }
                             );
-                            Business.prototype$updateAttributes(
+                            Business.prototype$patchAttributes(
                               { id: businessId },
                               { themeConfig: options.businessThemeConfig }
                             ).$promise.then(

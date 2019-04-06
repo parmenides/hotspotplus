@@ -137,7 +137,7 @@ app.controller('businessSettings', [
       if ($scope.business.autoAssignInternetPlan === false) {
         $scope.business.defaultInternetPlan = {};
       }
-      Business.prototype$updateAttributes(
+      Business.prototype$patchAttributes(
         { id: businessId },
         $scope.business
       ).$promise.then(
@@ -162,7 +162,7 @@ app.controller('businessSettings', [
           credential.password = currentPassword;
           Business.login(credential).$promise.then(
             function(result) {
-              Business.prototype$updateAttributes(
+              Business.prototype$patchAttributes(
                 { id: businessId },
                 { password: password }
               ).$promise.then(
@@ -201,7 +201,7 @@ app.controller('businessSettings', [
     $scope.dropboxAccess = function() {
       Business.dropBoxAuthorization({ id: businessId }).$promise.then(
         function(dropBox) {
-          if (dropBox.code == 302) {
+          if (dropBox.code === 302) {
             window.location.href = dropBox.returnUrl;
           } else {
             appMessenger.showError('business.dropboxAuthorizationFailed');
@@ -209,6 +209,21 @@ app.controller('businessSettings', [
         },
         function(error) {
           appMessenger.showError('business.dropboxConnectionFailed');
+        }
+      );
+    };
+
+    $scope.paypingAccess = function() {
+      Business.paypingAuthorization({ id: businessId }).$promise.then(
+        function(dropBox) {
+          if (dropBox.code === 302) {
+            window.location.href = dropBox.returnUrl;
+          } else {
+            appMessenger.showError('business.paypingAuthorizationFailed');
+          }
+        },
+        function(error) {
+          appMessenger.showError('business.paypingConnectionFailed');
         }
       );
     };

@@ -301,7 +301,7 @@ app.controller ( 'licenseList', [ '$state', '$scope', '$log', 'translateFilter',
 						$scope.yes = function () {
 							var active = license.active;
 							active = !active;
-							License.prototype$updateAttributes( {
+							License.prototype$patchAttributes( {
 								id: licenseId
 							}, { active: active } ).$promise.then ( function ( res ) {
 								appMessenger.showSuccess ( 'general.changeStatusSuccessFull' )

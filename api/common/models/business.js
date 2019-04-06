@@ -2144,6 +2144,56 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
 		returns: { root: true },
 	} );
 
+	Business.paypingAuthorization = function ( ctx, cb ) {
+		var businessId = ctx.currentUserId;
+		if ( !businessId ) {
+			return cb ( 'invalid biz id' );
+		}
+		Business.findById ( businessId, function ( error, business ) {
+			if ( error ) {
+				log.error ( error );
+				return cb ( error );
+			}
+			if ( !business ) {
+				return cb ( 'invalid biz id' );
+			}
+      const verifier = base64URLEncode(crypto.randomBytes(32));
+      business.updateAttributes({
+          paypingCodeVerifier:verifier
+        }, ( error ) =>{
+          if ( error ) {
+            return cb ( error );
+          }
+          const challenge = base64URLEncode(sha256(verifier));
+          const clientId = config.PAYPING_APP_CLIENT_ID;
+          const token = config.PAYPING_APP_TOKEN;
+          const returnUrl = config.PAYPING_AUTH_RETURN_URL;
+          const scopes = config.PAYPING_APP_REQUESTED_SCOPES;
+          const paypingAuthUrl = `https://oauth.payping.ir/connect/authorize?scope=${scopes}&response_type=code&client_id=${clientId}&code_challenge=${challenge}&code_challenge_method=S256&redirect_uri=${returnUrl}`
+          log.debug ( '@payping auth' );
+          return cb ( null, {
+            code:      302,
+            authUrl: paypingAuthUrl,
+          } );
+        },
+      )
+		} );
+    function sha256(buffer) {
+      return crypto.createHash('sha256').update(buffer).digest();
+    }
+    function base64URLEncode(str) {
+      return str.toString('base64')
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=/g, '');
+    }
+	};
+
+  Business.remoteMethod ( 'paypingAuthorization', {
+    accepts: [ { arg: 'options', type: 'object', http: 'optionsFromRequest' } ],
+    returns: { root: true },
+  } );
+
 	Business.dropBoxAuthorization = function ( ctx, cb ) {
 		var businessId = ctx.currentUserId;
 		var SystemConfig = app.models.SystemConfig;

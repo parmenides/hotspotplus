@@ -107,7 +107,7 @@ app.controller('hotspotThemes', [
                     verificationMethodEn: 'mobile'
                   };
                 }
-                Business.prototype$updateAttributes(
+                Business.prototype$patchAttributes(
                   {
                     id: businessId
                   },
@@ -322,7 +322,7 @@ app.controller('hotspotThemes', [
             };
             $scope.save = function() {
               $scope.businessThemeConfig[themeId] = $scope.themeConfig;
-              Business.prototype$updateAttributes(
+              Business.prototype$patchAttributes(
                 { id: businessId },
                 { themeConfig: $scope.businessThemeConfig }
               ).$promise.then(
@@ -378,7 +378,7 @@ app.controller('hotspotThemes', [
                         }
                         $scope.businessThemeConfig[themeId] =
                           $scope.themeConfig;
-                        Business.prototype$updateAttributes(
+                        Business.prototype$patchAttributes(
                           { id: businessId },
                           { themeConfig: $scope.businessThemeConfig }
                         ).$promise.then(

@@ -48,7 +48,7 @@ app.controller('changePasswordCtrl', [
                 $scope.save = function(sendMessage) {
                   $uibModalInstance.close();
                   if ($scope.newPassword) {
-                    Member.prototype$updateAttributes(
+                    Member.prototype$patchAttributes(
                       {
                         id: memberId
                       },

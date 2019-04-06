@@ -1,0 +1,21 @@
+{
+  "extends": [
+    "tslint:latest",
+    "tslint-eslint-rules",
+    "tslint-config-prettier"
+  ],
+  "rules": {
+    "interface-name": [
+      true,
+      "never-prefix"
+    ],
+    "comment-format": false,
+    "only-arrow-functions": true,
+    "file-name-casing": [true, "camel-case"],
+    "ordered-imports": false,
+    "member-ordering": false,
+    "object-literal-sort-keys": false,
+    "no-var-requires": false,
+    "no-implicit-dependencies": false
+  }
+}
