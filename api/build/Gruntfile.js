@@ -9,7 +9,7 @@ module.exports = function ( grunt ) {
 			},
 			task1:   {
 				options: {
-          exclude:["aggregates.js",'datasources.json'],
+          exclude:["aggregates.js","datasources.json"],
           compact: true,
 					controlFlowFlattening: true,
 					controlFlowFlatteningThreshold: 0.75,
