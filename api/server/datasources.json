@@ -7,6 +7,6 @@
     "name": "storage",
     "connector": "loopback-component-storage",
     "provider": "filesystem",
-    "root": "/usr/src/app/files"
+    "root": "../files"
   }
 }
