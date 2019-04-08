@@ -43,7 +43,7 @@ if (
 export const processLogRequest = async () => {
   log.debug('At processing log requests');
   const channel = await getRabbitMqChannel();
-  channel.prefetch(2, true);
+  channel.prefetch(4, true);
   process.once('SIGINT', async () => {
     await channel.close();
   });
