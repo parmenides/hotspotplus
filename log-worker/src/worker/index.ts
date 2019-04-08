@@ -21,6 +21,7 @@ import {
 } from '../typings';
 import moment = require('moment');
 import momentTz = require('moment-timezone');
+import { Error } from 'tslint/lib/error';
 
 // Convert fs.readFile into Promise version of same
 
@@ -110,17 +111,18 @@ export const processLogRequest = async () => {
           );
           fields = getSyslogFields();
         } else {
+          channel.ack(message);
           throw new Error('invalid report type');
         }
 
         log.debug(`index one of result size: ${reports.length}`);
         const csvReport = jsonToCsv(fields, reports);
+        log.debug(`csv created`);
         await uploadReport(generalReportRequestTask, csvReport);
+        log.debug(`uploaded`);
         channel.ack(message);
       } catch (error) {
         log.error(error);
-        //todo remove me after test
-        //channel.ack(message);
         channel.nack(message, false, false);
       }
     },
@@ -178,7 +180,6 @@ const uploadReport = async (
   const reportFile = await tmpFile();
   await writeFile(reportFile.path, csv, 'utf8');
   await closeFile(reportFile.fd);
-  log.debug(reportFile.path);
   log.debug(reportFile.path);
   const token = await login(
     // @ts-ignore
