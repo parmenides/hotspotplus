@@ -25,7 +25,10 @@ import momentTz = require('moment-timezone');
 // Convert fs.readFile into Promise version of same
 
 const log = logger.createLogger();
-const UPLOAD_API = `${process.env.API_ADDRESS}/api/file/upload`;
+const REPORT_CONTAINER = process.env.REPORT_CONTAINER || 'reports';
+const UPLOAD_API = `${
+  process.env.API_ADDRESS
+}/api/BigFiles/${REPORT_CONTAINER}/upload`;
 const REPORT_API = `${process.env.API_ADDRESS}/api/Reports`;
 
 if (
@@ -182,6 +185,7 @@ const uploadReport = async (
     process.env.SERVICE_MAN_USERNAME,
     process.env.SERVICE_MAN_PASSWORD,
   );
+  const fileName = `${Date.now().toString()}.csv`;
   const options = {
     method: 'POST',
     url: UPLOAD_API,
@@ -196,19 +200,22 @@ const uploadReport = async (
       businessId: reportRequest.businessId,
       myfile: {
         value: fs.createReadStream(reportFile.path),
-        options: { filename: 'report.csv', contentType: 'text/csv' },
+        options: { filename: fileName, contentType: 'text/csv' },
       },
     },
   };
   const response: string = await request(options);
   await unlink(reportFile.path);
-  const data: { fileId: string } = JSON.parse(response);
-  await updateReportRequest(reportRequest, data.fileId);
+  log.debug(JSON.parse(response));
+  await updateReportRequest(reportRequest, {
+    container: REPORT_CONTAINER,
+    fileName: fileName,
+  });
 };
 
 const updateReportRequest = async (
   reportRequest: GeneralReportRequestTask,
-  fileStorageId: string,
+  fileInfo: { fileName: string; container: string },
 ) => {
   const token = await login(
     // @ts-ignore
@@ -216,10 +223,11 @@ const updateReportRequest = async (
     process.env.SERVICE_MAN_PASSWORD,
   );
   log.debug('report:', reportRequest.id);
-  log.debug('file:', fileStorageId);
+  log.debug('file:', fileInfo);
   const update = {
     status: 'ready',
-    fileStorageId,
+    container: fileInfo.container,
+    fileName: fileInfo.fileName,
     from: reportRequest.from,
     to: reportRequest.to,
   };

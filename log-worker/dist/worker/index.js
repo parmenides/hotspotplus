@@ -18,7 +18,8 @@ const typings_1 = require("../typings");
 const momentTz = require("moment-timezone");
 // Convert fs.readFile into Promise version of same
 const log = logger_1.default.createLogger();
-const UPLOAD_API = `${process.env.API_ADDRESS}/api/file/upload`;
+const REPORT_CONTAINER = process.env.REPORT_CONTAINER || 'reports';
+const UPLOAD_API = `${process.env.API_ADDRESS}/api/BigFiles/${REPORT_CONTAINER}/upload`;
 const REPORT_API = `${process.env.API_ADDRESS}/api/Reports`;
 if (!process.env.SERVICE_MAN_USERNAME ||
     !process.env.SERVICE_MAN_PASSWORD ||
@@ -134,6 +135,7 @@ const uploadReport = async (reportRequest, csv) => {
     const token = await auth_1.login(
     // @ts-ignore
     process.env.SERVICE_MAN_USERNAME, process.env.SERVICE_MAN_PASSWORD);
+    const fileName = `${Date.now().toString()}.csv`;
     const options = {
         method: 'POST',
         url: UPLOAD_API,
@@ -147,24 +149,28 @@ const uploadReport = async (reportRequest, csv) => {
             businessId: reportRequest.businessId,
             myfile: {
                 value: fs_1.default.createReadStream(reportFile.path),
-                options: { filename: 'report.csv', contentType: 'text/csv' },
+                options: { filename: fileName, contentType: 'text/csv' },
             },
         },
     };
     const response = await request_promise_1.default(options);
     await unlink(reportFile.path);
-    const data = JSON.parse(response);
-    await updateReportRequest(reportRequest, data.fileId);
+    log.debug(JSON.parse(response));
+    await updateReportRequest(reportRequest, {
+        container: REPORT_CONTAINER,
+        fileName: fileName,
+    });
 };
-const updateReportRequest = async (reportRequest, fileStorageId) => {
+const updateReportRequest = async (reportRequest, fileInfo) => {
     const token = await auth_1.login(
     // @ts-ignore
     process.env.SERVICE_MAN_USERNAME, process.env.SERVICE_MAN_PASSWORD);
     log.debug('report:', reportRequest.id);
-    log.debug('file:', fileStorageId);
+    log.debug('file:', fileInfo);
     const update = {
         status: 'ready',
-        fileStorageId,
+        container: fileInfo.container,
+        fileName: fileInfo.fileName,
         from: reportRequest.from,
         to: reportRequest.to,
     };

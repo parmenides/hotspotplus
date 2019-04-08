@@ -19,6 +19,7 @@ app.controller('reportList', [
   'appMessenger',
   'PersianDateService',
   'englishNumberFilter',
+  'BigFile',
   function (
     $scope,
     $state,
@@ -35,7 +36,8 @@ app.controller('reportList', [
     PREFIX,
     appMessenger,
     PersianDateService,
-    englishNumberFilter
+    englishNumberFilter,
+    BigFile
   ) {
     var businessId = Session.business.id
     $scope.syslogReportCount = 0
@@ -134,7 +136,7 @@ app.controller('reportList', [
           headerCellFilter: 'translate',
           cellClass: 'center',
           headerCellClass: 'headerCenter',
-          cellTemplate: '<a class="btn btn-block" ng-class ="{\'disabled\': row.entity.status !== \'ready\' || !row.entity.fileStorageId  ,\'btn-info\': row.entity.status === \'ready\' && row.entity.fileStorageId}" ' +
+          cellTemplate: '<a class="btn btn-block" ng-class ="{\'disabled\': row.entity.status !== \'ready\' || !row.entity.fileName  ,\'btn-info\': row.entity.status === \'ready\' && row.entity.fileName}" ' +
             'ng-click="grid.appScope.downloadReport(row)"><i class="fa  fa-download"></i></a>'
         },
         {
@@ -321,9 +323,10 @@ app.controller('reportList', [
             .$promise.then(
             function (res) {
               //todo: also delete related file
-              if (row.entity.fileStorageId) {
-                Business.fileStorages
-                  .destroyById({id: businessId}, {fk: row.entity.fileStorageId})
+              if (row.entity.fileName) {
+                const fileName = row.entity.fileName;
+                const conatiner = row.entity.conatiner;
+                BigFile.removeFile({container:conatiner,file:fileName})
                   .$promise.then(
                   function (res) {
                     appMessenger.showSuccess('report.removeFileSuccessFull')
@@ -388,12 +391,14 @@ app.controller('reportList', [
       var reportId = row.entity.id
       Business.reports.findById({id: businessId, fk: reportId}).$promise.then(
         function (report) {
-          var fileStorageId = report.fileStorageId
-          if (report.fileStorageId) {
+          var fileName = report.fileName
+          var container = report.container
+          if (fileName && container) {
             window.location.href =
               Window.API_URL +
-              '/api/file/download/{0}'
-                .replace('{0}', fileStorageId)
+              '/api/BigFiles/{0}/download/{1}'
+                .replace('{0}', container)
+                .replace('{1}', fileName)
           } else {
             appMessenger.showError('report.noReportsToDownload')
           }

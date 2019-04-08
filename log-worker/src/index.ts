@@ -13,7 +13,6 @@ import { startCounterScheduler } from './worker/counterScheduler';
 
 //require('date-utils');
 const log = logger.createLogger();
-
 //hey you
 //dotenv.load();
 const app = express();
