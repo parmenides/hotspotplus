@@ -190,6 +190,7 @@ const uploadReport = async (
   const options = {
     method: 'POST',
     url: UPLOAD_API,
+    timeout: 600000,
     headers: {
       authorization: token,
       Accept: 'application/json',
