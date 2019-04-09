@@ -3,7 +3,7 @@ import { getRabbitMqChannel } from '../utils/rabbitmq';
 import netflow from './netflow';
 import { createHttpClient } from '../utils/httpClient';
 
-const { AsyncParser } = require('json2csv');
+const { parseAsync } = require('json2csv');
 
 import fs from 'fs';
 import _ from 'lodash';
@@ -117,7 +117,7 @@ export const processLogRequest = async () => {
         }
 
         log.debug(`index one of result size: ${reports.length}`);
-        const csvReport = jsonToCsv(fields, reports);
+        const csvReport = await jsonToCsv(fields, reports);
         log.debug(`csv created`);
         await uploadReport(generalReportRequestTask, csvReport);
         log.debug(`uploaded`);
@@ -159,28 +159,11 @@ const getSyslogFields = () => {
     'Gregorian_Date',
   ];
 };
-const jsonToCsv = (fields: string[], jsonData: any[]) => {
+
+const jsonToCsv = async (fields: string[], jsonData: any[]) => {
   try {
     const opts = { fields, defaultValue: 'N/A' };
-    const transformOpts = { highWaterMark: 8192 };
-
-    const input = createReadStream(inputPath, { encoding: 'utf8' });
-    const output = createWriteStream(outputPath, { encoding: 'utf8' });
-    const asyncParser = new JSON2CSVAsyncParser(opts, transformOpts);
-    asyncParser
-      .fromInput(input)
-      .toOutput(output)
-      .promise()
-      .then((csv) => console.log(csv))
-      .catch((err) => console.error(err));
-
-    let csv = '';
-    asyncParser.processor
-      .on('data', (chunk: string | Buffer) => (csv += chunk.toString()))
-      .on('end', () => console.log('write to csv finished'))
-      .on('error', (err: any) => log.error(err));
-    asyncParser.input.push(jsonData);
-    //asyncParser.input.push(null);
+    const csv = await parseAsync(jsonData, opts);
     return csv;
   } catch (error) {
     log.error(error);
