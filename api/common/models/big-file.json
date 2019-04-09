@@ -1,6 +1,6 @@
 {
   "name": "BigFile",
-  "base": "Model",
+  "base": "GenericUser",
   "properties": {},
   "validations": [],
   "relations": {},
