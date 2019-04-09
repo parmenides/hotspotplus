@@ -6,6 +6,7 @@
   "storage": {
     "name": "storage",
     "connector": "loopback-component-storage",
+    "maxFileSize": 104857600,
     "provider": "filesystem",
     "root": "/files"
   }
