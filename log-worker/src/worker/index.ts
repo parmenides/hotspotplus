@@ -174,8 +174,7 @@ const jsonToCsv = async (fields: string[], jsonData: any[]) => {
     input.push(null);
     const transformOpts = { objectMode: true };
     const json2csv = new Transform(opts, transformOpts);
-    const processor = input.pipe(json2csv).pipe(output);
-
+    const processor = input.pipe(json2csv);
     let csv = '';
     processor.on('data', function(chunk) {
       csv = csv + chunk;
