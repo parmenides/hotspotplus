@@ -164,14 +164,23 @@ const jsonToCsv = (fields: string[], jsonData: any[]) => {
     const opts = { fields, defaultValue: 'N/A' };
     const transformOpts = { highWaterMark: 8192 };
 
-    const asyncParser = new AsyncParser(opts, transformOpts);
+    const input = createReadStream(inputPath, { encoding: 'utf8' });
+    const output = createWriteStream(outputPath, { encoding: 'utf8' });
+    const asyncParser = new JSON2CSVAsyncParser(opts, transformOpts);
+    asyncParser
+      .fromInput(input)
+      .toOutput(output)
+      .promise()
+      .then((csv) => console.log(csv))
+      .catch((err) => console.error(err));
+
     let csv = '';
     asyncParser.processor
       .on('data', (chunk: string | Buffer) => (csv += chunk.toString()))
       .on('end', () => console.log('write to csv finished'))
       .on('error', (err: any) => log.error(err));
     asyncParser.input.push(jsonData);
-    asyncParser.input.push(null);
+    //asyncParser.input.push(null);
     return csv;
   } catch (error) {
     log.error(error);
