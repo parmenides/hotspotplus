@@ -238,6 +238,7 @@ const uploadReport = async (
     });
   } catch (error) {
     log.error('upload failed');
+    log.error(error);
     throw error;
   }
 };
