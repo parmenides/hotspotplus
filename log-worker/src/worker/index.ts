@@ -167,7 +167,7 @@ const jsonToCsv = (fields: string[], jsonData: any[]) => {
     const asyncParser = new AsyncParser(opts, transformOpts);
     let csv = '';
     asyncParser.processor
-      .on('data', (chunk: any) => (csv += chunk.toString()))
+      .on('data', (chunk: string | Buffer) => (csv += chunk.toString()))
       .on('end', () => console.log('write to csv finished'))
       .on('error', (err: any) => log.error(err));
     asyncParser.input.push(jsonData);
