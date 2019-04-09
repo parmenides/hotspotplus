@@ -6,6 +6,13 @@
   "relations": {},
   "acls": [
     {
+      "accessType": "EXECUTE",
+      "property": "download",
+      "permission": "ALLOW",
+      "principalType": "ROLE",
+      "principalId": "$everyone"
+    },
+    {
       "accessType": "*",
       "principalType": "ROLE",
       "principalId": "networkadmin",
