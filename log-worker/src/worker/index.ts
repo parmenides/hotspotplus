@@ -161,7 +161,7 @@ const getSyslogFields = () => {
   ];
 };
 
-const jsonToCsv = async (fields: string[], jsonData: any[]) => {
+const jsonToCsv = (fields: string[], jsonData: any[], cb: any) => {
   try {
     const opts = { fields, defaultValue: 'N/A' };
 
@@ -182,8 +182,8 @@ const jsonToCsv = async (fields: string[], jsonData: any[]) => {
 
     processor.on('end', function() {
       log.debug('write csv finished');
+      cb && cb(csv);
     });
-    return csv;
   } catch (error) {
     log.error(error);
     throw error;
