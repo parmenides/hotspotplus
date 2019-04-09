@@ -3,7 +3,8 @@ import { getRabbitMqChannel } from '../utils/rabbitmq';
 import netflow from './netflow';
 import { createHttpClient } from '../utils/httpClient';
 
-const { parseAsync } = require('json2csv');
+const { Transform } = require('json2csv');
+const { Readable } = require('stream');
 
 import fs from 'fs';
 import _ from 'lodash';
@@ -163,7 +164,26 @@ const getSyslogFields = () => {
 const jsonToCsv = async (fields: string[], jsonData: any[]) => {
   try {
     const opts = { fields, defaultValue: 'N/A' };
-    const csv = await parseAsync(jsonData, opts);
+
+    const input = new Readable({ objectMode: true });
+    input._read = () => {};
+    for (const row of jsonData) {
+      input.push(row);
+    }
+    // Pushing a null close the stream
+    input.push(null);
+    const transformOpts = { objectMode: true };
+    const json2csv = new Transform(opts, transformOpts);
+    const processor = input.pipe(json2csv).pipe(output);
+
+    let csv = '';
+    processor.on('data', function(chunk) {
+      csv = csv + chunk;
+    });
+
+    processor.on('end', function() {
+      log.debug('write csv finished');
+    });
     return csv;
   } catch (error) {
     log.error(error);
