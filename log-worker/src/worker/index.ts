@@ -21,7 +21,6 @@ import {
 } from '../typings';
 import moment = require('moment');
 import momentTz = require('moment-timezone');
-import { Error } from 'tslint/lib/error';
 
 // Convert fs.readFile into Promise version of same
 
