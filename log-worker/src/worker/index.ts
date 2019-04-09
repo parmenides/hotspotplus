@@ -2,7 +2,9 @@ import logger from '../utils/logger';
 import { getRabbitMqChannel } from '../utils/rabbitmq';
 import netflow from './netflow';
 import { createHttpClient } from '../utils/httpClient';
-import { Parser as Json2CsvParser } from 'json2csv';
+
+const { AsyncParser } = require('json2csv');
+
 import fs from 'fs';
 import _ from 'lodash';
 import request from 'request-promise';
@@ -160,9 +162,17 @@ const getSyslogFields = () => {
 const jsonToCsv = (fields: string[], jsonData: any[]) => {
   try {
     const opts = { fields, defaultValue: 'N/A' };
-    const json2CsvParser = new Json2CsvParser(opts);
-    const csvReport = json2CsvParser.parse(jsonData);
-    return csvReport;
+    const transformOpts = { highWaterMark: 8192 };
+
+    const asyncParser = new AsyncParser(opts, transformOpts);
+    let csv = '';
+    asyncParser.processor
+      .on('data', (chunk: any) => (csv += chunk.toString()))
+      .on('end', () => console.log('write to csv finished'))
+      .on('error', (err: any) => log.error(err));
+    asyncParser.input.push(jsonData);
+    asyncParser.input.push(null);
+    return csv;
   } catch (error) {
     log.error(error);
     throw error;
