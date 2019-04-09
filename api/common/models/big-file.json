@@ -1,6 +1,6 @@
 {
   "name": "BigFile",
-  "base": "GenericUser",
+  "base": "Generic",
   "properties": {},
   "validations": [],
   "relations": {},

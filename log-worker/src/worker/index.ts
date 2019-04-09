@@ -198,48 +198,56 @@ const uploadReport = async (
   reportRequest: GeneralReportRequestTask,
   csv: string,
 ) => {
-  const reportFile = await tmpFile();
-  await writeFile(reportFile.path, csv, 'utf8');
-  await closeFile(reportFile.fd);
-  log.debug(reportFile.path);
-  const token = await login(
-    // @ts-ignore
-    process.env.SERVICE_MAN_USERNAME,
-    process.env.SERVICE_MAN_PASSWORD,
-  );
-  const fileName = `${Date.now().toString()}.csv`;
-  const options = {
-    method: 'POST',
-    url: UPLOAD_API,
-    timeout: 600000,
-    headers: {
-      authorization: token,
-      Accept: 'application/json',
-      'cache-control': 'no-cache',
-      'content-type':
-        'multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW',
-    },
-    formData: {
-      businessId: reportRequest.businessId,
-      myfile: {
-        value: fs.createReadStream(reportFile.path),
-        options: { filename: fileName, contentType: 'text/csv' },
+  try {
+    const reportFile = await tmpFile();
+    await writeFile(reportFile.path, csv, 'utf8');
+    await closeFile(reportFile.fd);
+    log.debug(reportFile.path);
+    const token = await login(
+      // @ts-ignore
+      process.env.SERVICE_MAN_USERNAME,
+      process.env.SERVICE_MAN_PASSWORD,
+    );
+    const fileName = `${Date.now().toString()}.csv`;
+    const options = {
+      method: 'POST',
+      url: UPLOAD_API,
+      timeout: 600000,
+      headers: {
+        authorization: token,
+        Accept: 'application/json',
+        'cache-control': 'no-cache',
+        'content-type':
+          'multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW',
       },
-    },
-  };
-  const response: string = await request(options);
-  await unlink(reportFile.path);
-  log.debug(JSON.parse(response));
-  await updateReportRequest(reportRequest, {
-    container: REPORT_CONTAINER,
-    fileName: fileName,
-  });
+      formData: {
+        businessId: reportRequest.businessId,
+        myfile: {
+          value: fs.createReadStream(reportFile.path),
+          options: { filename: fileName, contentType: 'text/csv' },
+        },
+      },
+    };
+    const response: string = await request(options);
+    log.debug('uploaded');
+    log.debug(response);
+    await unlink(reportFile.path);
+    await updateReportRequest(reportRequest, {
+      container: REPORT_CONTAINER,
+      fileName: fileName,
+    });
+  } catch (error) {
+    log.error('upload failed');
+    throw error;
+  }
 };
 
 const updateReportRequest = async (
   reportRequest: GeneralReportRequestTask,
   fileInfo: { fileName: string; container: string },
 ) => {
+  log.debug('updating report request', fileInfo);
+  log.debug('updating report request', reportRequest);
   const token = await login(
     // @ts-ignore
     process.env.SERVICE_MAN_USERNAME,
