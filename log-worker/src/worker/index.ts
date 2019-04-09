@@ -118,11 +118,12 @@ export const processLogRequest = async () => {
         }
 
         log.debug(`index one of result size: ${reports.length}`);
-        const csvReport = await jsonToCsv(fields, reports);
-        log.debug(`csv created`);
-        await uploadReport(generalReportRequestTask, csvReport);
-        log.debug(`uploaded`);
-        channel.ack(message);
+        jsonToCsv(fields, reports, async (csv: string) => {
+          log.debug(`csv created`);
+          await uploadReport(generalReportRequestTask, csv);
+          log.debug(`uploaded`);
+          channel.ack(message);
+        });
       } catch (error) {
         log.error(error);
         channel.nack(message, false, false);
@@ -176,7 +177,7 @@ const jsonToCsv = (fields: string[], jsonData: any[], cb: any) => {
     const json2csv = new Transform(opts, transformOpts);
     const processor = input.pipe(json2csv);
     let csv = '';
-    processor.on('data', function(chunk) {
+    processor.on('data', function(chunk: string) {
       csv = csv + chunk;
     });
 
