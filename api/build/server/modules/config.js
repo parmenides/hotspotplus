@@ -27,8 +27,8 @@ var FAST_ACCOUNTING_UPDATE_INTERVAL_SECONDS =
 var CONFIG_SERVER_URL = process.env.CONFIG_SERVER_URL
 module.exports = {
   VERSION: '1.3',
-  PAYPING_APP_CLIENT_ID: '54f031a4-4178-4dcd-9e2f-d4db810911d2',
-  PAYPING_APP_TOKEN: '88f4d816-47b9-4180-9be5-eec78d802cc0',
+  PAYPING_APP_CLIENT_ID: process.env.PAYPING_APP_CLIENT_ID,
+  PAYPING_APP_TOKEN: process.env.PAYPING_APP_TOKEN,
   PAYPING_AUTH_RETURN_URL: 'http://127.0.0.1:3000/api/payping',
   PAYPING_CREATE_PAYMENT : 'https://api.payping.ir/v1/pay',
   PAYPING_PAYMENT_GATEWAY : 'https://api.payping.ir/v1/pay/gotoipg',
