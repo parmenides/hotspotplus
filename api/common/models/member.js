@@ -2616,6 +2616,7 @@ module.exports = function(Member) {
     ],
     returns: { root: true }
   });
+/*
 
   Member.verifySubscriptionPayment = function(
     invoiceId,
@@ -2790,6 +2791,7 @@ module.exports = function(Member) {
       }
     });
   };
+*/
 
   Member.autoReSubscribe = function(businessId, memberId, dateInMs) {
     var InternetPlan = app.models.InternetPlan;
@@ -3452,7 +3454,7 @@ module.exports = function(Member) {
           return reject('invalid business id');
         }
 
-        if (!business.paymentPanelApiKey) {
+        if (!business.paymentApiKey) {
           //return reject ( 'invalid business payment panel token' );
           return resolve({
             code: 500,
@@ -3498,7 +3500,7 @@ module.exports = function(Member) {
                 .replace('{0}', 'invoiceId')
                 .replace('{1}', invoice.id);
               Payment.openPaymentGateway(
-                business.paymentPanelApiKey,
+                business.paymentApiKey,
                 price,
                 config.PAYMENT_GATEWAY_INTERNET_PLAN_PAYMENT_DESC,
                 business.email,
@@ -3554,7 +3556,7 @@ module.exports = function(Member) {
     returns: { root: true }
   });
 
-  Member.verifyPayment = function(invoiceId) {
+  Member.verifyPayment = function(invoiceId,refId) {
     return Q.Promise(function(resolve, reject) {
       var Invoice = app.models.Invoice;
       var InternetPlan = app.models.InternetPlan;
@@ -3587,7 +3589,6 @@ module.exports = function(Member) {
           });
         }
         var businessId = invoice.businessId;
-        var paymentId = invoice.paymentId;
         var price = invoice.price;
         var invoiceType = invoice.invoiceType;
         Business.findById(businessId, function(error, business) {
@@ -3609,7 +3610,7 @@ module.exports = function(Member) {
             });
           }
 
-          if (!business.paymentPanelApiKey) {
+          if (!business.paymentApiKey) {
             return resolve({
               code: 302,
               returnUrl: returnUrl
@@ -3617,7 +3618,7 @@ module.exports = function(Member) {
                 .replace('{1}', '&error=Invalid payment token id')
             });
           }
-          Payment.verifyPayment(business.paymentPanelApiKey, paymentId, price)
+          Payment.verifyPayment(business.paymentApiKey, refId, price)
             .then(function(verificationResult) {
               log.warn(verificationResult);
 
@@ -3815,7 +3816,7 @@ module.exports = function(Member) {
           return reject('invalid business id');
         }
 
-        if (!business.paymentPanelApiKey) {
+        if (!business.paymentApiKey) {
           return reject('invalid business payment panel token');
         }
         InternetPlan.findById(internetPlanId, function(error, internetPlan) {
@@ -3846,12 +3847,13 @@ module.exports = function(Member) {
               if (error) {
                 return reject('Error in create invoice ' + error);
               }
+
               var returnUrl = config
                 .MEMBER_PAYMENT_RETURN_URL()
                 .replace('{0}', 'invoiceId')
                 .replace('{1}', invoice.id);
               Payment.openPaymentGateway(
-                business.paymentPanelApiKey,
+                business.paymentApiKey,
                 totalPrice,
                 config.PAYMENT_GATEWAY_INTERNET_BULK_PAYMENT_DESC,
                 business.email,

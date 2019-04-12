@@ -10,7 +10,7 @@ var serviceInfo = require('../../server/modules/serviceInfo.js');
 module.exports = function(Invoice) {
   var log = logger.createLogger();
 
-  Invoice.verifyInvoice = function(invoiceId) {
+  Invoice.verifyInvoice = function(invoiceId,refId) {
     return Q.Promise(function(resolve, reject) {
       if (!invoiceId) {
         return reject('invalid invoice id');
@@ -23,9 +23,8 @@ module.exports = function(Invoice) {
         if (!invoice) {
           return resolve('invoice not found');
         }
-        var paymentId = invoice.paymentId;
         var price = invoice.price;
-        Payment.verifyPayment(config.PAYMENT_API_KEY, paymentId, price)
+        Payment.verifyPayment(config.PAYMENT_API_KEY, refId, price)
           .then(function(result) {
             log.debug(result);
             if (result.payed) {
@@ -210,7 +209,7 @@ module.exports = function(Invoice) {
     returns: { root: true }
   });
 
-  Invoice.verifyExternalInvoice = function(invoiceId) {
+  Invoice.verifyExternalInvoice = function(invoiceId,refId) {
     return Q.Promise(function(resolve, reject) {
       var Invoice = app.models.Invoice;
       if (!invoiceId) {
@@ -225,10 +224,9 @@ module.exports = function(Invoice) {
         if (!invoice) {
           return reject('invoice not found');
         }
-        var paymentId = invoice.paymentId;
         var price = invoice.price;
         log.debug(invoice);
-        Payment.verifyPayment(config.PAYMENT_API_KEY, paymentId, price)
+        Payment.verifyPayment(config.PAYMENT_API_KEY, refId, price)
           .then(function(result) {
             log.debug(result);
             if (result.payed) {
@@ -283,6 +281,10 @@ module.exports = function(Invoice) {
     accepts: [
       {
         arg: 'invoiceId',
+        type: 'string',
+        required: true
+      },{
+        arg: 'refId',
         type: 'string',
         required: true
       }

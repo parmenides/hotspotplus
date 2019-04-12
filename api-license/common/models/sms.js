@@ -186,6 +186,7 @@ module.exports = function(Sms) {
   });
 
   Sms.buySmsCredit = function(systemUuid, localReturnUrl, price) {
+    log.debug('@buySmsCredit',systemUuid,localReturnUrl, price);
     var Invoice = app.models.Invoice;
     var License = app.models.License;
     return License.findOne({

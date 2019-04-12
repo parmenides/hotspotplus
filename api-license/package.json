@@ -33,7 +33,7 @@
     "loopback-connector-mongodb": "^3.4.4",
     "loopback-context": "^3.3.0",
     "ndjson": "^1.5.0",
-    "needle": "^2.2.1",
+    "needle": "^2.3.0",
     "node-rsa": "^1.0.0",
     "nodejs-license-file": "^4.0.0",
     "payir": "^1.0.0",

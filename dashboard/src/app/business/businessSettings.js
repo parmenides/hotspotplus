@@ -212,6 +212,20 @@ app.controller('businessSettings', [
         }
       );
     };
+$scope.paypingAccess = function() {
+      Business.paypingAuthorization({ id: businessId }).$promise.then(
+        function(payping) {
+          if (payping.code === 302) {
+            window.location.href = payping.returnUrl;
+          } else {
+            appMessenger.showError('business.paypingAuthorizationFailed');
+          }
+        },
+        function(error) {
+          appMessenger.showError('business.paypingConnectionFailed');
+        }
+      );
+    };
 
     $scope.paypingAccess = function() {
       Business.paypingAuthorization({ id: businessId }).$promise.then(

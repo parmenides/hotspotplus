@@ -7,6 +7,15 @@ var elasticURL =
   'http://' + process.env.ELASTIC_IP + ':' + process.env.ELASTIC_PORT+'/';
 
 module.exports = {
+  PAYPING_APP_CLIENT_ID: '54f031a4-4178-4dcd-9e2f-d4db810911d2',
+  PAYPING_APP_TOKEN: '88f4d816-47b9-4180-9be5-eec78d802cc0',
+  PAYPING_AUTH_RETURN_URL: 'http://127.0.0.1:3000/api/payping',
+  PAYPING_CREATE_PAYMENT : 'https://api.payping.ir/v1/pay',
+  PAYPING_PAYMENT_GATEWAY : 'https://api.payping.ir/v1/pay/gotoipg',
+  PAYPING_PAYMENT_VERIFY : 'https://api.payping.ir/v1/pay/verify',
+  PAYPING_OAUTH2: 'https://oauth.payping.ir/connect/token',
+  PAYPING_APP_REQUESTED_SCOPES: 'openid profile nationalcode phone pay:read pay:write',
+  PAYMENT_API_KEY: process.env.PAYMENT_API_KEY,
   ELASTIC_LICENSE_CHARGE:
     elasticURL +
     process.env.ELASTIC_INDEX_PREFIX +
@@ -14,7 +23,7 @@ module.exports = {
   ELASTIC_LICENSE_CHARGE_MAIN_CONTEXT:
     elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'licensecharge',
   LICENSE_TYPE_CHARGE: 'licenseCharge',
-  PAYMENT_API_KEY: process.env.PAYMENT_API_KEY,
+  //PAYMENT_API_KEY: process.env.PAYMENT_API_KEY,
   PAYMENT_GATEWAY_DEFAULT_DESC: 'خرید اعتبار از سایت هات اسپات پلاس',
   PAYMENT_SUPPORT_EMAIL: process.env.PAYMENT_SUPPORT_EMAIL,
   PAYMENT_SUPPORT_MOBILE: process.env.PAYMENT_SUPPORT_MOBILE,

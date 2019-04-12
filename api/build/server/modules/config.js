@@ -29,8 +29,13 @@ module.exports = {
   VERSION: '1.3',
   PAYPING_APP_CLIENT_ID: '54f031a4-4178-4dcd-9e2f-d4db810911d2',
   PAYPING_APP_TOKEN: '88f4d816-47b9-4180-9be5-eec78d802cc0',
-  PAYPING_AUTH_RETURN_URL: 'https://my.prohotspotplus.com/api/payping',
-  PAYPING_APP_REQUESTED_SCOPES: 'openid profile nationalcode phone pay.read pay.write',
+  PAYPING_AUTH_RETURN_URL: 'http://127.0.0.1:3000/api/payping',
+  PAYPING_CREATE_PAYMENT : 'https://api.payping.ir/v1/pay',
+  PAYPING_PAYMENT_GATEWAY : 'https://api.payping.ir/v1/pay/gotoipg',
+  PAYPING_PAYMENT_VERIFY : 'https://api.payping.ir/v1/pay/verify',
+  PAYPING_OAUTH2: 'https://oauth.payping.ir/connect/token',
+  PAYPING_APP_REQUESTED_SCOPES: 'openid profile nationalcode phone pay:read pay:write',
+  PAYMENT_API_KEY: process.env.PAYMENT_API_KEY,
   SMS_SIGNATURE: process.env.SMS_SIGNATURE,
   PASSWORD_PREFIX: process.env.PASSWORD_PREFIX,
   SYSTEM_ID_PATH: process.env.SYSTEM_ID_PATH,
@@ -38,7 +43,6 @@ module.exports = {
   ZARINPAL_SANDBOX: !!process.env.ZARINPAL_SANDBOX,
   TRIAL_DAYS: process.env.TRIAL_DAYS || 3,
   ADMIN_MOBILE: process.env.ADMIN_MOBILE,
-  PAYMENT_API_KEY: process.env.PAYMENT_API_KEY,
   PAYMENT_SUPPORT_EMAIL: process.env.PAYMENT_SUPPORT_EMAIL,
   PAYMENT_SUPPORT_MOBILE: process.env.PAYMENT_SUPPORT_MOBILE,
   SUPPORT_MOBILE: process.env.PAYMENT_SUPPORT_MOBILE,
@@ -617,6 +621,15 @@ module.exports = {
     )
   },
   /**
+   * @return {string}
+   */
+  PAYPING_AUTHORISE_RESULT_URL: function () {
+    return (
+      process.env.CALCULATED_WEB_APP_ADDRESS +
+      mainPath +
+      '#/app/loading?dropbox={0}{1}'
+    )
+  },/**
    * @return {string}
    */
   DROPBOX_AUTHORISE_RESULT_URL: function () {

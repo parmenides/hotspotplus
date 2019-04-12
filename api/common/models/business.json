@@ -82,6 +82,9 @@
     "dropboxToken": {
       "type": "string"
     },
+    "paypingToken": {
+      "type": "string"
+    },
     "serviceStatus": {
       "type": "string"
     }

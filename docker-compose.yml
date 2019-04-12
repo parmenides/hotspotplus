@@ -19,7 +19,7 @@ services:
     volumes:
       - ${PWD}/systemId:/systemId
       - ${PWD}/api/server:/usr/src/app/server/
-      - ${PWD}/files:/usr/src/app/files
+      - ${PWD}/files:/files
       - ${PWD}/api/node_modules:/usr/src/app/node_modules
       - ${PWD}/api/common:/usr/src/app/common/
       - ${PWD}/api/logs:/logs

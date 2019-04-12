@@ -342,7 +342,9 @@
 	"logoFooterExample":           "خوش آمدید",
 	"logoFooterExampleEn":         "Welcome",
 	"dropboxConnectionFailed":     "خطا در برقراری ارتباط با دراپ باکس",
+	"paypingConnectionFailed":     "خطا در برقراری ارتباط با پی‌پینگ",
 	"dropboxAuthorizationFailed":  "خطا در شناسایی کاربر دراپ باکس",
+	"paypingAuthorizationFailed":  "خطا در شناسایی کاربر پی‌پینگ",
 	"signUpDisabled":              "عضویت کاربران از طریق هات اسپات را غیر فعال کن"
   },
   "error":        {
@@ -510,6 +512,7 @@
 	"doSearch":                    "بررسی کن",
 	"hour":                        "ساعت",
 	"dropbox":                     "اتصال به دراپ‌ باکس (برای فعال سازی لاگ الزامیست)",
+	"payping":                     "اتصال به سرویس پرداخت Payping",
 	"number":                      "تعداد",
 	"persian":                     "فارسی",
 	"english":                     "انگلیسی",

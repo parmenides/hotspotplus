@@ -685,7 +685,7 @@ module.exports = function(License) {
     returns: { root: true }
   });
 
-  License.verifyInvoice = function(invoiceId, httpResponse) {
+  License.verifyInvoice = function(invoiceId, refId,httpResponse) {
     return Q.Promise(function(resolve, reject) {
       var Invoice = app.models.Invoice;
       if (!invoiceId) {
@@ -700,10 +700,9 @@ module.exports = function(License) {
         if (!invoice) {
           return reject('invoice not found');
         }
-        var paymentId = invoice.paymentId;
         var price = invoice.price;
         log.debug(invoice);
-        Payment.verifyPayment(config.PAYMENT_API_KEY, paymentId, price)
+        Payment.verifyPayment(config.PAYMENT_API_KEY, refId, price)
           .then(function(result) {
             log.debug(result);
             if (result.payed) {
@@ -765,6 +764,7 @@ module.exports = function(License) {
     description: 'verifyInvoice',
     accepts: [
       { arg: 'invoiceId', type: 'string', required: true },
+      { arg: 'refId', type: 'string', required: true },
       {
         arg: 'res',
         type: 'object',

@@ -68,7 +68,6 @@ module.exports = function(Invoice) {
     log.debug('issueInvoice');
     return new Promise(function(resolve, reject) {
       discountCoupon = discountCoupon || {};
-      log.debug('issueInvoice', discountCoupon);
       Invoice.verifyAndUseCoupon(price, discountCoupon.code)
         .then(function(discountedPrice) {
           var issueDate = new Date().getTime();
