@@ -7,7 +7,7 @@ var log = logger.createLogger();
 module.exports = function(app) {
   var router = app.loopback.Router();
 
-  router.post('/api/payment/hotspot/return', function(req, res) {
+  router.get('/api/payment/hotspot/return', function(req, res) {
     var invoiceId = req.query.invoiceId;
     var username = req.query.username;
     var password = req.query.password;
@@ -36,7 +36,7 @@ module.exports = function(app) {
       });
   });
 
-  router.post('/api/payment/business/return', function(req, res) {
+  router.get('/api/payment/business/return', function(req, res) {
     var Business = app.models.Business;
     var invoiceId = req.query.invoiceId;
     var refId = req.query.refId;
@@ -53,7 +53,7 @@ module.exports = function(app) {
       });
   });
 
-  router.post('/api/payment/external/return', function(req, res) {
+  router.get('/api/payment/external/return', function(req, res) {
     var Invoice = app.models.Invoice;
     var invoiceId = req.query.invoiceId;
     var refId = req.query.refId;
@@ -69,7 +69,7 @@ module.exports = function(app) {
       });
   });
 
-  router.post('/api/payment/charge/return', function(req, res) {
+  router.get('/api/payment/charge/return', function(req, res) {
     var Business = app.models.Business;
     var invoiceId = req.query.invoiceId;
     var refId = req.query.refId;
@@ -85,7 +85,7 @@ module.exports = function(app) {
       });
   });
 
-  router.post('/api/payment/member/return', function(req, res) {
+  router.get('/api/payment/member/return', function(req, res) {
     var Member = app.models.Member;
     var invoiceId = req.query.invoiceId;
     var refId = req.query.refId;
