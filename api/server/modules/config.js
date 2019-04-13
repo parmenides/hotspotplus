@@ -29,7 +29,7 @@ module.exports = {
   VERSION: '1.3',
   PAYPING_APP_CLIENT_ID: process.env.PAYPING_APP_CLIENT_ID,
   PAYPING_APP_TOKEN: process.env.PAYPING_APP_TOKEN,
-  PAYPING_AUTH_RETURN_URL: 'http://127.0.0.1:3000/api/payping',
+  PAYPING_AUTH_RETURN_URL: process.env.PAYPING_AUTH_RETURN_URL,
   PAYPING_CREATE_PAYMENT : 'https://api.payping.ir/v1/pay',
   PAYPING_PAYMENT_GATEWAY : 'https://api.payping.ir/v1/pay/gotoipg',
   PAYPING_PAYMENT_VERIFY : 'https://api.payping.ir/v1/pay/verify',

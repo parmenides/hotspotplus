@@ -9,7 +9,7 @@ var elasticURL =
 module.exports = {
   PAYPING_APP_CLIENT_ID: '54f031a4-4178-4dcd-9e2f-d4db810911d2',
   PAYPING_APP_TOKEN: '88f4d816-47b9-4180-9be5-eec78d802cc0',
-  PAYPING_AUTH_RETURN_URL: 'http://127.0.0.1:3000/api/payping',
+  PAYPING_AUTH_RETURN_URL: 'https://api.prohotspotplus.com/api/payping',
   PAYPING_CREATE_PAYMENT : 'https://api.payping.ir/v1/pay',
   PAYPING_PAYMENT_GATEWAY : 'https://api.payping.ir/v1/pay/gotoipg',
   PAYPING_PAYMENT_VERIFY : 'https://api.payping.ir/v1/pay/verify',
