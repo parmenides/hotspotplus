@@ -21,7 +21,12 @@ module.exports.openPaymentGateway = function (
   return Q.Promise(function (resolve, reject) {
     const amount = price
     const paymentId = uuidv4()
-
+    log.error('@open gateway',token,
+      price,
+      desc,
+      email,
+      mobile,
+      returnUrl)
     needle.post(config.PAYPING_CREATE_PAYMENT, {
       amount: amount,
       description: `ایمیل: ${email} شماره همراه: ${mobile}`,

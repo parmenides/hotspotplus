@@ -2167,7 +2167,7 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
           log.debug('challenge ', challenge)
           const clientId = config.PAYPING_APP_CLIENT_ID
           //const token = config.PAYPING_APP_TOKEN;
-          const returnUrl = `${config.PAYPING_AUTH_RETURN_URL}`
+          const returnUrl = config.PAYPING_AUTH_RETURN_URL
           const scopes = config.PAYPING_APP_REQUESTED_SCOPES
           const paypingAuthUrl = `https://oauth.payping.ir/connect/authorize?state=${businessId}&scope=${scopes}&response_type=code&client_id=${clientId}&code_challenge=${challenge}&code_challenge_method=S256&redirect_uri=${returnUrl}`
           log.debug('@payping auth')
