@@ -73,7 +73,14 @@ module.exports.verifyPayment = function (token, refId, price) {
         log.error(error)
         return reject(error)
       }
-      return resolve({payed: true, refId: refId})
+      if (response.statusCode === 200) {
+        log.debug('Payment success', response.body)
+        return resolve({payed: true, refId: refId})
+      } else {
+        log.error('payment failed')
+        return reject(response.body)
+      }
+
     })
   })
 }

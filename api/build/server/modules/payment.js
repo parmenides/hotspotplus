@@ -21,7 +21,7 @@ module.exports.openPaymentGateway = function (
   return Q.Promise(function (resolve, reject) {
     const amount = price
     const paymentId = uuidv4()
-    log.error('@open gateway',token,
+    log.error('@open gateway', token,
       price,
       desc,
       email,
@@ -78,7 +78,13 @@ module.exports.verifyPayment = function (token, refId, price) {
         log.error(error)
         return reject(error)
       }
-      return resolve({payed: true, refId: refId})
+      if (response.statusCode === 200) {
+        log.debug('Payment success', response.body)
+        return resolve({payed: true, refId: refId})
+      } else {
+        log.error('payment failed')
+        return reject(response.body)
+      }
     })
   })
 }
