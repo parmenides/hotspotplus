@@ -2616,9 +2616,9 @@ module.exports = function(Member) {
     ],
     returns: { root: true }
   });
-/*
 
   Member.verifySubscriptionPayment = function(
+    refId,
     invoiceId,
     username,
     password,
@@ -2698,7 +2698,7 @@ module.exports = function(Member) {
                   .replace('{0}', querystring.stringify(params))
               });
             }
-            Payment.verifyPayment(business.paymentApiKey, paymentId, price)
+            Payment.verifyPayment(business.paymentApiKey, refId, price)
               .then(function(verificationResult) {
                 log.warn(verificationResult);
 
@@ -2791,7 +2791,6 @@ module.exports = function(Member) {
       }
     });
   };
-*/
 
   Member.autoReSubscribe = function(businessId, memberId, dateInMs) {
     var InternetPlan = app.models.InternetPlan;

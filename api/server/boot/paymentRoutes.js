@@ -12,11 +12,13 @@ module.exports = function(app) {
     var username = req.query.username;
     var password = req.query.password;
     var businessId = req.query.businessId;
+    var refId = req.query.refid;
     var memberId = req.query.memberId;
     var nasId = req.query.nasId;
     var host = req.query.host;
     var Member = app.models.Member;
     Member.verifySubscriptionPayment(
+      refId,
       invoiceId,
       username,
       password,
@@ -39,7 +41,7 @@ module.exports = function(app) {
   router.get('/api/payment/business/return', function(req, res) {
     var Business = app.models.Business;
     var invoiceId = req.query.invoiceId;
-    var refId = req.query.refId;
+    var refId = req.query.refid;
 
     Business.verifyBuyPackage(invoiceId,refId)
       .then(function(result) {
@@ -56,7 +58,7 @@ module.exports = function(app) {
   router.get('/api/payment/external/return', function(req, res) {
     var Invoice = app.models.Invoice;
     var invoiceId = req.query.invoiceId;
-    var refId = req.query.refId;
+    var refId = req.query.refid;
     Invoice.verifyExternalInvoice(invoiceId,refId)
       .then(function(result) {
         var url = result.returnUrl;
@@ -72,7 +74,7 @@ module.exports = function(app) {
   router.get('/api/payment/charge/return', function(req, res) {
     var Business = app.models.Business;
     var invoiceId = req.query.invoiceId;
-    var refId = req.query.refId;
+    var refId = req.query.refid;
     Business.verifyBuyCredit(invoiceId,refId)
       .then(function(result) {
         var url = result.returnUrl;
@@ -88,7 +90,7 @@ module.exports = function(app) {
   router.get('/api/payment/member/return', function(req, res) {
     var Member = app.models.Member;
     var invoiceId = req.query.invoiceId;
-    var refId = req.query.refId;
+    var refId = req.query.refid;
 
     Member.verifyPayment(invoiceId,refId)
       .then(function(result) {

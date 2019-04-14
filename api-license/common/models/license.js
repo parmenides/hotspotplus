@@ -764,7 +764,7 @@ module.exports = function(License) {
     description: 'verifyInvoice',
     accepts: [
       { arg: 'invoiceId', type: 'string', required: true },
-      { arg: 'refId', type: 'string', required: true },
+      { arg: 'refid', type: 'string', required: true },
       {
         arg: 'res',
         type: 'object',
