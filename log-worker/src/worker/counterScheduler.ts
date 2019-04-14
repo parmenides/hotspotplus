@@ -16,7 +16,7 @@ export const countAndUpdateBusinessReports = async () => {
   const to = momentTz.tz(Date.now(), LOGGER_TIME_ZONE);
   to.add({ days: 1 });
   to.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
-  const from = to.clone().subtract({ days: 10 });
+  const from = to.clone().subtract({ days: 30 });
 
   const netflowBusinessReportCount = await netflowModule.countBusinessReports(
     from,
