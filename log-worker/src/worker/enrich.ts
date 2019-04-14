@@ -21,7 +21,7 @@ const log = logger.createLogger();
 export const enrichLogs = async () => {
   log.debug('At processing enrichment requests');
   const channel = await getRabbitMqChannel();
-  channel.prefetch(5, true);
+  channel.prefetch(3, true);
 
   process.once('SIGINT', async () => {
     await channel.close();
