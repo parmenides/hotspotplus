@@ -45,3 +45,12 @@ app.listen(app.get('port'), async () => {
   //await testRunner();
   log.info(` App is running at http://localhost:${app.get('port')}`);
 });
+
+process.on('uncaughtException', function(error) {
+  console.error('Something bad happened here....');
+  console.error(error);
+  console.error(error.stack);
+  log.error(error);
+  log.error(error.stack);
+  //utility.sendMessage ( error, { fileName: 'server.js', source: 'boot' } );
+});
