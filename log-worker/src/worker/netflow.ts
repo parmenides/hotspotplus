@@ -465,6 +465,10 @@ const updateNetflows = async (
   //log.debug('INDEXES:', indexNames);
   for (const indexName of indexNames) {
     try {
+      log.debug(
+        'update query %j',
+        createNetflowUpdateQuery(fromDate, toDate, nasIp, memberIp, updates),
+      );
       const result = await elasticClient.updateByQuery({
         index: indexName,
         type: 'doc',
