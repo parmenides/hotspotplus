@@ -102,107 +102,114 @@ const searchAndUpdateReport = async (
   for (const flowData of ipData) {
     const nasIp = flowData.nasIp;
     for (const memberIp of flowData.memberIpList) {
-      const groupedSessions = await sessionModule.querySessionsByIp(
-        nasIp,
-        memberIp,
-        from,
-        to,
-      );
-      if (groupedSessions.group_by_username.buckets.length > 0) {
-        log.warn('sessions: ', groupedSessions);
-      }
-      if (groupedSessions.group_by_username.buckets.length === 1) {
-        const session = groupedSessions.group_by_username.buckets[0];
-        const username = session.key;
-        const nasId = groupedSessions.extra.hits.hits[0]._source.nasId;
-        const nasTitle = groupedSessions.extra.hits.hits[0]._source.nasTitle;
-        const mac = groupedSessions.extra.hits.hits[0]._source.mac;
-        const memberId = groupedSessions.extra.hits.hits[0]._source.memberId;
-        const businessId =
-          groupedSessions.extra.hits.hits[0]._source.businessId;
-        let updateResult: UpdateDocumentByQueryResponse[];
-        if (reportType === REPORT_TYPE.SYSLOG) {
-          updateResult = await syslogModule.updateSyslogs(
-            from,
-            to,
-            nasIp,
-            memberIp,
-            {
-              nasId,
-              nasTitle,
-              mac,
-              memberId,
-              businessId,
-              username,
-            },
-          );
-        } else if (reportType === REPORT_TYPE.NETFLOW) {
-          updateResult = await netflowModule.updateNetflows(
-            from,
-            to,
-            nasIp,
-            memberIp,
-            {
-              nasId,
-              nasTitle,
-              mac,
-              memberId,
-              businessId,
-              username,
-            },
-          );
-        } else {
-          throw new Error(`invalid report type: ${reportType}`);
-        }
-
-        log.debug(
-          `updating ${reportType} report for ${username}  user, from:${moment(
-            from,
-          ).format('YYYY.MM.DD HH:MM')} to:${moment(to).format(
-            'YYYY.MM.DD HH:MM',
-          )} router IP:${nasIp} member IP:${memberIp}`,
-          {
-            nasId,
-            memberId,
-            businessId,
-            username,
-          },
-        );
-        //log.debug(`update result`, updateResult);
-      } else if (groupedSessions.group_by_username.buckets.length > 1) {
-        log.debug('more than two up found going to split time range');
-        const channel = await getRabbitMqChannel();
-        //split range in two;
-        const newTo = momentTz.tz(
-          from.valueOf() + (to.valueOf() - from.valueOf()) / 2,
-          LOGGER_TIME_ZONE,
-        );
-
-        const reQueueOne: EnrichTask = {
+      try {
+        const groupedSessions = await sessionModule.querySessionsByIp(
+          nasIp,
+          memberIp,
           from,
-          to: newTo,
-          reportType,
-        };
-        await channel.sendToQueue(
-          QUEUES.RETRY_LOG_ENRICHMENT_WORKER_QUEUE,
-          Buffer.from(JSON.stringify(reQueueOne)),
-        );
-
-        const reQueueTwo: EnrichTask = {
-          from: newTo,
           to,
-          reportType,
-        };
-        await channel.sendToQueue(
-          QUEUES.RETRY_LOG_ENRICHMENT_WORKER_QUEUE,
-          Buffer.from(JSON.stringify(reQueueTwo)),
         );
-      } else if (groupedSessions.group_by_username.buckets.length === 0) {
-        log.warn(
-          `nothing to update  ${reportType} from:${moment(from)} to:${moment(
+        if (groupedSessions.group_by_username.buckets.length > 0) {
+          log.warn('sessions: ', groupedSessions);
+        }
+        if (groupedSessions.group_by_username.buckets.length === 1) {
+          const session = groupedSessions.group_by_username.buckets[0];
+          const username = session.key;
+          const nasId = groupedSessions.extra.hits.hits[0]._source.nasId;
+          const nasTitle = groupedSessions.extra.hits.hits[0]._source.nasTitle;
+          const mac = groupedSessions.extra.hits.hits[0]._source.mac;
+          const memberId = groupedSessions.extra.hits.hits[0]._source.memberId;
+          const businessId =
+            groupedSessions.extra.hits.hits[0]._source.businessId;
+          let updateResult: UpdateDocumentByQueryResponse[];
+          if (reportType === REPORT_TYPE.SYSLOG) {
+            updateResult = await syslogModule.updateSyslogs(
+              from,
+              to,
+              nasIp,
+              memberIp,
+              {
+                nasId,
+                nasTitle,
+                mac,
+                memberId,
+                businessId,
+                username,
+              },
+            );
+          } else if (reportType === REPORT_TYPE.NETFLOW) {
+            updateResult = await netflowModule.updateNetflows(
+              from,
+              to,
+              nasIp,
+              memberIp,
+              {
+                nasId,
+                nasTitle,
+                mac,
+                memberId,
+                businessId,
+                username,
+              },
+            );
+          } else {
+            throw new Error(`invalid report type: ${reportType}`);
+          }
+
+          log.debug(
+            `updating ${reportType} report for ${username}  user, from:${moment(
+              from,
+            ).format('YYYY.MM.DD HH:MM')} to:${moment(to).format(
+              'YYYY.MM.DD HH:MM',
+            )} router IP:${nasIp} member IP:${memberIp}`,
+            {
+              nasId,
+              memberId,
+              businessId,
+              username,
+            },
+          );
+          //log.debug(`update result`, updateResult);
+        } else if (groupedSessions.group_by_username.buckets.length > 1) {
+          log.debug('more than two up found going to split time range');
+          const channel = await getRabbitMqChannel();
+          //split range in two;
+          const newTo = momentTz.tz(
+            from.valueOf() + (to.valueOf() - from.valueOf()) / 2,
+            LOGGER_TIME_ZONE,
+          );
+
+          const reQueueOne: EnrichTask = {
+            from,
+            to: newTo,
+            reportType,
+          };
+          await channel.sendToQueue(
+            QUEUES.RETRY_LOG_ENRICHMENT_WORKER_QUEUE,
+            Buffer.from(JSON.stringify(reQueueOne)),
+          );
+
+          const reQueueTwo: EnrichTask = {
+            from: newTo,
             to,
-          )} router IP:${nasIp} member IP:${memberIp}`,
-        );
+            reportType,
+          };
+          await channel.sendToQueue(
+            QUEUES.RETRY_LOG_ENRICHMENT_WORKER_QUEUE,
+            Buffer.from(JSON.stringify(reQueueTwo)),
+          );
+        } else if (groupedSessions.group_by_username.buckets.length === 0) {
+          log.warn(
+            `nothing to update  ${reportType} from:${moment(from)} to:${moment(
+              to,
+            )} router IP:${nasIp} member IP:${memberIp}`,
+          );
+          return;
+        }
+      } catch (error) {
+        log.error(error);
+        log.error(ipData);
+        throw error;
       }
     }
   }
