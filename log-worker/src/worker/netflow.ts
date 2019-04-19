@@ -547,16 +547,8 @@ const createNetflowUpdateQuery = (
     },
     script: {
       lang: 'painless',
-      params: {
-        username: update.username,
-        nasId: update.nasId,
-        nasTitle: update.nasTitle,
-        mac: update.mac,
-        memberId: update.memberId,
-        businessId: update.businessId,
-      },
-      source: `
-      ctx._source.username=params.username;
+      params: update,
+      source: `ctx._source.username=params.username;
       ctx._source.status="enriched";
       ctx._source.nasId=params.nasId;
       ctx._source.nasTitle=params.nasTitle;

@@ -428,14 +428,14 @@ const createUsernameUpdateQuery = (
     },
     script: {
       lang: 'painless',
-      inline: `
-            ctx._source['username'] = "${update.username}";
-            ctx._source['status'] = "enriched";
-            ctx._source['nasId'] = "${update.nasId}";
-            ctx._source['nasTitle'] = "${update.nasTitle}";
-            ctx._source['mac'] = "${update.mac}";
-            ctx._source['memberId'] = "${update.memberId}";
-            ctx._source['businessId'] = "${update.businessId}";
+      params: update,
+      source: `ctx._source['username']=params.username;
+            ctx._source['status']= "enriched";
+            ctx._source['nasId']=params.nasId;
+            ctx._source['nasTitle']=params.nasTitle;
+            ctx._source['mac']=params.mac;
+            ctx._source['memberId']=params.memberId;
+            ctx._source['businessId']=params.businessId;
             `,
     },
   };
