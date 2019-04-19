@@ -24,7 +24,7 @@
     "keygenerator": "^1.0.4",
     "easy-zip": "0.0.4",
     "ndjson": "^1.5.0",
-    "elasticsearch": "^15.2.0",
+    "@elastic/elasticsearch": "^6.7.0-rc.2",
     "json2csv": "^4.0.2",
     "needle": "1.4.2",
     "q": "^1.4.1",

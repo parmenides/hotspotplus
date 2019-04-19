@@ -15,7 +15,7 @@
     "posttest": "npm run lint && nsp check"
   },
   "dependencies": {
-    "@elastic/elasticsearch": "^7.0.0-rc.1",
+    "@elastic/elasticsearch": "^6.7.0-rc.2",
     "bluebird": "^3.5.1",
     "bunyan": "^1.8.12",
     "compression": "^1.0.3",
