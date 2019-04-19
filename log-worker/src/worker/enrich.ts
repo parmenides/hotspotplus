@@ -57,6 +57,7 @@ export const enrichLogs = async () => {
           channel.ack(message);
           return;
         }
+        log.warn('............... Enrichment Done...............');
         channel.ack(message);
       } catch (error) {
         log.error(error);
