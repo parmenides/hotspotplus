@@ -199,12 +199,11 @@ const searchAndUpdateReport = async (
             Buffer.from(JSON.stringify(reQueueTwo)),
           );
         } else if (groupedSessions.group_by_username.buckets.length === 0) {
-          log.warn(
+          log.debug(
             `nothing to update  ${reportType} from:${moment(from)} to:${moment(
               to,
             )} router IP:${nasIp} member IP:${memberIp}`,
           );
-          return;
         }
       } catch (error) {
         log.error(error);
