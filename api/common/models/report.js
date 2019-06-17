@@ -2,8 +2,10 @@
 
 const rabbitMq = require('../../server/modules/rabbitmq');
 const config = require('../../server/modules/config');
+var logger = require('../../server/modules/logger');
 
 module.exports = function(Report) {
+  var log = logger.createLogger();
   Report.observe('after save', function(ctx, next) {
     if (ctx.isNewInstance) {
       rabbitMq.getRabbitMqChannel((error, channel) => {
