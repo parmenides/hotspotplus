@@ -5,7 +5,10 @@ import errorHandler from './utils/errorHandler';
 import logger from './utils/logger';
 import { processLogRequest } from './worker';
 import { testRunner } from './test';
-import { addElasticIndexTemplates } from './modules/initElasticsearch';
+import {
+  addElasticIndexTemplates,
+  addDefaultIndex,
+} from './modules/initElasticsearch';
 import { addDefaultQueue } from './modules/initRabbitMq';
 import { enrichLogs } from './worker/enrich';
 import { startEnrichScheduler } from './worker/enrichScheduler';
@@ -36,6 +39,7 @@ app.listen(app.get('port'), async () => {
   /*tslint:disable*/
   console.log('Add default queues...');
   await addElasticIndexTemplates();
+  await addDefaultIndex();
   await addDefaultQueue();
   await processLogRequest();
   await enrichLogs();

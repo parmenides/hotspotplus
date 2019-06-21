@@ -58,6 +58,8 @@ services:
 #      - rabbitmq
     environment:
       - ELASTICSEARCH_LOG_LEVEL=debug
+      - ELASTIC_INDEX_PREFIX=hotspotplus
+      - ELASTIC_LICENSE_INDEX_PREFIX=hotspotpluslicense
       - LOG_REQUEST_RETRY_MS=300000
       - API_ADDRESS=http://hotspotplusapi:3000
       - SERVICE_MAN_USERNAME=pinTimeServiceMan
@@ -66,7 +68,6 @@ services:
       - RABBITMQ_PASSWORD=123
       - REDIS_PORT=6379
       - REDIS_HOST=hsp_redis
-      - ELASTIC_INDEX_PREFIX=hotspotplus
       - ELASTIC_IP=hsp_elasticsearch
       - ELASTIC_PORT=9200
       - LOG_LEVEL=debug
@@ -184,17 +185,17 @@ services:
       - hotspotplusgate
   elasticsearch:
     container_name: hsp_elasticsearch
-    image: 'bitnami/elasticsearch:7.1.1'
+    image: 'bitnami/elasticsearch:6.7.0'
     restart: always
     environment:
-      - ELASTICSEARCH_HEAP_SIZE=1024m
+      - ELASTICSEARCH_HEAP_SIZE=512m
     expose:
       - "9300"
       - "9200"
     ports:
       - 9200:9200
     volumes:
-      - hsp_elasticsearch:/bitnami/elasticsearch
+      - hsp_elasticsearch6:/bitnami/elasticsearch
     networks:
       hotspotplusgate:
          ipv4_address: 172.20.0.20
@@ -260,7 +261,7 @@ volumes:
     driver: local
   hsp_redis:
     driver: local
-  hsp_elasticsearch:
+  hsp_elasticsearch6:
     driver: local
   hsp_kibana:
     driver: local

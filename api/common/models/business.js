@@ -1386,7 +1386,7 @@ module.exports = function (Business) {
           }
           if (!business) {
             log.error('@adminPayment, Invalid business id')
-            return cb && cb('Invalid business id')
+            return cb && cb(new Error('Invalid business id'))
           }
           Charge.addCharge({
             businessId: businessId,
@@ -1455,7 +1455,7 @@ module.exports = function (Business) {
                       }
                       if (body.remaincredit === undefined) {
                         log.error('failed to load sms credit ', body)
-                        throw new Error('failed to load credit ', body)
+                        return cb(new Error('failed to load credit '))
                       }
                       return cb(null, {balance: body.remaincredit})
                     },
@@ -1524,7 +1524,7 @@ module.exports = function (Business) {
       }
       if (!business) {
         log.error('invalid business id')
-        return cb('invalid business id')
+        return cb(new Error('invalid business id'))
       }
       return Usage.getBusinessUsageReport(
         fromDate,
@@ -1590,7 +1590,7 @@ module.exports = function (Business) {
     log.debug('@getResellerMobile')
     if (!businessId) {
       log.error('invalid business id')
-      return cb('invalid business id')
+      return cb(new Error('invalid business id'))
     }
     Business.findById(businessId, function (error, business) {
       if (error) {
@@ -1598,7 +1598,7 @@ module.exports = function (Business) {
         return cb(error)
       }
       if (!business) {
-        return cb('business not found')
+        return cb(new Error('business not found'))
       }
       var resellerId = business.resellerId
       var Reseller = app.models.Reseller
@@ -1618,7 +1618,7 @@ module.exports = function (Business) {
           }
           if (!reseller) {
             log.error('reseller not found')
-            return cb('reseller not found')
+            return cb(new Error('reseller not found'))
           }
           return cb(null, reseller)
         },
@@ -2145,7 +2145,7 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
   Business.paypingAuthorization = function (ctx, cb) {
     var businessId = ctx.currentUserId
     if (!businessId) {
-      return cb('invalid biz id')
+      return cb(new Error('invalid biz id'))
     }
     Business.findById(businessId, function (error, business) {
       if (error) {
@@ -2153,7 +2153,7 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
         return cb(error)
       }
       if (!business) {
-        return cb('invalid biz id')
+        return cb(new Error('invalid biz id'))
       }
       const verifier = base64URLEncode(crypto.randomBytes(32))
       log.debug('verifier', verifier)
@@ -2330,7 +2330,7 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
   Business.dropBoxAuthorization = function (ctx, cb) {
     var businessId = ctx.currentUserId
     if (!businessId) {
-      return cb('invalid biz id')
+      return cb(new Error('invalid biz id'))
     }
     log.debug('@dropBoxAuthorization')
     Business.findById(businessId, function (error, business) {
@@ -2339,7 +2339,7 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
         return cb(error)
       }
       if (!business) {
-        return cb('invalid biz id')
+        return cb(new Error('invalid biz id'))
       }
       var CSRFToken = businessId
       var redirectURI = config.DROPBOX_REST_API()
