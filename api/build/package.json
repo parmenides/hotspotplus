@@ -35,7 +35,7 @@
     "build:prod:angular": "ELASTIC_IP=99 ELASTIC_PORT=9090 RABBITMQ_USERNAME=payam RABBITMQ_PASSWORD=123 lb-ng ./server/server.js  ../dashboard/src/js/lb-services.js",
     "build": "ELASTIC_IP=localhost ELASTIC_PORT=9200 npm run build:prod:angular && rm -rf build && grunt",
     "releaseSandbox": "grunt ;git commit -a -m 'sandbox:latest';git tag -f release ;git push -u origin develop --tags --force",
-    "releaseProduction": "grunt ;git commit -a -m 'production:3.12';git tag -f release ;git push -u origin master --tags --force",
+    "releaseProduction": "grunt ;git commit -a -m 'production:4.2.17';git tag -f release ;git push -u origin master --tags --force",
     "releaseLocalProduction": "grunt ;git commit -a -m 'production:latest';git tag -f release ;git push -u origin master --tags --force",
     "posttest": "nsp check"
   },

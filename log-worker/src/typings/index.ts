@@ -118,7 +118,6 @@ export interface RawNetflowReport {
       dst_port: string;
       src_addr: string;
       ipv4_next_hop: string;
-      version: number;
     };
     '@version': string;
     geoip_dst: {
