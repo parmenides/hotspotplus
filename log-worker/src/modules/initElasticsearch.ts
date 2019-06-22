@@ -9,7 +9,10 @@ const SYSLOG_INDEX_NAME = 'syslog';
 const SESSION_INDEX_NAME = 'session';
 
 export const addDefaultIndex = async () => {
-  if (!process.env.ELASTIC_INDEX_PREFIX) {
+  if (
+    !process.env.ELASTIC_INDEX_PREFIX ||
+    !process.env.ELASTIC_LICENSE_INDEX_PREFIX
+  ) {
     throw new Error('ELASTIC_INDEX_PREFIX is empty');
   }
   try {

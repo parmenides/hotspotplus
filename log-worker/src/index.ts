@@ -3,7 +3,7 @@ import express from 'express';
 import router from '../src/routes';
 import errorHandler from './utils/errorHandler';
 import logger from './utils/logger';
-import { processLogRequest } from './worker';
+import { processLogRequest } from './worker/logBuilder';
 import { testRunner } from './test';
 import {
   addElasticIndexTemplates,
@@ -11,8 +11,8 @@ import {
 } from './modules/initElasticsearch';
 import { addDefaultQueue } from './modules/initRabbitMq';
 import { enrichLogs } from './worker/enrich';
-import { startEnrichScheduler } from './worker/enrichScheduler';
-import { startCounterScheduler } from './worker/counterScheduler';
+import { startEnrichScheduler } from './schedulers/enrichScheduler';
+import { startCounterScheduler } from './schedulers/counterScheduler';
 
 //require('date-utils');
 const log = logger.createLogger();

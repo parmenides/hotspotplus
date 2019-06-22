@@ -1,7 +1,7 @@
 version: '3'
 services:
 #  syslog:
-#    image: 'docker.elastic.co/logstash/logstash:6.6.0'
+#    image: 'docker.elastic.co/logstash/logstash:7.1.1'
 #    restart: always
 #    ports:
 #      - 9000:9000/tcp
@@ -14,19 +14,19 @@ services:
 #      - ./syslog/syslog.conf:/usr/share/logstash/pipeline/syslog.conf
 #    networks:
 #      - hotspotplusgate
-#  accountinglogstash:
-#    image: 'docker.elastic.co/logstash/logstash:6.6.0'
-#    restart: always
-#    environment:
-#      - XPACK_MONITORING_ENABLED=false
-#    volumes:
-#      - ./accounting/jvm.options:/usr/share/logstash/config/jvm.options
-#      - ./accounting/logstash.yml:/usr/share/logstash/config/logstash.yml
-#      - ./accounting/accounting.conf:/usr/share/logstash/pipeline/accounting.conf
-#    networks:
-#      - hotspotplusgate
+  accountinglogstash:
+    image: 'docker.elastic.co/logstash/logstash:7.1.1'
+    restart: always
+    environment:
+      - XPACK_MONITORING_ENABLED=false
+    volumes:
+      - ./accounting/jvm.options:/usr/share/logstash/config/jvm.options
+      - ./accounting/logstash.yml:/usr/share/logstash/config/logstash.yml
+      - ./accounting/accounting.conf:/usr/share/logstash/pipeline/accounting.conf
+    networks:
+      - hotspotplusgate
   sessions:
-    image: 'docker.elastic.co/logstash/logstash:6.6.0'
+    image: 'docker.elastic.co/logstash/logstash:7.1.1'
     restart: always
     environment:
       - XPACK_MONITORING_ENABLED=false
@@ -36,25 +36,25 @@ services:
       - ./sessions/sessions.conf:/usr/share/logstash/pipeline/sessions.conf
     networks:
       - hotspotplusgate
-  netflowlogstash:
-    image: 'docker.elastic.co/logstash/logstash:7.1.1'
-    restart: always
-    environment:
-    - XPACK_MONITORING_ENABLED=false
-    volumes:
-    - ./netflow/jvm.options:/usr/share/logstash/config/jvm.options
-    - ./netflow/logstash.yml:/usr/share/logstash/config/logstash.yml
-    - ./netflow/netflow.conf:/usr/share/logstash/pipeline/netflow.conf
-    networks:
-    - hotspotplusgate
-  goflow:
-    image: 'registry.gitlab.com/parmenides/hotspotplus/goflow:latest'
-    restart: always
-    ports:
-    - 2055:2055/udp
-    command: -kafka.out.brokers 172.20.0.80:9092 -kafka.out.topic flows -loglevel debug
-    networks:
-    - hotspotplusgate
+#  netflowlogstash:
+#    image: 'docker.elastic.co/logstash/logstash:7.1.1'
+#    restart: always
+#    environment:
+#    - XPACK_MONITORING_ENABLED=false
+#    volumes:
+#    - ./netflow/jvm.options:/usr/share/logstash/config/jvm.options
+#    - ./netflow/logstash.yml:/usr/share/logstash/config/logstash.yml
+#    - ./netflow/netflow.conf:/usr/share/logstash/pipeline/netflow.conf
+#    networks:
+#    - hotspotplusgate
+#  goflow:
+#    image: 'registry.gitlab.com/parmenides/hotspotplus/goflow:latest'
+#    restart: always
+#    ports:
+#    - 2055:2055/udp
+#    command: -kafka.out.brokers 172.20.0.80:9092 -kafka.out.topic flows -loglevel debug
+#    networks:
+#    - hotspotplusgate
 
 networks:
   hotspotplusgate:

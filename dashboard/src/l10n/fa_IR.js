@@ -938,6 +938,7 @@
 	"invalidIpSetting":           "تنظیمات رنج آی‌پی یا subnet mask صحیح نیست.",
 	"ipPoolName":                 "ip pool name",
 	"ipRange":                    "محدوده‌ی IP",
+	"totalUsage":                    "مصرف کل",
 	"sellPackageSetting":         "تنظیمات فروش اینترنت",
 	"ipPoolSettings":             "تنظیمات آی‌پی هایی که قصد دارید به کاربران تخصیص داده شود. (توجه: تنظیمات آی‌پی الزامی نیست و اشتباه وارد کردن آنها باعث اختلال در سرویس شما می‌شود.)",
 	"netmask":                    "Subnet Mask",

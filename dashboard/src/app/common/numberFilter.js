@@ -130,7 +130,7 @@ app.filter('translateDate', [
     return function(epoch) {
       var date = new Date(Number(epoch));
       var locale = $translate.use();
-      if (locale == 'en') {
+      if (locale === 'en') {
         return (
           date.getFullYear() +
           '/' +
@@ -149,6 +149,17 @@ app.filter('trimUsername', [
   function(usernameService) {
     return function(username) {
       return usernameService.trim(username);
+    };
+  }
+]);
+
+app.filter('humanSize', [
+  function() {
+    return function(size) {
+      if(size===undefined || size===null){
+        size = 0;
+      }
+      return numeral(size).format('0.000 b')
     };
   }
 ]);

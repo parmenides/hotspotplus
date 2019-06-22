@@ -82,6 +82,7 @@
     "node-rsa": "^1.0.0",
     "nodejs-license-file": "^4.0.0",
     "payir": "^1.0.0",
+    "pretty-bytes": "^5.2.0",
     "q": "^1.4.1",
     "qs": "^6.5.2",
     "quadratic": "^1.0.3",

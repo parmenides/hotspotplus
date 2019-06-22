@@ -1443,8 +1443,8 @@ module.exports = function (Business) {
                     },
                     {json: true},
                     function (error, response, body) {
-                      log.debug('load charge result: ', response.body)
-                      log.debug('load charge code: ', response.statusCode)
+                      //log.debug('load charge result: ', response.body)
+                      //log.debug('load charge code: ', response.statusCode)
                       if (error) {
                         log.error(error)
                         return cb(new Error('failed to load charges'))

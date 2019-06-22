@@ -1,4 +1,5 @@
 var Q = require('q');
+const prettyBytes = require('pretty-bytes');
 
 var jsSHA = require('jssha');
 var keygen = require('keygenerator');

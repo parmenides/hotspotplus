@@ -1,6 +1,6 @@
-import netflowModule from './netflow';
-import syslogModule from './syslog';
-import sessionModule from './session';
+import netflowModule from '../modules/netflow';
+import syslogModule from '../modules/syslog';
+import sessionModule from '../modules/session';
 import { getRabbitMqChannel } from '../utils/rabbitmq';
 import {
   EnrichTask,
@@ -37,7 +37,7 @@ export const enrichLogs = async () => {
       const body = message.content.toString();
 
       try {
-        log.debug(" [x] enrichment message received '%s'", body);
+        //log.debug(" [x] enrichment message received '%s'", body);
         const enrichTask: EnrichTask = JSON.parse(body);
 
         const fromDate = moment(enrichTask.from);
@@ -48,16 +48,26 @@ export const enrichLogs = async () => {
           const result = await syslogModule.syslogGroupByIp(fromDate, toDate);
           const ipData = getIpData(result);
           await searchAndUpdateReport(reportType, ipData, fromDate, toDate);
+          if (ipData.length > 0) {
+            log.debug(ipData);
+            log.warn(
+              '################### Syslog Enrichment Done ###################',
+            );
+          }
         } else if (reportType === REPORT_TYPE.NETFLOW) {
           const result = await netflowModule.netflowGroupByIp(fromDate, toDate);
           const ipData = getIpData(result);
+
           await searchAndUpdateReport(reportType, ipData, fromDate, toDate);
+          if (ipData.length > 0) {
+            log.debug(ipData);
+            log.warn('............... Netflow Enrichment Done...............');
+          }
         } else {
           log.warn('unknown enrichment type:', reportType);
           channel.ack(message);
           return;
         }
-        log.warn('............... Enrichment Done...............');
         channel.ack(message);
       } catch (error) {
         log.error(error);

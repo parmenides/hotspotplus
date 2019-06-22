@@ -35,7 +35,7 @@
   "devDependencies": {
     "@types/ajv": "^1.0.0",
     "@types/ajv-errors": "^1.0.2",
-    "@types/amqplib": "^0.5.9",
+    "@types/amqplib": "^0.5.12",
     "@types/axios": "^0.14.0",
     "@types/bunyan": "^1.8.5",
     "@types/chai": "^4.1.7",

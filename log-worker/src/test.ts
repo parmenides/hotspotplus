@@ -1,14 +1,14 @@
 import { getRabbitMqChannel } from './utils/rabbitmq';
-import netflowModule from './worker/netflow';
+import netflowModule from './modules/netflow';
 import {
   NetflowReportRequestTask,
   QUEUES,
   REPORT_TYPE,
   SyslogReportRequestTask,
 } from './typings';
-import { addEnrichmentTasks } from './worker/enrichScheduler';
+import { addEnrichmentTasks } from './schedulers/enrichScheduler';
 import momentTz from 'moment-timezone';
-import { countAndUpdateBusinessReports } from './worker/counterScheduler';
+import { countAndUpdateBusinessReports } from './schedulers/counterScheduler';
 
 export const testRunner = async () => {
   const channel = await getRabbitMqChannel();
