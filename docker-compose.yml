@@ -201,6 +201,25 @@ services:
     networks:
       hotspotplusgate:
          ipv4_address: 172.20.0.20
+  clickhouse:
+    image: yandex/clickhouse-server
+    hostname: clickhouse
+    container_name: clickhouse
+    ports:
+    - 9000:9000
+    - 9009:9009
+    - 8123:8123
+    volumes:
+    - ./clickhouse/clickhouse_config.xml:/etc/clickhouse-server/config.xml
+    - ./clickhouse/clickhouse_metrika.xml:/etc/clickhouse-server/metrika.xml
+    - ./clickhouse/users.xml:/etc/clickhouse-server/users.xml
+    -  clickhouse:/var/lib/clickhouse
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    networks:
+      - hotspotplusgate
 #  kibana:
 #    image: 'bitnami/kibana:6.5.4'
 #    ports:
@@ -268,6 +287,8 @@ volumes:
   hsp_kibana:
     driver: local
   kafka:
+    driver: local
+  clickhouse:
     driver: local
 
 networks:
