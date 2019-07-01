@@ -45,6 +45,7 @@ module.exports = function(Charge) {
         };
         elasticClient.index({
           index:CHARGE_INDEX,
+          type:'doc',
           body:charge
         },(error,result)=>{
           if (error) {

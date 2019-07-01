@@ -1,0 +1,15 @@
+{
+  "name": "pretty-bytes",
+  "homepage": "https://github.com/sindresorhus/pretty-bytes",
+  "version": "5.2.0",
+  "_release": "5.2.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v5.2.0",
+    "commit": "17c051945110fa61d71d5f225da0162a123e34b8"
+  },
+  "_source": "https://github.com/sindresorhus/pretty-bytes.git",
+  "_target": "^5.2.0",
+  "_originalSource": "pretty-bytes",
+  "_direct": true
+}
