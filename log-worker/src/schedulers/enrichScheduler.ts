@@ -1,4 +1,4 @@
-import moment, { duration, Moment } from 'moment';
+import moment, { Moment } from 'moment';
 import { getRabbitMqChannel } from '../utils/rabbitmq';
 import { EnrichTask, LOGGER_TIME_ZONE, QUEUES, REPORT_TYPE } from '../typings';
 import logger from '../utils/logger';
@@ -20,8 +20,8 @@ export const addEnrichmentTasks = async (reportType: REPORT_TYPE) => {
     );
     const channel = await getRabbitMqChannel();
 
-    const duration = moment.duration(toDate.diff(fromDate));
-    const hours = Math.ceil(duration.asHours());
+    const durationInBetween = moment.duration(toDate.diff(fromDate));
+    const hours = Math.ceil(durationInBetween.asHours());
     const RUN_TASK_EVERY_MINUTES = 5;
     const taskLen: any[] = new Array(hours * (60 / RUN_TASK_EVERY_MINUTES));
 

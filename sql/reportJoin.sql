@@ -1,0 +1,1 @@
+CREATE MATERIALIZED VIEW report ENGINE = AggregatingMergeTree() PARTITION BY tuple() ORDER BY RouterAddr POPULATE AS SELECT * FROM logs.netflow JOIN logs.session ON session.nasIp=netflow.RouterAddr WHERE session.framedIpAddress=netflow.DstIP OR session.framedIpAddress=netflow.SrcIP OR session.framedIpAddress=netflow.NextHop

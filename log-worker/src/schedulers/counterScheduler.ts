@@ -22,6 +22,7 @@ export const countAndUpdateBusinessReports = async () => {
     to,
   );
   const netflowReportsArray: Array<{ businessId: string; count: number }> = [];
+
   for (const businessId in netflowBusinessReportCount) {
     netflowReportsArray.push({
       businessId,

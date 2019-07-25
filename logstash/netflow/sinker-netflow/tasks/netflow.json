@@ -1,0 +1,27 @@
+{
+	"name" : "netflow",
+	"kafka": "kfk1",
+	"topic": "flows",
+	"earliest" : true,
+	"consumerGroup" : "netflow_consumer",
+
+	"parser" : "json",
+	"clickhouse" : "ch1",
+	"tableName" : "netflow",
+
+	"dims" : [
+		{"name" : "RouterAddr" , "type" : "String"},
+		{"name" : "SrcPort" , "type" : "String"},
+		{"name" : "DstPort" , "type" : "String"},
+		{"name" : "NextHop" , "type" : "String"},
+		{"name" : "TimeRecvd" , "type" : "UInt32"},
+		{"name" : "SrcIP" , "type" : "String"},
+		{"name" : "DstIP" , "type" : "String"}
+	],
+
+	"@desc_of_autoSchema" : "auto schema will auto fetch the schema from clickhouse",
+	"autoSchema" : false,
+	"@desc_of_exclude_columns" : "this columns will be excluded by insert SQL ",
+	"excludeColumns" : [],
+	"bufferSize" : 90000
+}

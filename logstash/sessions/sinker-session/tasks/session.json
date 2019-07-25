@@ -1,0 +1,29 @@
+{
+	"name" : "session",
+	"kafka": "kfk1",
+	"topic": "sessionTopic",
+	"earliest" : true,
+	"consumerGroup" : "session_consumer",
+
+	"parser" : "json",
+	"clickhouse" : "ch1",
+	"tableName" : "session",
+
+	"dims" : [
+		{"name" : "businessId" , "type" : "String"},
+		{"name" : "memberId" , "type" : "String"},
+		{"name" : "nasId" , "type" : "String"},
+		{"name" : "nasTitle" , "type" : "String"},
+		{"name" : "nasIp" , "type" : "String"},
+		{"name" : "username" , "type" : "String"},
+		{"name" : "framedIpAddress" , "type" : "String"},
+		{"name" : "mac" , "type" : "String"},
+		{"name" : "creationDate" , "type" : "UInt32"}
+	],
+
+	"@desc_of_autoSchema" : "auto schema will auto fetch the schema from clickhouse",
+	"autoSchema" : false,
+	"@desc_of_exclude_columns" : "this columns will be excluded by insert SQL ",
+	"excludeColumns" : [],
+	"bufferSize" : 90000
+}

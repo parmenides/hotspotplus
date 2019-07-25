@@ -13,6 +13,7 @@ import { addDefaultQueue } from './modules/initRabbitMq';
 import { enrichLogs } from './worker/enrich';
 import { startEnrichScheduler } from './schedulers/enrichScheduler';
 import { startCounterScheduler } from './schedulers/counterScheduler';
+import clickHouse from './modules/clickhouse';
 
 //require('date-utils');
 const log = logger.createLogger();
@@ -38,6 +39,7 @@ app.use((req, resp, next) => {
 app.listen(app.get('port'), async () => {
   /*tslint:disable*/
   console.log('Add default queues...');
+  /*
   await addElasticIndexTemplates();
   await addDefaultIndex();
   await addDefaultQueue();
@@ -45,6 +47,8 @@ app.listen(app.get('port'), async () => {
   await enrichLogs();
   await startEnrichScheduler();
   await startCounterScheduler();
+*/
+  await clickHouse.init();
   console.log(`App is running at http://localhost:${app.get('port')}`);
   //await testRunner();
   log.info(` App is running at http://localhost:${app.get('port')}`);

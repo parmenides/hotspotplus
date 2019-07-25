@@ -1,0 +1,25 @@
+{
+	"name" : "syslog",
+	"kafka": "kfk1",
+	"topic": "syslog",
+	"earliest" : true,
+	"consumerGroup" : "syslog_consumer",
+	"parser" : "json",
+	"clickhouse" : "ch1",
+	"tableName" : "syslog",
+	"dims" : [
+		{"name" : "memberIp" , "type" : "String"},
+		{"name" : "nasIp" , "type" : "String"},
+		{"name" : "protocol" , "type" : "String"},
+		{"name" : "url" , "type" : "String"},
+		{"name" : "method" , "type" : "String"},
+		{"name" : "domain" , "type" : "String"},
+		{"name" : "creationDate" , "type" : "UInt32"}
+	],
+
+	"@desc_of_autoSchema" : "auto schema will auto fetch the schema from clickhouse",
+	"autoSchema" : false,
+	"@desc_of_exclude_columns" : "this columns will be excluded by insert SQL ",
+	"excludeColumns" : [],
+	"bufferSize" : 90000
+}

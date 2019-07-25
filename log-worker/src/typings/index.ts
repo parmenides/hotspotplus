@@ -142,7 +142,7 @@ export interface GeneralReportRequestTask {
   username?: string;
   from?: number;
   to?: number;
-  nas:Array<{id}>;
+  nas: Array<{ id: string; title: string }>;
   nasId?: string[];
 }
 

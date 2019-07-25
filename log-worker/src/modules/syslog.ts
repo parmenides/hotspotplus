@@ -157,7 +157,7 @@ const getSyslogByIndex = async (
   for (const i of parts) {
     try {
       const queryResult = await elasticClient.scroll({
-        scrollId: scrollId,
+        scrollId,
         scroll: scrollTtl,
       });
 
@@ -273,8 +273,9 @@ const syslogGroupByIp = async (fromDate: Moment, toDate: Moment) => {
     }
   }
 
-  if (data.length > 0)
+  if (data.length > 0) {
     log.debug('syslog group by ip result length: ', data.length);
+  }
   return data;
 };
 

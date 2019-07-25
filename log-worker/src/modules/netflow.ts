@@ -214,7 +214,7 @@ const getNetflowsByIndex = async (
   for (const i of parts) {
     try {
       const queryResult = await elasticClient.scroll({
-        scrollId: scrollId,
+        scrollId,
         scroll: scrollTtl,
       });
       if (queryResult._scroll_id && queryResult._scroll_id !== scrollId) {
@@ -362,8 +362,9 @@ const netflowGroupByIp = async (fromDate: Moment, toDate: Moment) => {
       }
     }
   }
-  if (data.length > 0 && data[0].group_by_nas_ip.buckets.length > 0)
+  if (data.length > 0 && data[0].group_by_nas_ip.buckets.length > 0) {
     log.debug('netflow group by ip result length: ', data.length, data);
+  }
   return data;
 };
 
