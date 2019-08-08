@@ -49,49 +49,49 @@ services:
       - ${PWD}/api-license/key:/key
     networks:
       - hotspotplusgate
-#  logworker:
-#    build:
-#      context: ./log-worker
-#    user: '${UID:-1000}:${GID:-1000}'
-#    command: npm run start:dev
-##    depends_on:
-##      - rabbitmq
-#    environment:
-#      - ELASTICSEARCH_LOG_LEVEL=debug
-#      - START_MANUAL_ENRICHMENT=true
-#      - ENRICHMENT_SCOPE=1000
-#      - ELASTIC_INDEX_PREFIX=hotspotplus
-#      - ELASTIC_LICENSE_INDEX_PREFIX=hotspotpluslicense
-#      - LOG_REQUEST_RETRY_MS=300000
-#      - API_ADDRESS=http://hotspotplusapi:3000
-#      - SERVICE_MAN_USERNAME=pinTimeServiceMan
-#      - SERVICE_MAN_PASSWORD=#123aaa)
-#      - RABBITMQ_USERNAME=payam
-#      - RABBITMQ_PASSWORD=123
-#      - REDIS_PORT=6379
-#      - REDIS_HOST=hsp_redis
-#      - ELASTIC_IP=hsp_elasticsearch
-#      - ELASTIC_PORT=9200
-#      - LOG_LEVEL=debug
-#      - LOG_PATH=/logs/log-worker.log
+  logworker:
+    build:
+      context: ./log-worker
+    user: '${UID:-1000}:${GID:-1000}'
+    command: npm run start:dev
+#    depends_on:
+#      - rabbitmq
+    environment:
+      - ELASTICSEARCH_LOG_LEVEL=debug
+      - START_MANUAL_ENRICHMENT=true
+      - ENRICHMENT_SCOPE=1000
+      - ELASTIC_INDEX_PREFIX=hotspotplus
+      - ELASTIC_LICENSE_INDEX_PREFIX=hotspotpluslicense
+      - LOG_REQUEST_RETRY_MS=300000
+      - API_ADDRESS=http://hotspotplusapi:3000
+      - SERVICE_MAN_USERNAME=pinTimeServiceMan
+      - SERVICE_MAN_PASSWORD=#123aaa)
+      - RABBITMQ_USERNAME=payam
+      - RABBITMQ_PASSWORD=123
+      - REDIS_PORT=6379
+      - REDIS_HOST=hsp_redis
+      - ELASTIC_IP=hsp_elasticsearch
+      - ELASTIC_PORT=9200
+      - LOG_LEVEL=debug
+      - LOG_PATH=/logs/log-worker.log
+    volumes:
+      - ${PWD}/log-worker/dist/log.worker.js:/usr/src/app/log.worker.js
+      - ${PWD}/log-worker/node_modules:/usr/src/app/node_modules
+      - ${PWD}/log-worker/logs:/logs
+    networks:
+    - hotspotplusgate
+  rabbitmq:
+    image: 'bitnami/rabbitmq:3.7.16-ol-7-r4'
+    ports:
+      - 15672:15672
+    container_name: rabbitmq
+    environment:
+      - RABBITMQ_USERNAME=payam
+      - RABBITMQ_PASSWORD=123
 #    volumes:
-#      - ${PWD}/log-worker/dist/log.worker.js:/usr/src/app/log.worker.js
-#      - ${PWD}/log-worker/node_modules:/usr/src/app/node_modules
-#      - ${PWD}/log-worker/logs:/logs
-#    networks:
-#    - hotspotplusgate
-#  rabbitmq:
-#    image: 'bitnami/rabbitmq:3.7.16-ol-7-r4'
-#    ports:
-#      - 15672:15672
-#    container_name: rabbitmq
-#    environment:
-#      - RABBITMQ_USERNAME=payam
-#      - RABBITMQ_PASSWORD=123
-##    volumes:
-##      - hsp_rabbitmq:/bitnami
-#    networks:
-#      - hotspotplusgate
+#      - hsp_rabbitmq:/bitnami
+    networks:
+      - hotspotplusgate
 #  logaggregator:
 #    build:
 #      context: ${PWD}/log-aggregator
