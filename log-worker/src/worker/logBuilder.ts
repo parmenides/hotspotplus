@@ -7,12 +7,11 @@ const { Transform } = require('json2csv');
 const { Readable } = require('stream');
 
 import fs from 'fs';
-import _ from 'lodash';
 import request from 'request-promise';
 import { login } from '../utils/auth';
 import { file as tmpFile } from 'tmp-promise';
 import util from 'util';
-import syslog from '../modules/syslog';
+/*import syslog from '../modules/syslog';*/
 import {
   GeneralReportRequestTask,
   LOCAL_TIME_ZONE,
@@ -20,9 +19,7 @@ import {
   NetflowReportRequestTask,
   QUEUES,
   REPORT_TYPE,
-  SyslogReportRequestTask,
 } from '../typings';
-import moment = require('moment');
 import momentTz = require('moment-timezone');
 
 // Convert fs.readFile into Promise version of same
@@ -118,8 +115,9 @@ export const processLogRequest = async () => {
           reports = await netflow.getNetflowReports(
             generalReportRequestTask as NetflowReportRequestTask,
           );
+
           fields = getNetflowFields();
-        } else if (generalReportRequestTask.type === REPORT_TYPE.SYSLOG) {
+        } /* else if (generalReportRequestTask.type === REPORT_TYPE.SYSLOG) {
           reports = await syslog.getSyslogReports(
             generalReportRequestTask as SyslogReportRequestTask,
           );
@@ -127,7 +125,7 @@ export const processLogRequest = async () => {
         } else {
           channel.ack(message);
           throw new Error('invalid report type');
-        }
+        }*/
 
         log.debug(`index one of result size: ${reports.length}`);
         jsonToCsv(fields, reports, async (csv: string) => {
@@ -149,14 +147,15 @@ const getNetflowFields = () => {
   return [
     'Router',
     'Username',
-    'Jalali_Date',
     'Mac',
+    'Jalali_Date',
     'Src_Addr',
     'Src_Port',
     'Dst_Addr',
     'Dst_Port',
     'Protocol',
     'Gregorian_Date',
+    'Proto',
   ];
 };
 
@@ -177,7 +176,6 @@ const getSyslogFields = () => {
 const jsonToCsv = (fields: string[], jsonData: any[], cb: any) => {
   try {
     const opts = { fields, defaultValue: 'N/A' };
-
     const input = new Readable({ objectMode: true });
     input._read = () => {};
     for (const row of jsonData) {
@@ -189,11 +187,11 @@ const jsonToCsv = (fields: string[], jsonData: any[], cb: any) => {
     const json2csv = new Transform(opts, transformOpts);
     const processor = input.pipe(json2csv);
     let csv = '';
-    processor.on('data', function(chunk: string) {
+    processor.on('data', (chunk: string) => {
       csv = csv + chunk;
     });
 
-    processor.on('end', function() {
+    processor.on('end', () => {
       log.debug('write csv finished');
       cb && cb(csv);
     });

@@ -1,5 +1,6 @@
 //
 import { Moment } from 'moment';
+import { ClickNetflowRow } from '../modules/clickhouse';
 
 export const LOGGER_TIME_ZONE = 'Europe/London';
 export const LOCAL_TIME_ZONE = 'Asia/Tehran';
@@ -135,14 +136,14 @@ export interface RawNetflowReport {
 
 export interface GeneralReportRequestTask {
   type: REPORT_TYPE;
-  businessId: string;
+  businessId?: string;
   id: string;
-  fromDate: Moment;
-  toDate: Moment;
+  fromDate?: Moment;
+  toDate?: Moment;
   username?: string;
   from?: number;
   to?: number;
-  nas: Array<{ id: string; title: string }>;
+  nas?: Array<{ id: string; title: string }>;
   nasId?: string[];
 }
 
@@ -152,6 +153,21 @@ export interface NetflowReportRequestTask extends GeneralReportRequestTask {
   srcAddress?: string;
   srcPort?: string[];
   protocol?: string;
+}
+
+export enum PROTOCOLS {
+  TCP = 'TCP',
+  UPD = 'UDP',
+}
+
+export interface ClickHouseColumnMeta {
+  name: string;
+  type: string;
+}
+
+export interface ClickHouseQueryResult {
+  rows: ClickNetflowRow[];
+  columns: ClickHouseColumnMeta[];
 }
 
 export interface SyslogReportRequestTask extends GeneralReportRequestTask {

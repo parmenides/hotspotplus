@@ -14,20 +14,19 @@ export const testRunner = async () => {
   const channel = await getRabbitMqChannel();
   const LOG_WORKER_QUEUE = QUEUES.LOG_WORKER_QUEUE;
 
-  const from = new Date('2019-03-25T00:00:00').getTime();
-  const to = new Date('2019-03-28T23:59:59').getTime();
+  //const from = new Date('2019-03-25T00:00:00').getTime();
+  //const to = new Date('2019-03-28T23:59:59').getTime();
 
-  /*const message: SyslogReportRequestTask = {
-    reportRequestId: '123123123123',
-    businessId: '3724627346278346',
-    reportType: REPORT_TYPE.SYSLOG,
+  const message: NetflowReportRequestTask = {
+    type: REPORT_TYPE.NETFLOW,
+    id: '123',
   };
-  console.log('add test task', message);
+
   await channel.sendToQueue(
     LOG_WORKER_QUEUE,
     Buffer.from(JSON.stringify(message)),
   );
-  await channel.close();*/
+  await channel.close();
   //const res = await countAndUpdateBusinessReports();
 
   // await channel.close();;;

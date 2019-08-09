@@ -1438,9 +1438,9 @@ module.exports = function(Member) {
       username: RadiusRequest.getAttribute('username'),
       framedIpAddress: RadiusRequest.getAttribute('framedIpAddress'),
       businessId: businessId,
-      '@timestamp': momentTz.tz(Date.now(),'Europe/London'),
+      '@timestamp': momentTz.tz(Date.now(),''),
       memberId: memberId,
-      creationDate: Date.now()
+      creationDate: momentTz.tz(Date.now(),'').unix()
     };
     ClientSession.saveLogSession(session);
   };

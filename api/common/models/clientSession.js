@@ -59,7 +59,7 @@ module.exports = function(ClientSession) {
           log.error('Failed to add session to kafka: ', error);
           return;
         }
-        log.debug('session added:', data);
+        log.debug('session added:',JSON.stringify(session), data);
       }
     );
   };

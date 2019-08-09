@@ -16,7 +16,8 @@
 		{"name" : "NextHop" , "type" : "String"},
 		{"name" : "TimeRecvd" , "type" : "UInt32"},
 		{"name" : "SrcIP" , "type" : "String"},
-		{"name" : "DstIP" , "type" : "String"}
+		{"name" : "DstIP" , "type" : "String"},
+		{"name" : "Proto" , "type" : "UInt8"}
 	],
 
 	"@desc_of_autoSchema" : "auto schema will auto fetch the schema from clickhouse",

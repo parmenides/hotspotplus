@@ -12,7 +12,7 @@ services:
     networks:
     - hotspotplusgate
   clickhouse-sinker-syslog:
-    image: 'registry.gitlab.com/parmenides/hspfreeradius/clickhouse-sinker:latest'
+    image: 'registry.gitlab.com/parmenides/hotspotplus/clickhouse-sinker:latest'
     restart: always
     volumes:
       - ./sinker-syslog:/opt/config
