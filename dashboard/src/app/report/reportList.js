@@ -325,8 +325,8 @@ app.controller('reportList', [
               //todo: also delete related file
               if (row.entity.fileName) {
                 const fileName = row.entity.fileName;
-                const conatiner = row.entity.conatiner;
-                BigFile.removeFile({container:conatiner,file:fileName})
+                const container = row.entity.container;
+                BigFile.removeFile({container:container,file:fileName})
                   .$promise.then(
                   function (res) {
                     appMessenger.showSuccess('report.removeFileSuccessFull')

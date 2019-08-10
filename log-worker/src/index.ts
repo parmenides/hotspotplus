@@ -23,7 +23,7 @@ import {
 } from './modules/initElasticsearch';
 import { addDefaultQueue } from './modules/initRabbitMq';
 import { processLogRequest } from './worker/logBuilder';
-import { testRunner } from './test';
+/*import { testRunner } from './test';*/
 
 //require('date-utils');
 const log = logger.createLogger();

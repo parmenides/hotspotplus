@@ -60,18 +60,6 @@ export const processLogRequest = async () => {
         body,
       );
 
-      //todo: test this
-      if (
-        generalReportRequestTask.nas &&
-        generalReportRequestTask.nas.length > 0
-      ) {
-        generalReportRequestTask.nasId = generalReportRequestTask.nas.map(
-          (nas) => {
-            return nas.id;
-          },
-        );
-      }
-
       if (!generalReportRequestTask.to) {
         generalReportRequestTask.toDate = momentTz.tz(LOGGER_TIME_ZONE);
         generalReportRequestTask.to = momentTz(

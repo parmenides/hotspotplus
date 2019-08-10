@@ -5,6 +5,7 @@ import {
   ClickHouseColumnMeta,
   ClickHouseQueryResult,
   LOCAL_TIME_ZONE,
+  LOGGER_TIME_ZONE,
   NetflowReportRequestTask,
   PROTOCOLS,
   REPORT_TYPE,
@@ -12,6 +13,7 @@ import {
 import moment from 'moment';
 import momentJ from 'moment-jalaali';
 import momentTz from 'moment-timezone';
+
 const reportDateFormat = 'YYYY-MM-DD HH:mm:ss';
 const log = createLogger();
 
@@ -47,37 +49,48 @@ const createNetflowQuery = (
 
   if (netflowReportRequestTask.fromDate) {
     whereParts.push(
-      ` TimeRecvd>='${netflowReportRequestTask.fromDate.format(
+      ` TimeRecvd>=toDateTime('${netflowReportRequestTask.fromDate.format(
         reportDateFormat,
-      )}' `,
+      )}') `,
     );
   }
   if (netflowReportRequestTask.toDate) {
     whereParts.push(
-      ` TimeRecvd<='${netflowReportRequestTask.toDate.format(
+      ` TimeRecvd<=toDateTime('${netflowReportRequestTask.toDate.format(
         reportDateFormat,
-      )}' `,
+      )}') `,
     );
   }
   if (netflowReportRequestTask.username) {
     whereParts.push(` username='${netflowReportRequestTask.username}' `);
   }
-  if (netflowReportRequestTask.dstPort) {
-    whereParts.push(` dstPort='${netflowReportRequestTask.dstPort}' `);
+  if (
+    netflowReportRequestTask.dstPort &&
+    netflowReportRequestTask.dstPort.length > 0
+  ) {
+    const dstPortQueries: string[] = [];
+    for (const dstPort of netflowReportRequestTask.dstPort) {
+      dstPortQueries.push(` DstPort='${dstPort}' `);
+    }
+    whereParts.push(` (${dstPortQueries.join(' OR ')}) `);
   }
-  if (netflowReportRequestTask.srcPort) {
-    whereParts.push(` srcPort='${netflowReportRequestTask.srcPort}' `);
+  if (
+    netflowReportRequestTask.srcPort &&
+    netflowReportRequestTask.srcPort.length > 0
+  ) {
+    const srcPortQueries: string[] = [];
+    for (const srcPort of netflowReportRequestTask.srcPort) {
+      srcPortQueries.push(` SrcPort='${srcPort}' `);
+    }
+    whereParts.push(` (${srcPortQueries.join(' OR ')}) `);
   }
   if (netflowReportRequestTask.businessId) {
     whereParts.push(` businessId='${netflowReportRequestTask.businessId}' `);
   }
-  if (
-    netflowReportRequestTask.nasId &&
-    netflowReportRequestTask.nasId.length > 0
-  ) {
+  if (netflowReportRequestTask.nas && netflowReportRequestTask.nas.length > 0) {
     const nasIdQueries: string[] = [];
-    for (const nasId of netflowReportRequestTask.nasId) {
-      nasIdQueries.push(` nasId='${nasId}' `);
+    for (const nas of netflowReportRequestTask.nas) {
+      nasIdQueries.push(` nasId='${nas.id}' `);
     }
     whereParts.push(` (${nasIdQueries.join(' OR ')}) `);
   }
@@ -102,7 +115,6 @@ const createNetflowQuery = (
       whereParts.push(` Proto=17 `);
     }
   }
-
   if (whereParts.length > 0) {
     mainQuery = `${mainQuery} WHERE  ${whereParts.join(' AND ')}`;
   }
@@ -156,6 +168,7 @@ export class ClickNetflowRow {
   public mac: string;
   public creationDate: string;
   public Proto: number;
+
   constructor(row: any[]) {
     this.RouterAddr = row[0] && row[0].toString();
     this.SrcIP = row[1] && row[1].toString();
@@ -164,26 +177,28 @@ export class ClickNetflowRow {
     this.DstPort = row[4] && row[4].toString();
     this.NextHop = row[5] && row[5].toString();
     this.TimeRecvd = row[6] && row[6].toString();
-    this.businessId = row[7] && row[7].toString();
-    this.memberId = row[8] && row[8].toString();
-    this.nasId = row[9] && row[9].toString();
-    this.nasTitle = row[10] && row[10].toString();
-    this.nasIp = row[11] && row[11].toString();
-    this.username = row[12] && row[12].toString();
-    this.framedIpAddress = row[13] && row[13].toString();
-    this.mac = row[14] && row[14].toString();
-    this.creationDate = row[15] && row[15].toString();
-    this.Proto = row[16] && (row[16] as number);
+    this.Proto = row[7] && (row[7] as number);
+    this.businessId = row[8] && row[8].toString();
+    this.memberId = row[9] && row[9].toString();
+    this.nasId = row[10] && row[10].toString();
+    this.nasTitle = row[11] && row[11].toString();
+    this.nasIp = row[12] && row[12].toString();
+    this.username = row[13] && row[13].toString();
+    this.framedIpAddress = row[14] && row[14].toString();
+    this.mac = row[15] && row[15].toString();
+    this.creationDate = row[16] && row[16].toString();
   }
 
   public getJalaliDate() {
-    return momentJ(momentTz.tz(this.TimeRecvd, LOCAL_TIME_ZONE)).format(
+    return momentJ(moment.tz(this.TimeRecvd, '').tz(LOCAL_TIME_ZONE)).format(
       'jYYYY/jM/jD HH:MM',
     );
   }
+
   public getGregorianDate() {
-    return momentTz
-      .tz(this.TimeRecvd, LOCAL_TIME_ZONE)
+    return moment
+      .tz(this.TimeRecvd, '')
+      .tz(LOCAL_TIME_ZONE)
       .format('YYYY/MM/DD HH:mm');
   }
 

@@ -2,7 +2,7 @@
 import { Moment } from 'moment';
 import { ClickNetflowRow } from '../modules/clickhouse';
 
-export const LOGGER_TIME_ZONE = 'Europe/London';
+export const LOGGER_TIME_ZONE = '';
 export const LOCAL_TIME_ZONE = 'Asia/Tehran';
 
 export enum QUEUES {
@@ -136,6 +136,8 @@ export interface RawNetflowReport {
 
 export interface GeneralReportRequestTask {
   type: REPORT_TYPE;
+  creationDate: string;
+  status: string;
   businessId?: string;
   id: string;
   fromDate?: Moment;
@@ -144,7 +146,6 @@ export interface GeneralReportRequestTask {
   from?: number;
   to?: number;
   nas?: Array<{ id: string; title: string }>;
-  nasId?: string[];
 }
 
 export interface NetflowReportRequestTask extends GeneralReportRequestTask {

@@ -17,6 +17,7 @@ export const testRunner = async () => {
   //const from = new Date('2019-03-25T00:00:00').getTime();
   //const to = new Date('2019-03-28T23:59:59').getTime();
 
+/*
   const message: NetflowReportRequestTask = {
     type: REPORT_TYPE.NETFLOW,
     id: '123',
@@ -27,6 +28,7 @@ export const testRunner = async () => {
     Buffer.from(JSON.stringify(message)),
   );
   await channel.close();
+*/
   //const res = await countAndUpdateBusinessReports();
 
   // await channel.close();;;
