@@ -1,9 +1,13 @@
 //
 import { Moment } from 'moment';
-import { ClickNetflowRow } from '../modules/clickhouse';
+import { ClickNetflowRow } from '../modules/netflow';
+import { ClickSyslogRow } from '../modules/syslog';
 
 export const LOGGER_TIME_ZONE = '';
 export const LOCAL_TIME_ZONE = 'Asia/Tehran';
+export const DATABASE_DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
+export const REPORT_GREGORIAN_DATE_FORMAT = 'YYYY/MM/DD HH:mm';
+export const REPORT_PERSIAN_DATE_FORMAT = 'jYYYY/jM/jD HH:MM';
 
 export enum QUEUES {
   LOG_ENRICHMENT_WORKER_QUEUE = 'log-enrichment',
@@ -166,8 +170,13 @@ export interface ClickHouseColumnMeta {
   type: string;
 }
 
-export interface ClickHouseQueryResult {
+export interface ClickHouseNetflowQueryResult {
   rows: ClickNetflowRow[];
+  columns: ClickHouseColumnMeta[];
+}
+
+export interface ClickHouseSyslogQueryResult {
+  rows: ClickSyslogRow[];
   columns: ClickHouseColumnMeta[];
 }
 

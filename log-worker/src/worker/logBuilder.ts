@@ -19,8 +19,10 @@ import {
   NetflowReportRequestTask,
   QUEUES,
   REPORT_TYPE,
+  SyslogReportRequestTask,
 } from '../typings';
 import momentTz = require('moment-timezone');
+import syslog from '../modules/syslog';
 
 // Convert fs.readFile into Promise version of same
 
@@ -100,20 +102,19 @@ export const processLogRequest = async () => {
         let reports: any;
         let fields: string[];
         if (generalReportRequestTask.type === REPORT_TYPE.NETFLOW) {
-          reports = await netflow.getNetflowReports(
+          reports = await netflow.queryNetflow(
             generalReportRequestTask as NetflowReportRequestTask,
           );
-
           fields = getNetflowFields();
-        } /* else if (generalReportRequestTask.type === REPORT_TYPE.SYSLOG) {
-          reports = await syslog.getSyslogReports(
+        } else if (generalReportRequestTask.type === REPORT_TYPE.SYSLOG) {
+          reports = await syslog.querySyslog(
             generalReportRequestTask as SyslogReportRequestTask,
           );
           fields = getSyslogFields();
         } else {
           channel.ack(message);
           throw new Error('invalid report type');
-        }*/
+        }
 
         log.debug(`index one of result size: ${reports.length}`);
         jsonToCsv(fields, reports, async (csv: string) => {
