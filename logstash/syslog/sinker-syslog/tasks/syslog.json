@@ -14,7 +14,7 @@
 		{"name" : "url" , "type" : "String"},
 		{"name" : "method" , "type" : "String"},
 		{"name" : "domain" , "type" : "String"},
-		{"name" : "creationDate" , "type" : "UInt32"}
+		{"name" : "receivedAt" , "type" : "UInt32"}
 	],
 
 	"@desc_of_autoSchema" : "auto schema will auto fetch the schema from clickhouse",

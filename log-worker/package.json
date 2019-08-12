@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@apla/clickhouse": "^1.6.0",
-    "amqplib": "^0.5.3",
+    "amqplib": "^0.5.5",
     "axios": "0.18.0",
     "bunyan": "^1.8.12",
     "cron": "^1.6.0",
@@ -36,7 +36,7 @@
   "devDependencies": {
     "@types/ajv": "^1.0.0",
     "@types/ajv-errors": "^1.0.2",
-    "@types/amqplib": "^0.5.12",
+    "@types/amqplib": "^0.5.13",
     "@types/axios": "^0.14.0",
     "@types/bunyan": "^1.8.5",
     "@types/chai": "^4.1.7",

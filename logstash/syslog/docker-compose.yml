@@ -9,6 +9,9 @@ services:
       - ./logstash/jvm.options:/usr/share/logstash/config/jvm.options
       - ./logstash/logstash.yml:/usr/share/logstash/config/logstash.yml
       - ./logstash/syslog.conf:/usr/share/logstash/pipeline/syslog.conf
+    ports:
+      - 9002:9002/tcp
+      - 9002:9002/udp
     networks:
     - hotspotplusgate
   clickhouse-sinker-syslog:

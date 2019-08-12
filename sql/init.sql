@@ -8,10 +8,10 @@ engine=MergeTree
 PARTITION BY toStartOfDay( creationDate )
 ORDER BY (nasIp,framedIpAddress,creationDate)
 
-create table IF NOT EXISTS logs.syslog(memberIp String,nasIp String,protocol String,url String,method String,domain String,creationDate DateTime )
+create table IF NOT EXISTS logs.syslog(memberIp String,nasIp String,protocol String,url String,method String,domain String,receivedAt DateTime )
 engine=MergeTree
-PARTITION BY toStartOfDay( creationDate )
-ORDER BY (nasIp,memberIp,creationDate)
+PARTITION BY toStartOfDay( receivedAt )
+ORDER BY (nasIp,memberIp,receivedAt)
 
 
 ## List Of Partitions

@@ -31,9 +31,11 @@ interface SyslogReportResult {
 const querySyslog = async (
   syslogReportRequestTask: SyslogReportRequestTask,
 ): Promise<SyslogReportResult[]> => {
-  const mainQuery = await createSyslogQuery(syslogReportRequestTask);
-  log.debug(mainQuery);
-  const { rows } = executeClickQuery(clickHouse, mainQuery);
+  log.debug('### querySyslog ###');
+  log.debug({ syslogReportRequestTask });
+  const query = await createSyslogQuery(syslogReportRequestTask);
+  log.debug({ query });
+  const { rows } = executeClickQuery(clickHouse, query);
   const syslogRows = rows.map((row: any[]) => {
     return new ClickSyslogRow(row);
   });
