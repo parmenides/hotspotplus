@@ -1,0 +1,2 @@
+http.port: 9250-9550
+xpack.monitoring.enabled: false

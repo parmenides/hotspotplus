@@ -7,7 +7,7 @@
 
 	"parser" : "json",
 	"clickhouse" : "ch1",
-	"tableName" : "session",
+	"tableName" : "Session",
 
 	"dims" : [
 		{"name" : "businessId" , "type" : "String"},

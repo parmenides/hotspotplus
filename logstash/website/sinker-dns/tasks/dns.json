@@ -1,0 +1,23 @@
+{
+	"name" : "dns",
+	"kafka": "kfk1",
+	"topic": "dns",
+	"earliest" : true,
+	"consumerGroup" : "dns_consumer",
+	"parser" : "json",
+	"clickhouse" : "ch1",
+	"tableName" : "Dns",
+	"dims" : [
+		{"name" : "memberIp" , "type" : "String"},
+		{"name" : "nasIp" , "type" : "String"},
+		{"name" : "domain" , "type" : "String"},
+		{"name" : "receivedAt" , "type" : "UInt32"}
+
+	],
+
+	"@desc_of_autoSchema" : "auto schema will auto fetch the schema from clickhouse",
+	"autoSchema" : false,
+	"@desc_of_exclude_columns" : "this columns will be excluded by insert SQL ",
+	"excludeColumns" : [],
+	"bufferSize" : 90000
+}

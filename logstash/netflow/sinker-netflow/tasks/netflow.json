@@ -7,7 +7,7 @@
 
 	"parser" : "json",
 	"clickhouse" : "ch1",
-	"tableName" : "netflow",
+	"tableName" : "Netflow",
 
 	"dims" : [
 		{"name" : "RouterAddr" , "type" : "String"},

@@ -1,12 +1,12 @@
 {
-	"name" : "syslog",
+	"name" : "webproxy",
 	"kafka": "kfk1",
-	"topic": "syslog",
+	"topic": "webproxy",
 	"earliest" : true,
-	"consumerGroup" : "syslog_consumer",
+	"consumerGroup" : "webproxy_consumer",
 	"parser" : "json",
 	"clickhouse" : "ch1",
-	"tableName" : "syslog",
+	"tableName" : "WebProxy",
 	"dims" : [
 		{"name" : "memberIp" , "type" : "String"},
 		{"name" : "nasIp" , "type" : "String"},

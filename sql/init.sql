@@ -1,18 +1,22 @@
-create table IF NOT EXISTS logs.netflow(RouterAddr String,SrcIP String,DstIP String, SrcPort String,DstPort String,NextHop String, TimeRecvd DateTime,Proto UInt8)
-engine=MergeTree
+create table IF NOT EXISTS logs.Netflow(RouterAddr String,SrcIP String,DstIP String, SrcPort String,DstPort String,NextHop String, TimeRecvd DateTime,Proto UInt8)
+engine=MergeTree()
 PARTITION BY toStartOfDay( TimeRecvd )
 ORDER BY (RouterAddr,SrcIP,TimeRecvd)
 
-create table IF NOT EXISTS logs.session(businessId String,memberId String,nasId String,nasTitle String,nasIp String,username String,framedIpAddress String,mac String,creationDate DateTime )
-engine=MergeTree
+create table IF NOT EXISTS logs.Session(businessId String,memberId String,nasId String,nasTitle String,nasIp String,username String,framedIpAddress String,mac String,creationDate DateTime )
+engine=MergeTree()
 PARTITION BY toStartOfDay( creationDate )
 ORDER BY (nasIp,framedIpAddress,creationDate)
 
-create table IF NOT EXISTS logs.syslog(memberIp String,nasIp String,protocol String,url String,method String,domain String,receivedAt DateTime )
-engine=MergeTree
+create table IF NOT EXISTS logs.WebProxy( memberIp String,nasIp String,protocol String,url String,method String,domain String,receivedAt DateTime )
+engine=MergeTree()
 PARTITION BY toStartOfDay( receivedAt )
 ORDER BY (nasIp,memberIp,receivedAt)
 
+create table IF NOT EXISTS logs.Dns(memberIp String,nasIp String,domain String,receivedAt DateTime )
+engine=AggregatingMergeTree()
+PARTITION BY toStartOfDay( receivedAt )
+ORDER BY (nasIp,memberIp,domain,toStartOfFiveMinute( receivedAt ))
 
 ## List Of Partitions
 SELECT  active,partition,name  FROM system.parts  WHERE database='logs' AND table='netflow'
