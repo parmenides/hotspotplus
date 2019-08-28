@@ -22,7 +22,7 @@ services:
     command: --conf /opt/config
     networks:
       - hotspotplusgate
-   dnssyslog:
+  dnssyslog:
      image: 'docker.elastic.co/logstash/logstash:7.3.1'
      restart: always
      environment:
@@ -36,7 +36,7 @@ services:
        - 9003:9003/udp
      networks:
        - hotspotplusgate
-   clickhouse-sinker-dns:
+  clickhouse-sinker-dns:
      image: 'registry.gitlab.com/parmenides/hotspotplus/clickhouse-sinker:latest'
      restart: always
      volumes:
