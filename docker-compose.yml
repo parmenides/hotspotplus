@@ -205,26 +205,26 @@ services:
     networks:
       hotspotplusgate:
          ipv4_address: 172.20.0.20
-  clickhouse:
-    image: yandex/clickhouse-server
-    hostname: clickhouse
-    container_name: clickhouse
-    ports:
-    - 9000:9000
-    - 9009:9009
-    - 8123:8123
-    volumes:
-    - ./clickhouse/clickhouse_config.xml:/etc/clickhouse-server/config.xml
-    - ./clickhouse/clickhouse_metrika.xml:/etc/clickhouse-server/metrika.xml
-    - ./clickhouse/users.xml:/etc/clickhouse-server/users.xml
-    -  clickhouse:/var/lib/clickhouse
-    ulimits:
-      nofile:
-        soft: 262144
-        hard: 262144
-    networks:
-      hotspotplusgate:
-        ipv4_address: 172.20.0.85
+#  clickhouse:
+#    image: yandex/clickhouse-server
+#    hostname: clickhouse
+#    container_name: clickhouse
+#    ports:
+#    - 9000:9000
+#    - 9009:9009
+#    - 8123:8123
+#    volumes:
+#    - ./clickhouse/clickhouse_config.xml:/etc/clickhouse-server/config.xml
+#    - ./clickhouse/clickhouse_metrika.xml:/etc/clickhouse-server/metrika.xml
+#    - ./clickhouse/users.xml:/etc/clickhouse-server/users.xml
+#    -  clickhouse:/var/lib/clickhouse
+#    ulimits:
+#      nofile:
+#        soft: 262144
+#        hard: 262144
+#    networks:
+#      hotspotplusgate:
+#        ipv4_address: 172.20.0.85
 #  kibana:
 #    image: 'bitnami/kibana:6.5.4'
 #    ports:
@@ -236,35 +236,35 @@ services:
 #    networks:
 #      hotspotplusgate:
 #       ipv4_address: 172.20.0.21
-  zookeeper:
-    image: 'bitnami/zookeeper:latest'
-    restart: always
-    container_name: 'hsp_zookeeper'
-    environment:
-      - ALLOW_ANONYMOUS_LOGIN=yes
-    expose:
-      - '2181'
-    networks:
-      - hotspotplusgate
-  kafka:
-    image: 'bitnami/kafka:latest'
-    restart: always
-    container_name: 'kafka'
-    depends_on:
-      - zookeeper
-    environment:
-      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
-      - KAFKA_LOG_RETENTION_HOURS=72
-      - ALLOW_ANONYMOUS_LOGIN=yes
-      - ALLOW_PLAINTEXT_LISTENER=yes
-      - KAFKA_ZOOKEEPER_CONNECT=hsp_zookeeper:2181
-    expose:
-      - '9092'
-    volumes:
-      - kafka:/bitnami/kafka
-    networks:
-      hotspotplusgate:
-        ipv4_address: 172.20.0.80
+#  zookeeper:
+#    image: 'bitnami/zookeeper:latest'
+#    restart: always
+#    container_name: 'hsp_zookeeper'
+#    environment:
+#      - ALLOW_ANONYMOUS_LOGIN=yes
+#    expose:
+#      - '2181'
+#    networks:
+#      - hotspotplusgate
+#  kafka:
+#    image: 'bitnami/kafka:latest'
+#    restart: always
+#    container_name: 'kafka'
+#    depends_on:
+#      - zookeeper
+#    environment:
+#      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+#      - KAFKA_LOG_RETENTION_HOURS=72
+#      - ALLOW_ANONYMOUS_LOGIN=yes
+#      - ALLOW_PLAINTEXT_LISTENER=yes
+#      - KAFKA_ZOOKEEPER_CONNECT=hsp_zookeeper:2181
+#    expose:
+#      - '9092'
+#    volumes:
+#      - kafka:/bitnami/kafka
+#    networks:
+#      hotspotplusgate:
+#        ipv4_address: 172.20.0.80
   radius:
     image: 'registry.gitlab.com/parmenides/hspfreeradius/production:3.3'
     restart: always
