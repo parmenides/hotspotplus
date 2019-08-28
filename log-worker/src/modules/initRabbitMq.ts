@@ -12,6 +12,7 @@ export const addDefaultQueue = async () => {
     await channel.assertExchange(QUEUES.LOG_WORKER_EXCHANGE, 'fanout', {
       durable: true,
     });
+    
     await channel.assertQueue(QUEUES.LOG_WORKER_QUEUE, {
       deadLetterExchange: QUEUES.RETRY_LOG_WORKER_EXCHANGE,
       durable: true,

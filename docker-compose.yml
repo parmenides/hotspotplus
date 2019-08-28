@@ -12,7 +12,7 @@ services:
     depends_on:
       - mongodb
       - elasticsearch
-#      - rabbitmq
+#     - rabbitmq
       - redis
     env_file:
       - api/.env
@@ -26,29 +26,29 @@ services:
       - ${PWD}/api/key:/key
     networks:
       - hotspotplusgate
-#  hotspotpluslicensapi:
-#    build:
-#      context: ${PWD}/api-license
-#    user: '${UID:-1000}:${GID:-1000}'
-#    restart: always
-#    container_name: hotspotpluslicensapi
-#    command: npm run start:dev
-#    ports:
-#      - 3001:3000
-#    depends_on:
-#      - mongodb
-#      - elasticsearch
-#      - redis
-#    env_file:
-#      - api-license/.env
-#    volumes:
-#      - ${PWD}/api-license/server:/usr/src/app/server/
-#      - ${PWD}/api-license/node_modules:/usr/src/app/node_modules
-#      - ${PWD}/api-license/common:/usr/src/app/common/
-#      - ${PWD}/api-license/logs:/logs
-#      - ${PWD}/api-license/key:/key
-#    networks:
-#      - hotspotplusgate
+  hotspotpluslicensapi:
+    build:
+      context: ${PWD}/api-license
+    user: '${UID:-1000}:${GID:-1000}'
+    restart: always
+    container_name: hotspotpluslicensapi
+    command: npm run start:dev
+    ports:
+      - 3001:3000
+    depends_on:
+      - mongodb
+      - elasticsearch
+      - redis
+    env_file:
+      - api-license/.env
+    volumes:
+      - ${PWD}/api-license/server:/usr/src/app/server/
+      - ${PWD}/api-license/node_modules:/usr/src/app/node_modules
+      - ${PWD}/api-license/common:/usr/src/app/common/
+      - ${PWD}/api-license/logs:/logs
+      - ${PWD}/api-license/key:/key
+    networks:
+      - hotspotplusgate
 #  logworker:
 #    build:
 #      context: ./log-worker
@@ -135,15 +135,15 @@ services:
     - ${PWD}/hotspot/:/usr/src/app/
     networks:
     - hotspotplusgate
-#  licensedashboard:
-#    image: 'bitnami/nginx:latest'
-#    restart: always
-#    ports:
-#      - 8082:8080
-#    volumes:
-#      - ${PWD}/license-dashboard:/app
-#    networks:
-#      - hotspotplusgate
+  licensedashboard:
+    image: 'bitnami/nginx:latest'
+    restart: always
+    ports:
+      - 8082:8080
+    volumes:
+      - ${PWD}/license-dashboard:/app
+    networks:
+      - hotspotplusgate
   coordinator:
     build:
       context: ${PWD}/coordinator

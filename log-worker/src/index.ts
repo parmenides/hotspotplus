@@ -15,8 +15,6 @@ import {
 //import { enrichLogs } from './worker/enrich';
 //import { startEnrichScheduler } from './schedulers/enrichScheduler';
 //import { startCounterScheduler } from './schedulers/counterScheduler';
-import clickHouse from './modules/clickhouse';
-import { REPORT_TYPE } from './typings';
 import {
   addDefaultIndex,
   addElasticIndexTemplates,
