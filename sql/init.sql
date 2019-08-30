@@ -1,7 +1,7 @@
 create table IF NOT EXISTS logs.Netflow(RouterAddr String,SrcIP String,DstIP String, SrcPort String,DstPort String,NextHop String, TimeRecvd DateTime,Proto UInt8)
-engine=MergeTree()
+engine=AggregatingMergeTree()
 PARTITION BY toStartOfDay( TimeRecvd )
-ORDER BY (RouterAddr,SrcIP,TimeRecvd)
+ORDER BY (NextHop,DstPort,SrcPort,DstIP,SrcIP,RouterAddr,toStartOfInterval( TimeRecvd ,INTERVAL 30 minute ))
 
 create table IF NOT EXISTS logs.Session(businessId String,memberId String,nasId String,nasTitle String,nasIp String,username String,framedIpAddress String,mac String,creationDate DateTime )
 engine=MergeTree()
@@ -16,7 +16,7 @@ ORDER BY (nasIp,memberIp,receivedAt)
 create table IF NOT EXISTS logs.Dns(memberIp String,nasIp String,domain String,receivedAt DateTime )
 engine=AggregatingMergeTree()
 PARTITION BY toStartOfDay( receivedAt )
-ORDER BY (nasIp,memberIp,domain,toStartOfFiveMinute( receivedAt ))
+ORDER BY (nasIp,memberIp,domain,toStartOfInterval( receivedAt , INTERVAL 120 minute ))
 
 ## List Of Partitions
 SELECT  active,partition,name  FROM system.parts  WHERE database='logs' AND table='netflow'

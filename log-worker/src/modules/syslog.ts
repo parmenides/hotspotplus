@@ -45,10 +45,14 @@ const querySyslog = async (
 const createSyslogQuery = (
   syslogReportRequestTask: SyslogReportRequestTask,
 ) => {
-  let mainQuery: string = ` SELECT * from ${
-    process.env.CLICK_NETFLOW_REPORT_DB
-  } `;
-  const whereParts: string[] = [];
+  let mainQuery: string = `  
+  SELECT * FROM logs.Session JOIN logs.WebProxy  ON Session.nasIp=WebProxy.nasIp 
+  AND toStartOfInterval(Session.creationDate, INTERVAL 5 minute)=toStartOfInterval(WebProxy.receivedAt, INTERVAL 5 minute ) 
+  `;
+
+  const whereParts: string[] = [
+      ' Session.framedIpAddress=WebProxy.memberIp '
+  ];
 
   if (syslogReportRequestTask.fromDate) {
     whereParts.push(
