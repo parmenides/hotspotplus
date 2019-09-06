@@ -11,7 +11,7 @@ services:
       - 3000:3000
     depends_on:
       - mongodb
-#      - elasticsearch
+#     - elasticsearch
 #     - rabbitmq
       - redis
     env_file:
@@ -54,8 +54,6 @@ services:
 #      context: ./log-worker
 #    user: '${UID:-1000}:${GID:-1000}'
 #    command: npm run start:dev
-##    depends_on:
-##      - rabbitmq
 #    environment:
 #      - CLICK_NETFLOW_REPORT_DB=logs.report
 #      - CLICK_HOST=clickhouse
@@ -269,8 +267,6 @@ services:
     image: 'registry.gitlab.com/parmenides/hspfreeradius/production:3.3'
     restart: always
     container_name: "hsp_radius_production"
-    logging:
-      driver: none
     networks:
       - hotspotplusgate
     expose:

@@ -1,0 +1,14 @@
+version: '3'
+services:
+  clickhouse-sinker-usage:
+    image: 'registry.gitlab.com/parmenides/hotspotplus/clickhouse-sinker:latest'
+    restart: always
+    volumes:
+      - ./sinker-usage:/opt/config
+    command: --conf /opt/config
+    networks:
+    - hotspotplusgate
+
+networks:
+  hotspotplusgate:
+    external: true

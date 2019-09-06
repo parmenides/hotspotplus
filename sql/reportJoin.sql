@@ -6,10 +6,19 @@ AND (SrcIP='192.168.2.1' OR DstIP='192.168.2.1' OR NextHop='192.168.2.1')
 AND Netflow.TimeRecvd>=toDateTime('2019-08-29 03:45:05')
 AND Netflow.TimeRecvd<=toDateTime('2019-08-29 04:29:06')
 
+
+
 select DstPort from logs.Netflow where
 Netflow.TimeRecvd>=toDateTime('2019-08-29 03:45:05')
 AND Netflow.TimeRecvd<=toDateTime('2019-08-29 04:29:06')
 AND (SrcIP='192.168.2.1' OR DstIP='192.168.2.1' OR NextHop='192.168.2.1')
+
+
+CREATE MATERIALIZED VIEW hotspotplus.all ENGINE=MergeTree()
+PARTITION BY (toStartOfDay( creationDate))
+PRIMARY KEY (businessId)
+ORDER BY (businessId,username)
+POPULATE AS SELECT businessId,username,creationDate,MAX(upload) as upload,MAX(download) as download,MAX(sessionTime) as sessionTime FROM hotspotplus.Usage
 
 
 CREATE MATERIALIZED VIEW logs.UserNetflowReport ENGINE=AggregatingMergeTree()

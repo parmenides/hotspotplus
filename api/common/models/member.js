@@ -1590,7 +1590,9 @@ module.exports = function(Member) {
 
           usage.businessId = businessId;
           usage.username = username;
-          usage.creationDate = new Date().getTime();
+          usage.creationDate = RadiusAccountingMessage.getAttribute(
+            'timestamp'
+          );
           usage.accStatusType = RadiusAccountingMessage.getAttribute(
             'acctStatusType'
           );

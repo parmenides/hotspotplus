@@ -44,7 +44,7 @@ export const enrichLogs = async () => {
         const toDate = moment(enrichTask.to);
         const reportType = enrichTask.reportType;
 
-        if (reportType === REPORT_TYPE.SYSLOG) {
+        if (reportType === REPORT_TYPE.WEBSITE) {
           const result = await syslogModule.syslogGroupByIp(fromDate, toDate);
           const ipData = getIpData(result);
           await searchAndUpdateReport(reportType, ipData, fromDate, toDate);
@@ -54,7 +54,7 @@ export const enrichLogs = async () => {
               '################### Syslog Enrichment Done ###################',
             );
           }
-        } else if (reportType === REPORT_TYPE.NETFLOW) {
+        } else if (reportType === REPORT_TYPE.CONNECTION) {
           const result = await netflowModule.netflowGroupByIp(fromDate, toDate);
           const ipData = getIpData(result);
 
@@ -133,7 +133,7 @@ const searchAndUpdateReport = async (
           const businessId =
             groupedSessions.extra.hits.hits[0]._source.businessId;
           let updateResult: UpdateDocumentByQueryResponse[];
-          if (reportType === REPORT_TYPE.SYSLOG) {
+          if (reportType === REPORT_TYPE.WEBSITE) {
             updateResult = await syslogModule.updateSyslogs(
               from,
               to,
@@ -148,7 +148,7 @@ const searchAndUpdateReport = async (
                 username,
               },
             );
-          } else if (reportType === REPORT_TYPE.NETFLOW) {
+          } else if (reportType === REPORT_TYPE.CONNECTION) {
             updateResult = await netflowModule.updateNetflows(
               from,
               to,

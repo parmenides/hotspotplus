@@ -2,7 +2,6 @@ var logger = require('../../server/modules/logger')
 var app = require('../../server/server')
 var config = require('../../server/modules/config')
 var utility = require('../../server/modules/utility')
-var aggregate = require('../../server/modules/aggregates')
 var Payment = require('../../server/modules/payment')
 var request = require('request')
 var Q = require('q')
@@ -12,6 +11,8 @@ var auth = require('../../server/modules/auth')
 var needle = require('needle')
 var redis = require('redis')
 var crypto = require('crypto')
+const db = require('../../server/modules/db.factory')
+
 var redisInvoicePayed = redis.createClient(
   config.REDIS.PORT,
   config.REDIS.HOST,
@@ -1426,7 +1427,7 @@ module.exports = function (Business) {
     var SystemConfig = app.models.SystemConfig
     SystemConfig.isLocal()
       .then(function (isLocal) {
-        if (isLocal) {
+        if (false/*isLocal*/) {
           utility
             .getSystemUuid(config.SYSTEM_ID_PATH)
             .then(function (systemUuid) {
@@ -1471,8 +1472,7 @@ module.exports = function (Business) {
               return cb(error)
             })
         } else {
-          aggregate
-            .getProfileBalance(businessId)
+          db.getProfileBalance(businessId)
             .then(function (balance) {
               log.debug(balance)
               return cb(null, balance)

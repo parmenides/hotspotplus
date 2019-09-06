@@ -1,7 +1,6 @@
-import logger, {createLogger} from '../utils/logger';
+import {createLogger} from '../utils/logger';
 import _ from 'lodash';
 import {
-    NetflowReportRequestTask,
     LOCAL_TIME_ZONE,
     NetflowReportRequestTask,
     PROTOCOLS,
@@ -11,7 +10,6 @@ import {
 } from '../typings';
 import moment from 'moment';
 import momentJ from 'moment-jalaali';
-import momentTz from 'moment-timezone';
 import {createClickConnection, executeClickQuery} from '../utils/clickClient';
 
 const log = createLogger();

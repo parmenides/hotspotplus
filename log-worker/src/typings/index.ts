@@ -1,7 +1,7 @@
 //
 import { Moment } from 'moment';
 import { ClickNetflowRow } from '../modules/netflow';
-import { ClickSyslogRow } from '../modules/syslog';
+import { ClickWebproxyLogRow } from '../modules/webproxyLog';
 
 export const LOGGER_TIME_ZONE = '';
 export const LOCAL_TIME_ZONE = 'Asia/Tehran';
@@ -27,47 +27,8 @@ export interface EnrichTask {
 }
 
 export enum REPORT_TYPE {
-  NETFLOW = 'netflow',
-  SYSLOG = 'syslog',
-}
-
-export interface RawSyslogReport {
-  _source: {
-    username: string;
-    nasId: string;
-    mac: string;
-    nasTitle: string;
-    query: string;
-    '@timestamp': string;
-    params: string;
-    message: string;
-    method: string;
-    url: string;
-    protocol: string;
-    path: string;
-    domain: string;
-    hostGeoIp: any;
-    memberIp: string;
-    nasIp: string;
-  };
-}
-
-export interface SyslogAggregateByIp {
-  group_by_nas_ip: {
-    doc_count_error_upper_bound: number;
-    sum_other_doc_count: number;
-    buckets: [
-      {
-        key: string;
-        doc_count: number;
-        group_by_member_ip: {
-          doc_count_error_upper_bound: number;
-          sum_other_doc_count: number;
-          buckets: Array<{ key: string; doc_count: number }>;
-        };
-      }
-    ];
-  };
+  CONNECTION = 'netflow',
+  WEBSITE = 'syslog',
 }
 
 export interface NetflowAggregateByIp {
@@ -85,56 +46,6 @@ export interface NetflowAggregateByIp {
         };
       }
     ];
-  };
-}
-
-export interface NetflowReportQueryParams {
-  fromDate: Moment;
-  toDate: Moment;
-  username?: string;
-  dstAddress?: string;
-  dstPort?: string[];
-  srcAddress?: string;
-  srcPort?: string[];
-  protocol?: string;
-  nasId?: string[];
-}
-
-export interface SyslogReportQueryParams {
-  fromDate: Moment;
-  toDate: Moment;
-  username?: string;
-  url?: string;
-  domain?: string;
-  method?: string[];
-  nasId?: string[];
-}
-
-export interface RawNetflowReport {
-  _source: {
-    username: string;
-    mac: string;
-    nasId: string;
-    nasTitle: string;
-    netflow: {
-      src_port: string;
-      protocol: string;
-      dst_addr: string;
-      dst_port: string;
-      src_addr: string;
-      ipv4_next_hop: string;
-    };
-    '@version': string;
-    geoip_dst: {
-      autonomous_system: string;
-    };
-    host: string;
-    geoip_src: {
-      autonomous_system: string;
-    };
-    type: string;
-    tags: string[];
-    '@timestamp': string;
   };
 }
 
@@ -170,18 +81,11 @@ export interface ClickHouseColumnMeta {
   type: string;
 }
 
-export interface ClickHouseNetflowQueryResult {
-  rows: ClickNetflowRow[];
-  columns: ClickHouseColumnMeta[];
-}
-
-export interface ClickHouseSyslogQueryResult {
-  rows: ClickSyslogRow[];
-  columns: ClickHouseColumnMeta[];
-}
-
-export interface SyslogReportRequestTask extends GeneralReportRequestTask {
+export interface WebproxyReportRequestTask extends GeneralReportRequestTask {
   domain?: string;
   url?: string;
   method?: string[];
+}
+export interface DnsReportRequestTask extends GeneralReportRequestTask {
+  domain?: string;
 }

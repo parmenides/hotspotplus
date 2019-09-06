@@ -1,7 +1,7 @@
 {
   "clickhouse": {
     "ch1": {
-      "db": "logs",
+      "db": "hotspotplus",
       "host": "172.20.0.85",
       "dnsLoop" : true,
       "maxLifeTime": 300,

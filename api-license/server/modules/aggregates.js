@@ -3,8 +3,8 @@ var logger = require('./logger')
 var log = logger.createLogger()
 
 const ACCOUNTING_INDEX = `${process.env.ELASTIC_INDEX_PREFIX}accounting`
-const CHARGE_INDEX = `${process.env.ELASTIC_INDEX_PREFIX}charge`
-const LICENSE_CHARGE_INDEX = `${process.env.ELASTIC_INDEX_PREFIX}licensecharge`
+//const CHARGE_INDEX = `${process.env.ELASTIC_INDEX_PREFIX}charge`
+//const LICENSE_CHARGE_INDEX = `${process.env.ELASTIC_INDEX_PREFIX}licensecharge`
 const {Client} = require('@elastic/elasticsearch')
 const elasticClient = new Client({
   node: `http://${process.env.ELASTIC_IP}:${process.env.ELASTIC_PORT}`,
@@ -270,101 +270,101 @@ module.exports.getMemberUsage = function (
   })
 }
 
-module.exports.getLicenseBalance = function (licenseId) {
-  return Q.Promise(function (resolve, reject) {
-    if (!licenseId) {
-      return reject('licenseId is undefined')
-    }
+// module.exports.getLicenseBalance = function (licenseId) {
+//   return Q.Promise(function (resolve, reject) {
+//     if (!licenseId) {
+//       return reject('licenseId is undefined')
+//     }
+//
+//     log.debug('get license balance ', LICENSE_CHARGE_INDEX)
+//     try {
+//       elasticClient.search({
+//         index: LICENSE_CHARGE_INDEX,
+//         body: {
+//           query: {
+//             term: {
+//               licenseId: licenseId
+//             }
+//           },
+//           aggs: {
+//             balance: {
+//               sum: {
+//                 field: 'amount'
+//               }
+//             }
+//           }
+//         }
+//       }, (error, response) => {
+//         if (error) {
+//           log.error('getProfileBalance:', error)
+//           return reject(error)
+//         }
+//         const body = response.body;
+//
+//         if (body && body.aggregations) {
+//           var result = body.aggregations
+//           var balance = result.balance.value
+//           return resolve({
+//             balance: balance
+//           })
+//         } else {
+//           log.error(body)
+//           return reject(body)
+//         }
+//       })
+//     } catch (error) {
+//       log.error(error)
+//       return reject(error)
+//     }
+//   })
+// }
 
-    log.debug('get license balance ', LICENSE_CHARGE_INDEX)
-    try {
-      elasticClient.search({
-        index: LICENSE_CHARGE_INDEX,
-        body: {
-          query: {
-            term: {
-              licenseId: licenseId
-            }
-          },
-          aggs: {
-            balance: {
-              sum: {
-                field: 'amount'
-              }
-            }
-          }
-        }
-      }, (error, response) => {
-        if (error) {
-          log.error('getProfileBalance:', error)
-          return reject(error)
-        }
-        const body = response.body;
-
-        if (body && body.aggregations) {
-          var result = body.aggregations
-          var balance = result.balance.value
-          return resolve({
-            balance: balance
-          })
-        } else {
-          log.error(body)
-          return reject(body)
-        }
-      })
-    } catch (error) {
-      log.error(error)
-      return reject(error)
-    }
-  })
-}
-
-module.exports.getProfileBalance = function (businessId) {
-  return Q.Promise(function (resolve, reject) {
-    if (!businessId) {
-      return reject('business ID is undefined')
-    }
-    try {
-      elasticClient.search({
-        index: CHARGE_INDEX,
-        body: {
-          query: {
-            term: {
-              businessId: businessId
-            }
-          },
-          aggs: {
-            balance: {
-              sum: {
-                field: 'amount'
-              }
-            }
-          }
-        },
-      }, (error, response) => {
-        if (error) {
-          log.error('getProfileBalance:', error)
-          return reject(error)
-        }
-        const body = response.body;
-
-        if (body && body.aggregations) {
-          var result = body.aggregations
-          var balance = result.balance.value
-          return resolve({
-            balance: balance
-          })
-        } else {
-          log.debug(body)
-          return reject(body)
-        }
-      })
-    } catch (error) {
-      log.error(error)
-      return reject(error)
-    }
-  })
-}
+// module.exports.getProfileBalance = function (businessId) {
+//   return Q.Promise(function (resolve, reject) {
+//     if (!businessId) {
+//       return reject('business ID is undefined')
+//     }
+//     try {
+//       elasticClient.search({
+//         index: CHARGE_INDEX,
+//         body: {
+//           query: {
+//             term: {
+//               businessId: businessId
+//             }
+//           },
+//           aggs: {
+//             balance: {
+//               sum: {
+//                 field: 'amount'
+//               }
+//             }
+//           }
+//         },
+//       }, (error, response) => {
+//         if (error) {
+//           log.error('getProfileBalance:', error)
+//           return reject(error)
+//         }
+//         const body = response.body;
+//
+//         if (body && body.aggregations) {
+//           var result = body.aggregations
+//           var balance = result.balance.value
+//           return resolve({
+//             balance: balance
+//           })
+//         } else {
+//           log.debug(body)
+//           return reject(body)
+//         }
+//       })
+//     } catch (error) {
+//       log.error(error)
+//       return reject(error)
+//     }
+//   })
+// }
 
 /* Return sum of Session Time & Download & Upload for Member Online Users & Max for Ip Online Users
  fromDate: number
@@ -724,75 +724,75 @@ module.exports.getAllUniqueSessionCount = function (startDate, endDate) {
   })
 }
 
-module.exports.getCharges = function (businessId, startDate, skip, limit) {
-  return Q.Promise(function (resolve, reject) {
-    if (!businessId) {
-      return reject('business ID is undefined')
-    }
-    if (!startDate) {
-      return reject('startDate or endDate is undefined')
-    }
-    if (!limit) {
-      return reject('limit is undefined')
-    }
-    if (skip == null) {
-      return reject('skip is undefined')
-    }
-    try {
-      elasticClient.search({
-        index: CHARGE_INDEX,
-        from: skip,
-        size: limit,
-        body: {
-          sort: [{date: 'desc'}],
-          query: {
-            bool: {
-              must: [
-                {
-                  term: {businessId: businessId}
-                },
-                {
-                  range: {
-                    date: {
-                      gte: startDate
-                    }
-                  }
-                }
-              ]
-            }
-          },
-        }
-
-      }, (error, response) => {
-        if (error) {
-          log.error('Error', error)
-          log.error('body: %j', response.body)
-          return reject(error)
-        }
-        const body = response.body;
-        log.debug('status code', response.statusCode)
-
-        if (body && body.hits && !body.hits.hits) {
-          log.error('getCharges', body)
-          return resolve({})
-        }
-        if (body && body.hits && body.hits.hits) {
-          var result = body.hits.hits
-          return resolve({
-            charges: result
-          })
-        } else {
-          log.debug(body)
-          return reject(body)
-        }
-      })
-
-    } catch (error) {
-      log.error('getCharges %j', error)
-      return reject(error)
-    }
-  })
-}
+// module.exports.getCharges = function (businessId, startDate, skip, limit) {
+//   return Q.Promise(function (resolve, reject) {
+//     if (!businessId) {
+//       return reject('business ID is undefined')
+//     }
+//     if (!startDate) {
+//       return reject('startDate or endDate is undefined')
+//     }
+//     if (!limit) {
+//       return reject('limit is undefined')
+//     }
+//     if (skip == null) {
+//       return reject('skip is undefined')
+//     }
+//     try {
+//       elasticClient.search({
+//         index: CHARGE_INDEX,
+//         from: skip,
+//         size: limit,
+//         body: {
+//           sort: [{date: 'desc'}],
+//           query: {
+//             bool: {
+//               must: [
+//                 {
+//                   term: {businessId: businessId}
+//                 },
+//                 {
+//                   range: {
+//                     date: {
+//                       gte: startDate
+//                     }
+//                   }
+//                 }
+//               ]
+//             }
+//           },
+//         }
+//
+//       }, (error, response) => {
+//         if (error) {
+//           log.error('Error', error)
+//           log.error('body: %j', response.body)
+//           return reject(error)
+//         }
+//         const body = response.body;
+//         log.debug('status code', response.statusCode)
+//
+//         if (body && body.hits && !body.hits.hits) {
+//           log.error('getCharges', body)
+//           return resolve({})
+//         }
+//         if (body && body.hits && body.hits.hits) {
+//           var result = body.hits.hits
+//           return resolve({
+//             charges: result
+//           })
+//         } else {
+//           log.debug(body)
+//           return reject(body)
+//         }
+//       })
+//
+//     } catch (error) {
+//       log.error('getCharges %j', error)
+//       return reject(error)
+//     }
+//   })
+// }
 
 /* Return Unique Session Count for Member of business from Accounting UsageReport based on startDate, endDate
  startDate, endDate : number

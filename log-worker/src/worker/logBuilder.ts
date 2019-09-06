@@ -11,7 +11,6 @@ import request from 'request-promise';
 import { login } from '../utils/auth';
 import { file as tmpFile } from 'tmp-promise';
 import util from 'util';
-/*import syslog from '../modules/syslog';*/
 import {
   GeneralReportRequestTask,
   LOCAL_TIME_ZONE,
@@ -19,10 +18,11 @@ import {
   NetflowReportRequestTask,
   QUEUES,
   REPORT_TYPE,
-  SyslogReportRequestTask,
+  WebproxyReportRequestTask,
 } from '../typings';
 import momentTz = require('moment-timezone');
-import syslog from '../modules/syslog';
+
+import webproxyLog from "../modules/webproxyLog";
 
 // Convert fs.readFile into Promise version of same
 
@@ -99,18 +99,18 @@ export const processLogRequest = async () => {
       );
 
       try {
-        let reports: any;
+        let reports: any[];
         let fields: string[];
-        if (generalReportRequestTask.type === REPORT_TYPE.NETFLOW) {
+        if (generalReportRequestTask.type === REPORT_TYPE.CONNECTION) {
           reports = await netflow.queryNetflow(
             generalReportRequestTask as NetflowReportRequestTask,
           );
-          fields = getNetflowFields();
-        } else if (generalReportRequestTask.type === REPORT_TYPE.SYSLOG) {
-          reports = await syslog.querySyslog(
-            generalReportRequestTask as SyslogReportRequestTask,
+          fields = getConnectionReportFields();
+        } else if (generalReportRequestTask.type === REPORT_TYPE.WEBSITE) {
+          reports = await webproxyLog.queryWebproxyLog(
+            generalReportRequestTask as WebproxyReportRequestTask,
           );
-          fields = getSyslogFields();
+          fields = getWebsiteReportFields();
         } else {
           channel.ack(message);
           throw new Error('invalid report type');
@@ -132,7 +132,7 @@ export const processLogRequest = async () => {
   );
 };
 
-const getNetflowFields = () => {
+const getConnectionReportFields = () => {
   return [
     'Router',
     'Username',
@@ -148,7 +148,7 @@ const getNetflowFields = () => {
   ];
 };
 
-const getSyslogFields = () => {
+const getWebsiteReportFields = () => {
   return [
     'Router',
     'Username',

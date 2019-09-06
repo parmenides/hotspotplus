@@ -27,7 +27,7 @@ const createClickConnection = () => {
 const executeClickQuery = async (
   mainQuery: string,
   clickClient: ClickHouse,
-) => {
+):Promise<{rows:any,columns:any}> => {
   return new Promise((resolve, reject) => {
     const stream: any = clickClient.query(mainQuery);
 
@@ -37,7 +37,7 @@ const executeClickQuery = async (
       columns = columnsInfo;
     });
 
-    const rows: any[any[]] = [];
+    const rows: any[] = [];
     stream.on('data', (row: any) => {
       rows.push(row);
     });

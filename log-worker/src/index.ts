@@ -49,8 +49,8 @@ app.listen(app.get('port'), async () => {
   console.log('Add default queues...');
   await addElasticIndexTemplates();
   await addDefaultIndex();
-  await addDefaultQueue();
-  await processLogRequest();
+  //await addDefaultQueue();
+  //await processLogRequest();
   /*
   ================
     await enrichLogs();
@@ -73,5 +73,5 @@ process.on('uncaughtException', function(error) {
   console.error(error.stack);
   log.error(error);
   log.error(error.stack);
-  //utility.sendMessage ( error, { fileName: 'server.js', source: 'boot' } );
+  process.exit(1);
 });

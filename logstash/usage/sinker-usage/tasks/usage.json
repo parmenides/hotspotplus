@@ -1,0 +1,32 @@
+{
+	"name" : "Usage",
+	"kafka": "kfk1",
+	"topic": "usageTopic",
+	"earliest" : true,
+	"consumerGroup" : "usage_consumer",
+
+	"parser" : "json",
+	"clickhouse" : "ch1",
+	"tableName" : "Usage",
+
+	"dims" : [
+		{"name" : "creationDate" , "type" : "UInt32"},
+		{"name" : "accStatusType" , "type" : "UInt8"},
+		{"name" : "sessionId" , "type" : "String"},
+		{"name" : "businessId" , "type" : "String"},
+		{"name" : "memberId" , "type" : "String"},
+		{"name" : "nasId" , "type" : "String"},
+		{"name" : "mac" , "type" : "String"},
+		{"name" : "username" , "type" : "String"},
+		{"name" : "download" , "type" : "UInt32"},
+		{"name" : "upload" , "type" : "UInt32"},
+		{"name" : "totalUsage" , "type" : "UInt32"},
+		{"name" : "sessionTime" , "type" : "UInt32"}
+	],
+
+	"@desc_of_autoSchema" : "auto schema will auto fetch the schema from clickhouse",
+	"autoSchema" : false,
+	"@desc_of_exclude_columns" : "this columns will be excluded by insert SQL ",
+	"excludeColumns" : [],
+	"bufferSize" : 90000
+}

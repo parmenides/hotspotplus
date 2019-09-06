@@ -60,8 +60,8 @@ export const addEnrichmentTasks = async (reportType: REPORT_TYPE) => {
 
 export const startEnrichScheduler = () => {
   const job = new CronJob('0 */1 * * *', async () => {
-    await addEnrichmentTasks(REPORT_TYPE.NETFLOW);
-    await addEnrichmentTasks(REPORT_TYPE.SYSLOG);
+    await addEnrichmentTasks(REPORT_TYPE.CONNECTION);
+    await addEnrichmentTasks(REPORT_TYPE.WEBSITE);
   });
   job.start();
 };
@@ -71,6 +71,6 @@ if (process.env.START_MANUAL_ENRICHMENT === 'true') {
     throw new Error('ENRICHMENT_SCOPE is empty, so why manual enrichment?');
   }
   log.debug('going to add enrichment task..... manually');
-  addEnrichmentTasks(REPORT_TYPE.NETFLOW);
-  addEnrichmentTasks(REPORT_TYPE.SYSLOG);
+  addEnrichmentTasks(REPORT_TYPE.CONNECTION);
+  addEnrichmentTasks(REPORT_TYPE.WEBSITE);
 }

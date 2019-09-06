@@ -85,6 +85,7 @@ module.exports = {
     upload: 'Acct-Input-Octets',
     download: 'Acct-Output-Octets',
     sessionTime: 'Acct-Session-Time',
+    timestamp: 'Event-Timestamp',
     bulk: 'Mikrotik-Xmit-Limit',
     clearTextPass: 'Cleartext-Password',
     accountingUpdateInterval: 'Acct-Interim-Interval',

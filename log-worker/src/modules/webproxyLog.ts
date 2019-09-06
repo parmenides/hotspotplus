@@ -1,22 +1,21 @@
 import logger from '../utils/logger';
 import moment from 'moment';
 import momentJ from 'moment-jalaali';
-import momentTz from 'moment-timezone';
 
 const clickHouse: any = createClickConnection();
 
 import {
   LOCAL_TIME_ZONE,
   DATABASE_DATE_FORMAT,
-  SyslogReportRequestTask,
+  WebproxyReportRequestTask,
   REPORT_PERSIAN_DATE_FORMAT,
   REPORT_GREGORIAN_DATE_FORMAT,
 } from '../typings';
 import _ from 'lodash';
-import { createClickConnection, executeClickQuery } from '../utils/clickClient';
+import { executeClickQuery,createClickConnection} from '../utils/clickClient';
 const log = logger.createLogger();
 
-interface SyslogReportResult {
+interface WebproxyReportResult {
   Router: string;
   Username: string;
   IP: string;
@@ -28,22 +27,22 @@ interface SyslogReportResult {
   Gregorian_Date: string;
 }
 
-const querySyslog = async (
-  syslogReportRequestTask: SyslogReportRequestTask,
-): Promise<SyslogReportResult[]> => {
-  log.debug('### querySyslog ###');
-  log.debug({ syslogReportRequestTask });
-  const query = await createSyslogQuery(syslogReportRequestTask);
+const queryWebproxyLog = async (
+  webproxyReportRequestTask: WebproxyReportRequestTask,
+): Promise<WebproxyReportResult[]> => {
+  log.debug('### queryWebproxy ###');
+  log.debug({ webproxyReportRequestTask });
+  const query = await createWebproxyQuery(webproxyReportRequestTask);
   log.debug({ query });
-  const { rows } = executeClickQuery(clickHouse, query);
-  const syslogRows = rows.map((row: any[]) => {
-    return new ClickSyslogRow(row);
+  const {rows}  = await executeClickQuery(clickHouse, query);
+  const webproxyRows = rows.map((row: any[]) => {
+    return new ClickWebproxyLogRow(row);
   });
-  return formatReports(syslogRows);
+  return formatWebproxyReports(webproxyRows);
 };
 
-const createSyslogQuery = (
-  syslogReportRequestTask: SyslogReportRequestTask,
+const createWebproxyQuery = (
+  webproxyReportRequestTask: WebproxyReportRequestTask,
 ) => {
   let mainQuery: string = `  
   SELECT * FROM logs.Session JOIN logs.WebProxy  ON Session.nasIp=WebProxy.nasIp 
@@ -54,51 +53,51 @@ const createSyslogQuery = (
       ' Session.framedIpAddress=WebProxy.memberIp '
   ];
 
-  if (syslogReportRequestTask.fromDate) {
+  if (webproxyReportRequestTask.fromDate) {
     whereParts.push(
-      ` receivedAt>=toDateTime('${syslogReportRequestTask.fromDate.format(
+      ` receivedAt>=toDateTime('${webproxyReportRequestTask.fromDate.format(
         DATABASE_DATE_FORMAT,
       )}') `,
     );
   }
 
-  if (syslogReportRequestTask.toDate) {
+  if (webproxyReportRequestTask.toDate) {
     whereParts.push(
-      ` receivedAt<=toDateTime('${syslogReportRequestTask.toDate.format(
+      ` receivedAt<=toDateTime('${webproxyReportRequestTask.toDate.format(
         DATABASE_DATE_FORMAT,
       )}') `,
     );
   }
 
-  if (syslogReportRequestTask.username) {
-    whereParts.push(` username='${syslogReportRequestTask.username}' `);
+  if (webproxyReportRequestTask.username) {
+    whereParts.push(` username='${webproxyReportRequestTask.username}' `);
   }
 
-  if (syslogReportRequestTask.domain) {
-    whereParts.push(` domain='${syslogReportRequestTask.domain}' `);
+  if (webproxyReportRequestTask.domain) {
+    whereParts.push(` domain='${webproxyReportRequestTask.domain}' `);
   }
 
-  if (syslogReportRequestTask.url) {
-    whereParts.push(` url='${syslogReportRequestTask.url}' `);
+  if (webproxyReportRequestTask.url) {
+    whereParts.push(` url='${webproxyReportRequestTask.url}' `);
   }
 
   if (
-    syslogReportRequestTask.method &&
-    syslogReportRequestTask.method.length > 0
+    webproxyReportRequestTask.method &&
+    webproxyReportRequestTask.method.length > 0
   ) {
     const methodQueries: string[] = [];
-    for (const method of syslogReportRequestTask.method) {
+    for (const method of webproxyReportRequestTask.method) {
       methodQueries.push(` method='${method}' `);
     }
     whereParts.push(` (${methodQueries.join(' OR ')}) `);
   }
 
-  if (syslogReportRequestTask.businessId) {
-    whereParts.push(` businessId='${syslogReportRequestTask.businessId}' `);
+  if (webproxyReportRequestTask.businessId) {
+    whereParts.push(` businessId='${webproxyReportRequestTask.businessId}' `);
   }
-  if (syslogReportRequestTask.nas && syslogReportRequestTask.nas.length > 0) {
+  if (webproxyReportRequestTask.nas && webproxyReportRequestTask.nas.length > 0) {
     const nasIdQueries: string[] = [];
-    for (const nas of syslogReportRequestTask.nas) {
+    for (const nas of webproxyReportRequestTask.nas) {
       nasIdQueries.push(` nasId='${nas.id}' `);
     }
     whereParts.push(` (${nasIdQueries.join(' OR ')}) `);
@@ -110,7 +109,7 @@ const createSyslogQuery = (
   return mainQuery;
 };
 
-const formatReports = (rows: ClickSyslogRow[]) => {
+const formatWebproxyReports = (rows: ClickWebproxyLogRow[]) => {
   const formatted = rows.map((clickRow) => {
     return {
       Router: clickRow.nasTitle,
@@ -127,7 +126,7 @@ const formatReports = (rows: ClickSyslogRow[]) => {
   return _.sortBy(formatted, ['Router', 'Username', 'Jalali_Date', 'Domain']);
 };
 
-export class ClickSyslogRow {
+export class ClickWebproxyLogRow {
   public memberIp: string;
   public nasIp: string;
   public protocol: string;
@@ -140,7 +139,6 @@ export class ClickSyslogRow {
   public memberId: string;
   public nasId: string;
   public nasTitle: string;
-  public nasIp: string;
   public username: string;
   public framedIpAddress: string;
   public mac: string;
@@ -158,7 +156,7 @@ export class ClickSyslogRow {
     this.memberId = row[8] && row[8].toString();
     this.nasId = row[9] && row[9].toString();
     this.nasTitle = row[10] && row[10].toString();
-    this.nasIp = row[11] && row[11].toString();
+    //this.nasIp = row[11] && row[11].toString();
     this.username = row[12] && row[12].toString();
     this.framedIpAddress = row[13] && row[13].toString();
     this.mac = row[14] && row[14].toString();
@@ -180,5 +178,5 @@ export class ClickSyslogRow {
 }
 
 export default {
-  querySyslog,
+    queryWebproxyLog,
 };
