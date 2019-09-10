@@ -5,7 +5,7 @@ var config = require('../../server/modules/config');
 var utility = require('../../server/modules/utility');
 var smsModule = require('../../server/modules/sms');
 var Q = require('q');
-var aggregate = require('../../server/modules/aggregates');
+var db = require('../../server/modules/db.factory');
 
 module.exports = function(Reseller) {
   var log = logger.createLogger();
@@ -46,8 +46,7 @@ module.exports = function(Reseller) {
   Reseller.getBalance = function(resellerId) {
     log.debug('@getProfileBalance');
     return Q.Promise(function(resolve, reject) {
-      aggregate
-        .getProfileBalance(resellerId)
+      db.getProfileBalance(resellerId)
         .then(function(balance) {
           log.debug(balance);
           return resolve(balance);

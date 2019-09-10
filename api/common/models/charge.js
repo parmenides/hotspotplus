@@ -4,7 +4,6 @@ var Q = require('q')
 var config = require('../../server/modules/config.js')
 var smsModule = require('../../server/modules/sms')
 var logger = require('../../server/modules/logger')
-var aggregate = require('../../server/modules/aggregates')
 const db = require('../../server/modules/db.factory')
 
 const {Client} = require('@elastic/elasticsearch')

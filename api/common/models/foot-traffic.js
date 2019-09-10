@@ -1,4 +1,3 @@
-var aggregate = require('../../server/modules/aggregates');
 var logger = require('../../server/modules/logger');
 var log = logger.createLogger();
 var config = require('../../server/modules/config');

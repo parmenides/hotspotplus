@@ -224,6 +224,7 @@ module.exports = function (Member) {
     monthDays,
     cb
   ) {
+    //todo: replace with db aggregates
     var fromDate = Number.parseInt(startDate)
     var toDate = Number.parseInt(endDate)
     offset = -offset * config.AGGREGATE.HOUR_MILLISECONDS

@@ -5,7 +5,6 @@ var config = require('../../server/modules/config.js')
 var logger = require('../../server/modules/logger')
 var log = logger.createLogger()
 var hotspotMessages = require('../../server/modules/hotspotMessages')
-var aggregate = require('../../server/modules/aggregates')
 
 module.exports = function (InternetPlan) {
   InternetPlan.observe('after save', function (ctx, next) {
