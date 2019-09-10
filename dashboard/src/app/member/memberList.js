@@ -67,7 +67,6 @@ app.controller('memberList', [
         {
           displayName: 'member.username',
           field: 'username',
-          width: 110,
           enableHiding: false,
           enableSorting: false,
           enableColumnMenu: false,
@@ -76,9 +75,9 @@ app.controller('memberList', [
           headerCellFilter: 'translate'
         },
         {
-          displayName: 'member.internetPlanName',
+          displayName: 'member.internetPackage',
           field: 'internetPlanName',
-          width: 110,
+          width: 100,
           enableHiding: false,
           enableSorting: false,
           enableColumnMenu: false,
@@ -89,6 +88,7 @@ app.controller('memberList', [
         {
           displayName: 'dashboard.upload',
           field: 'upload',
+          width: 100,
           enableHiding: false,
           enableSorting: false,
           enableColumnMenu: false,
@@ -99,6 +99,7 @@ app.controller('memberList', [
         {
           displayName: 'dashboard.download',
           field: 'download',
+          width: 100,
           enableHiding: false,
           enableSorting: false,
           enableColumnMenu: false,
@@ -109,7 +110,7 @@ app.controller('memberList', [
         {
           displayName: 'member.active',
           field: 'active',
-          width: 70,
+          width: 90,
           enableColumnMenu: false,
           enableHiding: false,
           enableSorting: false,
@@ -124,7 +125,7 @@ app.controller('memberList', [
         {
           displayName: 'member.refresh',
           field: 'refresh',
-          width: 120,
+          width: 90,
           enableColumnMenu: false,
           headerCellFilter: 'translate',
           cellClass: 'center',
@@ -134,7 +135,7 @@ app.controller('memberList', [
             'popover-placement="right"><i class="fa  fa-refresh"></i></a>'
         },
         {
-          displayName: 'member.editPassword',
+          displayName: 'member.modifyPassword',
           field: 'passwordText',
           width: 90,
           enableColumnMenu: false,
@@ -147,7 +148,7 @@ app.controller('memberList', [
         {
           displayName: 'member.showPlanHistory',
           field: 'showPlanHistory',
-          width: 90,
+          width: 95,
           enableHiding: false,
           enableSorting: false,
           enableColumnMenu: false,
@@ -160,7 +161,7 @@ app.controller('memberList', [
         {
           displayName: 'general.edit',
           field: 'edit',
-          width: 90,
+          width: 100,
           enableColumnMenu: false,
           headerCellFilter: 'translate',
           cellClass: 'center',
@@ -171,7 +172,7 @@ app.controller('memberList', [
         {
           displayName: 'general.remove',
           field: 'delete',
-          width: 70,
+          width: 95,
           enableColumnMenu: false,
           headerCellFilter: 'translate',
           cellClass: 'center',

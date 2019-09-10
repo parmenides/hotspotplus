@@ -78,6 +78,7 @@ module.exports = function (ClientSession) {
       upload: session.upload,
       sessionTime: session.sessionTime
     })
+    await Usage.cacheUsage(session);
     session = {...session, ...calculatedUsage}
     log.debug(session)
     await ClientSession.sendToBroker(session)

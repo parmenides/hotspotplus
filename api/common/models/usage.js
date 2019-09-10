@@ -33,11 +33,15 @@ module.exports = function (Usage) {
   Usage.calculateUsage = async (sessionId, usage) => {
     let {upload, download, sessionTime} = usage
     const previewsUsage = await Usage.getUsageFromCache(sessionId)
+    log.error({upload, download, sessionTime})
+    log.error({previewsUsage})
+    log.error({usage})
     if (previewsUsage) {
       upload = upload - previewsUsage.upload
       download = download - previewsUsage.download
       sessionTime = sessionTime - previewsUsage.sessionTime
     }
+    log.error({upload, download, sessionTime})
     return {upload, download, sessionTime}
   }
 
@@ -92,6 +96,7 @@ module.exports = function (Usage) {
           throw new Error(error)
         }
         if (!usage) {
+          log.warn('previews session is empty');
           return resolve()
         }
         return resolve(JSON.parse(usage))
