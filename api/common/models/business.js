@@ -870,7 +870,7 @@ module.exports = function (Business) {
                       },
                       {json: true},
                       function (error, response, body) {
-                        log.debug('open api: ',body);
+                        log.debug('open api: ', body)
                         if (error) {
                           log.error(error)
                           return reject(error)
@@ -1005,8 +1005,7 @@ module.exports = function (Business) {
               ctx.data.selectedThemeId = themeId
               ctx.data.groupMemberHelps = ctx.data.groupMemberHelps || {}
               ctx.data.themeConfig = themeConfig
-              ctx.data.nasSharedSecret =
-                ctx.data.nasSharedSecret || config.PRIMARY_SHARED_SECRET
+              ctx.data.nasSharedSecret = ctx.data.nasSharedSecret || config.PRIMARY_SHARED_SECRET
               ctx.data.newNasSharedSecret = config.PRIMARY_SHARED_SECRET
               ctx.data.passwordText = '#$*%&#$*%^(#$*&%(*#$%*&'
               return next()
@@ -1063,7 +1062,7 @@ module.exports = function (Business) {
     }
   })
 
-  Business.verifyBuyPackage = function (invoiceId,refId) {
+  Business.verifyBuyPackage = function (invoiceId, refId) {
     return Q.Promise(function (resolve, reject) {
       var Reseller = app.models.Reseller
       var Invoice = app.models.Invoice
@@ -1239,7 +1238,7 @@ module.exports = function (Business) {
       })
     })
   }
-  Business.verifyBuyCredit = function (invoiceId,refId) {
+  Business.verifyBuyCredit = function (invoiceId, refId) {
     return Q.Promise(function (resolve, reject) {
       var Invoice = app.models.Invoice
       var Charge = app.models.Charge
@@ -1502,46 +1501,31 @@ module.exports = function (Business) {
     returns: {root: true},
   })
 
-  Business.getTrafficUsage = function (
-    startDate,
-    endDate,
-    offset,
-    monthDays,
-    ctx,
-    cb,
-  ) {
+  Business.getTrafficUsage = async (startDate, endDate, ctx) => {
     var businessId = ctx.currentUserId
-    startDate = startDate.toString()
-    endDate = endDate.toString()
     var fromDate = Number.parseInt(startDate)
     var toDate = Number.parseInt(endDate)
-    var intervalMili = config.AGGREGATE.DAY_MILLISECONDS
-    var Usage = app.models.Usage
-    Business.findById(businessId, function (error, business) {
-      if (error) {
-        log.error(error)
-        return cb(error)
-      }
-      if (!business) {
-        log.error('invalid business id')
-        return cb(new Error('invalid business id'))
-      }
-      return Usage.getBusinessUsageReport(
-        fromDate,
-        toDate,
-        businessId,
-        offset,
-        intervalMili,
-        monthDays,
-      )
-        .then(function (result) {
-          return cb(null, result)
-        })
-        .fail(function (error) {
-          log.error(error)
-          return cb(error)
-        })
-    })
+    const result = await db.getBusinessUsageByInterval(
+      businessId,
+      fromDate,
+      toDate,
+    )
+    const date = [];
+    const upload = [];
+    const download = [];
+    const sessionTime = [];
+    for(const res of result){
+      date.push(res.date)
+      upload.push(Number(res.upload))
+      download.push(Number(res.download))
+      sessionTime.push(Number(res.sessionTime))
+    }
+    return {
+      date,
+      upload,
+      download,
+      sessionTime
+    }
   }
 
   Business.remoteMethod('getTrafficUsage', {
@@ -1558,18 +1542,6 @@ module.exports = function (Business) {
         type: 'number',
         required: true,
         description: 'End Date',
-      },
-      {
-        arg: 'offset',
-        type: 'number',
-        required: false,
-        description: 'Time Zone',
-      },
-      {
-        arg: 'monthDays',
-        type: 'array',
-        required: false,
-        description: 'Days Of Month',
       },
       {arg: 'options', type: 'object', http: 'optionsFromRequest'},
     ],
@@ -2268,7 +2240,7 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
               var accessToken = body.access_token
               var accessTokenType = body.token_type
               var tokenId = body.id_token
-              if (accessToken ) {
+              if (accessToken) {
                 business.updateAttributes(
                   {
                     paymentApiKey: accessToken,

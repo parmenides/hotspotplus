@@ -5986,10 +5986,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `endDate` – `{number}` - End Date
              *
-             *  - `offset` – `{number=}` - Time Zone
-             *
-             *  - `monthDays` – `{*=}` - Days Of Month
-             *
              *  - `options` – `{object=}` -
              *
              * @param {function(Object,Object)=} successCb
@@ -11131,44 +11127,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              */
             "loadRadiusInfo": {
               url: urlBase + "/Nas/loadRadiusInfo",
-              method: "POST",
-            },
-
-            /**
-             * @ngdoc method
-             * @name lbServices.Nas#getStatus
-             * @methodOf lbServices.Nas
-             *
-             * @description
-             *
-             * return status of related business routers
-             *
-             * @param {Object=} parameters Request parameters.
-             *
-             *   This method does not accept any parameters.
-             *   Supply an empty object or omit this argument altogether.
-             *
-             * @param {Object} postData Request data.
-             *
-             *  - `businessId` – `{string}` -
-             *
-             * @param {function(Object,Object)=} successCb
-             *   Success callback with two arguments: `value`, `responseHeaders`.
-             *
-             * @param {function(Object)=} errorCb Error callback with one argument:
-             *   `httpResponse`.
-             *
-             * @returns {Object} An empty reference that will be
-             *   populated with the actual data once the response is returned
-             *   from the server.
-             *
-             * <em>
-             * (The remote method definition does not provide any description.
-             * This usually means the response is a `Nas` object.)
-             * </em>
-             */
-            "getStatus": {
-              url: urlBase + "/Nas/getStatus",
               method: "POST",
             },
 
@@ -22913,7 +22871,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * @param {Object} postData Request data.
              *
-             *  - `startDate` – `{number}` -
+             *  - `startDate` – `{number=}` -
+             *
+             *  - `endDate` – `{number=}` -
              *
              *  - `businessId` – `{string}` -
              *
@@ -22957,6 +22917,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * @param {Object} postData Request data.
              *
              *  - `businessId` – `{string}` -
+             *
+             *  - `startDate` – `{number=}` -
+             *
+             *  - `endDate` – `{number=}` -
              *
              * @param {function(Object,Object)=} successCb
              *   Success callback with two arguments: `value`, `responseHeaders`.
@@ -30678,6 +30642,48 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              */
             "createChangeStream": {
               url: urlBase + "/Usages/change-stream",
+              method: "POST",
+            },
+
+            /**
+             * @ngdoc method
+             * @name lbServices.Usage#getUsage
+             * @methodOf lbServices.Usage
+             *
+             * @description
+             *
+             * Get usage report.
+             *
+             * @param {Object=} parameters Request parameters.
+             *
+             *   This method does not accept any parameters.
+             *   Supply an empty object or omit this argument altogether.
+             *
+             * @param {Object} postData Request data.
+             *
+             *  - `startDate` – `{number}` - Start Date
+             *
+             *  - `endDate` – `{number}` - End Date
+             *
+             *  - `options` – `{object=}` -
+             *
+             * @param {function(Object,Object)=} successCb
+             *   Success callback with two arguments: `value`, `responseHeaders`.
+             *
+             * @param {function(Object)=} errorCb Error callback with one argument:
+             *   `httpResponse`.
+             *
+             * @returns {Object} An empty reference that will be
+             *   populated with the actual data once the response is returned
+             *   from the server.
+             *
+             * <em>
+             * (The remote method definition does not provide any description.
+             * This usually means the response is a `Usage` object.)
+             * </em>
+             */
+            "getUsage": {
+              url: urlBase + "/Usages/getUsage",
               method: "POST",
             },
           }

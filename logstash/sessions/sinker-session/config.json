@@ -21,7 +21,7 @@
   },
   "common": {
     "bufferSize": 90000,
-    "flushInterval": 5,
+    "flushInterval": 1,
     "logLevel": "info"
   }
 }

@@ -94,7 +94,7 @@ app.controller('memberList', [
           enableColumnMenu: false,
           headerCellFilter: 'translate',
           cellTemplate:
-            '<div class="ui-grid-cell-contents">{{row.entity.upload | number | translateNumber }}&nbsp;{{"dashboard.Mbps" | translate}}</div>'
+            '<div class="ui-grid-cell-contents" dir="ltr">{{row.entity.upload  | humanSize | translateNumber }}</div>'
         },
         {
           displayName: 'dashboard.download',
@@ -104,7 +104,7 @@ app.controller('memberList', [
           enableColumnMenu: false,
           headerCellFilter: 'translate',
           cellTemplate:
-            '<div class="ui-grid-cell-contents">{{row.entity.download | number | translateNumber }}&nbsp;{{"dashboard.Mbps" | translate}}</div>'
+            '<div class="ui-grid-cell-contents" dir="ltr">{{row.entity.download  | humanSize | translateNumber }}</div>'
         },
         {
           displayName: 'member.active',

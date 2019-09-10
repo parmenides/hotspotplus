@@ -59,6 +59,7 @@ app.config([
           PREFIX + 'app/widgets/trafficUsage/trafficUsage.js',
           PREFIX + 'app/widgets/sessionsReport/sessionsReport.js',
           PREFIX + 'app/widgets/sessionsCount/sessionsCount.js',
+          PREFIX + 'app/widgets/usageReport/usageReport.js',
           PREFIX + 'app/widgets/memberCount/memberCount.js',
           PREFIX + 'app/widgets/loading.js',
         ]),

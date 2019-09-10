@@ -187,22 +187,22 @@ services:
       - ALLOW_EMPTY_PASSWORD=yes
     networks:
       - hotspotplusgate
-  elasticsearch:
-    container_name: hsp_elasticsearch
-    image: 'bitnami/elasticsearch:6.7.0'
-    restart: always
-    environment:
-      - ELASTICSEARCH_HEAP_SIZE=512m
-    expose:
-      - "9300"
-      - "9200"
-    ports:
-      - 9200:9200
-    volumes:
-      - hsp_elasticsearch6:/bitnami/elasticsearch
-    networks:
-      hotspotplusgate:
-         ipv4_address: 172.20.0.20
+#  elasticsearch:
+#    container_name: hsp_elasticsearch
+#    image: 'bitnami/elasticsearch:6.7.0'
+#    restart: always
+#    environment:
+#      - ELASTICSEARCH_HEAP_SIZE=512m
+#    expose:
+#      - "9300"
+#      - "9200"
+#    ports:
+#      - 9200:9200
+#    volumes:
+#      - hsp_elasticsearch6:/bitnami/elasticsearch
+#    networks:
+#      hotspotplusgate:
+#         ipv4_address: 172.20.0.20
   clickhouse:
     image: yandex/clickhouse-server
     hostname: clickhouse
@@ -258,8 +258,8 @@ services:
       - KAFKA_ZOOKEEPER_CONNECT=hsp_zookeeper:2181
     expose:
       - '9092'
-    volumes:
-      - kafka:/bitnami/kafka
+#    volumes:
+#      - kafka:/bitnami/kafka
     networks:
       hotspotplusgate:
         ipv4_address: 172.20.0.80

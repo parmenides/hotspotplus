@@ -1,127 +1,133 @@
-'use strict';
-var logger = require('../../server/modules/logger');
-var app = require('../../server/server');
-var log = logger.createLogger();
-var Q = require('q');
-var radiusPod = require('../../server/modules/radiusDisconnectService');
-var kafka = require('kafka-node');
-var config = require('../../server/modules/config');
+'use strict'
+var logger = require('../../server/modules/logger')
+var app = require('../../server/server')
+var log = logger.createLogger()
+var Q = require('q')
+var radiusPod = require('../../server/modules/radiusDisconnectService')
+var kafka = require('kafka-node')
+var config = require('../../server/modules/config')
+const db = require('../../server/modules/db.factory')
+const moment = require('moment')
+var _ = require('underscore')
 
 const kafkaClient = new kafka.KafkaClient({
   kafkaHost: process.env.KAFKA_IP + ':' + process.env.KAFKA_PORT
-});
+})
 
-const kafkaProducer = new kafka.Producer(kafkaClient, { partitionerType: 2 });
+const kafkaProducer = new kafka.Producer(kafkaClient, {partitionerType: 2})
 
-kafkaProducer.on('ready', function() {
-  log.warn('Producer ready...');
-  kafkaClient.refreshMetadata([config.SESSION_TOPIC], function(error) {
-    log.debug('@refreshMetadata Error:', error);
-  });
-  kafkaProducer.send(
-    [
-      {
-        topic: config.SESSION_TOPIC,
-        messages: JSON.stringify({ message: 'sample' })
-      }
-    ],
-    function(error, data) {
-      if (error) {
-        log.error(
-          `failed to send sample message to kafka topic: ${
-            config.SESSION_TOPIC
-          }`,
-          error
-        );
-        return;
-      }
-      log.debug('sample message sent', data);
-    }
-  );
-});
-
-kafkaProducer.on('error', function(error) {
-  log.error('Producer preparation failed:', error);
-});
-
-module.exports = function(ClientSession) {
-
-  ClientSession.saveLogSession = function(session) {
+kafkaProducer.on('ready', function () {
+  log.warn('Producer ready...')
+  kafkaClient.refreshMetadata([config.SESSION_TOPIC], function (error) {
+    log.debug('@refreshMetadata Error:', error)
+  })
+  /*
     kafkaProducer.send(
       [
         {
           topic: config.SESSION_TOPIC,
-          messages: JSON.stringify(session)
+          messages: JSON.stringify({ message: 'sample' })
         }
       ],
       function(error, data) {
         if (error) {
-          log.error('Failed to add session to kafka: ', error);
+          log.error(
+            `failed to send sample message to kafka topic: ${
+              config.SESSION_TOPIC
+            }`,
+            error
+          );
           return;
         }
-        log.debug('session added:',JSON.stringify(session), data);
+        log.debug('sample message sent', data);
       }
-    );
-  };
+    );*/
+})
 
-  ClientSession.getOnlineUsers = function(
+kafkaProducer.on('error', function (error) {
+  log.error('Producer preparation failed:', error)
+})
+
+module.exports = function (ClientSession) {
+
+  ClientSession.setSession = async (options) => {
+    const {RadiusAccountingMessage, member, nas} = options
+    const sessionId = RadiusAccountingMessage.getSessionId()
+    let session = {}
+    session.sessionId = sessionId
+    session.memberId = member.id
+    session.businessId = nas.businessId
+    session.nasId = nas.id
+    session.nasIp = RadiusAccountingMessage.getNasIp()
+    session.framedIpAddress = RadiusAccountingMessage.getAttribute('framedIpAddress')
+    session.creationDate = moment.utc(RadiusAccountingMessage.getAttribute('timestamp')).unix()
+    session.username = RadiusAccountingMessage.getAttribute('username')
+    session.accStatusType = RadiusAccountingMessage.getAttribute('acctStatusType')
+    session.sessionId = RadiusAccountingMessage.getAttribute('sessionId')
+    session.mac = RadiusAccountingMessage.getAttribute('mac')
+    session.download = RadiusAccountingMessage.getAttribute('download') || 0
+    session.upload = RadiusAccountingMessage.getAttribute('upload') || 0
+    session.sessionTime = !_.isUndefined(RadiusAccountingMessage.getAttribute('sessionTime')) ? RadiusAccountingMessage.getAttribute('sessionTime') : 0
+    session.groupIdentity = member.groupIdentity
+    session.groupIdentityId = member.groupIdentityId
+    session.groupIdentityType = member.groupIdentityType
+
+    var Usage = app.models.Usage
+    const calculatedUsage = await Usage.calculateUsage(sessionId, {
+      download: session.download,
+      upload: session.upload,
+      sessionTime: session.sessionTime
+    })
+    session = {...session, ...calculatedUsage}
+    log.debug(session)
+    await ClientSession.sendToBroker(session)
+  }
+
+  ClientSession.sendToBroker = async (session) => {
+    return Q.promise((resolve, reject) => {
+      kafkaProducer.send(
+        [
+          {
+            topic: config.SESSION_TOPIC,
+            messages: JSON.stringify(session)
+          }
+        ],
+        function (error, data) {
+          if (error) {
+            log.error('Failed to add session to kafka: ', error)
+            return reject(error)
+          }
+          log.debug('session added:', JSON.stringify(session), data)
+          return resolve()
+        }
+      )
+    })
+  }
+
+  ClientSession.getOnlineUsers = async (
     startDate,
+    endDate,
     businessId,
     skip,
     limit,
     cb
-  ) {
+  ) => {
     if (!businessId) {
-      return cb('Business Id not defined');
-    }
-    if (!startDate) {
-      return cb('Start date is not defined');
+      throw new Error('Business Id not defined')
     }
     if (skip == null) {
-      skip = 0;
+      skip = 0
     }
     if (limit == null) {
-      limit = 10;
+      limit = 10
     }
-    startDate = startDate.toString();
-    // find sessions of business
-    /*fields: { memberId: true, ipId: true, creationDate: true, expiresAt: false, businessId: false },*/
-    var Usage = app.models.Usage;
-    ClientSession.find(
-      {
-        where: { businessId: businessId },
-        order: 'expiresAt DESC',
-        limit: limit,
-        skip: skip
-      },
-      function(error, sessionList) {
-        if (error) {
-          log.error(error);
-          return cb(error);
-        }
-        // if no online users find, return no session
-        if (sessionList.length == 0) {
-          return cb(null, { data: 'noSession' });
-        } else {
-          // get owner info from getSubscriptionDate
-          // create array of getSessionsReport aggregation function
-          log.debug('Sessions length', sessionList.length);
-          if (sessionList.length > 0) {
-            Usage.getSessionUsage(sessionList)
-              .then(function(result) {
-                return cb(null, result);
-              })
-              .fail(function(error) {
-                log.error(error);
-                return cb(error);
-              });
-          } else {
-            return cb(null, { data: 'noReport' });
-          }
-        }
-      }
-    );
-  };
+    startDate = startDate ? startDate : (new Date()).remove({minutes: 2})
+    endDate = endDate ? endDate : (new Date()).add({minutes: 2})
+
+    const sessions = await db.getSessions(businessId, startDate, endDate, skip, limit)
+    return sessions
+    //return cb(null, {data: 'noReport'})
+  }
 
   ClientSession.remoteMethod('getOnlineUsers', {
     description: 'Get Online Users Report.',
@@ -129,7 +135,9 @@ module.exports = function(ClientSession) {
       {
         arg: 'startDate',
         type: 'number',
-        required: true
+      }, {
+        arg: 'endDate',
+        type: 'number',
       },
       {
         arg: 'businessId',
@@ -147,26 +155,24 @@ module.exports = function(ClientSession) {
         required: false
       }
     ],
-    returns: { arg: 'result', type: 'Object' }
-  });
+    returns: {arg: 'result', type: 'Object'}
+  })
 
-  ClientSession.getOnlineSessionCount = function(businessId, cb) {
-    if (!businessId) {
-      return cb('Business Id not defined');
-    }
-    log.debug('@getOnlineSessionCount : ', businessId);
-    ClientSession.find({ where: { businessId: businessId } }, function(
-      error,
-      count
-    ) {
-      if (error) {
-        log.error(error);
-        return cb(error);
+  ClientSession.getOnlineSessionCount = async (businessId, startDate, endDate) => {
+    try {
+      if (!businessId) {
+        return cb('Business Id not defined')
       }
-      log.debug(count.length);
-      return cb(null, { count: count.length });
-    });
-  };
+      log.debug('@getOnlineSessionCount : ', businessId)
+      startDate = startDate ? startDate : (new Date()).remove({minutes: 2})
+      endDate = endDate ? endDate : (new Date()).add({minutes: 2})
+      const result = await db.countSessions(businessId, startDate, endDate)
+      return {count: result.count}
+    } catch (error) {
+      log.error(error)
+      throw new Error('failed to get online session count')
+    }
+  }
 
   ClientSession.remoteMethod('getOnlineSessionCount', {
     description: 'Get Online Sessions Count.',
@@ -175,41 +181,28 @@ module.exports = function(ClientSession) {
         arg: 'businessId',
         type: 'string',
         required: true
+      },
+      {
+        arg: 'startDate',
+        type: 'number',
+      }, {
+        arg: 'endDate',
+        type: 'number',
       }
     ],
-    returns: { root: true }
-  });
+    returns: {root: true}
+  })
 
-  ClientSession.killOnlineSession = function(session, ctx, cb) {
-    log.debug('@killOnlineSession : ', session);
-    var businessId = ctx.currentUserId;
+  ClientSession.killOnlineSession = async (session) => {
+    log.debug('@killOnlineSession : ', session)
     if (!session.memberId) {
-      return cb('memberId is not defined');
+      return cb('memberId is not defined')
     }
-    var memberId = session.memberId;
-    var sessionId = session.id;
-    ClientSession.findOne(
-      {
-        where: {
-          and: [
-            { memberId: memberId },
-            { businessId: businessId },
-            { id: sessionId }
-          ]
-        }
-      },
-      function(error, loadedSession) {
-        if (error) {
-          return cb(error);
-        }
-        if (!loadedSession) {
-          return cb(new Error('session not found'));
-        }
-        radiusPod.sendPod(loadedSession);
-        return cb(null, { ok: true, killedSession: loadedSession });
-      }
-    );
-  };
+    var sessionId = session.id
+    const loadedSession = await db.getSessionsById(sessionId)
+    radiusPod.sendPod(loadedSession)
+    return {ok: true, killedSession: loadedSession}
+  }
 
   ClientSession.remoteMethod('killOnlineSession', {
     description: 'Kill Online Session',
@@ -219,8 +212,8 @@ module.exports = function(ClientSession) {
         type: 'object',
         required: true
       },
-      { arg: 'options', type: 'object', http: 'optionsFromRequest' }
+      {arg: 'options', type: 'object', http: 'optionsFromRequest'}
     ],
-    returns: { root: true }
-  });
-};
+    returns: {root: true}
+  })
+}

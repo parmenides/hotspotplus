@@ -9,13 +9,15 @@ app.directive('datePickerAdvance', [
   'translateNumberFilter',
   'translateFilter',
   'dashboardTiming',
+  'appMessenger',
   function(
     PREFIX,
     $log,
     persianDateFilter,
     translateNumberFilter,
     translateFilter,
-    dashboardTiming
+    dashboardTiming,
+    appMessenger
   ) {
     return {
       scope: {
@@ -23,6 +25,12 @@ app.directive('datePickerAdvance', [
       },
       controller: function($scope) {
         var DAY_MILLISECONDS = 24 * 60 * 60 * 1000;
+        if(!$scope.fromDate){
+          $scope.fromDate = new Date(new Date().getTime()).setHours(0, 0, 0, 0);
+        }
+        if(!$scope.endDate) {
+          $scope.endDate = new Date().setDate(new Date($scope.fromDate).getDate() + 7);
+        }
         $scope.dateFormats = [
           'dd-MMMM-yyyy',
           'yyyy/MM/dd',
@@ -30,9 +38,9 @@ app.directive('datePickerAdvance', [
           'shortDate',
           'MM'
         ];
-        $scope.isAdvance = true;
-        $scope.isBasic = false;
-        $scope.radioModel = 'monthly';
+        $scope.isAdvance = false;
+        $scope.isBasic = true;
+        //$scope.radioModel = 'monthly';
         $scope.showAdvance = function() {
           $scope.isAdvance = false;
           $scope.isBasic = true;
@@ -61,51 +69,16 @@ app.directive('datePickerAdvance', [
         $scope.dateFormat = $scope.dateFormats[0];
 
         $scope.getDates = function() {
-          var today = new Date();
-          var fromDate = today;
-          var endDate = today.setHours(23, 59, 59, 0);
-          switch ($scope.radioModel) {
-            case 'daily':
-              fromDate = new Date(today.getTime() - DAY_MILLISECONDS).setHours(
-                0,
-                0,
-                0,
-                0
-              );
-              if ($scope.advanceTime) {
-                delete $scope.advanceTime;
-              }
-              break;
-            case 'weekly':
-              fromDate = dashboardTiming.startOfWeek(today);
-              if ($scope.advanceTime) {
-                delete $scope.advanceTime;
-              }
-              break;
-            case 'monthly':
-              fromDate = dashboardTiming.startOfMonth(today);
-              if ($scope.advanceTime) {
-                delete $scope.advanceTime;
-              }
-              break;
-            case 'advance':
-              {
-                fromDate = new Date($scope.fromDate).setHours(0, 0, 0, 0);
-                endDate = new Date($scope.endDate).setHours(0, 0, 0, 0);
-                if (endDate <= fromDate) {
-                  appMessenger.showError('dashboard.endDateIncorrect');
-                  fromDate = new Date($scope.fromDate).setHours(0, 0, 0, 0);
-                  endDate = new Date(
-                    new Date($scope.fromDate).getTime() + DAY_MILLISECONDS
-                  ).setHours(23, 59, 59, 0);
-                }
-                $scope.advanceTime = dashboardTiming.advanceTime(
-                  fromDate,
-                  endDate
-                );
-              }
-              break;
+          fromDate = new Date($scope.fromDate).setHours(0, 0, 0, 0);
+          endDate = new Date($scope.endDate).setHours(0, 0, 0, 0);
+          if (endDate <= fromDate) {
+            appMessenger.showError('dashboard.endDateIncorrect');
+            return;
           }
+          $scope.advanceTime = dashboardTiming.advanceTime(
+            fromDate,
+            endDate
+          );
           var result = {};
           result.fromDate = fromDate;
           result.endDate = endDate;

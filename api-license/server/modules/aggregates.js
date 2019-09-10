@@ -151,124 +151,124 @@ module.exports.getMemberTrafficUsageReport = function (
   })
 }
 
-module.exports.getMemberUsage = function (
-  startDate,
-  endDate,
-  memberId,
-  businessId
-) {
-  return Q.Promise(function (resolve, reject) {
-    if (!businessId) {
-      return reject('business ID is undefined')
-    }
-    if (!startDate || !endDate || startDate.getTime) {
-      return reject('invalid startDate or endDate ', startDate, endDate)
-    }
-    self.getMemberUniqueSessionCount(businessId, memberId, startDate, endDate)
-      .then(function (sessionCount) {
-        if (sessionCount < 10) {
-          sessionCount = 10
-        }
-
-        elasticClient.search({
-          index: ACCOUNTING_INDEX,
-          body: {
-            query: {
-              bool: {
-                must: [
-                  {
-                    term: {
-                      businessId: businessId
-                    }
-                  },
-                  {
-                    term: {
-                      memberId: memberId
-                    }
-                  },
-                  {
-                    range: {
-                      creationDate: {
-                        gte: startDate,
-                        lt: endDate
-                      }
-                    }
-                  }
-                ]
-              }
-            },
-            aggs: {
-              group_by_sessionId: {
-                terms: {
-                  size: sessionCount,
-                  field: 'sessionId'
-                },
-                aggs: {
-                  sessionTime: {
-                    max: {
-                      field: 'sessionTime'
-                    }
-                  },
-                  totalUsage: {
-                    max: {
-                      field: 'totalUsage'
-                    }
-                  },
-                  upload: {
-                    max: {
-                      field: 'upload'
-                    }
-                  },
-                  download: {
-                    max: {
-                      field: 'download'
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }, (error, response) => {
-          if (error) {
-            log.error('@getMemberUsage', error)
-            return reject(error)
-          }
-          const body = response.body
-          const usage = {
-            memberId: memberId,
-            bulk: 0,
-            download: 0,
-            upload: 0,
-            sessionTime: 0
-          }
-
-          if (response.statusCode >= 300) {
-            log.error('request to elastic failed ', body)
-            return reject('request to elastic failed ')
-          }
-          if (
-            body &&
-            body.aggregations &&
-            body.aggregations.group_by_sessionId.buckets.length > 0
-          ) {
-            var results = body.aggregations.group_by_sessionId.buckets
-            for (var j = 0; j < results.length; j++) {
-              var usageItem = results[j]
-              usage.bulk += usageItem.totalUsage.value
-              usage.download += usageItem.download.value
-              usage.upload += usageItem.upload.value
-              usage.sessionTime += usageItem.sessionTime.value
-            }
-          } else {
-            log.warn('going to send empty usage', body)
-          }
-          return resolve(usage)
-        })
-      }).fail(function (error) {
-      return reject(error)
-    })
-  })
-}
+// module.exports.getMemberUsage = function (
+//   startDate,
+//   endDate,
+//   memberId,
+//   businessId
+// ) {
+//   return Q.Promise(function (resolve, reject) {
+//     if (!businessId) {
+//       return reject('business ID is undefined')
+//     }
+//     if (!startDate || !endDate || startDate.getTime) {
+//       return reject('invalid startDate or endDate ', startDate, endDate)
+//     }
+//     self.getMemberUniqueSessionCount(businessId, memberId, startDate, endDate)
+//       .then(function (sessionCount) {
+//         if (sessionCount < 10) {
+//           sessionCount = 10
+//         }
+//
+//         elasticClient.search({
+//           index: ACCOUNTING_INDEX,
+//           body: {
+//             query: {
+//               bool: {
+//                 must: [
+//                   {
+//                     term: {
+//                       businessId: businessId
+//                     }
+//                   },
+//                   {
+//                     term: {
+//                       memberId: memberId
+//                     }
+//                   },
+//                   {
+//                     range: {
+//                       creationDate: {
+//                         gte: startDate,
+//                         lt: endDate
+//                       }
+//                     }
+//                   }
+//                 ]
+//               }
+//             },
+//             aggs: {
+//               group_by_sessionId: {
+//                 terms: {
+//                   size: sessionCount,
+//                   field: 'sessionId'
+//                 },
+//                 aggs: {
+//                   sessionTime: {
+//                     max: {
+//                       field: 'sessionTime'
+//                     }
+//                   },
+//                   totalUsage: {
+//                     max: {
+//                       field: 'totalUsage'
+//                     }
+//                   },
+//                   upload: {
+//                     max: {
+//                       field: 'upload'
+//                     }
+//                   },
+//                   download: {
+//                     max: {
+//                       field: 'download'
+//                     }
+//                   }
+//                 }
+//               }
+//             }
+//           }
+//         }, (error, response) => {
+//           if (error) {
+//             log.error('@getMemberUsage', error)
+//             return reject(error)
+//           }
+//           const body = response.body
+//           const usage = {
+//             memberId: memberId,
+//             bulk: 0,
+//             download: 0,
+//             upload: 0,
+//             sessionTime: 0
+//           }
+//
+//           if (response.statusCode >= 300) {
+//             log.error('request to elastic failed ', body)
+//             return reject('request to elastic failed ')
+//           }
+//           if (
+//             body &&
+//             body.aggregations &&
+//             body.aggregations.group_by_sessionId.buckets.length > 0
+//           ) {
+//             var results = body.aggregations.group_by_sessionId.buckets
+//             for (var j = 0; j < results.length; j++) {
+//               var usageItem = results[j]
+//               usage.bulk += usageItem.totalUsage.value
+//               usage.download += usageItem.download.value
+//               usage.upload += usageItem.upload.value
+//               usage.sessionTime += usageItem.sessionTime.value
+//             }
+//           } else {
+//             log.warn('going to send empty usage', body)
+//           }
+//           return resolve(usage)
+//         })
+//       }).fail(function (error) {
+//       return reject(error)
+//     })
+//   })
+// }
 
 // module.exports.getLicenseBalance = function (licenseId) {
 //   return Q.Promise(function (resolve, reject) {

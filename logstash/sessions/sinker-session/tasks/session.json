@@ -1,27 +1,28 @@
 {
-	"name" : "Usage",
+	"name" : "session",
 	"kafka": "kfk1",
-	"topic": "usageTopic",
+	"topic": "sessionTopic",
 	"earliest" : true,
-	"consumerGroup" : "usage_consumer",
+	"consumerGroup" : "session_consumer",
 
 	"parser" : "json",
 	"clickhouse" : "ch1",
-	"tableName" : "Usage",
+	"tableName" : "Session",
 
 	"dims" : [
-		{"name" : "creationDate" , "type" : "UInt32"},
-		{"name" : "accStatusType" , "type" : "UInt8"},
 		{"name" : "sessionId" , "type" : "String"},
 		{"name" : "businessId" , "type" : "String"},
 		{"name" : "memberId" , "type" : "String"},
 		{"name" : "nasId" , "type" : "String"},
-		{"name" : "mac" , "type" : "String"},
+		{"name" : "nasIp" , "type" : "String"},
 		{"name" : "username" , "type" : "String"},
+		{"name" : "framedIpAddress" , "type" : "String"},
+		{"name" : "mac" , "type" : "String"},
+		{"name" : "creationDate" , "type" : "UInt32"},
 		{"name" : "download" , "type" : "UInt32"},
 		{"name" : "upload" , "type" : "UInt32"},
-		{"name" : "totalUsage" , "type" : "UInt32"},
-		{"name" : "sessionTime" , "type" : "UInt32"}
+		{"name" : "sessionTime" , "type" : "UInt32"},
+		{"name" : "accStatusType" , "type" : "UInt8"}
 	],
 
 	"@desc_of_autoSchema" : "auto schema will auto fetch the schema from clickhouse",

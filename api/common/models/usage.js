@@ -7,12 +7,15 @@ var aggregate = require('../../server/modules/aggregates')
 var config = require('../../server/modules/config.js')
 var logger = require('../../server/modules/logger')
 var log = logger.createLogger()
-const moment = require('moment')
 var _ = require('underscore')
 var kafkaClient = new kafka.KafkaClient({
   kafkaHost: process.env.KAFKA_IP + ':' + process.env.KAFKA_PORT
 })
+const db = require('../../server/modules/db.factory')
+
 var kafkaProducer = new kafka.Producer(kafkaClient, {partitionerType: 2})
+var redis = require('redis')
+var redisClient = redis.createClient(config.REDIS.PORT, config.REDIS.HOST)
 
 kafkaProducer.on('ready', function () {
   log.warn('Producer ready...')
@@ -26,25 +29,73 @@ kafkaProducer.on('error', function (error) {
 })
 
 module.exports = function (Usage) {
-  Usage.addUsageReport = function (usage) {
-    return Q.Promise(function (resolve, reject) {
-      usage.creationDate = moment.utc(usage.creationDate).unix()
-      kafkaProducer.send(
-        [
-          {
-            topic: config.ACCOUNTING_TOPIC,
-            messages: JSON.stringify(usage)
-          }
-        ],
-        function (error, data) {
+
+  Usage.calculateUsage = async (sessionId, usage) => {
+    let {upload, download, sessionTime} = usage
+    const previewsUsage = await Usage.getUsageFromCache(sessionId)
+    if (previewsUsage) {
+      upload = upload - previewsUsage.upload
+      download = download - previewsUsage.download
+      sessionTime = sessionTime - previewsUsage.sessionTime
+    }
+    return {upload, download, sessionTime}
+  }
+
+  Usage.getUsage = async (startDate, endDate, ctx) => {
+    var businessId = ctx.currentUserId
+    const result = await db.getBusinessUsage(businessId,startDate,endDate);
+    return result;
+  }
+
+  Usage.remoteMethod('getUsage', {
+    description: 'Get usage report.',
+    accepts: [
+      {
+        arg: 'startDate',
+        type: 'number',
+        required: true,
+        description: 'Start Date',
+      },
+      {
+        arg: 'endDate',
+        type: 'number',
+        required: true,
+        description: 'End Date',
+      },
+      {arg: 'options', type: 'object', http: 'optionsFromRequest'},
+    ],
+    returns: {root: true}
+  })
+
+  Usage.cacheUsage = function (usage) {
+    return Q.promise((resolve, reject) => {
+      redisClient.set(
+        usage.sessionId,
+        JSON.stringify(usage),
+        'EX',
+        3600
+        , function (error) {
           if (error) {
-            log.error('Failed to add accounting to kafka: ', error)
-            return
+            log.error('failed to cache usage', error)
+            throw new Error(error)
           }
-          log.debug('usage added:', data)
+          return resolve()
+        })
+    })
+  }
+
+  Usage.getUsageFromCache = function (sessionId) {
+    return Q.promise((resolve, reject) => {
+      redisClient.get(sessionId, (error, usage) => {
+        if (error) {
+          log.error(`failed to get usage from cache by id: ${sessionId}`)
+          throw new Error(error)
         }
-      )
-      return resolve()
+        if (!usage) {
+          return resolve()
+        }
+        return resolve(JSON.parse(usage))
+      })
     })
   }
 

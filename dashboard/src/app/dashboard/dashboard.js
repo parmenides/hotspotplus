@@ -26,6 +26,7 @@ app.controller('dashboard', [
 
     $scope.datePicker = true;
 
+
     // Load dashboard on page load
     loadDashboard();
 
@@ -47,6 +48,7 @@ app.controller('dashboard', [
         }
       });
     };
+
 
     // Prepare start date & end date for scope
     function getFromToDate(fromDate, endDate) {

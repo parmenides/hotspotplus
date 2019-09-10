@@ -84,7 +84,8 @@
     "videogular-overlay-play": "~0.7.0",
     "videogular-poster": "~0.7.0",
     "waves": "~0.7.2",
-    "numeral": "^2.0.6"
+    "numeral": "^2.0.6",
+    "human-format": "^0.10.1"
   },
   "resolutions": {
     "angular-cookies": "1.4.7",
