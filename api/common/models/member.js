@@ -2805,41 +2805,28 @@ module.exports = function (Member) {
     returns: {root: true}
   })
 
-  Member.loadMemberUsage = function (members) {
-    return Q.Promise(function (resolve, reject) {
-      var tasks = []
-      for (var i = 0; i < members.length; i++) {
-        var member = members[i]
-        if (member.subscriptionDate) {
-          var fromDate = member.subscriptionDate
-          var toDate = new Date().getTime()
-          var id = member.id
-          var businessId = member.businessId
-          tasks.push(
-            db.getMemberUsage(fromDate, toDate, id, businessId)
-          )
+  Member.loadMemberUsage = async (members) => {
+
+    var results = {}
+    for (const member of members) {
+      if (member.subscriptionDate) {
+        const fromDate = member.subscriptionDate
+        const toDate = new Date().getTime()
+        const id = member.id
+        const businessId = member.businessId
+
+        const memberTraffic = await db.getMemberUsage(fromDate, toDate, id, businessId)
+        const {memberId, upload, download, sessionTime} = memberTraffic
+        results[memberId] = {
+          upload,
+          download,
+          bulk: upload + download,
+          sessionTime,
+          memberId
         }
       }
-      Q.all(tasks)
-        .then(function (trafficResults) {
-          var results = {}
-          for (var j = 0; j < trafficResults.length; j++) {
-            var memberTraffic = trafficResults[j]
-            results[memberTraffic.memberId] = {
-              upload: memberTraffic.upload,
-              download: memberTraffic.download,
-              bulk: memberTraffic.upload + memberTraffic.download,
-              sessionTime: memberTraffic.sessionTime,
-              memberId: memberTraffic.memberId
-            }
-          }
-          return resolve(results)
-        })
-        .fail(function (error) {
-          log.error(error)
-          return reject(error)
-        })
-    })
+    }
+    return results
   }
 
   Member.remoteMethod('loadMemberUsage', {

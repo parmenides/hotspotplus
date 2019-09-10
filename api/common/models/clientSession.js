@@ -204,7 +204,7 @@ module.exports = function (ClientSession) {
     if (!session.memberId) {
       return cb('memberId is not defined')
     }
-    var sessionId = session.id
+    var sessionId = session.sessionId
     const loadedSession = await db.getSessionsById(sessionId)
     radiusPod.sendPod(loadedSession)
     return {ok: true, killedSession: loadedSession}

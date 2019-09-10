@@ -100,86 +100,86 @@ module.exports = function (Usage) {
     })
   }
 
-  Usage.getBusinessUsageReport = function (
-    startDate,
-    endDate,
-    businessId,
-    offset,
-    intervalMili,
-    monthDays
-  ) {
-    return Q.Promise(function (resolve, reject) {
-
-      offset = -offset * config.AGGREGATE.HOUR_MILLISECONDS
-      log.debug('@getTrafficUsage from elastic')
-      aggregate
-        .getUniqueSessionCount(businessId, startDate, endDate)
-        .then(function (sessionCount) {
-          if (sessionCount < config.DEFAULT_AGGREGATION_SIZE) {
-            sessionCount = config.DEFAULT_AGGREGATION_SIZE
-          }
-          aggregate
-            .getMemberTrafficUsageReport(
-              startDate,
-              endDate,
-              businessId,
-              offset,
-              intervalMili,
-              sessionCount
-            )
-            .then(function (memberResult) {
-              var response = {date: [], download: [], upload: []}
-              monthDays = monthDays || []
-              if (monthDays.length === 0) {
-                // calculate daily interval docs
-                for (var i = 0; i < memberResult.length; i++) {
-                  response.date[i] = memberResult[i].key
-                  response.download[i] = utility
-                    .toMByte(memberResult[i].download.value)
-                    .toFixed(0)
-                  response.upload[i] = utility
-                    .toMByte(memberResult[i].upload.value)
-                    .toFixed(0)
-                }
-              } else {
-                // sum of persian month days
-                var days = 0
-                var daysCounter = 0
-                for (var month in monthDays) {
-                  var downloads = 0
-                  var uploads = 0
-                  days += monthDays[month]
-                  for (daysCounter; daysCounter < days; daysCounter++) {
-                    downloads += memberResult[daysCounter].download.value
-                    uploads += memberResult[daysCounter].upload.value
-                  }
-                  // add calculated month to response
-                  response.date[month] = memberResult[days].key
-                  response.download[month] = utility
-                    .toMByte(downloads)
-                    .toFixed(2)
-                  response.upload[month] = utility
-                    .toMByte(uploads)
-                    .toFixed(2)
-                }
-              }
-              log.debug(
-                'process of getting traffic usage info completed successfully' +
-                JSON.stringify(response)
-              )
-              return resolve(response)
-            })
-            .fail(function (error) {
-              log.error(error)
-              return reject(error)
-            })
-        })
-        .fail(function (error) {
-          log.error(error)
-          return reject(error)
-        })
-    })
-  }
+  // Usage.getBusinessUsageReport = function (
+  //   startDate,
+  //   endDate,
+  //   businessId,
+  //   offset,
+  //   intervalMili,
+  //   monthDays
+  // ) {
+  //   return Q.Promise(function (resolve, reject) {
+  //
+  //     offset = -offset * config.AGGREGATE.HOUR_MILLISECONDS
+  //     log.debug('@getTrafficUsage from elastic')
+  //     aggregate
+  //       .getUniqueSessionCount(businessId, startDate, endDate)
+  //       .then(function (sessionCount) {
+  //         if (sessionCount < config.DEFAULT_AGGREGATION_SIZE) {
+  //           sessionCount = config.DEFAULT_AGGREGATION_SIZE
+  //         }
+  //         aggregate
+  //           .getMemberTrafficUsageReport(
+  //             startDate,
+  //             endDate,
+  //             businessId,
+  //             offset,
+  //             intervalMili,
+  //             sessionCount
+  //           )
+  //           .then(function (memberResult) {
+  //             var response = {date: [], download: [], upload: []}
+  //             monthDays = monthDays || []
+  //             if (monthDays.length === 0) {
+  //               // calculate daily interval docs
+  //               for (var i = 0; i < memberResult.length; i++) {
+  //                 response.date[i] = memberResult[i].key
+  //                 response.download[i] = utility
+  //                   .toMByte(memberResult[i].download.value)
+  //                   .toFixed(0)
+  //                 response.upload[i] = utility
+  //                   .toMByte(memberResult[i].upload.value)
+  //                   .toFixed(0)
+  //               }
+  //             } else {
+  //               // sum of persian month days
+  //               var days = 0
+  //               var daysCounter = 0
+  //               for (var month in monthDays) {
+  //                 var downloads = 0
+  //                 var uploads = 0
+  //                 days += monthDays[month]
+  //                 for (daysCounter; daysCounter < days; daysCounter++) {
+  //                   downloads += memberResult[daysCounter].download.value
+  //                   uploads += memberResult[daysCounter].upload.value
+  //                 }
+  //                 // add calculated month to response
+  //                 response.date[month] = memberResult[days].key
+  //                 response.download[month] = utility
+  //                   .toMByte(downloads)
+  //                   .toFixed(2)
+  //                 response.upload[month] = utility
+  //                   .toMByte(uploads)
+  //                   .toFixed(2)
+  //               }
+  //             }
+  //             log.debug(
+  //               'process of getting traffic usage info completed successfully' +
+  //               JSON.stringify(response)
+  //             )
+  //             return resolve(response)
+  //           })
+  //           .fail(function (error) {
+  //             log.error(error)
+  //             return reject(error)
+  //           })
+  //       })
+  //       .fail(function (error) {
+  //         log.error(error)
+  //         return reject(error)
+  //       })
+  //   })
+  // }
 
   // Usage.getSessionUsage = function (sessionList) {
   //   return Q.Promise(function (resolve, reject) {

@@ -188,7 +188,7 @@ AND creationDate>=toDateTime('${startDate}') AND creationDate<=toDateTime('${end
     },
     getSessionsById: (sessionId) => {
       if (!sessionId) {
-        throw new Error('business ID is undefined')
+        throw new Error('sessionId ID is undefined')
       }
       try {
         const sqlQuery = `SELECT  * FROM ${SESSION_TABLE} WHERE sessionId='${sessionId}'`
