@@ -8,13 +8,15 @@ app.directive('trafficUsage', [
   'translateFilter',
   'persianDateFilter',
   'translateNumberFilter',
+  'humanSizeFilter',
   function(
     PREFIX,
     $log,
     Business,
     translateFilter,
     persianDateFilter,
-    translateNumberFilter
+    translateNumberFilter,
+    humanSizeFilter
   ) {
     return {
       scope: {
@@ -85,12 +87,7 @@ app.directive('trafficUsage', [
                 callbacks: {
                   label: function(tooltipItems, data) {
                     return (
-                      data.datasets[tooltipItems.datasetIndex].label +
-                      ' : ' +
-                      translateNumberFilter(tooltipItems.yLabel) +
-                      ' ' +
-                      translateFilter('dashboard.Mbps') +
-                      ' '
+                      humanSizeFilter(tooltipItems.yLabel)
                     );
                   }
                 }
@@ -133,7 +130,7 @@ app.directive('trafficUsage', [
                     ticks: {
                       beginAtZero: true,
                       callback: function(value) {
-                        return translateNumberFilter(Number(value));
+                        return humanSizeFilter(Number(value));
                       }
                     }
                   }
