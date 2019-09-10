@@ -9,7 +9,7 @@ const LICENSE_TABLE = 'license.Charge'
 module.exports = (insert, query, uuid) => {
   return Object.freeze({
 
-    getBusinessUsageByInterval: (businessId,startDate, endDate) => {
+    getBusinessUsageByInterval: (businessId, startDate, endDate) => {
       if (!businessId) {
         throw new Error('businessId is undefined')
       }
@@ -19,8 +19,8 @@ module.exports = (insert, query, uuid) => {
 
       const from = moment.utc(startDate).format(config.DATABASE_DATE_FORMAT)
       const to = moment.utc(endDate).format(config.DATABASE_DATE_FORMAT)
-      const intervalInSeconds = 86400;
-      const durationInDays = moment(endDate).diff(moment(startDate),'days');
+      const intervalInSeconds = 86400
+      const durationInDays = moment(endDate).diff(moment(startDate), 'days')
       const sqlQuery = `
 SELECT * FROM (
 SELECT any(toStartOfInterval(creationDate,INTERVAL ${intervalInSeconds} second)) as date ,toInt32(SUM(upload)) as upload,toInt32(SUM(download)) download,toInt32(SUM(sessionTime)) as sessionTime
@@ -31,10 +31,10 @@ GROUP BY toStartOfInterval(creationDate,INTERVAL ${intervalInSeconds} second) or
 SELECT arrayJoin(timeSlots(toDateTime('${from}'), toUInt32(${intervalInSeconds}*${durationInDays}),${intervalInSeconds})) AS date
 ) USING (date) order by date
  `
-      log.warn(sqlQuery);
+      log.warn(sqlQuery)
       return query(sqlQuery).then((result) => {
         log.debug({result})
-        return result;
+        return result
       })
     },
     getMemberUsage: (startDate, endDate, memberId, businessId) => {
@@ -65,7 +65,7 @@ WHERE creationDate>=toDateTime('${from}') AND creationDate<=toDateTime('${to}') 
         }
       })
     },
-    getBusinessUsage: (businessId,startDate, endDate) => {
+    getBusinessUsage: (businessId, startDate, endDate) => {
       if (!businessId) {
         throw new Error('businessId is undefined')
       }
@@ -105,7 +105,7 @@ WHERE creationDate>=toDateTime('${from}') AND creationDate<=toDateTime('${to}') 
       ]
       return insert(CHARGE_TABLE, charge)
     },
-    getSessions: (businessId, fromDate, toDate, skip, limit) => {
+    getActiveSessionIds: (businessId, fromDate, toDate, skip, limit) => {
 
       if (!businessId) {
         throw new Error('business ID is undefined')
@@ -123,8 +123,7 @@ WHERE creationDate>=toDateTime('${from}') AND creationDate<=toDateTime('${to}') 
       try {
         const startDate = moment.utc(fromDate).format(config.DATABASE_DATE_FORMAT)
         const endDate = toDate ? moment.utc(toDate).format(config.DATABASE_DATE_FORMAT) : moment.utc().format(config.DATABASE_DATE_FORMAT)
-        const sqlQuery = `SELECT any(framedIpAddress) as framedIpAddress,sessionId,any(nasIp) as nasIp,
-any(username) as username,any(memberId) as memberId,toInt32(sum(download)) as download,toInt32(sum(upload)) as upload,toInt32(sum(sessionTime)) as sessionTime
+        const sqlQuery = `SELECT sessionId
  FROM ${SESSION_TABLE} WHERE businessId='${businessId}' AND creationDate>=toDateTime('${startDate}') AND creationDate<=toDateTime('${endDate}')
  AND (accStatusType=3 OR accStatusType=1) 
  GROUP BY sessionId LIMIT ${limit} OFFSET ${skip} `
@@ -135,6 +134,29 @@ any(username) as username,any(memberId) as memberId,toInt32(sum(download)) as do
         })
       } catch (error) {
         log.error('get sessions %j', error)
+        throw error
+      }
+    },
+    getSessionUsage: (sessionId) => {
+
+      if (!sessionId) {
+        throw new Error('session ID is undefined')
+      }
+
+      try {
+
+        const sqlQuery = `SELECT any(framedIpAddress) as framedIpAddress,sessionId,any(nasIp) as nasIp,
+any(username) as username,any(memberId) as memberId,toInt32(sum(download)) as download,toInt32(sum(upload)) as upload,toInt32(sum(sessionTime)) as sessionTime
+ FROM ${SESSION_TABLE} WHERE sessionId='${sessionId}'
+ GROUP BY sessionId `
+
+        log.warn({sqlQuery})
+        return query(sqlQuery).then((result) => {
+          log.warn({result})
+          return result[0]
+        })
+      } catch (error) {
+        log.error('get session usage %j', error)
         throw error
       }
     },

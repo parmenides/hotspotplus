@@ -2826,9 +2826,9 @@ module.exports = function (Member) {
           for (var j = 0; j < trafficResults.length; j++) {
             var memberTraffic = trafficResults[j]
             results[memberTraffic.memberId] = {
-              upload: utility.toMByte(memberTraffic.upload),
-              download: utility.toMByte(memberTraffic.download),
-              bulk: utility.toMByte(memberTraffic.totalUsage),
+              upload: memberTraffic.upload,
+              download: memberTraffic.download,
+              bulk: memberTraffic.upload + memberTraffic.download,
               sessionTime: memberTraffic.sessionTime,
               memberId: memberTraffic.memberId
             }

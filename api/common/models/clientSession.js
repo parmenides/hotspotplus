@@ -78,7 +78,7 @@ module.exports = function (ClientSession) {
       upload: session.upload,
       sessionTime: session.sessionTime
     })
-    await Usage.cacheUsage(session);
+    await Usage.cacheUsage(session)
     session = {...session, ...calculatedUsage}
     log.debug(session)
     await ClientSession.sendToBroker(session)
@@ -125,8 +125,13 @@ module.exports = function (ClientSession) {
     startDate = startDate ? startDate : (new Date()).remove({minutes: 2})
     endDate = endDate ? endDate : (new Date()).add({minutes: 2})
 
-    const sessions = await db.getSessions(businessId, startDate, endDate, skip, limit)
-    return sessions
+    const activeSessions = await db.getActiveSessionIds(businessId, startDate, endDate, skip, limit)
+    const sessions = []
+    for (const session of activeSessions) {
+      const sessionData = await db.getSessionUsage(session.sessionId)
+      sessions.push(sessionData);
+    }
+    return sessions;
     //return cb(null, {data: 'noReport'})
   }
 

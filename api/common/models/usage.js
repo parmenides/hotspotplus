@@ -33,15 +33,11 @@ module.exports = function (Usage) {
   Usage.calculateUsage = async (sessionId, usage) => {
     let {upload, download, sessionTime} = usage
     const previewsUsage = await Usage.getUsageFromCache(sessionId)
-    log.error({upload, download, sessionTime})
-    log.error({previewsUsage})
-    log.error({usage})
     if (previewsUsage) {
       upload = upload - previewsUsage.upload
       download = download - previewsUsage.download
       sessionTime = sessionTime - previewsUsage.sessionTime
     }
-    log.error({upload, download, sessionTime})
     return {upload, download, sessionTime}
   }
 
@@ -185,54 +181,54 @@ module.exports = function (Usage) {
     })
   }
 
-  Usage.getSessionUsage = function (sessionList) {
-    return Q.Promise(function (resolve, reject) {
-      var sessionReportFunc = []
-      var ownersDictionary = {}
-      for (var i = 0; i < sessionList.length; i++) {
-        var singleSession = sessionList[i]
-        var sessionId = singleSession.id
-        ownersDictionary[sessionId] = singleSession
-        sessionReportFunc.push(
-          aggregate.getSessionsReport(
-            singleSession.creationDate,
-            singleSession.memberId,
-            sessionId
-          )
-        )
-      }
-      // get report info from getSessionsReport aggregation
-      Q.all(sessionReportFunc)
-        .then(function (tasksResult) {
-          //log.debug( '@getSessionsReport', tasksResult )
-          var report = []
-          for (var n = 0; n < tasksResult.length; n++) {
-            var reportResult = tasksResult[n]
-            var sessionReportList = reportResult.sessionReports
-            var sessionCreationDate = reportResult.fromDate
-            var reportSessionId = reportResult.sessionId
-            var res = ownersDictionary[reportSessionId]
-            for (var k = 0; k < sessionReportList.length; k++) {
-              var sessionReport = sessionReportList[k]
-              res.download = utility
-                .toMByte(sessionReport.download.value)
-                .toFixed(0)
-              res.upload = utility
-                .toMByte(sessionReport.upload.value)
-                .toFixed(0)
-              res.sessionTime = (
-                (new Date().getTime() - sessionCreationDate) /
-                60000
-              ).toFixed(0)
-            }
-            report.push(res)
-          }
-          return resolve({data: report})
-        })
-        .fail(function (error) {
-          log.error(error)
-          return reject(error)
-        })
-    })
-  }
+  // Usage.getSessionUsage = function (sessionList) {
+  //   return Q.Promise(function (resolve, reject) {
+  //     var sessionReportFunc = []
+  //     var ownersDictionary = {}
+  //     for (var i = 0; i < sessionList.length; i++) {
+  //       var singleSession = sessionList[i]
+  //       var sessionId = singleSession.id
+  //       ownersDictionary[sessionId] = singleSession
+  //       sessionReportFunc.push(
+  //         aggregate.getSessionsReport(
+  //           singleSession.creationDate,
+  //           singleSession.memberId,
+  //           sessionId
+  //         )
+  //       )
+  //     }
+  //     // get report info from getSessionsReport aggregation
+  //     Q.all(sessionReportFunc)
+  //       .then(function (tasksResult) {
+  //         //log.debug( '@getSessionsReport', tasksResult )
+  //         var report = []
+  //         for (var n = 0; n < tasksResult.length; n++) {
+  //           var reportResult = tasksResult[n]
+  //           var sessionReportList = reportResult.sessionReports
+  //           var sessionCreationDate = reportResult.fromDate
+  //           var reportSessionId = reportResult.sessionId
+  //           var res = ownersDictionary[reportSessionId]
+  //           for (var k = 0; k < sessionReportList.length; k++) {
+  //             var sessionReport = sessionReportList[k]
+  //             res.download = utility
+  //               .toMByte(sessionReport.download.value)
+  //               .toFixed(0)
+  //             res.upload = utility
+  //               .toMByte(sessionReport.upload.value)
+  //               .toFixed(0)
+  //             res.sessionTime = (
+  //               (new Date().getTime() - sessionCreationDate) /
+  //               60000
+  //             ).toFixed(0)
+  //           }
+  //           report.push(res)
+  //         }
+  //         return resolve({data: report})
+  //       })
+  //       .fail(function (error) {
+  //         log.error(error)
+  //         return reject(error)
+  //       })
+  //   })
+  // }
 }
