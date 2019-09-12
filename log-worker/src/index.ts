@@ -1,32 +1,11 @@
 import express from 'express';
-//import dotenv from 'dotenv';
 import router from '../src/routes';
 import errorHandler from './utils/errorHandler';
 import logger from './utils/logger';
-/*
-import { processLogRequest } from './worker/logBuilder';
-import { testRunner } from './test';
-import {
-  addElasticIndexTemplates,
-  addDefaultIndex,
-} from './modules/initElasticsearch';
-*/
-//import { addDefaultQueue } from './modules/initRabbitMq';
-//import { enrichLogs } from './worker/enrich';
-//import { startEnrichScheduler } from './schedulers/enrichScheduler';
-//import { startCounterScheduler } from './schedulers/counterScheduler';
-import {
-  addDefaultIndex,
-  addElasticIndexTemplates,
-} from './modules/initElasticsearch';
-import { addDefaultQueue } from './modules/initRabbitMq';
-import { processLogRequest } from './worker/logBuilder';
-/*import { testRunner } from './test';*/
 
-//require('date-utils');
+import { testRunner } from './test';
+
 const log = logger.createLogger();
-//hey you
-//dotenv.load();
 const app = express();
 
 app.set('port', process.env.PORT || 3000);
@@ -47,16 +26,6 @@ app.use((req, resp, next) => {
 app.listen(app.get('port'), async () => {
   /*tslint:disable*/
   console.log('Add default queues...');
-  await addElasticIndexTemplates();
-  await addDefaultIndex();
-  //await addDefaultQueue();
-  //await processLogRequest();
-  /*
-  ================
-    await enrichLogs();
-    await startEnrichScheduler();
-    await startCounterScheduler();
-  */
   /*
   await clickHouse.queryNetflow({
     type: REPORT_TYPE.NETFLOW,

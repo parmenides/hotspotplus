@@ -34246,12 +34246,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
 
             /**
              * @ngdoc method
-             * @name lbServices.Report#downloadReport
+             * @name lbServices.Report#getAllReportConfig
              * @methodOf lbServices.Report
              *
              * @description
              *
-             * download report
+             * getAllReportConfig
              *
              * @param {Object=} parameters Request parameters.
              *
@@ -34260,7 +34260,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * @param {Object} postData Request data.
              *
-             *  - `resellerId` – `{string}` -
+             * This method does not accept any data. Supply an empty object.
              *
              * @param {function(Object,Object)=} successCb
              *   Success callback with two arguments: `value`, `responseHeaders`.
@@ -34277,8 +34277,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Report` object.)
              * </em>
              */
-            "downloadReport": {
-              url: urlBase + "/Reports/downloadReport",
+            "getAllReportConfig": {
+              url: urlBase + "/Reports/getAllReportConfig",
               method: "POST",
             },
 

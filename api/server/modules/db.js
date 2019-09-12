@@ -1,12 +1,8 @@
-const logger = require('./logger')
-const log = logger.createLogger()
-const moment = require('moment')
-const config = require('./config')
 const SESSION_TABLE = 'hotspotplus.Session'
 const CHARGE_TABLE = 'hotspotplus.Charge'
 const LICENSE_TABLE = 'license.Charge'
 
-module.exports = (insert, query, uuid) => {
+module.exports = (insert, query, uuid,config,moment,log) => {
   return Object.freeze({
 
     getBusinessUsageByInterval: (businessId, startDate, endDate) => {

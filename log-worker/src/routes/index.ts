@@ -4,5 +4,6 @@ import controller from '../controllers';
 const router = Router();
 
 router.get('/health', controller.health);
+router.post('/api/report/create', controller.createReport);
 
 export default router;

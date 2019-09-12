@@ -26,11 +26,10 @@ const createClickConnection = () => {
 
 const executeClickQuery = async (
   mainQuery: string,
-  clickClient: ClickHouse,
-):Promise<{rows:any,columns:any}> => {
+): Promise<{ rows: any; columns: any }> => {
   return new Promise((resolve, reject) => {
-    const stream: any = clickClient.query(mainQuery);
-
+    const clickHouseClient = createClickConnection();
+    const stream: any = clickHouseClient.query(mainQuery);
     let columns: ClickHouseColumnMeta[] = [];
     stream.on('metadata', (columnsInfo: ClickHouseColumnMeta[]) => {
       log.debug(`row meta:`, columnsInfo);

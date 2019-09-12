@@ -1,15 +1,16 @@
 
 
 create database hotspotplus
+
 create table IF NOT EXISTS hotspotplus.Charge(_id UUID,businessId String,type String,forThe String, amount UInt32,date DateTime)
 engine=MergeTree()
 PARTITION BY toStartOfMonth( date )
 ORDER BY (businessId)
-create table IF NOT EXISTS hotspotplus.Usage(creationDate DateTime,accStatusType UInt8, sessionId String, businessId String,memberId String,nasId String,mac String,username String,download UInt32,upload UInt32,totalUsage UInt32,
-sessionTime UInt32)
-engine=SummingMergeTree((sessionTime,download,upload,totalUsage))
-PARTITION BY toStartOfMonth( creationDate )
-ORDER BY ( sessionId,businessId,memberId,username,toStartOfInterval( creationDate ,INTERVAL 60 minute ) )
+--create table IF NOT EXISTS hotspotplus.Usage(creationDate DateTime,accStatusType UInt8, sessionId String, businessId String,memberId String,nasId String,mac String,username String,download UInt32,upload UInt32,totalUsage UInt32,
+--sessionTime UInt32)
+--engine=SummingMergeTree((sessionTime,download,upload,totalUsage))
+--PARTITION BY toStartOfMonth( creationDate )
+--ORDER BY ( sessionId,businessId,memberId,username,toStartOfInterval( creationDate ,INTERVAL 60 minute ) )
 
 --
 --CREATE MATERIALIZED VIEW hotspotplus.UsageView ENGINE=MergeTree()

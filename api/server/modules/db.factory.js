@@ -5,8 +5,9 @@ var log = logger.createLogger()
 const DB = require('./db')
 const ClickHouse = require('@apla/clickhouse')
 const moment = require('moment')
+const config = require('./config')
 
-module.exports = DB(insert, query, uuidv4)
+module.exports = DB(insert, query, uuidv4,config,moment,log)
 
 function createClickHouseClient () {
   return new ClickHouse({

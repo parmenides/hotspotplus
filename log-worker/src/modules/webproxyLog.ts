@@ -2,8 +2,6 @@ import logger from '../utils/logger';
 import moment from 'moment';
 import momentJ from 'moment-jalaali';
 
-const clickHouse: any = createClickConnection();
-
 import {
   LOCAL_TIME_ZONE,
   DATABASE_DATE_FORMAT,
@@ -12,8 +10,9 @@ import {
   REPORT_GREGORIAN_DATE_FORMAT,
 } from '../typings';
 import _ from 'lodash';
-import { executeClickQuery,createClickConnection} from '../utils/clickClient';
+import { executeClickQuery, createClickConnection } from '../utils/clickClient';
 const log = logger.createLogger();
+const clickHouse: any = createClickConnection();
 
 interface WebproxyReportResult {
   Router: string;
@@ -34,7 +33,7 @@ const queryWebproxyLog = async (
   log.debug({ webproxyReportRequestTask });
   const query = await createWebproxyQuery(webproxyReportRequestTask);
   log.debug({ query });
-  const {rows}  = await executeClickQuery(clickHouse, query);
+  const { rows } = await executeClickQuery(query);
   const webproxyRows = rows.map((row: any[]) => {
     return new ClickWebproxyLogRow(row);
   });
@@ -45,13 +44,11 @@ const createWebproxyQuery = (
   webproxyReportRequestTask: WebproxyReportRequestTask,
 ) => {
   let mainQuery: string = `  
-  SELECT * FROM logs.Session JOIN logs.WebProxy  ON Session.nasIp=WebProxy.nasIp 
+  SELECT * FROM hotspotplus.Session JOIN hotspotplus.WebProxy  ON Session.nasIp=WebProxy.nasIp 
   AND toStartOfInterval(Session.creationDate, INTERVAL 5 minute)=toStartOfInterval(WebProxy.receivedAt, INTERVAL 5 minute ) 
   `;
 
-  const whereParts: string[] = [
-      ' Session.framedIpAddress=WebProxy.memberIp '
-  ];
+  const whereParts: string[] = [' Session.framedIpAddress=WebProxy.memberIp '];
 
   if (webproxyReportRequestTask.fromDate) {
     whereParts.push(
@@ -95,7 +92,10 @@ const createWebproxyQuery = (
   if (webproxyReportRequestTask.businessId) {
     whereParts.push(` businessId='${webproxyReportRequestTask.businessId}' `);
   }
-  if (webproxyReportRequestTask.nas && webproxyReportRequestTask.nas.length > 0) {
+  if (
+    webproxyReportRequestTask.nas &&
+    webproxyReportRequestTask.nas.length > 0
+  ) {
     const nasIdQueries: string[] = [];
     for (const nas of webproxyReportRequestTask.nas) {
       nasIdQueries.push(` nasId='${nas.id}' `);
@@ -178,5 +178,5 @@ export class ClickWebproxyLogRow {
 }
 
 export default {
-    queryWebproxyLog,
+  queryWebproxyLog,
 };

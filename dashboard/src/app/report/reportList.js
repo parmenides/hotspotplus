@@ -42,22 +42,25 @@ app.controller('reportList', [
     var businessId = Session.business.id
     $scope.syslogReportCount = 0
     $scope.netflowReportCount = 0
-
-    Business.findById({ id: businessId }).$promise.then(
-      function(business) {
-        $scope.business = business;
-        if (business.netflowReportCount) {
-          $scope.netflowReportCount = business.netflowReportCount
-        }
-        if (business.syslogReportCount) {
-          $scope.syslogReportCount = business.syslogReportCount
-        }
+    $scope.allReports = [
+      'Netflow',
+      'WebProxy',
+      'DNS'
+    ]
+    Business.findById({id: businessId}).$promise.then(
+      function (business) {
+        $scope.business = business
+        // if (business.netflowReportCount) {
+        //   $scope.netflowReportCount = business.netflowReportCount
+        // }
+        // if (business.syslogReportCount) {
+        //   $scope.syslogReportCount = business.syslogReportCount
+        // }
       },
-      function(err) {
-        appMessenger.showError('error.generalError');
+      function (err) {
+        appMessenger.showError('error.generalError')
       }
-    );
-
+    )
 
     $scope.paginationOptions = {
       pageNumber: 1,
@@ -77,7 +80,7 @@ app.controller('reportList', [
       minRowsToShow: 11,
       columnDefs: [
         {
-          displayName: 'report.title',
+          displayName: 'report.reportTitle',
           field: 'title',
           enableHiding: false,
           enableSorting: false,
@@ -85,38 +88,46 @@ app.controller('reportList', [
           headerCellFilter: 'translate',
         },
         {
-          displayName: 'report.reportType',
+          displayName: 'report.type',
           field: 'type',
           enableHiding: false,
           enableSorting: false,
           enableColumnMenu: false,
           headerCellFilter: 'translate',
           cellTemplate:
-            '<div class="ui-grid-cell-contents" ng-if="row.entity.from">{{"report." + row.entity.type  | translate }}</div>',
+            '<div class="ui-grid-cell-contents" ng-if="row.entity.from">{{row.entity.type.capitalize()  }}</div>',
+
+        }, {
+          displayName: 'report.reportFormat',
+          field: 'type',
+          enableHiding: false,
+          enableSorting: false,
+          enableColumnMenu: false,
+          headerCellFilter: 'translate',
+          cellTemplate:
+            '<div class="ui-grid-cell-contents">{{row.entity.reportType.capitalize()  | translate }}</div>',
 
         },
         {
           displayName: 'report.from',
           field: 'from',
-          width: 250,
           enableHiding: false,
           enableSorting: false,
           enableColumnMenu: false,
           headerCellFilter: 'translate',
           cellTemplate:
-            '<div class="ui-grid-cell-contents" ng-if="row.entity.from">{{row.entity.from |  translateDate | translateNumber }}{{"general.,"| translate}}&nbsp;{{"general.hour"| translate}}:&nbsp;{{row.entity.from |  date : "HH:mm" | translateNumber }}</div>',
+            '<div class="ui-grid-cell-contents" ng-if="row.entity.from">{{row.entity.from |  translateDate | translateNumber }}</div>',
 
         },
         {
           displayName: 'report.to',
           field: 'to',
-          width: 250,
           enableHiding: false,
           enableSorting: false,
           enableColumnMenu: false,
           headerCellFilter: 'translate',
           cellTemplate:
-            '<div class="ui-grid-cell-contents" ng-if="row.entity.to">{{row.entity.to |  translateDate | translateNumber }}{{"general.,"| translate}}&nbsp;{{"general.hour"| translate}}:&nbsp;{{row.entity.to |  date : "HH:mm" | translateNumber }}</div>'
+            '<div class="ui-grid-cell-contents" ng-if="row.entity.to">{{row.entity.to |  translateDate | translateNumber }}</div>'
         },
         {
           displayName: 'report.status',
@@ -131,7 +142,7 @@ app.controller('reportList', [
         {
           displayName: 'general.download',
           field: 'download',
-          width: 70,
+          width: 100,
           enableColumnMenu: false,
           headerCellFilter: 'translate',
           cellClass: 'center',
@@ -142,7 +153,7 @@ app.controller('reportList', [
         {
           displayName: 'general.remove',
           field: 'delete',
-          width: 70,
+          width: 100,
           enableColumnMenu: false,
           headerCellFilter: 'translate',
           cellClass: 'center',
@@ -191,19 +202,23 @@ app.controller('reportList', [
                   '$scope',
                   '$uibModalInstance',
                   function ($scope, $uibModalInstance) {
+                    $scope.loading = false
                     $scope.options = {
                       cancelBtnLabel: 'general.cancel',
                       saveBtnLabel: 'general.save'
                     }
-                    if (param === 'ip') {
+                    if (param === 'Netflow') {
                       $scope.options.title = 'report.addNetflowReport'
                       $scope.options.reportType = 'netflow'
-                    } else {
-                      $scope.options.title = 'report.addSyslogReport'
-                      $scope.options.reportType = 'syslog'
+                    } else if (param === 'WebProxy') {
+                      $scope.options.title = 'report.addWebproxyReport'
+                      $scope.options.reportType = 'webproxy'
+                    } else if (param === 'DNS') {
+                      $scope.options.title = 'report.addWebproxyReport'
+                      $scope.options.reportType = 'dns'
                     }
-                    $scope.protocols = ['TCP/UDP','TCP', 'UDP']
-                    $scope.report.protocol= $scope.protocols[0]
+                    $scope.protocols = ['TCP/UDP', 'TCP', 'UDP']
+                    $scope.report.protocol = $scope.protocols[0]
                     // Persian date picker methods
                     $scope.dateOptions = {
                       formatYear: 'yy',
@@ -246,6 +261,7 @@ app.controller('reportList', [
                       $uibModalInstance.close()
                     }
                     $scope.save = function () {
+                      $scope.loading = true
                       if ($scope.report.member) {
                         var memberId = $scope.report.member[0].id
                         var username = $scope.report.member[0].username
@@ -283,8 +299,10 @@ app.controller('reportList', [
                         $scope.report.srcPort = englishNumberFilter($scope.report.srcPort)
                         $scope.report.srcPort = $scope.report.srcPort.split(' ')
                       }
+                      appMessenger.showSuccess('report.reportSaverWait')
                       Business.reports.create({id: businessId}, $scope.report).$promise.then(
                         function (res) {
+                          $scope.loading = false
                           appMessenger.showSuccess('report.createSuccessFull')
                           $uibModalInstance.close()
                           getPage()
@@ -324,9 +342,9 @@ app.controller('reportList', [
             function (res) {
               //todo: also delete related file
               if (row.entity.fileName) {
-                const fileName = row.entity.fileName;
-                const container = row.entity.container;
-                BigFile.removeFile({container:container,file:fileName})
+                const fileName = row.entity.fileName
+                const container = row.entity.container
+                BigFile.removeFile({container: container, file: fileName})
                   .$promise.then(
                   function (res) {
                     appMessenger.showSuccess('report.removeFileSuccessFull')

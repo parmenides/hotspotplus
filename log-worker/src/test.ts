@@ -1,23 +1,13 @@
-import { getRabbitMqChannel } from './utils/rabbitmq';
-import netflowModule from './modules/netflow';
-import {
-  NetflowReportRequestTask,
-  QUEUES,
-  REPORT_TYPE,
-  SyslogReportRequestTask,
-} from './typings';
-import { addEnrichmentTasks } from './schedulers/enrichScheduler';
-import momentTz from 'moment-timezone';
-import { countAndUpdateBusinessReports } from './schedulers/counterScheduler';
-
+import { createLogger } from './utils/logger';
+import render from "./reportEngine";
+const log = createLogger();
 export const testRunner = async () => {
-  const channel = await getRabbitMqChannel();
-  const LOG_WORKER_QUEUE = QUEUES.LOG_WORKER_QUEUE;
-
+  //const result = await render();
+  log.debug('Done');
   //const from = new Date('2019-03-25T00:00:00').getTime();
   //const to = new Date('2019-03-28T23:59:59').getTime();
 
-/*
+  /*
   const message: NetflowReportRequestTask = {
     type: REPORT_TYPE.NETFLOW,
     id: '123',

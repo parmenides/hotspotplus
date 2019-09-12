@@ -20,136 +20,136 @@ var self = this
  offset: number
  interval: number
  */
-module.exports.getMemberTrafficUsageReport = function (
-  startDate,
-  endDate,
-  businessId,
-  offset,
-  interval,
-  size
-) {
-  return Q.Promise(function (resolve, reject) {
-    if (offset == null) {
-      return reject('offset is undefined')
-    }
-    if (interval == null) {
-      return reject('interval is undefined')
-    }
-    if (!businessId) {
-      return reject('business ID is undefined')
-    }
-    if (!startDate || !endDate) {
-      return reject('startDate or endDate is undefined')
-    }
-
-    const query = {
-      query: {
-        bool: {
-          must: [
-            {
-              term: {
-                businessId: businessId
-              }
-            },
-            {
-              range: {
-                creationDate: {
-                  gte: startDate,
-                  lt: endDate
-                }
-              }
-            }
-          ]
-        }
-      },
-      aggs: {
-        usage: {
-          histogram: {
-            field: 'creationDate',
-            interval: interval,
-            min_doc_count: 0,
-            extended_bounds: {
-              min: startDate,
-              max: endDate
-            },
-            offset: offset
-          },
-          aggs: {
-            group_by_sessionId: {
-              terms: {
-                field: 'sessionId',
-                size: size
-              },
-              aggs: {
-                sessionTime: {
-                  max: {
-                    field: 'sessionTime'
-                  }
-                },
-                download: {
-                  max: {
-                    field: 'download'
-                  }
-                },
-                upload: {
-                  max: {
-                    field: 'upload'
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-
-    elasticClient.search({
-      index: ACCOUNTING_INDEX,
-      body: query
-    }, (error, response) => {
-      if (error) {
-        log.error('Error TrafficUsageReport: %j', error)
-        return reject(error)
-      }
-      const body = response.body
-      if (body.aggregations.usage.buckets) {
-        var result = []
-        var usageDates = body.aggregations.usage.buckets
-        for (var i = 0; i < usageDates.length; i++) {
-          var usage = {
-            key: usageDates[i].key,
-            download: {value: 0},
-            upload: {value: 0},
-            sessionTime: {value: 0}
-          }
-          if (usageDates[i].group_by_sessionId.buckets) {
-            var sessionIdGroup = usageDates[i].group_by_sessionId.buckets
-            //log.debug( "###########################@getTrafficUsageReport:" )
-            //log.debug( sessionIdGroup )
-            if (sessionIdGroup.length > 0) {
-              for (var j = 0; j < sessionIdGroup.length; j++) {
-                var sessionGroup = sessionIdGroup[j]
-                log.debug(sessionGroup)
-                usage.download.value += sessionGroup.download.value
-                usage.upload.value += sessionGroup.upload.value
-                usage.sessionTime.value += sessionGroup.sessionTime.value
-              }
-              result.push(usage)
-            } else {
-              result.push(usage)
-            }
-          } else {
-            result.push(usage)
-          }
-        }
-        return resolve(result)
-      } else {
-        log.debug(body)
-        return reject(body)
-      }
-    })
-  })
-}
+// module.exports.getMemberTrafficUsageReport = function (
+//   startDate,
+//   endDate,
+//   businessId,
+//   offset,
+//   interval,
+//   size
+// ) {
+//   return Q.Promise(function (resolve, reject) {
+//     if (offset == null) {
+//       return reject('offset is undefined')
+//     }
+//     if (interval == null) {
+//       return reject('interval is undefined')
+//     }
+//     if (!businessId) {
+//       return reject('business ID is undefined')
+//     }
+//     if (!startDate || !endDate) {
+//       return reject('startDate or endDate is undefined')
+//     }
+//
+//     const query = {
+//       query: {
+//         bool: {
+//           must: [
+//             {
+//               term: {
+//                 businessId: businessId
+//               }
+//             },
+//             {
+//               range: {
+//                 creationDate: {
+//                   gte: startDate,
+//                   lt: endDate
+//                 }
+//               }
+//             }
+//           ]
+//         }
+//       },
+//       aggs: {
+//         usage: {
+//           histogram: {
+//             field: 'creationDate',
+//             interval: interval,
+//             min_doc_count: 0,
+//             extended_bounds: {
+//               min: startDate,
+//               max: endDate
+//             },
+//             offset: offset
+//           },
+//           aggs: {
+//             group_by_sessionId: {
+//               terms: {
+//                 field: 'sessionId',
+//                 size: size
+//               },
+//               aggs: {
+//                 sessionTime: {
+//                   max: {
+//                     field: 'sessionTime'
+//                   }
+//                 },
+//                 download: {
+//                   max: {
+//                     field: 'download'
+//                   }
+//                 },
+//                 upload: {
+//                   max: {
+//                     field: 'upload'
+//                   }
+//                 }
+//               }
+//             }
+//           }
+//         }
+//       }
+//     }
+//
+//     elasticClient.search({
+//       index: ACCOUNTING_INDEX,
+//       body: query
+//     }, (error, response) => {
+//       if (error) {
+//         log.error('Error TrafficUsageReport: %j', error)
+//         return reject(error)
+//       }
+//       const body = response.body
+//       if (body.aggregations.usage.buckets) {
+//         var result = []
+//         var usageDates = body.aggregations.usage.buckets
+//         for (var i = 0; i < usageDates.length; i++) {
+//           var usage = {
+//             key: usageDates[i].key,
+//             download: {value: 0},
+//             upload: {value: 0},
+//             sessionTime: {value: 0}
+//           }
+//           if (usageDates[i].group_by_sessionId.buckets) {
+//             var sessionIdGroup = usageDates[i].group_by_sessionId.buckets
+//             //log.debug( "###########################@getTrafficUsageReport:" )
+//             //log.debug( sessionIdGroup )
+//             if (sessionIdGroup.length > 0) {
+//               for (var j = 0; j < sessionIdGroup.length; j++) {
+//                 var sessionGroup = sessionIdGroup[j]
+//                 log.debug(sessionGroup)
+//                 usage.download.value += sessionGroup.download.value
+//                 usage.upload.value += sessionGroup.upload.value
+//                 usage.sessionTime.value += sessionGroup.sessionTime.value
+//               }
+//               result.push(usage)
+//             } else {
+//               result.push(usage)
+//             }
+//           } else {
+//             result.push(usage)
+//           }
+//         }
+//         return resolve(result)
+//       } else {
+//         log.debug(body)
+//         return reject(body)
+//       }
+//     })
+//   })
+// }
 
 // module.exports.getMemberUsage = function (
 //   startDate,
@@ -370,118 +370,118 @@ module.exports.getMemberTrafficUsageReport = function (
  fromDate: number
  memberId: string
  */
-module.exports.getSessionsReport = function (fromDateInMs, memberId, sessionId) {
-  return Q.Promise(function (resolve, reject) {
-    if (!memberId) {
-      return reject('memberId is undefined')
-    }
-    if (!sessionId) {
-      return reject('sessionId is undefined')
-    }
-    // no subscription date so return zero for download, upload & session time
-    if (!fromDateInMs) {
-      return resolve({
-        fromDate: new Date().getTime(),
-        sessionReports: [
-          {
-            download: {value: 0},
-            upload: {value: 0},
-            sessionTime: {value: 0}
-          }
-        ],
-        memberId: memberId
-      })
-    }
-    var aggregate = {
-      group_by_sessionId: {
-        terms: {
-          field: 'sessionId'
-        },
-        aggs: {
-          sessionTime: {
-            max: {
-              field: 'sessionTime'
-            }
-          },
-          download: {
-            max: {
-              field: 'download'
-            }
-          },
-          upload: {
-            max: {
-              field: 'upload'
-            }
-          }
-        }
-      }
-    }
-
-    elasticClient.search({
-      index: ACCOUNTING_INDEX,
-      body: {
-        query: {
-          bool: {
-            must: [
-              {
-                term: {memberId: memberId}
-              },
-              {
-                term: {sessionId: sessionId}
-              },
-              {
-                range: {
-                  creationDate: {
-                    gte: fromDateInMs
-                  }
-                }
-              }
-            ]
-          }
-        },
-        aggs: aggregate
-      },
-    }, (error, response) => {
-      if (error) {
-        log.error('@getSessionsReport: ', error)
-        return reject(error)
-      }
-      const body = response.body;
-
-      if (!body.aggregations) {
-        return resolve({
-          fromDate: fromDateInMs,
-          sessionReports: [
-            {
-              download: {value: 0},
-              upload: {value: 0},
-              sessionTime: {value: 0}
-            }
-          ],
-          memberId: memberId
-        })
-      } else {
-        var sessionReports =
-          body.aggregations.group_by_sessionId.buckets
-        if (!sessionReports || sessionReports.length === 0) {
-          sessionReports = [
-            {
-              download: {value: 0},
-              upload: {value: 0},
-              sessionTime: {value: 0}
-            }
-          ]
-        }
-        return resolve({
-          fromDate: fromDateInMs,
-          sessionReports: sessionReports,
-          sessionId: sessionId,
-          memberId: memberId
-        })
-      }
-    })
-  })
-}
+// module.exports.getSessionsReport = function (fromDateInMs, memberId, sessionId) {
+//   return Q.Promise(function (resolve, reject) {
+//     if (!memberId) {
+//       return reject('memberId is undefined')
+//     }
+//     if (!sessionId) {
+//       return reject('sessionId is undefined')
+//     }
+//     // no subscription date so return zero for download, upload & session time
+//     if (!fromDateInMs) {
+//       return resolve({
+//         fromDate: new Date().getTime(),
+//         sessionReports: [
+//           {
+//             download: {value: 0},
+//             upload: {value: 0},
+//             sessionTime: {value: 0}
+//           }
+//         ],
+//         memberId: memberId
+//       })
+//     }
+//     var aggregate = {
+//       group_by_sessionId: {
+//         terms: {
+//           field: 'sessionId'
+//         },
+//         aggs: {
+//           sessionTime: {
+//             max: {
+//               field: 'sessionTime'
+//             }
+//           },
+//           download: {
+//             max: {
+//               field: 'download'
+//             }
+//           },
+//           upload: {
+//             max: {
+//               field: 'upload'
+//             }
+//           }
+//         }
+//       }
+//     }
+//
+//     elasticClient.search({
+//       index: ACCOUNTING_INDEX,
+//       body: {
+//         query: {
+//           bool: {
+//             must: [
+//               {
+//                 term: {memberId: memberId}
+//               },
+//               {
+//                 term: {sessionId: sessionId}
+//               },
+//               {
+//                 range: {
+//                   creationDate: {
+//                     gte: fromDateInMs
+//                   }
+//                 }
+//               }
+//             ]
+//           }
+//         },
+//         aggs: aggregate
+//       },
+//     }, (error, response) => {
+//       if (error) {
+//         log.error('@getSessionsReport: ', error)
+//         return reject(error)
+//       }
+//       const body = response.body;
+//
+//       if (!body.aggregations) {
+//         return resolve({
+//           fromDate: fromDateInMs,
+//           sessionReports: [
+//             {
+//               download: {value: 0},
+//               upload: {value: 0},
+//               sessionTime: {value: 0}
+//             }
+//           ],
+//           memberId: memberId
+//         })
+//       } else {
+//         var sessionReports =
+//           body.aggregations.group_by_sessionId.buckets
+//         if (!sessionReports || sessionReports.length === 0) {
+//           sessionReports = [
+//             {
+//               download: {value: 0},
+//               upload: {value: 0},
+//               sessionTime: {value: 0}
+//             }
+//           ]
+//         }
+//         return resolve({
+//           fromDate: fromDateInMs,
+//           sessionReports: sessionReports,
+//           sessionId: sessionId,
+//           memberId: memberId
+//         })
+//       }
+//     })
+//   })
+// }
 
 /* Return Daily Internet Usage of a Member
  businessId, memberId : string
@@ -600,129 +600,129 @@ module.exports.getMemberDailyUsage = function (businessId, memberId, startDate) 
  startDate, endDate : number
  businessId: string
  */
-module.exports.getUniqueSessionCount = function (
-  businessId,
-  startDate,
-  endDate
-) {
-  return Q.Promise(function (resolve, reject) {
-    if (!startDate) {
-      return reject('startDate not defined')
-    }
-    if (!endDate) {
-      return reject('endDate not defined')
-    }
-    log.debug('@getUniqueSessionCount')
-
-    // Get Unique Session Count from ElasticSearch
-    elasticClient.search({
-      index: ACCOUNTING_INDEX,
-      body: {
-        query: {
-          bool: {
-            must: [
-              {
-                term: {
-                  businessId: businessId
-                }
-              },
-              {
-                range: {
-                  creationDate: {
-                    gte: startDate,
-                    lte: endDate
-                  }
-                }
-              }
-            ]
-          }
-        },
-        aggs: {
-          distinct_session: {
-            cardinality: {
-              field: 'sessionId'
-            }
-          }
-        }
-      }
-    }, (error, response) => {
-      if (error) {
-        log.error('@getUniqueSessionCount: ', error)
-        return reject(error)
-      }
-      const body = response.body;
-
-      if (
-        !body.aggregations ||
-        !body.aggregations.distinct_session ||
-        !body.aggregations.distinct_session.value
-      ) {
-        return resolve(0)
-      }
-      var result = body.aggregations.distinct_session.value
-      return resolve(result)
-    })
-  })
-}
+// module.exports.getUniqueSessionCount = function (
+//   businessId,
+//   startDate,
+//   endDate
+// ) {
+//   return Q.Promise(function (resolve, reject) {
+//     if (!startDate) {
+//       return reject('startDate not defined')
+//     }
+//     if (!endDate) {
+//       return reject('endDate not defined')
+//     }
+//     log.debug('@getUniqueSessionCount')
+//
+//     // Get Unique Session Count from ElasticSearch
+//     elasticClient.search({
+//       index: ACCOUNTING_INDEX,
+//       body: {
+//         query: {
+//           bool: {
+//             must: [
+//               {
+//                 term: {
+//                   businessId: businessId
+//                 }
+//               },
+//               {
+//                 range: {
+//                   creationDate: {
+//                     gte: startDate,
+//                     lte: endDate
+//                   }
+//                 }
+//               }
+//             ]
+//           }
+//         },
+//         aggs: {
+//           distinct_session: {
+//             cardinality: {
+//               field: 'sessionId'
+//             }
+//           }
+//         }
+//       }
+//     }, (error, response) => {
+//       if (error) {
+//         log.error('@getUniqueSessionCount: ', error)
+//         return reject(error)
+//       }
+//       const body = response.body;
+//
+//       if (
+//         !body.aggregations ||
+//         !body.aggregations.distinct_session ||
+//         !body.aggregations.distinct_session.value
+//       ) {
+//         return resolve(0)
+//       }
+//       var result = body.aggregations.distinct_session.value
+//       return resolve(result)
+//     })
+//   })
+// }
 
 /* Return All Unique Session Count from Accounting UsageReport based on startDate, endDate
  startDate, endDate : number
  */
-module.exports.getAllUniqueSessionCount = function (startDate, endDate) {
-  return Q.Promise(function (resolve, reject) {
-    if (!startDate) {
-      return reject('startDate not defined')
-    }
-    if (!endDate) {
-      return reject('endDate not defined')
-    }
-    log.debug('@getAllUniqueSessionCount')
-
-    // Get Unique Session Count from ElasticSearch
-    elasticClient.search({
-      index: ACCOUNTING_INDEX,
-      body: {
-        query: {
-          bool: {
-            must: [
-              {
-                range: {
-                  creationDate: {
-                    gte: startDate,
-                    lte: endDate
-                  }
-                }
-              }
-            ]
-          }
-        },
-        aggs: {
-          distinct_session: {
-            cardinality: {
-              field: 'sessionId'
-            }
-          }
-        }
-      }
-    }, (error, response) => {
-      if (error) {
-        log.error('@getAllUniqueSessionCount: ', error)
-        return reject(error)
-      }
-      const body = response.body;
-
-      if (
-        !body.aggregations ||
-        !body.aggregations.distinct_session ||
-        !body.aggregations.distinct_session.value
-      ) {
-        return resolve(0)
-      }
-      var result = body.aggregations.distinct_session.value
-      return resolve(result)
-    })
-  })
-}
+// module.exports.getAllUniqueSessionCount = function (startDate, endDate) {
+//   return Q.Promise(function (resolve, reject) {
+//     if (!startDate) {
+//       return reject('startDate not defined')
+//     }
+//     if (!endDate) {
+//       return reject('endDate not defined')
+//     }
+//     log.debug('@getAllUniqueSessionCount')
+//
+//     // Get Unique Session Count from ElasticSearch
+//     elasticClient.search({
+//       index: ACCOUNTING_INDEX,
+//       body: {
+//         query: {
+//           bool: {
+//             must: [
+//               {
+//                 range: {
+//                   creationDate: {
+//                     gte: startDate,
+//                     lte: endDate
+//                   }
+//                 }
+//               }
+//             ]
+//           }
+//         },
+//         aggs: {
+//           distinct_session: {
+//             cardinality: {
+//               field: 'sessionId'
+//             }
+//           }
+//         }
+//       }
+//     }, (error, response) => {
+//       if (error) {
+//         log.error('@getAllUniqueSessionCount: ', error)
+//         return reject(error)
+//       }
+//       const body = response.body;
+//
+//       if (
+//         !body.aggregations ||
+//         !body.aggregations.distinct_session ||
+//         !body.aggregations.distinct_session.value
+//       ) {
+//         return resolve(0)
+//       }
+//       var result = body.aggregations.distinct_session.value
+//       return resolve(result)
+//     })
+//   })
+// }
 
 // module.exports.getCharges = function (businessId, startDate, skip, limit) {
 //   return Q.Promise(function (resolve, reject) {
@@ -798,395 +798,395 @@ module.exports.getAllUniqueSessionCount = function (startDate, endDate) {
  startDate, endDate : number
  businessId, memberId: string
  */
-module.exports.getMemberUniqueSessionCount = function (
-  businessId,
-  memberId,
-  startDate,
-  endDate
-) {
-  return Q.Promise(function (resolve, reject) {
-    if (!startDate) {
-      return reject('startDate not defined')
-    }
-    if (!endDate) {
-      return reject('endDate not defined')
-    }
-    log.debug('@getMemberUniqueSessionCount')
-
-    const query = {
-      query: {
-        bool: {
-          must: [
-            {
-              term: {
-                businessId: businessId
-              }
-            },
-            {
-              term: {
-                memberId: memberId
-              }
-            },
-            {
-              range: {
-                creationDate: {
-                  gte: startDate,
-                  lte: endDate
-                }
-              }
-            }
-          ]
-        }
-      },
-      aggs: {
-        distinct_session: {
-          cardinality: {
-            field: 'sessionId'
-          }
-        }
-      }
-    }
-    elasticClient.search({
-      index: ACCOUNTING_INDEX,
-      body: query
-    }, (error, response) => {
-      if (error) {
-        log.error('@getMemberUniqueSessionCount: ', error)
-        return reject(error)
-      }
-      const body = response.body;
-
-      if (
-        !body.aggregations ||
-        !body.aggregations.distinct_session ||
-        !body.aggregations.distinct_session.value
-      ) {
-        return resolve(0)
-      }
-      var result = body.aggregations.distinct_session.value
-      return resolve(result)
-    })
-  })
-}
-
-module.exports.getAllSessions = function (startDate, endDate, size) {
-  return Q.Promise(function (resolve, reject) {
-    if (!startDate) {
-      return reject('startDate not defined')
-    }
-    if (!endDate) {
-      return reject('endDate not defined')
-    }
-    size = size || 10000
-    var query = {
-      query: {
-        bool: {
-          must_not: {
-            terms: {
-              accStatusType: [0]
-            }
-          },
-          must: [
-            {
-              range: {
-                creationDate: {
-                  gte: startDate,
-                  lte: endDate
-                }
-              }
-            }
-          ]
-        }
-      },
-      aggs: {
-        sessions: {
-          terms: {
-            field: 'sessionId',
-            size: size
-          }
-        }
-      }
-    }
-    elasticClient.search({
-      index: ACCOUNTING_INDEX,
-      body: query,
-      size: size
-    }, (error, response) => {
-      if (error) {
-        log.error('@getAllSessions: ', error)
-        return reject(error)
-      }
-      const body = response.body
-      if (
-        !body ||
-        !body.aggregations ||
-        !body.aggregations.sessions ||
-        !body.aggregations.sessions.buckets
-      ) {
-        log.warn('aggregation result is empty: ', body)
-        log.warn(query)
-        return resolve([])
-      }
-      var buckets = body.aggregations.sessions.buckets
-      var sessionIds = []
-      for (var i = 0; i < buckets.length; i++) {
-        sessionIds.push(buckets[i].key)
-      }
-      return resolve(sessionIds)
-    })
-  })
-}
-
-module.exports.getAggregatedUsageBySessionId = function (sessionId) {
-  return Q.Promise(function (resolve, reject) {
-    if (!sessionId) {
-      return reject('sessionId not defined')
-    }
-    var size = 0
-    var query = {
-      query: {
-        term: {
-          sessionId: sessionId
-        }
-      },
-      aggs: {
-        sessionTime: {
-          max: {
-            field: 'sessionTime'
-          }
-        },
-        download: {
-          max: {
-            field: 'download'
-          }
-        },
-        upload: {
-          max: {
-            field: 'upload'
-          }
-        },
-        creationDate: {
-          max: {
-            field: 'creationDate'
-          }
-        },
-        minCreationDate: {
-          min: {
-            field: 'creationDate'
-          }
-        },
-        accountingDoc: {
-          terms: {
-            field: 'sessionId',
-            size: 1
-          },
-          aggs: {
-            lastAccountingDoc: {
-              top_hits: {
-                _source: {
-                  includes: [
-                    'businessId',
-                    'nasId',
-                    'username',
-                    'memberId',
-                    'mac',
-                    'creationDateObj'
-                  ]
-                },
-                size: 1
-              }
-            }
-          }
-        }
-      }
-    }
-    elasticClient.search({
-      index: ACCOUNTING_INDEX,
-      size: size,
-      body: query
-    }, (error, response) => {
-      if (error) {
-        log.error('@getAllSessions: ', error)
-        return reject(error)
-      }
-
-      const body = response.body
-      const aggregations = body.aggregations
-
-      if (
-        !aggregations.download ||
-        aggregations.download.value === undefined ||
-        !aggregations.upload ||
-        aggregations.upload.value === undefined
-      ) {
-        log.warn('session data not found:', body)
-        log.warn(query)
-        return reject('data not found for this session')
-      }
-
-      if (
-        !aggregations.accountingDoc ||
-        !aggregations.accountingDoc.buckets ||
-        aggregations.accountingDoc.buckets.length === 0
-      ) {
-        return reject('top heat aggregated result is empty')
-      }
-
-      var result =
-        aggregations.accountingDoc.buckets[0].lastAccountingDoc.hits.hits[0]
-          ._source
-      result.accStatusType = 0
-      result.sessionId = sessionId
-      result.download = aggregations.download.value
-      result.upload = aggregations.upload.value
-      result.totalUsage = result.upload + result.download
-      result.sessionTime = aggregations.sessionTime.value
-      result.creationDate = aggregations.creationDate.value
-      return resolve({
-        aggregatedResult: result,
-        range: {
-          fromDateInMs: aggregations.minCreationDate.value,
-          toDateInMs: result.creationDate
-        }
-      })
-    })
-  })
-}
-
-module.exports.deleteBySessionId = function (
-  fromDateInMs,
-  toDateInMs,
-  sessionId
-) {
-  return Q.Promise(function (resolve, reject) {
-    if (!sessionId) {
-      return reject('sessionId not defined')
-    }
-    const query = {
-      query: {
-        bool: {
-          must_not: {
-            terms: {
-              accStatusType: [0]
-            }
-          },
-          must: [
-            {
-              term: {
-                sessionId: sessionId
-              }
-            },
-            {
-              range: {
-                creationDate: {
-                  gte: fromDateInMs,
-                  lte: toDateInMs + 1000
-                }
-              }
-            }
-          ]
-        }
-      }
-    }
-    elasticClient.deleteByQuery({
-      index: ACCOUNTING_INDEX,
-      body: query
-    }, (error, response) => {
-      if (error) {
-        log.error('@deleteBySessionId: ', error)
-        return reject(error)
-      }
-      const body = response.body
-      if (!body || body.deleted === undefined) {
-        log.error('delete failed: ', body)
-        log.error(query)
-        return reject('delete failed')
-      }
-      if (body.deleted === 0) {
-        log.warn('no document deleted for this session', sessionId)
-        log.error(query)
-      } else {
-        log.debug(
-          'Docs deleted for this session:',
-          sessionId,
-          ' : ',
-          body.deleted
-        )
-      }
-      return resolve(body)
-    })
-  })
-}
-
-module.exports.cleanupDoc = function (docType, fromDateInMs, toDateInMs) {
-  return Q.Promise(function (resolve, reject) {
-    if (!docType || !fromDateInMs || !toDateInMs) {
-      return reject('not enough parameters to remove docs!')
-    }
-    var SELECTED_INDEX
-    if (docType === 'accounting') {
-      SELECTED_INDEX = ACCOUNTING_INDEX
-    }
-    var query = {
-      query: {
-        bool: {
-          must: [
-            {
-              range: {
-                creationDate: {
-                  gte: fromDateInMs,
-                  lte: toDateInMs
-                }
-              }
-            }
-          ]
-        }
-      }
-    }
-
-    elasticClient.deleteByQuery({
-      index: SELECTED_INDEX,
-      body: query
-    }, (error, response) => {
-      if (error) {
-        log.error('@cleanupElastic: ', error)
-        return reject(error)
-      }
-      const body = response.body
-      if (!body || body.deleted === undefined) {
-        log.error('cleanupElastic failed: ', body)
-        log.error(query)
-        return reject('cleanupElastic failed')
-      }
-      if (body.deleted === 0) {
-        log.warn('nothing to clean up')
-        log.error(query)
-      } else {
-        log.debug('Docs cleaned up:', body.deleted)
-      }
-      return resolve(body)
-    })
-  })
-}
-
-module.exports.addAccountingDoc = function (doc) {
-  return Q.Promise(function (resolve, reject) {
-    elasticClient.index({
-      index: ACCOUNTING_INDEX,
-      body: doc
-    }, (error, response) => {
-      if (error) {
-        log.error(error)
-        return reject(error)
-      }
-      const body = response.body
-      if (!body || !body._id) {
-        log.error(body)
-        return reject('body result is empty')
-      }
-      log.debug('usage report created: ', body)
-      return resolve()
-
-    })
-  })
-}
+// module.exports.getMemberUniqueSessionCount = function (
+//   businessId,
+//   memberId,
+//   startDate,
+//   endDate
+// ) {
+//   return Q.Promise(function (resolve, reject) {
+//     if (!startDate) {
+//       return reject('startDate not defined')
+//     }
+//     if (!endDate) {
+//       return reject('endDate not defined')
+//     }
+//     log.debug('@getMemberUniqueSessionCount')
+//
+//     const query = {
+//       query: {
+//         bool: {
+//           must: [
+//             {
+//               term: {
+//                 businessId: businessId
+//               }
+//             },
+//             {
+//               term: {
+//                 memberId: memberId
+//               }
+//             },
+//             {
+//               range: {
+//                 creationDate: {
+//                   gte: startDate,
+//                   lte: endDate
+//                 }
+//               }
+//             }
+//           ]
+//         }
+//       },
+//       aggs: {
+//         distinct_session: {
+//           cardinality: {
+//             field: 'sessionId'
+//           }
+//         }
+//       }
+//     }
+//     elasticClient.search({
+//       index: ACCOUNTING_INDEX,
+//       body: query
+//     }, (error, response) => {
+//       if (error) {
+//         log.error('@getMemberUniqueSessionCount: ', error)
+//         return reject(error)
+//       }
+//       const body = response.body;
+//
+//       if (
+//         !body.aggregations ||
+//         !body.aggregations.distinct_session ||
+//         !body.aggregations.distinct_session.value
+//       ) {
+//         return resolve(0)
+//       }
+//       var result = body.aggregations.distinct_session.value
+//       return resolve(result)
+//     })
+//   })
+// }
+//
+// module.exports.getAllSessions = function (startDate, endDate, size) {
+//   return Q.Promise(function (resolve, reject) {
+//     if (!startDate) {
+//       return reject('startDate not defined')
+//     }
+//     if (!endDate) {
+//       return reject('endDate not defined')
+//     }
+//     size = size || 10000
+//     var query = {
+//       query: {
+//         bool: {
+//           must_not: {
+//             terms: {
+//               accStatusType: [0]
+//             }
+//           },
+//           must: [
+//             {
+//               range: {
+//                 creationDate: {
+//                   gte: startDate,
+//                   lte: endDate
+//                 }
+//               }
+//             }
+//           ]
+//         }
+//       },
+//       aggs: {
+//         sessions: {
+//           terms: {
+//             field: 'sessionId',
+//             size: size
+//           }
+//         }
+//       }
+//     }
+//     elasticClient.search({
+//       index: ACCOUNTING_INDEX,
+//       body: query,
+//       size: size
+//     }, (error, response) => {
+//       if (error) {
+//         log.error('@getAllSessions: ', error)
+//         return reject(error)
+//       }
+//       const body = response.body
+//       if (
+//         !body ||
+//         !body.aggregations ||
+//         !body.aggregations.sessions ||
+//         !body.aggregations.sessions.buckets
+//       ) {
+//         log.warn('aggregation result is empty: ', body)
+//         log.warn(query)
+//         return resolve([])
+//       }
+//       var buckets = body.aggregations.sessions.buckets
+//       var sessionIds = []
+//       for (var i = 0; i < buckets.length; i++) {
+//         sessionIds.push(buckets[i].key)
+//       }
+//       return resolve(sessionIds)
+//     })
+//   })
+// }
+//
+// module.exports.getAggregatedUsageBySessionId = function (sessionId) {
+//   return Q.Promise(function (resolve, reject) {
+//     if (!sessionId) {
+//       return reject('sessionId not defined')
+//     }
+//     var size = 0
+//     var query = {
+//       query: {
+//         term: {
+//           sessionId: sessionId
+//         }
+//       },
+//       aggs: {
+//         sessionTime: {
+//           max: {
+//             field: 'sessionTime'
+//           }
+//         },
+//         download: {
+//           max: {
+//             field: 'download'
+//           }
+//         },
+//         upload: {
+//           max: {
+//             field: 'upload'
+//           }
+//         },
+//         creationDate: {
+//           max: {
+//             field: 'creationDate'
+//           }
+//         },
+//         minCreationDate: {
+//           min: {
+//             field: 'creationDate'
+//           }
+//         },
+//         accountingDoc: {
+//           terms: {
+//             field: 'sessionId',
+//             size: 1
+//           },
+//           aggs: {
+//             lastAccountingDoc: {
+//               top_hits: {
+//                 _source: {
+//                   includes: [
+//                     'businessId',
+//                     'nasId',
+//                     'username',
+//                     'memberId',
+//                     'mac',
+//                     'creationDateObj'
+//                   ]
+//                 },
+//                 size: 1
+//               }
+//             }
+//           }
+//         }
+//       }
+//     }
+//     elasticClient.search({
+//       index: ACCOUNTING_INDEX,
+//       size: size,
+//       body: query
+//     }, (error, response) => {
+//       if (error) {
+//         log.error('@getAllSessions: ', error)
+//         return reject(error)
+//       }
+//
+//       const body = response.body
+//       const aggregations = body.aggregations
+//
+//       if (
+//         !aggregations.download ||
+//         aggregations.download.value === undefined ||
+//         !aggregations.upload ||
+//         aggregations.upload.value === undefined
+//       ) {
+//         log.warn('session data not found:', body)
+//         log.warn(query)
+//         return reject('data not found for this session')
+//       }
+//
+//       if (
+//         !aggregations.accountingDoc ||
+//         !aggregations.accountingDoc.buckets ||
+//         aggregations.accountingDoc.buckets.length === 0
+//       ) {
+//         return reject('top heat aggregated result is empty')
+//       }
+//
+//       var result =
+//         aggregations.accountingDoc.buckets[0].lastAccountingDoc.hits.hits[0]
+//           ._source
+//       result.accStatusType = 0
+//       result.sessionId = sessionId
+//       result.download = aggregations.download.value
+//       result.upload = aggregations.upload.value
+//       result.totalUsage = result.upload + result.download
+//       result.sessionTime = aggregations.sessionTime.value
+//       result.creationDate = aggregations.creationDate.value
+//       return resolve({
+//         aggregatedResult: result,
+//         range: {
+//           fromDateInMs: aggregations.minCreationDate.value,
+//           toDateInMs: result.creationDate
+//         }
+//       })
+//     })
+//   })
+// }
+//
+// module.exports.deleteBySessionId = function (
+//   fromDateInMs,
+//   toDateInMs,
+//   sessionId
+// ) {
+//   return Q.Promise(function (resolve, reject) {
+//     if (!sessionId) {
+//       return reject('sessionId not defined')
+//     }
+//     const query = {
+//       query: {
+//         bool: {
+//           must_not: {
+//             terms: {
+//               accStatusType: [0]
+//             }
+//           },
+//           must: [
+//             {
+//               term: {
+//                 sessionId: sessionId
+//               }
+//             },
+//             {
+//               range: {
+//                 creationDate: {
+//                   gte: fromDateInMs,
+//                   lte: toDateInMs + 1000
+//                 }
+//               }
+//             }
+//           ]
+//         }
+//       }
+//     }
+//     elasticClient.deleteByQuery({
+//       index: ACCOUNTING_INDEX,
+//       body: query
+//     }, (error, response) => {
+//       if (error) {
+//         log.error('@deleteBySessionId: ', error)
+//         return reject(error)
+//       }
+//       const body = response.body
+//       if (!body || body.deleted === undefined) {
+//         log.error('delete failed: ', body)
+//         log.error(query)
+//         return reject('delete failed')
+//       }
+//       if (body.deleted === 0) {
+//         log.warn('no document deleted for this session', sessionId)
+//         log.error(query)
+//       } else {
+//         log.debug(
+//           'Docs deleted for this session:',
+//           sessionId,
+//           ' : ',
+//           body.deleted
+//         )
+//       }
+//       return resolve(body)
+//     })
+//   })
+// }
+//
+// module.exports.cleanupDoc = function (docType, fromDateInMs, toDateInMs) {
+//   return Q.Promise(function (resolve, reject) {
+//     if (!docType || !fromDateInMs || !toDateInMs) {
+//       return reject('not enough parameters to remove docs!')
+//     }
+//     var SELECTED_INDEX
+//     if (docType === 'accounting') {
+//       SELECTED_INDEX = ACCOUNTING_INDEX
+//     }
+//     var query = {
+//       query: {
+//         bool: {
+//           must: [
+//             {
+//               range: {
+//                 creationDate: {
+//                   gte: fromDateInMs,
+//                   lte: toDateInMs
+//                 }
+//               }
+//             }
+//           ]
+//         }
+//       }
+//     }
+//
+//     elasticClient.deleteByQuery({
+//       index: SELECTED_INDEX,
+//       body: query
+//     }, (error, response) => {
+//       if (error) {
+//         log.error('@cleanupElastic: ', error)
+//         return reject(error)
+//       }
+//       const body = response.body
+//       if (!body || body.deleted === undefined) {
+//         log.error('cleanupElastic failed: ', body)
+//         log.error(query)
+//         return reject('cleanupElastic failed')
+//       }
+//       if (body.deleted === 0) {
+//         log.warn('nothing to clean up')
+//         log.error(query)
+//       } else {
+//         log.debug('Docs cleaned up:', body.deleted)
+//       }
+//       return resolve(body)
+//     })
+//   })
+// }
+//
+// module.exports.addAccountingDoc = function (doc) {
+//   return Q.Promise(function (resolve, reject) {
+//     elasticClient.index({
+//       index: ACCOUNTING_INDEX,
+//       body: doc
+//     }, (error, response) => {
+//       if (error) {
+//         log.error(error)
+//         return reject(error)
+//       }
+//       const body = response.body
+//       if (!body || !body._id) {
+//         log.error(body)
+//         return reject('body result is empty')
+//       }
+//       log.debug('usage report created: ', body)
+//       return resolve()
+//
+//     })
+//   })
+// }

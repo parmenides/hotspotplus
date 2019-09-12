@@ -10,9 +10,11 @@ export const getRabbitMqConnection = async () => {
       process.env.RABBITMQ_PASSWORD
     }@rabbitmq`,
   );
-  connection.on('close',()=>{
-      setTimeout(()=>{process.exit(1)},10000);
-  })
+  connection.on('close', () => {
+    setTimeout(() => {
+      process.exit(1);
+    }, 10000);
+  });
   return connection;
 };
 
