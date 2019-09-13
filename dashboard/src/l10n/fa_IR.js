@@ -588,6 +588,12 @@
 	"selectDuration":             "مدت زمان سرویس"
   },
   "dashboard":    {
+	"topMemberByUsage":                "کاربران پرمصرف",
+	"reportStatus":                "سایز لاگ‌ها",
+	"netflowCount":                "Netflow",
+	"webproxyCount":                "Webproxy",
+	"dnsCount":                "DNS",
+	"sessionCount":                "Session",
 	"usageReport":                "گزارش  میزان مصرف",
 	"sessionTimeUsed":                "کل مدت مصرف",
 	"credit":                "اعتبار",
@@ -603,6 +609,7 @@
 	"showMembers":                    "کاربران",
 	"allMembers":                     "کل کاربران",
 	"newMembers":                     "کاربر جدید",
+	"lastNewMembers":                 "کاربران جدید",
 	"newVisitors":                    "مشتریان جدید",
 	"failedMembers":                  "عضویت ناموفق",
 	"totalVisitors":                  "مجموع",

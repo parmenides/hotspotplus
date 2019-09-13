@@ -1,0 +1,28 @@
+version: '3'
+services:
+  webproxysyslog:
+    image: 'docker.elastic.co/logstash/logstash:7.1.1'
+    restart: always
+    environment:
+      - XPACK_MONITORING_ENABLED=false
+    volumes:
+      - ./webproxy/jvm.options:/usr/share/logstash/config/jvm.options
+      - ./webproxy/logstash.yml:/usr/share/logstash/config/logstash.yml
+      - ./webproxy/webproxy.conf:/usr/share/logstash/pipeline/webproxy.conf
+    ports:
+      - 9002:9002/tcp
+      - 9002:9002/udp
+    networks:
+      - hotspotplusgate
+  clickhouse-sinker-webproxy:
+    image: 'registry.gitlab.com/parmenides/hotspotplus/clickhouse-sinker:latest'
+    restart: always
+    volumes:
+    - ./sinker-webproxy:/opt/config
+    command: --conf /opt/config
+    networks:
+      - hotspotplusgate
+
+networks:
+  hotspotplusgate:
+    external: true

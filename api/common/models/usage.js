@@ -66,6 +66,76 @@ module.exports = function (Usage) {
     returns: {root: true}
   })
 
+  Usage.reportStatus = async () => {
+    const dbInfo = await db.getDatabaseInfo();
+    const info = {};
+    for(const tb of dbInfo){
+      info[tb.table] = tb
+    }
+    return {
+      db:info
+    };
+  }
+
+  Usage.remoteMethod('reportStatus', {
+    description: 'Get report.',
+    accepts: [],
+    returns: {root: true}
+  })
+
+  Usage.getTopMembers = async (startDate, endDate, ctx) => {
+
+    var businessId = ctx.currentUserId
+    var fromDate = Number.parseInt(startDate)
+    var toDate = Number.parseInt(endDate)
+    const limit = 10
+    const skip = 0
+
+    const result = await db.getTopMembersByUsage(
+      businessId,
+      fromDate,
+      toDate,
+      limit,
+      skip
+    )
+    const username = [];
+    const upload = [];
+    const download = [];
+    const sessionTime = [];
+    for(const res of result){
+      username.push(res.username)
+      upload.push(Number(res.upload))
+      download.push(Number(res.download))
+      sessionTime.push(Number(res.sessionTime))
+    }
+    return {
+      username,
+      upload,
+      download,
+      sessionTime
+    }
+  }
+
+  Usage.remoteMethod('getTopMembers', {
+    description: 'Get Top Members.',
+    accepts: [
+      {
+        arg: 'startDate',
+        type: 'number',
+        required: true,
+        description: 'Start Date',
+      },
+      {
+        arg: 'endDate',
+        type: 'number',
+        required: true,
+        description: 'End Date',
+      },
+      {arg: 'options', type: 'object', http: 'optionsFromRequest'},
+    ],
+    returns: {root: true}
+  })
+
   Usage.cacheUsage = function (usage) {
     return Q.promise((resolve, reject) => {
       redisClient.set(
@@ -99,135 +169,4 @@ module.exports = function (Usage) {
     })
   }
 
-  // Usage.getBusinessUsageReport = function (
-  //   startDate,
-  //   endDate,
-  //   businessId,
-  //   offset,
-  //   intervalMili,
-  //   monthDays
-  // ) {
-  //   return Q.Promise(function (resolve, reject) {
-  //
-  //     offset = -offset * config.AGGREGATE.HOUR_MILLISECONDS
-  //     log.debug('@getTrafficUsage from elastic')
-  //     aggregate
-  //       .getUniqueSessionCount(businessId, startDate, endDate)
-  //       .then(function (sessionCount) {
-  //         if (sessionCount < config.DEFAULT_AGGREGATION_SIZE) {
-  //           sessionCount = config.DEFAULT_AGGREGATION_SIZE
-  //         }
-  //         aggregate
-  //           .getMemberTrafficUsageReport(
-  //             startDate,
-  //             endDate,
-  //             businessId,
-  //             offset,
-  //             intervalMili,
-  //             sessionCount
-  //           )
-  //           .then(function (memberResult) {
-  //             var response = {date: [], download: [], upload: []}
-  //             monthDays = monthDays || []
-  //             if (monthDays.length === 0) {
-  //               // calculate daily interval docs
-  //               for (var i = 0; i < memberResult.length; i++) {
-  //                 response.date[i] = memberResult[i].key
-  //                 response.download[i] = utility
-  //                   .toMByte(memberResult[i].download.value)
-  //                   .toFixed(0)
-  //                 response.upload[i] = utility
-  //                   .toMByte(memberResult[i].upload.value)
-  //                   .toFixed(0)
-  //               }
-  //             } else {
-  //               // sum of persian month days
-  //               var days = 0
-  //               var daysCounter = 0
-  //               for (var month in monthDays) {
-  //                 var downloads = 0
-  //                 var uploads = 0
-  //                 days += monthDays[month]
-  //                 for (daysCounter; daysCounter < days; daysCounter++) {
-  //                   downloads += memberResult[daysCounter].download.value
-  //                   uploads += memberResult[daysCounter].upload.value
-  //                 }
-  //                 // add calculated month to response
-  //                 response.date[month] = memberResult[days].key
-  //                 response.download[month] = utility
-  //                   .toMByte(downloads)
-  //                   .toFixed(2)
-  //                 response.upload[month] = utility
-  //                   .toMByte(uploads)
-  //                   .toFixed(2)
-  //               }
-  //             }
-  //             log.debug(
-  //               'process of getting traffic usage info completed successfully' +
-  //               JSON.stringify(response)
-  //             )
-  //             return resolve(response)
-  //           })
-  //           .fail(function (error) {
-  //             log.error(error)
-  //             return reject(error)
-  //           })
-  //       })
-  //       .fail(function (error) {
-  //         log.error(error)
-  //         return reject(error)
-  //       })
-  //   })
-  // }
-
-  // Usage.getSessionUsage = function (sessionList) {
-  //   return Q.Promise(function (resolve, reject) {
-  //     var sessionReportFunc = []
-  //     var ownersDictionary = {}
-  //     for (var i = 0; i < sessionList.length; i++) {
-  //       var singleSession = sessionList[i]
-  //       var sessionId = singleSession.id
-  //       ownersDictionary[sessionId] = singleSession
-  //       sessionReportFunc.push(
-  //         aggregate.getSessionsReport(
-  //           singleSession.creationDate,
-  //           singleSession.memberId,
-  //           sessionId
-  //         )
-  //       )
-  //     }
-  //     // get report info from getSessionsReport aggregation
-  //     Q.all(sessionReportFunc)
-  //       .then(function (tasksResult) {
-  //         //log.debug( '@getSessionsReport', tasksResult )
-  //         var report = []
-  //         for (var n = 0; n < tasksResult.length; n++) {
-  //           var reportResult = tasksResult[n]
-  //           var sessionReportList = reportResult.sessionReports
-  //           var sessionCreationDate = reportResult.fromDate
-  //           var reportSessionId = reportResult.sessionId
-  //           var res = ownersDictionary[reportSessionId]
-  //           for (var k = 0; k < sessionReportList.length; k++) {
-  //             var sessionReport = sessionReportList[k]
-  //             res.download = utility
-  //               .toMByte(sessionReport.download.value)
-  //               .toFixed(0)
-  //             res.upload = utility
-  //               .toMByte(sessionReport.upload.value)
-  //               .toFixed(0)
-  //             res.sessionTime = (
-  //               (new Date().getTime() - sessionCreationDate) /
-  //               60000
-  //             ).toFixed(0)
-  //           }
-  //           report.push(res)
-  //         }
-  //         return resolve({data: report})
-  //       })
-  //       .fail(function (error) {
-  //         log.error(error)
-  //         return reject(error)
-  //       })
-  //   })
-  // }
 }

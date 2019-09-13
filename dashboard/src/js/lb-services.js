@@ -30686,6 +30686,86 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
               url: urlBase + "/Usages/getUsage",
               method: "POST",
             },
+
+            /**
+             * @ngdoc method
+             * @name lbServices.Usage#reportStatus
+             * @methodOf lbServices.Usage
+             *
+             * @description
+             *
+             * Get report.
+             *
+             * @param {Object=} parameters Request parameters.
+             *
+             *   This method does not accept any parameters.
+             *   Supply an empty object or omit this argument altogether.
+             *
+             * @param {Object} postData Request data.
+             *
+             * This method does not accept any data. Supply an empty object.
+             *
+             * @param {function(Object,Object)=} successCb
+             *   Success callback with two arguments: `value`, `responseHeaders`.
+             *
+             * @param {function(Object)=} errorCb Error callback with one argument:
+             *   `httpResponse`.
+             *
+             * @returns {Object} An empty reference that will be
+             *   populated with the actual data once the response is returned
+             *   from the server.
+             *
+             * <em>
+             * (The remote method definition does not provide any description.
+             * This usually means the response is a `Usage` object.)
+             * </em>
+             */
+            "reportStatus": {
+              url: urlBase + "/Usages/reportStatus",
+              method: "POST",
+            },
+
+            /**
+             * @ngdoc method
+             * @name lbServices.Usage#getTopMembers
+             * @methodOf lbServices.Usage
+             *
+             * @description
+             *
+             * Get Top Members.
+             *
+             * @param {Object=} parameters Request parameters.
+             *
+             *   This method does not accept any parameters.
+             *   Supply an empty object or omit this argument altogether.
+             *
+             * @param {Object} postData Request data.
+             *
+             *  - `startDate` – `{number}` - Start Date
+             *
+             *  - `endDate` – `{number}` - End Date
+             *
+             *  - `options` – `{object=}` -
+             *
+             * @param {function(Object,Object)=} successCb
+             *   Success callback with two arguments: `value`, `responseHeaders`.
+             *
+             * @param {function(Object)=} errorCb Error callback with one argument:
+             *   `httpResponse`.
+             *
+             * @returns {Object} An empty reference that will be
+             *   populated with the actual data once the response is returned
+             *   from the server.
+             *
+             * <em>
+             * (The remote method definition does not provide any description.
+             * This usually means the response is a `Usage` object.)
+             * </em>
+             */
+            "getTopMembers": {
+              url: urlBase + "/Usages/getTopMembers",
+              method: "POST",
+            },
           }
         );
 
@@ -34241,44 +34321,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              */
             "createChangeStream": {
               url: urlBase + "/Reports/change-stream",
-              method: "POST",
-            },
-
-            /**
-             * @ngdoc method
-             * @name lbServices.Report#getAllReportConfig
-             * @methodOf lbServices.Report
-             *
-             * @description
-             *
-             * getAllReportConfig
-             *
-             * @param {Object=} parameters Request parameters.
-             *
-             *   This method does not accept any parameters.
-             *   Supply an empty object or omit this argument altogether.
-             *
-             * @param {Object} postData Request data.
-             *
-             * This method does not accept any data. Supply an empty object.
-             *
-             * @param {function(Object,Object)=} successCb
-             *   Success callback with two arguments: `value`, `responseHeaders`.
-             *
-             * @param {function(Object)=} errorCb Error callback with one argument:
-             *   `httpResponse`.
-             *
-             * @returns {Object} An empty reference that will be
-             *   populated with the actual data once the response is returned
-             *   from the server.
-             *
-             * <em>
-             * (The remote method definition does not provide any description.
-             * This usually means the response is a `Report` object.)
-             * </em>
-             */
-            "getAllReportConfig": {
-              url: urlBase + "/Reports/getAllReportConfig",
               method: "POST",
             },
 

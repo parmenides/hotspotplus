@@ -97,7 +97,8 @@ app.controller('reportList', [
           cellTemplate:
             '<div class="ui-grid-cell-contents" ng-if="row.entity.from">{{row.entity.type.capitalize()  }}</div>',
 
-        }, {
+        },
+        {
           displayName: 'report.reportFormat',
           field: 'type',
           enableHiding: false,

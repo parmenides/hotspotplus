@@ -14,10 +14,7 @@ import webproxyLog from '../modules/webproxyLog';
 const log = logger.createLogger();
 import momentTz = require('moment-timezone');
 import render from '../reportEngine';
-import {
-  getAllReportConfig,
-  getReportConfig,
-} from '../reportEngine/reportTypes';
+import { getReportConfig } from '../reportEngine/reportTypes';
 import { sendReport } from '../modules/sendReport';
 import * as fs from 'fs';
 import { file as tmpFile } from 'tmp-promise';

@@ -1,0 +1,21 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="row no-padder-v text-gray">
+            <h3 class="col-xs-10 panel-title">{{"dashboard.lastNewMembers" | translate}}</h3>
+            <loading></loading>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="">
+
+            <div class="col" ng-if="!result">
+                <div class="table-responsive m-b-lg">
+                    <div ui-i18n="{{localLang}}">
+                        <div ui-grid="gridOptions" ui-grid-resize-columns class="grid"
+                             dir="{{direction}}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

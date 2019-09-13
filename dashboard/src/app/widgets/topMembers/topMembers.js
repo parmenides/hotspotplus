@@ -1,10 +1,10 @@
 /**
  * Created by rezanazari on 03/04/17.
  */
-app.directive('trafficUsage', [
+app.directive('topMembers', [
   'PREFIX',
   '$log',
-  'Business',
+  'Usage',
   'translateFilter',
   'persianDateFilter',
   'translateNumberFilter',
@@ -12,7 +12,7 @@ app.directive('trafficUsage', [
   function(
     PREFIX,
     $log,
-    Business,
+    Usage,
     translateFilter,
     persianDateFilter,
     translateNumberFilter,
@@ -40,36 +40,27 @@ app.directive('trafficUsage', [
           makeChart();
         });
         function makeChart() {
-          var trafficUsageChart = {};
-          trafficUsageChart.startDate = $scope.params.fromDate;
-          trafficUsageChart.endDate = $scope.params.endDate;
-          trafficUsageChart.businessId = $scope.params.businessId;
-          trafficUsageChart.offset = $scope.params.offset;
-          trafficUsageChart.monthDays = $scope.params.monthDays;
+          var query = {};
+          query.startDate = $scope.params.fromDate;
+          query.endDate = $scope.params.endDate;
+          query.businessId = $scope.params.businessId;
+          query.offset = 0;
           $scope.loading = true;
-          Business.getTrafficUsage(trafficUsageChart).$promise.then(function(
+          Usage.getTopMembers(query).$promise.then(function(
             res
           ) {
-            var DAY_MILLISECONDS = 24 * 60 * 60 * 1000;
             $scope.loading = false;
-            var interval = res.result.date[1] - res.result.date[0];
-            var xAxesLabel = 'dashboard.xAxesLabelDaily';
-            for (var date in res.result.date) {
-              res.result.date[date] = translateNumberFilter(
-                persianDateFilter(new Date(res.result.date[date]), 'M/d')
-              );
-            }
-            $scope.labels = res.result.date;
+
+            $scope.labels = res.username;
             $scope.series = [
               translateFilter('dashboard.download'),
               translateFilter('dashboard.upload')
             ];
-            $scope.data = [res.result.download, res.result.upload];
-            $scope.type = 'line';
-            if (interval > DAY_MILLISECONDS) {
-              $scope.type = 'bar';
-              xAxesLabel = 'dashboard.xAxesLabelMonthly';
-            }
+            $scope.data = [res.download, res.upload];
+
+            var xAxesLabel = 'dashboard.xAxesLabelDaily';
+
+            $scope.type = 'bar';
             $scope.colors = ['#6254b2', '#23b7e5'];
             $scope.options = {
               legend: {
@@ -140,7 +131,7 @@ app.directive('trafficUsage', [
             };
         }
       },
-      templateUrl: PREFIX + 'app/widgets/trafficUsage/tpl/trafficUsage.html'
+      templateUrl: PREFIX + 'app/widgets/topMembers/tpl/topMembers.html'
     };
   }
 ]);

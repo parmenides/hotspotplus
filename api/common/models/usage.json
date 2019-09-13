@@ -70,6 +70,20 @@
       "property": "getUsage"
     },
     {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "networkadmin",
+      "permission": "ALLOW",
+      "property": "reportStatus"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "networkadmin",
+      "permission": "ALLOW",
+      "property": "getTopMembers"
+    },
+    {
       "accessType": "*",
       "principalType": "ROLE",
       "principalId": "$everyone",

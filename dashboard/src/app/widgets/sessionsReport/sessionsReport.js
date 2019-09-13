@@ -56,9 +56,7 @@ app.directive('sessionsReport', [
             paginationPageSize: $scope.paginationOptions.itemPerPage,
             enableRowSelection: false,
             enableSelectAll: false,
-            selectionRowHeaderWidth: 35,
-            rowHeight: 35,
-            showGridFooter: true,
+            showGridFooter: false,
             enableColumnResizing: true,
             columnDefs: [
               {

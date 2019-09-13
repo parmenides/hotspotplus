@@ -177,3 +177,12 @@ app.filter('humanTime', [
     }
   }
 ])
+
+app.filter('cleanupUsername', [
+  function () {
+    return function (username) {
+      return username.split('@')[0];
+    }
+  }
+])
+
