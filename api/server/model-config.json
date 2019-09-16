@@ -25,6 +25,10 @@
     "dataSource": "mongo",
     "public": false
   },
+  "MemberGroup": {
+    "dataSource": "mongo",
+    "public": true
+  },
   "RoleMapping": {
     "dataSource": "mongo",
     "public": true,
@@ -48,23 +52,11 @@
     "dataSource": "mongo",
     "public": true
   },
-  "FootTraffic": {
-    "dataSource": "mongo",
-    "public": true
-  },
   "GenericUser": {
     "dataSource": "mongo",
     "public": false
   },
   "Member": {
-    "dataSource": "mongo",
-    "public": true
-  },
-  "Device": {
-    "dataSource": "mongo",
-    "public": true
-  },
-  "Campaign": {
     "dataSource": "mongo",
     "public": true
   },
@@ -88,10 +80,6 @@
     "dataSource": "mongo",
     "public": true
   },
-  "NasSession": {
-    "dataSource": "mongo",
-    "public": false
-  },
   "Theme": {
     "dataSource": "mongo",
     "public": true
@@ -112,18 +100,6 @@
     "dataSource": "mongo",
     "public": true
   },
-  "Netflow": {
-    "dataSource": "db",
-    "public": true
-  },
-  "Syslog": {
-    "dataSource": "db",
-    "public": true
-  },
-  "MemberGroup": {
-    "dataSource": "mongo",
-    "public": true
-  },
   "SystemConfig": {
     "dataSource": "db",
     "public": false
@@ -134,6 +110,14 @@
   },
   "BigFile": {
     "dataSource": "storage",
+    "public": true
+  },
+  "Department": {
+    "dataSource": "mongo",
+    "public": true
+  },
+  "Operator": {
+    "dataSource": "mongo",
     "public": true
   }
 }

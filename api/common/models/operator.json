@@ -1,0 +1,28 @@
+{
+  "name": "Operator",
+  "base": "GenericUser",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "family": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "departments": {
+      "type": "hasMany",
+      "model": "Department",
+      "foreignKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

@@ -218,6 +218,17 @@ app.config([
           PREFIX + 'app/nas/nasList.js',
         ]),
       })
+      .state('app.departments', {
+        url: '/departments',
+        templateUrl: TEMPLATE_PREFIX + 'app/department/tpl/departmentList.html',
+        resolve: load([
+          'ui.grid',
+          'ui.grid.pagination',
+          'ui.grid.selection',
+          'ui.grid.resizeColumns',
+          PREFIX + 'app/department/departmentList.js',
+        ]),
+      })
       .state('app.wifi', {
         url: '/wifi',
         templateUrl: TEMPLATE_PREFIX + 'app/wifi/tpl/wifiSettings.html',
@@ -251,6 +262,18 @@ app.config([
           'ui.bootstrap.persian.datepicker',
           PREFIX + 'app/member/memberList.js',
           PREFIX + 'app/member/planHistoryList.js',
+        ]),
+      })
+      .state('app.operators', {
+        url: '/operator',
+        templateUrl: TEMPLATE_PREFIX + 'app/operator/tpl/operatorList.html',
+        resolve: load([
+          'ui.grid',
+          'ui.grid.pagination',
+          'ui.grid.selection',
+          'ui.grid.resizeColumns',
+          'ui.bootstrap.persian.datepicker',
+          PREFIX + 'app/operator/operatorList.js'
         ]),
       })
         .state('app.reports', {

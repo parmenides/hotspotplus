@@ -6,34 +6,28 @@
         </div>
     </div>
     <div class="panel-body">
-        <div class="">
-            <table class="table table-hover table-responsive">
-                <thead>
+        <div class="hbox hbox-auto-xs hbox-auto-sm">
+                <table class="table table-hover table-responsive">
+                    <thead>
                     <tr>
                         <th>{{'member.username'|translate}}</th>
-                        <th>{{'member.creationDate'|translate}}</th>
-                        <th>{{'member.status'|translate}}</th>
+                        <th class="center">{{'member.creationDate'|translate}}</th>
+                        <th class="center">{{'member.status'|translate}}</th>
                     </tr>
-                </thead>
-                <tbody>
+                    </thead>
+                    <tbody>
                     <tr ng-repeat="member in members">
                         <td>{{member.username|cleanupUsername}}</td>
-                        <td>{{member.creationDate |  translateDate | translateNumber }}{{"general.,"| translate}}&nbsp;{{"general.hour"| translate}}:&nbsp;{{member.creationDate |  date : "HH:mm" | translateNumber }}</td>
-                        <td>
+                        <td class="center">{{member.creationDate | translateDate | translateNumber }}{{"general.,"| translate}}&nbsp;{{"general.hour"|
+                            translate}}:&nbsp;{{member.creationDate | date : "HH:mm" | translateNumber }}
+                        </td>
+                        <td class="center">
                             <span ng-if="member.active">{{"member.active"|translate}}</span>
                             <span ng-if="!member.active">{{"member.inActive"|translate}}</span>
                         </td>
                     </tr>
-                </tbody>
-            </table>
-            <!--<div class="col" ng-if="!result">-->
-            <!--<div class="table-responsive m-b-lg">-->
-            <!--<div ui-i18n="{{localLang}}">-->
-            <!--<div ui-grid="gridOptions" ui-grid-resize-columns class="grid"-->
-            <!--dir="{{direction}}"></div>-->
-            <!--</div>-->
-            <!--</div>-->
-            <!--</div>-->
+                    </tbody>
+                </table>
         </div>
     </div>
 </div>

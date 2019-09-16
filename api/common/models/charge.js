@@ -6,13 +6,6 @@ var smsModule = require('../../server/modules/sms')
 var logger = require('../../server/modules/logger')
 const db = require('../../server/modules/db.factory')
 
-const {Client} = require('@elastic/elasticsearch')
-const elasticClient = new Client({
-  node: `http://${process.env.ELASTIC_IP}:${process.env.ELASTIC_PORT}`,
-  apiVersion: '6.7',
-  log: process.env.ELASTICSEARCH_LOG_LEVEL || 'info',
-})
-const CHARGE_INDEX = process.env.ELASTIC_INDEX_PREFIX + 'charge'
 
 module.exports = function (Charge) {
   var log = logger.createLogger()

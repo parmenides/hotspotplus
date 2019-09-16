@@ -2061,9 +2061,6 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
   Business.destroyMembersById = function (memberIds, ctx) {
     return Q.promise(function (resolve, reject) {
       var businessId = ctx.currentUserId
-      log.error(ctx)
-      log.error('businessId:', businessId)
-      log.error('memberIds:', memberIds)
       var Member = app.models.Member
       log.debug('@destroyMembersById')
       if (!businessId) {
@@ -2587,9 +2584,6 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
   Business.destroyReportsById = function (reportIds, ctx) {
     return Q.promise(function (resolve, reject) {
       var businessId = ctx.currentUserId
-      log.error(ctx)
-      log.error('businessId:', businessId)
-      log.error('reportIds:', reportIds)
       var Report = app.models.Report
       log.debug('@destroyReportsById')
       if (!businessId) {

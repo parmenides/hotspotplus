@@ -27,6 +27,7 @@ app.controller('dashboard', [
     $scope.datePicker = true;
 
 
+
     // Load dashboard on page load
     loadDashboard();
 
@@ -52,10 +53,12 @@ app.controller('dashboard', [
 
     // Prepare start date & end date for scope
     function getFromToDate(fromDate, endDate) {
+/*
       if (!fromDate)
         fromDate = new Date(new Date().getTime()).setHours(0, 0, 0, 0);
       if (!endDate)
         endDate = new Date().setDate(new Date(fromDate).getDate() + 7);
+*/
 
       $scope.fromDate = fromDate;
       $scope.endDate = endDate;
@@ -66,7 +69,15 @@ app.controller('dashboard', [
 
     // Load dashboard on page load or after interval
     function loadDashboard() {
-      getFromToDate();
+      //getFromToDate();
+      var DAY_MILLISECONDS = 24 * 60 * 60 * 1000
+      if (!$scope.fromDate) {
+        const refDate = new Date(new Date().getTime()).setHours(0, 0, 0, 0)
+        $scope.fromDate = refDate - (DAY_MILLISECONDS * 20)
+      }
+      if (!$scope.endDate) {
+        $scope.endDate = $scope.fromDate  + (DAY_MILLISECONDS * 25)
+      }
       $scope.initParams = {
         fromDate: $scope.fromDate,
         endDate: $scope.endDate,

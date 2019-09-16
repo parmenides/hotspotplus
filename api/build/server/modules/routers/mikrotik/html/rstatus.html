@@ -1,4 +1,0 @@
-$(if http-header == "Access-Control-Allow-Origin")*$(endif)
-$(if http-header == "Access-Control-Allow-Methods")"GET, POST, PUT"$(endif)
-$(if http-status == 302)Hotspot login required$(endif)
-$(if http-header == 'Location')http://go.hotspotplus.ir/#!/home.html?nasId=$(identity)&mac=$(mac)&pap=$(plain-passwd)&host=$(hostname)&origin=$(link-orig)$(endif)

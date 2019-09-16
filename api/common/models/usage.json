@@ -55,7 +55,6 @@
     }
   },
   "acls": [
-
     {
       "accessType": "*",
       "principalType": "ROLE",

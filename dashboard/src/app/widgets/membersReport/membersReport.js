@@ -49,7 +49,7 @@ app.directive('membersReport', [
           options.filter = {}
           options.filter.sort = 'creationDate DESC'
           options.filter.skip = 0
-          options.filter.limit = 10
+          options.filter.limit = 8
           options.filter.fields = {internetPlanHistory: false}
 
           Business.members(options).$promise.then(

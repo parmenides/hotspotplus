@@ -49,6 +49,11 @@
       "type": "hasMany",
       "model": "FootTraffic",
       "foreignKey": ""
+    },
+    "Departments": {
+      "type": "hasOne",
+      "model": "department",
+      "foreignKey": ""
     }
   },
   "acls": [

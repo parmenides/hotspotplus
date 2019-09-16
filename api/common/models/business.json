@@ -155,6 +155,11 @@
       "type": "hasMany",
       "model": "FileStorage",
       "foreignKey": ""
+    },
+    "departments": {
+      "type": "hasMany",
+      "model": "Department",
+      "foreignKey": ""
     }
   },
   "acls": [
