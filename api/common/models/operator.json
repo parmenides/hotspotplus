@@ -5,21 +5,29 @@
   "options": {
     "validateUpsert": true
   },
+  "replaceOnPUT": false,
   "properties": {
-    "name": {
+    "firstName": {
       "type": "string",
       "required": true
     },
-    "family": {
+    "creationDate": {
+      "type": "number",
+      "required": true
+    },
+    "lastName": {
       "type": "string",
       "required": true
+    },
+    "departments": {
+      "type": "array"
     }
   },
   "validations": [],
   "relations": {
-    "departments": {
-      "type": "hasMany",
-      "model": "Department",
+    "business": {
+      "type": "belongsTo",
+      "model": "Business",
       "foreignKey": ""
     }
   },

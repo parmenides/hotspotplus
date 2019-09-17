@@ -160,6 +160,11 @@
       "type": "hasMany",
       "model": "Department",
       "foreignKey": ""
+    },
+    "operators": {
+      "type": "hasMany",
+      "model": "Operator",
+      "foreignKey": ""
     }
   },
   "acls": [
@@ -332,6 +337,13 @@
       "principalId": "$everyone",
       "permission": "ALLOW",
       "property": "loadServices"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "getMyDepartments"
     },
     {
       "accessType": "EXECUTE",

@@ -6,4 +6,5 @@ module.exports = function(Genericuser) {
     base.currentUserId = base.accessToken && base.accessToken.userId;
     return base;
   };
+
 };

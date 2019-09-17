@@ -98,6 +98,7 @@ module.exports = {
     NETWORKADMIN: 'networkadmin',
     NAS: 'nas',
     HEADMASTER: 'headmaster',
+    OPERATOR: 'operator',
     ADMIN: 'admin',
     RESELLER: 'reseller',
     SERVICEMAN: 'serviceMan',

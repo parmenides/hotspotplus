@@ -148,7 +148,7 @@ app.filter('trimUsername', [
   'usernameService',
   function (usernameService) {
     return function (username) {
-      return usernameService.trim(username)
+      return username?usernameService.trim(username):username
     }
   }
 ])

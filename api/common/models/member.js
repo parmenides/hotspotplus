@@ -20,7 +20,7 @@ var AVP = require('../../server/modules/avps')
 var radiusPod = require('../../server/modules/radiusDisconnectService')
 var dust = require('dustjs-helpers')
 var fs = require('fs')
-
+const createHttpError = require('http-errors')
 var hotspotMessages = require('../../server/modules/hotspotMessages')
 var csvtojson = require('csvtojson')
 
@@ -38,7 +38,7 @@ module.exports = function (Member) {
     cb
   ) {
     var Business = app.models.Business
-    var user = Member.createMemberUsername(businessId, username)
+    var user = Member.createUsername(businessId, username)
 
     Member.findOne(
       {
@@ -376,7 +376,7 @@ module.exports = function (Member) {
       }
       if (member.username && member.businessId) {
         member.uniqueUserId = member.businessId + member.username
-        member.username = Member.createMemberUsername(
+        member.username = Member.createUsername(
           member.businessId,
           member.username
         )
@@ -385,78 +385,34 @@ module.exports = function (Member) {
     }
   })
 
-  Member.sendPassword = function (businessId, memberId, nasId, host) {
+  Member.sendPassword = async (businessId, memberId) => {
     log.debug('@sendPassword')
-    return Q.Promise(function (resolve, reject) {
-      Member.findOne(
-        {
-          where: {
-            and: [{id: memberId}, {businessId: businessId}]
-          }
-        },
-        function (error, member) {
-          if (error) {
-            log.error(error)
-            return reject(error)
-          }
-          if (!member) {
-            log.error('member not found')
-            error = new Error()
-            error.message = hotspotMessages.memberNotFound
-            error.status = 404
-            return reject(error)
-          }
-          if (!member.mobile) {
-            log.error('no mobile number', member)
-            error = new Error()
-            error.message = hotspotMessages.noMobileNumber
-            error.status = 403
-            return reject(error)
-          }
-          var plainPassword = utility.decrypt(
-            member.passwordText,
-            config.ENCRYPTION_KEY
-          )
-          var plainUsername = member.username.split('@')[0]
-
-          log.warn(nasId && host)
-          if (nasId && host) {
-            Member.createShortSigninUrl(
-              businessId,
-              nasId,
-              host,
-              plainUsername,
-              plainPassword,
-              memberId,
-              function (error, shortUrl) {
-                if (error) {
-                  log.error('Failed to create short url', error)
-                }
-                Member.sendSms(businessId, {
-                  businessId: businessId,
-                  token1: plainUsername,
-                  token2: plainPassword,
-                  token3: shortUrl,
-                  mobile: member.mobile,
-                  template: config.HOTSPOT_CREDENTIALS_URL_MESSAGE_TEMPLATE
-                })
-                return resolve('sms added to Queue')
-              }
-            )
-          } else {
-            log.warn(nasId && host)
-            Member.sendSms(businessId, {
-              businessId: businessId,
-              token1: plainUsername,
-              token2: plainPassword,
-              mobile: member.mobile,
-              template: config.HOTSPOT_CREDENTIALS_MESSAGE_TEMPLATE
-            })
-            return resolve('sms added to Queue')
-          }
+    const member = await Member.findOne(
+      {
+        where: {
+          and: [{id: memberId}, {businessId: businessId}]
         }
-      )
+      })
+    if (!member) {
+      throw createHttpError(404, hotspotMessages.memberNotFound)
+    }
+    if (!member.mobile) {
+      throw createHttpError(403, hotspotMessages.noMobileNumber)
+    }
+    var plainPassword = utility.decrypt(
+      member.passwordText,
+      config.ENCRYPTION_KEY
+    )
+    var plainUsername = member.username.split('@')[0]
+
+    Member.sendSms(businessId, {
+      businessId: businessId,
+      token1: plainUsername,
+      token2: plainPassword,
+      mobile: member.mobile,
+      template: config.HOTSPOT_CREDENTIALS_MESSAGE_TEMPLATE
     })
+    return 'sms added to Queue'
   }
 
   Member.remoteMethod('sendPassword', {
@@ -685,7 +641,7 @@ module.exports = function (Member) {
           where: {
             and: [
               {businessId: businessId},
-              {username: Member.createMemberUsername(businessId, username)}
+              {username: Member.createUsername(businessId, username)}
             ]
           }
         },
@@ -3053,28 +3009,28 @@ module.exports = function (Member) {
           return cb('id of business not found')
         }
         var businessId = business[0].id
-        var uniqueUserId = Member.createMemberUsername(businessId, username)
+        var uniqueUserId = Member.createUsername(businessId, username)
         return cb(null, {username: uniqueUserId})
       }
     )
   }
 
-  Member.createMemberUsername = function (businessId, username) {
-    if (!username || !businessId) {
+  Member.extractUsername = function (username) {
+    if (!username) {
+      return null
+    }
+    return username.split('@')[0]
+  }
+
+  Member.createUsername = function (usernameSuffix, username) {
+    if (!username || !usernameSuffix) {
       return null
     }
     username = username.toString()
     if (username.indexOf('@') != -1) {
       return username
     }
-    return username + '@' + businessId
-  }
-
-  Member.extractMemberUsername = function (username) {
-    if (!username) {
-      return null
-    }
-    return username.split('@')[0]
+    return username + '@' + usernameSuffix
   }
 
   Member.remoteMethod('getBusinessId', {
@@ -3941,7 +3897,7 @@ module.exports = function (Member) {
 
           return resolve({
             registered: true,
-            username: Member.extractMemberUsername(member.username),
+            username: Member.extractUsername(member.username),
             password: utility.decrypt(
               member.passwordText,
               config.ENCRYPTION_KEY

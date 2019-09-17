@@ -212,6 +212,7 @@ app.config([
         templateUrl: TEMPLATE_PREFIX + 'app/nas/tpl/nasList.html',
         resolve: load([
           'ui.grid',
+          'oi.select',
           'ui.grid.pagination',
           'ui.grid.selection',
           'ui.grid.resizeColumns',
@@ -258,6 +259,7 @@ app.config([
           'ui.grid',
           'ui.grid.pagination',
           'ui.grid.selection',
+          'oi.select',
           'ui.grid.resizeColumns',
           'ui.bootstrap.persian.datepicker',
           PREFIX + 'app/member/memberList.js',
@@ -272,7 +274,7 @@ app.config([
           'ui.grid.pagination',
           'ui.grid.selection',
           'ui.grid.resizeColumns',
-          'ui.bootstrap.persian.datepicker',
+          'oi.select',
           PREFIX + 'app/operator/operatorList.js'
         ]),
       })

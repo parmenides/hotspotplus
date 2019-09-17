@@ -55,14 +55,6 @@ module.exports = function (Business) {
 
     // Check if this is a business create
     if (ctx.instance && ctx.isNewInstance) {
-      /*if ( !ctx.instance.services ) {
-  ctx.instance.services = {
-    id:               "economic",
-    subscriptionDate: new Date ().getTime (),
-    expiresAt:        (new Date ().addDays ( config.TRIAL_DAYS )).getTime (),
-    duration:         1
-  }
-}*/
       ctx.instance.smsSignature = ctx.instance.title
       // add time zone defaults to business
       ctx.instance.timeZone = {}
@@ -197,6 +189,7 @@ module.exports = function (Business) {
           Business.assignDefaultPlanToBusiness(businessId)
             .then(function () {
               Business.adminChargeCredit(businessId, 10000)
+              //Business.createDefaultDepartment()
               return next()
             })
             .fail(function (err) {
@@ -279,6 +272,46 @@ module.exports = function (Business) {
     returns: {root: true},
   })
 
+  Business.getMyDepartments = async (ctx) => {
+    const Operator = app.models.Operator
+    const Department = app.models.Department
+    var userId = ctx.currentUserId
+    let limitedToDepartments;
+    const business = await Business.findById(userId)
+    departments = []
+    if (business) {
+      //return all deps
+      limitedToDepartments=[];
+      departments = await Department.find({
+        where: {
+          businessId:userId
+        }
+      })
+    } else {
+      const operator = await Operator.findById(userId)
+      limitedToDepartments = operator.departments
+      departments = await Department.find({
+        where: {
+          or: limitedToDepartments.map((departments) => {
+            return {id: departments.id}
+          })
+        }
+      })
+    }
+    return {
+      departments
+    }
+
+  }
+
+  Business.remoteMethod('getMyDepartments', {
+    description: 'Register A New License ',
+    accepts: [
+      {arg: 'options', type: 'object', http: 'optionsFromRequest'},
+    ],
+    returns: {root: true},
+  })
+
   Business.loadConfig = function (bizId, cb) {
     Business.findById(bizId, function (error, business) {
       if (error) {
@@ -315,6 +348,7 @@ module.exports = function (Business) {
         business.formConfig =
           hotspotTemplates[config.DEFAULT_THEME_ID].formConfig
       }
+
       return cb(null, business)
     })
   }
@@ -787,62 +821,6 @@ module.exports = function (Business) {
     returns: {root: true},
   })
 
-  /*Business.assignModuleToBusiness = function ( businessId, modulesItems ) {
-  log.debug ( "@assignModuleToBusiness: ", businessId, modulesItems );
-  return Q.Promise ( function ( resolve, reject ) {
-    if ( !modulesItems || modulesItems.length == 0 ) {
-      log.debug ( "no module assigned", modulesItems );
-      return resolve ()
-    }
-    Business.findById ( businessId, function ( error, business ) {
-      if ( !business ) {
-        return reject ( "invalid biz id" );
-      }
-      var modules = business.modules || {};
-      for ( var k in modulesItems ) {
-        var modulesItem = modulesItems[ k ];
-        var subscriptionDate = modulesItem.subscriptionDate || new Date ().getTime ();
-        var duraion = modulesItem.durationInMonths;
-        var expiresAt = (new Date ( subscriptionDate ).addMonths ( duraion )).getTime ();
-        modules[ modulesItem.id ] = {
-          id:               modulesItem.id,
-          subscriptionDate: subscriptionDate,
-          expiresAt:        expiresAt,
-          duration:         duraion
-        };
-      }
-
-      business.updateAttributes ( {
-        modules: modules
-      }, function ( error ) {
-        if ( error ) {
-          log.error ( error );
-          return reject ( error );
-        }
-        return resolve ();
-      } )
-
-    } )
-  } )
-};*/
-
-  /*
-  Business.remoteMethod ( 'assignModuleToBusiness', {
-    accepts: [
-      {
-        arg:        'businessId',
-        type:       'string',
-        'required': true
-      },
-      {
-        arg:        'moduleItem',
-        type:       'array',
-        'required': true
-      }
-    ],
-    returns: { root: true }
-  } );*/
-
   Business.buyCredit = function (rialPrice, ctx) {
     var Invoice = app.models.Invoice
     var SystemConfig = app.models.SystemConfig
@@ -962,65 +940,49 @@ module.exports = function (Business) {
     returns: {root: true},
   })
 
-  Business.observe('loaded', function (ctx, next) {
+  Business.observe('loaded', async (ctx) => {
     //Set the default configs
     if (ctx.data) {
-      Business.getCurrentService(ctx.data)
-        .then(function (currentService) {
-          ctx.data.services = currentService
-          Business.getModules(ctx.data)
-            .then(function (modules) {
-              ctx.data.modules = modules
-              //Check if business has a selected theme
-              var themeId = ctx.data.selectedThemeId
-              var themeConfig = extend({}, ctx.data.themeConfig)
-              var oldThemeConfig = extend({}, themeConfig[themeId])
-              var serviceId = ctx.data.services.id
-              if (!ctx.data.selectedThemeId) {
-                themeId = config.DEFAULT_THEME_ID
-                themeConfig[themeId] = extend({}, returnThemeConfig(themeId))
-              } else if (
-                ctx.data.selectedThemeId === config.PREVIOUS_DEFAULT_THEME_ID
-              ) {
-                themeId = config.DEFAULT_THEME_ID
-                themeConfig[themeId] = extend(
-                  {},
-                  returnThemeConfig(themeId, oldThemeConfig, serviceId),
-                )
-              } else if (
-                ctx.data.selectedThemeId === config.PREVIOUS_HOTEL_THEME_ID
-              ) {
-                themeId = config.HOTEL_THEME_ID
-                themeConfig[themeId] = extend(
-                  {},
-                  returnThemeConfig(themeId, oldThemeConfig, serviceId),
-                )
-              } else if (!hotspotTemplates[ctx.data.selectedThemeId]) {
-                themeId = config.DEFAULT_THEME_ID
-                themeConfig[themeId] = extend(
-                  {},
-                  returnThemeConfig(themeId, oldThemeConfig, serviceId),
-                )
-              }
-              ctx.data.selectedThemeId = themeId
-              ctx.data.groupMemberHelps = ctx.data.groupMemberHelps || {}
-              ctx.data.themeConfig = themeConfig
-              ctx.data.nasSharedSecret = ctx.data.nasSharedSecret || config.PRIMARY_SHARED_SECRET
-              ctx.data.newNasSharedSecret = config.PRIMARY_SHARED_SECRET
-              ctx.data.passwordText = '#$*%&#$*%^(#$*&%(*#$%*&'
-              return next()
-            })
-            .fail(function (error) {
-              log.error(error)
-              return next(error)
-            })
-        })
-        .fail(function (error) {
-          log.error(error)
-          return next(error)
-        })
-    } else {
-      return next()
+      const currentService = await Business.getCurrentService(ctx.data)
+      ctx.data.services = currentService
+      const modules = await Business.getModules(ctx.data)
+      ctx.data.modules = modules
+      var themeId = ctx.data.selectedThemeId
+      var themeConfig = extend({}, ctx.data.themeConfig)
+      var oldThemeConfig = extend({}, themeConfig[themeId])
+      var serviceId = ctx.data.services.id
+      if (!ctx.data.selectedThemeId) {
+        themeId = config.DEFAULT_THEME_ID
+        themeConfig[themeId] = extend({}, returnThemeConfig(themeId))
+      } else if (
+        ctx.data.selectedThemeId === config.PREVIOUS_DEFAULT_THEME_ID
+      ) {
+        themeId = config.DEFAULT_THEME_ID
+        themeConfig[themeId] = extend(
+          {},
+          returnThemeConfig(themeId, oldThemeConfig, serviceId),
+        )
+      } else if (
+        ctx.data.selectedThemeId === config.PREVIOUS_HOTEL_THEME_ID
+      ) {
+        themeId = config.HOTEL_THEME_ID
+        themeConfig[themeId] = extend(
+          {},
+          returnThemeConfig(themeId, oldThemeConfig, serviceId),
+        )
+      } else if (!hotspotTemplates[ctx.data.selectedThemeId]) {
+        themeId = config.DEFAULT_THEME_ID
+        themeConfig[themeId] = extend(
+          {},
+          returnThemeConfig(themeId, oldThemeConfig, serviceId),
+        )
+      }
+      ctx.data.selectedThemeId = themeId
+      ctx.data.groupMemberHelps = ctx.data.groupMemberHelps || {}
+      ctx.data.themeConfig = themeConfig
+      ctx.data.nasSharedSecret = ctx.data.nasSharedSecret || config.PRIMARY_SHARED_SECRET
+      ctx.data.newNasSharedSecret = config.PRIMARY_SHARED_SECRET
+      ctx.data.passwordText = '#$*%&#$*%^(#$*&%(*#$%*&'
     }
 
     function returnThemeConfig (themeId, oldThemeConfig, serviceId) {
@@ -1510,11 +1472,11 @@ module.exports = function (Business) {
       fromDate,
       toDate,
     )
-    const date = [];
-    const upload = [];
-    const download = [];
-    const sessionTime = [];
-    for(const res of result){
+    const date = []
+    const upload = []
+    const download = []
+    const sessionTime = []
+    for (const res of result) {
       date.push(res.date)
       upload.push(Number(res.upload))
       download.push(Number(res.download))

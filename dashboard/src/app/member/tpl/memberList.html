@@ -21,7 +21,8 @@
                     </button>
                 </div>
                 <div class="clearfix m-b col-sm-4">
-                    <button type="button" class="btn btn-sm btn-default btn-addon pull-right" ng-click="removeMembers()">
+                    <button type="button" class="btn btn-sm btn-default btn-addon pull-right"
+                            ng-click="removeMembers()">
                         <i class="fa fa-trash-o"></i>{{"member.removeMembers"|translate}}
                     </button>
                     <button type="button" class="btn btn-sm btn-default btn-addon pull-right" ng-click="showCsvForm()"
@@ -32,7 +33,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="clearfix m-b col-sm-6">
+                <div class="clearfix m-b col-sm-3">
                     <form class="input-group col-sm-12" ng-submit="searchMember()">
                         <div class="input-group-btn">
                             <button type="button" class="btn btn-sm btn-primary" ng-if="!isSearching"
@@ -61,6 +62,18 @@
                             </button>
                         </div>
                     </form>
+                </div>
+                <div class="clearfix m-b col-sm-3">
+                    <select ng-model="searchFilter.department" class="form-control input-sm"
+                            ng-options="department.title  for department in permittedDepartments">
+                        <option value="">{{"department.selectDepartment"|translate}}</option>
+                    </select>
+                </div>
+                <div class="clearfix m-b col-sm-3">
+                    <select ng-model="searchFilter.internetPlan" class="form-control input-sm"
+                            ng-options="internetPlan.name  for internetPlan in allInternetPlans">
+                        <option value="">{{"internetPlan.selectInternetPlan"|translate}}</option>
+                    </select>
                 </div>
             </div>
             <div class="table-responsive m-b-lg">

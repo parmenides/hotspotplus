@@ -1,68 +1,22 @@
-<div ng-controller="memberList">
+<div ng-controller="operatorList">
     <div class="wrapper-md bg-light b-b">
-        <h1 class="m-n font-thin h3">{{"member.listTitle"|translate}}</h1>
+        <h1 class="m-n font-thin h3">{{"operator.listTitle"|translate}}</h1>
     </div>
     <div class="hbox hbox-auto-xs hbox-auto-sm">
         <div class="col wrapper-md">
             <div class="row">
                 <div class="clearfix m-b col-sm-8">
-                    <button type="button" class="btn btn-sm btn-primary btn-addon" ng-click="addMember()">
-                        <i class="fa fa-plus"></i>{{"member.addMember"|translate}}
-                    </button>
-                    <button type="button" class="btn btn-sm btn-default btn-addon" ng-click="sendMessageToAll()"
-                            check-action access-action="sendBulkSms"
-                            uib-popover="{{'help.sendMessageToAll' | translate}}" popover-trigger="mouseenter">
-                        <i class="fa fa-send"></i>{{"message.sendMessage"|translate}}
-                    </button>
-                    <button type="button" class="btn btn-sm btn-addon btn-info" ng-click="createMemberByGroup()"
-                            check-action access-action="createMemberByGroup"
-                            uib-popover="{{'help.createMemberByGroup' | translate}}" popover-trigger="mouseenter">
-                        <i class="fa fa-users"></i>{{"member.createMemberByGroup"|translate}}
+                    <button type="button" class="btn btn-sm btn-primary btn-addon" ng-click="addOperator()">
+                        <i class="fa fa-plus"></i>{{"operator.addOperator"|translate}}
                     </button>
                 </div>
                 <div class="clearfix m-b col-sm-4">
-                    <button type="button" class="btn btn-sm btn-default btn-addon pull-right" ng-click="removeMembers()">
-                        <i class="fa fa-trash-o"></i>{{"member.removeMembers"|translate}}
-                    </button>
-                    <button type="button" class="btn btn-sm btn-default btn-addon pull-right" ng-click="showCsvForm()"
-                            check-action access-action="uploadMembers"
-                            uib-popover="{{'help.bulkImportBtn' | translate}}" popover-trigger="mouseenter">
-                        <i class="fa fa-upload"></i>{{"member.bulkImport"|translate}}
+                    <button type="button" class="btn btn-sm btn-default btn-addon pull-right" ng-click="removeOperators()">
+                        <i class="fa fa-trash-o"></i>{{"operator.removeOperators"|translate}}
                     </button>
                 </div>
             </div>
-            <div class="row">
-                <div class="clearfix m-b col-sm-6">
-                    <form class="input-group col-sm-12" ng-submit="searchMember()">
-                        <div class="input-group-btn">
-                            <button type="button" class="btn btn-sm btn-primary" ng-if="!isSearching"
-                                    ng-click="searchMember()"
-                                    uib-popover="{{'help.searchMember' | translate}}" popover-trigger="mouseenter"
-                                    popover-placement="bottom-right">
-                                <i class="fa fa-search"></i>
-                            </button>
-                            <button type="button" class="btn btn-sm btn-info"
-                                    uib-popover="{{'help.isSearching' | translate}}" popover-trigger="mouseenter"
-                                    popover-placement="bottom-right"
-                                    ng-if="isSearching" disabled>
-                                <i class="fa fa-circle-o-notch fa-spin"></i>
-                            </button>
-                        </div>
-                        <input type="text" class="form-control input-sm" ng-model="memberUsername"
-                               placeholder="{{'member.inputUserName' |  translate}}"
-                               uib-popover="{{'help.searchByUserName' | translate}}" popover-trigger="mouseenter"
-                               popover-placement="bottom-right">
-                        <div class="input-group-btn">
-                            <button type="button" class="btn btn-sm btn-default"
-                                    uib-popover="{{'help.clear' | translate}}" popover-trigger="mouseenter"
-                                    popover-placement="left"
-                                    ng-click="clearSearch()">
-                                <i class="fa fa-close"></i>
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+
             <div class="table-responsive m-b-lg">
                 <div ui-i18n="{{localLang}}">
                     <div ui-grid="gridOptions" ui-grid-selection ui-grid-pagination ui-grid-resize-columns class="grid"

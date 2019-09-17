@@ -7,8 +7,9 @@ services:
     restart: always
     container_name: apihotspotplus
     command: npm run start:dev
+    #command: npm run build:dev:angular
     ports:
-      - 3005:3000
+      - 3000:3000
     depends_on:
       - mongodb
       - redis
