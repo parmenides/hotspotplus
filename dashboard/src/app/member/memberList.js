@@ -220,126 +220,124 @@ app.controller('memberList', [
         departments: [],
         selectedInternetPlan: null
       }
-      Business.departments({id: businessId}).$promise.then((allDepartments) => {
-        Business.internetPlans({id: businessId}).$promise.then(
-          function (internetPlans) {
-            if (internetPlans.length != 0) {
-              $scope.internetPlans = internetPlans
-              $scope.member.selectedInternetPlan = $scope.internetPlans[0]
-              $uibModal.open({
-                backdrop: true,
-                animation: true,
-                keyboard: true,
-                backdropClick: true,
-                size: 'md',
-                scope: $scope,
-                templateUrl: PREFIX + 'app/member/tpl/memberForm.html',
-                controller: [
-                  '$scope',
-                  '$uibModalInstance',
-                  function ($scope, $uibModalInstance) {
-                    $scope.departments = allDepartments
-                    $scope.options = {
-                      title: 'member.addMember',
-                      cancelBtnLabel: 'general.cancel',
-                      saveBtnLabel: 'general.save',
-                      saveAndSendBtnLabel: 'general.saveAndSendPass',
-                      newMember: true
-                    }
+      Business.internetPlans({id: businessId}).$promise.then(
+        function (internetPlans) {
+          if (internetPlans.length != 0) {
+            $scope.internetPlans = internetPlans
+            $scope.member.selectedInternetPlan = $scope.internetPlans[0]
+            $uibModal.open({
+              backdrop: true,
+              animation: true,
+              keyboard: true,
+              backdropClick: true,
+              size: 'md',
+              scope: $scope,
+              templateUrl: PREFIX + 'app/member/tpl/memberForm.html',
+              controller: [
+                '$scope',
+                '$uibModalInstance',
+                function ($scope, $uibModalInstance) {
+                  $scope.departments = $scope.permittedDepartments
+                  $scope.options = {
+                    title: 'member.addMember',
+                    cancelBtnLabel: 'general.cancel',
+                    saveBtnLabel: 'general.save',
+                    saveAndSendBtnLabel: 'general.saveAndSendPass',
+                    newMember: true
+                  }
 
-                    // Persian date picker methods
-                    $scope.dateOptions = {
-                      formatYear: 'yy',
-                      startingDay: 6
-                    }
-                    $scope.dateFormats = [
-                      'dd-MMMM-yyyy',
-                      'yyyy/MM/dd',
-                      'dd.MM.yyyy',
-                      'shortDate'
-                    ]
-                    $scope.dateFormat = $scope.dateFormats[0]
-                    $scope.disabled = function (date, mode) {
-                      return mode === 'day' && date.getDay() === 5
-                    }
-                    $scope.startDateCalendar = function ($event) {
-                      $event.preventDefault()
-                      $event.stopPropagation()
-                      $scope.startDateCalendarIsOpen = true
-                    }
-                    // --> for calendar bug
-                    $scope.$watch('member.birthday', function (
-                      newValue,
-                      oldValue
-                    ) {
-                      $scope.startDateCalendarIsOpen = false
+                  // Persian date picker methods
+                  $scope.dateOptions = {
+                    formatYear: 'yy',
+                    startingDay: 6
+                  }
+                  $scope.dateFormats = [
+                    'dd-MMMM-yyyy',
+                    'yyyy/MM/dd',
+                    'dd.MM.yyyy',
+                    'shortDate'
+                  ]
+                  $scope.dateFormat = $scope.dateFormats[0]
+                  $scope.disabled = function (date, mode) {
+                    return mode === 'day' && date.getDay() === 5
+                  }
+                  $scope.startDateCalendar = function ($event) {
+                    $event.preventDefault()
+                    $event.stopPropagation()
+                    $scope.startDateCalendarIsOpen = true
+                  }
+                  // --> for calendar bug
+                  $scope.$watch('member.birthday', function (
+                    newValue,
+                    oldValue
+                  ) {
+                    $scope.startDateCalendarIsOpen = false
+                  })
+                  // <-- for calendar bug
+                  $scope.cancel = function () {
+                    $uibModalInstance.close()
+                  }
+                  $scope.save = function (sendMessage) {
+                    $scope.member.departments = $scope.member.departments.map((department) => {
+                      return department.id
                     })
-                    // <-- for calendar bug
-                    $scope.cancel = function () {
-                      $uibModalInstance.close()
+                    if ($scope.member.birthday) {
+                      var birthday = new Date($scope.member.birthday)
+                      $scope.member.birthday = birthday.getTime()
                     }
-                    $scope.save = function (sendMessage) {
-                      $scope.member.departments = $scope.member.departments.map((department) => {
-                        return department.id
-                      })
-                      if ($scope.member.birthday) {
-                        var birthday = new Date($scope.member.birthday)
-                        $scope.member.birthday = birthday.getTime()
-                      }
-                      if ($scope.member.mobile) {
-                        $scope.member.mobile = englishNumberFilter(
-                          $scope.member.mobile
-                        )
-                      }
-                      var planId = $scope.member.selectedInternetPlan.id
-                      delete $scope.member.selectedInternetPlan
-                      Business.members
-                        .create({id: businessId}, $scope.member)
-                        .$promise.then(
-                        function (res) {
-                          var memberId = res.id
-                          InternetPlan.assignPlanToMember({
-                            memberId: memberId,
-                            planId: planId
-                          }).$promise.then(
-                            function (res) {
-                              if (sendMessage) {
-                                $scope.sendPassword(memberId)
-                              }
-                              appMessenger.showSuccess(
-                                'member.createSuccessFull'
-                              )
-                              getPage()
-                              $uibModalInstance.close()
-                            },
-                            function (error) {
-                              appMessenger.showError(
-                                'member.assignInternetPlanUnSuccessFull'
-                              )
-                            }
-                          )
-                        },
-                        function (err) {
-                          appMessenger.showError('member.createUnSuccessFull')
-                          if (err.status == 422) {
-                            appMessenger.showError('member.usernameNotValid')
-                          }
-                        }
+                    if ($scope.member.mobile) {
+                      $scope.member.mobile = englishNumberFilter(
+                        $scope.member.mobile
                       )
                     }
+                    var planId = $scope.member.selectedInternetPlan.id
+                    delete $scope.member.selectedInternetPlan
+                    Business.members
+                      .create({id: businessId}, $scope.member)
+                      .$promise.then(
+                      function (res) {
+                        var memberId = res.id
+                        InternetPlan.assignPlanToMember({
+                          memberId: memberId,
+                          planId: planId
+                        }).$promise.then(
+                          function (res) {
+                            if (sendMessage) {
+                              $scope.sendPassword(memberId)
+                            }
+                            appMessenger.showSuccess(
+                              'member.createSuccessFull'
+                            )
+                            getPage()
+                            $uibModalInstance.close()
+                          },
+                          function (error) {
+                            appMessenger.showError(
+                              'member.assignInternetPlanUnSuccessFull'
+                            )
+                          }
+                        )
+                      },
+                      function (err) {
+                        appMessenger.showError('member.createUnSuccessFull')
+                        if (err.status == 422) {
+                          appMessenger.showError('member.usernameNotValid')
+                        }
+                      }
+                    )
                   }
-                ]
-              })
-            } else {
-              appMessenger.showWarning('member.pleaseCreateAnInternetPlan')
-            }
-          },
-          function (error) {
-            $log.error(error)
-            appMessenger.showError('error.generalError')
+                }
+              ]
+            })
+          } else {
+            appMessenger.showWarning('member.pleaseCreateAnInternetPlan')
           }
-        )
-      })
+        },
+        function (error) {
+          $log.error(error)
+          appMessenger.showError('error.generalError')
+        }
+      )
 
     }
 
@@ -1068,10 +1066,10 @@ app.controller('memberList', [
         $scope.isSearching = true
         filter.internetPlanId = {eq: internetPlan.id}
       }
-      if ( $scope.searchFilter.status) {
+      if ($scope.searchFilter.status) {
         const status = $scope.searchFilter.status
         $scope.isSearching = true
-        filter.active = {eq: status==='true'}
+        filter.active = {eq: status === 'true'}
       }
       getPage(filter)
 

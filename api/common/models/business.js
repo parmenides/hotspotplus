@@ -289,12 +289,15 @@ module.exports = function (Business) {
       })
     } else {
       const operator = await Operator.findById(userId)
+      log.error({operator});
       limitedToDepartments = operator.departments
+      const depIds = limitedToDepartments.map((depId) => {
+        return {id: depId}
+      })
+      log.error({depIds});
       departments = await Department.find({
         where: {
-          or: limitedToDepartments.map((departments) => {
-            return {id: departments.id}
-          })
+          or: depIds
         }
       })
     }
