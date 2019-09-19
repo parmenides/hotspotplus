@@ -44,10 +44,7 @@ app.controller('memberList', [
     Blob
   ) {
     var businessId = Session.business.id
-    $scope.searchFilter = {
-      department: null,
-      internetPlan: null
-    }
+
     $scope.allInternetPlans = []
     $scope.permittedDepartments = []
 
@@ -59,7 +56,6 @@ app.controller('memberList', [
         $scope.allInternetPlans = internetPlans
       })
 
-    $scope.memberUsername = ''
     $scope.isSearching = false
     $scope.paginationOptions = {
       pageNumber: 1,
@@ -1046,20 +1042,43 @@ app.controller('memberList', [
         ]
       })
     }
-    $scope.searchMember = function () {
-      if ($scope.memberUsername) {
+    $scope.searchFilter = {
+      status: null,
+      department: null,
+      username: '',
+      internetPlan: null
+    }
+
+    $scope.search = function () {
+      const filter = {}
+      if ($scope.searchFilter.username) {
+        const memberUsername = $scope.searchFilter.username
         $scope.isSearching = true
         var usernamePattern =
-          '/' + $scope.memberUsername + '.*@' + businessId + '$/i'
-        var filter = {username: {regexp: usernamePattern}}
-        getPage(filter)
-      } else {
-        getPage()
+          '/' + memberUsername + '.*@' + businessId + '$/i'
+        filter.username = {regexp: usernamePattern}
       }
+      if ($scope.searchFilter.department) {
+        const department = $scope.searchFilter.department
+        $scope.isSearching = true
+        filter.departments = {eq: department.id}
+      }
+      if ($scope.searchFilter.internetPlan) {
+        const internetPlan = $scope.searchFilter.internetPlan
+        $scope.isSearching = true
+        filter.internetPlanId = {eq: internetPlan.id}
+      }
+      if ( $scope.searchFilter.status) {
+        const status = $scope.searchFilter.status
+        $scope.isSearching = true
+        filter.active = {eq: status==='true'}
+      }
+      getPage(filter)
+
     }
     $scope.clearSearch = function () {
-      if ($scope.memberUsername) {
-        $scope.memberUsername = ''
+      if ($scope.searchFilter.username) {
+        $scope.searchFilter.username = ''
         getPage()
       }
     }
@@ -1090,11 +1109,11 @@ app.controller('memberList', [
       )
     }
 
-    $scope.$watch('memberUsername', function (newValue, oldValue) {
+    /*$scope.$watch('memberUsername', function (newValue, oldValue) {
       if (newValue != oldValue && newValue.length == 0) {
         getPage()
       }
-    })
+    })*/
 
     $scope.$watch('paginationOptions.itemPerPage', function (
       newValue,

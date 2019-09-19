@@ -34,10 +34,10 @@
             </div>
             <div class="row">
                 <div class="clearfix m-b col-sm-3">
-                    <form class="input-group col-sm-12" ng-submit="searchMember()">
+                    <form class="input-group col-sm-12" ng-submit="search()">
                         <div class="input-group-btn">
                             <button type="button" class="btn btn-sm btn-primary" ng-if="!isSearching"
-                                    ng-click="searchMember()"
+                                    ng-click="search()"
                                     uib-popover="{{'help.searchMember' | translate}}" popover-trigger="mouseenter"
                                     popover-placement="bottom-right">
                                 <i class="fa fa-search"></i>
@@ -49,7 +49,7 @@
                                 <i class="fa fa-circle-o-notch fa-spin"></i>
                             </button>
                         </div>
-                        <input type="text" class="form-control input-sm" ng-model="memberUsername"
+                        <input type="text" class="form-control input-sm" ng-model="searchFilter.username"
                                placeholder="{{'member.inputUserName' |  translate}}"
                                uib-popover="{{'help.searchByUserName' | translate}}" popover-trigger="mouseenter"
                                popover-placement="bottom-right">
@@ -64,15 +64,22 @@
                     </form>
                 </div>
                 <div class="clearfix m-b col-sm-3">
-                    <select ng-model="searchFilter.department" class="form-control input-sm"
+                    <select ng-change="search()" ng-model="searchFilter.department" class="form-control input-sm"
                             ng-options="department.title  for department in permittedDepartments">
                         <option value="">{{"department.selectDepartment"|translate}}</option>
                     </select>
                 </div>
                 <div class="clearfix m-b col-sm-3">
-                    <select ng-model="searchFilter.internetPlan" class="form-control input-sm"
+                    <select ng-change="search()" ng-model="searchFilter.internetPlan" class="form-control input-sm"
                             ng-options="internetPlan.name  for internetPlan in allInternetPlans">
                         <option value="">{{"internetPlan.selectInternetPlan"|translate}}</option>
+                    </select>
+                </div>
+                <div class="clearfix m-b col-sm-3">
+                    <select ng-change="search()" ng-model="searchFilter.status" class="form-control input-sm">
+                        <option value="">{{"member.selectStatus"|translate}}</option>
+                        <option value="true">{{"member.active"|translate}}</option>
+                        <option value="false">{{"member.inActive"|translate}}</option>
                     </select>
                 </div>
             </div>

@@ -320,3 +320,7 @@ slider span.bar {
     padding-top: 17px;
     padding-bottom: 10px;
 }
+
+oi-select:not(.multiple) .select-search-list-item_selection {
+    text-align: center !important;
+}
