@@ -194,6 +194,18 @@
       "permission": "ALLOW"
     },
     {
+      "accessType": "READ",
+      "principalType": "ROLE",
+      "principalId": "operator",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "WRITE",
+      "principalType": "ROLE",
+      "principalId": "operator",
+      "permission": "ALLOW"
+    },
+    {
       "accessType": "WRITE",
       "principalType": "ROLE",
       "principalId": "$owner",
@@ -224,6 +236,13 @@
       "accessType": "EXECUTE",
       "principalType": "ROLE",
       "principalId": "networkadmin",
+      "permission": "ALLOW",
+      "property": "getBalance"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "operator",
       "permission": "ALLOW",
       "property": "getBalance"
     },
@@ -349,6 +368,13 @@
       "accessType": "EXECUTE",
       "principalType": "ROLE",
       "principalId": "networkadmin",
+      "permission": "ALLOW",
+      "property": "destroyMembersById"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "operator",
       "permission": "ALLOW",
       "property": "destroyMembersById"
     },

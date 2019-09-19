@@ -10,6 +10,7 @@ app.directive('datePickerAdvance', [
   'translateFilter',
   'dashboardTiming',
   'appMessenger',
+  'Business',
   function (
     PREFIX,
     $log,
@@ -17,7 +18,8 @@ app.directive('datePickerAdvance', [
     translateNumberFilter,
     translateFilter,
     dashboardTiming,
-    appMessenger
+    appMessenger,
+    Business
   ) {
     return {
       scope: {
@@ -25,13 +27,23 @@ app.directive('datePickerAdvance', [
       },
       controller: function ($scope) {
         var DAY_MILLISECONDS = 24 * 60 * 60 * 1000
+
         if (!$scope.fromDate) {
           const refDate = new Date(new Date().getTime()).setHours(0, 0, 0, 0)
           $scope.fromDate = refDate - (DAY_MILLISECONDS * 20)
         }
         if (!$scope.endDate) {
-          $scope.endDate = $scope.fromDate  + (DAY_MILLISECONDS * 25)
+          $scope.endDate = $scope.fromDate + (DAY_MILLISECONDS * 25)
         }
+        Business.getMyDepartments().$promise.then(function (response) {
+          $scope.permittedDepartments = response.departments
+          $scope.limited = response.limited
+          if (!$scope.limited) {
+            $scope.permittedDepartments = [{id: 'all', title: translateFilter('department.allDepartment')},...$scope.permittedDepartments]
+          }
+          $scope.selectedDepartment = $scope.permittedDepartments[0]
+          $scope.search()
+        })
         $scope.dateFormats = [
           'dd-MMMM-yyyy',
           'yyyy/MM/dd',
@@ -69,21 +81,17 @@ app.directive('datePickerAdvance', [
         }
         $scope.dateFormat = $scope.dateFormats[0]
 
-        $scope.getDates = function () {
+        $scope.search = function () {
           fromDate = new Date($scope.fromDate).setHours(0, 0, 0, 0)
           endDate = new Date($scope.endDate).setHours(0, 0, 0, 0)
           if (endDate <= fromDate) {
             appMessenger.showError('dashboard.endDateIncorrect')
             return
           }
-          $scope.advanceTime = dashboardTiming.advanceTime(
-            fromDate,
-            endDate
-          )
           var result = {}
           result.fromDate = fromDate
           result.endDate = endDate
-          result.advanceTime = $scope.advanceTime
+          result.departmentId = $scope.selectedDepartment ? $scope.selectedDepartment.id : null
           $scope.updateDashboard({option: result})
         }
       },

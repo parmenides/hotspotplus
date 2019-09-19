@@ -87,6 +87,8 @@ app.controller('loadDashboardController', [
     } else {
       if (Session.isBusinessUser() && !Session.business) {
         return $state.go('access.signIn');
+      } else if (Session.isOperatorUser() && !Session.operator) {
+        return $state.go('access.operatorSignIn');
       } else if (Session.isResellerUser() && !Session.reseller) {
         return $state.go('access.resellerSignIn');
       } else if (Session.isAdminUser() && !Session.user) {
@@ -97,9 +99,9 @@ app.controller('loadDashboardController', [
         if (hasRole('networkadmin')) {
           // go to network admin dashboard
           $state.go('app.networkAdminDashboard');
-        } else if (hasRole('headmaster')) {
-          // go to school head master dashboard
-          $state.go('app.headMasterDashboard');
+        } else if (hasRole('operator')) {
+          // go to members list
+          $state.go('app.members');
         } else if (hasRole('reseller')) {
           // go to school head master dashboard
           $state.go('app.resellerBusinessList');

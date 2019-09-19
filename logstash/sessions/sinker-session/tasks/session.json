@@ -13,6 +13,8 @@
 		{"name" : "sessionId" , "type" : "String"},
 		{"name" : "businessId" , "type" : "String"},
 		{"name" : "memberId" , "type" : "String"},
+		{"name" : "departmentId" , "type" : "String"},
+		{"name" : "groupIdentityId" , "type" : "String"},
 		{"name" : "nasId" , "type" : "String"},
 		{"name" : "nasIp" , "type" : "String"},
 		{"name" : "username" , "type" : "String"},

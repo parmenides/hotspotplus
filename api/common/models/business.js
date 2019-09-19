@@ -276,15 +276,15 @@ module.exports = function (Business) {
     const Operator = app.models.Operator
     const Department = app.models.Department
     var userId = ctx.currentUserId
-    let limitedToDepartments;
+    let limitedToDepartments
     const business = await Business.findById(userId)
     departments = []
     if (business) {
       //return all deps
-      limitedToDepartments=[];
+      limitedToDepartments = []
       departments = await Department.find({
         where: {
-          businessId:userId
+          businessId: userId
         }
       })
     } else {
@@ -299,6 +299,7 @@ module.exports = function (Business) {
       })
     }
     return {
+      limited: limitedToDepartments.length !== 0,
       departments
     }
 
@@ -1463,19 +1464,32 @@ module.exports = function (Business) {
     returns: {root: true},
   })
 
-  Business.getTrafficUsage = async (startDate, endDate, ctx) => {
+  Business.getTrafficUsage = async (startDate, endDate, departmentId, ctx) => {
     var businessId = ctx.currentUserId
     var fromDate = Number.parseInt(startDate)
     var toDate = Number.parseInt(endDate)
-    const result = await db.getBusinessUsageByInterval(
-      businessId,
-      fromDate,
-      toDate,
-    )
+
     const date = []
     const upload = []
     const download = []
     const sessionTime = []
+    if (!departmentId) {
+      return {
+        date,
+        upload,
+        download,
+        sessionTime,
+      }
+    }
+    if (departmentId === 'all') {
+      departmentId = null
+    }
+    const result = await db.getUsageByInterval(
+      businessId,
+      departmentId,
+      fromDate,
+      toDate,
+    )
     for (const res of result) {
       date.push(res.date)
       upload.push(Number(res.upload))
@@ -1504,6 +1518,11 @@ module.exports = function (Business) {
         type: 'number',
         required: true,
         description: 'End Date',
+      },
+      {
+        arg: 'departmentId',
+        type: 'string',
+        description: 'Department',
       },
       {arg: 'options', type: 'object', http: 'optionsFromRequest'},
     ],

@@ -157,9 +157,27 @@
       "permission": "ALLOW"
     },
     {
+      "accessType": "READ",
+      "principalType": "ROLE",
+      "principalId": "operator",
+      "permission": "ALLOW"
+    },
+    {
       "accessType": "WRITE",
       "principalType": "ROLE",
       "principalId": "$owner",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "WRITE",
+      "principalType": "ROLE",
+      "principalId": "operator",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "operator",
       "permission": "ALLOW"
     },
     {
@@ -234,7 +252,21 @@
     {
       "accessType": "EXECUTE",
       "principalType": "ROLE",
+      "principalId": "operator",
+      "permission": "ALLOW",
+      "property": "loadMember"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
       "principalId": "member",
+      "permission": "ALLOW",
+      "property": "loadMemberPassword"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "operator",
       "permission": "ALLOW",
       "property": "loadMemberPassword"
     },
@@ -255,7 +287,21 @@
     {
       "accessType": "EXECUTE",
       "principalType": "ROLE",
+      "principalId": "operator",
+      "permission": "ALLOW",
+      "property": "loadMemberInternetPlans"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
       "principalId": "networkadmin",
+      "permission": "ALLOW",
+      "property": "sendPassword"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "operator",
       "permission": "ALLOW",
       "property": "sendPassword"
     },
@@ -277,6 +323,13 @@
       "accessType": "EXECUTE",
       "principalType": "ROLE",
       "principalId": "networkadmin",
+      "permission": "ALLOW",
+      "property": "loadMemberUsage"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "operator",
       "permission": "ALLOW",
       "property": "loadMemberUsage"
     },

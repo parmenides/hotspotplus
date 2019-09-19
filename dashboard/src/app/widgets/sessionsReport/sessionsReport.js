@@ -34,11 +34,7 @@ app.directive('sessionsReport', [
         $scope.loading = false;
         makeTable();
         $scope.$on($scope.params.reloadEvent, function(event, data) {
-          if (data.params.advanceTime) {
-            $scope.params.fromDate = data.params.advanceTime.startDate;
-          } else {
             $scope.params.fromDate = data.params.fromDate;
-          }
           makeTable();
         });
         function makeTable() {
@@ -198,6 +194,7 @@ app.directive('sessionsReport', [
             var query = {};
             //query.startDate = $scope.params.fromDate;
             //query.endDate = $scope.params.endDate;
+            query.departmentId = $scope.params.departmentId;
             query.businessId = $scope.params.businessId;
             query.skip =
               ($scope.paginationOptions.pageNumber - 1) *

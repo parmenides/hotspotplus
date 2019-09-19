@@ -34,11 +34,11 @@ engine=AggregatingMergeTree()
 PARTITION BY toStartOfDay( TimeRecvd )
 ORDER BY (NextHop,DstPort,SrcPort,DstIP,SrcIP,RouterAddr,toStartOfInterval( TimeRecvd ,INTERVAL 30 minute ))
 
-create table IF NOT EXISTS hotspotplus.Session(sessionId String,businessId String,memberId String,nasId String,nasIp String,username String,framedIpAddress String,mac String,creationDate DateTime,download UInt32,upload UInt32,
+create table IF NOT EXISTS hotspotplus.Session(sessionId String,businessId String,memberId String,nasId String,departmentId String,groupIdentityId String,nasIp String,username String,framedIpAddress String,mac String,creationDate DateTime,download UInt32,upload UInt32,
 sessionTime UInt32,accStatusType UInt8 )
 engine=MergeTree()
 PARTITION BY toStartOfDay( creationDate )
-ORDER BY (businessId,memberId,sessionId,nasIp,framedIpAddress,creationDate,username)
+ORDER BY (businessId,memberId,sessionId,departmentId,nasIp,framedIpAddress,creationDate,username)
 
 create table IF NOT EXISTS hotspotplus.WebProxy( memberIp String,nasIp String,protocol String,url String,method String,domain String,receivedAt DateTime )
 engine=MergeTree()

@@ -9,7 +9,7 @@ app.directive('topMembers', [
   'persianDateFilter',
   'translateNumberFilter',
   'humanSizeFilter',
-  function(
+  function (
     PREFIX,
     $log,
     Usage,
@@ -22,46 +22,42 @@ app.directive('topMembers', [
       scope: {
         params: '=options'
       },
-      controller: function($scope) {
-        $scope.loading = false;
-        makeChart();
-        $scope.$on($scope.params.reloadEvent, function(event, data) {
-          if (data.params.advanceTime) {
-            $scope.params.fromDate = data.params.advanceTime.startDate;
-            $scope.params.endDate = data.params.advanceTime.endDate;
-            $scope.params.monthDays = data.params.advanceTime.monthDays;
-          } else {
-            $scope.params.fromDate = data.params.fromDate;
-            $scope.params.endDate = data.params.endDate;
-            $scope.params.monthDays = [];
-          }
-          $scope.params.offset = data.params.offset;
+      controller: function ($scope) {
+        $scope.loading = false
+        makeChart()
+        $scope.$on($scope.params.reloadEvent, function (event, data) {
+          $scope.params.fromDate = data.params.fromDate
+          $scope.params.endDate = data.params.endDate
+          $scope.params.monthDays = []
+          $scope.params.offset = data.params.offset
 
-          makeChart();
-        });
-        function makeChart() {
-          var query = {};
-          query.startDate = $scope.params.fromDate;
-          query.endDate = $scope.params.endDate;
-          query.businessId = $scope.params.businessId;
-          query.offset = 0;
-          $scope.loading = true;
-          Usage.getTopMembers(query).$promise.then(function(
+          makeChart()
+        })
+
+        function makeChart () {
+          var query = {}
+          query.startDate = $scope.params.fromDate
+          query.endDate = $scope.params.endDate
+          query.businessId = $scope.params.businessId
+          query.departmentId = $scope.params.departmentId
+          query.offset = 0
+          $scope.loading = true
+          Usage.getTopMembers(query).$promise.then(function (
             res
           ) {
-            $scope.loading = false;
+            $scope.loading = false
 
-            $scope.labels = res.username;
+            $scope.labels = res.username
             $scope.series = [
               translateFilter('dashboard.download'),
               translateFilter('dashboard.upload')
-            ];
-            $scope.data = [res.download, res.upload];
+            ]
+            $scope.data = [res.download, res.upload]
 
-            var xAxesLabel = 'dashboard.xAxesLabelDaily';
+            var xAxesLabel = 'dashboard.xAxesLabelDaily'
 
-            $scope.type = 'bar';
-            $scope.colors = ['#6254b2', '#23b7e5'];
+            $scope.type = 'bar'
+            $scope.colors = ['#6254b2', '#23b7e5']
             $scope.options = {
               legend: {
                 display: true,
@@ -76,10 +72,10 @@ app.directive('topMembers', [
                 bodyFontSize: 16,
                 mode: 'x-axis',
                 callbacks: {
-                  label: function(tooltipItems, data) {
+                  label: function (tooltipItems, data) {
                     return (
                       humanSizeFilter(tooltipItems.yLabel)
-                    );
+                    )
                   }
                 }
               },
@@ -91,14 +87,14 @@ app.directive('topMembers', [
                       labelString: translateFilter(xAxesLabel),
                       fontColor: '#333'
                     },
-                    afterTickToLabelConversion: function(data) {
-                      var xLabels = data.ticks;
+                    afterTickToLabelConversion: function (data) {
+                      var xLabels = data.ticks
                       if (xLabels.length > 6) {
-                        xLabels.forEach(function(labels, i) {
+                        xLabels.forEach(function (labels, i) {
                           if (i % 2 == 1) {
-                            xLabels[i] = '';
+                            xLabels[i] = ''
                           }
-                        });
+                        })
                       }
                     }
                   }
@@ -114,24 +110,24 @@ app.directive('topMembers', [
                     },
                     ticks: {
                       beginAtZero: true,
-                      callback: function(value) {
-                        return humanSizeFilter(Number(value));
+                      callback: function (value) {
+                        return humanSizeFilter(Number(value))
                       }
                     }
                   }
                 ]
               }
-            };
+            }
           }),
-            function(error) {
+            function (error) {
               $log.error(
                 'can not get traffic usage chart info from data source: ' +
-                  error
-              );
-            };
+                error
+              )
+            }
         }
       },
       templateUrl: PREFIX + 'app/widgets/topMembers/tpl/topMembers.html'
-    };
+    }
   }
-]);
+])

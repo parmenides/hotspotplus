@@ -509,11 +509,10 @@ module.exports = function (Member) {
 	} );*/
 
   Member.loadMember = function (memberId, ctx, cb) {
-    var businessId = ctx.currentUserId
     Member.findOne(
       {
         where: {
-          and: [{id: memberId}, {businessId: businessId}]
+          and: [{id: memberId}]
         },
         fields: {
           passwordText: false
@@ -3680,10 +3679,15 @@ module.exports = function (Member) {
     ],
     returns: {root: true}
   })
-  Member.getAllMembersCount = function (fromDate, endDate, ctx, cb) {
+  Member.getAllMembersCount = function (departmentId, fromDate, endDate, ctx, cb) {
     var businessId = ctx.currentUserId
     log.debug('@getAllMembersCount : ', businessId)
     var Business = app.models.Business
+
+    if (!departmentId) {
+      return {allMembers: 0}
+    }
+
     Business.findById(businessId, function (error, business) {
       if (error) {
         log.error(error)
@@ -3693,12 +3697,15 @@ module.exports = function (Member) {
         log.error('business not found')
         return cb('invalid business')
       }
-      var creationDate = business.creationDate
+      const query = {
+        businessId: businessId,
+        creationDate: {gte: business.creationDate, lt: endDate}
+      }
+      if (departmentId && departmentId !== 'all') {
+        query.departments = {eq: departmentId}
+      }
       Member.count(
-        {
-          businessId: businessId,
-          creationDate: {gte: creationDate, lt: endDate}
-        },
+        query,
         function (error, members) {
           if (error) {
             log.error(error)
@@ -3713,9 +3720,14 @@ module.exports = function (Member) {
       )
     })
   }
+
   Member.remoteMethod('getAllMembersCount', {
     description: 'Get All Member Count of Business.',
     accepts: [
+      {
+        arg: 'departmentId',
+        type: 'string'
+      },
       {
         arg: 'fromDate',
         type: 'number'
@@ -3818,10 +3830,13 @@ module.exports = function (Member) {
     returns: {root: true}
   })
 
-  Member.getNewMembersCount = function (fromDate, endDate, ctx, cb) {
+  Member.getNewMembersCount = function (departmentId, fromDate, endDate, ctx, cb) {
     var businessId = ctx.currentUserId
     log.debug('getNewMembersCount : ', businessId)
     var Business = app.models.Business
+    if (!departmentId) {
+      return {newMembers: 0}
+    }
     Business.findById(businessId, function (error, business) {
       if (error) {
         log.error(error)
@@ -3831,11 +3846,16 @@ module.exports = function (Member) {
         log.error('business not found')
         return cb('invalid business')
       }
+
+      const query = {
+        businessId: businessId,
+        creationDate: {gte: fromDate, lt: endDate}
+      }
+      if (departmentId && departmentId !== 'all') {
+        query.departments = {eq: departmentId}
+      }
       Member.count(
-        {
-          businessId: businessId,
-          creationDate: {gte: fromDate, lt: endDate}
-        },
+        query,
         function (error, members) {
           if (error) {
             log.error(error)
@@ -3855,6 +3875,10 @@ module.exports = function (Member) {
     description: 'Get New Member Count of Business.',
     accepts: [
       {
+        arg: 'departmentId',
+        type: 'string',
+        required: true
+      }, {
         arg: 'fromDate',
         type: 'number',
         required: true

@@ -20,6 +20,7 @@ app.directive('usageReport', [
         $scope.$on($scope.params.reloadEvent, function(event, data) {
           $scope.params.fromDate = data.params.fromDate;
           $scope.params.endDate = data.params.endDate;
+          $scope.params.departmentId = data.params.departmentId;
           getMembersCount();
         });
 
@@ -31,6 +32,7 @@ app.directive('usageReport', [
           options.businessId = $scope.params.businessId;
           options.startDate = $scope.params.fromDate;
           options.endDate = $scope.params.endDate;
+          options.departmentId = $scope.params.departmentId;
           Usage.getUsage(options).$promise.then(
             function(result) {
               $scope.download = result.download;

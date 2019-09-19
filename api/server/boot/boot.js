@@ -30,7 +30,6 @@ module.exports = function(app) {
       addOrLoadRole(config.ROLES.SERVICEMAN),
       addOrLoadRole(config.ROLES.RESELLER),
       addOrLoadRole(config.ROLES.NETWORKADMIN),
-      addOrLoadRole(config.ROLES.HEADMASTER),
       addOrLoadRole(config.ROLES.NAS),
       addOrLoadRole(config.ROLES.HOTSPOTMEMBER),
       addOrLoadRole(config.ROLES.SERVICEPROVIDER),

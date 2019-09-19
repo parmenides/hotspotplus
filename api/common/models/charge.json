@@ -31,6 +31,13 @@
     {
       "accessType": "EXECUTE",
       "principalType": "ROLE",
+      "principalId": "operator",
+      "permission": "ALLOW",
+      "property": "loadCharges"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
       "principalId": "networkadmin",
       "permission": "ALLOW",
       "property": "loadCharges"

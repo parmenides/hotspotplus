@@ -35,23 +35,27 @@ app.directive('membersReport', [
         $scope.members = []
         getPage()
         $scope.$on($scope.params.reloadEvent, function (event, data) {
-          if (data.params.advanceTime) {
-            $scope.params.fromDate = data.params.advanceTime.startDate
-          } else {
-            $scope.params.fromDate = data.params.fromDate
-          }
+          $scope.params.fromDate = data.params.fromDate
+          $scope.params.departmentId = data.params.departmentId
           getPage()
         })
-        function getPage() {
+
+        function getPage () {
           $scope.loading = true
           var options = {}
           options.id = $scope.params.businessId
-          options.filter = {}
+          options.filter = {
+            where:{}
+          }
           options.filter.sort = 'creationDate DESC'
           options.filter.skip = 0
           options.filter.limit = 8
           options.filter.fields = {internetPlanHistory: false}
-
+          if ($scope.params.departmentId && $scope.params.departmentId !=='all') {
+            options.filter.where.departments = {eq: $scope.params.departmentId}
+          } else if(!$scope.params.departmentId){
+            options.filter.where.departments = {eq: '--'}
+          }
           Business.members(options).$promise.then(
             function (members) {
               $scope.members = members

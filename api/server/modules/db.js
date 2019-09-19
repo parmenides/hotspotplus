@@ -8,7 +8,7 @@ const LICENSE_TABLE = 'license.Charge'
 module.exports = (insert, query, uuid, config, moment, log) => {
   return Object.freeze({
 
-    getBusinessUsageByInterval: (businessId, startDate, endDate) => {
+    getUsageByInterval: (businessId, departmentId, startDate, endDate) => {
       if (!businessId) {
         throw new Error('businessId is undefined')
       }
@@ -23,8 +23,8 @@ module.exports = (insert, query, uuid, config, moment, log) => {
       const sqlQuery = `
 SELECT * FROM (
 SELECT any(toStartOfInterval(creationDate,INTERVAL ${intervalInSeconds} second)) as date ,toInt32(SUM(upload)) as upload,toInt32(SUM(download)) download,toInt32(SUM(sessionTime)) as sessionTime
-FROM hotspotplus.Session
-WHERE creationDate>=toDateTime('${from}') AND creationDate<=toDateTime('${to}') AND businessId='${businessId}'
+FROM ${SESSION_TABLE}
+WHERE creationDate>=toDateTime('${from}') AND creationDate<=toDateTime('${to}') AND businessId='${businessId}' ${departmentId ? ` AND departmentId='${departmentId}'` : ''}
 GROUP BY toStartOfInterval(creationDate,INTERVAL ${intervalInSeconds} second) order by date
 ) ANY RIGHT JOIN (
 SELECT arrayJoin(timeSlots(toDateTime('${from}'), toUInt32(${intervalInSeconds}*${durationInDays}),${intervalInSeconds})) AS date
@@ -64,7 +64,7 @@ WHERE creationDate>=toDateTime('${from}') AND creationDate<=toDateTime('${to}') 
         }
       })
     },
-    getBusinessUsage: (businessId, startDate, endDate) => {
+    getBusinessUsage: (businessId, departmentId, startDate, endDate) => {
       if (!businessId) {
         throw new Error('businessId is undefined')
       }
@@ -75,7 +75,7 @@ WHERE creationDate>=toDateTime('${from}') AND creationDate<=toDateTime('${to}') 
       const from = moment.utc(startDate).format(config.DATABASE_DATE_FORMAT)
       const to = moment.utc(endDate).format(config.DATABASE_DATE_FORMAT)
       const sqlQuery = `SELECT toInt32(SUM(upload)) as upload,toInt32(SUM(download)) download,toInt32(SUM(sessionTime)) as sessionTime FROM ${SESSION_TABLE}
-WHERE creationDate>=toDateTime('${from}') AND creationDate<=toDateTime('${to}') AND businessId='${businessId}' `
+WHERE creationDate>=toDateTime('${from}') AND creationDate<=toDateTime('${to}') AND businessId='${businessId}' ${departmentId ? `AND departmentId='${departmentId}'` : ''}`
 
       return query(sqlQuery).then((result) => {
         const {upload, download, sessionTime, bulk} = result[0]
@@ -88,7 +88,7 @@ WHERE creationDate>=toDateTime('${from}') AND creationDate<=toDateTime('${to}') 
         }
       })
     },
-    getTopMembersByUsage: (businessId, startDate, endDate, limit, skip) => {
+    getTopMembersByUsage: (businessId, departmentId, startDate, endDate, limit, skip) => {
       if (!businessId) {
         throw new Error('businessId is undefined')
       }
@@ -99,10 +99,10 @@ WHERE creationDate>=toDateTime('${from}') AND creationDate<=toDateTime('${to}') 
       const from = moment.utc(startDate).format(config.DATABASE_DATE_FORMAT)
       const to = moment.utc(endDate).format(config.DATABASE_DATE_FORMAT)
       const sqlQuery = `SELECT memberId,any(username) as username,toInt32(SUM(upload)) as upload,toInt32(SUM(download)) download,toInt32(SUM(sessionTime)) as sessionTime FROM ${SESSION_TABLE}
-WHERE creationDate>=toDateTime('${from}') AND creationDate<=toDateTime('${to}') AND businessId='${businessId}' 
-GROUP BY memberId ORDER BY download DESC,upload DESC, sessionTime DESC LIMIT ${limit} OFFSET ${skip} 
+WHERE creationDate>=toDateTime('${from}') AND creationDate<=toDateTime('${to}') AND businessId='${businessId}' ${departmentId ? `AND departmentId='${departmentId}'` : ''} 
+    GROUP BY memberId ORDER BY download DESC,upload DESC, sessionTime DESC LIMIT ${limit} OFFSET ${skip} 
 `
-      log.error(sqlQuery)
+      log.debug(sqlQuery)
       return query(sqlQuery).then((result) => {
         log.debug({result})
         return result
@@ -124,7 +124,7 @@ GROUP BY memberId ORDER BY download DESC,upload DESC, sessionTime DESC LIMIT ${l
       ]
       return insert(CHARGE_TABLE, charge)
     },
-    getActiveSessionIds: (businessId, fromDate, toDate, skip, limit) => {
+    getActiveSessionIds: (businessId, departmentId, fromDate, toDate, skip, limit) => {
 
       if (!businessId) {
         throw new Error('business ID is undefined')
@@ -143,9 +143,9 @@ GROUP BY memberId ORDER BY download DESC,upload DESC, sessionTime DESC LIMIT ${l
         const startDate = moment.utc(fromDate).format(config.DATABASE_DATE_FORMAT)
         const endDate = toDate ? moment.utc(toDate).format(config.DATABASE_DATE_FORMAT) : moment.utc().format(config.DATABASE_DATE_FORMAT)
         const sqlQuery = `SELECT sessionId
- FROM ${SESSION_TABLE} WHERE businessId='${businessId}' AND creationDate>=toDateTime('${startDate}') AND creationDate<=toDateTime('${endDate}')
- AND (accStatusType=3 OR accStatusType=1) 
- GROUP BY sessionId LIMIT ${limit} OFFSET ${skip} `
+ FROM ${SESSION_TABLE} WHERE businessId='${businessId}' AND creationDate>=toDateTime('${startDate}') AND creationDate<=toDateTime('${endDate}') ${departmentId ? ` AND departmentId='${departmentId}'` : ''}
+       AND (accStatusType=3 OR accStatusType=1) 
+       GROUP BY sessionId LIMIT ${limit} OFFSET ${skip} `
         log.warn({sqlQuery})
         return query(sqlQuery).then((result) => {
           log.warn({result})
@@ -179,7 +179,7 @@ any(username) as username,any(memberId) as memberId,toInt32(sum(download)) as do
         throw error
       }
     },
-    countSessions: (businessId, fromDate, toDate) => {
+    countSessions: (businessId, departmentId, fromDate, toDate) => {
 
       if (!businessId) {
         throw new Error('business ID is undefined')
@@ -191,8 +191,8 @@ any(username) as username,any(memberId) as memberId,toInt32(sum(download)) as do
       try {
         const startDate = moment.utc(fromDate).format(config.DATABASE_DATE_FORMAT)
         const endDate = toDate ? moment.utc(toDate).format(config.DATABASE_DATE_FORMAT) : moment.utc().format(config.DATABASE_DATE_FORMAT)
-        const sqlQuery = `SELECT  sessionId,count() as count FROM ${SESSION_TABLE} WHERE businessId='${businessId}' 
-AND creationDate>=toDateTime('${startDate}') AND creationDate<=toDateTime('${endDate}') AND (accStatusType=3 OR accStatusType=1) group by sessionId`
+        const sqlQuery = `SELECT  sessionId,count() as count FROM ${SESSION_TABLE} WHERE businessId='${businessId}'  ${departmentId ? `AND departmentId='${departmentId}'` : ''} 
+      AND creationDate>=toDateTime('${startDate}') AND creationDate<=toDateTime('${endDate}') AND (accStatusType=3 OR accStatusType=1) group by sessionId`
         log.debug({sqlQuery})
         return query(sqlQuery).then(function (result) {
           log.debug({result})

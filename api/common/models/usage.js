@@ -40,15 +40,32 @@ module.exports = function (Usage) {
     return {upload, download, sessionTime}
   }
 
-  Usage.getUsage = async (startDate, endDate, ctx) => {
+  Usage.getUsage = async (departmentId, startDate, endDate, ctx) => {
     var businessId = ctx.currentUserId
-    const result = await db.getBusinessUsage(businessId,startDate,endDate);
-    return result;
+    if (!departmentId) {
+      return {
+        bulk: 0,
+        download: 0,
+        upload: 0,
+        sessionTime: 0
+      }
+    }
+    if (departmentId === 'all') {
+      departmentId = null
+    }
+
+    const result = await db.getBusinessUsage(businessId,departmentId, startDate, endDate)
+    return result
   }
 
   Usage.remoteMethod('getUsage', {
     description: 'Get usage report.',
     accepts: [
+      {
+        arg: 'departmentId',
+        type: 'string',
+        description: 'departmentId',
+      },
       {
         arg: 'startDate',
         type: 'number',
@@ -67,14 +84,14 @@ module.exports = function (Usage) {
   })
 
   Usage.reportStatus = async () => {
-    const dbInfo = await db.getDatabaseInfo();
-    const info = {};
-    for(const tb of dbInfo){
+    const dbInfo = await db.getDatabaseInfo()
+    const info = {}
+    for (const tb of dbInfo) {
       info[tb.table] = tb
     }
     return {
-      db:info
-    };
+      db: info
+    }
   }
 
   Usage.remoteMethod('reportStatus', {
@@ -83,7 +100,7 @@ module.exports = function (Usage) {
     returns: {root: true}
   })
 
-  Usage.getTopMembers = async (startDate, endDate, ctx) => {
+  Usage.getTopMembers = async (departmentId, startDate, endDate, ctx) => {
 
     var businessId = ctx.currentUserId
     var fromDate = Number.parseInt(startDate)
@@ -91,18 +108,32 @@ module.exports = function (Usage) {
     const limit = 10
     const skip = 0
 
+    const username = []
+    const upload = []
+    const download = []
+    const sessionTime = []
+
+    if (!departmentId) {
+      return {
+        username,
+        upload,
+        download,
+        sessionTime
+      }
+    }
+    if (departmentId === 'all') {
+      departmentId = null
+    }
+
     const result = await db.getTopMembersByUsage(
       businessId,
+      departmentId,
       fromDate,
       toDate,
       limit,
       skip
     )
-    const username = [];
-    const upload = [];
-    const download = [];
-    const sessionTime = [];
-    for(const res of result){
+    for (const res of result) {
       username.push(res.username)
       upload.push(Number(res.upload))
       download.push(Number(res.download))
@@ -119,6 +150,11 @@ module.exports = function (Usage) {
   Usage.remoteMethod('getTopMembers', {
     description: 'Get Top Members.',
     accepts: [
+      {
+        arg: 'departmentId',
+        type: 'string',
+        description: 'departmentId',
+      },
       {
         arg: 'startDate',
         type: 'number',
@@ -161,7 +197,7 @@ module.exports = function (Usage) {
           throw new Error(error)
         }
         if (!usage) {
-          log.warn('previews session is empty');
+          log.warn('previews session is empty')
           return resolve()
         }
         return resolve(JSON.parse(usage))

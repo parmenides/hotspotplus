@@ -10,6 +10,8 @@
                         <i class="fa fa-plus"></i>{{"member.addMember"|translate}}
                     </button>
                     <button type="button" class="btn btn-sm btn-default btn-addon" ng-click="sendMessageToAll()"
+                            access="networkadmin"
+                            access-permission-type="one"
                             check-action access-action="sendBulkSms"
                             uib-popover="{{'help.sendMessageToAll' | translate}}" popover-trigger="mouseenter">
                         <i class="fa fa-send"></i>{{"message.sendMessage"|translate}}
@@ -27,6 +29,9 @@
                     </button>
                     <button type="button" class="btn btn-sm btn-default btn-addon pull-right" ng-click="showCsvForm()"
                             check-action access-action="uploadMembers"
+                            access="networkadmin"
+                            access-permission-type="one"
+
                             uib-popover="{{'help.bulkImportBtn' | translate}}" popover-trigger="mouseenter">
                         <i class="fa fa-upload"></i>{{"member.bulkImport"|translate}}
                     </button>

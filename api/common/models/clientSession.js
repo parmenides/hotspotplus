@@ -58,6 +58,7 @@ module.exports = function (ClientSession) {
     session.memberId = member.id
     session.businessId = nas.businessId
     session.nasId = nas.id
+    session.departmentId = nas.department
     session.nasIp = RadiusAccountingMessage.getNasIp()
     session.framedIpAddress = RadiusAccountingMessage.getAttribute('framedIpAddress')
     session.creationDate = moment.utc(RadiusAccountingMessage.getAttribute('timestamp')).unix()
@@ -68,9 +69,9 @@ module.exports = function (ClientSession) {
     session.download = RadiusAccountingMessage.getAttribute('download') || 0
     session.upload = RadiusAccountingMessage.getAttribute('upload') || 0
     session.sessionTime = !_.isUndefined(RadiusAccountingMessage.getAttribute('sessionTime')) ? RadiusAccountingMessage.getAttribute('sessionTime') : 0
-    session.groupIdentity = member.groupIdentity
+    //session.groupIdentity = member.groupIdentity
     session.groupIdentityId = member.groupIdentityId
-    session.groupIdentityType = member.groupIdentityType
+    //session.groupIdentityType = member.groupIdentityType
 
     var Usage = app.models.Usage
     const calculatedUsage = await Usage.calculateUsage(sessionId, {
@@ -109,6 +110,7 @@ module.exports = function (ClientSession) {
     startDate,
     endDate,
     businessId,
+    departmentId,
     skip,
     limit,
     cb
@@ -124,14 +126,21 @@ module.exports = function (ClientSession) {
     }
     startDate = startDate ? startDate : (new Date()).remove({minutes: 2})
     endDate = endDate ? endDate : (new Date()).add({minutes: 2})
-
-    const activeSessions = await db.getActiveSessionIds(businessId, startDate, endDate, skip, limit)
     const sessions = []
+
+    if (!departmentId) {
+      return sessions
+    }
+    if (departmentId === 'all') {
+      departmentId = null
+    }
+
+    const activeSessions = await db.getActiveSessionIds(businessId, departmentId, startDate, endDate, skip, limit)
     for (const session of activeSessions) {
       const sessionData = await db.getSessionUsage(session.sessionId)
-      sessions.push(sessionData);
+      sessions.push(sessionData)
     }
-    return sessions;
+    return sessions
     //return cb(null, {data: 'noReport'})
   }
 
@@ -141,7 +150,8 @@ module.exports = function (ClientSession) {
       {
         arg: 'startDate',
         type: 'number',
-      }, {
+      },
+      {
         arg: 'endDate',
         type: 'number',
       },
@@ -149,6 +159,10 @@ module.exports = function (ClientSession) {
         arg: 'businessId',
         type: 'string',
         required: true
+      },
+      {
+        arg: 'departmentId',
+        type: 'string'
       },
       {
         arg: 'skip',
@@ -164,15 +178,21 @@ module.exports = function (ClientSession) {
     returns: {arg: 'result', type: 'Object'}
   })
 
-  ClientSession.getOnlineSessionCount = async (businessId, startDate, endDate) => {
+  ClientSession.getOnlineSessionCount = async (businessId, departmentId, startDate, endDate) => {
     try {
       if (!businessId) {
         return cb('Business Id not defined')
       }
       log.debug('@getOnlineSessionCount : ', businessId)
+      if (!departmentId) {
+        return {count: 0}
+      }
+      if (departmentId === 'all') {
+        departmentId = null
+      }
       startDate = startDate ? startDate : (new Date()).remove({minutes: 2})
       endDate = endDate ? endDate : (new Date()).add({minutes: 2})
-      const result = await db.countSessions(businessId, startDate, endDate)
+      const result = await db.countSessions(businessId, departmentId, startDate, endDate)
       return {count: result.count}
     } catch (error) {
       log.error(error)
@@ -187,6 +207,10 @@ module.exports = function (ClientSession) {
         arg: 'businessId',
         type: 'string',
         required: true
+      },
+      {
+        arg: 'departmentId',
+        type: 'string',
       },
       {
         arg: 'startDate',

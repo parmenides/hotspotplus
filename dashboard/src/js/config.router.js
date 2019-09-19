@@ -306,6 +306,11 @@ app.config([
         templateUrl: TEMPLATE_PREFIX + 'app/business/tpl/signIn.html',
         resolve: load([PREFIX + 'app/business/auth.js']),
       })
+      .state('access.operatorSignIn', {
+        url: '/operator/:name/signin',
+        templateUrl: TEMPLATE_PREFIX + 'app/operator/tpl/signIn.html',
+        resolve: load([PREFIX + 'app/operator/auth.js']),
+      })
       .state('access.publicCustomizeService', {
         url: '/public/customizeService',
         templateUrl:

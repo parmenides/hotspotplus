@@ -324,3 +324,7 @@ slider span.bar {
 oi-select:not(.multiple) .select-search-list-item_selection {
     text-align: center !important;
 }
+
+.no-margin{
+    margin: 0 !important;
+}
