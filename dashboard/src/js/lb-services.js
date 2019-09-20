@@ -28998,11 +28998,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * @param {Object=} parameters Request parameters.
              *
-             *   This method does not accept any parameters.
-             *   Supply an empty object or omit this argument altogether.
-             *
-             * @param {Object} postData Request data.
-             *
              *  - `type` – `{string=}` -
              *
              *  - `businessId` – `{string=}` -
@@ -29023,6 +29018,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `dstPort` – `{string=}` -
              *
+             *  - `limit` – `{number}` -
+             *
+             *  - `skip` – `{number}` -
+             *
+             *  - `sort` – `{string=}` -
+             *
              *  - `options` – `{object=}` -
              *
              * @param {function(Object,Object)=} successCb
@@ -29042,7 +29043,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              */
             "searchNetflow": {
               url: urlBase + "/Reports/searchNetflow",
-              method: "POST",
+              method: "GET",
             },
 
             /**

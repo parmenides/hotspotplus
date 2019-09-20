@@ -120,7 +120,11 @@ const createNetflowQuery = (
   if (whereParts.length > 0) {
     mainQuery = `${mainQuery} WHERE  ${whereParts.join(' AND ')}`;
   }
-  if (count === false) {
+  if (
+    count === false &&
+    netflowReportRequestTask.limit &&
+    netflowReportRequestTask.skip
+  ) {
     mainQuery = `${mainQuery} LIMIT ${netflowReportRequestTask.limit}  OFFSET ${
       netflowReportRequestTask.skip
     } `;
@@ -150,13 +154,27 @@ const queryNetflow = async (
   log.error({ countQuery });
   const countResult = await executeClickQuery(countQuery);
   const { rows, columns } = await executeClickQuery(mainQuery);
+  /*const data = rows.map((row: any[]) => {
+      return rowValueToJson(columns, row);
+    });*/
+  log.debug(countResult);
+  return {
+    rows,
+    columns,
+    size: countResult.rows[0][0],
+  };
+};
+
+const queryNetflowAsJson = async (
+  netflowReportRequestTask: NetflowReportRequestTask,
+) => {
+  const { rows, columns, size } = await queryNetflow(netflowReportRequestTask);
   const data = rows.map((row: any[]) => {
     return rowValueToJson(columns, row);
   });
-  log.debug(countResult);
   return {
     data,
-    size: countResult.rows[0][0],
+    size,
   };
 };
 
@@ -211,6 +229,7 @@ const toProtocolString = (protocol: number) => {
 };
 
 export default {
+  queryNetflowAsJson,
   queryNetflow,
   formatJson,
 };

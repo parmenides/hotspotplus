@@ -35,8 +35,8 @@ app.directive('netflowReport', [
       controller: function ($scope) {
         $scope.loading = true
 
-        $scope.localLang = $rootScope.localLang;
-        $scope.direction = $rootScope.direction;
+        $scope.localLang = $rootScope.localLang
+        $scope.direction = $rootScope.direction
         $scope.dateFormats = [
           'dd-MMMM-yyyy',
           'yyyy/MM/dd',
@@ -77,7 +77,6 @@ app.directive('netflowReport', [
           itemPerPage: 15,
           sort: null
         }
-
 
         $scope.gridOptions = {
           enableSorting: true,
@@ -133,7 +132,7 @@ app.directive('netflowReport', [
             {
               displayName: 'report.protocol',
               field: 'protocol',
-              width:100,
+              width: 100,
               enableColumnMenu: false,
               enableHiding: false,
               enableSorting: false,
@@ -143,7 +142,7 @@ app.directive('netflowReport', [
             }
           ],
           onRegisterApi: function (gridApi) {
-            $log.debug(gridApi.grid.isScrollingVertically);
+            $log.debug(gridApi.grid.isScrollingVertically)
             $scope.gridApi = gridApi
           }
         }
@@ -153,11 +152,11 @@ app.directive('netflowReport', [
           $scope.search()
         }
 
-        $scope.search = function () {
-          $log.debug($scope.searchFilter);
+        $scope.search = function (type) {
+          $log.debug($scope.searchFilter)
 
           var query = {
-            type:'json',
+            type,
             from: new Date($scope.searchFilter.from).getTime(),
             to: new Date($scope.searchFilter.to).getTime(),
             srcAddress: $scope.searchFilter.srcAddress,
@@ -169,20 +168,34 @@ app.directive('netflowReport', [
             }),
             username: $scope.searchFilter.member ? $scope.searchFilter.member.username : undefined,
             businessId: businessId,
-            sort: $scope.searchFilter.sort,
-            skip:($scope.paginationOptions.pageNumber - 1) * $scope.paginationOptions.itemPerPage,
-            limit:$scope.paginationOptions.itemPerPage
           }
-          Report.searchNetflow(query).$promise.then(
-            function (result) {
-              $scope.gridOptions.totalItems = result.size
-              $scope.paginationOptions.totalItems = result.size
-              $scope.gridOptions.data = result.data
-            },
-            function (error) {
-              $log.error(error)
-            }
-          )
+          if (type === 'json') {
+            query.sort = $scope.searchFilter.sort
+            query.skip = ($scope.paginationOptions.pageNumber - 1) * $scope.paginationOptions.itemPerPage
+            query.limit = $scope.paginationOptions.itemPerPage
+
+            Report.searchNetflow(query).$promise.then(
+              function (result) {
+                $scope.gridOptions.totalItems = result.size
+                $scope.paginationOptions.totalItems = result.size
+                $scope.gridOptions.data = result.data
+              },
+              function (error) {
+                $log.error(error)
+              }
+            )
+          }else if(type==='excel'){
+            Report.searchNetflow(query).$promise.then(
+              function (result) {
+                $scope.gridOptions.totalItems = result.size
+                $scope.paginationOptions.totalItems = result.size
+                $scope.gridOptions.data = result.data
+              },
+              function (error) {
+                $log.error(error)
+              }
+            )
+          }
         }
       },
       templateUrl: PREFIX + 'app/report/tpl/netflowReport.html'

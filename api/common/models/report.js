@@ -7,6 +7,10 @@ var utility = require('../../server/modules/utility')
 var HttpClient = require('../../server/modules/httpClient')
 var Q = require('q')
 
+const fs = require('fs')
+const Path = require('path')
+const Axios = require('axios')
+
 if (!process.env.REPORT_SERVICE_URL) {
   throw new Error('invalid REPORT_SERVICE_URL')
 }
@@ -27,11 +31,37 @@ module.exports = function (Report) {
   })
 
   Report.searchNetflow = async (type, businessId, departments, from, to, username, srcAddress, srcPort, dstAddress, dstPort, limit, skip, sort, ctx) => {
-    const httpClient = HttpClient(process.env.REPORT_SERVICE_URL)
-    const response = await httpClient.post('/api/netflow/search', {
-      type, businessId, departments, from, to, username, srcAddress, srcPort, dstAddress, dstPort,limit,skip,sort
-    })
-    return response.data
+
+    if (type === 'json') {
+      const httpClient = HttpClient(process.env.REPORT_SERVICE_URL)
+      const response = await httpClient.get('/api/netflow/search', {
+        params: {
+          type, businessId, departments, from, to, username, srcAddress, srcPort, dstAddress, dstPort, limit, skip, sort
+        }
+      })
+      return response.data
+    } else {
+      const response = await Axios({
+        url: `${process.env.REPORT_SERVICE_URL}api/netflow/search`,
+        method: 'get',
+        responseType: 'stream',
+        params: {
+          type, businessId, departments, from, to, username, srcAddress, srcPort, dstAddress, dstPort, limit, skip, sort
+        }
+      })
+
+      const writer = fs.createWriteStream('/files')
+      response.data.pipe(writer)
+
+      writer.on('finish', () => {
+        log.debug('report saved')
+        return {ok: true}
+      })
+
+      writer.on('error', () => {
+        log.error('report failed to save')
+      })
+    }
   }
 
   Report.remoteMethod('searchNetflow', {
@@ -47,11 +77,14 @@ module.exports = function (Report) {
       {arg: 'srcPort', type: 'string'},
       {arg: 'dstAddress', type: 'string'},
       {arg: 'dstPort', type: 'string'},
-      {arg: 'limit', type: 'number', required: true},
-      {arg: 'skip', type: 'number', required: true},
+      {arg: 'limit', type: 'number'},
+      {arg: 'skip', type: 'number'},
       {arg: 'sort', type: 'string'},
       {arg: 'options', type: 'object', http: 'optionsFromRequest'}
     ],
+    http: {
+      verb: 'get'
+    },
     returns: {root: true},
   })
 }
