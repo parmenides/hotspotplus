@@ -1,0 +1,116 @@
+<div class="">
+    <div class="row">
+        <div class="col-sm-12">
+            <form name="netflowForm" class="form-validation">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <span class="h4">{{"report.reportFilter" | translate}}</span>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group pull-in clearfix">
+                            <div class="col-sm-6">
+                                <label>{{"report.username" | translate}}</label>
+                                <oi-select oi-options="member.username for member in members"
+                                           ng-model="searchFilter.member"></oi-select>
+                            </div>
+                            <div class="col-sm-6">
+                                <label>{{"report.department" | translate}}</label>
+                                <oi-select oi-options="department.title for department in departments"
+                                           ng-model="searchFilter.department" multiple></oi-select>
+                            </div>
+                        </div>
+                        <div class="form-group pull-in clearfix">
+                            <div class="col-sm-6">
+                                <label>{{"report.from" | translate}}</label>
+                                <span class="input-group">
+                                    <input type="text" class="form-control text-center"
+                                           datepicker-popup-persian='{{dateFormat}}' ng-model="searchFilter.from"
+                                           placeholder="{{ 'report.from' | translate }}"
+                                           is-open="startDateCalendarIsOpen" datepicker-options="dateOptions"
+                                           date-disabled="disabled(date, mode)"
+                                           close-text="{{ 'date.close' | translate }}"/>
+
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-primary"
+                                                ng-click="startDateCalendar($event)">
+                                            <i class="fa fa-calendar"></i>
+                                        </button>
+                            </span>
+                                </span>
+                            </div>
+                            <div class="col-sm-6">
+                                <label>{{"report.to" | translate}}</label>
+                                <span class="input-group">
+                                    <input type="text" class="form-control text-center"
+                                           datepicker-popup-persian='{{dateFormat}}' ng-model="searchFilter.to"
+                                           placeholder="{{ 'report.to' | translate }}"
+                                           is-open="endDateCalendarIsOpen" datepicker-options="dateOptions"
+                                           date-disabled="disabled(date, mode)"
+                                           close-text="{{ 'date.close' | translate }}"/>
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-primary"
+                                                ng-click="endDateCalendar($event)">
+                                            <i class="fa fa-calendar"></i>
+                                        </button>
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group pull-in clearfix">
+                            <div class="col-sm-6">
+                                <label>{{ "report.srcAddress" | translate }}</label>
+                                <input type="text" class="form-control text-center ltr-text"   name="srcAddress"
+                                       ng-pattern="/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/"
+                                       ng-model="searchFilter.srcAddress">
+                            </div>
+                            <div class="col-sm-6">
+                                <label>{{ "report.srcPort" | translate }}</label>
+                                <input type="text"  class="form-control ltr-text text-center" name="srcPort" ng-pattern="/^[0-9]+$/" ng-model="searchFilter.srcPort">
+                            </div>
+                        </div>
+                        <div class="form-group pull-in clearfix">
+                            <div class="col-sm-6">
+                                <label>{{ "report.dstAddress" | translate }}</label>
+                                <input type="text" class="form-control ltr-text text-center"  name="dstAddress"
+                                       ng-pattern="/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/"
+                                       ng-model="searchFilter.dstAddress">
+                            </div>
+                            <div class="col-sm-6">
+                                <label>{{ "report.dstPort" | translate }}</label>
+                                <input type="text"  class="form-control text-center ltr-text"  name="dstPort" ng-pattern="/^[0-9]+$/" ng-model="searchFilter.dstPort">
+                            </div>
+                        </div>
+                    </div>
+                    <footer class="panel-footer text-right bg-light lter">
+                        <button ng-click="search()" type="submit" class="btn btn-success" >{{"report.search" |
+                            translate}}
+                        </button>
+                        <button type="button" class="btn btn-primary" >{{"report.download" |
+                            translate}}
+                        </button>
+                    </footer>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="table-responsive m-b-lg">
+        <div ui-i18n="{{localLang}}">
+            <div ui-grid="gridOptions"  ui-grid-pagination ui-grid-resize-columns class="grid"
+                 dir="{{direction}}"></div>
+        </div>
+    </div>
+
+    <div class="row text-center">
+        <div class="col-md-6">
+            <uib-pagination ng-change="pageChanges()"
+                            total-items="paginationOptions.totalItems"
+                            items-per-page="paginationOptions.itemPerPage"
+                            previous-text="{{'general.previous'|translate}}"
+                            next-text="{{'general.next'|translate}}"
+                            class="pagination-md"
+                            ng-model="paginationOptions.pageNumber"
+                            boundary-link-numbers="true" rotate="false" max-size="5"></uib-pagination>
+        </div>
+    </div>
+</div>

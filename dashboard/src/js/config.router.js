@@ -288,6 +288,7 @@ app.config([
           'ui.grid.resizeColumns',
           'ui.bootstrap.persian.datepicker',
           'oi.select',
+          PREFIX + 'app/report/netflowReport.js',
           PREFIX + 'app/report/reportList.js',
         ]),
       })

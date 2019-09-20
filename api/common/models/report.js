@@ -17,7 +17,7 @@ module.exports = function (Report) {
     if (ctx.isNewInstance) {
       var report = ctx.instance
       log.debug(report)
-      const httpClient = HttpClient(process.env.REPORT_SERVICE_URL);
+      const httpClient = HttpClient(process.env.REPORT_SERVICE_URL)
       const response = await httpClient.post('/api/report/create', report)
       log.debug(response.data)
       return next()
@@ -26,4 +26,32 @@ module.exports = function (Report) {
     }
   })
 
+  Report.searchNetflow = async (type, businessId, departments, from, to, username, srcAddress, srcPort, dstAddress, dstPort, limit, skip, sort, ctx) => {
+    const httpClient = HttpClient(process.env.REPORT_SERVICE_URL)
+    const response = await httpClient.post('/api/netflow/search', {
+      type, businessId, departments, from, to, username, srcAddress, srcPort, dstAddress, dstPort,limit,skip,sort
+    })
+    return response.data
+  }
+
+  Report.remoteMethod('searchNetflow', {
+    description: 'Search netflow',
+    accepts: [
+      {arg: 'type', type: 'string'},
+      {arg: 'businessId', type: 'string'},
+      {arg: 'departments', type: ['string']},
+      {arg: 'from', type: 'number'},
+      {arg: 'to', type: 'number'},
+      {arg: 'username', type: 'string'},
+      {arg: 'srcAddress', type: 'string'},
+      {arg: 'srcPort', type: 'string'},
+      {arg: 'dstAddress', type: 'string'},
+      {arg: 'dstPort', type: 'string'},
+      {arg: 'limit', type: 'number', required: true},
+      {arg: 'skip', type: 'number', required: true},
+      {arg: 'sort', type: 'string'},
+      {arg: 'options', type: 'object', http: 'optionsFromRequest'}
+    ],
+    returns: {root: true},
+  })
 }

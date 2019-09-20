@@ -305,7 +305,6 @@ module.exports = function (Business) {
       limited: limitedToDepartments.length !== 0,
       departments
     }
-
   }
 
   Business.remoteMethod('getMyDepartments', {

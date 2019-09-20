@@ -16,19 +16,22 @@ const log = createLogger();
 
 const clickHouse: any = createClickConnection();
 
-const formatReports = (rows: ClickNetflowRow[]) => {
-  const formatted = rows.map((clickRow) => {
+const formatReports = (rows: any[]) => {
+  const formatted = rows.map((row) => {
     return {
-      Router: clickRow.nasTitle,
-      Username: clickRow.username,
-      Mac: clickRow.mac,
-      Jalali_Date: clickRow.getJalaliDate(),
-      Src_Addr: clickRow.SrcIP,
-      Src_Port: clickRow.SrcPort,
-      Dst_Addr: clickRow.DstIP,
-      Dst_Port: clickRow.DstPort,
-      Protocol: clickRow.getProtocolString(),
-      Gregorian_Date: clickRow.getGregorianDate(),
+      BusinessId: row.businessId,
+      memberId: row.memberId,
+      nasId: row.nasId,
+      nasIp: row.nasIp,
+      Username: row.username,
+      Mac: row.mac,
+      Jalali_Date: toJalaliDate(row.TimeRecvd),
+      Src_Addr: row.SrcIP,
+      Src_Port: row.SrcPort,
+      Dst_Addr: row.DstIP,
+      Dst_Port: row.DstPort,
+      Protocol: toProtocolString(row.Proto),
+      gregorian_date: toGregorianDate(row.TimeRecvd),
     };
   });
   return _.sortBy(formatted, ['Router', 'Username', 'Jalali_Date']);
@@ -36,9 +39,16 @@ const formatReports = (rows: ClickNetflowRow[]) => {
 
 const createNetflowQuery = (
   netflowReportRequestTask: NetflowReportRequestTask,
+  count: boolean,
 ) => {
-  let mainQuery: string = ` SELECT * FROM hotspotplus.Session JOIN hotspotplus.Netflow ON Session.nasIp=Netflow.RouterAddr 
+  let mainQuery: string;
+  if (count) {
+    mainQuery = ` SELECT toInt32(count(*)) as size FROM hotspotplus.Session JOIN hotspotplus.Netflow ON Session.nasIp=Netflow.RouterAddr 
  AND toStartOfInterval(Session.creationDate, INTERVAL 5 minute)=toStartOfInterval(Netflow.TimeRecvd,INTERVAL 5 minute ) `;
+  } else {
+    mainQuery = ` SELECT businessId,memberId,nasIp,username,RouterAddr as routerAddr,SrcIP as srcIp, DstIP as dstIp, SrcPort as srcPort, DstPort as dstPort,TimeRecvd as timeRecvd,Proto as proto FROM hotspotplus.Session JOIN hotspotplus.Netflow ON Session.nasIp=Netflow.RouterAddr 
+ AND toStartOfInterval(Session.creationDate, INTERVAL 5 minute)=toStartOfInterval(Netflow.TimeRecvd,INTERVAL 5 minute ) `;
+  }
 
   const whereParts: string[] = [
     ` (Session.framedIpAddress=Netflow.DstIP OR Session.framedIpAddress=Netflow.SrcIP OR Session.framedIpAddress=Netflow.NextHop) `,
@@ -83,12 +93,15 @@ const createNetflowQuery = (
   if (netflowReportRequestTask.businessId) {
     whereParts.push(` businessId='${netflowReportRequestTask.businessId}' `);
   }
-  if (netflowReportRequestTask.nas && netflowReportRequestTask.nas.length > 0) {
-    const nasIdQueries: string[] = [];
-    for (const nas of netflowReportRequestTask.nas) {
-      nasIdQueries.push(` nasId='${nas.id}' `);
+  if (
+    netflowReportRequestTask.departments &&
+    netflowReportRequestTask.departments.length > 0
+  ) {
+    const departmentQueries: string[] = [];
+    for (const departmentId of netflowReportRequestTask.departments) {
+      departmentQueries.push(` departmentId='${departmentId}' `);
     }
-    whereParts.push(` (${nasIdQueries.join(' OR ')}) `);
+    whereParts.push(` (${departmentQueries.join(' OR ')}) `);
   }
   if (netflowReportRequestTask.srcAddress) {
     whereParts.push(
@@ -104,16 +117,15 @@ const createNetflowQuery = (
       }' ) `,
     );
   }
-  if (netflowReportRequestTask.protocol) {
-    if (netflowReportRequestTask.protocol === PROTOCOLS.TCP) {
-      whereParts.push(` Proto=6 `);
-    } else if (netflowReportRequestTask.protocol === PROTOCOLS.UPD) {
-      whereParts.push(` Proto=17 `);
-    }
-  }
   if (whereParts.length > 0) {
     mainQuery = `${mainQuery} WHERE  ${whereParts.join(' AND ')}`;
   }
+  if (count === false) {
+    mainQuery = `${mainQuery} LIMIT ${netflowReportRequestTask.limit}  OFFSET ${
+      netflowReportRequestTask.skip
+    } `;
+  }
+  log.debug(netflowReportRequestTask);
   return mainQuery;
 };
 
@@ -132,80 +144,73 @@ interface NetflowReportResult {
 
 const queryNetflow = async (
   netflowReportRequestTask: NetflowReportRequestTask,
-): Promise<NetflowReportResult[]> => {
-  const mainQuery = await createNetflowQuery(netflowReportRequestTask);
-  log.debug(mainQuery);
-  const { rows } = await executeClickQuery(mainQuery);
-  const netflowRows = rows.map((row: any[]) => {
-    return new ClickNetflowRow(row);
+) => {
+  const mainQuery = await createNetflowQuery(netflowReportRequestTask, false);
+  const countQuery = await createNetflowQuery(netflowReportRequestTask, true);
+  log.error({ countQuery });
+  const countResult = await executeClickQuery(countQuery);
+  const { rows, columns } = await executeClickQuery(mainQuery);
+  const data = rows.map((row: any[]) => {
+    return rowValueToJson(columns, row);
   });
-  return formatReports(netflowRows);
+  log.debug(countResult);
+  return {
+    data,
+    size: countResult.rows[0][0],
+  };
 };
 
-export class ClickNetflowRow {
-  public RouterAddr: string;
-  public SrcIP: string;
-  public DstIP: string;
-  public SrcPort: string;
-  public DstPort: string;
-  public NextHop: string;
-  public TimeRecvd: string;
-  public businessId: string;
-  public memberId: string;
-  public nasId: string;
-  public nasTitle: string;
-  public nasIp: string;
-  public username: string;
-  public framedIpAddress: string;
-  public mac: string;
-  public creationDate: string;
-  public Proto: number;
-
-  constructor(row: any[]) {
-    this.RouterAddr = row[0] && row[0].toString();
-    this.SrcIP = row[1] && row[1].toString();
-    this.DstIP = row[2] && row[2].toString();
-    this.SrcPort = row[3] && row[3].toString();
-    this.DstPort = row[4] && row[4].toString();
-    this.NextHop = row[5] && row[5].toString();
-    this.TimeRecvd = row[6] && row[6].toString();
-    this.Proto = row[7] && (row[7] as number);
-    this.businessId = row[8] && row[8].toString();
-    this.memberId = row[9] && row[9].toString();
-    this.nasId = row[10] && row[10].toString();
-    this.nasTitle = row[11] && row[11].toString();
-    this.nasIp = row[12] && row[12].toString();
-    this.username = row[13] && row[13].toString();
-    this.framedIpAddress = row[14] && row[14].toString();
-    this.mac = row[15] && row[15].toString();
-    this.creationDate = row[16] && row[16].toString();
-  }
-
-  public getJalaliDate() {
-    return momentJ(moment.tz(this.TimeRecvd, '').tz(LOCAL_TIME_ZONE)).format(
-      REPORT_PERSIAN_DATE_FORMAT,
-    );
-  }
-
-  public getGregorianDate() {
-    return moment
-      .tz(this.TimeRecvd, '')
-      .tz(LOCAL_TIME_ZONE)
-      .format(REPORT_GREGORIAN_DATE_FORMAT);
-  }
-
-  public getProtocolString() {
-    let protocolString = '';
-    if (this.Proto === 6) {
-      protocolString = PROTOCOLS.TCP;
+const formatJson = (data: any[]) => {
+  return data.map((row) => {
+    if (row.timeRecvd) {
+      row.jalaliDate = toJalaliDate(row.timeRecvd);
+      row.gregorianDate = toGregorianDate(row.timeRecvd);
     }
-    if (this.Proto === 17) {
-      protocolString = PROTOCOLS.UPD;
+    if (row.proto) {
+      row.protocol = toProtocolString(row.proto);
     }
-    return protocolString;
+    return row;
+  });
+};
+
+const rowValueToJson = (
+  columns: Array<{ name: 'string'; type: 'string' }>,
+  row: any[],
+) => {
+  let i = 0;
+  const jsonRow: any = {};
+  for (const value of row) {
+    jsonRow[columns[i].name] = value;
+    i++;
   }
-}
+  return jsonRow;
+};
+
+const toJalaliDate = (date: string) => {
+  return momentJ(moment.tz(date, '').tz(LOCAL_TIME_ZONE)).format(
+    REPORT_PERSIAN_DATE_FORMAT,
+  );
+};
+
+const toGregorianDate = (date: string) => {
+  return moment
+    .tz(date, '')
+    .tz(LOCAL_TIME_ZONE)
+    .format(REPORT_GREGORIAN_DATE_FORMAT);
+};
+
+const toProtocolString = (protocol: number) => {
+  let protocolString = '';
+  if (protocol === 6) {
+    protocolString = PROTOCOLS.TCP;
+  }
+  if (protocol === 17) {
+    protocolString = PROTOCOLS.UPD;
+  }
+  return protocolString;
+};
 
 export default {
   queryNetflow,
+  formatJson,
 };

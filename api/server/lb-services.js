@@ -6657,6 +6657,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `endDate` – `{number}` - End Date
              *
+             *  - `departmentId` – `{string=}` - Department
+             *
              *  - `options` – `{object=}` -
              *
              * @param {function(Object,Object)=} successCb
@@ -14655,6 +14657,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * @param {Object} postData Request data.
              *
+             *  - `departmentId` – `{string=}` -
+             *
              *  - `fromDate` – `{number=}` -
              *
              *  - `endDate` – `{number}` -
@@ -14740,6 +14744,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *   Supply an empty object or omit this argument altogether.
              *
              * @param {Object} postData Request data.
+             *
+             *  - `departmentId` – `{string}` -
              *
              *  - `fromDate` – `{number}` -
              *
@@ -20140,6 +20146,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `businessId` – `{string}` -
              *
+             *  - `departmentId` – `{string=}` -
+             *
              *  - `skip` – `{number=}` -
              *
              *  - `limit` – `{number=}` -
@@ -20180,6 +20188,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * @param {Object} postData Request data.
              *
              *  - `businessId` – `{string}` -
+             *
+             *  - `departmentId` – `{string=}` -
              *
              *  - `startDate` – `{number=}` -
              *
@@ -27924,6 +27934,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * @param {Object} postData Request data.
              *
+             *  - `departmentId` – `{string=}` - departmentId
+             *
              *  - `startDate` – `{number}` - Start Date
              *
              *  - `endDate` – `{number}` - End Date
@@ -28003,6 +28015,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *   Supply an empty object or omit this argument altogether.
              *
              * @param {Object} postData Request data.
+             *
+             *  - `departmentId` – `{string=}` - departmentId
              *
              *  - `startDate` – `{number}` - Start Date
              *
@@ -28970,6 +28984,64 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              */
             "createChangeStream": {
               url: urlBase + "/Reports/change-stream",
+              method: "POST",
+            },
+
+            /**
+             * @ngdoc method
+             * @name lbServices.Report#searchNetflow
+             * @methodOf lbServices.Report
+             *
+             * @description
+             *
+             * Search netflow
+             *
+             * @param {Object=} parameters Request parameters.
+             *
+             *   This method does not accept any parameters.
+             *   Supply an empty object or omit this argument altogether.
+             *
+             * @param {Object} postData Request data.
+             *
+             *  - `type` – `{string=}` -
+             *
+             *  - `businessId` – `{string=}` -
+             *
+             *  - `departments` – `{string=}` -
+             *
+             *  - `from` – `{number=}` -
+             *
+             *  - `to` – `{number=}` -
+             *
+             *  - `username` – `{string=}` -
+             *
+             *  - `srcAddress` – `{string=}` -
+             *
+             *  - `srcPort` – `{string=}` -
+             *
+             *  - `dstAddress` – `{string=}` -
+             *
+             *  - `dstPort` – `{string=}` -
+             *
+             *  - `options` – `{object=}` -
+             *
+             * @param {function(Object,Object)=} successCb
+             *   Success callback with two arguments: `value`, `responseHeaders`.
+             *
+             * @param {function(Object)=} errorCb Error callback with one argument:
+             *   `httpResponse`.
+             *
+             * @returns {Object} An empty reference that will be
+             *   populated with the actual data once the response is returned
+             *   from the server.
+             *
+             * <em>
+             * (The remote method definition does not provide any description.
+             * This usually means the response is a `Report` object.)
+             * </em>
+             */
+            "searchNetflow": {
+              url: urlBase + "/Reports/searchNetflow",
               method: "POST",
             },
 

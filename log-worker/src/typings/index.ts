@@ -14,25 +14,21 @@ export enum REPORT_TYPE {
 }
 
 export interface GeneralReportRequestTask {
-  type: REPORT_TYPE;
-  creationDate: string;
-  status: string;
-  businessId?: string;
-  id: string;
-  fromDate?: Moment;
-  toDate?: Moment;
-  username?: string;
-  from?: number;
-  to?: number;
-  nas?: Array<{ id: string; title: string }>;
+  type: string;
+  businessId: string;
+  fromDate: Moment;
+  toDate: Moment;
+  departments?: string[];
 }
 
 export interface NetflowReportRequestTask extends GeneralReportRequestTask {
+  username?: string;
   dstAddress?: string;
-  dstPort?: string[];
+  dstPort?: string;
   srcAddress?: string;
-  srcPort?: string[];
-  protocol?: string;
+  srcPort?: string;
+  limit: number;
+  skip: number;
 }
 
 export enum PROTOCOLS {

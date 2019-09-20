@@ -40,19 +40,13 @@ app.controller('reportList', [
     BigFile
   ) {
     var businessId = Session.business.id
-    //$scope.syslogReportCount = 0
-    //$scope.netflowReportCount = 0
+    $scope.syslogReportCount = 0
+    $scope.netflowReportCount = 0
     $scope.allReports = [
-      {
-        id: 'netflow',
-        title: 'Netflow'
-      },
-      {id: 'webproxy', title: 'WebProxy'},
-      {id: 'dns', title: 'DNS'}
+      'Netflow',
+      'WebProxy',
+      'DNS'
     ]
-
-    $scope.selectedReport = $scope.allReports[0]
-
     Business.findById({id: businessId}).$promise.then(
       function (business) {
         $scope.business = business
@@ -67,6 +61,123 @@ app.controller('reportList', [
         appMessenger.showError('error.generalError')
       }
     )
+
+    $scope.paginationOptions = {
+      pageNumber: 1,
+      itemPerPage: 10,
+      sort: null
+    }
+    $scope.gridOptions = {
+      enableSorting: true,
+      enablePaginationControls: false,
+      enableRowSelection: true,
+      enableSelectAll: true,
+      multiSelect: true,
+      selectionRowHeaderWidth: 35,
+      rowHeight: 36,
+      showGridFooter: true,
+      enableColumnResizing: true,
+      minRowsToShow: 11,
+      columnDefs: [
+        {
+          displayName: 'report.reportTitle',
+          field: 'title',
+          enableHiding: false,
+          enableSorting: false,
+          enableColumnMenu: false,
+          headerCellFilter: 'translate',
+        },
+        {
+          displayName: 'report.type',
+          field: 'type',
+          enableHiding: false,
+          enableSorting: false,
+          enableColumnMenu: false,
+          headerCellFilter: 'translate',
+          cellTemplate:
+            '<div class="ui-grid-cell-contents" ng-if="row.entity.from">{{row.entity.type.capitalize()  }}</div>',
+
+        },
+        {
+          displayName: 'report.reportFormat',
+          field: 'type',
+          enableHiding: false,
+          enableSorting: false,
+          enableColumnMenu: false,
+          headerCellFilter: 'translate',
+          cellTemplate:
+            '<div class="ui-grid-cell-contents">{{row.entity.reportType.capitalize()  | translate }}</div>',
+
+        },
+        {
+          displayName: 'report.from',
+          field: 'from',
+          enableHiding: false,
+          enableSorting: false,
+          enableColumnMenu: false,
+          headerCellFilter: 'translate',
+          cellTemplate:
+            '<div class="ui-grid-cell-contents" ng-if="row.entity.from">{{row.entity.from |  translateDate | translateNumber }}</div>',
+
+        },
+        {
+          displayName: 'report.to',
+          field: 'to',
+          enableHiding: false,
+          enableSorting: false,
+          enableColumnMenu: false,
+          headerCellFilter: 'translate',
+          cellTemplate:
+            '<div class="ui-grid-cell-contents" ng-if="row.entity.to">{{row.entity.to |  translateDate | translateNumber }}</div>'
+        },
+        {
+          displayName: 'report.status',
+          field: 'status',
+          enableHiding: false,
+          enableSorting: false,
+          enableColumnMenu: false,
+          headerCellFilter: 'translate',
+          cellTemplate:
+            '<div class="ui-grid-cell-contents">{{"report." + row.entity.status  | translate }}</div>'
+        },
+        {
+          displayName: 'general.download',
+          field: 'download',
+          width: 100,
+          enableColumnMenu: false,
+          headerCellFilter: 'translate',
+          cellClass: 'center',
+          headerCellClass: 'headerCenter',
+          cellTemplate: '<a class="btn btn-block" ng-class ="{\'disabled\': row.entity.status !== \'ready\' || !row.entity.fileName  ,\'btn-info\': row.entity.status === \'ready\' && row.entity.fileName}" ' +
+            'ng-click="grid.appScope.downloadReport(row)"><i class="fa  fa-download"></i></a>'
+        },
+        {
+          displayName: 'general.remove',
+          field: 'delete',
+          width: 100,
+          enableColumnMenu: false,
+          headerCellFilter: 'translate',
+          cellClass: 'center',
+          headerCellClass: 'headerCenter',
+          cellTemplate:
+            '<a class="btn btn-link" ng-click="grid.appScope.removeReport(row)"><i class="fa  fa-trash"></i></a>',
+        },
+      ],
+      onRegisterApi: function (gridApi) {
+        $scope.gridApi = gridApi
+        $scope.gridApi.core.on.sortChanged($scope, function (grid, sortColumns) {
+          if (sortColumns.length == 0) {
+            $scope.paginationOptions.sort = null
+          } else {
+            $scope.paginationOptions.sort =
+              sortColumns[0].name +
+              ' ' +
+              sortColumns[0].sort.direction.toUpperCase()
+          }
+          getPage()
+        })
+      }
+    }
 
     $scope.addReport = function (param) {
       Business.loadMembersUsernames({businessId: businessId}).$promise.then(
@@ -365,124 +476,5 @@ app.controller('reportList', [
         }
       )
     }
-
-    /*  $scope.paginationOptions = {
-      pageNumber: 1,
-      itemPerPage: 10,
-      sort: null
-    }
-
-    $scope.gridOptions = {
-      enableSorting: true,
-      enablePaginationControls: false,
-      enableRowSelection: true,
-      enableSelectAll: true,
-      multiSelect: true,
-      selectionRowHeaderWidth: 35,
-      rowHeight: 36,
-      showGridFooter: true,
-      enableColumnResizing: true,
-      minRowsToShow: 11,
-      columnDefs: [
-        {
-          displayName: 'report.reportTitle',
-          field: 'title',
-          enableHiding: false,
-          enableSorting: false,
-          enableColumnMenu: false,
-          headerCellFilter: 'translate',
-        },
-        {
-          displayName: 'report.type',
-          field: 'type',
-          enableHiding: false,
-          enableSorting: false,
-          enableColumnMenu: false,
-          headerCellFilter: 'translate',
-          cellTemplate:
-            '<div class="ui-grid-cell-contents" ng-if="row.entity.from">{{row.entity.type.capitalize()  }}</div>',
-
-        },
-        {
-          displayName: 'report.reportFormat',
-          field: 'type',
-          enableHiding: false,
-          enableSorting: false,
-          enableColumnMenu: false,
-          headerCellFilter: 'translate',
-          cellTemplate:
-            '<div class="ui-grid-cell-contents">{{row.entity.reportType.capitalize()  | translate }}</div>',
-
-        },
-        {
-          displayName: 'report.from',
-          field: 'from',
-          enableHiding: false,
-          enableSorting: false,
-          enableColumnMenu: false,
-          headerCellFilter: 'translate',
-          cellTemplate:
-            '<div class="ui-grid-cell-contents" ng-if="row.entity.from">{{row.entity.from |  translateDate | translateNumber }}</div>',
-
-        },
-        {
-          displayName: 'report.to',
-          field: 'to',
-          enableHiding: false,
-          enableSorting: false,
-          enableColumnMenu: false,
-          headerCellFilter: 'translate',
-          cellTemplate:
-            '<div class="ui-grid-cell-contents" ng-if="row.entity.to">{{row.entity.to |  translateDate | translateNumber }}</div>'
-        },
-        {
-          displayName: 'report.status',
-          field: 'status',
-          enableHiding: false,
-          enableSorting: false,
-          enableColumnMenu: false,
-          headerCellFilter: 'translate',
-          cellTemplate:
-            '<div class="ui-grid-cell-contents">{{"report." + row.entity.status  | translate }}</div>'
-        },
-        {
-          displayName: 'general.download',
-          field: 'download',
-          width: 100,
-          enableColumnMenu: false,
-          headerCellFilter: 'translate',
-          cellClass: 'center',
-          headerCellClass: 'headerCenter',
-          cellTemplate: '<a class="btn btn-block" ng-class ="{\'disabled\': row.entity.status !== \'ready\' || !row.entity.fileName  ,\'btn-info\': row.entity.status === \'ready\' && row.entity.fileName}" ' +
-            'ng-click="grid.appScope.downloadReport(row)"><i class="fa  fa-download"></i></a>'
-        },
-        {
-          displayName: 'general.remove',
-          field: 'delete',
-          width: 100,
-          enableColumnMenu: false,
-          headerCellFilter: 'translate',
-          cellClass: 'center',
-          headerCellClass: 'headerCenter',
-          cellTemplate:
-            '<a class="btn btn-link" ng-click="grid.appScope.removeReport(row)"><i class="fa  fa-trash"></i></a>',
-        },
-      ],
-      onRegisterApi: function (gridApi) {
-        $scope.gridApi = gridApi
-        $scope.gridApi.core.on.sortChanged($scope, function (grid, sortColumns) {
-          if (sortColumns.length == 0) {
-            $scope.paginationOptions.sort = null
-          } else {
-            $scope.paginationOptions.sort =
-              sortColumns[0].name +
-              ' ' +
-              sortColumns[0].sort.direction.toUpperCase()
-          }
-          getPage()
-        })
-      }
-    }
-*/
   }
 ])

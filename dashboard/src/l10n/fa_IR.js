@@ -1364,6 +1364,12 @@
 },
   "report": {
   "createReport": "ساخت گزارش",
+    "sourceClient": "مبدا",
+    "destinationClient": "مقصد",
+    "search": "جستجو",
+    "department": "شعبه",
+    "reportFilter": "فیلتر گزارش",
+    "download": "دانلود",
     "addWebproxyReport": "گزارش وب پراکسی",
     "reportFormat": "فرمت",
     "reportTitle": "عنوان",
