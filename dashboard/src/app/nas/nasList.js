@@ -88,7 +88,7 @@ app.controller('nasList', [
           cellTemplate:
             '<a class="btn btn-warning btn-block" ng-click="grid.appScope.downloadScript(row)" ><i class="fa fa-fw fa-download"></i></a>'
         },
-        {
+        /*{
           displayName: 'general.edit',
           field: 'edit',
           width: 100,
@@ -100,7 +100,7 @@ app.controller('nasList', [
           headerCellFilter: 'translate',
           cellTemplate:
             '<a  class=\'btn btn-link btn-block\' ng-click=\'grid.appScope.editNas(row)\' ><i class=\'fa fa-fw fa-pencil\'></i></a>'
-        },
+        },*/
         {
           displayName: 'general.remove',
           field: 'delete',

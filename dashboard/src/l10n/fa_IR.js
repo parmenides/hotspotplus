@@ -1364,6 +1364,7 @@
 },
   "report": {
   "createReport": "ساخت گزارش",
+    "netflowReportTitle": "Netflow",
     "sourceClient": "مبدا",
     "destinationClient": "مقصد",
     "search": "جستجو",

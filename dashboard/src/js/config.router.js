@@ -278,9 +278,9 @@ app.config([
           PREFIX + 'app/operator/operatorList.js'
         ]),
       })
-        .state('app.reports', {
-        url: '/report',
-        templateUrl: TEMPLATE_PREFIX + 'app/report/tpl/reportList.html',
+        .state('app.netflowReports', {
+        url: '/report/netflow',
+        templateUrl: TEMPLATE_PREFIX + 'app/report/tpl/netflowReport.html',
         resolve: load([
           'ui.grid',
           'ui.grid.pagination',
@@ -288,8 +288,7 @@ app.config([
           'ui.grid.resizeColumns',
           'ui.bootstrap.persian.datepicker',
           'oi.select',
-          PREFIX + 'app/report/netflowReport.js',
-          PREFIX + 'app/report/reportList.js',
+          PREFIX + 'app/report/netflowReport.js'
         ]),
       })
       .state('access.signUp', {

@@ -96,7 +96,7 @@ app.controller('internetPlanList', [
             'popover-placement="right"><i class="fa fa-circle-o" ng-if="!row.entity.selected"></i>' +
             '<i class="fa fa-dot-circle-o text-info" ng-if="row.entity.selected"></i></a>'
         },
-        {
+        /*{
           displayName: 'general.edit',
           field: 'edit',
           width: 90,
@@ -108,11 +108,11 @@ app.controller('internetPlanList', [
           headerCellClass: 'center',
           cellTemplate:
             '<a class="btn btn-link" ng-click="grid.appScope.editPlan(row)"><i class="fa fa-fw fa-pencil"></i></a>'
-        },
+        },*/
         {
           displayName: 'general.remove',
           field: 'delete',
-          width: 70,
+          width: 100,
           enableHiding: false,
           enableSorting: false,
           enableColumnMenu: false,
