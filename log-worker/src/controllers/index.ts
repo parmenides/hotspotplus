@@ -1,18 +1,21 @@
 import { RequestHandler } from 'express';
 import logger from '../utils/logger';
 import {
+  DnsReportRequestTask,
   LOGGER_TIME_ZONE,
   NetflowReportRequestTask,
   REPORT_TYPE,
+  WebproxyReportRequestTask,
 } from '../typings';
 import netflow from '../modules/netflow';
-
 const log = logger.createLogger();
 import momentTz = require('moment-timezone');
 import { getReportConfig } from '../reportEngine/reportTypes';
 import * as fs from 'fs';
 import render from '../reportEngine';
 import { file as tmpFile } from 'tmp-promise';
+import dns from '../modules/dns';
+import webproxy from '../modules/webproxy';
 
 const controller: { [key: string]: RequestHandler } = {
   health: (request, response) => {
@@ -81,17 +84,11 @@ const controller: { [key: string]: RequestHandler } = {
 
     try {
       if (type === 'json') {
-        const result = await netflow.queryNetflow(
-          'json',
-          netflowReportRequestTask,
-        );
+        const result = await netflow.query('json', netflowReportRequestTask);
         result.data = netflow.formatJson(result.data);
         response.send(result);
       } else if (type === 'excel') {
-        const result = await netflow.queryNetflow(
-          'json',
-          netflowReportRequestTask,
-        );
+        const result = await netflow.query('json', netflowReportRequestTask);
         result.data = netflow.formatJson(result.data);
         const reportConfig = getReportConfig(REPORT_TYPE.NETFLOW);
         const report = await render(reportConfig, { netflow: result.data });
@@ -112,78 +109,164 @@ const controller: { [key: string]: RequestHandler } = {
       throw e;
     }
   },
-  /* createReport: async (request, response) => {
-                              const generalReportRequestTask: GeneralReportRequestTask = request.body;
-                              log.debug(request.body);
-                              if (!generalReportRequestTask.to) {
-                                  generalReportRequestTask.toDate = momentTz.tz(LOGGER_TIME_ZONE);
-                                  generalReportRequestTask.to = momentTz(
-                                      generalReportRequestTask.toDate,
-                                      LOCAL_TIME_ZONE,
-                                  ).valueOf();
-                              } else {
-                                  generalReportRequestTask.toDate = momentTz.tz(
-                                      generalReportRequestTask.to,
-                                      LOGGER_TIME_ZONE,
-                                  );
-                              }
+  searchDns: async (request, response) => {
+    let {
+      to,
+      limit,
+      from,
+      skip,
+    }: {
+      from: number;
+      to: number;
+      limit: number;
+      skip: number;
+    } = request.query;
+    const {
+      type,
+      departments,
+      businessId,
+      username,
+    }: {
+      type: string;
+      departments: string[];
+      businessId: string;
+      username: string;
+    } = request.query;
 
-                              // create fromDate 1 year before from Date
-                              if (!generalReportRequestTask.from) {
-                                  generalReportRequestTask.fromDate = momentTz.tz(
-                                      generalReportRequestTask.toDate.valueOf() - 31539999 * 1000,
-                                      LOGGER_TIME_ZONE,
-                                  );
-                                  generalReportRequestTask.from = momentTz(
-                                      generalReportRequestTask.fromDate,
-                                      LOCAL_TIME_ZONE,
-                                  ).valueOf();
-                              } else {
-                                  generalReportRequestTask.fromDate = momentTz.tz(
-                                      generalReportRequestTask.from,
-                                      LOGGER_TIME_ZONE,
-                                  );
-                              }
-                              log.debug(
-                                  `Create ${generalReportRequestTask.type} report from ${
-                                      generalReportRequestTask.fromDate
-                                      } to ${generalReportRequestTask.toDate}`,
-                                  JSON.stringify(generalReportRequestTask),
-                              );
+    from = Number(from);
+    to = Number(to);
+    skip = Number(skip);
+    limit = Number(limit);
 
-                              try {
-                                  let data: any[];
+    log.debug(request.body);
 
-                                  if (generalReportRequestTask.type === REPORT_TYPE.NETFLOW) {
-                                      data = await netflow.queryNetflow(
-                                          generalReportRequestTask as NetflowReportRequestTask,
-                                      );
-                                  } else if (generalReportRequestTask.type === REPORT_TYPE.WEBPROXY) {
-                                      data = await webproxyLog.queryWebproxyLog(
-                                          generalReportRequestTask as WebproxyReportRequestTask,
-                                      );
-                                  } else if (generalReportRequestTask.type === REPORT_TYPE.DNS) {
-                                      throw new Error('not implemented');
-                                  } else {
-                                      throw new Error('invalid report type');
-                                  }
-                                  const reportConfig = getReportConfig(generalReportRequestTask.type);
+    const dnsReportRequestTask: DnsReportRequestTask = {
+      type,
+      fromDate: momentTz.tz(from, LOGGER_TIME_ZONE),
+      toDate: momentTz.tz(to, LOGGER_TIME_ZONE),
+      departments,
+      username,
+      businessId,
+      limit,
+      skip,
+    };
 
-                                  const report = await render(reportConfig, {data});
-                                  const reportFile = await tmpFile();
-                                  await report.stream.pipe(fs.createWriteStream(reportFile.path));
-                                  await sendReport(generalReportRequestTask, reportFile.path, reportConfig);
-                                  // fs.unlink(reportFile.path, () => {
-                                  //   log.debug('file cleared up');
-                                  // });
-                                  //log.debug(report.content);
-                                  log.debug(`report created and uploaded`);
-                                  response.send({ok: true});
-                              } catch (error) {
-                                  log.error(error);
-                                  throw error;
-                              }
-                          },*/
+    log.debug(
+      `Create dns report from ${dnsReportRequestTask.fromDate} to ${
+        dnsReportRequestTask.toDate
+      }`,
+      JSON.stringify(dnsReportRequestTask),
+    );
+
+    try {
+      if (type === 'json') {
+        const result = await dns.query('json', dnsReportRequestTask);
+        result.data = dns.formatJson(result.data);
+        response.send(result);
+      } else if (type === 'excel') {
+        const result = await dns.query('json', dnsReportRequestTask);
+        result.data = dns.formatJson(result.data);
+        const reportConfig = getReportConfig(REPORT_TYPE.DNS);
+        const report = await render(reportConfig, { dns: result.data });
+        const reportFile = await tmpFile();
+        const writable = fs.createWriteStream(reportFile.path);
+        await report.stream.pipe(writable);
+        writable.on('finish', () => {
+          response.sendFile(reportFile.path);
+        });
+        writable.on('error', (e) => {
+          log.error(e);
+        });
+      } else {
+        throw new Error('unknown report type');
+      }
+    } catch (e) {
+      log.error(e);
+      throw e;
+    }
+  },
+  searchWebproxy: async (request, response) => {
+    let {
+      to,
+      limit,
+      from,
+      skip,
+    }: {
+      from: number;
+      to: number;
+      limit: number;
+      skip: number;
+    } = request.query;
+    const {
+      type,
+      departments,
+      businessId,
+      domain,
+      url,
+      username,
+    }: {
+      type: string;
+      departments: string[];
+      businessId: string;
+      domain: string;
+      url: string;
+      username: string;
+    } = request.query;
+
+    from = Number(from);
+    to = Number(to);
+    skip = Number(skip);
+    limit = Number(limit);
+
+    log.debug(request.body);
+
+    const webproxyReportRequestTask: WebproxyReportRequestTask = {
+      type,
+      fromDate: momentTz.tz(from, LOGGER_TIME_ZONE),
+      toDate: momentTz.tz(to, LOGGER_TIME_ZONE),
+      departments,
+      username,
+      domain,
+      url,
+      businessId,
+      limit,
+      skip,
+    };
+
+    log.debug(
+      `Create webproxy report from ${webproxyReportRequestTask.fromDate} to ${
+        webproxyReportRequestTask.toDate
+      }`,
+      JSON.stringify(webproxyReportRequestTask),
+    );
+
+    try {
+      if (type === 'json') {
+        const result = await webproxy.query('json', webproxyReportRequestTask);
+        result.data = webproxy.formatJson(result.data);
+        response.send(result);
+      } else if (type === 'excel') {
+        const result = await webproxy.query('json', webproxyReportRequestTask);
+        result.data = webproxy.formatJson(result.data);
+        const reportConfig = getReportConfig(REPORT_TYPE.WEBPROXY);
+        const report = await render(reportConfig, { webproxy: result.data });
+        const reportFile = await tmpFile();
+        const writable = fs.createWriteStream(reportFile.path);
+        await report.stream.pipe(writable);
+        writable.on('finish', () => {
+          response.sendFile(reportFile.path);
+        });
+        writable.on('error', (e) => {
+          log.error(e);
+        });
+      } else {
+        throw new Error('unknown report type');
+      }
+    } catch (e) {
+      log.error(e);
+      throw e;
+    }
+  },
 };
 
 export default controller;

@@ -28989,12 +28989,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
 
             /**
              * @ngdoc method
-             * @name lbServices.Report#search
+             * @name lbServices.Report#searchNetflow
              * @methodOf lbServices.Report
              *
              * @description
              *
-             * Search reports
+             * Search Netflow
              *
              * @param {Object=} parameters Request parameters.
              *
@@ -29043,8 +29043,114 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Report` object.)
              * </em>
              */
-            "search": {
-              url: urlBase + "/Reports/search",
+            "searchNetflow": {
+              url: urlBase + "/Reports/searchNetflow",
+              method: "GET",
+            },
+
+            /**
+             * @ngdoc method
+             * @name lbServices.Report#searchDns
+             * @methodOf lbServices.Report
+             *
+             * @description
+             *
+             * Search Dns
+             *
+             * @param {Object=} parameters Request parameters.
+             *
+             *  - `report` – `{string}` -
+             *
+             *  - `type` – `{string=}` -
+             *
+             *  - `businessId` – `{string=}` -
+             *
+             *  - `departments` – `{string=}` -
+             *
+             *  - `from` – `{number=}` -
+             *
+             *  - `to` – `{number=}` -
+             *
+             *  - `username` – `{string=}` -
+             *
+             *  - `limit` – `{number=}` -
+             *
+             *  - `skip` – `{number=}` -
+             *
+             *  - `sort` – `{string=}` -
+             *
+             *  - `options` – `{object=}` -
+             *
+             * @param {function(Object,Object)=} successCb
+             *   Success callback with two arguments: `value`, `responseHeaders`.
+             *
+             * @param {function(Object)=} errorCb Error callback with one argument:
+             *   `httpResponse`.
+             *
+             * @returns {Object} An empty reference that will be
+             *   populated with the actual data once the response is returned
+             *   from the server.
+             *
+             * <em>
+             * (The remote method definition does not provide any description.
+             * This usually means the response is a `Report` object.)
+             * </em>
+             */
+            "searchDns": {
+              url: urlBase + "/Reports/searchDns",
+              method: "GET",
+            },
+
+            /**
+             * @ngdoc method
+             * @name lbServices.Report#searchWebProxy
+             * @methodOf lbServices.Report
+             *
+             * @description
+             *
+             * Search WebProxy
+             *
+             * @param {Object=} parameters Request parameters.
+             *
+             *  - `report` – `{string}` -
+             *
+             *  - `type` – `{string=}` -
+             *
+             *  - `businessId` – `{string=}` -
+             *
+             *  - `departments` – `{string=}` -
+             *
+             *  - `from` – `{number=}` -
+             *
+             *  - `to` – `{number=}` -
+             *
+             *  - `username` – `{string=}` -
+             *
+             *  - `limit` – `{number=}` -
+             *
+             *  - `skip` – `{number=}` -
+             *
+             *  - `sort` – `{string=}` -
+             *
+             *  - `options` – `{object=}` -
+             *
+             * @param {function(Object,Object)=} successCb
+             *   Success callback with two arguments: `value`, `responseHeaders`.
+             *
+             * @param {function(Object)=} errorCb Error callback with one argument:
+             *   `httpResponse`.
+             *
+             * @returns {Object} An empty reference that will be
+             *   populated with the actual data once the response is returned
+             *   from the server.
+             *
+             * <em>
+             * (The remote method definition does not provide any description.
+             * This usually means the response is a `Report` object.)
+             * </em>
+             */
+            "searchWebProxy": {
+              url: urlBase + "/Reports/searchWebProxy",
               method: "GET",
             },
 

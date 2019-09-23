@@ -291,6 +291,32 @@ app.config([
           PREFIX + 'app/report/netflowReport.js'
         ]),
       })
+        .state('app.dnsReports', {
+        url: '/report/dns',
+        templateUrl: TEMPLATE_PREFIX + 'app/report/tpl/dnsReport.html',
+        resolve: load([
+          'ui.grid',
+          'ui.grid.pagination',
+          'ui.grid.selection',
+          'ui.grid.resizeColumns',
+          'ui.bootstrap.persian.datepicker',
+          'oi.select',
+          PREFIX + 'app/report/dnsReport.js'
+        ]),
+      })
+        .state('app.webproxyReports', {
+        url: '/report/webproxy',
+        templateUrl: TEMPLATE_PREFIX + 'app/report/tpl/webproxyReport.html',
+        resolve: load([
+          'ui.grid',
+          'ui.grid.pagination',
+          'ui.grid.selection',
+          'ui.grid.resizeColumns',
+          'ui.bootstrap.persian.datepicker',
+          'oi.select',
+          PREFIX + 'app/report/webproxyReport.js'
+        ]),
+      })
       .state('access.signUp', {
         url: '/signup',
         templateUrl: TEMPLATE_PREFIX + 'app/business/tpl/signUp.html',

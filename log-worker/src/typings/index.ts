@@ -19,6 +19,8 @@ export interface GeneralReportRequestTask {
   fromDate: Moment;
   toDate: Moment;
   departments?: string[];
+  limit: number;
+  skip: number;
 }
 
 export interface NetflowReportRequestTask extends GeneralReportRequestTask {
@@ -27,8 +29,6 @@ export interface NetflowReportRequestTask extends GeneralReportRequestTask {
   dstPort?: string;
   srcAddress?: string;
   srcPort?: string;
-  limit: number;
-  skip: number;
 }
 
 export enum PROTOCOLS {
@@ -42,10 +42,12 @@ export interface ClickHouseColumnMeta {
 }
 
 export interface WebproxyReportRequestTask extends GeneralReportRequestTask {
-  domain?: string;
+  username?: string;
   url?: string;
-  method?: string[];
+  domain?: string;
 }
+
 export interface DnsReportRequestTask extends GeneralReportRequestTask {
+  username?: string;
   domain?: string;
 }

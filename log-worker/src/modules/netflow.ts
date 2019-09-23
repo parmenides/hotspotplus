@@ -1,5 +1,4 @@
 import { createLogger } from '../utils/logger';
-import _ from 'lodash';
 import {
   LOCAL_TIME_ZONE,
   NetflowReportRequestTask,
@@ -10,38 +9,29 @@ import {
 } from '../typings';
 import moment from 'moment';
 import momentJ from 'moment-jalaali';
-import { createClickConnection, executeClickQuery } from '../utils/clickClient';
+import { executeClickQuery } from '../utils/clickClient';
 
 const log = createLogger();
-
-const clickHouse: any = createClickConnection();
-
-const formatReports = (rows: any[]) => {
-  const formatted = rows.map((row) => {
-    return {
-      BusinessId: row.businessId,
-      memberId: row.memberId,
-      nasId: row.nasId,
-      nasIp: row.nasIp,
-      Username: row.username,
-      Mac: row.mac,
-      Jalali_Date: toJalaliDate(row.TimeRecvd),
-      Src_Addr: row.SrcIP,
-      Src_Port: row.SrcPort,
-      Dst_Addr: row.DstIP,
-      Dst_Port: row.DstPort,
-      Protocol: toProtocolString(row.Proto),
-      gregorian_date: toGregorianDate(row.TimeRecvd),
-    };
-  });
-  return _.sortBy(formatted, ['Router', 'Username', 'Jalali_Date']);
-};
 
 const createNetflowQuery = (
   netflowReportRequestTask: NetflowReportRequestTask,
   count: boolean,
 ) => {
+  const {
+    skip,
+    limit,
+    businessId,
+    toDate,
+    fromDate,
+    departments,
+    srcPort,
+    dstAddress,
+    dstPort,
+    srcAddress,
+    username,
+  } = netflowReportRequestTask;
   let mainQuery: string;
+
   if (count) {
     mainQuery = ` SELECT toInt32(count(*)) as size FROM hotspotplus.Session JOIN hotspotplus.Netflow ON Session.nasIp=Netflow.RouterAddr 
  AND toStartOfInterval(Session.creationDate, INTERVAL 5 minute)=toStartOfInterval(Netflow.TimeRecvd,INTERVAL 5 minute ) `;
@@ -53,100 +43,56 @@ const createNetflowQuery = (
   const whereParts: string[] = [
     ` (Session.framedIpAddress=Netflow.DstIP OR Session.framedIpAddress=Netflow.SrcIP OR Session.framedIpAddress=Netflow.NextHop) `,
   ];
-  if (netflowReportRequestTask.fromDate) {
+  if (fromDate) {
     whereParts.push(
-      ` TimeRecvd>=toDateTime('${netflowReportRequestTask.fromDate.format(
-        DATABASE_DATE_FORMAT,
-      )}') `,
+      ` TimeRecvd>=toDateTime('${fromDate.format(DATABASE_DATE_FORMAT)}') `,
     );
   }
-  if (netflowReportRequestTask.toDate) {
+  if (toDate) {
     whereParts.push(
-      ` TimeRecvd<=toDateTime('${netflowReportRequestTask.toDate.format(
-        DATABASE_DATE_FORMAT,
-      )}') `,
+      ` TimeRecvd<=toDateTime('${toDate.format(DATABASE_DATE_FORMAT)}') `,
     );
   }
-  if (netflowReportRequestTask.username) {
-    whereParts.push(` username='${netflowReportRequestTask.username}' `);
+
+  if (username) {
+    whereParts.push(` username='${username}' `);
   }
-  if (
-    netflowReportRequestTask.dstPort &&
-    netflowReportRequestTask.dstPort.length > 0
-  ) {
-    const dstPortQueries: string[] = [];
-    for (const dstPort of netflowReportRequestTask.dstPort) {
-      dstPortQueries.push(` DstPort='${dstPort}' `);
-    }
-    whereParts.push(` (${dstPortQueries.join(' OR ')}) `);
+
+  if (dstPort) {
+    whereParts.push(` DstPort='${dstPort}' `);
   }
-  if (
-    netflowReportRequestTask.srcPort &&
-    netflowReportRequestTask.srcPort.length > 0
-  ) {
-    const srcPortQueries: string[] = [];
-    for (const srcPort of netflowReportRequestTask.srcPort) {
-      srcPortQueries.push(` SrcPort='${srcPort}' `);
-    }
-    whereParts.push(` (${srcPortQueries.join(' OR ')}) `);
+
+  if (srcPort) {
+    whereParts.push(` SrcPort='${srcPort}' `);
   }
-  if (netflowReportRequestTask.businessId) {
-    whereParts.push(` businessId='${netflowReportRequestTask.businessId}' `);
+
+  if (businessId) {
+    whereParts.push(` businessId='${businessId}' `);
   }
-  if (
-    netflowReportRequestTask.departments &&
-    netflowReportRequestTask.departments.length > 0
-  ) {
+  if (departments && departments.length > 0) {
     const departmentQueries: string[] = [];
-    for (const departmentId of netflowReportRequestTask.departments) {
+    for (const departmentId of departments) {
       departmentQueries.push(` departmentId='${departmentId}' `);
     }
     whereParts.push(` (${departmentQueries.join(' OR ')}) `);
   }
-  if (netflowReportRequestTask.srcAddress) {
-    whereParts.push(
-      ` ( SrcIP='${netflowReportRequestTask.srcAddress}' OR NextHop='${
-        netflowReportRequestTask.srcAddress
-      }' ) `,
-    );
+  if (srcAddress) {
+    whereParts.push(` ( SrcIP='${srcAddress}' OR NextHop='${srcAddress}' ) `);
   }
-  if (netflowReportRequestTask.dstAddress) {
-    whereParts.push(
-      ` ( DstIP='${netflowReportRequestTask.dstAddress}' OR NextHop='${
-        netflowReportRequestTask.dstAddress
-      }' ) `,
-    );
+  if (dstAddress) {
+    whereParts.push(` ( DstIP='${dstAddress}' OR NextHop='${dstAddress}' ) `);
   }
   if (whereParts.length > 0) {
     mainQuery = `${mainQuery} WHERE  ${whereParts.join(' AND ')}`;
   }
-  if (
-    count === false &&
-    netflowReportRequestTask.limit >= 0 &&
-    netflowReportRequestTask.skip >= 0
-  ) {
-    mainQuery = `${mainQuery} LIMIT ${netflowReportRequestTask.limit}  OFFSET ${
-      netflowReportRequestTask.skip
-    } `;
+  if (!count && limit >= 0 && skip >= 0) {
+    mainQuery = `${mainQuery} LIMIT ${limit}  OFFSET ${skip} `;
   }
   log.debug(netflowReportRequestTask);
   return mainQuery;
 };
 
-interface NetflowReportResult {
-  Router: string;
-  Username: string;
-  Mac: string;
-  Jalali_Date: any;
-  Src_Addr: string;
-  Src_Port: string;
-  Dst_Addr: string;
-  Dst_Port: string;
-  Protocol: string;
-  Gregorian_Date: string;
-}
-
-const queryNetflow = async (
+const query = async (
   type: string,
   netflowReportRequestTask: NetflowReportRequestTask,
 ) => {
@@ -164,7 +110,7 @@ const queryNetflow = async (
   return {
     data,
     columns,
-    size: countResult.rows[0][0],
+    size: countResult.rows && countResult.rows[0] && countResult.rows[0][0],
   };
 };
 
@@ -219,6 +165,6 @@ const toProtocolString = (protocol: number) => {
 };
 
 export default {
-  queryNetflow,
+  query,
   formatJson,
 };

@@ -12,7 +12,6 @@
 		{"name" : "nasIp" , "type" : "String"},
 		{"name" : "domain" , "type" : "String"},
 		{"name" : "receivedAt" , "type" : "UInt32"}
-
 	],
 
 	"@desc_of_autoSchema" : "auto schema will auto fetch the schema from clickhouse",

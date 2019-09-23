@@ -1363,9 +1363,12 @@
     "messageSentUnSuccessFull": "خطا در ارسال پیام"
 },
   "report": {
+  "webproxyReportTitle": "WebProxy Report",
+  "dnsReportTitle": "DNS Report",
   "createReport": "ساخت گزارش",
+  "domain": "دامین",
   "wait4download": "در حال ساخت گزارش...",
-    "netflowReportTitle": "Netflow",
+    "netflowReportTitle": "Netflow Report",
     "sourceClient": "مبدا",
     "destinationClient": "مقصد",
     "search": "جستجو",
@@ -1387,7 +1390,6 @@
     "destination": "مقصد",
     "protocol": "پروتکل",
     "nasTitle": "عنوان روتر",
-    "domain": "دامنه",
     "website": "وبسایت",
     "method": "متد",
     "srcAddress": "آی‌پی مبدا",

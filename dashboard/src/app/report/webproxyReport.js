@@ -1,7 +1,7 @@
 /**
  * Created by rezanazari on 03/04/17.
  */
-app.controller('netflowReport', [
+app.controller('webproxyReport', [
   'PREFIX',
   '$scope',
   '$log',
@@ -86,7 +86,6 @@ app.controller('netflowReport', [
       showGridFooter: false,
       enableColumnResizing: true,
       columnDefs: [
-
         {
           displayName: 'report.department',
           field: 'department',
@@ -107,38 +106,17 @@ app.controller('netflowReport', [
           headerCellClass: 'headerCenter',
           headerCellFilter: 'translate'
         },
+
         {
-          displayName: 'report.sourceClient',
-          field: 'srcIp',
+          displayName: 'report.url',
+          field: 'url',
           enableColumnMenu: false,
           enableHiding: false,
           enableSorting: false,
           cellClass: 'center',
           headerCellClass: 'headerCenter',
           headerCellFilter: 'translate',
-          cellTemplate: '<div class="ui-grid-cell-contents ltr-text">{{row.entity.srcIp}} <b> {{"["+row.entity.srcPort+"]"}}</b></div>'
-        },
-        {
-          displayName: 'report.destinationClient',
-          field: 'dstIp',
-          enableColumnMenu: false,
-          enableHiding: false,
-          enableSorting: false,
-          cellClass: 'center',
-          headerCellClass: 'headerCenter',
-          headerCellFilter: 'translate',
-          cellTemplate: '<div class="ui-grid-cell-contents ltr-text">{{row.entity.dstIp}} <b> {{"["+row.entity.dstPort+"]"}}</b></div>'
-        },
-        {
-          displayName: 'report.protocol',
-          field: 'protocol',
-          width: 100,
-          enableColumnMenu: false,
-          enableHiding: false,
-          enableSorting: false,
-          cellClass: 'center',
-          headerCellClass: 'headerCenter',
-          headerCellFilter: 'translate'
+          cellTemplate: '<div class="ui-grid-cell-contents ltr-text">{{row.entity.url}}</div>'
         },
         {
           displayName: 'report.date',
@@ -149,7 +127,7 @@ app.controller('netflowReport', [
           cellClass: 'center',
           headerCellClass: 'headerCenter',
           headerCellFilter: 'translate'
-        }
+        },
       ],
       onRegisterApi: function (gridApi) {
         $log.debug(gridApi.grid.isScrollingVertically)
@@ -166,14 +144,12 @@ app.controller('netflowReport', [
       $log.debug($scope.searchFilter)
       type = type || 'json'
       var query = {
-        report: 'netflow',
+        report: 'webproxy',
         type,
         from: new Date($scope.searchFilter.from).getTime(),
         to: new Date($scope.searchFilter.to).getTime(),
-        srcAddress: $scope.searchFilter.srcAddress,
-        srcPort: $scope.searchFilter.srcPort,
-        dstAddress: $scope.searchFilter.dstAddress,
-        dstPort: $scope.searchFilter.dstPort,
+        domain: $scope.searchFilter.domain,
+        url: $scope.searchFilter.url,
         departments: $scope.searchFilter.departments.map(function (dep) {
           return dep.id
         }),
@@ -185,7 +161,7 @@ app.controller('netflowReport', [
         query.skip = ($scope.paginationOptions.pageNumber - 1) * $scope.paginationOptions.itemPerPage
         query.limit = $scope.paginationOptions.itemPerPage
         $scope.waitingForResponse = true;
-        Report.searchNetflow(query).$promise.then(
+        Report.searchWebProxy(query).$promise.then(
           function (result) {
             $scope.waitingForResponse = false;
             $scope.gridOptions.totalItems = result.size
@@ -198,7 +174,7 @@ app.controller('netflowReport', [
         )
       } else if (type === 'excel') {
         $scope.waitingForDwl = true;
-        Report.searchNetflow(query).$promise.then(
+        Report.searchWebProxy(query).$promise.then(
           function (report) {
             $scope.waitingForDwl = false;
             var fileName = report.fileName
@@ -214,6 +190,7 @@ app.controller('netflowReport', [
             }
           },
           function (error) {
+            $scope.waitingForDwl = false;
             $log.error(error)
           }
         )

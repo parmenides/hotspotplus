@@ -1,4 +1,6 @@
+//tslint:disable-next-line
 import ClickHouse from '@apla/clickhouse';
+
 import { createLogger } from './logger';
 import { ClickHouseColumnMeta } from '../typings';
 

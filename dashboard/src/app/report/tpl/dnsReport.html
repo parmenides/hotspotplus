@@ -1,6 +1,6 @@
-<div ng-controller="netflowReport">
+<div ng-controller="dnsReport">
     <div class="wrapper-md bg-light b-b">
-        <h1 class="m-n font-thin h3">{{"report.netflowReportTitle"|translate}}</h1>
+        <h1 class="m-n font-thin h3">{{"report.dnsReportTitle"|translate}}</h1>
     </div>
     <div class="hbox hbox-auto-xs hbox-auto-sm">
         <div class="col wrapper-md">
@@ -62,29 +62,10 @@
                                     </div>
                                 </div>
                                 <div class="form-group pull-in clearfix">
-                                    <div class="col-sm-6">
-                                        <label>{{ "report.srcAddress" | translate }}</label>
-                                        <input type="text" class="form-control text-center ltr-text" name="srcAddress"
-                                               ng-pattern="/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/"
-                                               ng-model="searchFilter.srcAddress">
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <label>{{ "report.srcPort" | translate }}</label>
-                                        <input type="text" class="form-control ltr-text text-center" name="srcPort"
-                                               ng-pattern="/^[0-9]+$/" ng-model="searchFilter.srcPort">
-                                    </div>
-                                </div>
-                                <div class="form-group pull-in clearfix">
-                                    <div class="col-sm-6">
-                                        <label>{{ "report.dstAddress" | translate }}</label>
-                                        <input type="text" class="form-control ltr-text text-center" name="dstAddress"
-                                               ng-pattern="/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/"
-                                               ng-model="searchFilter.dstAddress">
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <label>{{ "report.dstPort" | translate }}</label>
-                                        <input type="text" class="form-control text-center ltr-text" name="dstPort"
-                                               ng-pattern="/^[0-9]+$/" ng-model="searchFilter.dstPort">
+                                    <div class="col-sm-12">
+                                        <label>{{ "report.domain" | translate }}</label>
+                                        <input type="text" class="form-control text-center ltr-text" name="domain"
+                                               ng-model="searchFilter.domain">
                                     </div>
                                 </div>
                             </div>

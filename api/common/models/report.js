@@ -31,29 +31,78 @@ module.exports = function (Report) {
     }
   })
 
-  Report.search = async (report, type, businessId, departments, from, to, username, srcAddress, srcPort, dstAddress, dstPort, limit, skip, sort, ctx) => {
+  Report.searchNetflow = async (report, type, businessId, departments, from, to, username, srcAddress, srcPort, dstAddress, dstPort, limit, skip, sort) => {
+    const result = await Report.search({
+      report,
+      type,
+      businessId,
+      departments,
+      from,
+      to,
+      username,
+      srcAddress,
+      srcPort,
+      dstAddress,
+      dstPort,
+      limit,
+      skip,
+      sort
+    })
+    return result
+  }
+
+  Report.searchDns = async (report, type, businessId, departments, from, to, username, domain, limit, skip, sort) => {
+    const result = await Report.search({
+      report,
+      type,
+      businessId,
+      departments,
+      from,
+      to,
+      username,
+      limit,
+      skip,
+      sort
+    })
+    return result
+  }
+
+  Report.searchWebProxy = async (report, type, businessId, departments, from, to, username, domain, limit, skip, sort) => {
+    const result = await Report.search({
+      report,
+      type,
+      businessId,
+      departments,
+      from,
+      to,
+      username,
+      limit,
+      skip,
+      sort
+    })
+    return result
+  }
+
+  Report.search = async (options) => {
+    const {type, report, from} = options
     if (type === 'json') {
       const httpClient = HttpClient(process.env.REPORT_SERVICE_URL)
       const response = await httpClient.get(`/api/${report}/search`, {
-        params: {
-          type, businessId, departments, from, to, username, srcAddress, srcPort, dstAddress, dstPort, limit, skip, sort
-        }
+        params: options
       })
       return response.data
     } else {
-      const HTTP_TIME_OUT = 1000* 60;
+      const HTTP_TIME_OUT = 1000 * 60
       var BigFile = app.models.BigFile
       const result = await Axios({
-        url: `${process.env.REPORT_SERVICE_URL}api/${report}/search`,
+        url: `${process.env.REPORT_SERVICE_URL}/api/${report}/search`,
         timeout: HTTP_TIME_OUT,
         method: 'get',
         responseType: 'stream',
-        params: {
-          type, businessId, departments, from, to, username, srcAddress, srcPort, dstAddress, dstPort, limit, skip, sort
-        }
+        params: options
       })
 
-      let fileName = `${new Date()}-${Date.now()}`
+      let fileName = `${new Date(from).toLocaleDateString()}-${new Date(from).toLocaleTimeString()}-${type}`
       if (type === 'excel') {
         fileName = `${Date.now()}.xlsx`
       }
@@ -67,8 +116,8 @@ module.exports = function (Report) {
     }
   }
 
-  Report.remoteMethod('search', {
-    description: 'Search reports',
+  Report.remoteMethod('searchNetflow', {
+    description: 'Search Netflow',
     accepts: [
       {arg: 'report', type: 'string', required: true},
       {arg: 'type', type: 'string'},
@@ -81,6 +130,49 @@ module.exports = function (Report) {
       {arg: 'srcPort', type: 'string'},
       {arg: 'dstAddress', type: 'string'},
       {arg: 'dstPort', type: 'string'},
+      {arg: 'limit', type: 'number'},
+      {arg: 'skip', type: 'number'},
+      {arg: 'sort', type: 'string'},
+      {arg: 'options', type: 'object', http: 'optionsFromRequest'},
+
+    ],
+    returns: {root: true},
+    http: {
+      verb: 'get'
+    }
+  })
+  Report.remoteMethod('searchDns', {
+    description: 'Search Dns',
+    accepts: [
+      {arg: 'report', type: 'string', required: true},
+      {arg: 'type', type: 'string'},
+      {arg: 'businessId', type: 'string'},
+      {arg: 'departments', type: ['string']},
+      {arg: 'from', type: 'number'},
+      {arg: 'to', type: 'number'},
+      {arg: 'username', type: 'string'},
+      {arg: 'limit', type: 'number'},
+      {arg: 'skip', type: 'number'},
+      {arg: 'sort', type: 'string'},
+      {arg: 'options', type: 'object', http: 'optionsFromRequest'},
+
+    ],
+    returns: {root: true},
+    http: {
+      verb: 'get'
+    }
+  })
+
+  Report.remoteMethod('searchWebProxy', {
+    description: 'Search WebProxy',
+    accepts: [
+      {arg: 'report', type: 'string', required: true},
+      {arg: 'type', type: 'string'},
+      {arg: 'businessId', type: 'string'},
+      {arg: 'departments', type: ['string']},
+      {arg: 'from', type: 'number'},
+      {arg: 'to', type: 'number'},
+      {arg: 'username', type: 'string'},
       {arg: 'limit', type: 'number'},
       {arg: 'skip', type: 'number'},
       {arg: 'sort', type: 'string'},
