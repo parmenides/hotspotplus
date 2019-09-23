@@ -1,6 +1,6 @@
 {{xlsxRemove "xl/worksheets/sheet1.xml" "worksheet.sheetData[0].row" 1}}
 
-{{#each netflow}}
+{{#each webproxy}}
 {{#xlsxAdd "xl/worksheets/sheet1.xml" "worksheet.sheetData[0].row"}}
 <row>
     <c t="inlineStr" s="{{@root.$removedItem.c.[0].$.s}}"><is><t>{{nasIp}}</t></is></c>

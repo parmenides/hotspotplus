@@ -36,7 +36,7 @@ const createNetflowQuery = (
     mainQuery = ` SELECT toInt32(count(*)) as size FROM hotspotplus.Session JOIN hotspotplus.Netflow ON Session.nasIp=Netflow.RouterAddr 
  AND toStartOfInterval(Session.creationDate, INTERVAL 5 minute)=toStartOfInterval(Netflow.TimeRecvd,INTERVAL 5 minute ) `;
   } else {
-    mainQuery = ` SELECT businessId,memberId,nasIp,username,RouterAddr as routerAddr,SrcIP as srcIp, DstIP as dstIp, SrcPort as srcPort, DstPort as dstPort,TimeRecvd as timeRecvd,Proto as proto FROM hotspotplus.Session JOIN hotspotplus.Netflow ON Session.nasIp=Netflow.RouterAddr 
+    mainQuery = ` SELECT businessId,departmentId,memberId,nasIp,username,RouterAddr as routerAddr,SrcIP as srcIp, DstIP as dstIp, SrcPort as srcPort, DstPort as dstPort,TimeRecvd as timeRecvd,Proto as proto FROM hotspotplus.Session JOIN hotspotplus.Netflow ON Session.nasIp=Netflow.RouterAddr 
  AND toStartOfInterval(Session.creationDate, INTERVAL 5 minute)=toStartOfInterval(Netflow.TimeRecvd,INTERVAL 5 minute ) `;
   }
 

@@ -79,7 +79,6 @@ const createWebproxyQuery = (
     departments,
     fromDate,
     toDate,
-    type,
     businessId,
     limit,
     skip,
@@ -90,10 +89,10 @@ const createWebproxyQuery = (
   let mainQuery: string;
 
   if (count) {
-    mainQuery = `SELECT * FROM hotspotplus.Session JOIN hotspotplus.WebProxy  ON Session.nasIp=WebProxy.nasIp 
+    mainQuery = `SELECT toInt32(count (*)) FROM hotspotplus.Session JOIN hotspotplus.WebProxy  ON Session.nasIp=WebProxy.nasIp 
   AND toStartOfInterval(Session.creationDate, INTERVAL 5 minute)=toStartOfInterval(WebProxy.receivedAt, INTERVAL 5 minute )`;
   } else {
-    mainQuery = `SELECT * FROM hotspotplus.Session JOIN hotspotplus.WebProxy  ON Session.nasIp=WebProxy.nasIp 
+    mainQuery = `SELECT businessId,departmentId,memberId,nasIp,username,domain,method,url,nasIp,memberIp, receivedAt FROM hotspotplus.Session JOIN hotspotplus.WebProxy  ON Session.nasIp=WebProxy.nasIp 
   AND toStartOfInterval(Session.creationDate, INTERVAL 5 minute)=toStartOfInterval(WebProxy.receivedAt, INTERVAL 5 minute )`;
   }
   const whereParts: string[] = [' Session.framedIpAddress=WebProxy.memberIp '];
