@@ -89,13 +89,16 @@
                                 </div>
                             </div>
                             <footer class="panel-footer text-right bg-light lter">
-                                <button ng-click="search('json')" type="submit" class="btn btn-success">
+                                <button ng-disabled="waitingForDwl" ng-click="search('json')" type="submit" class="btn btn-success">
                                     {{"report.search" |
                                     translate}}
                                 </button>
-                                <button ng-click="search('excel')" type="button" class="btn btn-primary">
+                                <button ng-if="!waitingForDwl" ng-click="search('excel')" type="button" class="btn btn-primary">
                                     {{"report.download" |
                                     translate}}
+                                </button>
+                                <button ng-disabled="waitingForDwl" ng-if="waitingForDwl" ng-click="search('excel')" type="button" class="btn btn-primary">
+                                    {{"report.wait4download" | translate}}
                                 </button>
                             </footer>
                         </div>

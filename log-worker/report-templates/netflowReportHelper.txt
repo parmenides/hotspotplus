@@ -1,11 +1,18 @@
 {{xlsxRemove "xl/worksheets/sheet1.xml" "worksheet.sheetData[0].row" 1}}
 
-{{#each data}}
+{{#each netflow}}
 {{#xlsxAdd "xl/worksheets/sheet1.xml" "worksheet.sheetData[0].row"}}
 <row>
-    <c t="inlineStr" s="{{@root.$removedItem.c.[0].$.s}}"><is><t>{{name}}</t></is></c>
-    <c t="inlineStr" s="{{@root.$removedItem.c.[1].$.s}}"><is><t>{{gender}}</t></is></c>
-    <c s="{{@root.$removedItem.c.[2].$.s}}"><v>{{age}}</v></c>
+    <c t="inlineStr" s="{{@root.$removedItem.c.[0].$.s}}"><is><t>{{nasIp}}</t></is></c>
+    <c t="inlineStr" s="{{@root.$removedItem.c.[1].$.s}}"><is><t>{{username}}</t></is></c>
+    <c t="inlineStr" s="{{@root.$removedItem.c.[2].$.s}}"><is><t>----</t></is></c>
+    <c t="inlineStr" s="{{@root.$removedItem.c.[3].$.s}}"><is><t>{{jalaliDate}}</t></is></c>
+    <c t="inlineStr" s="{{@root.$removedItem.c.[4].$.s}}"><is><t>{{srcIp}}</t></is></c>
+    <c t="inlineStr" s="{{@root.$removedItem.c.[5].$.s}}"><is><t>{{srcPort}}</t></is></c>
+    <c t="inlineStr" s="{{@root.$removedItem.c.[6].$.s}}"><is><t>{{dstIp}}</t></is></c>
+    <c t="inlineStr" s="{{@root.$removedItem.c.[7].$.s}}"><is><t>{{dstPort}}</t></is></c>
+    <c t="inlineStr" s="{{@root.$removedItem.c.[8].$.s}}"><is><t>{{protocol}}</t></is></c>
+    <c t="inlineStr" s="{{@root.$removedItem.c.[9].$.s}}"><is><t>{{gregorianDate}}</t></is></c>
 </row>
 {{/xlsxAdd}}
 {{/each}}

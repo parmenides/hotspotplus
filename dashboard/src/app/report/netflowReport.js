@@ -31,6 +31,7 @@ app.controller('netflowReport', [
     trimUsernameFilter
   ) {
     $scope.loading = true
+    $scope.waitingForDwl = false;
 
     $scope.localLang = $rootScope.localLang
     $scope.direction = $rootScope.direction
@@ -95,6 +96,16 @@ app.controller('netflowReport', [
           headerCellFilter: 'translate'
         },
         {
+          displayName: 'report.department',
+          field: 'department',
+          enableColumnMenu: false,
+          enableHiding: false,
+          enableSorting: false,
+          cellClass: 'center',
+          headerCellClass: 'headerCenter',
+          headerCellFilter: 'translate'
+        },
+        {
           displayName: 'report.date',
           field: 'jalaliDate',
           enableColumnMenu: false,
@@ -113,7 +124,7 @@ app.controller('netflowReport', [
           cellClass: 'center',
           headerCellClass: 'headerCenter',
           headerCellFilter: 'translate',
-          cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.srcIp+":"+row.entity.srcPort}}</div>'
+          cellTemplate: '<div class="ui-grid-cell-contents ltr-text">{{row.entity.srcIp}} <b> {{"["+row.entity.srcPort+"]"}}</b></div>'
         },
         {
           displayName: 'report.destinationClient',
@@ -124,7 +135,7 @@ app.controller('netflowReport', [
           cellClass: 'center',
           headerCellClass: 'headerCenter',
           headerCellFilter: 'translate',
-          cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.dstIp+":"+row.entity.dstPort}}</div>'
+          cellTemplate: '<div class="ui-grid-cell-contents ltr-text">{{row.entity.dstIp}} <b> {{"["+row.entity.dstPort+"]"}}</b></div>'
         },
         {
           displayName: 'report.protocol',
@@ -151,8 +162,9 @@ app.controller('netflowReport', [
 
     $scope.search = function (type) {
       $log.debug($scope.searchFilter)
-
+      type = type || 'json'
       var query = {
+        report: 'netflow',
         type,
         from: new Date($scope.searchFilter.from).getTime(),
         to: new Date($scope.searchFilter.to).getTime(),
@@ -170,8 +182,7 @@ app.controller('netflowReport', [
         query.sort = $scope.searchFilter.sort
         query.skip = ($scope.paginationOptions.pageNumber - 1) * $scope.paginationOptions.itemPerPage
         query.limit = $scope.paginationOptions.itemPerPage
-
-        Report.searchNetflow(query).$promise.then(
+        Report.search(query).$promise.then(
           function (result) {
             $scope.gridOptions.totalItems = result.size
             $scope.paginationOptions.totalItems = result.size
@@ -182,11 +193,21 @@ app.controller('netflowReport', [
           }
         )
       } else if (type === 'excel') {
-        Report.searchNetflow(query).$promise.then(
-          function (result) {
-            $scope.gridOptions.totalItems = result.size
-            $scope.paginationOptions.totalItems = result.size
-            $scope.gridOptions.data = result.data
+        $scope.waitingForDwl = true;
+        Report.search(query).$promise.then(
+          function (report) {
+            $scope.waitingForDwl = false;
+            var fileName = report.fileName
+            var container = report.container
+            if (fileName && container) {
+              window.location.href =
+                Window.API_URL +
+                '/api/BigFiles/{0}/download/{1}'
+                  .replace('{0}', container)
+                  .replace('{1}', fileName)
+            } else {
+              appMessenger.showError('report.noReportsToDownload')
+            }
           },
           function (error) {
             $log.error(error)

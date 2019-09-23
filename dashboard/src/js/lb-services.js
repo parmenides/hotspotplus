@@ -28989,14 +28989,16 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
 
             /**
              * @ngdoc method
-             * @name lbServices.Report#searchNetflow
+             * @name lbServices.Report#search
              * @methodOf lbServices.Report
              *
              * @description
              *
-             * Search netflow
+             * Search reports
              *
              * @param {Object=} parameters Request parameters.
+             *
+             *  - `report` – `{string}` -
              *
              *  - `type` – `{string=}` -
              *
@@ -29018,9 +29020,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `dstPort` – `{string=}` -
              *
-             *  - `limit` – `{number}` -
+             *  - `limit` – `{number=}` -
              *
-             *  - `skip` – `{number}` -
+             *  - `skip` – `{number=}` -
              *
              *  - `sort` – `{string=}` -
              *
@@ -29041,8 +29043,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Report` object.)
              * </em>
              */
-            "searchNetflow": {
-              url: urlBase + "/Reports/searchNetflow",
+            "search": {
+              url: urlBase + "/Reports/search",
               method: "GET",
             },
 

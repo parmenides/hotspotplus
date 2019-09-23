@@ -122,8 +122,8 @@ const createNetflowQuery = (
   }
   if (
     count === false &&
-    netflowReportRequestTask.limit &&
-    netflowReportRequestTask.skip
+    netflowReportRequestTask.limit >= 0 &&
+    netflowReportRequestTask.skip >= 0
   ) {
     mainQuery = `${mainQuery} LIMIT ${netflowReportRequestTask.limit}  OFFSET ${
       netflowReportRequestTask.skip
@@ -147,34 +147,24 @@ interface NetflowReportResult {
 }
 
 const queryNetflow = async (
+  type: string,
   netflowReportRequestTask: NetflowReportRequestTask,
 ) => {
   const mainQuery = await createNetflowQuery(netflowReportRequestTask, false);
   const countQuery = await createNetflowQuery(netflowReportRequestTask, true);
-  log.error({ countQuery });
+  log.debug({ countQuery });
   const countResult = await executeClickQuery(countQuery);
   const { rows, columns } = await executeClickQuery(mainQuery);
-  /*const data = rows.map((row: any[]) => {
+  let data;
+  if (type === 'json') {
+    data = rows.map((row: any[]) => {
       return rowValueToJson(columns, row);
-    });*/
-  log.debug(countResult);
-  return {
-    rows,
-    columns,
-    size: countResult.rows[0][0],
-  };
-};
-
-const queryNetflowAsJson = async (
-  netflowReportRequestTask: NetflowReportRequestTask,
-) => {
-  const { rows, columns, size } = await queryNetflow(netflowReportRequestTask);
-  const data = rows.map((row: any[]) => {
-    return rowValueToJson(columns, row);
-  });
+    });
+  }
   return {
     data,
-    size,
+    columns,
+    size: countResult.rows[0][0],
   };
 };
 
@@ -229,7 +219,6 @@ const toProtocolString = (protocol: number) => {
 };
 
 export default {
-  queryNetflowAsJson,
   queryNetflow,
   formatJson,
 };

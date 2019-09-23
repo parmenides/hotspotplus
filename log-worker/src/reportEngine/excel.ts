@@ -15,7 +15,7 @@ const readFile = util.promisify(fs.readFile);
 const closeFile = util.promisify(fs.close);
 const unlink = util.promisify(fs.unlink);
 
-const render = async (reportConfig: ReportConfig, data: any) => {
+const render = async (reportConfig: ReportConfig, data1: any) => {
   const { templateName, helperName } = reportConfig;
 
   const template = await readFile(
@@ -35,7 +35,10 @@ const render = async (reportConfig: ReportConfig, data: any) => {
         content: template.toString('base64'),
       },
     },
-    data,
+    templatingEngines: {
+      timeout: 80000,
+    },
+    data: data1,
   });
   return report;
 };

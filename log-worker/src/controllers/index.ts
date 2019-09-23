@@ -81,25 +81,29 @@ const controller: { [key: string]: RequestHandler } = {
 
     try {
       if (type === 'json') {
-        const result = await netflow.queryNetflowAsJson(
+        const result = await netflow.queryNetflow(
+          'json',
           netflowReportRequestTask,
         );
         result.data = netflow.formatJson(result.data);
         response.send(result);
       } else if (type === 'excel') {
-        const result = await netflow.queryNetflowAsJson(
+        const result = await netflow.queryNetflow(
+          'json',
           netflowReportRequestTask,
         );
-        log.debug('111');
+        result.data = netflow.formatJson(result.data);
         const reportConfig = getReportConfig(REPORT_TYPE.NETFLOW);
-        log.debug('222');
-        const report = await render(reportConfig, { data: result.data });
-        log.debug('333');
+        const report = await render(reportConfig, { netflow: result.data });
         const reportFile = await tmpFile();
-        log.debug('4444');
-        await report.stream.pipe(fs.createWriteStream(reportFile.path));
-        log.debug('mmmm');
-        response.sendFile(reportFile.path);
+        const writable = fs.createWriteStream(reportFile.path);
+        await report.stream.pipe(writable);
+        writable.on('finish', () => {
+          response.sendFile(reportFile.path);
+        });
+        writable.on('error', (e) => {
+          log.error(e);
+        });
       } else {
         throw new Error('unknown report type');
       }
@@ -109,77 +113,77 @@ const controller: { [key: string]: RequestHandler } = {
     }
   },
   /* createReport: async (request, response) => {
-                    const generalReportRequestTask: GeneralReportRequestTask = request.body;
-                    log.debug(request.body);
-                    if (!generalReportRequestTask.to) {
-                        generalReportRequestTask.toDate = momentTz.tz(LOGGER_TIME_ZONE);
-                        generalReportRequestTask.to = momentTz(
-                            generalReportRequestTask.toDate,
-                            LOCAL_TIME_ZONE,
-                        ).valueOf();
-                    } else {
-                        generalReportRequestTask.toDate = momentTz.tz(
-                            generalReportRequestTask.to,
-                            LOGGER_TIME_ZONE,
-                        );
-                    }
+                              const generalReportRequestTask: GeneralReportRequestTask = request.body;
+                              log.debug(request.body);
+                              if (!generalReportRequestTask.to) {
+                                  generalReportRequestTask.toDate = momentTz.tz(LOGGER_TIME_ZONE);
+                                  generalReportRequestTask.to = momentTz(
+                                      generalReportRequestTask.toDate,
+                                      LOCAL_TIME_ZONE,
+                                  ).valueOf();
+                              } else {
+                                  generalReportRequestTask.toDate = momentTz.tz(
+                                      generalReportRequestTask.to,
+                                      LOGGER_TIME_ZONE,
+                                  );
+                              }
 
-                    // create fromDate 1 year before from Date
-                    if (!generalReportRequestTask.from) {
-                        generalReportRequestTask.fromDate = momentTz.tz(
-                            generalReportRequestTask.toDate.valueOf() - 31539999 * 1000,
-                            LOGGER_TIME_ZONE,
-                        );
-                        generalReportRequestTask.from = momentTz(
-                            generalReportRequestTask.fromDate,
-                            LOCAL_TIME_ZONE,
-                        ).valueOf();
-                    } else {
-                        generalReportRequestTask.fromDate = momentTz.tz(
-                            generalReportRequestTask.from,
-                            LOGGER_TIME_ZONE,
-                        );
-                    }
-                    log.debug(
-                        `Create ${generalReportRequestTask.type} report from ${
-                            generalReportRequestTask.fromDate
-                            } to ${generalReportRequestTask.toDate}`,
-                        JSON.stringify(generalReportRequestTask),
-                    );
+                              // create fromDate 1 year before from Date
+                              if (!generalReportRequestTask.from) {
+                                  generalReportRequestTask.fromDate = momentTz.tz(
+                                      generalReportRequestTask.toDate.valueOf() - 31539999 * 1000,
+                                      LOGGER_TIME_ZONE,
+                                  );
+                                  generalReportRequestTask.from = momentTz(
+                                      generalReportRequestTask.fromDate,
+                                      LOCAL_TIME_ZONE,
+                                  ).valueOf();
+                              } else {
+                                  generalReportRequestTask.fromDate = momentTz.tz(
+                                      generalReportRequestTask.from,
+                                      LOGGER_TIME_ZONE,
+                                  );
+                              }
+                              log.debug(
+                                  `Create ${generalReportRequestTask.type} report from ${
+                                      generalReportRequestTask.fromDate
+                                      } to ${generalReportRequestTask.toDate}`,
+                                  JSON.stringify(generalReportRequestTask),
+                              );
 
-                    try {
-                        let data: any[];
+                              try {
+                                  let data: any[];
 
-                        if (generalReportRequestTask.type === REPORT_TYPE.NETFLOW) {
-                            data = await netflow.queryNetflow(
-                                generalReportRequestTask as NetflowReportRequestTask,
-                            );
-                        } else if (generalReportRequestTask.type === REPORT_TYPE.WEBPROXY) {
-                            data = await webproxyLog.queryWebproxyLog(
-                                generalReportRequestTask as WebproxyReportRequestTask,
-                            );
-                        } else if (generalReportRequestTask.type === REPORT_TYPE.DNS) {
-                            throw new Error('not implemented');
-                        } else {
-                            throw new Error('invalid report type');
-                        }
-                        const reportConfig = getReportConfig(generalReportRequestTask.type);
+                                  if (generalReportRequestTask.type === REPORT_TYPE.NETFLOW) {
+                                      data = await netflow.queryNetflow(
+                                          generalReportRequestTask as NetflowReportRequestTask,
+                                      );
+                                  } else if (generalReportRequestTask.type === REPORT_TYPE.WEBPROXY) {
+                                      data = await webproxyLog.queryWebproxyLog(
+                                          generalReportRequestTask as WebproxyReportRequestTask,
+                                      );
+                                  } else if (generalReportRequestTask.type === REPORT_TYPE.DNS) {
+                                      throw new Error('not implemented');
+                                  } else {
+                                      throw new Error('invalid report type');
+                                  }
+                                  const reportConfig = getReportConfig(generalReportRequestTask.type);
 
-                        const report = await render(reportConfig, {data});
-                        const reportFile = await tmpFile();
-                        await report.stream.pipe(fs.createWriteStream(reportFile.path));
-                        await sendReport(generalReportRequestTask, reportFile.path, reportConfig);
-                        // fs.unlink(reportFile.path, () => {
-                        //   log.debug('file cleared up');
-                        // });
-                        //log.debug(report.content);
-                        log.debug(`report created and uploaded`);
-                        response.send({ok: true});
-                    } catch (error) {
-                        log.error(error);
-                        throw error;
-                    }
-                },*/
+                                  const report = await render(reportConfig, {data});
+                                  const reportFile = await tmpFile();
+                                  await report.stream.pipe(fs.createWriteStream(reportFile.path));
+                                  await sendReport(generalReportRequestTask, reportFile.path, reportConfig);
+                                  // fs.unlink(reportFile.path, () => {
+                                  //   log.debug('file cleared up');
+                                  // });
+                                  //log.debug(report.content);
+                                  log.debug(`report created and uploaded`);
+                                  response.send({ok: true});
+                              } catch (error) {
+                                  log.error(error);
+                                  throw error;
+                              }
+                          },*/
 };
 
 export default controller;
