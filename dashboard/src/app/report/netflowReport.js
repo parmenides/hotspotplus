@@ -67,9 +67,15 @@ app.controller('netflowReport', [
     })
 
     $scope.departments = []
+    $scope.departmentsMap = {}
     Business.getMyDepartments().$promise.then(function (response) {
       $scope.departments = response.departments
+      $scope.departmentsMap = $scope.departments.reduce(function(obj,department){
+        obj[department.id] = department;
+        return obj
+      },{})
     })
+
 
     $scope.paginationOptions = {
       pageNumber: 1,
@@ -89,12 +95,13 @@ app.controller('netflowReport', [
 
         {
           displayName: 'report.department',
-          field: 'department',
+          field: 'departmentId',
           enableColumnMenu: false,
           enableHiding: false,
           enableSorting: false,
           cellClass: 'center',
           headerCellClass: 'headerCenter',
+          cellTemplate: '<div class="ui-grid-cell-contents ltr-text">{{row.entity.departmentTitle}}</div>',
           headerCellFilter: 'translate'
         },
         {
@@ -190,7 +197,10 @@ app.controller('netflowReport', [
             $scope.waitingForResponse = false;
             $scope.gridOptions.totalItems = result.size
             $scope.paginationOptions.totalItems = result.size
-            $scope.gridOptions.data = result.data
+            $scope.gridOptions.data = result.data.map(function(row){
+              row.departmentTitle = $scope.departmentsMap[row.departmentId].title
+              return row;
+            });
           },
           function (error) {
             $log.error(error)

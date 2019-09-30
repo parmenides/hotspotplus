@@ -31,8 +31,8 @@ app.controller('dnsReport', [
     trimUsernameFilter
   ) {
     $scope.loading = true
-    $scope.waitingForDwl = false;
-    $scope.waitingForResponse = false;
+    $scope.waitingForDwl = false
+    $scope.waitingForResponse = false
 
     $scope.localLang = $rootScope.localLang
     $scope.direction = $rootScope.direction
@@ -69,6 +69,10 @@ app.controller('dnsReport', [
     $scope.departments = []
     Business.getMyDepartments().$promise.then(function (response) {
       $scope.departments = response.departments
+      $scope.departmentsMap = $scope.departments.reduce(function (obj, department) {
+        obj[department.id] = department
+        return obj
+      }, {})
     })
 
     $scope.paginationOptions = {
@@ -94,7 +98,9 @@ app.controller('dnsReport', [
           enableSorting: false,
           cellClass: 'center',
           headerCellClass: 'headerCenter',
-          headerCellFilter: 'translate'
+          headerCellFilter: 'translate',
+          cellTemplate: '<div class="ui-grid-cell-contents ltr-text">{{row.entity.departmentTitle}}</div>',
+
         },
         {
           displayName: 'report.username',
@@ -159,23 +165,26 @@ app.controller('dnsReport', [
         query.sort = $scope.searchFilter.sort
         query.skip = ($scope.paginationOptions.pageNumber - 1) * $scope.paginationOptions.itemPerPage
         query.limit = $scope.paginationOptions.itemPerPage
-        $scope.waitingForResponse = true;
+        $scope.waitingForResponse = true
         Report.searchDns(query).$promise.then(
           function (result) {
-            $scope.waitingForResponse = false;
+            $scope.waitingForResponse = false
             $scope.gridOptions.totalItems = result.size
             $scope.paginationOptions.totalItems = result.size
-            $scope.gridOptions.data = result.data
+            $scope.gridOptions.data = result.data.map(function (row) {
+              row.departmentTitle = $scope.departmentsMap[row.departmentId].title
+              return row
+            })
           },
           function (error) {
             $log.error(error)
           }
         )
       } else if (type === 'excel') {
-        $scope.waitingForDwl = true;
+        $scope.waitingForDwl = true
         Report.searchDns(query).$promise.then(
           function (report) {
-            $scope.waitingForDwl = false;
+            $scope.waitingForDwl = false
             var fileName = report.fileName
             var container = report.container
             if (fileName && container) {

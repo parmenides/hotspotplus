@@ -1,15 +1,28 @@
 version: '3.6'
 services:
-  hotspotplusapi:
+  traefik:
+    image: traefik:v2.0
+    container_name: traefik
+    command: --providers.docker=true --entryPoints.web.address=:80  --providers.docker.endpoint="unix:///var/run/docker.sock" --providers.docker.network=hotspotplusgate
+    ports:
+    - '80:80'
+    - '8080:8080'
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+    - hotspotplusgate
+  api:
     build:
       context: ${PWD}/api
     user: '${UID:-1000}:${GID:-1000}'
     restart: always
     container_name: apihotspotplus
     command: npm run start:dev
+    expose:
+      - '3000'
+    labels:
+      - traefik.http.routers.api.rule=( Host(`my.localhotspot.ir`) || Host(`go.localhotspot.ir`) ) && PathPrefix(`/api/`,`/explorer`)
     #command: npm run build:dev:angular
-    ports:
-      - 3000:3000
     depends_on:
       - mongodb
       - redis
@@ -25,15 +38,17 @@ services:
       - ${PWD}/api/key:/key
     networks:
       - hotspotplusgate
-  hotspotpluslicensapi:
+  licensapi:
     build:
       context: ${PWD}/api-license
     user: '${UID:-1000}:${GID:-1000}'
     restart: always
     container_name: hotspotpluslicensapi
+    labels:
+    - traefik.http.routers.lcapi.rule=( Host(`lc.localhotspot.ir`) || Host(`lc.localhotspot.ir`) ) && PathPrefix(`/api/`,`/explorer`)
     command: npm run start:dev
-    ports:
-      - 3001:3000
+    expose:
+     - '3000'
     depends_on:
       - mongodb
 #      - elasticsearch
@@ -85,10 +100,12 @@ services:
   dashboard:
     image: 'bitnami/nginx:latest'
     restart: always
-    ports:
-      - 8080:8080
     volumes:
       - ${PWD}/dashboard:/app
+    labels:
+      - traefik.http.routers.dashboard.rule=Host(`my.localhotspot.ir`)
+    expose:
+      - '8080'
     networks:
       - hotspotplusgate
   hotspot:
@@ -97,8 +114,10 @@ services:
     user: '${UID:-1000}:${GID:-1000}'
     restart: always
     command: npm start
-    ports:
-    - 8081:8070
+    labels:
+    - traefik.http.routers.hotspot.rule=Host(`go.localhotspot.ir`)
+    expose:
+    - '8070'
     volumes:
     - ${PWD}/hotspot/:/usr/src/app/
     networks:
@@ -106,8 +125,10 @@ services:
   licensedashboard:
     image: 'bitnami/nginx:latest'
     restart: always
-    ports:
-      - 8082:8080
+    labels:
+    - traefik.http.routers.lcdashboard.rule=Host(`lc.localhotspot.ir`)
+    expose:
+    - '8080'
     volumes:
       - ${PWD}/license-dashboard:/app
     networks:

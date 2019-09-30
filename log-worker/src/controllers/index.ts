@@ -126,11 +126,13 @@ const controller: { [key: string]: RequestHandler } = {
       departments,
       businessId,
       username,
+      domain,
     }: {
       type: string;
       departments: string[];
       businessId: string;
       username: string;
+      domain: string;
     } = request.query;
 
     from = Number(from);
@@ -146,6 +148,7 @@ const controller: { [key: string]: RequestHandler } = {
       toDate: momentTz.tz(to, LOGGER_TIME_ZONE),
       departments,
       username,
+      domain,
       businessId,
       limit,
       skip,
