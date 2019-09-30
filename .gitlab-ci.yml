@@ -7,7 +7,6 @@ stages:
   - build_api_license
   - build_dashboard
   - build_license_dashboard
-  - build_log_aggregator
   - build_log_worker
   - build_goflow
   - build_coordinator
@@ -57,13 +56,6 @@ build_license_dashboard:
     - tags
   script:
     - ./license-dashboard/build.sh
-build_log_aggregator:
-  stage: build_log_aggregator
-  when: manual
-  only:
-    - tags
-  script:
-    - ./log-aggregator/build.sh
 build_log_worker:
   stage: build_log_worker
   when: manual
