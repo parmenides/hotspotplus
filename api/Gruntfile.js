@@ -11,9 +11,9 @@ module.exports = function ( grunt ) {
 				options: {
           exclude:["aggregates.js","datasources.json"],
           compact: true,
-					controlFlowFlattening: true,
+					controlFlowFlattening: false,
 					controlFlowFlatteningThreshold: 0.75,
-					deadCodeInjection: true,
+					deadCodeInjection: false,
 					deadCodeInjectionThreshold: 0.4,
 					debugProtection: false,
 					debugProtectionInterval: false,
@@ -26,7 +26,7 @@ module.exports = function ( grunt ) {
 					stringArray: true,
 					stringArrayEncoding: 'base64',
 					stringArrayThreshold: 0.75,
-					transformObjectKeys: true,
+					transformObjectKeys: false,
 					unicodeEscapeSequence: false
 				},
 				files:   {
