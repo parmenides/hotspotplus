@@ -24,15 +24,9 @@ app.directive('visitorsChart', [
         $scope.loading = false;
         showChart();
         $scope.$on($scope.params.reloadEvent, function(event, data) {
-          if (data.params.advanceTime) {
-            $scope.params.fromDate = data.params.advanceTime.startDate;
-            $scope.params.endDate = data.params.advanceTime.endDate;
-            $scope.params.monthDays = data.params.advanceTime.monthDays;
-          } else {
             $scope.params.fromDate = data.params.fromDate;
             $scope.params.endDate = data.params.endDate;
             $scope.params.monthDays = [];
-          }
           $scope.params.offset = data.params.offset;
           showChart();
         });

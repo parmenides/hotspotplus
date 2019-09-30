@@ -1,18 +1,30 @@
 version: '3.6'
 services:
-  hotspotplusapi:
+  traefik:
+    image: traefik:v2.0
+    container_name: traefik
+    command: --providers.docker=true --entryPoints.web.address=:80  --providers.docker.endpoint="unix:///var/run/docker.sock" --providers.docker.network=hotspotplusgate
+    ports:
+    - '80:80'
+    - '8080:8080'
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+    - hotspotplusgate
+  api:
     build:
       context: ${PWD}/api
     user: '${UID:-1000}:${GID:-1000}'
     restart: always
     container_name: apihotspotplus
     command: npm run start:dev
-    ports:
-      - 3000:3000
+    expose:
+      - '3000'
+    labels:
+      - traefik.http.routers.api.rule=( Host(`my.localhotspot.ir`) || Host(`go.localhotspot.ir`) ) && PathPrefix(`/api/`,`/explorer`)
+    #command: npm run build:dev:angular
     depends_on:
       - mongodb
-      - elasticsearch
-#      - rabbitmq
       - redis
     env_file:
       - api/.env
@@ -26,18 +38,20 @@ services:
       - ${PWD}/api/key:/key
     networks:
       - hotspotplusgate
-  hotspotpluslicensapi:
+  licensapi:
     build:
       context: ${PWD}/api-license
     user: '${UID:-1000}:${GID:-1000}'
     restart: always
     container_name: hotspotpluslicensapi
+    labels:
+    - traefik.http.routers.lcapi.rule=( Host(`lc.localhotspot.ir`) || Host(`lc.localhotspot.ir`) ) && PathPrefix(`/api/`,`/explorer`)
     command: npm run start:dev
-    ports:
-      - 3001:3000
+    expose:
+     - '3000'
     depends_on:
       - mongodb
-      - elasticsearch
+#      - elasticsearch
       - redis
     env_file:
       - api-license/.env
@@ -53,20 +67,25 @@ services:
     build:
       context: ./log-worker
     user: '${UID:-1000}:${GID:-1000}'
+    container_name: logworker
     command: npm run start:dev
-#    depends_on:
-#      - rabbitmq
     environment:
+      - REPORT_TEMPLATES_PAHT=/report-templates
+      - CLICK_NETFLOW_REPORT_DB=logs.report
+      - CLICK_HOST=clickhouse
+      - CLICK_USER=admin
+      - CLICK_PASSWORD=123
       - ELASTICSEARCH_LOG_LEVEL=debug
+      - START_MANUAL_ENRICHMENT=true
+      - ENRICHMENT_SCOPE=1000
+      - ELASTIC_INDEX_PREFIX=hotspotplus
+      - ELASTIC_LICENSE_INDEX_PREFIX=hotspotpluslicense
       - LOG_REQUEST_RETRY_MS=300000
       - API_ADDRESS=http://hotspotplusapi:3000
       - SERVICE_MAN_USERNAME=pinTimeServiceMan
       - SERVICE_MAN_PASSWORD=#123aaa)
-      - RABBITMQ_USERNAME=payam
-      - RABBITMQ_PASSWORD=123
       - REDIS_PORT=6379
       - REDIS_HOST=hsp_redis
-      - ELASTIC_INDEX_PREFIX=hotspotplus
       - ELASTIC_IP=hsp_elasticsearch
       - ELASTIC_PORT=9200
       - LOG_LEVEL=debug
@@ -74,46 +93,19 @@ services:
     volumes:
       - ${PWD}/log-worker/dist/log.worker.js:/usr/src/app/log.worker.js
       - ${PWD}/log-worker/node_modules:/usr/src/app/node_modules
+      - ${PWD}/log-worker/report-templates:/report-templates
       - ${PWD}/log-worker/logs:/logs
     networks:
     - hotspotplusgate
-#  rabbitmq:
-#    image: 'bitnami/rabbitmq:3.7.10-ol-7-r2'
-#    ports:
-#      - 15672:15672
-#    container_name: rabbitmq
-#    environment:
-#      - RABBITMQ_USERNAME=payam
-#      - RABBITMQ_PASSWORD=123
-##    volumes:
-##      - hsp_rabbitmq:/bitnami
-#    networks:
-#      - hotspotplusgate
-#  logaggregator:
-#    build:
-#      context: ${PWD}/log-aggregator
-#    user: '${UID:-1000}:${GID:-1000}'
-#    restart: always
-#    command: npm start
-#    depends_on:
-#      - elasticsearch
-#      - redis
-#    env_file:
-#      - ${PWD}/log-aggregator/.env
-#    volumes:
-#      - ${PWD}/log-aggregator/src/:/usr/src/app/src/
-#      - ${PWD}/log-aggregator/index.js:/usr/src/app/index.js
-#      - ${PWD}/log-aggregator/node_modules/:/usr/src/app/node_modules/
-#      - ${PWD}/log-aggregator/logs:/logs
-#    networks:
-#      - hotspotplusgate
   dashboard:
     image: 'bitnami/nginx:latest'
     restart: always
-    ports:
-      - 8080:8080
     volumes:
       - ${PWD}/dashboard:/app
+    labels:
+      - traefik.http.routers.dashboard.rule=Host(`my.localhotspot.ir`)
+    expose:
+      - '8080'
     networks:
       - hotspotplusgate
   hotspot:
@@ -122,21 +114,25 @@ services:
     user: '${UID:-1000}:${GID:-1000}'
     restart: always
     command: npm start
-    ports:
-    - 8081:8070
+    labels:
+    - traefik.http.routers.hotspot.rule=Host(`go.localhotspot.ir`)
+    expose:
+    - '8070'
     volumes:
     - ${PWD}/hotspot/:/usr/src/app/
     networks:
     - hotspotplusgate
-#  licensedashboard:
-#    image: 'bitnami/nginx:latest'
-#    restart: always
-#    ports:
-#      - 8082:8080
-#    volumes:
-#      - ${PWD}/license-dashboard:/app
-#    networks:
-#      - hotspotplusgate
+  licensedashboard:
+    image: 'bitnami/nginx:latest'
+    restart: always
+    labels:
+    - traefik.http.routers.lcdashboard.rule=Host(`lc.localhotspot.ir`)
+    expose:
+    - '8080'
+    volumes:
+      - ${PWD}/license-dashboard:/app
+    networks:
+      - hotspotplusgate
   coordinator:
     build:
       context: ${PWD}/coordinator
@@ -147,7 +143,7 @@ services:
       - ${PWD}/coordinator/.env
     depends_on:
       - redis
-      - hotspotpluslicensapi
+#      - hotspotpluslicensapi
     environment:
       - LOG_LEVEL=debug
       - LOG_DIR=/logs
@@ -182,33 +178,26 @@ services:
       - ALLOW_EMPTY_PASSWORD=yes
     networks:
       - hotspotplusgate
-  elasticsearch:
-    container_name: hsp_elasticsearch
-    image: 'bitnami/elasticsearch:7.1.1'
-    restart: always
-    environment:
-      - ELASTICSEARCH_HEAP_SIZE=1024m
-    expose:
-      - "9300"
-      - "9200"
+  clickhouse:
+    image: yandex/clickhouse-server
+    hostname: clickhouse
+    container_name: clickhouse
     ports:
-      - 9200:9200
+    - 9000:9000
+    - 9009:9009
+    - 8123:8123
     volumes:
-      - hsp_elasticsearch:/bitnami/elasticsearch
+    - ./clickhouse/clickhouse_config.xml:/etc/clickhouse-server/config.xml
+    - ./clickhouse/clickhouse_metrika.xml:/etc/clickhouse-server/metrika.xml
+    - ./clickhouse/users.xml:/etc/clickhouse-server/users.xml
+    -  clickhouse:/var/lib/clickhouse
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
     networks:
       hotspotplusgate:
-         ipv4_address: 172.20.0.20
-#  kibana:
-#    image: 'bitnami/kibana:6.5.4'
-#    ports:
-#      - 5601:5601
-#    environment:
-#      - KIBANA_ELASTICSEARCH_URL=hsp_elasticsearch
-#    volumes:
-#      - 'hsp_kibana:/bitnami'
-#    networks:
-#      hotspotplusgate:
-#       ipv4_address: 172.20.0.21
+        ipv4_address: 172.20.0.85
   zookeeper:
     image: 'bitnami/zookeeper:latest'
     restart: always
@@ -233,8 +222,6 @@ services:
       - KAFKA_ZOOKEEPER_CONNECT=hsp_zookeeper:2181
     expose:
       - '9092'
-    volumes:
-      - kafka:/bitnami/kafka
     networks:
       hotspotplusgate:
         ipv4_address: 172.20.0.80
@@ -242,8 +229,6 @@ services:
     image: 'registry.gitlab.com/parmenides/hspfreeradius/production:3.3'
     restart: always
     container_name: "hsp_radius_production"
-    logging:
-      driver: none
     networks:
       - hotspotplusgate
     expose:
@@ -253,18 +238,17 @@ services:
       - "1812:1812/udp"
       - "1813:1813/udp"
 
+
 volumes:
-  hsp_rabbitmq:
+  hsp_grafana:
     driver: local
   hsp_mongodb:
     driver: local
   hsp_redis:
     driver: local
-  hsp_elasticsearch:
-    driver: local
-  hsp_kibana:
-    driver: local
   kafka:
+    driver: local
+  clickhouse:
     driver: local
 
 networks:

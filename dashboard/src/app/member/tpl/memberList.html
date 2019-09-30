@@ -10,33 +10,41 @@
                         <i class="fa fa-plus"></i>{{"member.addMember"|translate}}
                     </button>
                     <button type="button" class="btn btn-sm btn-default btn-addon" ng-click="sendMessageToAll()"
+                            access="networkadmin"
+                            access-permission-type="one"
                             check-action access-action="sendBulkSms"
                             uib-popover="{{'help.sendMessageToAll' | translate}}" popover-trigger="mouseenter">
                         <i class="fa fa-send"></i>{{"message.sendMessage"|translate}}
                     </button>
                     <button type="button" class="btn btn-sm btn-addon btn-info" ng-click="createMemberByGroup()"
                             check-action access-action="createMemberByGroup"
+                            access="networkadmin"
+                            access-permission-type="one"
                             uib-popover="{{'help.createMemberByGroup' | translate}}" popover-trigger="mouseenter">
                         <i class="fa fa-users"></i>{{"member.createMemberByGroup"|translate}}
                     </button>
                 </div>
                 <div class="clearfix m-b col-sm-4">
-                    <button type="button" class="btn btn-sm btn-default btn-addon pull-right" ng-click="removeMembers()">
+                    <button type="button" class="btn btn-sm btn-default btn-addon pull-right"
+                            ng-click="removeMembers()">
                         <i class="fa fa-trash-o"></i>{{"member.removeMembers"|translate}}
                     </button>
                     <button type="button" class="btn btn-sm btn-default btn-addon pull-right" ng-click="showCsvForm()"
                             check-action access-action="uploadMembers"
+                            access="networkadmin"
+                            access-permission-type="one"
+
                             uib-popover="{{'help.bulkImportBtn' | translate}}" popover-trigger="mouseenter">
                         <i class="fa fa-upload"></i>{{"member.bulkImport"|translate}}
                     </button>
                 </div>
             </div>
             <div class="row">
-                <div class="clearfix m-b col-sm-6">
-                    <form class="input-group col-sm-12" ng-submit="searchMember()">
+                <div class="clearfix m-b col-sm-3">
+                    <form class="input-group col-sm-12" ng-submit="search()">
                         <div class="input-group-btn">
                             <button type="button" class="btn btn-sm btn-primary" ng-if="!isSearching"
-                                    ng-click="searchMember()"
+                                    ng-click="search()"
                                     uib-popover="{{'help.searchMember' | translate}}" popover-trigger="mouseenter"
                                     popover-placement="bottom-right">
                                 <i class="fa fa-search"></i>
@@ -48,7 +56,7 @@
                                 <i class="fa fa-circle-o-notch fa-spin"></i>
                             </button>
                         </div>
-                        <input type="text" class="form-control input-sm" ng-model="memberUsername"
+                        <input type="text" class="form-control input-sm" ng-model="searchFilter.username"
                                placeholder="{{'member.inputUserName' |  translate}}"
                                uib-popover="{{'help.searchByUserName' | translate}}" popover-trigger="mouseenter"
                                popover-placement="bottom-right">
@@ -62,6 +70,25 @@
                         </div>
                     </form>
                 </div>
+                <div class="clearfix m-b col-sm-3">
+                    <select ng-change="search()" ng-model="searchFilter.department" class="form-control input-sm"
+                            ng-options="department.title  for department in permittedDepartments">
+                        <option value="">{{"department.selectDepartment"|translate}}</option>
+                    </select>
+                </div>
+                <div class="clearfix m-b col-sm-3">
+                    <select ng-change="search()" ng-model="searchFilter.internetPlan" class="form-control input-sm"
+                            ng-options="internetPlan.name  for internetPlan in allInternetPlans">
+                        <option value="">{{"internetPlan.selectInternetPlan"|translate}}</option>
+                    </select>
+                </div>
+                <div class="clearfix m-b col-sm-3">
+                    <select ng-change="search()" ng-model="searchFilter.status" class="form-control input-sm">
+                        <option value="">{{"member.selectStatus"|translate}}</option>
+                        <option value="true">{{"member.active"|translate}}</option>
+                        <option value="false">{{"member.inActive"|translate}}</option>
+                    </select>
+                </div>
             </div>
             <div class="table-responsive m-b-lg">
                 <div ui-i18n="{{localLang}}">
@@ -70,7 +97,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-5">
+               <!-- <div class="col-md-5">
                     <div class="btn-group">
                         <label class="btn btn-default" ng-model="paginationOptions.itemPerPage" uib-btn-radio="10"
                                uncheckable>{{10 | translateNumber}}</label>
@@ -85,7 +112,7 @@
                         <label class="btn btn-default" ng-model="paginationOptions.itemPerPage" uib-btn-radio="100"
                                uncheckable>{{100 | translateNumber}}</label>
                     </div>
-                </div>
+                </div>-->
                 <div class="col-md-6">
                     <uib-pagination ng-change="pageChanges()"
                                     total-items="paginationOptions.totalItems"

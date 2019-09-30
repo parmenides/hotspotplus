@@ -1,18 +1,19 @@
 var loopback = require('loopback');
 var bodyParser = require('body-parser');
 var boot = require('loopback-boot');
-var config = require('./modules/config');
+var mongoConnector = require('loopback-connector-mongodb');
+
+//var config = require('./modules/config');
 var app = (module.exports = loopback());
 var logger = require('./modules/logger');
 var log = logger.createLogger();
 require('date-utils');
 var cors = require('cors');
-var redis = require('redis');
-var redisClient = redis.createClient(config.REDIS.PORT, config.REDIS.HOST);
-var utility = require('./modules/utility');
+//var redis = require('redis');
+//var redisClient = redis.createClient(config.REDIS.PORT, config.REDIS.HOST);
 
-var dataSource = {
-  connector: require('loopback-connector-mongodb'),
+app.dataSource('mongo', {
+  connector: mongoConnector,
   url:
     'mongodb://' +
     process.env.MONGO_IP +
@@ -20,37 +21,15 @@ var dataSource = {
     process.env.MONGO_DB_NAME +
     '?w=1&j=true',
   name: 'mongo'
-};
-var MongoClient = require('mongodb').MongoClient;
-MongoClient.connect(
-  dataSource.url,
-  function(error, db) {
-    if (error) {
-      console.log('connection to mongo failed');
-      console.log(error);
-      return;
-    }
-    db.collection('ClientSession').createIndex(
-      { expiresAt: 1 },
-      { expireAfterSeconds: 0 }
-    );
-    db.collection('NasSession').createIndex(
-      { expiresAt: 1 },
-      { expireAfterSeconds: 0 }
-    );
-    db.collection('Member').createIndex(
-      { expiresAt: 1 },
-      { expireAfterSeconds: 0 }
-    );
-  }
-);
-app.dataSource('mongo', dataSource);
+});
 
 app.use(loopback.token());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.use(cors());
 
+
+/*
 app.get('/a/:urlKey', function(req, res) {
   var urlKey = req.params.urlKey;
   redisClient.get(urlKey, function(error, reply) {
@@ -64,11 +43,11 @@ app.get('/a/:urlKey', function(req, res) {
     }
     return res.redirect(302, reply);
   });
-});
-
-app.get('/api/status', function(req, res) {
-  res.redirect(301, 'http://example.com');
-});
+});*/
+//
+// app.get('/api/status', function(req, res) {
+//   res.redirect(301, 'http://example.com');
+// });
 
 // Prevent Wapelizer from exposing our server side technologies.
 app.use(function(req, res, next) {
@@ -89,31 +68,31 @@ app.use(function(req, res, next) {
   }
   next();
 });
-
-app.use(function(request, response, next) {
-  response.on('finish', function() {
-    var statusCode = response.statusCode;
-    statusCode = Number(statusCode);
-    if (statusCode >= 500) {
-      var myError = 'Http Error ' + response.statusCode + ' ' + request.path;
-      utility.sendMessage(myError, {
-        request: request.body
-      });
-    } else if (statusCode == 403) {
-      var myError =
-        'Error UnAuthorized Access' + response.statusCode + ' ' + request.path;
-      utility.sendMessage(myError, {
-        request: request.body
-      });
-    } else if (statusCode >= 400) {
-      var myError = 'Http Error ' + response.statusCode + ' ' + request.path;
-      utility.sendMessage(myError, {
-        request: request.body
-      });
-    }
-  });
-  return next();
-});
+//
+// app.use(function(request, response, next) {
+//   response.on('finish', function() {
+//     var statusCode = response.statusCode;
+//     statusCode = Number(statusCode);
+//     if (statusCode >= 500) {
+//       var myError = 'Http Error ' + response.statusCode + ' ' + request.path;
+//       utility.sendMessage(myError, {
+//         request: request.body
+//       });
+//     } else if (statusCode == 403) {
+//       var myError =
+//         'Error UnAuthorized Access' + response.statusCode + ' ' + request.path;
+//       utility.sendMessage(myError, {
+//         request: request.body
+//       });
+//     } else if (statusCode >= 400) {
+//       var myError = 'Http Error ' + response.statusCode + ' ' + request.path;
+//       utility.sendMessage(myError, {
+//         request: request.body
+//       });
+//     }
+//   });
+//   return next();
+// });
 
 app.start = function() {
   // start the web server
@@ -136,12 +115,12 @@ boot(app, __dirname, function(err) {
     app.start();
   }
 });
-
-process.on('uncaughtException', function(error) {
+process.on('uncaughtException', function (error) {
   console.error('Something bad happened here....');
   console.error(error);
-  console.error(error.stack);
+  error?console.error(error.stack):null;
   log.error(error);
-  log.error(error.stack);
+  error?log.error(error && error.stack):null
+  process.exit(1);
   //utility.sendMessage ( error, { fileName: 'server.js', source: 'boot' } );
 });

@@ -26,6 +26,7 @@ exports.sendPod = function(clientSession) {
     if (!nasId || !username || !framedIpAddress || !nasSessionId || !mac) {
       return reject('invalid parameters, failed to dc user');
     }
+
     Nas.findById(nasId)
       .then(function(nas) {
         var businessId = nas.businessId;

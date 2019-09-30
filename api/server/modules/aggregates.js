@@ -2,15 +2,6 @@ var Q = require('q')
 var logger = require('./logger')
 var log = logger.createLogger()
 
-const ACCOUNTING_INDEX = `${process.env.ELASTIC_INDEX_PREFIX}accounting`
-const CHARGE_INDEX = `${process.env.ELASTIC_INDEX_PREFIX}charge`
-const LICENSE_CHARGE_INDEX = `${process.env.ELASTIC_INDEX_PREFIX}licensecharge`
-const {Client} = require('@elastic/elasticsearch')
-const elasticClient = new Client({
-  node: `http://${process.env.ELASTIC_IP}:${process.env.ELASTIC_PORT}`,
-  apiVersion: '6.7',
-  log: process.env.ELASTICSEARCH_LOG_LEVEL || 'info',
-})
 
 var redis = require('redis');
 var redisClient = redis.createClient(
@@ -18,6 +9,7 @@ var redisClient = redis.createClient(
   process.env.REDIS_HOST
 );
 var self = this;
+/*
 
 redisClient.get('methodNames', function(error, methods) {
   log.debug('Methods: ', methods);
@@ -44,3 +36,4 @@ redisClient.get('methodNames', function(error, methods) {
     })(methods[i]);
   }
 });
+*/

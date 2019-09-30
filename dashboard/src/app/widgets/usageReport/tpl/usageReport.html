@@ -1,0 +1,46 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="row no-padder-v text-gray">
+            <h3 class="col-xs-10 panel-title">{{"dashboard.usageReport" | translate}}</h3>
+            <loading></loading>
+        </div>
+    </div>
+    <div class="panel-body text-center widget-router">
+        <div class="col-sm-4 hidden-xs text-info">
+            <div class="row">
+                <span dir="ltr">
+                     {{upload | humanSize |translateNumber}}
+                </span>
+            </div>
+            <div class="row">
+                <span>
+                    <i class="text-md">{{"dashboard.upload" | translate}}</i>
+                </span>
+            </div>
+        </div>
+        <div class="col-sm-4 hidden-xs text-primary">
+            <div class="row">
+                <span dir="ltr">
+                    {{download | humanSize| translateNumber}}
+                </span>
+            </div>
+            <div class="row">
+                <span>
+                    <i class="text-md">{{"dashboard.download" | translate}}</i>
+                </span>
+            </div>
+        </div>
+        <div class="col-sm-4 hidden-xs text-success-dker">
+            <div class="row">
+                <span >
+                    {{sessionTime | humanTime | translateNumber}}
+                </span>
+            </div>
+            <div class="row">
+                <span>
+                    <i class="text-md">{{"dashboard.sessionTime" | translate}}</i>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>

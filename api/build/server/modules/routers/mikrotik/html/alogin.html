@@ -1,6 +1,0 @@
-$(if http-header == "Access-Control-Allow-Origin")*$(endif)
-$(if http-header == "Access-Control-Allow-Methods")"GET, POST, PUT"$(endif)
-$(if http-header == "Content-Type")"Application/json"$(endif)
-$(if $(session-id) != ""){"ok":"true","message":"youAreLoggedIn","session-id":$(session-id)}
-$(else){"ok":"true","message":"youAreLoggedIn"}
-$(endif)

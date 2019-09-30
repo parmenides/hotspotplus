@@ -16,6 +16,7 @@ app
             Session.business ||
             Session.user ||
             Session.reseller ||
+            Session.operator ||
             Session.member,
           loweredPermissions = [],
           hasPermission = true,
@@ -75,10 +76,12 @@ app
   .factory('Session', [
     'Business',
     'Member',
+    'Operator',
     'Reseller',
-    function(Business, Member, Reseller) {
+    function(Business, Member,Operator, Reseller) {
       var props = [
         'business',
+        'operator',
         'roles',
         'user',
         'userType',
@@ -112,6 +115,9 @@ app
             case 'Reseller':
               Reseller.findById({ id: self.reseller.id });
               break;
+            case 'Operator':
+              Operator.findById({ id: self.operator.id });
+              break;
             default:
               Business.findById({ id: businessId });
               break;
@@ -127,6 +133,9 @@ app
       };
       Session.prototype.isResellerUser = function() {
         return this.userType == 'Reseller';
+      };
+      Session.prototype.isOperatorUser = function() {
+        return this.userType == 'Operator';
       };
       Session.prototype.isMemberUser = function() {
         return this.userType == 'Member';
@@ -149,6 +158,8 @@ app
         var theUser = {};
         if (this.business) {
           theUser = this.business;
+        } else if (this.operator) {
+          theUser = this.operator;
         } else if (this.reseller) {
           theUser = this.reseller;
         } else if (this.member) {

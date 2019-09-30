@@ -27,12 +27,14 @@ var FAST_ACCOUNTING_UPDATE_INTERVAL_SECONDS =
 var CONFIG_SERVER_URL = process.env.CONFIG_SERVER_URL
 module.exports = {
   VERSION: '1.3',
+  APP_CACHE_TTL: 60*60,
+  DATABASE_DATE_FORMAT: 'YYYY-MM-DD HH:mm:ss',
   PAYPING_APP_CLIENT_ID: process.env.PAYPING_APP_CLIENT_ID,
   PAYPING_APP_TOKEN: process.env.PAYPING_APP_TOKEN,
   PAYPING_AUTH_RETURN_URL: process.env.PAYPING_AUTH_RETURN_URL,
-  PAYPING_CREATE_PAYMENT : 'https://api.payping.ir/v1/pay',
-  PAYPING_PAYMENT_GATEWAY : 'https://api.payping.ir/v1/pay/gotoipg',
-  PAYPING_PAYMENT_VERIFY : 'https://api.payping.ir/v1/pay/verify',
+  PAYPING_CREATE_PAYMENT: 'https://api.payping.ir/v1/pay',
+  PAYPING_PAYMENT_GATEWAY: 'https://api.payping.ir/v1/pay/gotoipg',
+  PAYPING_PAYMENT_VERIFY: 'https://api.payping.ir/v1/pay/verify',
   PAYPING_OAUTH2: 'https://oauth.payping.ir/connect/token',
   PAYPING_APP_REQUESTED_SCOPES: 'openid profile nationalcode phone pay:read pay:write',
   PAYMENT_API_KEY: process.env.PAYMENT_API_KEY,
@@ -96,7 +98,7 @@ module.exports = {
     BUSINESS: 'business',
     NETWORKADMIN: 'networkadmin',
     NAS: 'nas',
-    HEADMASTER: 'headmaster',
+    OPERATOR: 'operator',
     ADMIN: 'admin',
     RESELLER: 'reseller',
     SERVICEMAN: 'serviceMan',
@@ -137,7 +139,7 @@ module.exports = {
     PASS: null,
     OPTIONS: {}
   },
-  ACCOUNTING_TOPIC: 'accountingTopic',
+  ACCOUNTING_TOPIC: 'usageTopic',
   SESSION_TOPIC: 'sessionTopic',
   REPORT_GET_LOGS: 'REPORT_GET_LOGS',
   DEFAULT_AGGREGATION_SIZE: 10,
@@ -629,7 +631,7 @@ module.exports = {
       mainPath +
       '#/app/loading?dropbox={0}{1}'
     )
-  },/**
+  }, /**
    * @return {string}
    */
   DROPBOX_AUTHORISE_RESULT_URL: function () {

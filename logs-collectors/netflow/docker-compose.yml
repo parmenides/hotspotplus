@@ -1,0 +1,22 @@
+version: '3'
+services:
+  goflow:
+    image: 'registry.gitlab.com/parmenides/hotspotplus/goflow:latest'
+    restart: always
+    ports:
+    - 2055:2055/udp
+    command: -kafka.out.brokers 172.20.0.80:9092 -kafka.out.topic flows -loglevel debug
+    networks:
+    - hotspotplusgate
+  clickhouse-sinker-netflow:
+    image: 'registry.gitlab.com/parmenides/hotspotplus/clickhouse-sinker:latest'
+    restart: always
+    volumes:
+      - ./sinker-netflow:/opt/config
+    command: --conf /opt/config
+    networks:
+    - hotspotplusgate
+
+networks:
+  hotspotplusgate:
+    external: true

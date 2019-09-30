@@ -13,7 +13,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
 (function(window, angular, undefined) {
   'use strict';
 
-	var urlBase =  "http://127.0.0.1:4000/api";
+	var urlBase =  "http://lc.localhotspot.ir/api";
 
 	var authHeader = 'authorization';
 

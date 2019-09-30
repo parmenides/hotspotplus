@@ -77,6 +77,8 @@
 <script src="../libs/angular/angular-file-saver/angular-file-saver.bundle.min.js"></script>
 <!-- endbuild -->
 <script src="../libs/assets/persian-date/persiandate.js"></script>
+<script src="../libs/assets/numeral/min/numeral.min.js"></script>
+<script src="../libs/assets/human-format/index.js"></script>
 <script src="../libs/raven-js/dist/plugins/angular.js"></script>
 <script src="js/app.js"></script>
 <script src="js/config.js"></script>
@@ -97,6 +99,7 @@
 <script src="app/admin/auth.js"></script>
 <script src="app/reseller/auth.js"></script>
 <script src="app/member/auth.js"></script>
+<script src="app/operator/auth.js"></script>
 <script src="app/business/businessSettings.js"></script>
 <script src="app/subscription/subscriptionService.js"></script>
 <script src="app/reseller/resellerSettings.js"></script>
@@ -125,11 +128,11 @@
 <!-- endbuild -->
 <script>
 
-	Window.appStatus = 'production';
+	Window.appStatus = 'test';
 	Window.appDomain = location.host;
 	Window.API_URL="";
 	if ( Window.appStatus === 'test'   ) {
-		Window.API_URL = "http://127.0.0.1:3000";
+		Window.API_URL = "http://my.localhotspot.ir";
 	}
 	angular.element ( document ).ready ( function () {
 		$.ajax ( {
@@ -173,7 +176,6 @@
 				}
 			} ).addPlugin ( Raven.Plugins.Angular ).install ();
 		}
-
 
 	} );
 </script>

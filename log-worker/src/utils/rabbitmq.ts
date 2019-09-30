@@ -5,15 +5,16 @@ if (!process.env.RABBITMQ_USERNAME || !process.env.RABBITMQ_PASSWORD) {
 }
 let connection: amqp.Connection;
 export const getRabbitMqConnection = async () => {
-  /*tslint:disable*/
-  if (connection !== undefined) {
-    return connection;
-  }
   connection = await amqp.connect(
     `amqp://${process.env.RABBITMQ_USERNAME}:${
       process.env.RABBITMQ_PASSWORD
     }@rabbitmq`,
   );
+  connection.on('close', () => {
+    setTimeout(() => {
+      process.exit(1);
+    }, 10000);
+  });
   return connection;
 };
 

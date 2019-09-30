@@ -155,6 +155,16 @@
       "type": "hasMany",
       "model": "FileStorage",
       "foreignKey": ""
+    },
+    "departments": {
+      "type": "hasMany",
+      "model": "Department",
+      "foreignKey": ""
+    },
+    "operators": {
+      "type": "hasMany",
+      "model": "Operator",
+      "foreignKey": ""
     }
   },
   "acls": [
@@ -181,6 +191,18 @@
       "accessType": "READ",
       "principalType": "ROLE",
       "principalId": "$owner",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "READ",
+      "principalType": "ROLE",
+      "principalId": "operator",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "WRITE",
+      "principalType": "ROLE",
+      "principalId": "operator",
       "permission": "ALLOW"
     },
     {
@@ -214,6 +236,13 @@
       "accessType": "EXECUTE",
       "principalType": "ROLE",
       "principalId": "networkadmin",
+      "permission": "ALLOW",
+      "property": "getBalance"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "operator",
       "permission": "ALLOW",
       "property": "getBalance"
     },
@@ -331,7 +360,21 @@
     {
       "accessType": "EXECUTE",
       "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "getMyDepartments"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
       "principalId": "networkadmin",
+      "permission": "ALLOW",
+      "property": "destroyMembersById"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "operator",
       "permission": "ALLOW",
       "property": "destroyMembersById"
     },

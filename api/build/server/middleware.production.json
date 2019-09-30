@@ -1,9 +1,0 @@
-{
-  "final:after": {
-    "strong-error-handler": {
-      "params": {
-        "includeStack": false
-      }
-    }
-  }
-}

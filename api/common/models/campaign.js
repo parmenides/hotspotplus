@@ -35,11 +35,7 @@ module.exports = function(Campaign) {
           campaignLog = campaign.log;
         }
 
-        Business.findById(businessId, function(error, business) {
-          if (error) {
-            log.error('failed to load business');
-            return reject(error);
-          }
+        Business.findById(businessId).then(function(business) {
           if (!business) {
             return reject('business not found');
           }

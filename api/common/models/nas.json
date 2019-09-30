@@ -49,6 +49,11 @@
       "type": "hasMany",
       "model": "FootTraffic",
       "foreignKey": ""
+    },
+    "Departments": {
+      "type": "hasOne",
+      "model": "department",
+      "foreignKey": ""
     }
   },
   "acls": [
@@ -82,6 +87,13 @@
       "principalId": "networkadmin",
       "permission": "ALLOW",
       "property": "getStatus"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "operator",
+      "permission": "ALLOW",
+      "property": "loadRadiusInfo"
     },
     {
       "accessType": "EXECUTE",

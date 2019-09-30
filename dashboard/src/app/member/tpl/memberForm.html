@@ -63,6 +63,14 @@
                                     ng-options="internetPlan.name  for internetPlan in internetPlans">
                             </select>
                         </div>
+
+                        <div class="form-group col-sm-12">
+                            <label class="control-label">{{ "department.departments" | translate }}</label>
+                            <oi-select oi-options="department.title for department in departments"
+                                       ng-model="member.departments"
+                                       multiple></oi-select>
+                        </div>
+
                         <div class="form-group col-sm-12">
                             <div class="col-sm-12 checkbox">
                                 <label class="i-checks">
@@ -87,7 +95,7 @@
                                 {{member.creationDate | persianDate : 'fullDate'|translateNumber}}
                             </div>
                         </div>
-                        <div class="form-group col-sm-12" >
+                        <div class="form-group col-sm-12">
                             <label class="control-label">{{ "member.fullName" | translate }}</label>
                             <input type="text" class="form-control" ng-model="member.fullName">
                         </div>

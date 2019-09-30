@@ -19,6 +19,7 @@ app.directive('memberCount', [
         $scope.$on($scope.params.reloadEvent, function(event, data) {
           $scope.params.fromDate = data.params.fromDate;
           $scope.params.endDate = data.params.endDate;
+          $scope.params.departmentId = data.params.departmentId
           getMembersCount();
         });
 
@@ -30,6 +31,7 @@ app.directive('memberCount', [
           options.businessId = $scope.params.businessId;
           options.fromDate = $scope.params.fromDate;
           options.endDate = $scope.params.endDate;
+          options.departmentId = $scope.params.departmentId;
           Member.getAllMembersCount(options).$promise.then(
             function(result) {
               $scope.allMembers = result.allMembers;

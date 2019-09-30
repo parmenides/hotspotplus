@@ -59,7 +59,11 @@ app.config([
           PREFIX + 'app/widgets/trafficUsage/trafficUsage.js',
           PREFIX + 'app/widgets/sessionsReport/sessionsReport.js',
           PREFIX + 'app/widgets/sessionsCount/sessionsCount.js',
+          PREFIX + 'app/widgets/usageReport/usageReport.js',
           PREFIX + 'app/widgets/memberCount/memberCount.js',
+          PREFIX + 'app/widgets/reportStatus/reportStatus.js',
+          PREFIX + 'app/widgets/membersReport/membersReport.js',
+          PREFIX + 'app/widgets/topMembers/topMembers.js',
           PREFIX + 'app/widgets/loading.js',
         ]),
       })
@@ -208,10 +212,22 @@ app.config([
         templateUrl: TEMPLATE_PREFIX + 'app/nas/tpl/nasList.html',
         resolve: load([
           'ui.grid',
+          'oi.select',
           'ui.grid.pagination',
           'ui.grid.selection',
           'ui.grid.resizeColumns',
           PREFIX + 'app/nas/nasList.js',
+        ]),
+      })
+      .state('app.departments', {
+        url: '/departments',
+        templateUrl: TEMPLATE_PREFIX + 'app/department/tpl/departmentList.html',
+        resolve: load([
+          'ui.grid',
+          'ui.grid.pagination',
+          'ui.grid.selection',
+          'ui.grid.resizeColumns',
+          PREFIX + 'app/department/departmentList.js',
         ]),
       })
       .state('app.wifi', {
@@ -243,15 +259,28 @@ app.config([
           'ui.grid',
           'ui.grid.pagination',
           'ui.grid.selection',
+          'oi.select',
           'ui.grid.resizeColumns',
           'ui.bootstrap.persian.datepicker',
           PREFIX + 'app/member/memberList.js',
           PREFIX + 'app/member/planHistoryList.js',
         ]),
       })
-        .state('app.reports', {
-        url: '/report',
-        templateUrl: TEMPLATE_PREFIX + 'app/report/tpl/reportList.html',
+      .state('app.operators', {
+        url: '/operator',
+        templateUrl: TEMPLATE_PREFIX + 'app/operator/tpl/operatorList.html',
+        resolve: load([
+          'ui.grid',
+          'ui.grid.pagination',
+          'ui.grid.selection',
+          'ui.grid.resizeColumns',
+          'oi.select',
+          PREFIX + 'app/operator/operatorList.js'
+        ]),
+      })
+        .state('app.netflowReports', {
+        url: '/report/netflow',
+        templateUrl: TEMPLATE_PREFIX + 'app/report/tpl/netflowReport.html',
         resolve: load([
           'ui.grid',
           'ui.grid.pagination',
@@ -259,7 +288,33 @@ app.config([
           'ui.grid.resizeColumns',
           'ui.bootstrap.persian.datepicker',
           'oi.select',
-          PREFIX + 'app/report/reportList.js',
+          PREFIX + 'app/report/netflowReport.js'
+        ]),
+      })
+        .state('app.dnsReports', {
+        url: '/report/dns',
+        templateUrl: TEMPLATE_PREFIX + 'app/report/tpl/dnsReport.html',
+        resolve: load([
+          'ui.grid',
+          'ui.grid.pagination',
+          'ui.grid.selection',
+          'ui.grid.resizeColumns',
+          'ui.bootstrap.persian.datepicker',
+          'oi.select',
+          PREFIX + 'app/report/dnsReport.js'
+        ]),
+      })
+        .state('app.webproxyReports', {
+        url: '/report/webproxy',
+        templateUrl: TEMPLATE_PREFIX + 'app/report/tpl/webproxyReport.html',
+        resolve: load([
+          'ui.grid',
+          'ui.grid.pagination',
+          'ui.grid.selection',
+          'ui.grid.resizeColumns',
+          'ui.bootstrap.persian.datepicker',
+          'oi.select',
+          PREFIX + 'app/report/webproxyReport.js'
         ]),
       })
       .state('access.signUp', {
@@ -276,6 +331,11 @@ app.config([
         url: '/signin',
         templateUrl: TEMPLATE_PREFIX + 'app/business/tpl/signIn.html',
         resolve: load([PREFIX + 'app/business/auth.js']),
+      })
+      .state('access.operatorSignIn', {
+        url: '/operator/:name/signin',
+        templateUrl: TEMPLATE_PREFIX + 'app/operator/tpl/signIn.html',
+        resolve: load([PREFIX + 'app/operator/auth.js']),
       })
       .state('access.publicCustomizeService', {
         url: '/public/customizeService',

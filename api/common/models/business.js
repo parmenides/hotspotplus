@@ -2,7 +2,6 @@ var logger = require('../../server/modules/logger')
 var app = require('../../server/server')
 var config = require('../../server/modules/config')
 var utility = require('../../server/modules/utility')
-var aggregate = require('../../server/modules/aggregates')
 var Payment = require('../../server/modules/payment')
 var request = require('request')
 var Q = require('q')
@@ -12,6 +11,9 @@ var auth = require('../../server/modules/auth')
 var needle = require('needle')
 var redis = require('redis')
 var crypto = require('crypto')
+const db = require('../../server/modules/db.factory')
+const hspCache = require('../../server/modules/hspCache')
+
 var redisInvoicePayed = redis.createClient(
   config.REDIS.PORT,
   config.REDIS.HOST,
@@ -24,6 +26,17 @@ var extend = require('util')._extend
 
 module.exports = function (Business) {
   var log = logger.createLogger()
+
+  Business.loadById = async function (id) {
+    const cachedBusiness = await hspCache.readFromCache(id)
+    if (cachedBusiness) {
+      return cachedBusiness
+    }
+    const business = await Business.findById(id)
+    log.warn('from db...', business)
+    hspCache.cacheIt(id, business)
+    return business
+  }
 
   Business.observe('before save', function (ctx, next) {
     if (ctx.instance) {
@@ -54,14 +67,6 @@ module.exports = function (Business) {
 
     // Check if this is a business create
     if (ctx.instance && ctx.isNewInstance) {
-      /*if ( !ctx.instance.services ) {
-  ctx.instance.services = {
-    id:               "economic",
-    subscriptionDate: new Date ().getTime (),
-    expiresAt:        (new Date ().addDays ( config.TRIAL_DAYS )).getTime (),
-    duration:         1
-  }
-}*/
       ctx.instance.smsSignature = ctx.instance.title
       // add time zone defaults to business
       ctx.instance.timeZone = {}
@@ -196,6 +201,7 @@ module.exports = function (Business) {
           Business.assignDefaultPlanToBusiness(businessId)
             .then(function () {
               Business.adminChargeCredit(businessId, 10000)
+              //Business.createDefaultDepartment()
               return next()
             })
             .fail(function (err) {
@@ -278,12 +284,51 @@ module.exports = function (Business) {
     returns: {root: true},
   })
 
+  Business.getMyDepartments = async (ctx) => {
+    const Operator = app.models.Operator
+    const Department = app.models.Department
+    var userId = ctx.currentUserId
+    let limitedToDepartments
+    const business = await Business.findById(userId)
+    departments = []
+    if (business) {
+      //return all deps
+      limitedToDepartments = []
+      departments = await Department.find({
+        where: {
+          businessId: userId
+        }
+      })
+    } else {
+      const operator = await Operator.findById(userId)
+      log.error({operator})
+      limitedToDepartments = operator.departments
+      const depIds = limitedToDepartments.map((depId) => {
+        return {id: depId}
+      })
+      log.error({depIds})
+      departments = await Department.find({
+        where: {
+          or: depIds
+        }
+      })
+    }
+    return {
+      limited: limitedToDepartments.length !== 0,
+      departments
+    }
+  }
+
+  Business.remoteMethod('getMyDepartments', {
+    description: 'Register A New License ',
+    accepts: [
+      {arg: 'options', type: 'object', http: 'optionsFromRequest'},
+    ],
+    returns: {root: true},
+  })
+
   Business.loadConfig = function (bizId, cb) {
-    Business.findById(bizId, function (error, business) {
-      if (error) {
-        log.error(error)
-        return cb(error)
-      }
+    Business.findById(bizId).then(function (business) {
       if (!business) {
         var error = new Error()
         error.message = hotspotMessages.invalidBusinessId
@@ -314,6 +359,7 @@ module.exports = function (Business) {
         business.formConfig =
           hotspotTemplates[config.DEFAULT_THEME_ID].formConfig
       }
+
       return cb(null, business)
     })
   }
@@ -683,11 +729,7 @@ module.exports = function (Business) {
           if (!selectedPkg) {
             return reject('pkg not found:' + packageId)
           }
-          Business.findById(businessId, function (error, business) {
-            if (error) {
-              log.error(error)
-              return reject(error)
-            }
+          Business.findById(businessId).then(function (business) {
             if (!business) {
               return reject('invalid biz id')
             }
@@ -786,62 +828,6 @@ module.exports = function (Business) {
     returns: {root: true},
   })
 
-  /*Business.assignModuleToBusiness = function ( businessId, modulesItems ) {
-  log.debug ( "@assignModuleToBusiness: ", businessId, modulesItems );
-  return Q.Promise ( function ( resolve, reject ) {
-    if ( !modulesItems || modulesItems.length == 0 ) {
-      log.debug ( "no module assigned", modulesItems );
-      return resolve ()
-    }
-    Business.findById ( businessId, function ( error, business ) {
-      if ( !business ) {
-        return reject ( "invalid biz id" );
-      }
-      var modules = business.modules || {};
-      for ( var k in modulesItems ) {
-        var modulesItem = modulesItems[ k ];
-        var subscriptionDate = modulesItem.subscriptionDate || new Date ().getTime ();
-        var duraion = modulesItem.durationInMonths;
-        var expiresAt = (new Date ( subscriptionDate ).addMonths ( duraion )).getTime ();
-        modules[ modulesItem.id ] = {
-          id:               modulesItem.id,
-          subscriptionDate: subscriptionDate,
-          expiresAt:        expiresAt,
-          duration:         duraion
-        };
-      }
-
-      business.updateAttributes ( {
-        modules: modules
-      }, function ( error ) {
-        if ( error ) {
-          log.error ( error );
-          return reject ( error );
-        }
-        return resolve ();
-      } )
-
-    } )
-  } )
-};*/
-
-  /*
-  Business.remoteMethod ( 'assignModuleToBusiness', {
-    accepts: [
-      {
-        arg:        'businessId',
-        type:       'string',
-        'required': true
-      },
-      {
-        arg:        'moduleItem',
-        type:       'array',
-        'required': true
-      }
-    ],
-    returns: { root: true }
-  } );*/
-
   Business.buyCredit = function (rialPrice, ctx) {
     var Invoice = app.models.Invoice
     var SystemConfig = app.models.SystemConfig
@@ -869,7 +855,7 @@ module.exports = function (Business) {
                       },
                       {json: true},
                       function (error, response, body) {
-                        log.debug('open api: ',body);
+                        log.debug('open api: ', body)
                         if (error) {
                           log.error(error)
                           return reject(error)
@@ -961,66 +947,49 @@ module.exports = function (Business) {
     returns: {root: true},
   })
 
-  Business.observe('loaded', function (ctx, next) {
+  Business.observe('loaded', async (ctx) => {
     //Set the default configs
     if (ctx.data) {
-      Business.getCurrentService(ctx.data)
-        .then(function (currentService) {
-          ctx.data.services = currentService
-          Business.getModules(ctx.data)
-            .then(function (modules) {
-              ctx.data.modules = modules
-              //Check if business has a selected theme
-              var themeId = ctx.data.selectedThemeId
-              var themeConfig = extend({}, ctx.data.themeConfig)
-              var oldThemeConfig = extend({}, themeConfig[themeId])
-              var serviceId = ctx.data.services.id
-              if (!ctx.data.selectedThemeId) {
-                themeId = config.DEFAULT_THEME_ID
-                themeConfig[themeId] = extend({}, returnThemeConfig(themeId))
-              } else if (
-                ctx.data.selectedThemeId === config.PREVIOUS_DEFAULT_THEME_ID
-              ) {
-                themeId = config.DEFAULT_THEME_ID
-                themeConfig[themeId] = extend(
-                  {},
-                  returnThemeConfig(themeId, oldThemeConfig, serviceId),
-                )
-              } else if (
-                ctx.data.selectedThemeId === config.PREVIOUS_HOTEL_THEME_ID
-              ) {
-                themeId = config.HOTEL_THEME_ID
-                themeConfig[themeId] = extend(
-                  {},
-                  returnThemeConfig(themeId, oldThemeConfig, serviceId),
-                )
-              } else if (!hotspotTemplates[ctx.data.selectedThemeId]) {
-                themeId = config.DEFAULT_THEME_ID
-                themeConfig[themeId] = extend(
-                  {},
-                  returnThemeConfig(themeId, oldThemeConfig, serviceId),
-                )
-              }
-              ctx.data.selectedThemeId = themeId
-              ctx.data.groupMemberHelps = ctx.data.groupMemberHelps || {}
-              ctx.data.themeConfig = themeConfig
-              ctx.data.nasSharedSecret =
-                ctx.data.nasSharedSecret || config.PRIMARY_SHARED_SECRET
-              ctx.data.newNasSharedSecret = config.PRIMARY_SHARED_SECRET
-              ctx.data.passwordText = '#$*%&#$*%^(#$*&%(*#$%*&'
-              return next()
-            })
-            .fail(function (error) {
-              log.error(error)
-              return next(error)
-            })
-        })
-        .fail(function (error) {
-          log.error(error)
-          return next(error)
-        })
-    } else {
-      return next()
+      const currentService = await Business.getCurrentService(ctx.data)
+      ctx.data.services = currentService
+      const modules = await Business.getModules(ctx.data)
+      ctx.data.modules = modules
+      var themeId = ctx.data.selectedThemeId
+      var themeConfig = extend({}, ctx.data.themeConfig)
+      var oldThemeConfig = extend({}, themeConfig[themeId])
+      var serviceId = ctx.data.services.id
+      if (!ctx.data.selectedThemeId) {
+        themeId = config.DEFAULT_THEME_ID
+        themeConfig[themeId] = extend({}, returnThemeConfig(themeId))
+      } else if (
+        ctx.data.selectedThemeId === config.PREVIOUS_DEFAULT_THEME_ID
+      ) {
+        themeId = config.DEFAULT_THEME_ID
+        themeConfig[themeId] = extend(
+          {},
+          returnThemeConfig(themeId, oldThemeConfig, serviceId),
+        )
+      } else if (
+        ctx.data.selectedThemeId === config.PREVIOUS_HOTEL_THEME_ID
+      ) {
+        themeId = config.HOTEL_THEME_ID
+        themeConfig[themeId] = extend(
+          {},
+          returnThemeConfig(themeId, oldThemeConfig, serviceId),
+        )
+      } else if (!hotspotTemplates[ctx.data.selectedThemeId]) {
+        themeId = config.DEFAULT_THEME_ID
+        themeConfig[themeId] = extend(
+          {},
+          returnThemeConfig(themeId, oldThemeConfig, serviceId),
+        )
+      }
+      ctx.data.selectedThemeId = themeId
+      ctx.data.groupMemberHelps = ctx.data.groupMemberHelps || {}
+      ctx.data.themeConfig = themeConfig
+      ctx.data.nasSharedSecret = ctx.data.nasSharedSecret || config.PRIMARY_SHARED_SECRET
+      ctx.data.newNasSharedSecret = config.PRIMARY_SHARED_SECRET
+      ctx.data.passwordText = '#$*%&#$*%^(#$*&%(*#$%*&'
     }
 
     function returnThemeConfig (themeId, oldThemeConfig, serviceId) {
@@ -1062,7 +1031,7 @@ module.exports = function (Business) {
     }
   })
 
-  Business.verifyBuyPackage = function (invoiceId,refId) {
+  Business.verifyBuyPackage = function (invoiceId, refId) {
     return Q.Promise(function (resolve, reject) {
       var Reseller = app.models.Reseller
       var Invoice = app.models.Invoice
@@ -1111,16 +1080,8 @@ module.exports = function (Business) {
               })
             }
 
-            Business.findById(businessId, function (error, business) {
-              if (error) {
-                log.error(error)
-                return resolve({
-                  code: 302,
-                  returnUrl: returnUrl
-                    .replace('{0}', 'false')
-                    .replace('{1}', '&error=Error in finding business'),
-                })
-              }
+            Business.findById(businessId).then(function (business) {
+
               if (!business) {
                 return resolve({
                   code: 302,
@@ -1238,7 +1199,7 @@ module.exports = function (Business) {
       })
     })
   }
-  Business.verifyBuyCredit = function (invoiceId,refId) {
+  Business.verifyBuyCredit = function (invoiceId, refId) {
     return Q.Promise(function (resolve, reject) {
       var Invoice = app.models.Invoice
       var Charge = app.models.Charge
@@ -1278,16 +1239,7 @@ module.exports = function (Business) {
           .then(function (result) {
             log.debug(result)
             if (result.payed) {
-              Business.findById(businessId, function (error, business) {
-                if (error) {
-                  log.error(error)
-                  return resolve({
-                    code: 302,
-                    returnUrl: returnUrl
-                      .replace('{0}', 'false')
-                      .replace('{1}', '&error=Error in finding business'),
-                  })
-                }
+              Business.findById(businessId).then(function (business) {
                 if (!business) {
                   return resolve({
                     code: 302,
@@ -1379,14 +1331,10 @@ module.exports = function (Business) {
           return cb && cb(error)
         }
 
-        Business.findById(businessId, function (error, business) {
-          if (error) {
-            log.error('@adminPayment, error in finding business:', error)
-            return cb && cb(error)
-          }
+        Business.findById(businessId).then(function (business) {
           if (!business) {
             log.error('@adminPayment, Invalid business id')
-            return cb && cb('Invalid business id')
+            return cb && cb(new Error('Invalid business id'))
           }
           Charge.addCharge({
             businessId: businessId,
@@ -1426,7 +1374,7 @@ module.exports = function (Business) {
     var SystemConfig = app.models.SystemConfig
     SystemConfig.isLocal()
       .then(function (isLocal) {
-        if (isLocal) {
+        if (false/*isLocal*/) {
           utility
             .getSystemUuid(config.SYSTEM_ID_PATH)
             .then(function (systemUuid) {
@@ -1443,8 +1391,8 @@ module.exports = function (Business) {
                     },
                     {json: true},
                     function (error, response, body) {
-                      log.debug('load charge result: ', response.body)
-                      log.debug('load charge code: ', response.statusCode)
+                      //log.debug('load charge result: ', response.body)
+                      //log.debug('load charge code: ', response.statusCode)
                       if (error) {
                         log.error(error)
                         return cb(new Error('failed to load charges'))
@@ -1455,7 +1403,7 @@ module.exports = function (Business) {
                       }
                       if (body.remaincredit === undefined) {
                         log.error('failed to load sms credit ', body)
-                        throw new Error('failed to load credit ', body)
+                        return cb(new Error('failed to load credit '))
                       }
                       return cb(null, {balance: body.remaincredit})
                     },
@@ -1471,8 +1419,7 @@ module.exports = function (Business) {
               return cb(error)
             })
         } else {
-          aggregate
-            .getProfileBalance(businessId)
+          db.getProfileBalance(businessId)
             .then(function (balance) {
               log.debug(balance)
               return cb(null, balance)
@@ -1502,46 +1449,44 @@ module.exports = function (Business) {
     returns: {root: true},
   })
 
-  Business.getTrafficUsage = function (
-    startDate,
-    endDate,
-    offset,
-    monthDays,
-    ctx,
-    cb,
-  ) {
+  Business.getTrafficUsage = async (startDate, endDate, departmentId, ctx) => {
     var businessId = ctx.currentUserId
-    startDate = startDate.toString()
-    endDate = endDate.toString()
     var fromDate = Number.parseInt(startDate)
     var toDate = Number.parseInt(endDate)
-    var intervalMili = config.AGGREGATE.DAY_MILLISECONDS
-    var Usage = app.models.Usage
-    Business.findById(businessId, function (error, business) {
-      if (error) {
-        log.error(error)
-        return cb(error)
+
+    const date = []
+    const upload = []
+    const download = []
+    const sessionTime = []
+    if (!departmentId) {
+      return {
+        date,
+        upload,
+        download,
+        sessionTime,
       }
-      if (!business) {
-        log.error('invalid business id')
-        return cb('invalid business id')
-      }
-      return Usage.getBusinessUsageReport(
-        fromDate,
-        toDate,
-        businessId,
-        offset,
-        intervalMili,
-        monthDays,
-      )
-        .then(function (result) {
-          return cb(null, result)
-        })
-        .fail(function (error) {
-          log.error(error)
-          return cb(error)
-        })
-    })
+    }
+    if (departmentId === 'all') {
+      departmentId = null
+    }
+    const result = await db.getUsageByInterval(
+      businessId,
+      departmentId,
+      fromDate,
+      toDate,
+    )
+    for (const res of result) {
+      date.push(res.date)
+      upload.push(Number(res.upload))
+      download.push(Number(res.download))
+      sessionTime.push(Number(res.sessionTime))
+    }
+    return {
+      date,
+      upload,
+      download,
+      sessionTime
+    }
   }
 
   Business.remoteMethod('getTrafficUsage', {
@@ -1560,16 +1505,9 @@ module.exports = function (Business) {
         description: 'End Date',
       },
       {
-        arg: 'offset',
-        type: 'number',
-        required: false,
-        description: 'Time Zone',
-      },
-      {
-        arg: 'monthDays',
-        type: 'array',
-        required: false,
-        description: 'Days Of Month',
+        arg: 'departmentId',
+        type: 'string',
+        description: 'Department',
       },
       {arg: 'options', type: 'object', http: 'optionsFromRequest'},
     ],
@@ -1590,15 +1528,11 @@ module.exports = function (Business) {
     log.debug('@getResellerMobile')
     if (!businessId) {
       log.error('invalid business id')
-      return cb('invalid business id')
+      return cb(new Error('invalid business id'))
     }
-    Business.findById(businessId, function (error, business) {
-      if (error) {
-        log.error(error)
-        return cb(error)
-      }
+    Business.findById(businessId).then(function (business) {
       if (!business) {
-        return cb('business not found')
+        return cb(new Error('business not found'))
       }
       var resellerId = business.resellerId
       var Reseller = app.models.Reseller
@@ -1618,7 +1552,7 @@ module.exports = function (Business) {
           }
           if (!reseller) {
             log.error('reseller not found')
-            return cb('reseller not found')
+            return cb(new Error('reseller not found'))
           }
           return cb(null, reseller)
         },
@@ -1663,7 +1597,7 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
         )
         return resolve(true)
       } else {
-        return reject('expired subscription')
+        return resolve(false)
       }
     })
   }
@@ -1737,11 +1671,7 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
         return reject('biz id is empty')
       }
       password = password || utility.createRandomLongNumericalPassword()
-      Business.findById(businessId, function (error, business) {
-        if (error) {
-          log.error(error)
-          return reject(error)
-        }
+      Business.findById(businessId).then(function (business) {
         if (!business) {
           return reject('biz not found')
         }
@@ -1786,10 +1716,7 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
   Business.makeBackup = function (ctx) {
     return Q.Promise(function (resolve, reject) {
       var businessId = ctx.currentUserId
-      Business.findById(businessId, function (error, business) {
-        if (error) {
-          return reject(error)
-        }
+      Business.findById(businessId).then(function (business) {
 
         var Member = app.models.Member
         var InternetPlan = app.models.InternetPlan
@@ -2039,59 +1966,17 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
     returns: {root: true},
   })
 
-  Business.isMoreSessionAllowed = function (businessId) {
+  Business.isMoreSessionAllowed = async (business) => {
     var ClientSession = app.models.ClientSession
-    var SystemConfig = app.models.SystemConfig
-    return Q.Promise(function (resolve, reject) {
-      if (!businessId) {
-        return reject('invalid business id')
-      }
-      Business.findById(businessId, function (error, business) {
-        if (error) {
-          log.error('failed to query business', error)
-          return reject(error)
-        }
-        SystemConfig.isLocal()
-          .then(function (isLocal) {
-            var query
-            if (isLocal) {
-              query = {}
-            } else {
-              query = {
-                where: {
-                  businessId: businessId,
-                },
-              }
-            }
-            ClientSession.find(query, function (error, sessions) {
-              if (error) {
-                log.error('failed to query sessions', error)
-                return reject(error)
-              }
-              var concurrentSession = sessions.length
-              var currentService = business.services
-              if (concurrentSession <= currentService.allowedOnlineUsers) {
-                return resolve({ok: true})
-              } else {
-                log.error('no more session allowed:', sessions.length)
-                return resolve({ok: false})
-              }
-            })
-          })
-          .fail(function (error) {
-            log.error('check isLocal error', error)
-            return reject(error)
-          })
-      })
-    })
+    const result = await ClientSession.getOnlineSessionCount(business.id, 'all')
+    var concurrentSession = result.count
+    var currentService = business.services
+    return concurrentSession <= currentService.allowedOnlineUsers;
   }
 
   Business.destroyMembersById = function (memberIds, ctx) {
     return Q.promise(function (resolve, reject) {
       var businessId = ctx.currentUserId
-      log.error(ctx)
-      log.error('businessId:', businessId)
-      log.error('memberIds:', memberIds)
       var Member = app.models.Member
       log.debug('@destroyMembersById')
       if (!businessId) {
@@ -2145,15 +2030,11 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
   Business.paypingAuthorization = function (ctx, cb) {
     var businessId = ctx.currentUserId
     if (!businessId) {
-      return cb('invalid biz id')
+      return cb(new Error('invalid biz id'))
     }
-    Business.findById(businessId, function (error, business) {
-      if (error) {
-        log.error(error)
-        return cb(error)
-      }
+    Business.findById(businessId).then(function (business) {
       if (!business) {
-        return cb('invalid biz id')
+        return cb(new Error('invalid biz id'))
       }
       const verifier = base64URLEncode(crypto.randomBytes(32))
       log.debug('verifier', verifier)
@@ -2227,16 +2108,7 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
       var Business = app.models.Business
       var businessId = options.state
       var code = options.code
-      Business.findById(businessId, function (error, business) {
-        if (error) {
-          log.error(error)
-          return resolve({
-            code: 302,
-            returnUrl: returnUrl
-              .replace('{0}', 'false')
-              .replace('{1}', '&error=Error in finding business'),
-          })
-        }
+      Business.findById(businessId).then(function (business) {
         if (!business) {
           return resolve({
             code: 302,
@@ -2268,7 +2140,7 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
               var accessToken = body.access_token
               var accessTokenType = body.token_type
               var tokenId = body.id_token
-              if (accessToken ) {
+              if (accessToken) {
                 business.updateAttributes(
                   {
                     paymentApiKey: accessToken,
@@ -2330,16 +2202,12 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
   Business.dropBoxAuthorization = function (ctx, cb) {
     var businessId = ctx.currentUserId
     if (!businessId) {
-      return cb('invalid biz id')
+      return cb(new Error('invalid biz id'))
     }
     log.debug('@dropBoxAuthorization')
-    Business.findById(businessId, function (error, business) {
-      if (error) {
-        log.error(error)
-        return cb(error)
-      }
+    Business.findById(businessId).then(function (business) {
       if (!business) {
-        return cb('invalid biz id')
+        return cb(new Error('invalid biz id'))
       }
       var CSRFToken = businessId
       var redirectURI = config.DROPBOX_REST_API()
@@ -2391,16 +2259,7 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
       var Business = app.models.Business
       var businessId = options.state
       var code = options.code
-      Business.findById(businessId, function (error, business) {
-        if (error) {
-          log.error(error)
-          return resolve({
-            code: 302,
-            returnUrl: returnUrl
-              .replace('{0}', 'false')
-              .replace('{1}', '&error=Error in finding business'),
-          })
-        }
+      Business.findById(businessId).then(function (business) {
         if (!business) {
           return resolve({
             code: 302,
@@ -2615,9 +2474,6 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
   Business.destroyReportsById = function (reportIds, ctx) {
     return Q.promise(function (resolve, reject) {
       var businessId = ctx.currentUserId
-      log.error(ctx)
-      log.error('businessId:', businessId)
-      log.error('reportIds:', reportIds)
       var Report = app.models.Report
       log.debug('@destroyReportsById')
       if (!businessId) {

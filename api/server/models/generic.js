@@ -1,12 +1,10 @@
 var logger = require('../modules/logger');
-var config = require('../modules/config');
-var Q = require('q');
+
 
 module.exports = function(Generic) {
   Generic.getLogger = function() {
     return logger.createLogger();
   };
-  var log = Generic.getLogger();
 
   Generic.getCurrentUserId = function(ctx) {
     const token = ctx && ctx.accessToken;
@@ -19,4 +17,5 @@ module.exports = function(Generic) {
     base.currentUserId = base.accessToken && base.accessToken.userId;
     return base;
   };
+
 };

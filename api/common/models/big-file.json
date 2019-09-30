@@ -7,10 +7,10 @@
   "acls": [
     {
       "accessType": "EXECUTE",
-      "property": "download",
-      "permission": "ALLOW",
       "principalType": "ROLE",
-      "principalId": "$everyone"
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "download"
     },
     {
       "accessType": "*",

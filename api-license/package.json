@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "build": "echo 'we are ready'",
     "start": "node server/server.js",
-    "start:dev": "nodemon ./server/server.js",
+    "start:dev": "supervisor -w server,common ./server/server.js",
     "releaseSandbox": "git commit -a -m 'sandbox:3.5';git tag -f release ;git push -u origin develop --tags --force",
     "releaseProduction": "git commit -a -m 'production:3.5';git tag -f release ;git push -u origin master --tags --force",
     "posttest": "npm run lint && nsp check"
@@ -48,7 +48,7 @@
   "devDependencies": {
     "eslint": "^3.17.1",
     "eslint-config-loopback": "^8.0.0",
-    "nodemon": "^1.18.9",
+    "supervisor": "^0.12.0",
     "nsp": "^2.1.0"
   },
   "repository": {

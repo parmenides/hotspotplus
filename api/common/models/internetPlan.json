@@ -115,6 +115,13 @@
     {
       "accessType": "*",
       "principalType": "ROLE",
+      "principalId": "operator",
+      "permission": "ALLOW",
+      "property": "assignPlanToMember"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
       "principalId": "$everyone",
       "permission": "ALLOW",
       "property": "assignFreePlanToMember"

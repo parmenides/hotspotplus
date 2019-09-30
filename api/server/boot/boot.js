@@ -25,16 +25,16 @@ module.exports = function(app) {
 
   function addDefaultRolesAndUsers() {
     Q.all([
+      addOrLoadRole(config.ROLES.OPERATOR),
       addOrLoadRole(config.ROLES.ADMIN),
       addOrLoadRole(config.ROLES.SERVICEMAN),
       addOrLoadRole(config.ROLES.RESELLER),
       addOrLoadRole(config.ROLES.NETWORKADMIN),
-      addOrLoadRole(config.ROLES.HEADMASTER),
       addOrLoadRole(config.ROLES.NAS),
       addOrLoadRole(config.ROLES.HOTSPOTMEMBER),
       addOrLoadRole(config.ROLES.SERVICEPROVIDER),
       addOrLoadRole(config.ROLES.CUSTOMER)
-    ]).then(function() {
+    ]).then(function(result) {
       log.debug('all roles added');
       addOrLoadUser(
         config.DEFAULTS.SERVICE_MAN_USERNAME,
@@ -46,6 +46,8 @@ module.exports = function(app) {
         config.DEFAULTS.ADMIN_PASS,
         config.DEFAULTS.ADMIN_ROLES
       );
+    }).fail((error)=>{
+      log.error(error)
     });
   }
 

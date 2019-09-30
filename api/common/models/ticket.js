@@ -34,7 +34,7 @@ module.exports = function(Ticket) {
             return reject(error);
           }
 
-          Business.findById(ticket.businessId, function(error, business) {
+          Business.findById(ticket.businessId).then( function( business) {
             var ticketCode = ticket.ticketCode;
             var mobile;
             var messageTemplate;
