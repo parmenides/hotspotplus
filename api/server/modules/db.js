@@ -156,6 +156,33 @@ WHERE creationDate>=toDateTime('${from}') AND creationDate<=toDateTime('${to}') 
         throw error
       }
     },
+    getMemberSessions: (memberId, fromDate, toDate) => {
+
+      if (!memberId) {
+        throw new Error('member ID is undefined')
+      }
+      if (!fromDate) {
+        throw new Error('startDate is undefined')
+      }
+
+      try {
+        const startDate = moment.utc(fromDate).format(config.DATABASE_DATE_FORMAT)
+        const endDate = toDate ? moment.utc(toDate).format(config.DATABASE_DATE_FORMAT) : moment.utc().format(config.DATABASE_DATE_FORMAT)
+        const sqlQuery = `SELECT sessionId,any(businessId),any(memberId),any(nasId),any(departmentId),any(groupIdentityId), any(nasIp),           
+any(username),any(framedIpAddress),any(mac),any(creationDate),any(download),any(upload),any(sessionTime),any(accStatusType)
+ FROM ${SESSION_TABLE} WHERE memberId='${memberId}' AND creationDate>=toDateTime('${startDate}') AND creationDate<=toDateTime('${endDate}') 
+       AND (accStatusType=3 OR accStatusType=1) 
+       GROUP BY sessionId  `
+        log.warn({sqlQuery})
+        return query(sqlQuery).then((result) => {
+          log.warn({result})
+          return result
+        })
+      } catch (error) {
+        log.error('get member sessions %j', error)
+        throw error
+      }
+    },
     getSessionUsage: (sessionId) => {
 
       if (!sessionId) {

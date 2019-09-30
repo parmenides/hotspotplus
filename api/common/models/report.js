@@ -60,6 +60,7 @@ module.exports = function (Report) {
       from,
       to,
       username,
+      domain,
       limit,
       skip,
       sort
@@ -67,7 +68,31 @@ module.exports = function (Report) {
     return result
   }
 
-  Report.searchWebProxy = async (report, type, businessId, departments, from, to, username, domain, limit, skip, sort) => {
+
+  Report.remoteMethod('searchDns', {
+    description: 'Search Dns',
+    accepts: [
+      {arg: 'report', type: 'string', required: true},
+      {arg: 'type', type: 'string'},
+      {arg: 'businessId', type: 'string'},
+      {arg: 'departments', type: ['string']},
+      {arg: 'from', type: 'number'},
+      {arg: 'to', type: 'number'},
+      {arg: 'username', type: 'string'},
+      {arg: 'domain', type: 'string'},
+      {arg: 'limit', type: 'number'},
+      {arg: 'skip', type: 'number'},
+      {arg: 'sort', type: 'string'},
+      {arg: 'options', type: 'object', http: 'optionsFromRequest'},
+
+    ],
+    returns: {root: true},
+    http: {
+      verb: 'get'
+    }
+  })
+
+  Report.searchWebProxy = async (report, type, businessId, departments, from, to, username, domain, url,limit, skip, sort) => {
     const result = await Report.search({
       report,
       type,
@@ -76,12 +101,39 @@ module.exports = function (Report) {
       from,
       to,
       username,
+      domain,
+      url,
       limit,
       skip,
       sort
     })
     return result
   }
+
+
+  Report.remoteMethod('searchWebProxy', {
+    description: 'Search WebProxy',
+    accepts: [
+      {arg: 'report', type: 'string', required: true},
+      {arg: 'type', type: 'string'},
+      {arg: 'businessId', type: 'string'},
+      {arg: 'departments', type: ['string']},
+      {arg: 'from', type: 'number'},
+      {arg: 'to', type: 'number'},
+      {arg: 'username', type: 'string'},
+      {arg: 'domain', type: 'string'},
+      {arg: 'url', type: 'string'},
+      {arg: 'limit', type: 'number'},
+      {arg: 'skip', type: 'number'},
+      {arg: 'sort', type: 'string'},
+      {arg: 'options', type: 'object', http: 'optionsFromRequest'},
+
+    ],
+    returns: {root: true},
+    http: {
+      verb: 'get'
+    }
+  })
 
   Report.search = async (options) => {
     const {type, report, from} = options
@@ -141,47 +193,5 @@ module.exports = function (Report) {
       verb: 'get'
     }
   })
-  Report.remoteMethod('searchDns', {
-    description: 'Search Dns',
-    accepts: [
-      {arg: 'report', type: 'string', required: true},
-      {arg: 'type', type: 'string'},
-      {arg: 'businessId', type: 'string'},
-      {arg: 'departments', type: ['string']},
-      {arg: 'from', type: 'number'},
-      {arg: 'to', type: 'number'},
-      {arg: 'username', type: 'string'},
-      {arg: 'limit', type: 'number'},
-      {arg: 'skip', type: 'number'},
-      {arg: 'sort', type: 'string'},
-      {arg: 'options', type: 'object', http: 'optionsFromRequest'},
 
-    ],
-    returns: {root: true},
-    http: {
-      verb: 'get'
-    }
-  })
-
-  Report.remoteMethod('searchWebProxy', {
-    description: 'Search WebProxy',
-    accepts: [
-      {arg: 'report', type: 'string', required: true},
-      {arg: 'type', type: 'string'},
-      {arg: 'businessId', type: 'string'},
-      {arg: 'departments', type: ['string']},
-      {arg: 'from', type: 'number'},
-      {arg: 'to', type: 'number'},
-      {arg: 'username', type: 'string'},
-      {arg: 'limit', type: 'number'},
-      {arg: 'skip', type: 'number'},
-      {arg: 'sort', type: 'string'},
-      {arg: 'options', type: 'object', http: 'optionsFromRequest'},
-
-    ],
-    returns: {root: true},
-    http: {
-      verb: 'get'
-    }
-  })
 }

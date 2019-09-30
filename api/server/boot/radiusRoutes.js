@@ -8,76 +8,49 @@ var log = logger.createLogger()
 module.exports = function (app) {
   var router = app.loopback.Router()
 
-  router.post('/echo/:id', function (req, res) {
-    log.debug('Echo: ', req.params)
-    log.debug(req.body)
-    console.log('Echo: ')
-    console.log(req.body)
-    res.status(200).json({ok: true})
+  router.post('/api/radius/authorize/:nasIp', async (req, res) => {
+    try {
+      log.debug('#### Authorize #####')
+
+      var Member = app.models.Member
+      const AccessRequest = await RadiusAdaptor.RadiusMessage(req.body)
+      AccessRequest.setNasIp(req.params.nasIp)
+      const RadiusResponse = await Member.radiusAuthorize(AccessRequest)
+      log.debug(RadiusResponse)
+      log.debug(RadiusResponse.getMessage())
+      log.debug(RadiusResponse.getCode())
+      return res.status(RadiusResponse.getCode()).json(RadiusResponse.getMessage())
+    } catch (error) {
+      if (error.statusCode && error.message) {
+        return res.status(error.statusCode || 500).json(error.message)
+      }
+      return res.status(500).json(error)
+    }
   })
 
-  router.post('/api/radius/authorize/:nasIp', function (req, res) {
-    log.debug('#### @authorize ####')
-    //log.debug(req.body)
-    var Member = app.models.Member
-    RadiusAdaptor.RadiusMessage(req.body)
-      .then(function (AccessRequest) {
-        AccessRequest.setNasIp(req.params.nasIp)
-        Member.authorize(AccessRequest)
-          .then(function (RadiusResponse) {
-            log.debug('SENDING RESPONSE')
-            log.debug(RadiusResponse.getMessage())
-            return res
-              .status(RadiusResponse.getCode())
-              .json(RadiusResponse.getMessage())
-          })
-          .fail(function (RadiusResponse) {
-            return res
-              .status(RadiusResponse.getCode())
-              .json(RadiusResponse.getMessage())
-          })
-      })
-      .fail(function (error) {
-        log.error(error)
-        return res.status(500).json(error)
-      })
-  })
-
-  router.post('/api/radius/post-auth', function (req, res) {
-    log.debug('#### @post-auth ####')
-    //log.debug(req.body)
-
-    var Member = app.models.Member
-    RadiusAdaptor.RadiusMessage(req.body)
-      .then(function (AccessRequest) {
-        Member.postAuth(AccessRequest)
-          .then(function (RadiusResponse) {
-            log.debug('SENDING RESPONSE')
-            log.debug(RadiusResponse.getMessage())
-            return res
-              .status(RadiusResponse.getCode())
-              .json(RadiusResponse.getMessage())
-          })
-          .fail(function (RadiusResponse) {
-            return res
-              .status(RadiusResponse.getCode())
-              .json(RadiusResponse.getMessage())
-          })
-      })
-      .fail(function (error) {
-        log.error(error)
-        return res.status(500).json(error)
-      })
+  router.post('/api/radius/post-auth', async (req, res) => {
+    log.debug('#### Post Auth #####')
+    try {
+      var Member = app.models.Member
+      const AccessRequest = await RadiusAdaptor.RadiusMessage(req.body)
+      const RadiusResponse = await Member.radiusPostAuth(AccessRequest)
+      return res.status(RadiusResponse.getCode()).json(RadiusResponse.getMessage())
+    } catch (error) {
+      log.error(error);
+      if (error.statusCode && error.message) {
+        return res.status(error.statusCode || 500).json(error.message)
+      }
+      return res.status(500).json(error)
+    }
   })
 
   router.post('/api/radius/accounting/:nasIp', async (req, res) => {
-    log.debug('#### @post-auth ####')
-    //log.debug(req.body)
+    log.debug('#### Accounting #####')
     try {
       const AccountingMessage = await RadiusAdaptor.RadiusMessage(req.body)
       AccountingMessage.setNasIp(req.params.nasIp)
       var Member = app.models.Member
-      const RadiusResponse = await Member.accounting(AccountingMessage)
+      const RadiusResponse = await Member.radiusAccounting(AccountingMessage)
       return res.status(200).json(RadiusResponse.getMessage())
     } catch (error) {
       log.error(error)

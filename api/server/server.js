@@ -115,13 +115,12 @@ boot(app, __dirname, function(err) {
     app.start();
   }
 });
-
-process.on('uncaughtException', function(error) {
+process.on('uncaughtException', function (error) {
   console.error('Something bad happened here....');
   console.error(error);
   error?console.error(error.stack):null;
   log.error(error);
   error?log.error(error && error.stack):null
-  //process.exit(1);
+  process.exit(1);
   //utility.sendMessage ( error, { fileName: 'server.js', source: 'boot' } );
 });

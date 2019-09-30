@@ -109,14 +109,14 @@ module.exports.RadiusResponse = function (RadiusMessage) {
   }
 }
 
-module.exports.RadiusMessage = function (radiusRequestData) {
+module.exports.RadiusMessage = async function (radiusRequestData) {
   function RadMsg (radMessage) {
     this.message = {}
     this.nas = {}
     try {
       /*
 		 var s = {
-		 'NAS-Identifier': { type: 'array', value: '' },
+		 '`Identifier': { type: 'array', value: '' },
 		 } */
       for (var key in radMessage) {
         var msg = radMessage[key]
@@ -174,24 +174,11 @@ module.exports.RadiusMessage = function (radiusRequestData) {
     }
   }
 
-  return Q.Promise(function (resolve, reject) {
-    var radiusMessage = new RadMsg(radiusRequestData)
-    var Nas = app.models.Nas
-    var nasId = radiusMessage.getNasId()
-    if (!nasId) {
-      throw new Error('nas id is empty')
-    }
-    Nas.findById(nasId, function (error, nas) {
-      if (error) {
-        log.error('failed to load nas', error)
-        throw new Error(error)
-      }
-      if (!nas) {
-        throw new Error('404 nas not found')
-      }
-      radiusMessage.nas = nas
-      radiusMessage.message.nasType = nas.accessPointType.toLowerCase()
-      return resolve(radiusMessage)
-    })
-  })
+  var radiusMessage = new RadMsg(radiusRequestData)
+  var Nas = app.models.Nas
+  var nasId = radiusMessage.getNasId()
+  const nas = await Nas.loadById(nasId)
+  radiusMessage.nas = nas
+  radiusMessage.message.nasType = nas.accessPointType.toLowerCase()
+  return radiusMessage
 }

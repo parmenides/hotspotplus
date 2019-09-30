@@ -5,6 +5,7 @@ var config = require('../../server/modules/config.js')
 var logger = require('../../server/modules/logger')
 var log = logger.createLogger()
 var hotspotMessages = require('../../server/modules/hotspotMessages')
+const hspCache = require('../../server/modules/hspCache')
 
 module.exports = function (InternetPlan) {
   InternetPlan.observe('after save', function (ctx, next) {
@@ -18,15 +19,22 @@ module.exports = function (InternetPlan) {
     }
   })
 
+  InternetPlan.loadById = async function (id) {
+    const cachedInternetPlan = await hspCache.readFromCache(id)
+    if (cachedInternetPlan) {
+      return cachedInternetPlan
+    }
+    const plan = await InternetPlan.findById(id)
+    log.warn('from db...', plan)
+    hspCache.cacheIt(id, plan)
+    return plan
+  }
+
   InternetPlan.assignPlanToMember = function (memberId, planId, isFree) {
     log.debug('@assignPlanToMember')
     var Member = app.models.Member
     return Q.Promise(function (resolve, reject) {
-      InternetPlan.findById(planId, function (error, plan) {
-        if (error) {
-          log.error(error)
-          return reject(error)
-        }
+      InternetPlan.findById(planId).then(function (plan) {
         if (!plan) {
           log.error('no such plan')
           return reject('plan not found ', planId)
@@ -36,11 +44,7 @@ module.exports = function (InternetPlan) {
           return reject('not a free plan', planId)
         }
 
-        Member.findById(memberId, function (error, member) {
-          if (error) {
-            log.error(error)
-            return reject(error)
-          }
+        Member.findById(memberId).then(function (member) {
           if (!member) {
             log.error('member not found')
             return reject('member not found')
@@ -53,11 +57,7 @@ module.exports = function (InternetPlan) {
             return reject('member and business plan mismatch')
           }
           var Business = app.models.Business
-          Business.findById(member.businessId, function (error, business) {
-            if (error) {
-              log.error(error)
-              return reject(error)
-            }
+          Business.findById(member.businessId).then(function (business) {
             if (!business) {
               log.error('business not found')
               return reject('business not found')
@@ -137,16 +137,16 @@ module.exports = function (InternetPlan) {
   InternetPlan.calculatePreviewsPlanUsage = (businessId, memberId, previousPlan) => {
     var Member = app.models.Member
     return Q.Promise((resolve, reject) => {
-      log.debug('//////////');
-      log.debug(memberId);
-      log.debug(businessId);
-      log.debug(previousPlan);
+      log.debug('//////////')
+      log.debug(memberId)
+      log.debug(businessId)
+      log.debug(previousPlan)
       if (previousPlan) {
-        const to = (new Date()).getTime();
+        const to = (new Date()).getTime()
         Member.getInternetUsage(businessId, memberId, previousPlan.assignDate, to).then((usageReport) => {
-          log.debug(usageReport);
-          previousPlan.totalUsage = usageReport.bulk || 0;
-          return resolve(previousPlan);
+          log.debug(usageReport)
+          previousPlan.totalUsage = usageReport.bulk || 0
+          return resolve(previousPlan)
         }).fail((error) => {
           log.error(error)
           return reject('failed to load old plan usage ')
@@ -161,21 +161,13 @@ module.exports = function (InternetPlan) {
     log.debug('@updateInternetPlanHistory')
     var Member = app.models.Member
     return Q.Promise(function (resolve, reject) {
-      InternetPlan.findById(planId, function (error, plan) {
-        if (error) {
-          log.error(error)
-          return reject(error)
-        }
+      InternetPlan.findById(planId).then(function (plan) {
         if (!plan) {
           log.error('no such plan')
           return reject('plan not found ', planId)
         }
 
-        Member.findById(memberId, function (error, member) {
-          if (error) {
-            log.error(error)
-            return reject(error)
-          }
+        Member.findById(memberId).then(function (member) {
           if (!member) {
             log.error('member not found')
             return reject('member not found')

@@ -146,11 +146,7 @@ module.exports = function(Reseller) {
   Reseller.assignBusinessToReseller = function(businessId, resellerId) {
     var Business = app.models.Business;
     return Q.Promise(function(resolve, reject) {
-      Business.findById(businessId, function(error, business) {
-        if (error) {
-          log.error(error);
-          return reject(error);
-        }
+      Business.findById(businessId).then(function(business) {
         var update = {
           resellerId: resellerId
         };

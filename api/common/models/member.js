@@ -23,153 +23,19 @@ var fs = require('fs')
 const createHttpError = require('http-errors')
 var hotspotMessages = require('../../server/modules/hotspotMessages')
 var csvtojson = require('csvtojson')
+const hspCache = require('../../server/modules/hspCache')
 
 module.exports = function (Member) {
   Member.validatesUniquenessOf('uniqueUserId')
 
-  Member.signIn = function (
-    businessId,
-    username,
-    password,
-    routerType,
-    nasId,
-    pinCode,
-    mac,
-    cb
-  ) {
-    var Business = app.models.Business
-    var user = Member.createUsername(businessId, username)
-
-    Member.findOne(
-      {
-        where: {
-          and: [
-            {username: user},
-            {businessId: businessId},
-            {passwordText: utility.encrypt(password, config.ENCRYPTION_KEY)}
-          ]
-        }
-      },
-      function (error, member) {
-        if (error) {
-          log.error(error)
-          return cb(error)
-        }
-        if (!member) {
-          log.error(member)
-          var error = new Error()
-          error.message = hotspotMessages.invalidUsernameOrPassword
-          error.status = 401
-          return cb(error)
-        }
-
-        Business.isMoreSessionAllowed(businessId)
-          .then(function (isAllowedResult) {
-            if (isAllowedResult.ok === false) {
-              var error = new Error()
-              error.message = hotspotMessages.maxOnlineUsersReached
-              error.status = 500
-              return cb(error)
-            }
-            var memberId = member.id
-            var msg = {}
-
-            if (
-              !routerType ||
-              routerType === '' ||
-              routerType === 'undefined'
-            ) {
-              routerType = 'mikrotik'
-            }
-            routerType = routerType.toLowerCase()
-            msg[AVP['nasId']] = {type: 'string', value: [nasId]}
-            msg[AVP[routerType]['username']] = {
-              type: 'string',
-              value: [username]
-            }
-            //supply mac in order for lock_by_mac functionality
-            msg[AVP[routerType]['mac']] = {type: 'string', value: [mac]}
-            RadiusAdaptor.RadiusMessage(msg)
-              .then(function (AccessRequest) {
-                Member.postAuth(AccessRequest, true)
-                  .then(function (RadiusResponse) {
-                    log.debug('SENDING RESPONSE')
-                    log.debug(RadiusResponse.getMessage())
-                    var bizId = member.businessId
-                    Business.findById(bizId, function (error, business) {
-                      if (error) {
-                        log.error('failed to load business')
-                        return cb(error)
-                      }
-                      if (!business) {
-                        var error = new Error()
-                        error.message = hotspotMessages.businessNotFound
-                        error.status = 500
-                        return cb(error)
-                      }
-                      Business.hasValidSubscription(business)
-                        .then(function () {
-                          var selectedThemeId = business.selectedThemeId
-                          if (
-                            business.themeConfig[selectedThemeId]
-                              .showPinCode === true
-                          ) {
-                            var pinCodeValid =
-                              business.hotSpotPinCode === pinCode
-                          } else {
-                            pinCodeValid = true
-                          }
-                          if (pinCodeValid === true) {
-                            return cb(null, {
-                              ok: true,
-                              memberId: memberId,
-                              active: member.active,
-                              language: member.language,
-                              message: RadiusResponse.getMessage(),
-                              code: RadiusResponse.getCode()
-                            })
-                          } else {
-                            var error = new Error()
-                            error.message = hotspotMessages.invalidPinCode
-                            error.status = 401
-                            return cb(error)
-                          }
-                        })
-                        .fail(function (e) {
-                          log.warn(e)
-                          log.debug(
-                            'This business does not have valid subscription, service blocked'
-                          )
-                          var error = new Error()
-                          error.message =
-                            hotspotMessages.businessServiceExpired
-                          error.status = 401
-                          return cb(error)
-                        })
-                    })
-                  })
-                  .fail(function (RadiusResponse) {
-                    cb(null, {
-                      ok: false,
-                      memberId: memberId,
-                      active: member.active,
-                      language: member.language,
-                      message: RadiusResponse.getMessage(),
-                      errorCode: RadiusResponse.getErrorCode()
-                    })
-                  })
-              })
-              .fail(function (error) {
-                log.error(error)
-                return cb(error)
-              })
-          })
-          .fail(function (error) {
-            log.error(error)
-            return cb(error)
-          })
-      }
-    )
+  Member.signIn = async function (businessId, username, password, routerType, nasId, pinCode, mac, cb) {
+    const {member} = await Member.checkAuthorization(businessId, nasId, username)
+    return cb(null, {
+      ok: true,
+      memberId: member.id,
+      active: member.active,
+      language: member.language,
+    })
   }
 
   Member.remoteMethod('signIn', {
@@ -633,438 +499,151 @@ module.exports = function (Member) {
     returns: {root: true}
   })
 
-  Member.getMemberByUserName = function (businessId, username) {
-    return Q.Promise(function (resolve, reject) {
-      Member.findOne(
-        {
-          where: {
-            and: [
-              {businessId: businessId},
-              {username: Member.createUsername(businessId, username)}
-            ]
-          }
-        },
-        function (error, member) {
-          if (error) {
-            log.error(error)
-            return reject(error)
-          }
-          return resolve(member)
-        }
-      )
+  Member.getMemberByUserName = async function (businessId, username) {
+    const cacheKey = `${businessId}:${username}`
+    const cachedMember = await hspCache.readFromCache(cacheKey)
+    if (cachedMember) {
+      return cachedMember
+    }
+    const member = await Member.findOne({
+      where: {
+        and: [
+          {businessId: businessId},
+          {username: Member.createUsername(businessId, username)}
+        ]
+      }
     })
+    hspCache.cacheIt(cacheKey, member)
+    return member
   }
 
-  Member.authorize = function (AccessRequest) {
-    //var Nas = app.models.Nas
+  Member.radiusAuthorize = async (AccessRequest) => {
+    var RadiusResponse = new radiusAdaptor.RadiusResponse(AccessRequest)
     var Member = app.models.Member
-    var Business = app.models.Business
     var username = AccessRequest.getAttribute('username')
+    var nas = AccessRequest.nas
+    var businessId = nas.businessId
 
-    return Q.Promise(function (resolve, reject) {
-      var RadiusResponse = new radiusAdaptor.RadiusResponse(AccessRequest)
-      //Handle other access requests
-      var nas = AccessRequest.nas
-      var businessId = nas.businessId
-      Business.findById(businessId, function (error, business) {
-        if (error) {
-          log.error(error)
-          RadiusResponse.addReplyMessage(Radius_Messages.generalError)
-          RadiusResponse.setCode(500)
-          return reject(RadiusResponse)
-        }
-        if (!business) {
-          RadiusResponse.addReplyMessage('business not found')
-          RadiusResponse.setCode(404)
-          return reject(RadiusResponse)
-        }
-        Business.hasValidSubscription(business)
-          .then(function () {
-            log.debug('hasValidSubscription checked ')
-            Member.getMemberByUserName(businessId, username)
-              .then(function (member) {
-                log.debug('Loaded User ', member)
-                if (!member) {
-                  RadiusResponse.addReplyMessage(
-                    Radius_Messages.usernameNotFound
-                  )
-                  RadiusResponse.setCode(404)
-                  return reject(RadiusResponse)
-                }
-
-                if (member.active) {
-                  var clearTextPass = utility.decrypt(
-                    member.passwordText,
-                    config.ENCRYPTION_KEY
-                  )
-                  RadiusResponse.addControl('clearTextPass', clearTextPass)
-                  RadiusResponse.setCode(200)
-                  return resolve(RadiusResponse)
-                } else {
-                  RadiusResponse.addReplyMessage(Radius_Messages.inActiveUser)
-                  RadiusResponse.setCode(403)
-                  return reject(RadiusResponse)
-                }
-              })
-              .fail(function (error) {
-                log.error(error)
-                RadiusResponse.addReplyMessage(Radius_Messages.generalError)
-                RadiusResponse.setCode(500)
-                return reject(RadiusResponse)
-              })
-          })
-          .fail(function (error) {
-            log.error('////////')
-            log.error(error)
-            RadiusResponse.addReplyMessage(Radius_Messages.serviceBlocked)
-            RadiusResponse.setCode(608)
-            return reject(RadiusResponse)
-          })
-      })
-    })
+    const {member} = await Member.checkAuthorization(businessId, nas.id, username)
+    log.debug('authorization passed')
+    var clearTextPass = utility.decrypt(member.passwordText, config.ENCRYPTION_KEY)
+    RadiusResponse.addControl('clearTextPass', clearTextPass)
+    RadiusResponse.setCode(200)
+    return RadiusResponse
   }
 
-  Member.postAuth = function (AccessRequest, dontUpdateSessions) {
-    //var Nas = app.models.Nas
+  Member.checkAuthorization = async (businessId, nasId, username) => {
     var Business = app.models.Business
     var InternetPlan = app.models.InternetPlan
-    return Q.Promise(function (resolve, reject) {
-      var RadiusResponse = new radiusAdaptor.RadiusResponse(AccessRequest)
-      var nas = AccessRequest.nas
-      var businessId = nas.businessId.valueOf()
-      var username = AccessRequest.getAttribute('username')
-      Business.findById(businessId, function (error, business) {
-        if (error) {
-          log.error(error)
-          RadiusResponse.addReplyMessage(Radius_Messages.generalError)
-          RadiusResponse.setErrorCode(600)
-          RadiusResponse.setCode(500)
-          log.error(RadiusResponse)
-          return reject(RadiusResponse)
-        }
-        if (!business) {
-          RadiusResponse.addReplyMessage(Radius_Messages.businessNotFound)
-          RadiusResponse.setCode(404)
-          RadiusResponse.setErrorCode(604)
-          log.error(RadiusResponse)
-          return reject(RadiusResponse)
-        }
+    const business = await Business.loadById(businessId)
+    const validSubscription = await Business.hasValidSubscription(business)
+    if (!validSubscription) {
+      throw createError(401, hotspotMessages.businessServiceExpired)
+    }
 
-        Member.getMemberByUserName(businessId, username)
-          .then(function (member) {
-            if (!member) {
-              log.error('member not found')
-              RadiusResponse.addReplyMessage(Radius_Messages.generalError)
-              RadiusResponse.setCode(500)
-              RadiusResponse.setErrorCode(600)
-              log.error(RadiusResponse)
-              return reject(RadiusResponse)
-            } else {
-              var internetPlanId = member.internetPlanId
-              if (!internetPlanId) {
-                RadiusResponse.addReplyMessage(
-                  Radius_Messages.memberHasNoInternetPlan
-                )
-                RadiusResponse.setCode(401)
-                RadiusResponse.setErrorCode(601)
-                log.error(RadiusResponse)
-                return reject(RadiusResponse)
-              }
-              Business.isMoreSessionAllowed(businessId)
-                .then(function (isMoreSessionAllowedResult) {
-                  if (isMoreSessionAllowedResult.ok === false) {
-                    RadiusResponse.addReplyMessage(
-                      Radius_Messages.noMoreConnectionAllowed
-                    )
-                    RadiusResponse.setCode(401)
-                    RadiusResponse.setErrorCode(605)
-                    log.error(RadiusResponse)
-                    return reject(RadiusResponse)
-                  }
+    const isAllowed = await Business.isMoreSessionAllowed(business)
+    if (isAllowed === false) {
+      throw createError(500, hotspotMessages.maxOnlineUsersReached)
+    }
 
-                  InternetPlan.findById(internetPlanId, function (
-                    error,
-                    internetPlan
-                  ) {
-                    if (error) {
-                      log.error(error)
-                      RadiusResponse.addReplyMessage(
-                        Radius_Messages.generalError
-                      )
-                      RadiusResponse.setCode(500)
-                      RadiusResponse.setErrorCode(600)
-                      log.error(RadiusResponse)
-                      return reject(RadiusResponse)
-                    }
-                    if (!internetPlan) {
-                      log.error('internetPlan not found')
-                      RadiusResponse.addReplyMessage(
-                        Radius_Messages.internetPlanRemoved
-                      )
-                      RadiusResponse.setCode(404)
-                      RadiusResponse.setErrorCode(600)
-                      log.error(RadiusResponse)
-                      return reject(RadiusResponse)
-                    }
-                    internetPlan.bindMemberSigninToMac =
-                      internetPlan.bindMemberSigninToMac || false
-                    log.debug(
-                      'BindMemberSigninToMac:',
-                      internetPlan.bindMemberSigninToMac &&
-                      AccessRequest.getAttribute('mac')
-                    )
-                    if (
-                      internetPlan.bindMemberSigninToMac &&
-                      AccessRequest.getAttribute('mac')
-                    ) {
-                      var deviceMac = utility.trimMac(
-                        AccessRequest.getAttribute('mac')
-                      )
-                      log.debug('DeviceMac :', deviceMac)
-                      log.debug(
-                        'Mac :',
-                        member.mac && member.mac !== deviceMac
-                      )
-                      if (member.mac && member.mac !== deviceMac) {
-                        RadiusResponse.addReplyMessage(
-                          Radius_Messages.memberLoginBindToMac
-                        )
-                        RadiusResponse.setCode(401)
-                        RadiusResponse.setErrorCode(608)
-                        log.error(RadiusResponse)
-                        return reject(RadiusResponse)
-                      }
-                    }
+    const member = await Member.getMemberByUserName(businessId, username)
+    if (!member) {
+      throw createError(401, hotspotMessages.invalidUsernameOrPassword)
+    }
 
-                    Member.getMemberCurrentSessions(businessId, member.id).then(
-                      function (sessions) {
-                        var numberOfMembersSession = sessions.length
+    if (!member.active) {
+      throw createError(401, Radius_Messages.inActiveUser)
+    }
 
-                        if (nas.sessionStatus === 'multiSession') {
-                          var allowedSession =
-                            business.allowedSession ||
-                            config.DEFAULT_ALLOWED_MULTI_SESSION
-                          if (numberOfMembersSession >= allowedSession) {
-                            // send reject, no more session allowed
-                            RadiusResponse.addReplyMessage(
-                              Radius_Messages.noMoreSessionAllowed
-                            )
-                            RadiusResponse.setCode(401)
-                            RadiusResponse.setErrorCode(606)
-                            log.error(RadiusResponse)
-                            return reject(RadiusResponse)
-                          }
-                        } else {
-                          //Handle single session nas
-                          if (nas.kickOnSingleSession) {
-                            //Handle single session && kill other sessions
-                            log.debug(
-                              'going to disconnect members because of kickOnSingleSession'
-                            )
-                            if (numberOfMembersSession > 0) {
-                              for (var k = 0; k < sessions.length; k++) {
-                                var singleSession = sessions[k]
-                                log.debug(singleSession)
-                                if (!dontUpdateSessions) {
-                                  radiusPod.sendPod(singleSession)
-                                }
-                              }
-                            }
-                          } else {
-                            //Handle single session with no nas ip and nas port
-                            log.debug('does not have a valid ip and port')
-                            if (
-                              numberOfMembersSession >=
-                              config.DEFAULT_ALLOWED_SINGLE_SESSION
-                            ) {
-                              log.debug(
-                                'Reject the request no more session allowed for single session service'
-                              )
-                              // send reject, no more session allowed
-                              RadiusResponse.addReplyMessage(
-                                Radius_Messages.noMoreSessionAllowed
-                              )
-                              RadiusResponse.setCode(401)
-                              RadiusResponse.setErrorCode(606)
-                              log.error(RadiusResponse)
-                              return reject(RadiusResponse)
-                            }
-                          }
-                        }
+    if (!member.internetPlanId) {
+      throw createError(401, Radius_Messages.memberHasNoInternetPlan)
+    }
 
-                        Member.hasValidSubscriptionDuration(
-                          member,
-                          internetPlan
-                        )
-                          .then(function (duration) {
-                            Member.getInternetUsage(
-                              businessId.toString(),
-                              member.id.toString(),
-                              duration.from.getTime(),
-                              duration.to.getTime()
-                            )
-                              .then(function (usageReport) {
-                                log.warn('usageReport')
-                                log.warn(usageReport)
-                                Member.hasEnoughBulk(
-                                  internetPlan,
-                                  usageReport.bulk,
-                                  member.extraBulk
-                                )
-                                  .then(function (remainingBulk) {
-                                    RadiusResponse.addReply(
-                                      'accountingUpdateInterval',
-                                      config.DEFAULT_ACCOUNTING_UPDATE_INTERVAL_SECONDS
-                                    )
-                                    if (remainingBulk > 0) {
-                                      if (
-                                        nas.sessionStatus === 'multiSession'
-                                      ) {
-                                        if (
-                                          remainingBulk <=
-                                          config.ACCOUNTING_DC_THRESHHOLD
-                                        ) {
-                                          RadiusResponse.addReply(
-                                            'accountingUpdateInterval',
-                                            config.FAST_ACCOUNTING_UPDATE_INTERVAL_SECONDS
-                                          )
-                                        }
-                                      }
-                                    }
-                                    //To prevent 2^32 limit on acc input octet
-                                    if (
-                                      remainingBulk === 0 ||
-                                      remainingBulk > 3900000000
-                                    ) {
-                                      remainingBulk = 3900000000
-                                      log.debug(
-                                        'To prevent 2^32 limit on acc input octet, changing bulk to:',
-                                        remainingBulk
-                                      )
-                                    }
-                                    RadiusResponse.addAllowedBulk(
-                                      remainingBulk
-                                    )
-                                    Member.hasEnoughTime(
-                                      internetPlan,
-                                      usageReport.sessionTime
-                                    )
-                                      .then(function (remainingTimeInSeconds) {
-                                        if (remainingTimeInSeconds > 0) {
-                                          RadiusResponse.addSessionTimeOut(
-                                            remainingTimeInSeconds
-                                          )
-                                        }
-                                        var uploadSpeed = utility.toKbps(
-                                          internetPlan.speed.value,
-                                          internetPlan.speed.type
-                                        )
-                                        var downloadSpeed = utility.toKbps(
-                                          internetPlan.speed.value,
-                                          internetPlan.speed.type
-                                        )
-                                        var burstTime =
-                                          internetPlan.burstTime ||
-                                          config.DEFAULT_BURST_TIME_IN_SECONDS
-                                        var burstDownloadFactor =
-                                          internetPlan.burstDownloadFactor ||
-                                          config.DEFAULT_DOWNLOAD_BURST_FACTOR
-                                        var burstUploadFactor =
-                                          internetPlan.burstUploadFactor ||
-                                          config.DEFAULT_UPLOAD_BURST_FACTOR
+    const internetPlan = await InternetPlan.loadById(member.internetPlanId)
+    if (!internetPlan) {
+      throw createError(401, Radius_Messages.internetPlanRemoved)
+    }
 
-                                        if (internetPlan.ipPoolName) {
-                                          RadiusResponse.addIpPool(
-                                            internetPlan.ipPoolName
-                                          )
-                                        }
-                                        if (
-                                          uploadSpeed > 0 &&
-                                          downloadSpeed > 0
-                                        ) {
-                                          uploadSpeed = Math.round(uploadSpeed)
-                                          downloadSpeed = Math.round(
-                                            downloadSpeed
-                                          )
-                                          RadiusResponse.addConnectionSpeed(
-                                            nas.accessPointType,
-                                            downloadSpeed,
-                                            downloadSpeed * burstDownloadFactor,
-                                            uploadSpeed,
-                                            uploadSpeed * burstUploadFactor,
-                                            burstTime
-                                          )
-                                        }
-                                        RadiusResponse.setCode(200)
-                                        return resolve(RadiusResponse)
-                                      })
-                                      .fail(function () {
-                                        RadiusResponse.addReplyMessage(
-                                          Radius_Messages.outOfTime
-                                        )
-                                        RadiusResponse.setCode(401)
-                                        RadiusResponse.setErrorCode(602)
-                                        log.error(RadiusResponse)
-                                        return reject(RadiusResponse)
-                                      })
-                                  })
-                                  .fail(function () {
-                                    RadiusResponse.addReplyMessage(
-                                      Radius_Messages.outOfBulk
-                                    )
-                                    RadiusResponse.setCode(401)
-                                    RadiusResponse.setErrorCode(603)
-                                    log.error(RadiusResponse)
-                                    return reject(RadiusResponse)
-                                  })
-                              })
-                              .fail(function (error) {
-                                log.error('failed to query usage report')
-                                log.error(error)
-                                RadiusResponse.addReplyMessage(
-                                  Radius_Messages.generalError
-                                )
-                                RadiusResponse.setCode(500)
-                                RadiusResponse.setErrorCode(600)
-                                log.error(RadiusResponse)
-                                return reject(RadiusResponse)
-                              })
-                          })
-                          .fail(function () {
-                            RadiusResponse.addReplyMessage(
-                              Radius_Messages.noActiveSubscription
-                            )
-                            RadiusResponse.setCode(401)
-                            RadiusResponse.setErrorCode(605)
-                            log.error(RadiusResponse)
-                            return reject(RadiusResponse)
-                          })
-                      }
-                    )
-                  })
-                })
-                .fail(function (error) {
-                  log.error('failed to query sessions')
-                  log.error(error)
-                  RadiusResponse.addReplyMessage(Radius_Messages.generalError)
-                  RadiusResponse.setCode(500)
-                  RadiusResponse.setErrorCode(600)
-                  log.error(RadiusResponse)
-                  return reject(RadiusResponse)
-                })
+    const duration = Member.getSubscriptionDuration(member, internetPlan)
+    if (!duration) {
+      throw createError(401, Radius_Messages.noActiveSubscription)
+    }
+
+    const usageReport = await Member.getInternetUsage(businessId.toString(), member.id.toString(), duration.from.getTime(), duration.to.getTime())
+    const remainingBulk = Member.hasEnoughBulk(internetPlan, usageReport.bulk, member.extraBulk)
+    if (remainingBulk <= 0) {
+      throw createError(403, Radius_Messages.outOfBulk)
+    }
+
+    const remainingTimeInSeconds = Member.hasEnoughTime(internetPlan, usageReport.sessionTime)
+    if (remainingTimeInSeconds <= 0) {
+      throw createError(401, Radius_Messages.outOfTime)
+    }
+
+    return {business, member, internetPlan, duration, remainingBulk, remainingTimeInSeconds}
+  }
+
+  Member.radiusPostAuth = async function (AccessRequest, dontUpdateSessions) {
+
+    var RadiusResponse = new radiusAdaptor.RadiusResponse(AccessRequest)
+    var nas = AccessRequest.nas
+    var nasId = nas.id
+    var businessId = nas.businessId.valueOf()
+    var username = AccessRequest.getAttribute('username')
+
+    const {business, member, internetPlan, duration, remainingBulk, remainingTimeInSeconds} = await Member.checkAuthorization(businessId, nasId, username)
+    var memberId = member.id
+    const memberSessions = await Member.getMemberCurrentSessions(businessId, memberId)
+    var numberOfMembersSession = memberSessions.length
+    if (nas.sessionStatus !== 'multiSession') {
+      //Handle single session && kill other sessions
+      if (nas.kickOnSingleSession) {
+        if (numberOfMembersSession > 0) {
+          for (var k = 0; k < sessions.length; k++) {
+            var singleSession = sessions[k]
+            if (!dontUpdateSessions) {
+              radiusPod.sendPod(singleSession)
             }
-          })
-          .fail(function (error) {
-            log.error('failed to load member')
-            log.error(error)
-            RadiusResponse.addReplyMessage(Radius_Messages.generalError)
-            RadiusResponse.setCode(500)
-            RadiusResponse.setErrorCode(600)
-            log.error(RadiusResponse)
-            return reject(RadiusResponse)
-          })
-      })
-    })
+          }
+        }
+      } else if (numberOfMembersSession >= 1) {
+        throw createError(401, Radius_Messages.noMoreSessionAllowed)
+      }
+    }
+
+    RadiusResponse.addReply('accountingUpdateInterval', config.DEFAULT_ACCOUNTING_UPDATE_INTERVAL_SECONDS)
+    RadiusResponse.addAllowedBulk(remainingBulk)
+    RadiusResponse.addSessionTimeOut(remainingTimeInSeconds)
+
+    //Add speed limit
+    var uploadSpeed = utility.toKbps(internetPlan.speed.value, internetPlan.speed.type)
+    var downloadSpeed = utility.toKbps(internetPlan.speed.value, internetPlan.speed.type)
+
+    //Add burst
+    var burstTime = internetPlan.burstTime || config.DEFAULT_BURST_TIME_IN_SECONDS
+    var burstDownloadFactor = internetPlan.burstDownloadFactor || config.DEFAULT_DOWNLOAD_BURST_FACTOR
+    var burstUploadFactor = internetPlan.burstUploadFactor || config.DEFAULT_UPLOAD_BURST_FACTOR
+
+    //Add valid ip pool name
+    if (internetPlan.ipPoolName) {
+      RadiusResponse.addIpPool(internetPlan.ipPoolName)
+    }
+
+    if (uploadSpeed > 0 && downloadSpeed > 0) {
+      uploadSpeed = Math.round(uploadSpeed)
+      downloadSpeed = Math.round(downloadSpeed)
+      RadiusResponse.addConnectionSpeed(
+        nas.accessPointType,
+        downloadSpeed,
+        downloadSpeed * burstDownloadFactor,
+        uploadSpeed,
+        uploadSpeed * burstUploadFactor,
+        burstTime
+      )
+    }
+    RadiusResponse.setCode(200)
+    return RadiusResponse
+
   }
 
   Member.getInternetUsage = function (
@@ -1075,8 +654,7 @@ module.exports = function (Member) {
   ) {
     log.debug(`'GetInternetUsage businessId ${businessId} MemberId ${memberId} From:  ${fromDateInMs}  to ${toDateInMs}`)
     return Q.Promise(function (resolve, reject) {
-      db
-        .getMemberUsage(fromDateInMs, toDateInMs, memberId, businessId)
+      db.getMemberUsage(fromDateInMs, toDateInMs, memberId, businessId)
         .then(function (usage) {
           return resolve(usage)
         })
@@ -1086,188 +664,114 @@ module.exports = function (Member) {
     })
   }
 
-  Member.hasValidSubscriptionDuration = function (member, internetPlan) {
-    return Q.Promise(function (resolve, reject) {
-      var subscriptionDate = new Date(member.subscriptionDate)
-      var now = new Date()
-      var numberOfMonthsOrDays = internetPlan.duration
-      var planType = internetPlan.type
-      var validDuration = getDuration(
-        now,
-        subscriptionDate,
-        numberOfMonthsOrDays,
-        planType,
-        internetPlan.autoResubscribe
-      )
-      if (validDuration && validDuration.from && validDuration.to) {
-        return resolve(validDuration)
-      } else {
-        if (internetPlan.autoResubscribe === true) {
-          //Handle autoResubscribe
-          log.debug('this plan has auto resubscribe')
-          Member.autoReSubscribe(member.businessId, member.id)
-            .then(function (resubscribedMember) {
-              if (
-                member.subscriptionDate === resubscribedMember.subscriptionDate
-              ) {
-                log.error(
-                  'autoResubscribe failed, Race happened in member subscription update'
-                )
-                log.error(
-                  'subscriptionDate : ',
-                  member.subscriptionDate,
-                  ':',
-                  resubscribedMember.subscriptionDate
-                )
-                return reject('Race happened in member subscription update')
-              }
-              Member.hasValidSubscriptionDuration(
-                resubscribedMember,
-                internetPlan
-              )
-                .then(function (result) {
-                  return resolve(result)
-                })
-                .fail(function (error) {
-                  return reject(error)
-                })
-            })
-            .fail(function (error) {
-              log.error('failed to auto resubscribe', error)
-              return reject(error)
-            })
-        } else {
-          return reject()
-        }
-      }
+  Member.getSubscriptionDuration = function (member, internetPlan) {
+    var subscriptionDate = new Date(member.subscriptionDate)
+    var now = new Date()
+    var numberOfMonthsOrDays = internetPlan.duration
+    var planType = internetPlan.type
+    var validDuration = getDuration(
+      now,
+      subscriptionDate,
+      numberOfMonthsOrDays,
+      planType,
+      internetPlan.autoResubscribe
+    )
+    if (validDuration && validDuration.from && validDuration.to) {
+      return validDuration
+    } else {
+      return
+    }
 
-      function getDuration (
-        now,
-        from,
-        monthsOrDays,
-        planType,
-        isAutoResubscribe
-      ) {
-        monthsOrDays = Number(monthsOrDays)
-        var to = new Date(from.getTime())
-        if (planType === 'monthly') {
-          var daysInMonth = Date.getDaysInMonth(
-            from.getFullYear(),
-            from.getMonth()
-          )
-          to.add({days: daysInMonth})
-        } else if (planType === 'daily') {
-          to.add({hours: 24})
-        } else if (planType === 'dynamic') {
-          to.add({hours: 24 * monthsOrDays})
-          if (isAutoResubscribe === true) {
-            //if isAutoResubscribe is enabled consider midnight for end date;
-            to.clearTime()
-          }
-        }
-        log.debug('Checking subscription duration between for', now)
-        log.debug('from: ', from)
-        log.debug('to: ', to)
-        if (now.between(from, to)) {
-          log.debug('It works and has a subscription')
-          return {from: from, to: to}
-        } else {
-          monthsOrDays--
-          if (
-            monthsOrDays > 0 &&
-            (planType === 'daily' || planType === 'monthly')
-          ) {
-            log.debug('need more checks on next month or day: ', monthsOrDays)
-            return getDuration(
-              now,
-              to,
-              monthsOrDays,
-              planType,
-              isAutoResubscribe
-            )
-          } else {
-            log.debug('no check just returns null ', monthsOrDays)
-            return null
-          }
+    function getDuration (
+      now,
+      from,
+      monthsOrDays,
+      planType,
+      isAutoResubscribe
+    ) {
+      monthsOrDays = Number(monthsOrDays)
+      var to = new Date(from.getTime())
+      if (planType === 'monthly') {
+        var daysInMonth = Date.getDaysInMonth(
+          from.getFullYear(),
+          from.getMonth()
+        )
+        to.add({days: daysInMonth})
+      } else if (planType === 'daily') {
+        to.add({hours: 24})
+      } else if (planType === 'dynamic') {
+        to.add({hours: 24 * monthsOrDays})
+        if (isAutoResubscribe === true) {
+          //if isAutoResubscribe is enabled consider midnight for end date;
+          to.clearTime()
         }
       }
-    })
+      log.debug('Checking subscription duration between for', now)
+      log.debug('from: ', from)
+      log.debug('to: ', to)
+      if (now.between(from, to)) {
+        log.debug('It works and has a subscription')
+        return {from: from, to: to}
+      } else {
+        monthsOrDays--
+        if (
+          monthsOrDays > 0 &&
+          (planType === 'daily' || planType === 'monthly')
+        ) {
+          log.debug('need more checks on next month or day: ', monthsOrDays)
+          return getDuration(
+            now,
+            to,
+            monthsOrDays,
+            planType,
+            isAutoResubscribe
+          )
+        } else {
+          log.debug('no check just returns null ', monthsOrDays)
+          return null
+        }
+      }
+    }
   }
 
   Member.hasEnoughBulk = function (internetPlan, usedBulk, extraBulk) {
-    log.debug('@hasEnoughBulk')
-    return Q.Promise(function (resolve, reject) {
-      try {
-        if (!usedBulk) {
-          usedBulk = 0
-        }
-        var allowedBulk = 0
-        if (internetPlan.bulk) {
-          allowedBulk = utility.toByte(
-            internetPlan.bulk.value,
-            internetPlan.bulk.type
-          )
-        }
-        if (extraBulk) {
-          allowedBulk = allowedBulk + utility.toByte(extraBulk, 'gb')
-        }
-        if (allowedBulk === 0) {
-          return resolve()
-        }
-        log.debug('allowed bulk: ', allowedBulk)
-        log.debug('usedBulk bulk: ', usedBulk)
-        var remainingBulk = allowedBulk - usedBulk
-        log.debug('remaining bulk: ', remainingBulk)
-        if (remainingBulk > 0) {
-          return resolve(remainingBulk)
-        } else {
-          return reject()
-        }
-      } catch (error) {
-        log.error(error)
-        return reject(error)
+    const maxAllowedBulk = 3900000000
+    if (!usedBulk) {
+      usedBulk = 0
+    }
+    var allowedBulk = 0
+    if (internetPlan.bulk) {
+      allowedBulk = utility.toByte(
+        internetPlan.bulk.value,
+        internetPlan.bulk.type
+      )
+      if (internetPlan.bulk.value === '0' || internetPlan.bulk.value === 0) {
+        return maxAllowedBulk
       }
-    })
+    }
+    if (extraBulk) {
+      allowedBulk = allowedBulk + utility.toByte(extraBulk, 'gb')
+    }
+    log.debug('allowed bulk: ', allowedBulk)
+    log.debug('usedBulk bulk: ', usedBulk)
+    var remainingBulk = allowedBulk - usedBulk
+    log.debug('remaining bulk: ', remainingBulk)
+    return remainingBulk > 0 ? remainingBulk : 0
   }
 
   Member.hasEnoughTime = function (internetPlan, usedTimeInSeconds) {
-    return Q.Promise(function (resolve, reject) {
-      var usedTimeInS = Number(usedTimeInSeconds) || 0
-      var allowedTimeInMinutes = Number(internetPlan.timeDuration) || 0
-      if (allowedTimeInMinutes === 0) {
-        return resolve(fixByMidnight(allowedTimeInMinutes))
-      }
-      var allowedTimeInSeconds = allowedTimeInMinutes * 60
-      if (allowedTimeInSeconds > usedTimeInS) {
-        var remainingTimeInS = allowedTimeInSeconds - usedTimeInS
-        return resolve(fixByMidnight(remainingTimeInS))
-      } else {
-        return reject()
-      }
-
-      //Set member to be disconnected at midnight
-      function fixByMidnight (remainingTimeInSeconds) {
-        try {
-          var midnight = Date.today().add({days: 1})
-          if (remainingTimeInSeconds === 0) {
-            return new Date().getSecondsBetween(midnight)
-          }
-          //Check if dc time is before midnight or after midnight
-          var dcTime = new Date()
-          dcTime.addSeconds(remainingTimeInSeconds)
-
-          if (dcTime.isBefore(midnight)) {
-            return remainingTimeInSeconds
-          } else {
-            return new Date().getSecondsBetween(midnight)
-          }
-        } catch (e) {
-          log.error('failed to fix midnight time for member')
-          log.error(e)
-          return remainingTimeInSeconds
-        }
-      }
-    })
+    const maxAllowedTime = 86400 * 2
+    var usedTimeInSeconds = Number(usedTimeInSeconds) || 0
+    var allowedTimeInMinutes = Number(internetPlan.timeDuration) || 0
+    if (allowedTimeInMinutes === 0) {
+      return maxAllowedTime
+    }
+    var allowedTimeInSeconds = allowedTimeInMinutes * 60
+    if (allowedTimeInSeconds > usedTimeInSeconds) {
+      return allowedTimeInSeconds - usedTimeInSeconds
+    } else {
+      return 0
+    }
   }
 
   Member.loadMemberCredentialsByMac = function (mac, businessId) {
@@ -1309,54 +813,41 @@ module.exports = function (Member) {
     })
   }
 
-  Member.getMemberCurrentSessions = function (businessId, memberId) {
-    return Q.promise(function (resolve, reject) {
-      var ClientSession = app.models.ClientSession
-      ClientSession.find(
-        {
-          where: {and: [{memberId: memberId}, {businessId: businessId}]}
-        },
-        function (error, sessions) {
-          if (error) {
-            return reject()
-          }
-          sessions = sessions || []
-          return resolve(sessions)
-        }
-      )
-    })
+  Member.getMemberCurrentSessions = async function (businessId, memberId) {
+    var ClientSession = app.models.ClientSession
+    return ClientSession.getActiveMemberSessions(memberId)
   }
 
-  Member.accounting = async (RadiusAccountingMessage) => {
+  async function saveAccounting (RadiusAccountingMessage) {
+    var ClientSession = app.models.ClientSession
+    const nas = RadiusAccountingMessage.nas
+    const businessId = nas.businessId.valueOf()
+    const username = RadiusAccountingMessage.getAttribute('username')
+    const member = await Member.getMemberByUserName(businessId, username)
+    if (!member) {
+      log.warn('accounting with unknown member, silently discarded')
+    }
+    //await Usage.addUsageReport(usage)
+    await ClientSession.setSession({
+      RadiusAccountingMessage,
+      member,
+      nas
+    })
+
+    /*if (nas.sessionStatus === 'multiSession' || nas.kickOnSingleSession) {
+      Member.evaluateMemberUsage(member, businessId)
+    }*/
+
+    var mac = RadiusAccountingMessage.getAttribute('mac')
+    await Member.setMemberMac(member, mac)
+  }
+
+  Member.radiusAccounting = async (RadiusAccountingMessage) => {
     try {
-      var ClientSession = app.models.ClientSession
       var RadiusResponse = new radiusAdaptor.RadiusResponse(
         RadiusAccountingMessage
       )
-      const nas = RadiusAccountingMessage.nas
-      const businessId = nas.businessId.valueOf()
-      const username = RadiusAccountingMessage.getAttribute('username')
-      const member = await Member.getMemberByUserName(businessId, username)
-      if (!member) {
-        log.warn(`message received but user: ${username}@${businessId} not found,silently discarded NotBad:201`)
-        RadiusResponse.addReplyMessage(`message received but user: ${username}@${businessId} not found,silently discarded NotBad:201`)
-        RadiusResponse.setCode(5)
-        return RadiusResponse
-      }
-
-      //await Usage.addUsageReport(usage)
-      await ClientSession.setSession({
-        RadiusAccountingMessage,
-        member,
-        nas
-      })
-
-      if (nas.sessionStatus === 'multiSession' || nas.kickOnSingleSession) {
-        Member.evaluateMemberUsage(member, businessId)
-      }
-
-      var mac = RadiusAccountingMessage.getAttribute('mac')
-      await Member.setMemberMac(member, mac)
+      saveAccounting(RadiusAccountingMessage)
       RadiusResponse.addReplyMessage('message received from radius and scheduled to record Ok:200')
       RadiusResponse.setCode(5)
       return RadiusResponse
@@ -1384,98 +875,77 @@ module.exports = function (Member) {
     })
   }
 
-  Member.evaluateMemberUsage = function (member, businessId) {
+  /*Member.evaluateMemberUsage = function (member, businessId) {
     var InternetPlan = app.models.InternetPlan
     var internetPlanId = member.internetPlanId
     var memberId = member.id.toString()
     businessId = businessId.toString()
     return Q.Promise(function (resolve, reject) {
-      InternetPlan.findById(internetPlanId, function (error, internetPlan) {
-        if (error) {
-          log.error(error)
-          return reject(error)
-        }
+      InternetPlan.findById(internetPlanId).then(function (internetPlan) {
         if (!internetPlan) {
           return reject(internetPlan)
         }
-        Member.hasValidSubscriptionDuration(member, internetPlan)
-          .then(function (duration) {
-            Member.getInternetUsage(
-              businessId,
-              memberId,
-              duration.from.getTime(),
-              duration.to.getTime()
-            )
-              .then(function (usageReport) {
-                log.debug('Evaluate usage report:', usageReport)
-                Member.hasEnoughBulk(
-                  internetPlan,
-                  usageReport.bulk,
-                  member.extraBulk
-                )
-                  .then(function (remainingBulk) {
-                    //nothing to do, has permission to use anything
-                    log.debug('Remaining bulk: ', remainingBulk)
-                    return resolve()
-                  })
-                  .fail(function () {
-                    //has no bulk so send kill all
-                    Member.disconnectAllSessionOfMember(businessId, memberId)
-                      .then(function () {
-                        log.debug(
-                          'not enough bulk send kill all for ',
-                          member.username
-                        )
-                        return resolve()
-                      })
-                      .fail(function (error) {
-                        log.error(error)
-                        return reject(error)
-                      })
-                  })
-              })
-              .fail(function (error) {
-                log.error('failed to query usage report')
-                log.error(error)
-                return reject()
-              })
+        const duration = Member.getSubscriptionDuration(member, internetPlan)
+        if (!duration) {
+          Member.disconnectAllSessionOfMember(businessId, memberId)
+            .then(function () {
+              log.debug(`expired subscription duration, send kill all for ${member.username}`)
+              return resolve()
+            }).fail(function (error) {
+            log.error(error)
+            return reject(error)
           })
-          .fail(function () {
-            //has no subscription duration, so send kill all
-            Member.disconnectAllSessionOfMember(businessId, memberId)
-              .then(function () {
-                log.debug(
-                  'expired subscription duration, send kill all for ',
-                  member.username
-                )
+        }
+        Member.getInternetUsage(
+          businessId,
+          memberId,
+          duration.from.getTime(),
+          duration.to.getTime()
+        )
+          .then(function (usageReport) {
+            log.debug('Evaluate usage report:', usageReport)
+            Member.hasEnoughBulk(
+              internetPlan,
+              usageReport.bulk,
+              member.extraBulk
+            )
+              .then(function (remainingBulk) {
+                //nothing to do, has permission to use anything
+                log.debug('Remaining bulk: ', remainingBulk)
                 return resolve()
               })
-              .fail(function (error) {
-                log.error(error)
-                return reject(error)
+              .fail(function () {
+                //has no bulk so send kill all
+                Member.disconnectAllSessionOfMember(businessId, memberId)
+                  .then(function () {
+                    log.debug(
+                      'not enough bulk send kill all for ',
+                      member.username
+                    )
+                    return resolve()
+                  })
+                  .fail(function (error) {
+                    log.error(error)
+                    return reject(error)
+                  })
               })
           })
+          .fail(function (error) {
+            log.error('failed to query usage report')
+            log.error(error)
+            return reject()
+          })
+
       })
     })
-  }
+  }*/
 
-  Member.disconnectAllSessionOfMember = function (businessId, memberId) {
-    return Q.Promise(function (resolve, reject) {
-      log.debug('dc for: ', businessId, ' memberId:', memberId)
-      Member.getMemberCurrentSessions(businessId, memberId)
-        .then(function (sessions) {
-          log.debug('Dc Session:', sessions.length)
-          log.debug('Dc Session:', sessions)
-          for (var k = 0; k < sessions.length; k++) {
-            var singleSession = sessions[k]
-            radiusPod.sendPod(singleSession)
-          }
-        })
-        .fail(function (error) {
-          log.error('failed to load all session for member:', memberId)
-          return reject(error)
-        })
-    })
+  Member.disconnectAllSessionOfMember = async function (businessId, memberId) {
+    log.debug('dc for: ', businessId, ' memberId:', memberId)
+    const sessions = Member.getMemberCurrentSessions(businessId, memberId)
+    for (const session of sessions) {
+      radiusPod.sendPod(singleSession)
+    }
   }
 
   Member.createShortVerificationUrl = function (
@@ -1586,11 +1056,7 @@ module.exports = function (Member) {
         member.verificationCount = 1
       }
 
-      Business.findById(businessId, function (error, business) {
-        if (error) {
-          log.error(error)
-          return reject(error)
-        }
+      Business.findById(businessId).then(function (business) {
         if (!business) {
           log.error('business not found')
           return reject('business not found')
@@ -1849,11 +1315,7 @@ module.exports = function (Member) {
             })
         } else {
           log.debug('Previous member exist', previousMember)
-          Business.findById(businessId, function (error, business) {
-            if (error) {
-              log.error(error)
-              return cb(error)
-            }
+          Business.findById(businessId).then(function (business) {
             if (!business) {
               var error = new Error()
               error.message = hotspotMessages.businessNotFound
@@ -2044,11 +1506,7 @@ module.exports = function (Member) {
   ) {
     log.debug('@verifyHotSpotMember')
     var Member = app.models.Member
-    Member.findById(memberId, function (error, member) {
-      if (error) {
-        log.error(error)
-        return cb(error)
-      }
+    Member.findById(memberId).then(function (member) {
       log.debug(member)
       verificationCode = Number(verificationCode)
       if (member && member.verificationCode == verificationCode) {
@@ -2159,11 +1617,7 @@ module.exports = function (Member) {
     return Q.Promise(function (resolve, reject) {
       var Business = app.models.Business
       var InternetPlan = app.models.InternetPlan
-      Business.findById(businessId, function (error, business) {
-        if (error) {
-          log.error(error)
-          return reject(error)
-        }
+      Business.findById(businessId).then(function (business) {
         if (!business) {
           var error = new Error()
           error.message = hotspotMessages.businessNotFound
@@ -2176,11 +1630,7 @@ module.exports = function (Member) {
           error.status = 500
           return reject(error)
         }
-        InternetPlan.findById(internetPlanId, function (error, internetPlan) {
-          if (error) {
-            log.error(error)
-            return reject(error)
-          }
+        InternetPlan.findById(internetPlanId).then(function (internetPlan) {
           if (!internetPlan) {
             var error = new Error()
             error.message = hotspotMessages.internetPlanDoesNotExist
@@ -2356,18 +1806,7 @@ module.exports = function (Member) {
           var businessId = invoice.businessId
           var paymentId = invoice.paymentId
           var price = invoice.price
-          Business.findById(businessId, function (error, business) {
-            if (error) {
-              log.error(error)
-              log.error('Error in finding business')
-              params.payStatus = false
-              return resolve({
-                code: 302,
-                returnUrl: config
-                  .HOTSPOT_PAYMENT_WEB_RETURN_URL()
-                  .replace('{0}', querystring.stringify(params))
-              })
-            }
+          Business.findById(businessId).then(function (business) {
             if (!business) {
               log.error('Invalid business id')
               params.payStatus = false
@@ -2491,11 +1930,7 @@ module.exports = function (Member) {
       if (!dateInMs) {
         dateInMs = new Date().clearTime().getTime()
       }
-      Member.findById(memberId, function (error, member) {
-        if (error) {
-          log.error(error)
-          return reject(error)
-        }
+      Member.findById(memberId).then(function (member) {
         if (!member) {
           return reject('member not found')
         }
@@ -2514,11 +1949,7 @@ module.exports = function (Member) {
               member.internetPlanId
             )
               .then(function () {
-                Member.findById(memberId, function (error, latestMember) {
-                  if (error) {
-                    log.error(error)
-                    return reject(error)
-                  }
+                Member.findById(memberId).then(function (latestMember) {
                   if (!latestMember) {
                     return reject('latestMember not found')
                   }
@@ -2716,10 +2147,7 @@ module.exports = function (Member) {
   Member.sendSms = function (businessId, smsData) {
     var Business = app.models.Business
     return Q.Promise(function (resolve, reject) {
-      Business.findById(businessId, function (error, business) {
-        if (error) {
-          return reject(error)
-        }
+      Business.findById(businessId).then(function (business) {
         if (business.modules && business.modules.sms) {
           if (new Date().isBefore(new Date(business.modules.sms.expiresAt))) {
             smsModule
@@ -3122,10 +2550,7 @@ module.exports = function (Member) {
     return Q.Promise(function (resolve, reject) {
       var Business = app.models.Business
       var InternetPlan = app.models.InternetPlan
-      Business.findById(businessId, function (error, business) {
-        if (error) {
-          return reject('Error in Finding Business ')
-        }
+      Business.findById(businessId).then(function (business) {
         if (!business) {
           return reject('invalid business id')
         }
@@ -3137,10 +2562,7 @@ module.exports = function (Member) {
             url: '/'
           })
         }
-        InternetPlan.findById(internetPlanId, function (error, internetPlan) {
-          if (error) {
-            return reject('Error in Finding Plan ')
-          }
+        InternetPlan.findById(internetPlanId).then(function (internetPlan) {
           if (!internetPlan) {
             return reject('invalid internet plan id')
           }
@@ -3267,16 +2689,7 @@ module.exports = function (Member) {
         var businessId = invoice.businessId
         var price = invoice.price
         var invoiceType = invoice.invoiceType
-        Business.findById(businessId, function (error, business) {
-          if (error) {
-            log.error(error)
-            return resolve({
-              code: 302,
-              returnUrl: returnUrl
-                .replace('{0}', 'false')
-                .replace('{1}', '&error=Error in finding business')
-            })
-          }
+        Business.findById(businessId).then(function (business) {
           if (!business) {
             return resolve({
               code: 302,
@@ -3356,24 +2769,9 @@ module.exports = function (Member) {
                           })
                         break
                       case config.BUY_EXTRA_BULK:
-                        Member.findById(invoice.memberId, function (
-                          error,
+                        Member.findById(invoice.memberId).then(function (
                           member
                         ) {
-                          log.debug('%%%%%%%%%%%')
-                          log.debug(member)
-                          if (error) {
-                            log.error(error)
-                            return resolve({
-                              code: 302,
-                              returnUrl: returnUrl
-                                .replace('{0}', 'false')
-                                .replace(
-                                  '{1}',
-                                  '&error=Error in finding member'
-                                )
-                            })
-                          }
                           if (!invoice) {
                             return resolve({
                               code: 302,
@@ -3484,10 +2882,7 @@ module.exports = function (Member) {
     return Q.Promise(function (resolve, reject) {
       var Business = app.models.Business
       var InternetPlan = app.models.InternetPlan
-      Business.findById(businessId, function (error, business) {
-        if (error) {
-          return reject('Error in Finding Business ')
-        }
+      Business.findById(businessId).then(function (business) {
         if (!business) {
           return reject('invalid business id')
         }
@@ -3495,10 +2890,7 @@ module.exports = function (Member) {
         if (!business.paymentApiKey) {
           return reject('invalid business payment panel token')
         }
-        InternetPlan.findById(internetPlanId, function (error, internetPlan) {
-          if (error) {
-            return reject('Error in Finding Plan ')
-          }
+        InternetPlan.findById(internetPlanId).then(function (internetPlan) {
           if (!internetPlan) {
             return reject('invalid internet plan id')
           }
@@ -3604,11 +2996,7 @@ module.exports = function (Member) {
       return cb(error)
     }
     var Business = app.models.Business
-    Business.findById(businessId, function (error, business) {
-      if (error) {
-        log.error(error)
-        return cb(error)
-      }
+    Business.findById(businessId).then(function (business) {
       if (!business) {
         var error = new Error()
         error.message = hotspotMessages.businessNotFound
@@ -3627,11 +3015,7 @@ module.exports = function (Member) {
       var defaultPlanPeriod = business.defaultInternetPlan.period
       var defaultPlanCount = business.defaultInternetPlan.count
       var Member = app.models.Member
-      Member.findById(memberId, function (error, member) {
-        if (error) {
-          log.error(error)
-          return cb(error)
-        }
+      Member.findById(memberId).then(function (member) {
         if (!business) {
           var error = new Error()
           error.message = hotspotMessages.businessNotFound
@@ -3688,11 +3072,7 @@ module.exports = function (Member) {
       return {allMembers: 0}
     }
 
-    Business.findById(businessId, function (error, business) {
-      if (error) {
-        log.error(error)
-        return cb(error)
-      }
+    Business.findById(businessId).then(function (business) {
       if (!business) {
         log.error('business not found')
         return cb('invalid business')
@@ -3752,11 +3132,7 @@ module.exports = function (Member) {
         error.status = 500
         return reject(error)
       }
-      Business.findById(businessId, function (error, business) {
-        if (error) {
-          log.error(error)
-          return reject(error)
-        }
+      Business.findById(businessId).then(function (business) {
         if (!business) {
           log.error('biz not found')
           return reject('biz not found')
@@ -3837,11 +3213,7 @@ module.exports = function (Member) {
     if (!departmentId) {
       return {newMembers: 0}
     }
-    Business.findById(businessId, function (error, business) {
-      if (error) {
-        log.error(error)
-        return cb(error)
-      }
+    Business.findById(businessId).then(function (business) {
       if (!business) {
         log.error('business not found')
         return cb('invalid business')
@@ -3898,11 +3270,8 @@ module.exports = function (Member) {
     return Q.Promise(function (resolve, reject) {
       mac = utility.trimMac(mac)
       mac = mac.toLowerCase()
-      Nas.findById(nasId, function (error, nas) {
-        if (error) {
-          log.error(error)
-          return reject(error)
-        }
+
+      Nas.findById(nasId).then(function (nas) {
         if (!nas) {
           var error = new Error()
           error.message = 'nas not found'
@@ -4004,11 +3373,7 @@ module.exports = function (Member) {
     var Business = app.models.Business
     var MemberGroup = app.models.MemberGroup
     var businessId = ctx.currentUserId
-    Business.findById(businessId, function (error, business) {
-      if (error) {
-        log.error(error)
-        return cb(error)
-      }
+    Business.findById(businessId).then(function (business) {
       if (count > 30) {
         return cb('more than 30 member is not allowed')
       }
@@ -4184,4 +3549,15 @@ module.exports = function (Member) {
       {arg: 'options', type: 'object', http: 'optionsFromRequest'}
     ]
   })
+
+  Member.loadById = async function (id) {
+    const cachedMember = await hspCache.readFromCache(id)
+    if (cachedMember) {
+      return cachedMember
+    }
+    const member = await Member.findById(id)
+    log.warn('from db...', member)
+    hspCache.cacheIt(id, member)
+    return member
+  }
 }

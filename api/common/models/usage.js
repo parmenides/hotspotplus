@@ -182,7 +182,7 @@ module.exports = function (Usage) {
         , function (error) {
           if (error) {
             log.error('failed to cache usage', error)
-            throw new Error(error)
+            return reject('failed to cache')
           }
           return resolve()
         })
@@ -194,7 +194,7 @@ module.exports = function (Usage) {
       redisClient.get(sessionId, (error, usage) => {
         if (error) {
           log.error(`failed to get usage from cache by id: ${sessionId}`)
-          throw new Error(error)
+          return reject(error)
         }
         if (!usage) {
           log.warn('previews session is empty')

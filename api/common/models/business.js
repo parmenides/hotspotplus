@@ -12,6 +12,7 @@ var needle = require('needle')
 var redis = require('redis')
 var crypto = require('crypto')
 const db = require('../../server/modules/db.factory')
+const hspCache = require('../../server/modules/hspCache')
 
 var redisInvoicePayed = redis.createClient(
   config.REDIS.PORT,
@@ -25,6 +26,17 @@ var extend = require('util')._extend
 
 module.exports = function (Business) {
   var log = logger.createLogger()
+
+  Business.loadById = async function (id) {
+    const cachedBusiness = await hspCache.readFromCache(id)
+    if (cachedBusiness) {
+      return cachedBusiness
+    }
+    const business = await Business.findById(id)
+    log.warn('from db...', business)
+    hspCache.cacheIt(id, business)
+    return business
+  }
 
   Business.observe('before save', function (ctx, next) {
     if (ctx.instance) {
@@ -289,12 +301,12 @@ module.exports = function (Business) {
       })
     } else {
       const operator = await Operator.findById(userId)
-      log.error({operator});
+      log.error({operator})
       limitedToDepartments = operator.departments
       const depIds = limitedToDepartments.map((depId) => {
         return {id: depId}
       })
-      log.error({depIds});
+      log.error({depIds})
       departments = await Department.find({
         where: {
           or: depIds
@@ -316,11 +328,7 @@ module.exports = function (Business) {
   })
 
   Business.loadConfig = function (bizId, cb) {
-    Business.findById(bizId, function (error, business) {
-      if (error) {
-        log.error(error)
-        return cb(error)
-      }
+    Business.findById(bizId).then(function (business) {
       if (!business) {
         var error = new Error()
         error.message = hotspotMessages.invalidBusinessId
@@ -721,11 +729,7 @@ module.exports = function (Business) {
           if (!selectedPkg) {
             return reject('pkg not found:' + packageId)
           }
-          Business.findById(businessId, function (error, business) {
-            if (error) {
-              log.error(error)
-              return reject(error)
-            }
+          Business.findById(businessId).then(function (business) {
             if (!business) {
               return reject('invalid biz id')
             }
@@ -1076,16 +1080,8 @@ module.exports = function (Business) {
               })
             }
 
-            Business.findById(businessId, function (error, business) {
-              if (error) {
-                log.error(error)
-                return resolve({
-                  code: 302,
-                  returnUrl: returnUrl
-                    .replace('{0}', 'false')
-                    .replace('{1}', '&error=Error in finding business'),
-                })
-              }
+            Business.findById(businessId).then(function (business) {
+
               if (!business) {
                 return resolve({
                   code: 302,
@@ -1243,16 +1239,7 @@ module.exports = function (Business) {
           .then(function (result) {
             log.debug(result)
             if (result.payed) {
-              Business.findById(businessId, function (error, business) {
-                if (error) {
-                  log.error(error)
-                  return resolve({
-                    code: 302,
-                    returnUrl: returnUrl
-                      .replace('{0}', 'false')
-                      .replace('{1}', '&error=Error in finding business'),
-                  })
-                }
+              Business.findById(businessId).then(function (business) {
                 if (!business) {
                   return resolve({
                     code: 302,
@@ -1344,11 +1331,7 @@ module.exports = function (Business) {
           return cb && cb(error)
         }
 
-        Business.findById(businessId, function (error, business) {
-          if (error) {
-            log.error('@adminPayment, error in finding business:', error)
-            return cb && cb(error)
-          }
+        Business.findById(businessId).then(function (business) {
           if (!business) {
             log.error('@adminPayment, Invalid business id')
             return cb && cb(new Error('Invalid business id'))
@@ -1547,11 +1530,7 @@ module.exports = function (Business) {
       log.error('invalid business id')
       return cb(new Error('invalid business id'))
     }
-    Business.findById(businessId, function (error, business) {
-      if (error) {
-        log.error(error)
-        return cb(error)
-      }
+    Business.findById(businessId).then(function (business) {
       if (!business) {
         return cb(new Error('business not found'))
       }
@@ -1618,7 +1597,7 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
         )
         return resolve(true)
       } else {
-        return reject('expired subscription')
+        return resolve(false)
       }
     })
   }
@@ -1692,11 +1671,7 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
         return reject('biz id is empty')
       }
       password = password || utility.createRandomLongNumericalPassword()
-      Business.findById(businessId, function (error, business) {
-        if (error) {
-          log.error(error)
-          return reject(error)
-        }
+      Business.findById(businessId).then(function (business) {
         if (!business) {
           return reject('biz not found')
         }
@@ -1741,10 +1716,7 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
   Business.makeBackup = function (ctx) {
     return Q.Promise(function (resolve, reject) {
       var businessId = ctx.currentUserId
-      Business.findById(businessId, function (error, business) {
-        if (error) {
-          return reject(error)
-        }
+      Business.findById(businessId).then(function (business) {
 
         var Member = app.models.Member
         var InternetPlan = app.models.InternetPlan
@@ -1994,51 +1966,12 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
     returns: {root: true},
   })
 
-  Business.isMoreSessionAllowed = function (businessId) {
+  Business.isMoreSessionAllowed = async (business) => {
     var ClientSession = app.models.ClientSession
-    var SystemConfig = app.models.SystemConfig
-    return Q.Promise(function (resolve, reject) {
-      if (!businessId) {
-        return reject('invalid business id')
-      }
-      Business.findById(businessId, function (error, business) {
-        if (error) {
-          log.error('failed to query business', error)
-          return reject(error)
-        }
-        SystemConfig.isLocal()
-          .then(function (isLocal) {
-            var query
-            if (isLocal) {
-              query = {}
-            } else {
-              query = {
-                where: {
-                  businessId: businessId,
-                },
-              }
-            }
-            ClientSession.find(query, function (error, sessions) {
-              if (error) {
-                log.error('failed to query sessions', error)
-                return reject(error)
-              }
-              var concurrentSession = sessions.length
-              var currentService = business.services
-              if (concurrentSession <= currentService.allowedOnlineUsers) {
-                return resolve({ok: true})
-              } else {
-                log.error('no more session allowed:', sessions.length)
-                return resolve({ok: false})
-              }
-            })
-          })
-          .fail(function (error) {
-            log.error('check isLocal error', error)
-            return reject(error)
-          })
-      })
-    })
+    const result = await ClientSession.getOnlineSessionCount(business.id, 'all')
+    var concurrentSession = result.count
+    var currentService = business.services
+    return concurrentSession <= currentService.allowedOnlineUsers;
   }
 
   Business.destroyMembersById = function (memberIds, ctx) {
@@ -2099,11 +2032,7 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
     if (!businessId) {
       return cb(new Error('invalid biz id'))
     }
-    Business.findById(businessId, function (error, business) {
-      if (error) {
-        log.error(error)
-        return cb(error)
-      }
+    Business.findById(businessId).then(function (business) {
       if (!business) {
         return cb(new Error('invalid biz id'))
       }
@@ -2179,16 +2108,7 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
       var Business = app.models.Business
       var businessId = options.state
       var code = options.code
-      Business.findById(businessId, function (error, business) {
-        if (error) {
-          log.error(error)
-          return resolve({
-            code: 302,
-            returnUrl: returnUrl
-              .replace('{0}', 'false')
-              .replace('{1}', '&error=Error in finding business'),
-          })
-        }
+      Business.findById(businessId).then(function (business) {
         if (!business) {
           return resolve({
             code: 302,
@@ -2285,11 +2205,7 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
       return cb(new Error('invalid biz id'))
     }
     log.debug('@dropBoxAuthorization')
-    Business.findById(businessId, function (error, business) {
-      if (error) {
-        log.error(error)
-        return cb(error)
-      }
+    Business.findById(businessId).then(function (business) {
       if (!business) {
         return cb(new Error('invalid biz id'))
       }
@@ -2343,16 +2259,7 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
       var Business = app.models.Business
       var businessId = options.state
       var code = options.code
-      Business.findById(businessId, function (error, business) {
-        if (error) {
-          log.error(error)
-          return resolve({
-            code: 302,
-            returnUrl: returnUrl
-              .replace('{0}', 'false')
-              .replace('{1}', '&error=Error in finding business'),
-          })
-        }
+      Business.findById(businessId).then(function (business) {
         if (!business) {
           return resolve({
             code: 302,

@@ -115,9 +115,6 @@ module.exports = function (ClientSession) {
     limit,
     cb
   ) => {
-    if (!businessId) {
-      throw new Error('Business Id not defined')
-    }
     if (skip == null) {
       skip = 0
     }
@@ -142,6 +139,16 @@ module.exports = function (ClientSession) {
     }
     return sessions
     //return cb(null, {data: 'noReport'})
+  }
+
+  ClientSession.getActiveMemberSessions = async (
+    memberId,
+    startDate,
+    endDate,
+  ) => {
+    startDate = startDate ? startDate : (new Date()).remove({minutes: 2})
+    endDate = endDate ? endDate : (new Date()).add({minutes: 2})
+    return db.getMemberSessions(memberId, startDate, endDate)
   }
 
   ClientSession.remoteMethod('getOnlineUsers', {
@@ -180,9 +187,6 @@ module.exports = function (ClientSession) {
 
   ClientSession.getOnlineSessionCount = async (businessId, departmentId, startDate, endDate) => {
     try {
-      if (!businessId) {
-        return cb('Business Id not defined')
-      }
       log.debug('@getOnlineSessionCount : ', businessId)
       if (!departmentId) {
         return {count: 0}

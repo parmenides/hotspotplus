@@ -5,6 +5,7 @@ var config = require('../../server/modules/config')
 var Q = require('q')
 var hotspotMessages = require('../../server/modules/hotspotMessages')
 var hotspotTemplates = require('../../server/modules/hotspotTemplates')
+const hspCache = require('../../server/modules/hspCache')
 
 module.exports = function (Nas) {
   Nas.validatesUniquenessOf('nasIpPortKey')
@@ -18,53 +19,6 @@ module.exports = function (Nas) {
     }
     next()
   })
-
-  // Nas.loadNasByRadiusRequest = function (nasId) {
-  //   //var nasId = radiusRequest.getNasId()
-  //   //var nasIp = radiusRequest.getNasIp();
-  //
-  //   return Q.Promise(function (resolve, reject) {
-  //     if (!nasId) {
-  //       return reject('both nasId is empty')
-  //     }
-  //     /*if (nasId) {*/
-  //     Nas.findById(nasId, function (error, nas) {
-  //       if (error) {
-  //         log.error(error)
-  //         return reject(error)
-  //       }
-  //       if (!nas) {
-  //         log.warn('Nas by nas id not found')
-  //         return reject('invalid nas id')
-  //       }
-  //       return resolve(nas)
-  //     })
-  //     // } else if (nasIp) {
-  //     //   redisClient.get(nasIp, function(error, reply) {
-  //     //     if (error) {
-  //     //       log.error(error);
-  //     //       return reject(error);
-  //     //     }
-  //     //     if (!reply) {
-  //     //       return reject('nas by ip not found:', nasIp);
-  //     //     }
-  //     //     var businessData = JSON.parse(reply);
-  //     //     var nasId = businessData.nasId;
-  //     //     Nas.findById(nasId, function(error, nas) {
-  //     //       if (error) {
-  //     //         log.error(error);
-  //     //         return reject(error);
-  //     //       }
-  //     //       if (!nas) {
-  //     //         log.error('Nas not found');
-  //     //         return reject('invalid nas id');
-  //     //       }
-  //     //       return resolve(nas);
-  //     //     });
-  //     //   });
-  //     // }
-  //   })
-  // }
 
   Nas.observe('before save', function (ctx, next) {
     // Check if nas is created
@@ -88,12 +42,8 @@ module.exports = function (Nas) {
   })
 
   Nas.loadRouterInfo = function (nasId, clbk) {
-    Nas.findById(nasId, function (error, nas) {
+    Nas.findById(nasId).then(function (nas) {
       log.debug('loading nas id', nasId)
-      if (error) {
-        log.error(error)
-        return clbk(error)
-      }
       if (!nas) {
         var error = new Error()
         error.message = hotspotMessages.routerNotFound
@@ -199,5 +149,16 @@ module.exports = function (Nas) {
 
   Nas.getNasCredential = function () {
     return config.PRIMARY_SHARED_SECRET
+  }
+
+  Nas.loadById = async (id) => {
+    const cachedNas = await hspCache.readFromCache(id)
+    if (cachedNas) {
+      return cachedNas
+    }
+    const nas = await Nas.findById(id)
+    log.warn('from db...', nas)
+    hspCache.cacheIt(id, nas)
+    return nas
   }
 }
