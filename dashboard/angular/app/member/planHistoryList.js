@@ -52,12 +52,13 @@ app.controller('planHistoryList', [
           displayName: 'internetPlan.assignDate',
           field: 'assignDate',
           enableHiding: false,
+          width:130,
           enableSorting: true,
           enableColumnMenu: false,
           headerCellFilter: 'translate',
           cellTemplate:
             '<div class="ui-grid-cell-contents"><span ng-if="row.entity.assignDate">' +
-            '{{row.entity.assignDate |  persianDate : "fullDate" | translateNumber }}{{"general.,"| translate}}&nbsp;{{"general.hour"| translate}}:&nbsp;{{row.entity.assignDate |  date : "HH:mm" | translateNumber }}' +
+            '{{row.entity.assignDate |  translateDate  | translateNumber }}&nbsp;{{row.entity.assignDate |  date : "HH:mm" | translateNumber }}' +
             '</span><span ng-if="!row.entity.assignDate">-</span>' +
             '</div>'
         },
@@ -76,6 +77,16 @@ app.controller('planHistoryList', [
             '</div>'
         },
         {
+          displayName: 'internetPlan.totalUsage',
+          field: 'totalUsage',
+          enableHiding: false,
+          enableSorting: false,
+          enableColumnMenu: false,
+          headerCellFilter: 'translate',
+          cellFilter: 'translate',
+          cellTemplate: '<div class="ui-grid-cell-contents"><span ng-if="row.entity.totalUsage">{{row.entity.totalUsage | number | humanSize | translateNumber }}</span> <span ng-if="!row.entity.totalUsage">-</span></div>'
+        },
+       /* {
           displayName: 'internetPlan.type',
           field: 'type',
           enableHiding: false,
@@ -84,8 +95,8 @@ app.controller('planHistoryList', [
           headerCellFilter: 'translate',
           cellTemplate:
             '<div class="ui-grid-cell-contents"><span ng-if="row.entity.type">{{row.entity.type | translate}}</span><span ng-if="!row.entity.type">-</span></div>'
-        },
-        {
+        },*/
+       /* {
           displayName: 'internetPlan.accessType',
           field: 'accessType',
           enableHiding: false,
@@ -94,7 +105,7 @@ app.controller('planHistoryList', [
           headerCellFilter: 'translate',
           cellTemplate:
             '<div class="ui-grid-cell-contents"><span ng-if="row.entity.accessType">{{row.entity.accessType | translate}}</span><span ng-if="!row.entity.accessType">-</span></div>'
-        },
+        },*/
         {
           displayName: 'internetPlan.price',
           field: 'price',

@@ -34,11 +34,7 @@ app.directive('sessionsReport', [
         $scope.loading = false;
         makeTable();
         $scope.$on($scope.params.reloadEvent, function(event, data) {
-          if (data.params.advanceTime) {
-            $scope.params.fromDate = data.params.advanceTime.startDate;
-          } else {
             $scope.params.fromDate = data.params.fromDate;
-          }
           makeTable();
         });
         function makeTable() {
@@ -56,9 +52,7 @@ app.directive('sessionsReport', [
             paginationPageSize: $scope.paginationOptions.itemPerPage,
             enableRowSelection: false,
             enableSelectAll: false,
-            selectionRowHeaderWidth: 35,
-            rowHeight: 35,
-            showGridFooter: true,
+            showGridFooter: false,
             enableColumnResizing: true,
             columnDefs: [
               {
@@ -100,7 +94,7 @@ app.directive('sessionsReport', [
                 headerCellClass: 'headerCenter',
                 headerCellFilter: 'translate',
                 cellClass: 'center',
-                cellFilter: 'translateNumber'
+                cellFilter: 'humanTime'
               },
               {
                 displayName: 'dashboard.downloadMbps',
@@ -112,7 +106,7 @@ app.directive('sessionsReport', [
                 headerCellClass: 'headerCenter',
                 headerCellFilter: 'translate',
                 cellClass: 'center',
-                cellFilter: 'translateNumber'
+                cellFilter: 'humanSize'
               },
               {
                 displayName: 'dashboard.uploadMbps',
@@ -124,7 +118,7 @@ app.directive('sessionsReport', [
                 headerCellClass: 'headerCenter',
                 headerCellFilter: 'translate',
                 cellClass: 'center',
-                cellFilter: 'translateNumber'
+                cellFilter: 'humanSize'
               },
               {
                 displayName: 'dashboard.killOnlineSession',
@@ -198,7 +192,9 @@ app.directive('sessionsReport', [
                 break;
             }
             var query = {};
-            query.startDate = $scope.params.fromDate;
+            //query.startDate = $scope.params.fromDate;
+            //query.endDate = $scope.params.endDate;
+            query.departmentId = $scope.params.departmentId;
             query.businessId = $scope.params.businessId;
             query.skip =
               ($scope.paginationOptions.pageNumber - 1) *
@@ -215,7 +211,7 @@ app.directive('sessionsReport', [
                 ClientSession.getOnlineUsers(query).$promise.then(function(
                   onlineUsers
                 ) {
-                  switch (onlineUsers.result.data) {
+                  switch (onlineUsers.result) {
                     case 'noSession':
                       $scope.result = translateFilter(
                         'dashboard.noSessionOnlineUsers'
@@ -223,7 +219,7 @@ app.directive('sessionsReport', [
                       $scope.loading = false;
                       break;
                     default:
-                      $scope.gridOptions.data = onlineUsers.result.data;
+                      $scope.gridOptions.data = onlineUsers.result;
                       $scope.loading = false;
                       break;
                   }

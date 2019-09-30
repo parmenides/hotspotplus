@@ -24,4 +24,7 @@ angular.module('app', [
   'ngRoute',
   'ngFileSaver'
 ]);
+String.prototype.capitalize = function() {
+  return this.charAt(0).toUpperCase() + this.slice(1);
+}
 /*persian date picker doc : https://github.com/AminRahimi/angular-bootstrap-persian-datepicker/tree/gh-pages*/

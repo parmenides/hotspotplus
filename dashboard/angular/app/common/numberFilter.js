@@ -2,14 +2,14 @@
  * Created by hamidehnouri on 10/10/2016 AD.
  */
 
-app.filter('persianNumber', function() {
-  return persianNumber;
-});
+app.filter('persianNumber', function () {
+  return persianNumber
+})
 
-function persianNumber(value) {
-  value = String(value);
-  if (!value) return '';
-  var s = value.toString();
+function persianNumber (value) {
+  value = String(value)
+  if (!value) return ''
+  var s = value.toString()
   s = s
     .replace(/1/g, '۱')
     .replace(/2/g, '۲')
@@ -21,18 +21,18 @@ function persianNumber(value) {
     .replace(/8/g, '۸')
     .replace(/9/g, '۹')
     .replace(/0/g, '۰')
-    .replace(/,/g, '،');
-  return s;
+    .replace(/,/g, '،')
+  return s
 }
 
-app.filter('englishNumber', function() {
-  return englishNumber;
-});
+app.filter('englishNumber', function () {
+  return englishNumber
+})
 
-function englishNumber(value) {
-  value = String(value);
-  if (!value) return '';
-  var s = value.toString();
+function englishNumber (value) {
+  value = String(value)
+  if (!value) return ''
+  var s = value.toString()
   s = s
     .replace(/۱/g, '1')
     .replace(/۲/g, '2')
@@ -44,111 +44,145 @@ function englishNumber(value) {
     .replace(/۸/g, '8')
     .replace(/۹/g, '9')
     .replace(/۰/g, '0')
-    .replace(/،/g, ',');
-  return s;
+    .replace(/،/g, ',')
+  return s
 }
 
 app.filter('translateNumber', [
   '$translate',
-  function($translate) {
-    return function(value) {
-      var locale = $translate.use();
+  function ($translate) {
+    return function (value) {
+      var locale = $translate.use()
       if (locale == 'en') {
-        return englishNumber(value);
+        return englishNumber(value)
       } else {
-        return persianNumber(value);
+        return persianNumber(value)
       }
-    };
+    }
   }
-]);
+])
 
 app.filter('getDay', [
   '$translate',
-  function($translate) {
-    return function(epoch) {
-      var date = new Date(Number(epoch));
-      var locale = $translate.use();
+  function ($translate) {
+    return function (epoch) {
+      var date = new Date(Number(epoch))
+      var locale = $translate.use()
       if (locale == 'en') {
-        return date.getDate();
+        return date.getDate()
       } else {
-        return date.getJalaliDate();
+        return date.getJalaliDate()
       }
-    };
+    }
   }
-]);
+])
 
 app.filter('getMonth', [
   '$translate',
-  function($translate) {
-    return function(epoch) {
-      var date = new Date(Number(epoch));
-      var locale = $translate.use();
+  function ($translate) {
+    return function (epoch) {
+      var date = new Date(Number(epoch))
+      var locale = $translate.use()
       if (locale == 'en') {
-        return date.getMonth() + 1;
+        return date.getMonth() + 1
       } else {
-        return date.getJalaliMonth();
+        return date.getJalaliMonth()
       }
-    };
+    }
   }
-]);
+])
 
 app.filter('getMonthName', [
   '$translate',
   'translateFilter',
-  function($translate, translateFilter) {
-    return function(epoch) {
-      var date = new Date(Number(epoch));
-      var locale = $translate.use();
+  function ($translate, translateFilter) {
+    return function (epoch) {
+      var date = new Date(Number(epoch))
+      var locale = $translate.use()
       if (locale == 'en') {
-        return translateFilter(date.getMonth() + 1 + '-month');
+        return translateFilter(date.getMonth() + 1 + '-month')
       } else {
-        return translateFilter(date.getJalaliMonth() + 1 + '-month');
+        return translateFilter(date.getJalaliMonth() + 1 + '-month')
       }
-    };
+    }
   }
-]);
+])
 
 app.filter('getYear', [
   '$translate',
-  function($translate) {
-    return function(epoch) {
-      var date = new Date(Number(epoch));
-      var locale = $translate.use();
+  function ($translate) {
+    return function (epoch) {
+      var date = new Date(Number(epoch))
+      var locale = $translate.use()
       if (locale == 'en') {
-        return date.getFullYear();
+        return date.getFullYear()
       } else {
-        return date.getJalaliFullYear();
+        return date.getJalaliFullYear()
       }
-    };
+    }
   }
-]);
+])
 
 app.filter('translateDate', [
   '$translate',
   'PersianDateService',
-  function($translate,PersianDateService) {
-    return function(epoch) {
-      var date = new Date(Number(epoch));
-      var locale = $translate.use();
-      if (locale == 'en') {
+  function ($translate, PersianDateService) {
+    return function (epoch) {
+      var date = new Date(Number(epoch))
+      var locale = $translate.use()
+      if (locale === 'en') {
         return (
           date.getFullYear() +
           '/' +
           (date.getMonth() + 1) +
           '/' +
           date.getDate()
-        );
+        )
       } else {
-        return PersianDateService.getFullYear(date) +'/'+ (PersianDateService.getMonth(date) + 1) + '/'   + PersianDateService.getDate(date);
+        return PersianDateService.getFullYear(date) + '/' + (PersianDateService.getMonth(date) + 1) + '/' + PersianDateService.getDate(date)
       }
-    };
+    }
   }
-]);
+])
 app.filter('trimUsername', [
   'usernameService',
-  function(usernameService) {
-    return function(username) {
-      return usernameService.trim(username);
-    };
+  function (usernameService) {
+    return function (username) {
+      return username?usernameService.trim(username):username
+    }
   }
-]);
+])
+
+app.filter('humanSize', [
+  function () {
+    return function (size) {
+      if (size === undefined || size === null) {
+        size = 0
+      }
+      return humanFormat(size, {decimals: 0, separator: '/' , unit: 'B'})
+    }
+  }
+])
+app.filter('humanTime', [
+  function () {
+    return function (size) {
+      if (size === undefined || size === null) {
+        size = 0
+      }
+      var timeScale = new humanFormat.Scale({
+        'دقیقه': 60,
+        'ساعت': 3600,
+      })
+      return humanFormat(size, {scale: timeScale, decimals: 0})
+    }
+  }
+])
+
+app.filter('cleanupUsername', [
+  function () {
+    return function (username) {
+      return username.split('@')[0];
+    }
+  }
+])
+

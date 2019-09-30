@@ -137,7 +137,7 @@ var app = angular
         passwordAndUsernameAreRequired: 'نام کاربری و رمز عبور الزامی است.',
         'password is a required argument':
           'پیام لوکال: نام کاربری و رمز عبور الزامی است.',
-        'invalid username or password': 'پیام لوکال: نام کاربری صحیح نیست.',
+        'invalid username or password': 'نام کاربری و یا رمز عبور صحیح نیست.',
         checkHotspotNetworkConnection:
           'روتر شبکه‌ی شما در دسترس نیست، از اتصال به شبکه‌ی هات‌اسپات اطمینان پیدا کنید.',
         verifyHeaderText:
@@ -148,7 +148,7 @@ var app = angular
         thisDeviceIsLockedByOtherUser:
           'این دستگاه به نام کاربری دیگری اختصاص داده شده است، اگر رمز عبور خود را فراموش کرده‌اید از بازیابی رمز عبور استفاده کنید.',
         timeout:
-          'به دلیل شلوغی شبکه‌ی وای‌فای و یا دور بودن از آنتن‌های وایرلس، اتصال شما به شبکه‌ی وای‌فای دچار اختلال شده است و درخواست‌های شما ارسال نمی‌شود.',
+          'روتر یا سرویس اکانتینگ در دسترس نیست، دقایقی دیگر مجدد تلاش کنید.',
         logout: 'خروج',
         nasIdIsInvalid:
           'شناسه‌ی روتر شما صحیح نیست. شناسه را از پروفایل روتر کپی و به عنوان nas identity تنظیم کنید.',
@@ -372,6 +372,8 @@ var app = angular
           "User exist, If you forgot your password please use 'password recovery' or contact network administrator",
         verifyTitle: 'تایید موبایل',
         enterVerificationCode: 'Enter verification code',
+        timeout:
+          'Service unavailable, please try again later.',
         youAreConnected: 'شما با موفقیت به اینترنت متصل شدید.',
         loggedInSuccessfully: 'شما با موفقیت وارد و به اینترنت متصل شدید.',
         invalidCode: 'کد صحیح نیست',

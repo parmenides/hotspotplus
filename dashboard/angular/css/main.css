@@ -127,9 +127,9 @@
 }
 
 .widget-router {
-    font-weight: 500;
-    font-size: 24px;
-    line-height: 41px;
+    font-weight: normal;
+    font-size: 21px;
+    line-height: 37px;
     vertical-align: middle;
 }
 
@@ -319,4 +319,12 @@ slider span.bar {
     font-weight: lighter;
     padding-top: 17px;
     padding-bottom: 10px;
+}
+
+oi-select:not(.multiple) .select-search-list-item_selection {
+    text-align: center !important;
+}
+
+.no-margin{
+    margin: 0 !important;
 }

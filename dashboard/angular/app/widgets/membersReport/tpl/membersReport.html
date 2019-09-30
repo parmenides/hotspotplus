@@ -1,0 +1,33 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="row no-padder-v text-gray">
+            <h3 class="col-xs-10 panel-title">{{"dashboard.lastNewMembers" | translate}}</h3>
+            <loading></loading>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="hbox hbox-auto-xs hbox-auto-sm">
+                <table class="table table-hover table-responsive">
+                    <thead>
+                    <tr>
+                        <th>{{'member.username'|translate}}</th>
+                        <th class="center">{{'member.creationDate'|translate}}</th>
+                        <th class="center">{{'member.status'|translate}}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="member in members">
+                        <td>{{member.username|cleanupUsername}}</td>
+                        <td class="center">{{member.creationDate | translateDate | translateNumber }}{{"general.,"| translate}}&nbsp;{{"general.hour"|
+                            translate}}:&nbsp;{{member.creationDate | date : "HH:mm" | translateNumber }}
+                        </td>
+                        <td class="center">
+                            <span ng-if="member.active">{{"member.active"|translate}}</span>
+                            <span ng-if="!member.active">{{"member.inActive"|translate}}</span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+        </div>
+    </div>
+</div>
