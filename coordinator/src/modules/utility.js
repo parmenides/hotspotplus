@@ -11,10 +11,7 @@ var needle = require('needle');
 var logger = require('./logger');
 var fs = require('fs');
 var log = logger.createLogger();
-var ndjson = require('ndjson');
 var RAVEN_SERVER_ADDRESS = process.env.SENTRY_URL;
-var elasticURL =
-  'http://' + process.env.ELASTIC_IP + ':' + process.env.ELASTIC_PORT + '/';
 
 Date.myNewDate = function() {
   var myNow = new Date();
@@ -484,63 +481,3 @@ exports.getSystemUuid = function(path) {
   });
 };
 
-exports.elasticBulkInsertDoc = function(data) {
-  return Q.promise(function(resolve, reject) {
-    if (!data) {
-      return reject('no data for insert to elastic');
-    }
-    if (!data.docs) {
-      return reject('no bulk docs for insert to elastic');
-    }
-    if (!data.index) {
-      return reject('no elastic index defined');
-    }
-    if (!data.type) {
-      return reject('no elastic type defined');
-    }
-    var docs = data.docs;
-    var index = data.index;
-    var type = data.type;
-    var ELASTIC_BULK =
-      elasticURL +
-      process.env.ELASTIC_INDEX_PREFIX +
-      index +
-      '/' +
-      type +
-      '/_bulk';
-    var bulkDocs = '';
-    var serialize = ndjson.serialize();
-
-    serialize.on('data', function(line) {
-      bulkDocs += line;
-    });
-
-    serialize.on('end', function() {
-      needle.post(ELASTIC_BULK, bulkDocs, function(error, response) {
-        if (error) {
-          log.error(error);
-          return reject(error);
-        }
-        if (
-          !response.statusCode ||
-          response.statusCode != 200 ||
-          !response.body
-        ) {
-          log.debug('@@ELASTIC_BULK_INSERT#####>>>>  no docs inserted');
-          return resolve();
-        }
-        log.debug(
-          '@ELASTIC_BULK_INSERT#####>>>>  docs inserted to elastic: ',
-          docs.length
-        );
-        return resolve();
-      });
-    });
-
-    for (var i = 0; i < docs.length; i++) {
-      serialize.write({ index: {} });
-      serialize.write(docs[i]);
-    }
-    serialize.end();
-  });
-};

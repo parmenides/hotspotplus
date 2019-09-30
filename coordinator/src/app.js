@@ -16,11 +16,11 @@ var log = logger.createLogger();
 var SYSTEM_ID_PATH = process.env.SYSTEM_ID_PATH;
 var redisLicenseRenew = redis.createClient(
   process.env.REDIS_PORT,
-  process.env.REDIS_IP
+  process.env.REDIS_HOST
 );
 var redisLicenseLoaded = redis.createClient(
   process.env.REDIS_PORT,
-  process.env.REDIS_IP
+  process.env.REDIS_HOST
 );
 
 const CONFIG_SERVER_LICENSE_TEMPLATE = [
