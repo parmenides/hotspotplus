@@ -1,0 +1,13 @@
+{
+  "db": {
+    "name": "db",
+    "connector": "memory"
+  },
+  "storage": {
+    "name": "storage",
+    "connector": "loopback-component-storage",
+    "maxFileSize": 204857600,
+    "provider": "filesystem",
+    "root": "/files"
+  }
+}

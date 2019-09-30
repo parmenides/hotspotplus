@@ -1,0 +1,93 @@
+{
+  "name": "Invoice",
+  "base": "Generic",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "replaceOnPUT": false,
+  "properties": {
+    "price": {
+      "type": "number",
+      "required": true
+    },
+    "paymentDate": {
+      "type": "number"
+    },
+    "planId": {
+      "type": "string"
+    },
+    "payed": {
+      "type": "boolean",
+      "required": true
+    },
+    "paymentRefId": {
+      "type": "string"
+    },
+    "issueDate": {
+      "type": "number",
+      "required": true
+    },
+    "paymentId": {
+      "type": "string"
+    },
+    "hotspotParams": {
+      "type": "object"
+    },
+    "description": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "business": {
+      "type": "belongsTo",
+      "model": "Business",
+      "foreignKey": ""
+    },
+    "reseller": {
+      "type": "belongsTo",
+      "model": "Reseller",
+      "foreignKey": ""
+    },
+    "members": {
+      "type": "hasOne",
+      "model": "Member",
+      "foreignKey": ""
+    }
+  },
+  "acls": [
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "issueExternalInvoiceAndOpenPayment"
+    },
+    {
+      "accessType": "READ",
+      "principalType": "ROLE",
+      "principalId": "$owner",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "WRITE",
+      "principalType": "ROLE",
+      "principalId": "$owner",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "serviceMan",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "DENY"
+    }
+  ],
+  "methods": {}
+}

@@ -1,0 +1,123 @@
+{
+  "_meta": {
+    "sources": [
+      "loopback/common/models",
+      "loopback/server/models",
+      "../common/models",
+      "./models"
+    ],
+    "mixins": [
+      "loopback/common/mixins",
+      "loopback/server/mixins",
+      "../common/mixins",
+      "./mixins"
+    ]
+  },
+  "User": {
+    "dataSource": "mongo",
+    "public": true
+  },
+  "AccessToken": {
+    "dataSource": "mongo",
+    "public": false
+  },
+  "ACL": {
+    "dataSource": "mongo",
+    "public": false
+  },
+  "MemberGroup": {
+    "dataSource": "mongo",
+    "public": true
+  },
+  "RoleMapping": {
+    "dataSource": "mongo",
+    "public": true,
+    "options": {
+      "strictObjectIDCoercion": true
+    }
+  },
+  "Role": {
+    "dataSource": "mongo",
+    "public": true
+  },
+  "Generic": {
+    "dataSource": "mongo",
+    "public": false
+  },
+  "Business": {
+    "dataSource": "mongo",
+    "public": true
+  },
+  "Nas": {
+    "dataSource": "mongo",
+    "public": true
+  },
+  "GenericUser": {
+    "dataSource": "mongo",
+    "public": false
+  },
+  "Member": {
+    "dataSource": "mongo",
+    "public": true
+  },
+  "InternetPlan": {
+    "dataSource": "mongo",
+    "public": true
+  },
+  "Invoice": {
+    "dataSource": "mongo",
+    "public": true
+  },
+  "Charge": {
+    "dataSource": "mongo",
+    "public": true
+  },
+  "ClientSession": {
+    "dataSource": "mongo",
+    "public": true
+  },
+  "FileStorage": {
+    "dataSource": "mongo",
+    "public": true
+  },
+  "Theme": {
+    "dataSource": "mongo",
+    "public": true
+  },
+  "Reseller": {
+    "dataSource": "mongo",
+    "public": true
+  },
+  "Coupon": {
+    "dataSource": "mongo",
+    "public": true
+  },
+  "Ticket": {
+    "dataSource": "mongo",
+    "public": true
+  },
+  "Usage": {
+    "dataSource": "mongo",
+    "public": true
+  },
+  "SystemConfig": {
+    "dataSource": "db",
+    "public": false
+  },
+  "Report": {
+    "dataSource": "mongo",
+    "public": true
+  },
+  "BigFile": {
+    "dataSource": "storage",
+    "public": true
+  },
+  "Department": {
+    "dataSource": "mongo",
+    "public": true
+  },
+  "Operator": {
+    "dataSource": "mongo",
+    "public": true
+  }
+}

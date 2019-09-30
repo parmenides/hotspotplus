@@ -1,0 +1,144 @@
+{
+  "name": "InternetPlan",
+  "base": "Generic",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "replaceOnPUT": false,
+  "properties": {
+    "type": {
+      "type": "string",
+      "required": true
+    },
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "duration": {
+      "type": "number",
+      "required": true
+    },
+    "bulk": {
+      "type": "object",
+      "required": true
+    },
+    "speed": {
+      "type": "object",
+      "required": true
+    },
+    "timeDuration": {
+      "type": "number",
+      "required": true
+    },
+    "fromToCheck": {
+      "type": "boolean",
+      "required": true
+    },
+    "fromHour": {
+      "type": "number",
+      "required": true
+    },
+    "toHour": {
+      "type": "number",
+      "required": true
+    },
+    "fromMinute": {
+      "type": "number",
+      "required": true
+    },
+    "toMinute": {
+      "type": "number",
+      "required": true
+    },
+    "price": {
+      "type": "number",
+      "required": true
+    },
+    "extraBulkPrice": {
+      "type": "number"
+    },
+    "accessType": {
+      "type": "string"
+    },
+    "businessId": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "business": {
+      "type": "belongsTo",
+      "model": "Business",
+      "foreignKey": ""
+    }
+  },
+  "acls": [
+    {
+      "accessType": "READ",
+      "principalType": "ROLE",
+      "principalId": "$owner",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "WRITE",
+      "principalType": "ROLE",
+      "principalId": "$owner",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "serviceMan",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "admin",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "READ",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "find"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "networkadmin",
+      "permission": "ALLOW",
+      "property": "assignPlanToMember"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "operator",
+      "permission": "ALLOW",
+      "property": "assignPlanToMember"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "assignFreePlanToMember"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "getPublicInternetPlans"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "DENY"
+    }
+  ],
+  "methods": {}
+}

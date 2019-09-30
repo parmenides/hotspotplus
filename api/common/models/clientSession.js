@@ -80,7 +80,10 @@ module.exports = function (ClientSession) {
       sessionTime: session.sessionTime
     })
     await Usage.cacheUsage(session)
-    session = {...session, ...calculatedUsage}
+    session.download = calculatedUsage.download
+    session.upload = calculatedUsage.upload
+    session.sessionTime= calculatedUsage.sessionTime
+    //session = {...session, ...calculatedUsage}
     log.debug(session)
     await ClientSession.sendToBroker(session)
   }
