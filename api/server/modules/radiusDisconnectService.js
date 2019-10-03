@@ -9,7 +9,6 @@ var log = logger.createLogger();
 var radius = require('radius');
 var dgram = require('dgram');
 
-log.debug('POD service started');
 exports.sendPod = function(clientSession) {
   return Q.Promise(function(resolve, reject) {
     log.debug('Going to dc ', clientSession);

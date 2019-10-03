@@ -21,7 +21,7 @@ services:
     expose:
       - '3000'
     labels:
-      - traefik.http.routers.api.rule=( Host(`my.localhotspot.ir`) || Host(`go.localhotspot.ir`) ) && PathPrefix(`/api/`,`/explorer`)
+      - traefik.http.routers.api.rule=( Host(`my.localhotspot.ir`) || Host(`go.localhotspot.ir`)|| Host(`go1.captiveportal.ir`) ) && PathPrefix(`/api/`,`/explorer`)
     #command: npm run build:dev:angular
     depends_on:
       - mongodb
@@ -115,7 +115,7 @@ services:
     restart: always
     command: npm start
     labels:
-    - traefik.http.routers.hotspot.rule=Host(`go.localhotspot.ir`)
+    - traefik.http.routers.hotspot.rule=Host(`go.localhotspot.ir`) || Host(`go1.captiveportal.ir`)
     expose:
     - '8070'
     volumes:
@@ -226,17 +226,22 @@ services:
       hotspotplusgate:
         ipv4_address: 172.20.0.80
   radius:
-    image: 'registry.gitlab.com/parmenides/hspfreeradius/production:3.3'
+    image: 'freeradius/freeradius-server:3.0.19-alpine'
     restart: always
-    container_name: "hsp_radius_production"
+    volumes:
+      - ./radius.3.0.19/clients.conf:/etc/raddb/clients.conf
+      - ./radius.3.0.19/mods-enabled/rest:/etc/raddb/mods-enabled/rest
+      - ./radius.3.0.19/sites-enabled/dynamic-clients:/etc/raddb/sites-enabled/dynamic-clients
+      - ./radius.3.0.19/sites-enabled/default:/etc/raddb/sites-enabled/default
     networks:
       - hotspotplusgate
     expose:
       - "1812"
       - "1813"
     ports:
-      - "1812:1812/udp"
-      - "1813:1813/udp"
+      - "1812:1812"
+      - "1813:1813"
+    command: -X
 
 
 volumes:
