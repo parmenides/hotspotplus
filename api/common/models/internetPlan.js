@@ -260,6 +260,20 @@ module.exports = function (InternetPlan) {
     returns: {root: true}
   })
 
+
+  InternetPlan.observe('persist', function (ctx, next) {
+    let entityId
+    if (ctx.instance && ctx.instance.id) {
+      entityId = ctx.instance.id
+    } else if (ctx.data && ctx.data.id) {
+      entityId = ctx.data.id
+    }
+    if(entityId){
+      hspCache.clearCache(entityId);
+    }
+    next()
+  })
+
   InternetPlan.getPublicInternetPlans = function (businessId, clbk) {
     log.debug('@getPublicInternetPlans')
     if (!businessId) {

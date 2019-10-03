@@ -20,6 +20,7 @@ const cacheIt = async (id, jsonData) => {
 }
 const clearCache = async (id) => {
   if (id) {
+    log.debug(`going to clear up cache for id: ${id}`)
     return redisClient.del(id)
   }
 }

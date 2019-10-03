@@ -209,6 +209,19 @@ module.exports = function (Member) {
     }
   })
 
+  Member.observe('persist', function (ctx, next) {
+    let entityId
+    if (ctx.instance && ctx.instance.id) {
+      entityId = ctx.instance.id
+    } else if (ctx.data && ctx.data.id) {
+      entityId = ctx.data.id
+    }
+    if(entityId){
+      hspCache.clearCache(entityId);
+    }
+    next()
+  })
+
   Member.observe('before save', function (ctx, next) {
     if (ctx.instance) {
       doTheThings(ctx.instance, function (error) {
@@ -3066,7 +3079,7 @@ module.exports = function (Member) {
   })
   Member.getAllMembersCount = function (departmentId, fromDate, endDate, ctx) {
 
-    return Q.Promise((resolve,reject)=>{
+    return Q.Promise((resolve, reject) => {
       var businessId = ctx.currentUserId
       log.debug('@getAllMembersCount : ', businessId)
       var Business = app.models.Business
@@ -3081,7 +3094,7 @@ module.exports = function (Member) {
           log.error('business not found')
           return reject(new Error('invalid business'))
         }
-        log.error('loaded',business)
+        log.error('loaded', business)
         const query = {
           businessId: businessId,
           creationDate: {gte: business.creationDate, lt: endDate}
@@ -3089,7 +3102,7 @@ module.exports = function (Member) {
         if (departmentId && departmentId !== 'all') {
           query.departments = {eq: departmentId}
         }
-        log.error('query',query)
+        log.error('query', query)
 
         Member.count(
           query,
@@ -3098,7 +3111,7 @@ module.exports = function (Member) {
               log.error(error)
               return reject(error)
             }
-            log.error('members',members)
+            log.error('members', members)
             var allMembers = 0
             if (members) {
               allMembers = members

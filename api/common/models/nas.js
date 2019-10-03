@@ -67,6 +67,19 @@ module.exports = function (Nas) {
     returns: {root: true}
   })
 
+  Nas.observe('persist', function (ctx, next) {
+    let entityId
+    if (ctx.instance && ctx.instance.id) {
+      entityId = ctx.instance.id
+    } else if (ctx.data && ctx.data.id) {
+      entityId = ctx.data.id
+    }
+    if(entityId){
+      hspCache.clearCache(entityId);
+    }
+    next()
+  })
+
   Nas.loadThemeConfigById = function (nasId, cb) {
     var Business = app.models.Business
     var Theme = app.models.Theme

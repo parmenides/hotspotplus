@@ -214,6 +214,20 @@ module.exports = function (Business) {
     }
   })
 
+
+  Business.observe('persist', function (ctx, next) {
+    let entityId
+    if (ctx.instance && ctx.instance.id) {
+      entityId = ctx.instance.id
+    } else if (ctx.data && ctx.data.id) {
+      entityId = ctx.data.id
+    }
+    if(entityId){
+      hspCache.clearCache(entityId);
+    }
+    next()
+  })
+
   Business.registerNewLicense = function (mobile, fullname, title) {
     return Q.Promise(function (resolve, reject) {
       mobile = utility.verifyAndTrimMobile(mobile)
