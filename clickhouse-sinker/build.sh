@@ -7,8 +7,7 @@ get_latest_commit(){
 }
 
 build_image(){
-    docker build  --no-cache -t ${CI_REGISTRY_IMAGE}/clickhousesinker:latest -t ${CI_REGISTRY_IMAGE}/clickhousesinker:${CI_COMMIT_TAG}  ./clickhouse-sinker
-    docker push ${CI_REGISTRY_IMAGE}/clickhousesinker:${CI_COMMIT_TAG}
+    docker build  --no-cache -t ${CI_REGISTRY_IMAGE}/clickhousesinker:latest   ./clickhouse-sinker
     docker push ${CI_REGISTRY_IMAGE}/clickhousesinker:latest
 }
 

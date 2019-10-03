@@ -7,8 +7,7 @@ get_latest_commit(){
 }
 
 build_image(){
-    docker build  --no-cache -t ${CI_REGISTRY_IMAGE}/goflow:latest -t ${CI_REGISTRY_IMAGE}/goflow:${CI_COMMIT_TAG}  ./goflow
-    docker push ${CI_REGISTRY_IMAGE}/goflow:${CI_COMMIT_TAG}
+    docker build  --no-cache -t ${CI_REGISTRY_IMAGE}/goflow:latest   ./goflow
     docker push ${CI_REGISTRY_IMAGE}/goflow:latest
 }
 
