@@ -3085,16 +3085,14 @@ module.exports = function (Member) {
       var Business = app.models.Business
 
       if (!departmentId) {
-        return {allMembers: 0}
+        return resolve({allMembers: 0})
       }
 
-      log.error('loading business')
       Business.findById(businessId).then(function (business) {
         if (!business) {
           log.error('business not found')
           return reject(new Error('invalid business'))
         }
-        log.error('loaded', business)
         const query = {
           businessId: businessId,
           creationDate: {gte: business.creationDate, lt: endDate}
@@ -3102,7 +3100,6 @@ module.exports = function (Member) {
         if (departmentId && departmentId !== 'all') {
           query.departments = {eq: departmentId}
         }
-        log.error('query', query)
 
         Member.count(
           query,
@@ -3111,7 +3108,6 @@ module.exports = function (Member) {
               log.error(error)
               return reject(error)
             }
-            log.error('members', members)
             var allMembers = 0
             if (members) {
               allMembers = members
