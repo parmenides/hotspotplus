@@ -8,6 +8,37 @@ const LICENSE_TABLE = 'license.Charge'
 module.exports = (insert, query, uuid, config, moment, log) => {
   return Object.freeze({
 
+    init: async () => {
+      await query(`create database IF NOT EXISTS  hotspotplus`)
+      await query(`create table IF NOT EXISTS hotspotplus.Charge(_id UUID,businessId String,type String,forThe String, amount UInt32,date DateTime) engine=MergeTree()
+PARTITION BY toStartOfMonth( date )
+ORDER BY (businessId)
+`)
+
+      await query(`create table IF NOT EXISTS hotspotplus.Netflow(RouterAddr String,SrcIP String,DstIP String, SrcPort String,DstPort String,NextHop String, TimeRecvd DateTime,Proto UInt8)
+engine=AggregatingMergeTree()
+PARTITION BY toStartOfDay( TimeRecvd )
+ORDER BY (NextHop,DstPort,SrcPort,DstIP,SrcIP,RouterAddr,toStartOfInterval( TimeRecvd ,INTERVAL 30 minute ))
+`)
+
+      await query(`create table IF NOT EXISTS hotspotplus.Session(sessionId String,businessId String,memberId String,nasId String,departmentId String,groupIdentityId String,nasIp String,username String,framedIpAddress String,mac String,creationDate DateTime,download UInt32,upload UInt32,
+sessionTime UInt32,accStatusType UInt8 )
+engine=MergeTree()
+PARTITION BY toStartOfDay( creationDate )
+ORDER BY (businessId,memberId,sessionId,departmentId,nasIp,framedIpAddress,creationDate,username)
+`)
+
+      await query(`create table IF NOT EXISTS hotspotplus.WebProxy( memberIp String,nasIp String,protocol String,url String,method String,domain String,receivedAt DateTime )
+engine=MergeTree()
+PARTITION BY toStartOfDay( receivedAt )
+ORDER BY (nasIp,memberIp,receivedAt)
+`)
+      await query(`create table IF NOT EXISTS hotspotplus.Dns(memberIp String,nasIp String,domain String,receivedAt DateTime )
+engine=AggregatingMergeTree()
+PARTITION BY toStartOfDay( receivedAt )
+ORDER BY (nasIp,memberIp,domain,toStartOfInterval( receivedAt , INTERVAL 120 minute ))
+`)
+    },
     getUsageByInterval: (businessId, departmentId, startDate, endDate) => {
       if (!businessId) {
         throw new Error('businessId is undefined')

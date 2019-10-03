@@ -4,12 +4,15 @@ var logger = require('../modules/logger');
 var needle = require('needle');
 var utility = require('../modules/utility');
 var redis = require('redis');
+const db = require('../modules/db.factory')
 
 var redisLicenseReload = redis.createClient(
   process.env.REDIS_PORT,
   process.env.REDIS_IP
 );
-module.exports = function(app) {
+
+
+module.exports = async function (app) {
   var User = app.models.User;
   var Business = app.models.Business;
   var Role = app.models.Role;
@@ -18,7 +21,7 @@ module.exports = function(app) {
 
   SystemConfig.getConfig();
   addDefaultRolesAndUsers();
-  //createElasticMapping();
+  await db.init()
 
   log.debug('App started');
   utility.sendMessage('Server started', { fileName: 'boot.js' });
