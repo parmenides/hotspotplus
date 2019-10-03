@@ -3064,47 +3064,51 @@ module.exports = function (Member) {
     ],
     returns: {root: true}
   })
-  Member.getAllMembersCount = function (departmentId, fromDate, endDate, ctx, cb) {
-    var businessId = ctx.currentUserId
-    log.debug('@getAllMembersCount : ', businessId)
-    var Business = app.models.Business
+  Member.getAllMembersCount = function (departmentId, fromDate, endDate, ctx) {
 
-    if (!departmentId) {
-      return {allMembers: 0}
-    }
+    return Q.Promise((resolve,reject)=>{
+      var businessId = ctx.currentUserId
+      log.debug('@getAllMembersCount : ', businessId)
+      var Business = app.models.Business
 
-    log.error('loading business')
-    Business.findById(businessId).then(function (business) {
-      if (!business) {
-        log.error('business not found')
-        return cb(new Error('invalid business'))
+      if (!departmentId) {
+        return {allMembers: 0}
       }
-      log.error('loaded',business)
-      const query = {
-        businessId: businessId,
-        creationDate: {gte: business.creationDate, lt: endDate}
-      }
-      if (departmentId && departmentId !== 'all') {
-        query.departments = {eq: departmentId}
-      }
-      log.error('query',query)
 
-      Member.count(
-        query,
-        function (error, members) {
-          if (error) {
-            log.error(error)
-            return cb(error)
-          }
-          log.error('members',members)
-          var allMembers = 0
-          if (members) {
-            allMembers = members
-          }
-          return cb(null, {allMembers})
+      log.error('loading business')
+      Business.findById(businessId).then(function (business) {
+        if (!business) {
+          log.error('business not found')
+          return reject(new Error('invalid business'))
         }
-      )
+        log.error('loaded',business)
+        const query = {
+          businessId: businessId,
+          creationDate: {gte: business.creationDate, lt: endDate}
+        }
+        if (departmentId && departmentId !== 'all') {
+          query.departments = {eq: departmentId}
+        }
+        log.error('query',query)
+
+        Member.count(
+          query,
+          function (error, members) {
+            if (error) {
+              log.error(error)
+              return reject(error)
+            }
+            log.error('members',members)
+            var allMembers = 0
+            if (members) {
+              allMembers = members
+            }
+            return resolve({allMembers})
+          }
+        )
+      })
     })
+
   }
 
   Member.remoteMethod('getAllMembersCount', {
