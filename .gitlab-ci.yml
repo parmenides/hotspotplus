@@ -10,6 +10,7 @@ stages:
   - build_log_aggregator
   - build_log_worker
   - build_goflow
+  - build_clickhouse_sinker
   - build_coordinator
   - build_hotspot
 before_script:
@@ -74,7 +75,10 @@ build_log_worker:
 build_goflow:
   stage: build_goflow
   when: manual
-  only:
-    - tags
   script:
     - ./goflow/build.sh
+build_clickhouse_sinker:
+  stage: build_clickhouse_sinker
+  when: manual
+  script:
+    - ./clickhouse-sinker/build.sh
