@@ -839,7 +839,8 @@ module.exports = function (Member) {
     }*/
 
     var mac = RadiusAccountingMessage.getAttribute('mac')
-    await Member.setMemberMac(member, mac)
+    const memberInstance = await Member.findById(memberId)
+    await Member.setMemberMac(memberInstance, mac)
   }
 
   Member.radiusAccounting = async (RadiusAccountingMessage) => {
@@ -857,7 +858,7 @@ module.exports = function (Member) {
     }
   }
 
-  Member.setMemberMac = function (memberInstance, mac, forceUpdate) {
+  Member.setMemberMac = async function (memberInstance, mac, forceUpdate) {
     return Q.Promise(function (resolve, reject) {
       if (forceUpdate || (!memberInstance.mac && mac)) {
         mac = utility.trimMac(mac)
