@@ -839,7 +839,7 @@ module.exports = function (Member) {
     }*/
 
     var mac = RadiusAccountingMessage.getAttribute('mac')
-    const memberInstance = await Member.findById(memberId)
+    const memberInstance = await Member.findById(member.id)
     await Member.setMemberMac(memberInstance, mac)
   }
 
