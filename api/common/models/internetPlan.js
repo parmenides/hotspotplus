@@ -119,7 +119,7 @@ module.exports = function (InternetPlan) {
                 }
                 InternetPlan.updateInternetPlanHistory(memberId, planId)
                   .then(function () {
-                    log.debug('plan assigned :', result)
+                    log.debug('plan assigned')
                     return resolve()
                   })
                   .fail(function (error) {
@@ -137,14 +137,10 @@ module.exports = function (InternetPlan) {
   InternetPlan.calculatePreviewsPlanUsage = (businessId, memberId, previousPlan) => {
     var Member = app.models.Member
     return Q.Promise((resolve, reject) => {
-      log.debug('//////////')
-      log.debug(memberId)
-      log.debug(businessId)
-      log.debug(previousPlan)
       if (previousPlan) {
         const to = (new Date()).getTime()
         Member.getInternetUsage(businessId, memberId, previousPlan.assignDate, to).then((usageReport) => {
-          log.debug(usageReport)
+          log.debug({usageReport})
           previousPlan.totalUsage = usageReport.bulk || 0
           return resolve(previousPlan)
         }).fail((error) => {
@@ -195,7 +191,7 @@ module.exports = function (InternetPlan) {
                   log.error(error)
                   return reject(error)
                 }
-                log.debug('internet plan history update result:', result)
+                log.debug('internet plan history updated ')
                 return resolve()
               }
             )
@@ -267,9 +263,11 @@ module.exports = function (InternetPlan) {
       entityId = ctx.instance.id
     } else if (ctx.data && ctx.data.id) {
       entityId = ctx.data.id
+    } else if (ctx.currentInstance && ctx.currentInstance.id) {
+      entityId = ctx.currentInstance.id
     }
-    if(entityId){
-      hspCache.clearCache(entityId);
+    if (entityId) {
+      hspCache.clearCache(entityId)
     }
     next()
   })

@@ -73,9 +73,11 @@ module.exports = function (Nas) {
       entityId = ctx.instance.id
     } else if (ctx.data && ctx.data.id) {
       entityId = ctx.data.id
+    } else if (ctx.currentInstance && ctx.currentInstance.id) {
+      entityId = ctx.currentInstance.id
     }
-    if(entityId){
-      hspCache.clearCache(entityId);
+    if (entityId) {
+      hspCache.clearCache(entityId)
     }
     next()
   })

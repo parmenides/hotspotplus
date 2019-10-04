@@ -41,7 +41,7 @@ ORDER BY (nasIp,memberIp,receivedAt)
       await query(`create table IF NOT EXISTS hotspotplus.Dns(memberIp String,nasIp String,domain String,receivedAt DateTime )
 engine=AggregatingMergeTree()
 PARTITION BY toStartOfDay( receivedAt )
-ORDER BY (nasIp,memberIp,domain,toStartOfInterval( receivedAt , INTERVAL 120 minute ))
+ORDER BY (nasIp,memberIp,domain,toStartOfInterval( receivedAt , INTERVAL 1 day ))
 `)
     },
     getUsageByInterval: (businessId, departmentId, startDate, endDate) => {

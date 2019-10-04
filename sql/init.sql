@@ -8,12 +8,12 @@ PARTITION BY toStartOfMonth( date )
 ORDER BY (businessId)
 
 
-CREATE MATERIALIZED VIEW IF NOT EXISTS  hotspotplus.Usage
+create MATERIALIZED VIEW IF NOT EXISTS  hotspotplus.Usage
 engine=SummingMergeTree((sessionTime,download,upload))
 PARTITION BY (toStartOfMonth( creationDate))
 ORDER BY (businessId,memberId,departmentId,sessionId)
-POPULATE AS SELECT *
-FROM hotspotplus.Session
+POPULATE AS select *
+from hotspotplus.Session
 
 --create table IF NOT EXISTS hotspotplus.Usage(creationDate DateTime,accStatusType UInt8, sessionId String, businessId String,memberId String,nasId String,mac String,username String,download UInt32,upload UInt32,totalUsage UInt32,
 --sessionTime UInt32)
@@ -29,7 +29,7 @@ FROM hotspotplus.Session
 --FROM hotspotplus.Usage
 --group by sessionId
 
-select sum(a.download) from (select sessionId,max(download) download,max(upload),MAX(sessionTime) from hotspotplus.UsageView  where memberId='5d728a37a987c2013d392bf4' group by sessionId) a
+select sum(a.download) from (select sessionId,max(download) download,max(upload),max(sessionTime) from hotspotplus.UsageView  where memberId='5d728a37a987c2013d392bf4' group by sessionId) a
 
 create database hotspotplusLicense
 create table IF NOT EXISTS hotspotplusLicense.Charge(_id UUID,licenseId String,type String,forThe String, amount UInt8,date DateTime)
@@ -54,13 +54,13 @@ engine=MergeTree()
 PARTITION BY toStartOfDay( receivedAt )
 ORDER BY (nasIp,memberIp,receivedAt)
 
-create table IF NOT EXISTS hotspotplus.Dns(memberIp String,nasIp String,domain String,receivedAt DateTime )
+create table IF NOT EXISTS hotspotplus.Dns1(memberIp String,nasIp String,domain String,receivedAt DateTime )
 engine=AggregatingMergeTree()
 PARTITION BY toStartOfDay( receivedAt )
-ORDER BY (nasIp,memberIp,domain,toStartOfInterval( receivedAt , INTERVAL 120 minute ))
+ORDER BY (nasIp,memberIp,domain,toStartOfInterval( receivedAt , INTERVAL 1 day ))
 
 ## List Of Partitions
-SELECT  active,partition,name  FROM system.parts  WHERE database='logs' AND table='netflow'
+select  active,partition,name  from system.parts  where database='logs' and table='netflow'
 
 ## Detach Partition
 alter table hotspotplus.netflow detach partition '2019-08-09 14:24:53'
