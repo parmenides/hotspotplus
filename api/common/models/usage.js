@@ -1,12 +1,10 @@
 'use strict'
 var app = require('../../server/server')
-var utility = require('../../server/modules/utility')
 var Q = require('q')
 var kafka = require('kafka-node')
 var config = require('../../server/modules/config.js')
 var logger = require('../../server/modules/logger')
 var log = logger.createLogger()
-var _ = require('underscore')
 var kafkaClient = new kafka.KafkaClient({
   kafkaHost: process.env.KAFKA_IP + ':' + process.env.KAFKA_PORT
 })

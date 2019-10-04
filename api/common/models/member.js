@@ -7,16 +7,12 @@ var db = require('../../server/modules/db.factory')
 var redis = require('redis')
 var redisClient = redis.createClient(config.REDIS.PORT, config.REDIS.HOST)
 var log = logger.createLogger()
-var aggregate = require('../../server/modules/aggregates')
-var momentTz = require('moment-timezone')
 var smsModule = require('../../server/modules/sms')
 var createError = require('http-errors')
 var radiusAdaptor = require('../../server/modules/radiusAdaptor')
 var Radius_Messages = require('../../server/modules/radiusMessages')
 var _ = require('underscore')
 var querystring = require('querystring')
-var RadiusAdaptor = require('../../server/modules/radiusAdaptor')
-var AVP = require('../../server/modules/avps')
 var radiusPod = require('../../server/modules/radiusDisconnectService')
 var dust = require('dustjs-helpers')
 var fs = require('fs')
@@ -29,13 +25,15 @@ module.exports = function (Member) {
   Member.validatesUniquenessOf('uniqueUserId')
 
   Member.signIn = async function (businessId, username, password, routerType, nasId, pinCode, mac, cb) {
-    const {member} = await Member.checkAuthorization(businessId, nasId, username)
-    return cb(null, {
-      ok: true,
-      memberId: member.id,
-      active: member.active,
-      language: member.language,
-    })
+      log.debug('@Signin')
+      const {member} = await Member.checkAuthorization(businessId, nasId, username)
+      return cb(null, {
+        ok: true,
+        memberId: member.id,
+        active: member.active,
+        language: member.language,
+      })
+
   }
 
   Member.remoteMethod('signIn', {
@@ -96,46 +94,48 @@ module.exports = function (Member) {
     offset = -offset * config.AGGREGATE.HOUR_MILLISECONDS
     var oneDay = config.AGGREGATE.DAY_MILLISECONDS
     var intervalMilli = oneDay
-
-    aggregate
-      .newMemberInterval(fromDate, toDate, offset, intervalMilli, businessId)
-      .then(function (newMembers) {
-        var response = {date: [], verified: [], failed: []}
-        if (monthDays.length == 0) {
-          // calculate daily interval docs
-          for (var newMember in newMembers) {
-            response.date[newMember] = newMembers[newMember].key
-            response.verified[newMember] = newMembers[newMember].verified
-            response.failed[newMember] = newMembers[newMember].failed
-          }
-        } else {
-          // sum of persian month days
-          var days = 0
-          var daysCounter = 0
-          for (var month in monthDays) {
-            var verifiedMember = 0
-            var failedMember = 0
-            days += monthDays[month]
-            for (daysCounter; daysCounter < days; daysCounter++) {
-              verifiedMember += newMembers[daysCounter].verified
-              failedMember += newMembers[daysCounter].failed
+    //todo re implement me
+    cb(null, {message: 'needs to reimplement'})
+    /*
+        aggregate
+          .newMemberInterval(fromDate, toDate, offset, intervalMilli, businessId)
+          .then(function (newMembers) {
+            var response = {date: [], verified: [], failed: []}
+            if (monthDays.length == 0) {
+              // calculate daily interval docs
+              for (var newMember in newMembers) {
+                response.date[newMember] = newMembers[newMember].key
+                response.verified[newMember] = newMembers[newMember].verified
+                response.failed[newMember] = newMembers[newMember].failed
+              }
+            } else {
+              // sum of persian month days
+              var days = 0
+              var daysCounter = 0
+              for (var month in monthDays) {
+                var verifiedMember = 0
+                var failedMember = 0
+                days += monthDays[month]
+                for (daysCounter; daysCounter < days; daysCounter++) {
+                  verifiedMember += newMembers[daysCounter].verified
+                  failedMember += newMembers[daysCounter].failed
+                }
+                // add calculated month to response
+                response.date[month] = newMembers[days].key
+                response.verified[month] = verifiedMember
+                response.failed[month] = failedMember
+              }
             }
-            // add calculated month to response
-            response.date[month] = newMembers[days].key
-            response.verified[month] = verifiedMember
-            response.failed[month] = failedMember
-          }
-        }
-        log.debug(
-          'process of getting members info completed successfully' +
-          JSON.stringify(response)
-        )
-        return cb(null, response)
-      })
-      .fail(function (error) {
-        log.error(error)
-        return cb(error)
-      })
+            log.debug(
+              'process of getting members info completed successfully' +
+              JSON.stringify(response)
+            )
+            return cb(null, response)
+          })
+          .fail(function (error) {
+            log.error(error)
+            return cb(error)
+          })*/
   }
 
   Member.remoteMethod('getMembersChart', {
@@ -216,8 +216,8 @@ module.exports = function (Member) {
     } else if (ctx.data && ctx.data.id) {
       entityId = ctx.data.id
     }
-    if(entityId){
-      hspCache.clearCache(entityId);
+    if (entityId) {
+      hspCache.clearCache(entityId)
     }
     next()
   })
@@ -531,6 +531,7 @@ module.exports = function (Member) {
   }
 
   Member.radiusAuthorize = async (AccessRequest) => {
+    log.debug('@RadiusAuthorize')
     var RadiusResponse = new radiusAdaptor.RadiusResponse(AccessRequest)
     var Member = app.models.Member
     var username = AccessRequest.getAttribute('username')
@@ -592,7 +593,7 @@ module.exports = function (Member) {
     if (remainingTimeInSeconds <= 0) {
       throw createError(401, Radius_Messages.outOfTime)
     }
-
+    log.debug('member authorized...')
     return {business, member, internetPlan, duration, remainingBulk, remainingTimeInSeconds}
   }
 

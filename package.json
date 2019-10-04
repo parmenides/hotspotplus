@@ -4,7 +4,7 @@
   "description": "hotspotplus",
   "scripts": {
     "start": "docker-compose down; docker-compose up",
-    "log:cordinator": "tail -f coordinator/logs/coordinator-debug.log| bunyan",
+    "log:coordinator": "tail -f coordinator/logs/coordinator-debug.log| bunyan",
     "log:api": "tail -f api/logs/API-debug.log| bunyan",
     "log:apilc": "tail -f api-license/logs/api-license-debug.log| bunyan",
     "log:cord": "tail -f coordinator/logs/coordinator-debug.log| bunyan",

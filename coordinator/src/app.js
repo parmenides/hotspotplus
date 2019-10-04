@@ -6,21 +6,20 @@ var Q = require('q');
 require('date-utils');
 var redis = require('redis');
 var redisClient = redis.createClient(
-  process.env.REDIS_PORT,
-  process.env.REDIS_HOST
+  config.REDIS.PORT,
+  config.REDIS.HOST,
 );
 var utility = require('./modules/utility');
 var authUtility = require('./modules/auth');
 var logger = require('./modules/logger');
 var log = logger.createLogger();
-var SYSTEM_ID_PATH = process.env.SYSTEM_ID_PATH;
 var redisLicenseRenew = redis.createClient(
-  process.env.REDIS_PORT,
-  process.env.REDIS_HOST
+  config.REDIS.PORT,
+  config.REDIS.HOST,
 );
 var redisLicenseLoaded = redis.createClient(
-  process.env.REDIS_PORT,
-  process.env.REDIS_HOST
+  config.REDIS.PORT,
+  config.REDIS.HOST,
 );
 
 const CONFIG_SERVER_LICENSE_TEMPLATE = [
@@ -57,7 +56,7 @@ const publicKey = new NodeRSA(pkString);
 const KEYS_EXPIRES = 604800 * 2;
 const LC_RENEW_INTERVAL = 3600 * 1000;
 
-var LC_PATH = process.env.LC_PATH;
+var LC_PATH = config.LC_PATH;
 var fs = require('fs');
 
 function loadLicense() {
@@ -228,7 +227,7 @@ function renewLicense() {
   return Q.Promise(function(resolve, reject) {
     log.debug('renewLicense');
     utility
-      .getSystemUuid(SYSTEM_ID_PATH)
+      .getSystemUuid(config.SYSTEM_ID_PATH)
       .then(function(systemUuid) {
         log.debug(systemUuid);
         log.debug(

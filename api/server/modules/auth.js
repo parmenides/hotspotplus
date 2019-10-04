@@ -5,17 +5,20 @@
 var Q = require('q');
 var needle = require('needle');
 var logger = require('./logger');
+var config = require('./config');
 var log = logger.createLogger();
 var utility = require('./utility');
+/*
 var API_ADDRESS = utility.getApiAddress();
 var LOGIN_REST_API = API_ADDRESS + '/api/Users/login';
 var LOGOUT_REST_API = API_ADDRESS + '/api/Users/logout?access_token={0}';
+*/
 // login to the rest api to get the access token
 module.exports.serviceManLogin = function(ttlMs) {
   log.debug('service man logged in ', ttlMs);
   return login(
-    process.env.SERVICE_MAN_USERNAME,
-    process.env.SERVICE_MAN_PASSWORD,
+    config.SERVICE_MAN_USERNAME,
+    config.SERVICE_MAN_PASSWORD,
     ttlMs
   );
 };
@@ -53,17 +56,16 @@ module.exports.loginToLicenseServer = function(CONFIG_SERVER_LOGIN_URL) {
   log.debug('@loginToLicenseServer');
   return Q.Promise(function(resolve, reject) {
     utility
-      .getSystemUuid(process.env.SYSTEM_ID_PATH)
+      .getSystemUuid(config.SYSTEM_ID_PATH)
       .then(function(systemUuid) {
         if (!systemUuid) {
           return resolve({});
         }
         log.info(systemUuid);
-        log.info(process.env.PASSWORD_PREFIX);
         loginToConfigServer(
           CONFIG_SERVER_LOGIN_URL,
           systemUuid,
-          process.env.PASSWORD_PREFIX + utility.md5(systemUuid)
+          config.PASSWORD_PREFIX + utility.md5(systemUuid)
         )
           .then(function(authResult) {
             var token = authResult.token;
@@ -82,6 +84,7 @@ module.exports.loginToLicenseServer = function(CONFIG_SERVER_LOGIN_URL) {
       });
   });
 };
+/*
 
 var login = (module.exports.login = function(username, password, ttlMs) {
   return Q.Promise(function(resolve, reject) {
@@ -129,3 +132,4 @@ var logout = (module.exports.logout = function(accessToken) {
     });
   });
 });
+*/

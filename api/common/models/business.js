@@ -214,7 +214,6 @@ module.exports = function (Business) {
     }
   })
 
-
   Business.observe('persist', function (ctx, next) {
     let entityId
     if (ctx.instance && ctx.instance.id) {
@@ -222,8 +221,8 @@ module.exports = function (Business) {
     } else if (ctx.data && ctx.data.id) {
       entityId = ctx.data.id
     }
-    if(entityId){
-      hspCache.clearCache(entityId);
+    if (entityId) {
+      hspCache.clearCache(entityId)
     }
     next()
   })
@@ -1388,7 +1387,7 @@ module.exports = function (Business) {
     var SystemConfig = app.models.SystemConfig
     SystemConfig.isLocal()
       .then(function (isLocal) {
-        if (false/*isLocal*/) {
+        if (isLocal) {
           utility
             .getSystemUuid(config.SYSTEM_ID_PATH)
             .then(function (systemUuid) {
@@ -1985,7 +1984,7 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
     const result = await ClientSession.getOnlineSessionCount(business.id, 'all')
     var concurrentSession = result.count
     var currentService = business.services
-    return concurrentSession <= currentService.allowedOnlineUsers;
+    return concurrentSession <= currentService.allowedOnlineUsers
   }
 
   Business.destroyMembersById = function (memberIds, ctx) {

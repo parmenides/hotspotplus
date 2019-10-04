@@ -29,7 +29,7 @@ services:
     env_file:
       - api/.env
     volumes:
-      - ${PWD}/systemId:/systemId
+      - ${PWD}/systemId:/app/machine-id
       - ${PWD}/api/server:/usr/src/app/server/
       - ${PWD}/files:/files
       - ${PWD}/api/node_modules:/usr/src/app/node_modules
@@ -38,31 +38,31 @@ services:
       - ${PWD}/api/key:/key
     networks:
       - hotspotplusgate
-  licensapi:
-    build:
-      context: ${PWD}/api-license
-    user: '${UID:-1000}:${GID:-1000}'
-    restart: always
-    container_name: hotspotpluslicensapi
-    labels:
-    - traefik.http.routers.lcapi.rule=( Host(`lc.localhotspot.ir`) || Host(`lc.localhotspot.ir`) ) && PathPrefix(`/api/`,`/explorer`)
-    command: npm run start:dev
-    expose:
-     - '3000'
-    depends_on:
-      - mongodb
-#      - elasticsearch
-      - redis
-    env_file:
-      - api-license/.env
-    volumes:
-      - ${PWD}/api-license/server:/usr/src/app/server/
-      - ${PWD}/api-license/node_modules:/usr/src/app/node_modules
-      - ${PWD}/api-license/common:/usr/src/app/common/
-      - ${PWD}/api-license/logs:/logs
-      - ${PWD}/api-license/key:/key
-    networks:
-      - hotspotplusgate
+#  licensapi:
+#    build:
+#      context: ${PWD}/api-license
+#    user: '${UID:-1000}:${GID:-1000}'
+#    restart: always
+#    container_name: hotspotpluslicensapi
+#    labels:
+#    - traefik.http.routers.lcapi.rule=Host(`lc.localhotspot.ir`) && PathPrefix(`/api/`,`/explorer`)
+#    command: npm run start:dev
+#    expose:
+#     - '3000'
+#    depends_on:
+#      - mongodb
+##      - elasticsearch
+#      - redis
+#    env_file:
+#      - api-license/.env
+#    volumes:
+#      - ${PWD}/api-license/server:/usr/src/app/server/
+#      - ${PWD}/api-license/node_modules:/usr/src/app/node_modules
+#      - ${PWD}/api-license/common:/usr/src/app/common/
+#      - ${PWD}/api-license/logs:/logs
+#      - ${PWD}/api-license/key:/key
+#    networks:
+#      - hotspotplusgate
   logworker:
     build:
       context: ./log-worker
@@ -71,25 +71,11 @@ services:
     command: npm run start:dev
     environment:
       - REPORT_TEMPLATES_PAHT=/report-templates
-      - CLICK_NETFLOW_REPORT_DB=logs.report
       - CLICK_HOST=clickhouse
       - CLICK_USER=admin
       - CLICK_PASSWORD=123
-      - ELASTICSEARCH_LOG_LEVEL=debug
-      - START_MANUAL_ENRICHMENT=true
-      - ENRICHMENT_SCOPE=1000
-      - ELASTIC_INDEX_PREFIX=hotspotplus
-      - ELASTIC_LICENSE_INDEX_PREFIX=hotspotpluslicense
-      - LOG_REQUEST_RETRY_MS=300000
-      - API_ADDRESS=http://hotspotplusapi:3000
-      - SERVICE_MAN_USERNAME=pinTimeServiceMan
-      - SERVICE_MAN_PASSWORD=#123aaa)
-      - REDIS_PORT=6379
-      - REDIS_HOST=hsp_redis
-      - ELASTIC_IP=hsp_elasticsearch
-      - ELASTIC_PORT=9200
+      - API_ADDRESS=http://apihotspotplus:3000
       - LOG_LEVEL=debug
-      - LOG_PATH=/logs/log-worker.log
     volumes:
       - ${PWD}/log-worker/dist/log.worker.js:/usr/src/app/log.worker.js
       - ${PWD}/log-worker/node_modules:/usr/src/app/node_modules
@@ -110,29 +96,29 @@ services:
       - hotspotplusgate
   hotspot:
     build:
-      context: ${PWD}/api
+      context: ${PWD}/hotspot
     user: '${UID:-1000}:${GID:-1000}'
     restart: always
     command: npm start
     labels:
     - traefik.http.routers.hotspot.rule=Host(`go.localhotspot.ir`) || Host(`go1.captiveportal.ir`)
     expose:
-    - '8070'
+    - '8080'
     volumes:
     - ${PWD}/hotspot/:/usr/src/app/
     networks:
     - hotspotplusgate
-  licensedashboard:
-    image: 'bitnami/nginx:latest'
-    restart: always
-    labels:
-    - traefik.http.routers.lcdashboard.rule=Host(`lc.localhotspot.ir`)
-    expose:
-    - '8080'
-    volumes:
-      - ${PWD}/license-dashboard:/app
-    networks:
-      - hotspotplusgate
+#  licensedashboard:
+#    image: 'bitnami/nginx:latest'
+#    restart: always
+#    labels:
+#    - traefik.http.routers.lcdashboard.rule=Host(`lc.localhotspot.ir`)
+#    expose:
+#    - '8080'
+#    volumes:
+#      - ${PWD}/license-dashboard:/app
+#    networks:
+#      - hotspotplusgate
   coordinator:
     build:
       context: ${PWD}/coordinator
@@ -146,14 +132,13 @@ services:
 #      - hotspotpluslicensapi
     environment:
       - LOG_LEVEL=debug
-      - LOG_DIR=/logs
       - REDIS_PORT=6379
       - REDIS_HOST=hsp_redis
       - REDIS_IP=hsp_redis
     volumes:
       - ${PWD}/coordinator/src/:/usr/src/app/src/
       - ${PWD}/coordinator/node_modules/:/usr/src/app/node_modules/
-      - ${PWD}/systemId:/systemId
+      - ${PWD}/systemId:/app/machine-id
       - ${PWD}/coordinator/key:/key
       - ${PWD}/coordinator/logs:/logs
     networks:
@@ -172,14 +157,14 @@ services:
     image: bitnami/redis:4.0.12-debian-9-r11
     container_name: hsp_redis
     restart: always
-    volumes:
-      - hsp_redis:/bitnami/redis/data
+#    volumes:
+#      - hsp_redis:/bitnami/redis/data
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
     networks:
       - hotspotplusgate
   clickhouse:
-    image: yandex/clickhouse-server
+    image: yandex/clickhouse-server:19.13.5.44
     hostname: clickhouse
     container_name: clickhouse
     ports:
@@ -209,7 +194,7 @@ services:
     networks:
       - hotspotplusgate
   kafka:
-    image: 'bitnami/kafka:latest'
+    image: 'bitnami/kafka:2.3.0-debian-9-r96'
     restart: always
     container_name: 'kafka'
     depends_on:
@@ -239,10 +224,9 @@ services:
       - "1812"
       - "1813"
     ports:
-      - "1812:1812"
-      - "1813:1813"
+      - "1812:1812/udp"
+      - "1813:1813/udp"
     command: -X
-
 
 volumes:
   hsp_grafana:

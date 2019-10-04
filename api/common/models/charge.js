@@ -38,7 +38,7 @@ module.exports = function (Charge) {
         smsModule.send({
           token1: charge.amount,
           mobile: ownerMobile,
-          template: process.env.BUSINESS_SMS_CHARGE_CONFIRM
+          template: config.BUSINESS_SMS_CHARGE_CONFIRM
         })
       }
     })

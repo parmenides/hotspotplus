@@ -123,7 +123,7 @@ const createDnsQuery = (
   if (departments && departments.length > 0) {
     const departmentsIdQueries: string[] = [];
     for (const department of departments) {
-      departmentsIdQueries.push(` nasId='${department}' `);
+      departmentsIdQueries.push(` departmentId='${department}' `);
     }
     whereParts.push(` (${departmentsIdQueries.join(' OR ')}) `);
   }

@@ -5,7 +5,7 @@
 var bunyan = require('bunyan');
 
 module.exports.createLogger = function() {
-  const name = process.env.APP_NAME || 'api-license';
+  const name = 'api-license';
   const path = process.env.LOG_DIR;
   return bunyan.createLogger({
     name: name,

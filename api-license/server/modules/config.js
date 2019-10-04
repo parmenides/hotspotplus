@@ -16,14 +16,32 @@ module.exports = {
   PAYPING_OAUTH2: 'https://oauth.payping.ir/connect/token',
   PAYPING_APP_REQUESTED_SCOPES: 'openid profile nationalcode phone pay:read pay:write',
   PAYMENT_API_KEY: process.env.PAYMENT_API_KEY,
-  ELASTIC_LICENSE_CHARGE:
-    elasticURL +
-    process.env.ELASTIC_INDEX_PREFIX +
-    'licensecharge',
-  ELASTIC_LICENSE_CHARGE_MAIN_CONTEXT:
-    elasticURL + process.env.ELASTIC_INDEX_PREFIX + 'licensecharge',
+  ELASTIC_LICENSE_CHARGE: elasticURL + 'hotspotpluslicensecharge',
+  ELASTIC_LICENSE_CHARGE_MAIN_CONTEXT: elasticURL + 'hotspotpluslicensecharge',
   LICENSE_TYPE_CHARGE: 'licenseCharge',
-  //PAYMENT_API_KEY: process.env.PAYMENT_API_KEY,
+  AGGREGATE: {
+    MINUTE_MILLISECONDS: 60 * 1000,
+    MINUTE_SECONDS: 60,
+    HOUR_MILLISECONDS: 60 * 60 * 1000,
+    DAY_MINUTES: 24 * 60,
+    DAY_MILLISECONDS: 24 * 60 * 60 * 1000,
+    WEEK_MILLISECONDS: 7 * 24 * 60 * 60 * 1000,
+    MONTH_FIRST_HALF_MILLISECONDS: 31 * 24 * 60 * 60 * 1000,
+    MONTH_SECOND_HALF_MILLISECONDS: 30 * 24 * 60 * 60 * 1000,
+    MONTH_MARCH_MILLISECONDS: 29 * 24 * 60 * 60 * 1000,
+    QUARTER_FIRST_HALF_MILLISECONDS: 3 * 31 * 24 * 60 * 60 * 1000,
+    QUARTER_SECOND_HALF_MILLISECONDS: 3 * 30 * 24 * 60 * 60 * 1000,
+    QUARTER_WINTER_MILLISECONDS:
+      2 * 30 * 24 * 60 * 60 * 1000 + 29 * 24 * 60 * 60 * 1000,
+    YEAR_MILLISECONDS:
+      6 * 31 * 24 * 60 * 60 * 1000 +
+      5 * 30 * 24 * 60 * 60 * 1000 +
+      29 * 24 * 60 * 60 * 1000,
+    YEAR_LEAP_MILLISECONDS:
+      6 * 31 * 24 * 60 * 60 * 1000 + 6 * 30 * 24 * 60 * 60 * 1000,
+    WEEK_DAYS: 7,
+    MONTH_DAYS: 30
+  },
   PAYMENT_GATEWAY_DEFAULT_DESC: 'خرید اعتبار از سایت هات اسپات پلاس',
   PAYMENT_SUPPORT_EMAIL: process.env.PAYMENT_SUPPORT_EMAIL,
   PAYMENT_SUPPORT_MOBILE: process.env.PAYMENT_SUPPORT_MOBILE,
@@ -254,7 +272,7 @@ module.exports = {
       }
     ]
   },
-  PASSWORD_PREFIX: process.env.PASSWORD_PREFIX,
+  PASSWORD_PREFIX: process.env.PASSWORD_PREFIX || '#$*%*#$^%@)',
   ADMIN_OWNER_ID: 'Admin',
   PERCENT_UNIT: 'percent',
   TOMAN_UNIT: 'toman',

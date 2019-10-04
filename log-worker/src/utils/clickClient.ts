@@ -1,4 +1,3 @@
-//tslint:disable-next-line
 import ClickHouse from '@apla/clickhouse';
 
 import { createLogger } from './logger';
@@ -13,6 +12,7 @@ if (!process.env.CLICK_HOST) {
 if (!process.env.CLICK_USER) {
   throw new Error('CLICK_USER is empty');
 }
+
 if (!process.env.CLICK_PASSWORD) {
   throw new Error('CLICK_PASSWORD is empty');
 }

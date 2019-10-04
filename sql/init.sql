@@ -6,6 +6,15 @@ create table IF NOT EXISTS hotspotplus.Charge(_id UUID,businessId String,type St
 engine=MergeTree()
 PARTITION BY toStartOfMonth( date )
 ORDER BY (businessId)
+
+
+CREATE MATERIALIZED VIEW IF NOT EXISTS  hotspotplus.Usage
+engine=SummingMergeTree((sessionTime,download,upload))
+PARTITION BY (toStartOfMonth( creationDate))
+ORDER BY (businessId,memberId,departmentId,sessionId)
+POPULATE AS SELECT *
+FROM hotspotplus.Session
+
 --create table IF NOT EXISTS hotspotplus.Usage(creationDate DateTime,accStatusType UInt8, sessionId String, businessId String,memberId String,nasId String,mac String,username String,download UInt32,upload UInt32,totalUsage UInt32,
 --sessionTime UInt32)
 --engine=SummingMergeTree((sessionTime,download,upload,totalUsage))

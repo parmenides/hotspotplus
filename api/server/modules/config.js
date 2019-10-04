@@ -39,8 +39,8 @@ module.exports = {
   PAYPING_APP_REQUESTED_SCOPES: 'openid profile nationalcode phone pay:read pay:write',
   PAYMENT_API_KEY: process.env.PAYMENT_API_KEY,
   SMS_SIGNATURE: process.env.SMS_SIGNATURE,
-  PASSWORD_PREFIX: process.env.PASSWORD_PREFIX,
-  SYSTEM_ID_PATH: process.env.SYSTEM_ID_PATH,
+  PASSWORD_PREFIX: process.env.PASSWORD_PREFIX || '#$*%*#$^%@)',
+  SYSTEM_ID_PATH: '/app/machine-id',
   PRIMARY_SHARED_SECRET: process.env.PRIMARY_SHARED_SECRET,
   ZARINPAL_SANDBOX: !!process.env.ZARINPAL_SANDBOX,
   TRIAL_DAYS: process.env.TRIAL_DAYS || 3,
@@ -106,7 +106,7 @@ module.exports = {
     SERVICEPROVIDER: 'serviceProvider',
     HOTSPOTMEMBER: 'member'
   },
-  LC_PATH: process.env.LC_PATH,
+  LC_PATH: '/key',
   CONFIG_SERVER_LOGIN: CONFIG_SERVER_URL + '/Licenses/login',
   CONFIG_SERVER_CHARGE_SMS:
     CONFIG_SERVER_URL + '/Sms/buySmsCredit?access_token={token}',
@@ -130,8 +130,9 @@ module.exports = {
     numberOfAllowedBusiness: 1
   },
   LOG: {
-    appName: 'PinFi',
-    LOG_DIR: process.env.LOG_DIR
+    appName: 'hotspotplus',
+    LOG_DIR: '/logs',
+    LOG_LEVEL: process.env.LOG_LEVEL || 'info'
   },
   REDIS: {
     HOST: process.env.REDIS_IP,
@@ -168,7 +169,6 @@ module.exports = {
     WEEK_DAYS: 7,
     MONTH_DAYS: 30
   },
-  NAS_SESSION_EXPIRES_AT: process.env.NAS_SESSION_EXPIRES_AT,
 
   THRESHOLD_BEFORE_BLOCKING_SERVICE_IN_DAYS: 1,
   ENGLISH_SMS_COST: 46,
@@ -506,7 +506,7 @@ module.exports = {
   ],
   DEFAULT_HOTSPOT_HELP:
     'برای اتصال به اینترنت، به شبکه وای فای متصل شوید. سپس با مرورگر کروم به سایت wifi.ir وارد شوید. پس از باز شدن صفحه با نام کاربری و رمز زیر به هات اسپات لاگین کنید.',
-  ENABLE_SENTRY: process.env.ENABLE_SENTRY === 'false',
+  ENABLE_SENTRY: process.env.ENABLE_SENTRY === 'true',
   SENTRY_RELEASE_TOKEN: process.env.SENTRY_RELEASE_TOKEN,
   SENTRY_URL: process.env.SENTRY_URL,
   ENABLE_DASHBOARD_SENTRY: process.env.ENABLE_DASHBOARD_SENTRY === 'true',

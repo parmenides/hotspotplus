@@ -1,13 +1,8 @@
-var app = require('../../server/server');
-var Q = require('q');
-var config = require('../../server/modules/config.js');
-var aggregate = require('../../server/modules/aggregates');
-var smsModule = require('../../server/modules/sms');
 var logger = require('../../server/modules/logger');
 var log = logger.createLogger();
 
 module.exports = function(Campaign) {
-  Campaign.sendBulkMessages = function(campaignId) {
+  /*Campaign.sendBulkMessages = function(campaignId) {
     var Member = app.models.Member;
     var Business = app.models.Business;
     var Coupon = app.models.Coupon;
@@ -258,7 +253,7 @@ module.exports = function(Campaign) {
         });
       });
     });
-  };
+  };*/
 
   Campaign.remoteMethod('sendBulkMessages', {
     description: 'send message to all members with mobile number',

@@ -394,7 +394,7 @@ exports.sendMessage = function(error, options, moduleName) {
   );
   Raven.setContext({
     user: {
-      username: moduleName || process.env.APP_NAME || 'coordinator'
+      username: moduleName || 'coordinator'
     }
   });
   Raven.mergeContext({
@@ -460,10 +460,12 @@ exports.writeStringToFileInPath = function(path, stringContent) {
     stream.end();
   });
 };
+/*
 
 exports.getApiAddress = function() {
   return process.env.INTERNAL_API_ADDRESS;
 };
+*/
 
 exports.getSystemUuid = function(path) {
   path = path || '/etc/machine-id';

@@ -10,7 +10,7 @@ module.exports = function (app) {
 
   router.post('/api/radius/authorize/:nasIp', async (req, res) => {
     try {
-      log.debug('#### Authorize #####')
+      log.error('#### Authorize #####')
 
       var Member = app.models.Member
       const AccessRequest = await RadiusAdaptor.RadiusMessage(req.body)
@@ -21,6 +21,7 @@ module.exports = function (app) {
       log.debug(RadiusResponse.getCode())
       return res.status(RadiusResponse.getCode()).json(RadiusResponse.getMessage())
     } catch (error) {
+      log.error(error)
       if (error.statusCode && error.message) {
         return res.status(error.statusCode || 500).json(error.message)
       }
@@ -37,6 +38,7 @@ module.exports = function (app) {
       return res.status(RadiusResponse.getCode()).json(RadiusResponse.getMessage())
     } catch (error) {
       log.error(error);
+      log.error(error)
       if (error.statusCode && error.message) {
         return res.status(error.statusCode || 500).json(error.message)
       }

@@ -3,15 +3,15 @@
  */
 
 var bunyan = require('bunyan');
-
+const config = require('../config')
 module.exports.createLogger = function() {
-  const name = process.env.APP_NAME || 'coordinator';
-  const path = process.env.LOG_DIR;
+  const name =  'coordinator';
+  const path = config.LOG_DIR;
   return bunyan.createLogger({
     name: name,
     streams: [
       {
-        level: process.env.LOG_LEVEL || 'debug',
+        level: process.env.LOG_LEVEL || 'info',
         path: path + '/' + name + '-debug.log'
       },
       {

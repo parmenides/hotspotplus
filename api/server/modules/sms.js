@@ -6,14 +6,15 @@ require('date-utils');
 var Q = require('q');
 var app = require('../server');
 var redis = require('redis');
-var REDIS_PORT = process.env.REDIS_PORT;
-var REDIS_HOST = process.env.REDIS_HOST;
+const config=  require('./config');
+var REDIS_PORT = config.REDIS.PORT;
+var REDIS_HOST = config.REDIS.HOST;
 var redisClient = redis.createClient(REDIS_PORT, REDIS_HOST);
 var logger = require('./logger');
 var log = logger.createLogger();
 var utility = require('./utility');
 var auth = require('./auth');
-var aggregate = require('../../server/modules/aggregates');
+var db = require('./db.factory')
 var CONFIG_SERVER_URL = process.env.CONFIG_SERVER_URL;
 var LICENSE_SERVER_SMS_API_URL =
   CONFIG_SERVER_URL + '/Sms/sendMessages?access_token={token}';
@@ -95,11 +96,11 @@ exports.send = function(data) {
                       return reject(error);
                     });
                 } else {
-                  aggregate
+                  db
                     .getProfileBalance(businessId)
                     .then(function(result) {
                       var balance = result.balance;
-                      if (balance > process.env.MIN_REQUIRED_SMS_CREDIT) {
+                      if (balance > config.MIN_REQUIRED_SMS_CREDIT) {
                         sendMessage(
                           mobile,
                           token1,
