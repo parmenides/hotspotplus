@@ -5,6 +5,10 @@ RUN mkdir /log
 COPY ./dist /app
 COPY ./package.json /app
 COPY ./package-lock.json /app
+RUN  mkdir /app/report-templates
+COPY ./report-templates /app/report-templates
+RUN ls /app
+RUN ls /app/report-templates
 WORKDIR /app
 ENV NPM_CONFIG_PREFIX=/app/.npm-global
 ENV PATH=$PATH:/app/.npm-global/bin
