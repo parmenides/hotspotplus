@@ -67,19 +67,12 @@ module.exports = function (Nas) {
     returns: {root: true}
   })
 
-  Nas.observe('persist', function (ctx, next) {
-    let entityId
-    if (ctx.instance && ctx.instance.id) {
-      entityId = ctx.instance.id
-    } else if (ctx.data && ctx.data.id) {
-      entityId = ctx.data.id
-    } else if (ctx.currentInstance && ctx.currentInstance.id) {
-      entityId = ctx.currentInstance.id
+  Nas.observe('after save', function (ctx, next) {
+    if (ctx.instance) {
+      const entity = ctx.instance
+      hspCache.clearCache(entity.id)
     }
-    if (entityId) {
-      hspCache.clearCache(entityId)
-    }
-    next()
+    next();
   })
 
   Nas.loadThemeConfigById = function (nasId, cb) {

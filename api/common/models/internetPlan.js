@@ -10,6 +10,10 @@ const hspCache = require('../../server/modules/hspCache')
 module.exports = function (InternetPlan) {
   InternetPlan.observe('after save', function (ctx, next) {
     var Business = app.models.Business
+    if (ctx.instance) {
+      const entity = ctx.instance
+      hspCache.clearCache(entity.id)
+    }
     if (ctx.isNewInstance) {
       var plan = ctx.instance
       //Business.updateBusinessHistoryActivity ( plan.businessId, { name: "Internet plan created" } );
@@ -254,22 +258,6 @@ module.exports = function (InternetPlan) {
       }
     ],
     returns: {root: true}
-  })
-
-
-  InternetPlan.observe('persist', function (ctx, next) {
-    let entityId
-    if (ctx.instance && ctx.instance.id) {
-      entityId = ctx.instance.id
-    } else if (ctx.data && ctx.data.id) {
-      entityId = ctx.data.id
-    } else if (ctx.currentInstance && ctx.currentInstance.id) {
-      entityId = ctx.currentInstance.id
-    }
-    if (entityId) {
-      hspCache.clearCache(entityId)
-    }
-    next()
   })
 
   InternetPlan.getPublicInternetPlans = function (businessId, clbk) {

@@ -167,6 +167,10 @@ module.exports = function (Business) {
 
   Business.observe('after save', function (ctx, next) {
     var Role = app.models.Role
+    if (ctx.instance) {
+      const entity = ctx.instance;
+      hspCache.clearCache(entity.id)
+    }
     if (ctx.isNewInstance) {
       var business = ctx.instance
       var businessId = ctx.instance.id
@@ -214,20 +218,6 @@ module.exports = function (Business) {
     }
   })
 
-  Business.observe('persist', function (ctx, next) {
-    let entityId
-    if (ctx.instance && ctx.instance.id) {
-      entityId = ctx.instance.id
-    } else if (ctx.data && ctx.data.id) {
-      entityId = ctx.data.id
-    } else if (ctx.currentInstance && ctx.currentInstance.id) {
-      entityId = ctx.currentInstance.id
-    }
-    if (entityId) {
-      hspCache.clearCache(entityId)
-    }
-    next()
-  })
 
   Business.registerNewLicense = function (mobile, fullname, title) {
     return Q.Promise(function (resolve, reject) {

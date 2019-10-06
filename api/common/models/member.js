@@ -25,14 +25,14 @@ module.exports = function (Member) {
   Member.validatesUniquenessOf('uniqueUserId')
 
   Member.signIn = async function (businessId, username, password, routerType, nasId, pinCode, mac, cb) {
-      log.debug('@Signin')
-      const {member} = await Member.checkAuthorization(businessId, nasId, username)
-      return cb(null, {
-        ok: true,
-        memberId: member.id,
-        active: member.active,
-        language: member.language,
-      })
+    log.debug('@Signin')
+    const {member} = await Member.checkAuthorization(businessId, nasId, username)
+    return cb(null, {
+      ok: true,
+      memberId: member.id,
+      active: member.active,
+      language: member.language,
+    })
 
   }
 
@@ -177,6 +177,13 @@ module.exports = function (Member) {
 
   Member.observe('after save', function (ctx, next) {
     var Role = app.models.Role
+
+    if (ctx.instance) {
+      const entity = ctx.instance;
+      hspCache.clearCache(entity.id)
+      hspCache.clearCache(`${entity.businessId}:${entity.username}`)
+    }
+
     if (ctx.isNewInstance) {
       var id = ctx.instance.id
       Role.findOne({where: {name: config.ROLES.HOTSPOTMEMBER}}, function (
@@ -209,20 +216,6 @@ module.exports = function (Member) {
     }
   })
 
-  Member.observe('persist', function (ctx, next) {
-    let entityId
-    if (ctx.instance && ctx.instance.id) {
-      entityId = ctx.instance.id
-    } else if (ctx.data && ctx.data.id) {
-      entityId = ctx.data.id
-    } else if (ctx.currentInstance && ctx.currentInstance.id) {
-      entityId = ctx.currentInstance.id
-    }
-    if (entityId) {
-      hspCache.clearCache(entityId)
-    }
-    next()
-  })
 
   Member.observe('before save', function (ctx, next) {
     if (ctx.instance) {

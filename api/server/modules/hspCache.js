@@ -12,8 +12,9 @@ const cacheIt = async (id, jsonData) => {
   try {
     const data = JSON.stringify(jsonData)
     id = id.toString()
-    await redisClient.set(id, data)
+    const result = await redisClient.set(id, data)
     await redisClient.expire(id, config.APP_CACHE_TTL)
+    log.debug('cached in ',result)
   } catch (e) {
     log.error('failed to stringify json to cache')
   }
@@ -21,7 +22,12 @@ const cacheIt = async (id, jsonData) => {
 const clearCache = async (id) => {
   if (id) {
     log.debug(`going to clear up cache for id: ${id}`)
-    return redisClient.del(id)
+    redisClient.del(id.toString(), (error, result) => {
+      if (error) {
+        log.error(error)
+      }
+      log.debug('cleared up',result)
+    })
   }
 }
 
@@ -33,6 +39,7 @@ const readFromCache = async (id) => {
   const data = await redisClient.get(id)
   if (data) {
     try {
+      log.debug('reading from cache:', id)
       return JSON.parse(data)
     } catch (e) {
       log.error(`failed to parse data from cache id ${id}`)
