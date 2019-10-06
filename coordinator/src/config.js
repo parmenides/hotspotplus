@@ -18,7 +18,7 @@ module.exports = {
     CONFIG_SERVER_URL +
     '/Licenses/downloadLicense?systemUuid={systemUuid}&access_token={token}',
   PASSWORD_PREFIX: '#$*%*#$^%@)',
-  PING_JOB_SCHEDULER: '*/15 * * * *',
+  PING_JOB_SCHEDULER: '0 1 * * *',
   LC_PATH: '/key',
   LOG_DIR: '/logs',
 };

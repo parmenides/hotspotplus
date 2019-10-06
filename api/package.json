@@ -33,7 +33,7 @@
     "pretest": "eslint .",
     "build:dev:angular": "export $(cat .env | xargs) && lb-ng ./server/server.js  ./server/lb-services.js",
     "build:prod:angular": "export $(cat .env | xargs) && lb-ng ./server/server.js  ./server/lb-services.js",
-    "build": "echo 'no build'",
+    "build": "export $(cat .env | xargs) && pkg -t node10-linux-x64  ./server/server.js  -o hotspotplus-api",
     "releaseSandbox": "grunt ;git commit -a -m 'sandbox:latest';git tag -f release ;git push -u origin develop --tags --force",
     "releaseProduction": "grunt ;git commit -a -m 'production:4.2.17';git tag -f release ;git push -u origin master --tags --force",
     "releaseLocalProduction": "grunt ;git commit -a -m 'production:latest';git tag -f release ;git push -u origin master --tags --force",
