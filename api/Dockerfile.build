@@ -1,6 +1,8 @@
-FROM alpine:latest
+FROM ubuntu:xenial
 
-COPY ./hotspotplus-api /opt
-RUN chmod a+x /opt/hotspotplus-api
-RUN ls /opt
-ENTRYPOINT ["/opt/hotspotplus-api"]
+RUN mkdir /log
+RUN mkdir /key
+RUN mkdir /app
+COPY ./hotspotplus-coordinator /app
+RUN chmod a+x /app/hotspotplus-coordinator
+CMD /app/hotspotplus-coordinator
