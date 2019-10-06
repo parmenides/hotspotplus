@@ -132,7 +132,8 @@ app.controller('dnsReport', [
           enableSorting: false,
           cellClass: 'center',
           headerCellClass: 'headerCenter',
-          headerCellFilter: 'translate'
+          headerCellFilter: 'translate',
+          cellTemplate: '<div class="ui-grid-cell-contents ltr-text">{{row.entity.jalaliDate}}</div>'
         },
       ],
       onRegisterApi: function (gridApi) {

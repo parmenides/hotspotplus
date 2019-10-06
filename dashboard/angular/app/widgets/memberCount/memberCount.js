@@ -31,7 +31,7 @@ app.directive('memberCount', [
           options.businessId = $scope.params.businessId;
           options.fromDate = $scope.params.fromDate;
           options.endDate = $scope.params.endDate;
-          options.departmentId = $scope.params.departmentId;
+          options.departmentId = $scope.params.departmentId || 'all';
           Member.getAllMembersCount(options).$promise.then(
             function(result) {
               $scope.allMembers = result.allMembers;

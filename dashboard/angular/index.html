@@ -38,56 +38,56 @@
 <script src="js/app5.angular.js"></script>
 <script>
 
-	Window.appStatus = 'production';
-	Window.appDomain = location.host;
-	Window.API_URL="";
-	if ( Window.appStatus === 'test'   ) {
-		Window.API_URL = "http://my.localhotspot.ir";
-	}
-	angular.element ( document ).ready ( function () {
-		$.ajax ( {
-			type:    "POST",
-			url:     Window.API_URL + "/api/config/systemConfig",
-			method:  'POST',
-			success: function ( systemConfig, textStatus, jqXHR ) {
-				setConfig ( systemConfig );
-				setupRaven ();
-				/*if ( Window.enableSentry ) {
-				}*/
-				angular.bootstrap ( document, [ "app" ] );
-			},
-			error:   function ( jqXHR, textStatus, errorThrown ) {
-				console.log ( textStatus );
-				console.log ( errorThrown );
-				alert ( "Error, Contact Support!" );
-			}
-		} );
+  Window.appStatus = 'production'
+  Window.appDomain = location.host
+  Window.API_URL = ''
+  if (Window.appStatus === 'test') {
+    Window.API_URL = 'http://my.localhotspot.ir'
+  }
+  angular.element(document).ready(function () {
+    $.ajax({
+      type: 'POST',
+      url: Window.API_URL + '/api/config/systemConfig',
+      method: 'POST',
+      success: function (systemConfig, textStatus, jqXHR) {
+        setConfig(systemConfig)
+        setupRaven()
+        /*if ( Window.enableSentry ) {
+        }*/
+        angular.bootstrap(document, ['app'])
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        console.log(textStatus)
+        console.log(errorThrown)
+        alert('Error, Contact Support!')
+      }
+    })
 
-		function setConfig ( systemConfig ) {
-			Window.serviceStatus = systemConfig.serviceStatus;
-			Window.appTitle = systemConfig.appTitle;
-			Window.enableSentry = systemConfig.enableSentry;
-			Window.sentryUrl = systemConfig.sentryUrl;
-			Window.sentryReleaseToken = systemConfig.sentryReleaseToken || "default";
-			Window.isDefault = systemConfig.isDefault || false;
-			Window.systemConfig = systemConfig;
-		}
+    function setConfig (systemConfig) {
+      Window.serviceStatus = systemConfig.serviceStatus
+      Window.appTitle = systemConfig.appTitle
+      Window.enableSentry = systemConfig.enableSentry
+      Window.sentryUrl = systemConfig.sentryUrl
+      Window.sentryReleaseToken = systemConfig.sentryReleaseToken || 'default'
+      Window.isDefault = systemConfig.isDefault || false
+      Window.systemConfig = systemConfig
+    }
 
-		function setupRaven ( id, username ) {
-			var userInfo = {};
-			if ( id ) {
-				userInfo.id = id;
-				userInfo.email = username;
-			}
-			Raven.config ( Window.sentryUrl, {
-				release:            Window.sentryReleaseToken,
-				shouldSendCallback: function () {
-					return Window.enableSentry;
-				}
-			} ).addPlugin ( Raven.Plugins.Angular ).install ();
-		}
+    function setupRaven (id, username) {
+      var userInfo = {}
+      if (id) {
+        userInfo.id = id
+        userInfo.email = username
+      }
+      Raven.config(Window.sentryUrl, {
+        release: Window.sentryReleaseToken,
+        shouldSendCallback: function () {
+          return Window.enableSentry
+        }
+      }).addPlugin(Raven.Plugins.Angular).install()
+    }
 
-	} );
+  })
 </script>
 </body>
 </html>
