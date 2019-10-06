@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM ubuntu:xenial
 
 RUN mkdir /log
 RUN mkdir /key

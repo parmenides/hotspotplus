@@ -1,6 +1,6 @@
 FROM alpine:latest
 
-RUN mkdir /app
-COPY ./hotspotplus-api /app
-RUN chmod a+x /app/hotspotplus-api
-CMD /app/hotspotplus-api
+COPY ./hotspotplus-api /opt
+RUN chmod a+x /opt/hotspotplus-api
+RUN ls /opt
+ENTRYPOINT ["/opt/hotspotplus-api"]
