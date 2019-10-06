@@ -131,7 +131,7 @@ module.exports = {
   },
   LOG: {
     appName: 'hotspotplus',
-    LOG_DIR: '/logs',
+    LOG_DIR: process.env.LOG_PATH || '/logs',
     LOG_LEVEL: process.env.LOG_LEVEL || 'info'
   },
   REDIS: {

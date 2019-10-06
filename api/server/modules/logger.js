@@ -8,6 +8,7 @@ const config = require('./config');
 module.exports.createLogger = function() {
   const name = 'API';
   const path = config.LOG.LOG_DIR;
+
   return bunyan.createLogger({
     name: name,
     streams: [

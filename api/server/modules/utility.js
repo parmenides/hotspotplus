@@ -484,3 +484,12 @@ exports.getSystemUuid = function (path) {
   })
 }
 
+exports.checkDirectory = function (directory, callback) {
+  fs.stat(directory, function (error, stats) {
+    if (error) {
+      callback(error)
+    } else {
+      callback(null,stats)
+    }
+  })
+}
