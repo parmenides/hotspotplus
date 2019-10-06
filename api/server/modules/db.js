@@ -87,13 +87,13 @@ SELECT arrayJoin(timeSlots(toDateTime('${from}'), toUInt32(${intervalInSeconds}*
       const to = moment.utc(endDate).format(config.DATABASE_DATE_FORMAT)
       const sqlQuery = `SELECT toInt32(SUM(upload)) as upload,toInt32(SUM(download)) download,toInt32(SUM(sessionTime)) as sessionTime FROM ${USAGE_TABLE}
 WHERE creationDate>=toDateTime('${from}') AND creationDate<=toDateTime('${to}') AND businessId='${businessId}' AND memberId='${memberId}' `
-
+      log.debug(sqlQuery);
       return query(sqlQuery).then((result) => {
-        const {upload, download, sessionTime, bulk} = result[0]
+        const {upload, download, sessionTime} = result[0]
         log.debug({result})
         return {
           memberId: memberId,
-          bulk: Number(bulk),
+          bulk: Number(download) + Number(upload),
           download: Number(download),
           upload: Number(upload),
           sessionTime: Number(sessionTime)

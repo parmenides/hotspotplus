@@ -12,7 +12,7 @@ var needle = require('needle')
 var redis = require('redis')
 var crypto = require('crypto')
 const db = require('../../server/modules/db.factory')
-const hspCache = require('../../server/modules/hspCache')
+const cacheManager = require('../../server/modules/cacheManager')
 
 var redisInvoicePayed = redis.createClient(
   config.REDIS.PORT,
@@ -28,13 +28,13 @@ module.exports = function (Business) {
   var log = logger.createLogger()
 
   Business.loadById = async function (id) {
-    const cachedBusiness = await hspCache.readFromCache(id)
+    const cachedBusiness = await cacheManager.readFromCache(id)
     if (cachedBusiness) {
       return cachedBusiness
     }
     const business = await Business.findById(id)
     log.warn('from db...', business)
-    hspCache.cacheIt(id, business)
+    cacheManager.cacheIt(id, business)
     return business
   }
 
@@ -169,7 +169,7 @@ module.exports = function (Business) {
     var Role = app.models.Role
     if (ctx.instance) {
       const entity = ctx.instance;
-      hspCache.clearCache(entity.id)
+      cacheManager.clearCache(entity.id)
     }
     if (ctx.isNewInstance) {
       var business = ctx.instance

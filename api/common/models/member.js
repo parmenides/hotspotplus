@@ -19,7 +19,7 @@ var fs = require('fs')
 const createHttpError = require('http-errors')
 var hotspotMessages = require('../../server/modules/hotspotMessages')
 var csvtojson = require('csvtojson')
-const hspCache = require('../../server/modules/hspCache')
+const cacheManager = require('../../server/modules/cacheManager')
 
 module.exports = function (Member) {
   Member.validatesUniquenessOf('uniqueUserId')
@@ -179,9 +179,9 @@ module.exports = function (Member) {
     var Role = app.models.Role
 
     if (ctx.instance) {
-      const entity = ctx.instance;
-      hspCache.clearCache(entity.id)
-      hspCache.clearCache(`${entity.businessId}:${entity.username}`)
+      const entity = ctx.instance
+      cacheManager.clearCache(entity.id)
+      cacheManager.clearCache(`${entity.businessId}:${entity.username}`)
     }
 
     if (ctx.isNewInstance) {
@@ -215,7 +215,6 @@ module.exports = function (Member) {
       return next()
     }
   })
-
 
   Member.observe('before save', function (ctx, next) {
     if (ctx.instance) {
@@ -508,8 +507,8 @@ module.exports = function (Member) {
   })
 
   Member.getMemberByUserName = async function (businessId, username) {
-    const cacheKey = `${businessId}:${username}`
-    const cachedMember = await hspCache.readFromCache(cacheKey)
+    const cacheKey = `${businessId}:${Member.createUsername(businessId, username)}`
+    const cachedMember = await cacheManager.readFromCache(cacheKey)
     if (cachedMember) {
       return cachedMember
     }
@@ -521,7 +520,7 @@ module.exports = function (Member) {
         ]
       }
     })
-    hspCache.cacheIt(cacheKey, member)
+    cacheManager.cacheIt(cacheKey, member)
     return member
   }
 
@@ -579,6 +578,7 @@ module.exports = function (Member) {
     }
 
     const usageReport = await Member.getInternetUsage(businessId.toString(), member.id.toString(), duration.from.getTime(), duration.to.getTime())
+    log.error(usageReport)
     const remainingBulk = Member.hasEnoughBulk(internetPlan, usageReport.bulk, member.extraBulk)
     if (remainingBulk <= 0) {
       throw createError(403, Radius_Messages.outOfBulk)
@@ -674,72 +674,16 @@ module.exports = function (Member) {
   }
 
   Member.getSubscriptionDuration = function (member, internetPlan) {
-    var subscriptionDate = new Date(member.subscriptionDate)
     var now = new Date()
-    var numberOfMonthsOrDays = internetPlan.duration
-    var planType = internetPlan.type
-    var validDuration = getDuration(
-      now,
-      subscriptionDate,
-      numberOfMonthsOrDays,
-      planType,
-      internetPlan.autoResubscribe
-    )
-    if (validDuration && validDuration.from && validDuration.to) {
-      return validDuration
+    var subscriptionDate = new Date(member.subscriptionDate)
+    const planDuration = Number(internetPlan.duration)
+    var to = new Date(subscriptionDate)
+    to.add({hours: 24 * planDuration})
+    if (now.between(subscriptionDate, to)) {
+      log.debug('It works and has a subscription')
+      return {from: subscriptionDate, to}
     } else {
-      return
-    }
-
-    function getDuration (
-      now,
-      from,
-      monthsOrDays,
-      planType,
-      isAutoResubscribe
-    ) {
-      monthsOrDays = Number(monthsOrDays)
-      var to = new Date(from.getTime())
-      if (planType === 'monthly') {
-        var daysInMonth = Date.getDaysInMonth(
-          from.getFullYear(),
-          from.getMonth()
-        )
-        to.add({days: daysInMonth})
-      } else if (planType === 'daily') {
-        to.add({hours: 24})
-      } else if (planType === 'dynamic') {
-        to.add({hours: 24 * monthsOrDays})
-        if (isAutoResubscribe === true) {
-          //if isAutoResubscribe is enabled consider midnight for end date;
-          to.clearTime()
-        }
-      }
-      log.debug('Checking subscription duration between for', now)
-      log.debug('from: ', from)
-      log.debug('to: ', to)
-      if (now.between(from, to)) {
-        log.debug('It works and has a subscription')
-        return {from: from, to: to}
-      } else {
-        monthsOrDays--
-        if (
-          monthsOrDays > 0 &&
-          (planType === 'daily' || planType === 'monthly')
-        ) {
-          log.debug('need more checks on next month or day: ', monthsOrDays)
-          return getDuration(
-            now,
-            to,
-            monthsOrDays,
-            planType,
-            isAutoResubscribe
-          )
-        } else {
-          log.debug('no check just returns null ', monthsOrDays)
-          return null
-        }
-      }
+      return null
     }
   }
 
@@ -3566,13 +3510,13 @@ module.exports = function (Member) {
   })
 
   Member.loadById = async function (id) {
-    const cachedMember = await hspCache.readFromCache(id)
+    const cachedMember = await cacheManager.readFromCache(id)
     if (cachedMember) {
       return cachedMember
     }
     const member = await Member.findById(id)
     log.warn('from db...', member)
-    hspCache.cacheIt(id, member)
+    cacheManager.cacheIt(id, member)
     return member
   }
 }

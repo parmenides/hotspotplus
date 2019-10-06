@@ -5,32 +5,25 @@ var config = require('../../server/modules/config.js')
 var logger = require('../../server/modules/logger')
 var log = logger.createLogger()
 var hotspotMessages = require('../../server/modules/hotspotMessages')
-const hspCache = require('../../server/modules/hspCache')
+const cacheManager = require('../../server/modules/cacheManager')
 
 module.exports = function (InternetPlan) {
   InternetPlan.observe('after save', function (ctx, next) {
-    var Business = app.models.Business
     if (ctx.instance) {
       const entity = ctx.instance
-      hspCache.clearCache(entity.id)
+      cacheManager.clearCache(entity.id)
     }
-    if (ctx.isNewInstance) {
-      var plan = ctx.instance
-      //Business.updateBusinessHistoryActivity ( plan.businessId, { name: "Internet plan created" } );
-      next()
-    } else {
-      next()
-    }
+    next()
   })
 
   InternetPlan.loadById = async function (id) {
-    const cachedInternetPlan = await hspCache.readFromCache(id)
+    const cachedInternetPlan = await cacheManager.readFromCache(id)
     if (cachedInternetPlan) {
       return cachedInternetPlan
     }
     const plan = await InternetPlan.findById(id)
     log.warn('from db...', plan)
-    hspCache.cacheIt(id, plan)
+    cacheManager.cacheIt(id, plan)
     return plan
   }
 

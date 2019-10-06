@@ -5,7 +5,7 @@ var config = require('../../server/modules/config')
 var Q = require('q')
 var hotspotMessages = require('../../server/modules/hotspotMessages')
 var hotspotTemplates = require('../../server/modules/hotspotTemplates')
-const hspCache = require('../../server/modules/hspCache')
+const cacheManager = require('../../server/modules/cacheManager')
 
 module.exports = function (Nas) {
   Nas.validatesUniquenessOf('nasIpPortKey')
@@ -70,7 +70,7 @@ module.exports = function (Nas) {
   Nas.observe('after save', function (ctx, next) {
     if (ctx.instance) {
       const entity = ctx.instance
-      hspCache.clearCache(entity.id)
+      cacheManager.clearCache(entity.id)
     }
     next();
   })
@@ -160,13 +160,13 @@ module.exports = function (Nas) {
   }
 
   Nas.loadById = async (id) => {
-    const cachedNas = await hspCache.readFromCache(id)
+    const cachedNas = await cacheManager.readFromCache(id)
     if (cachedNas) {
       return cachedNas
     }
     const nas = await Nas.findById(id)
     log.warn('from db...', nas)
-    hspCache.cacheIt(id, nas)
+    cacheManager.cacheIt(id, nas)
     return nas
   }
 }
