@@ -3,37 +3,13 @@
   "version": "4.0.2",
   "main": "server/server.js",
   "bin": "server/server.js",
-  "pkg": {
-    "scripts": [
-      "server/boot/**/*.js",
-      "node_modules/loopback/server/middleware/*.js",
-      "node_modules/loopback/lib/connectors/*.js",
-      "node_modules/loopback/common/**/*.js",
-      "node_modules/moment/locale/*.js",
-      "common/**/*.js"
-    ],
-    "assets": [
-      "node_modules/*/node_modules/loopback-phase/intl/**/*.json",
-      "node_modules/*/intl/**/*.json",
-      "node_modules/*/node_modules/strong-globalize/cldr/*.json",
-      "node_modules/loopback/common/**/*.json",
-      "node_modules/strong-globalize/cldr/*.json",
-      "node_modules/strong-remoting/node_modules/strong-error-handler/intl/**/*.json",
-      "node_modules/strong-remoting/node_modules/strong-error-handler/views/*",
-      "node_modules/strong-error-handler/intl/**/*.json",
-      "node_modules/strong-error-handler/views/*",
-      "client/dist/*",
-      "common/**/*.json",
-      "server/**/*.json"
-    ]
-  },
   "scripts": {
     "start": "node server/server.js",
     "start:dev": "supervisor -w server,common ./server/server.js",
     "pretest": "eslint .",
     "build:dev:angular": "export $(cat .env | xargs) && lb-ng ./server/server.js  ./server/lb-services.js",
     "build:prod:angular": "export $(cat .env | xargs) && lb-ng ./server/server.js  ./server/lb-services.js",
-    "build": "export $(cat .env | xargs) && pkg -t node10-linux-x64  ./server/server.js  -o hotspotplus-api",
+    "build":"echo 'ok'",
     "releaseSandbox": "grunt ;git commit -a -m 'sandbox:latest';git tag -f release ;git push -u origin develop --tags --force",
     "releaseProduction": "grunt ;git commit -a -m 'production:4.2.17';git tag -f release ;git push -u origin master --tags --force",
     "releaseLocalProduction": "grunt ;git commit -a -m 'production:latest';git tag -f release ;git push -u origin master --tags --force",
