@@ -58,7 +58,7 @@ ORDER BY (nasIp,memberIp,domain,toStartOfInterval( receivedAt , INTERVAL 1 day )
       const durationInDays = moment(endDate).diff(moment(startDate), 'days')
       const sqlQuery = `
 SELECT * FROM (
-SELECT any(toStartOfInterval(creationDate,INTERVAL ${intervalInSeconds} second)) as date ,toInt32(SUM(upload)) as upload,toInt32(SUM(download)) download,toInt32(SUM(sessionTime)) as sessionTime
+SELECT any(toStartOfInterval(creationDate,INTERVAL ${intervalInSeconds} second)) as date ,toInt64(SUM(upload)) as upload,toInt64(SUM(download)) download,toInt64(SUM(sessionTime)) as sessionTime
 FROM ${USAGE_TABLE}
 WHERE creationDate>=toDateTime('${from}') AND creationDate<=toDateTime('${to}') AND businessId='${businessId}' ${departmentId ? ` AND departmentId='${departmentId}'` : ''}
 GROUP BY toStartOfInterval(creationDate,INTERVAL ${intervalInSeconds} second) order by date
@@ -85,7 +85,7 @@ SELECT arrayJoin(timeSlots(toDateTime('${from}'), toUInt32(${intervalInSeconds}*
 
       const from = moment.utc(startDate).format(config.DATABASE_DATE_FORMAT)
       const to = moment.utc(endDate).format(config.DATABASE_DATE_FORMAT)
-      const sqlQuery = `SELECT toInt32(SUM(upload)) as upload,toInt32(SUM(download)) download,toInt32(SUM(sessionTime)) as sessionTime FROM ${USAGE_TABLE}
+      const sqlQuery = `SELECT toInt64(SUM(upload)) as upload,toInt64(SUM(download)) download,toInt64(SUM(sessionTime)) as sessionTime FROM ${USAGE_TABLE}
 WHERE creationDate>=toDateTime('${from}') AND creationDate<=toDateTime('${to}') AND businessId='${businessId}' AND memberId='${memberId}' `
       log.debug(sqlQuery);
       return query(sqlQuery).then((result) => {
@@ -110,7 +110,7 @@ WHERE creationDate>=toDateTime('${from}') AND creationDate<=toDateTime('${to}') 
 
       const from = moment.utc(startDate).format(config.DATABASE_DATE_FORMAT)
       const to = moment.utc(endDate).format(config.DATABASE_DATE_FORMAT)
-      const sqlQuery = `SELECT toInt32(SUM(upload)) as upload,toInt32(SUM(download)) download,toInt32(SUM(sessionTime)) as sessionTime FROM ${USAGE_TABLE}
+      const sqlQuery = `SELECT toInt64(SUM(upload)) as upload,toInt64(SUM(download)) download,toInt64(SUM(sessionTime)) as sessionTime FROM ${USAGE_TABLE}
 WHERE creationDate>=toDateTime('${from}') AND creationDate<=toDateTime('${to}') AND businessId='${businessId}' ${departmentId ? `AND departmentId='${departmentId}'` : ''}`
 
       return query(sqlQuery).then((result) => {
@@ -134,7 +134,7 @@ WHERE creationDate>=toDateTime('${from}') AND creationDate<=toDateTime('${to}') 
 
       const from = moment.utc(startDate).format(config.DATABASE_DATE_FORMAT)
       const to = moment.utc(endDate).format(config.DATABASE_DATE_FORMAT)
-      const sqlQuery = `SELECT memberId,any(username) as username,toInt32(SUM(upload)) as upload,toInt32(SUM(download)) download,toInt32(SUM(sessionTime)) as sessionTime FROM ${USAGE_TABLE}
+      const sqlQuery = `SELECT memberId,any(username) as username,toInt64(SUM(upload)) as upload,toInt64(SUM(download)) download,toInt64(SUM(sessionTime)) as sessionTime FROM ${USAGE_TABLE}
 WHERE creationDate>=toDateTime('${from}') AND creationDate<=toDateTime('${to}') AND businessId='${businessId}' ${departmentId ? `AND departmentId='${departmentId}'` : ''} 
     GROUP BY memberId ORDER BY download DESC,upload DESC, sessionTime DESC LIMIT ${limit} OFFSET ${skip} 
 `
@@ -228,7 +228,7 @@ any(username),any(framedIpAddress),any(mac),any(creationDate),any(download),any(
       try {
 
         const sqlQuery = `SELECT any(framedIpAddress) as framedIpAddress,sessionId,any(nasIp) as nasIp,
-any(username) as username,any(memberId) as memberId,toInt32(sum(download)) as download,toInt32(sum(upload)) as upload,toInt32(sum(sessionTime)) as sessionTime
+any(username) as username,any(memberId) as memberId,toInt64(sum(download)) as download,toInt64(sum(upload)) as upload,toInt64(sum(sessionTime)) as sessionTime
  FROM ${USAGE_TABLE} WHERE sessionId='${sessionId}'
  GROUP BY sessionId `
 
