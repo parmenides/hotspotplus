@@ -131,7 +131,6 @@ module.exports = async function (app) {
 
 
   //radius.startRadius ();
-  utility.installRaven();
   redisLicenseReload.on('message', function() {
     process.exit(1);
   });
