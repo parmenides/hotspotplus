@@ -6,12 +6,10 @@ var crypto = require('crypto')
 var algorithm = 'aes192'
 var temp = require('temp').track()
 var EasyZip = require('easy-zip').EasyZip
-var Raven = require('raven')
 var logger = require('./logger')
 var config = require('./config')
 var fs = require('fs')
 var log = logger.createLogger()
-var RAVEN_SERVER_ADDRESS = process.env.SENTRY_URL
 
 Date.myNewDate = function () {
   var myNow = new Date()
@@ -378,42 +376,6 @@ exports.clean = function (sourceArray, deleteValue) {
   return sourceArray
 }
 
-exports.installRaven = function () {
-  Raven.config(RAVEN_SERVER_ADDRESS, {
-    release: process.env.SENTRY_RELEASE_TOKEN || 'defaultRelease',
-    shouldSendCallback: function () {
-      return config.ENABLE_SENTRY
-    }
-  }).install()
-}
-
-exports.sendMessage = function (error, options, moduleName) {
-  if (!config.ENABLE_SENTRY) {
-    return
-  }
-  log.debug(
-    ' ################ Sending error to sentry ################ ',
-    error
-  )
-  Raven.setContext({
-    user: {
-      username: moduleName || 'API'
-    }
-  })
-  Raven.mergeContext({
-    tags: options
-  })
-  Raven.captureException(error, function (sendErr) {
-    if (sendErr) {
-      log.debug(
-        ' #######################  Failed to send captured exception to Sentry ########################  ',
-        sendErr
-      )
-      return
-    }
-    log.debug('error sent to sentry')
-  })
-}
 
 exports.printJobQueueStates = function (logger, thqQueue, queueName) {
   thqQueue.getJobCounts().then(function (result) {

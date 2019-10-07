@@ -22,7 +22,6 @@ module.exports = async function (app) {
   await db.init()
 
   log.debug('App started');
-  utility.sendMessage('Server started', { fileName: 'boot.js' });
 
   function addDefaultRolesAndUsers() {
     Q.all([

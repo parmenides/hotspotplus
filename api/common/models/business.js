@@ -1149,11 +1149,6 @@ module.exports = function (Business) {
                               })
                               .fail(function (error) {
                                 log.error(error)
-                                utility.sendMessage(error, {
-                                  type: 'FailedToAddResellerCommission',
-                                  resellerId: business.resellerId,
-                                  businessId: businessId,
-                                })
                               })
                           }
                           return resolve({
@@ -2415,10 +2410,6 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
                 )
             })
             .fail(function (error) {
-              utility.sendMessage(
-                'failed to open local payment gateway not found',
-                {error: error},
-              )
               log.error('failed to open payment gateway')
               log.error(error)
               return reject(error)
