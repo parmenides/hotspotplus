@@ -82,7 +82,7 @@ module.exports = function (ClientSession) {
     await Usage.cacheUsage(session)
     session.download = calculatedUsage.download
     session.upload = calculatedUsage.upload
-    session.sessionTime= calculatedUsage.sessionTime
+    session.sessionTime = calculatedUsage.sessionTime
     //session = {...session, ...calculatedUsage}
     log.debug(session)
     await ClientSession.sendToBroker(session)
@@ -138,7 +138,9 @@ module.exports = function (ClientSession) {
     const activeSessions = await db.getActiveSessionIds(businessId, departmentId, startDate, endDate, skip, limit)
     for (const session of activeSessions) {
       const sessionData = await db.getSessionUsage(session.sessionId)
-      sessions.push(sessionData)
+      if (sessionData && sessionData.memberId) {
+        sessions.push(sessionData)
+      }
     }
     return sessions
     //return cb(null, {data: 'noReport'})
