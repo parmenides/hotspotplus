@@ -139,6 +139,9 @@ module.exports = function (ClientSession) {
     for (const session of activeSessions) {
       const sessionData = await db.getSessionUsage(session.sessionId)
       if (sessionData && sessionData.memberId) {
+        sessionData.download = Number(sessionData.download)
+        sessionData.upload = Number(sessionData.upload)
+        sessionData.sessionTime = Number(sessionData.sessionTime)
         sessions.push(sessionData)
       }
     }
