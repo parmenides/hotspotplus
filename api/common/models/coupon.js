@@ -1,4 +1,4 @@
-var config = require('../../server/modules/config');
+const config = require('../../server/modules/config');
 module.exports = function(Coupon) {
   Coupon.validatesUniquenessOf('uniqueCouponId');
 
@@ -15,8 +15,8 @@ module.exports = function(Coupon) {
     Coupon.findOne(
       {
         where: {
-          and: [{ code: giftCode }, { ownerId: config.ADMIN_OWNER_ID }]
-        }
+          and: [{code: giftCode}, {ownerId: config.ADMIN_OWNER_ID}],
+        },
       },
       function(error, result) {
         if (error) {
@@ -28,7 +28,7 @@ module.exports = function(Coupon) {
   };
 
   Coupon.remoteMethod('verifyGiftCode', {
-    accepts: [{ arg: 'giftCode', type: 'string', required: true }],
-    returns: { root: true }
+    accepts: [{arg: 'giftCode', type: 'string', required: true}],
+    returns: {root: true},
   });
 };

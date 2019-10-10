@@ -1,180 +1,180 @@
-var logger = require('../../server/modules/logger')
-var app = require('../../server/server')
-var config = require('../../server/modules/config')
-var utility = require('../../server/modules/utility')
-var Payment = require('../../server/modules/payment')
-var request = require('request')
-var Q = require('q')
-var smsModule = require('../../server/modules/sms')
-var serviceInfo = require('../../server/modules/serviceInfo.js')
-var auth = require('../../server/modules/auth')
-var needle = require('needle')
-var redis = require('redis')
-var crypto = require('crypto')
-const db = require('../../server/modules/db.factory')
-const cacheManager = require('../../server/modules/cacheManager')
+const logger = require('../../server/modules/logger');
+const app = require('../../server/server');
+const config = require('../../server/modules/config');
+const utility = require('../../server/modules/utility');
+const Payment = require('../../server/modules/payment');
+const request = require('request');
+const Q = require('q');
+const smsModule = require('../../server/modules/sms');
+const serviceInfo = require('../../server/modules/serviceInfo.js');
+const auth = require('../../server/modules/auth');
+const needle = require('needle');
+const redis = require('redis');
+const crypto = require('crypto');
+const db = require('../../server/modules/db.factory');
+const cacheManager = require('../../server/modules/cacheManager');
 
-var redisInvoicePayed = redis.createClient(
+const redisInvoicePayed = redis.createClient(
   config.REDIS.PORT,
   config.REDIS.HOST,
-)
+);
 
-var underscore = require('underscore')
-var hotspotMessages = require('../../server/modules/hotspotMessages')
-var hotspotTemplates = require('../../server/modules/hotspotTemplates')
-var extend = require('util')._extend
+const underscore = require('underscore');
+const hotspotMessages = require('../../server/modules/hotspotMessages');
+const hotspotTemplates = require('../../server/modules/hotspotTemplates');
+const extend = require('util')._extend;
 
-module.exports = function (Business) {
-  var log = logger.createLogger()
+module.exports = function(Business) {
+  const log = logger.createLogger();
 
-  Business.loadById = async function (id) {
-    const cachedBusiness = await cacheManager.readFromCache(id)
+  Business.loadById = async function(id) {
+    const cachedBusiness = await cacheManager.readFromCache(id);
     if (cachedBusiness) {
-      return cachedBusiness
+      return cachedBusiness;
     }
-    const business = await Business.findById(id)
-    log.warn('from db...', business)
-    cacheManager.cacheIt(id, business)
-    return business
-  }
+    const business = await Business.findById(id);
+    log.warn('from db...', business);
+    cacheManager.cacheIt(id, business);
+    return business;
+  };
 
-  Business.observe('before save', function (ctx, next) {
+  Business.observe('before save', function(ctx, next) {
     if (ctx.instance) {
-      updateModel(ctx.instance)
+      updateModel(ctx.instance);
     } else if (ctx.data) {
-      updateModel(ctx.data)
+      updateModel(ctx.data);
     }
 
-    function updateModel (business) {
+    function updateModel(business) {
       if (business.mobile) {
         business.mobile = utility.removeAllSpace(
           utility.verifyAndTrimMobile(business.mobile),
-        )
+        );
         if (!business.mobile) {
-          var error = new Error()
-          error.message = hotspotMessages.invalidMobileNumber
-          error.status = 403
-          return next(error)
+          const error = new Error();
+          error.message = hotspotMessages.invalidMobileNumber;
+          error.status = 403;
+          return next(error);
         }
       }
       if (business.password) {
         business.passwordText = utility.encrypt(
           business.password,
           config.ENCRYPTION_KEY,
-        )
+        );
       }
     }
 
     // Check if this is a business create
     if (ctx.instance && ctx.isNewInstance) {
-      ctx.instance.smsSignature = ctx.instance.title
+      ctx.instance.smsSignature = ctx.instance.title;
       // add time zone defaults to business
-      ctx.instance.timeZone = {}
-      ctx.instance.groupMemberHelps = {}
-      ctx.instance.timeZone = config.TIME_ZONE_DEFAULT
-      ctx.instance.autoAssignInternetPlan = false
-      ctx.instance.defaultInternetPlan = {}
-      ctx.instance.username = utility.removeAllSpace(ctx.instance.email)
-      ctx.instance.username = ctx.instance.username.toLowerCase()
-      ctx.instance.email = utility.removeAllSpace(ctx.instance.email)
-      ctx.instance.email = ctx.instance.email.toLowerCase()
-      ctx.instance.creationDate = new Date().getTime()
-      ctx.instance.subscriptionDate = new Date().getTime()
-      ctx.instance.selectedThemeId = config.DEFAULT_THEME_ID
-      ctx.instance.themeConfig = {}
-      ctx.instance.themeConfig[config.DEFAULT_THEME_ID] = {}
+      ctx.instance.timeZone = {};
+      ctx.instance.groupMemberHelps = {};
+      ctx.instance.timeZone = config.TIME_ZONE_DEFAULT;
+      ctx.instance.autoAssignInternetPlan = false;
+      ctx.instance.defaultInternetPlan = {};
+      ctx.instance.username = utility.removeAllSpace(ctx.instance.email);
+      ctx.instance.username = ctx.instance.username.toLowerCase();
+      ctx.instance.email = utility.removeAllSpace(ctx.instance.email);
+      ctx.instance.email = ctx.instance.email.toLowerCase();
+      ctx.instance.creationDate = new Date().getTime();
+      ctx.instance.subscriptionDate = new Date().getTime();
+      ctx.instance.selectedThemeId = config.DEFAULT_THEME_ID;
+      ctx.instance.themeConfig = {};
+      ctx.instance.themeConfig[config.DEFAULT_THEME_ID] = {};
       ctx.instance.themeConfig[config.DEFAULT_THEME_ID].style =
-        hotspotTemplates[config.DEFAULT_THEME_ID].styles[0].id
+        hotspotTemplates[config.DEFAULT_THEME_ID].styles[0].id;
       ctx.instance.themeConfig[config.DEFAULT_THEME_ID].formConfig =
-        hotspotTemplates[config.DEFAULT_THEME_ID].formConfig
-      var SystemConfig = app.models.SystemConfig
+        hotspotTemplates[config.DEFAULT_THEME_ID].formConfig;
+      const SystemConfig = app.models.SystemConfig;
       SystemConfig.getConfig()
-        .then(function (systemConfig) {
-          Business.count(function (error, numberOfBusiness) {
+        .then(function(systemConfig) {
+          Business.count(function(error, numberOfBusiness) {
             if (error) {
-              log.error(error)
-              return next(error)
+              log.error(error);
+              return next(error);
             }
             if (systemConfig.numberOfAllowedBusiness > numberOfBusiness) {
-              return next()
+              return next();
             } else {
-              var error = new Error()
-              error.message = hotspotMessages.maxProfileReached
-              error.status = 403
-              return next(error)
+              const httpError = new Error();
+              httpError.message = hotspotMessages.maxProfileReached;
+              httpError.status = 403;
+              return next(httpError);
             }
-          })
+          });
         })
-        .fail(function (error) {
-          log.error(error)
-          return next(error)
-        })
+        .fail(function(error) {
+          log.error(error);
+          return next(error);
+        });
     } else {
-      next()
+      next();
     }
-  })
+  });
 
-  Business.observe('before delete', function (ctx, next) {
+  Business.observe('before delete', function(ctx, next) {
     if (ctx.where && ctx.where.id && ctx.where.id.inq[0]) {
-      var businessId = ctx.where.id.inq[0]
-      var InternetPlan = app.models.InternetPlan
-      var Nas = app.models.Nas
-      var Member = app.models.Member
-      var Invoice = app.models.Invoice
-      var File = app.models.FileStorage
-      log.debug('@Business before delete')
-      InternetPlan.destroyAll({businessId: businessId}, function (error, res) {
+      const businessId = ctx.where.id.inq[0];
+      const InternetPlan = app.models.InternetPlan;
+      const Nas = app.models.Nas;
+      const Member = app.models.Member;
+      const Invoice = app.models.Invoice;
+      const File = app.models.FileStorage;
+      log.debug('@Business before delete');
+      InternetPlan.destroyAll({businessId: businessId}, function(error, res) {
         if (error) {
-          log.error(error)
-          return next(error)
+          log.error(error);
+          return next(error);
         }
-        log.debug('internetPlans deleted')
-        Nas.destroyAll({businessId: businessId}, function (error, res) {
+        log.debug('internetPlans deleted');
+        Nas.destroyAll({businessId: businessId}, function(error, res) {
           if (error) {
-            log.error(error)
-            return next(error)
+            log.error(error);
+            return next(error);
           }
-          log.debug('nas deleted')
-          Member.destroyAll({businessId: businessId}, function (error, res) {
+          log.debug('nas deleted');
+          Member.destroyAll({businessId: businessId}, function(error, res) {
             if (error) {
-              log.error(error)
-              return next(error)
+              log.error(error);
+              return next(error);
             }
-            log.debug('members deleted')
-            Invoice.destroyAll({businessId: businessId}, function (
+            log.debug('members deleted');
+            Invoice.destroyAll({businessId: businessId}, function(
               error,
               res,
             ) {
               if (error) {
-                log.error(error)
-                return next(error)
+                log.error(error);
+                return next(error);
               }
-              log.debug('invoices deleted')
-              File.destroyAll({businessId: businessId}, function (error, res) {
+              log.debug('invoices deleted');
+              File.destroyAll({businessId: businessId}, function(error, res) {
                 if (error) {
-                  log.error(error)
-                  return next(error)
+                  log.error(error);
+                  return next(error);
                 }
-                log.debug('files deleted')
-              })
-            })
-          })
-        })
-      })
+                log.debug('files deleted');
+              });
+            });
+          });
+        });
+      });
     }
-    next()
-  })
+    next();
+  });
 
-  Business.observe('after save', function (ctx, next) {
-    var Role = app.models.Role
+  Business.observe('after save', function(ctx, next) {
+    const Role = app.models.Role;
     if (ctx.instance) {
       const entity = ctx.instance;
-      cacheManager.clearCache(entity.id)
+      cacheManager.clearCache(entity.id);
     }
     if (ctx.isNewInstance) {
-      var business = ctx.instance
-      var businessId = ctx.instance.id
-      Role.findOne({where: {name: config.ROLES.NETWORKADMIN}}, function (
+      const business = ctx.instance;
+      const businessId = ctx.instance.id;
+      Role.findOne({where: {name: config.ROLES.NETWORKADMIN}}, function(
         error,
         role,
       ) {
@@ -184,52 +184,51 @@ module.exports = function (Business) {
             config.ROLES.NETWORKADMIN +
             ' for role assignment',
             error,
-          )
-          return next()
+          );
+          return next();
         }
         if (!role) {
-          return next('failed to load role')
+          return next('failed to load role');
         }
-        var roleMapping = {principalType: 'USER', principalId: businessId}
-        role.principals.create(roleMapping, function (error, result) {
+        const roleMapping = {principalType: 'USER', principalId: businessId};
+        role.principals.create(roleMapping, function(error, result) {
           if (error) {
-            log.error('failed to assign role to business', error)
+            log.error('failed to assign role to business', error);
           }
-          log.debug('principal assigned ', result)
+          log.debug('principal assigned ', result);
           smsModule.send({
             token1: business.username,
             mobile: business.mobile,
             template: config.REGISTRATION_MESSAGE_TEMPLATE,
-          })
-          //Add trial sms test;
+          });
+          // Add trial sms test;
           Business.assignDefaultPlanToBusiness(businessId)
-            .then(function () {
-              Business.adminChargeCredit(businessId, 10000)
-              //Business.createDefaultDepartment()
-              return next()
+            .then(function() {
+              Business.adminChargeCredit(businessId, 10000);
+              // Business.createDefaultDepartment()
+              return next();
             })
-            .fail(function (err) {
-              return next(err)
-            })
-        })
-      })
+            .fail(function(err) {
+              return next(err);
+            });
+        });
+      });
     } else {
-      return next()
+      return next();
     }
-  })
+  });
 
-
-  Business.registerNewLicense = function (mobile, fullname, title) {
-    return Q.Promise(function (resolve, reject) {
-      mobile = utility.verifyAndTrimMobile(mobile)
+  Business.registerNewLicense = function(mobile, fullname, title) {
+    return Q.Promise(function(resolve, reject) {
+      mobile = utility.verifyAndTrimMobile(mobile);
       if (!mobile) {
-        var error = new Error()
-        error.status = 422
-        error.message = hotspotMessages.invalidMobileNumber
-        return reject(error)
+        const error = new Error();
+        error.status = 422;
+        error.message = hotspotMessages.invalidMobileNumber;
+        return reject(error);
       }
 
-      log.debug(config.CONFIG_SERVER_NEW_LICENSE)
+      log.debug(config.CONFIG_SERVER_NEW_LICENSE);
       needle.request(
         'post',
         config.CONFIG_SERVER_NEW_LICENSE,
@@ -239,33 +238,33 @@ module.exports = function (Business) {
           fullName: fullname,
         },
         {json: true},
-        function (error, resp, body) {
+        function(error, resp, body) {
           if (error) {
-            log.error(error)
-            return reject(error)
+            log.error(error);
+            return reject(error);
           }
-          log.debug(resp.statusCode)
+          log.debug(resp.statusCode);
           if (resp.statusCode !== 200) {
-            log.error(body)
-            return reject(resp.statusCode)
+            log.error(body);
+            return reject(resp.statusCode);
           }
           if (!body.systemUuid) {
-            log.error('invalid uuid ')
-            return reject('invalid system uuid')
+            log.error('invalid uuid ');
+            return reject('invalid system uuid');
           }
           utility
             .writeStringToFileInPath(config.SYSTEM_ID_PATH, body.systemUuid)
-            .then(function () {
-              Business.reloadLicense()
-              return resolve()
+            .then(function() {
+              Business.reloadLicense();
+              return resolve();
             })
-            .fail(function (error) {
-              return reject(error)
-            })
+            .fail(function(error) {
+              return reject(error);
+            });
         },
-      )
-    })
-  }
+      );
+    });
+  };
 
   Business.remoteMethod('registerNewLicense', {
     description: 'Register A New License ',
@@ -287,42 +286,42 @@ module.exports = function (Business) {
       },
     ],
     returns: {root: true},
-  })
+  });
 
   Business.getMyDepartments = async (ctx) => {
-    const Operator = app.models.Operator
-    const Department = app.models.Department
-    var userId = ctx.currentUserId
-    let limitedToDepartments
-    const business = await Business.findById(userId)
-    departments = []
+    const Operator = app.models.Operator;
+    const Department = app.models.Department;
+    const userId = ctx.currentUserId;
+    let limitedToDepartments;
+    const business = await Business.findById(userId);
+    let departments = [];
     if (business) {
-      //return all deps
-      limitedToDepartments = []
+      // return all deps
+      limitedToDepartments = [];
       departments = await Department.find({
         where: {
-          businessId: userId
-        }
-      })
+          businessId: userId,
+        },
+      });
     } else {
-      const operator = await Operator.findById(userId)
-      log.error({operator})
-      limitedToDepartments = operator.departments
+      const operator = await Operator.findById(userId);
+      log.error({operator});
+      limitedToDepartments = operator.departments;
       const depIds = limitedToDepartments.map((depId) => {
-        return {id: depId}
-      })
-      log.error({depIds})
+        return {id: depId};
+      });
+      log.error({depIds});
       departments = await Department.find({
         where: {
-          or: depIds
-        }
-      })
+          or: depIds,
+        },
+      });
     }
     return {
       limited: limitedToDepartments.length !== 0,
-      departments
-    }
-  }
+      departments,
+    };
+  };
 
   Business.remoteMethod('getMyDepartments', {
     description: 'Register A New License ',
@@ -330,44 +329,44 @@ module.exports = function (Business) {
       {arg: 'options', type: 'object', http: 'optionsFromRequest'},
     ],
     returns: {root: true},
-  })
+  });
 
-  Business.loadConfig = function (bizId, cb) {
-    Business.findById(bizId).then(function (business) {
+  Business.loadConfig = function(bizId, cb) {
+    Business.findById(bizId).then(function(business) {
       if (!business) {
-        var error = new Error()
-        error.message = hotspotMessages.invalidBusinessId
-        error.status = 404
-        return cb(error)
+        const error = new Error();
+        error.message = hotspotMessages.invalidBusinessId;
+        error.status = 404;
+        return cb(error);
       }
-      business.password = null
-      business.passwordText = null
-      business.mobile = null
-      business.username = null
-      business.email = null
-      //todo: don't remove -- for analytics
-      //business.autoCheck = business.autoCheck || false
-      //business.autoLogin = business.autoLogin || false
+      business.password = null;
+      business.passwordText = null;
+      business.mobile = null;
+      business.username = null;
+      business.email = null;
+      // todo: don't remove -- for analytics
+      // business.autoCheck = business.autoCheck || false
+      // business.autoLogin = business.autoLogin || false
       business.autoAssignInternetPlan =
-        business.autoAssignInternetPlan || false
-      business.defaultInternetPlan = business.defaultInternetPlan || {}
+        business.autoAssignInternetPlan || false;
+      business.defaultInternetPlan = business.defaultInternetPlan || {};
       business.selectedThemeId =
-        business.selectedThemeId || config.DEFAULT_THEME_ID
+        business.selectedThemeId || config.DEFAULT_THEME_ID;
       if (!business.themeConfig) {
-        business.themeConfig = {}
+        business.themeConfig = {};
         business.themeConfig[config.DEFAULT_THEME_ID] = {
           formConfig: hotspotTemplates[config.DEFAULT_THEME_ID].formConfig,
-        }
+        };
       }
-      business.enableMemberAutoLogin = business.enableMemberAutoLogin === true
+      business.enableMemberAutoLogin = business.enableMemberAutoLogin === true;
       if (!business.formConfig || !underscore.isArray(business.formConfig)) {
         business.formConfig =
-          hotspotTemplates[config.DEFAULT_THEME_ID].formConfig
+          hotspotTemplates[config.DEFAULT_THEME_ID].formConfig;
       }
 
-      return cb(null, business)
-    })
-  }
+      return cb(null, business);
+    });
+  };
 
   Business.remoteMethod('loadConfig', {
     description: 'Load business config',
@@ -379,10 +378,10 @@ module.exports = function (Business) {
       },
     ],
     returns: {root: true},
-  })
+  });
 
-  Business.getPackageById = function (packageId) {
-    return Q.Promise(function (resolve, reject) {
+  Business.getPackageById = function(packageId) {
+    return Q.Promise(function(resolve, reject) {
       if (
         !packageId ||
         packageId === 'premium' ||
@@ -391,59 +390,59 @@ module.exports = function (Business) {
         packageId === 'bronze' ||
         packageId === 'free'
       ) {
-        packageId = 'economic'
+        packageId = 'economic';
       }
-      Business.getPackages().then(function (pkgList) {
-        for (var j in pkgList) {
-          var pkg = pkgList[j]
+      Business.getPackages().then(function(pkgList) {
+        for (const j in pkgList) {
+          const pkg = pkgList[j];
           if (pkg.id === packageId) {
-            return resolve(pkg)
+            return resolve(pkg);
           }
         }
-        return reject()
-      })
-    })
-  }
+        return reject();
+      });
+    });
+  };
 
-  Business.assignDefaultPlanToBusiness = function (businessId) {
-    var SystemConfig = app.models.SystemConfig
-    return Q.Promise(function (resolve, reject) {
-      SystemConfig.isLocal().then(function (isLocal) {
+  Business.assignDefaultPlanToBusiness = function(businessId) {
+    const SystemConfig = app.models.SystemConfig;
+    return Q.Promise(function(resolve, reject) {
+      SystemConfig.isLocal().then(function(isLocal) {
         if (!isLocal) {
           Business.assignPackageToBusiness(businessId, 'demo')
-            .then(function () {
-              return resolve()
+            .then(function() {
+              return resolve();
             })
-            .fail(function (error) {
-              return reject(error)
-            })
+            .fail(function(error) {
+              return reject(error);
+            });
         } else {
-          return resolve()
+          return resolve();
         }
-      })
-    })
-  }
-  Business.getCurrentService = function (business) {
-    var SystemConfig = app.models.SystemConfig
-    return Q.Promise(function (resolve, reject) {
-      SystemConfig.isLocal().then(function (isLocal) {
+      });
+    });
+  };
+  Business.getCurrentService = function(business) {
+    const SystemConfig = app.models.SystemConfig;
+    return Q.Promise(function(resolve, reject) {
+      SystemConfig.isLocal().then(function(isLocal) {
         if (isLocal) {
           SystemConfig.getService()
-            .then(function (currentService) {
-              return resolve(currentService)
+            .then(function(currentService) {
+              return resolve(currentService);
             })
-            .fail(function (error) {
-              return reject(error)
-            })
+            .fail(function(error) {
+              return reject(error);
+            });
         } else {
-          var currentService = business.services
+          let currentService = business.services;
           if (!currentService) {
             currentService = {
               id: 'economic',
               subscriptionDate: new Date().removeDays(31).getTime(),
               expiresAt: new Date().getTime(),
               duration: 1,
-            }
+            };
           }
           if (
             currentService.allowedOnlineUsers &&
@@ -451,31 +450,31 @@ module.exports = function (Business) {
           ) {
             currentService.allowedOnlineUsers = Number(
               currentService.allowedOnlineUsers,
-            )
+            );
           }
           currentService.allowedOnlineUsers =
             currentService.allowedOnlineUsers ||
-            config.DEFAULT_ALLOWED_ONLINE_USERS
-          return resolve(currentService)
+            config.DEFAULT_ALLOWED_ONLINE_USERS;
+          return resolve(currentService);
         }
-      })
-    })
-  }
+      });
+    });
+  };
 
-  Business.getModules = function (business) {
-    var SystemConfig = app.models.SystemConfig
-    return Q.Promise(function (resolve, reject) {
-      SystemConfig.isLocal().then(function (isLocal) {
+  Business.getModules = function(business) {
+    const SystemConfig = app.models.SystemConfig;
+    return Q.Promise(function(resolve, reject) {
+      SystemConfig.isLocal().then(function(isLocal) {
         if (isLocal) {
           SystemConfig.getModules()
-            .then(function (modules) {
-              return resolve(modules)
+            .then(function(modules) {
+              return resolve(modules);
             })
-            .fail(function (error) {
-              return reject(error)
-            })
+            .fail(function(error) {
+              return reject(error);
+            });
         } else {
-          var currentModules = {
+          const currentModules = {
             sms: {
               id: 'sms',
               duration: business.services.duration,
@@ -488,45 +487,45 @@ module.exports = function (Business) {
               subscriptionDate: business.services.subscriptionDate,
               expiresAt: business.services.expiresAt,
             },
-          }
-          return resolve(currentModules)
+          };
+          return resolve(currentModules);
         }
-      })
-    })
-  }
+      });
+    });
+  };
 
-  Business.reloadLicense = function (cb) {
-    redisInvoicePayed.publish('INVOICE_PAYED', 'Payed')
-    var SystemConfig = app.models.SystemConfig
-    setTimeout(function () {
-      SystemConfig.getConfig()
-    }, 5000)
-    return cb && cb(null, {ok: true})
-  }
+  Business.reloadLicense = function(cb) {
+    redisInvoicePayed.publish('INVOICE_PAYED', 'Payed');
+    const SystemConfig = app.models.SystemConfig;
+    setTimeout(function() {
+      SystemConfig.getConfig();
+    }, 5000);
+    return cb && cb(null, {ok: true});
+  };
 
   Business.remoteMethod('reloadLicense', {
     description: 'reloadLicense',
     accepts: [],
     returns: {root: true},
-  })
+  });
 
-  Business.buyPackage = function (packageId, discountCoupon, ctx) {
-    var Invoice = app.models.Invoice
-    var SystemConfig = app.models.SystemConfig
-    var issueDate = new Date().getTime()
-    var businessId = ctx.currentUserId
-    return Q.Promise(function (resolve, reject) {
-      SystemConfig.isLocal().then(function (isLocal) {
+  Business.buyPackage = function(packageId, discountCoupon, ctx) {
+    const Invoice = app.models.Invoice;
+    const SystemConfig = app.models.SystemConfig;
+    const issueDate = new Date().getTime();
+    const businessId = ctx.currentUserId;
+    return Q.Promise(function(resolve, reject) {
+      SystemConfig.isLocal().then(function(isLocal) {
         if (isLocal) {
           utility
             .getSystemUuid(config.SYSTEM_ID_PATH)
-            .then(function (systemUuid) {
+            .then(function(systemUuid) {
               auth
                 .loginToLicenseServer(config.CONFIG_SERVER_LOGIN)
-                .then(function (authResult) {
-                  var token = authResult.token
-                  var providerId = authResult.userId
-                  log.debug('REturn to ', config.BUY_LOCAL_PACKAGE_RETURN())
+                .then(function(authResult) {
+                  const token = authResult.token;
+                  const providerId = authResult.userId;
+                  log.debug('REturn to ', config.BUY_LOCAL_PACKAGE_RETURN());
                   needle.post(
                     config.CONFIG_SERVER_BUY_PACKAGE.replace('{token}', token),
                     {
@@ -537,38 +536,38 @@ module.exports = function (Business) {
                       discountCoupon: discountCoupon,
                     },
                     {json: true},
-                    function (error, response, body) {
+                    function(error, response, body) {
                       if (error) {
-                        log.error(error)
-                        return reject(error)
+                        log.error(error);
+                        return reject(error);
                       }
                       if (response.statusCode !== 200) {
-                        return reject(response.body)
+                        return reject(response.body);
                       }
-                      return resolve({url: body.url})
+                      return resolve({url: body.url});
                     },
-                  )
+                  );
                 })
-                .fail(function (error) {
-                  log.error(error)
-                  return reject(new Error('failed to authenticate'))
-                })
+                .fail(function(error) {
+                  log.error(error);
+                  return reject(new Error('failed to authenticate'));
+                });
             })
-            .fail(function (error) {
-              log.error(error)
-              return reject(new Error('failed to load systemid'))
-            })
+            .fail(function(error) {
+              log.error(error);
+              return reject(new Error('failed to load systemid'));
+            });
         } else {
           Business.getPackageById(packageId)
-            .then(function (selectedPackage) {
+            .then(function(selectedPackage) {
               if (!selectedPackage) {
-                return reject('package not found')
+                return reject('package not found');
               }
-              var price =
+              let price =
                 selectedPackage.price -
-                selectedPackage.price * selectedPackage.discount
+                selectedPackage.price * selectedPackage.discount;
               if (discountCoupon && discountCoupon.code) {
-                var Coupon = app.models.Coupon
+                const Coupon = app.models.Coupon;
                 Coupon.findOne(
                   {
                     where: {
@@ -578,23 +577,23 @@ module.exports = function (Business) {
                       ],
                     },
                   },
-                  function (error, coupon) {
+                  function(error, coupon) {
                     if (error) {
-                      log.error(error)
-                      return reject(error)
+                      log.error(error);
+                      return reject(error);
                     }
                     if (!coupon) {
-                      log.error('coupon not found')
-                      return reject('coupon not found')
+                      log.error('coupon not found');
+                      return reject('coupon not found');
                     }
-                    var unit = coupon.value.unit
-                    var amount = coupon.value.amount
+                    const unit = coupon.value.unit;
+                    const amount = coupon.value.amount;
                     if (unit === config.PERCENT_UNIT) {
-                      var discountAmount = (price * amount) / 100
-                      price = price - discountAmount
+                      const discountAmount = (price * amount) / 100;
+                      price = price - discountAmount;
                     }
                     if (unit === config.TOMAN_UNIT) {
-                      price = price - amount
+                      price = price - amount;
                     }
                     coupon
                       .updateAttributes({
@@ -602,41 +601,41 @@ module.exports = function (Business) {
                         redeemDate: new Date().getTime(),
                       })
                       .then(
-                        function () {
-                          createInvoiceAndPay(price)
+                        function() {
+                          createInvoiceAndPay(price);
                         },
-                        function (error) {
-                          log.error('coupon update error:', error)
-                          log.error(error)
-                          return reject(error)
+                        function(error) {
+                          log.error('coupon update error:', error);
+                          log.error(error);
+                          return reject(error);
                         },
-                      )
+                      );
                   },
-                )
+                );
               } else {
-                createInvoiceAndPay(price)
+                createInvoiceAndPay(price);
               }
 
-              function createInvoiceAndPay (price) {
+              function createInvoiceAndPay(price) {
                 if (price === 0) {
                   Business.assignPackageToBusiness(businessId, packageId)
-                    .then(function () {
-                      var returnUrl = config.BUSINESS_PAYMENT_RESULT_URL()
+                    .then(function() {
+                      const returnUrl = config.BUSINESS_PAYMENT_RESULT_URL();
                       return resolve({
                         url: returnUrl
                           .replace('{0}', 'true')
                           .replace('{1}', '&desc=success'),
-                      })
+                      });
                     })
-                    .fail(function (error) {
+                    .fail(function(error) {
                       log.error(
                         'failed to assign zero price pkg to business',
                         error,
-                      )
-                      return reject(error)
-                    })
+                      );
+                      return reject(error);
+                    });
                 } else {
-                  log.debug('createInvoiceAndPay price:', price)
+                  log.debug('createInvoiceAndPay price:', price);
                   Invoice.create(
                     {
                       price: price,
@@ -646,25 +645,25 @@ module.exports = function (Business) {
                       issueDate: issueDate,
                       businessId: businessId,
                     },
-                    function (error, invoice) {
+                    function(error, invoice) {
                       if (error) {
-                        log.error('failed to create invoice', error)
-                        return reject(error)
+                        log.error('failed to create invoice', error);
+                        return reject(error);
                       }
-                      var invoiceId = invoice.id
-                      var returnUrl = config
+                      const invoiceId = invoice.id;
+                      const returnUrl = config
                         .BUSINESS_PAYMENT_RETURN_URL()
                         .replace('{0}', 'invoiceId')
-                        .replace('{1}', invoiceId)
+                        .replace('{1}', invoiceId);
                       log.debug(
                         'config.BUSINESS_PAYMENT_RETURN_URL (): ',
                         config.BUSINESS_PAYMENT_RETURN_URL(),
-                      )
-                      log.debug('returnUrl: ', returnUrl)
+                      );
+                      log.debug('returnUrl: ', returnUrl);
                       log.debug(
                         'EXTRACTED_EXTERNAL_API_ADDRESS: ',
                         process.env.EXTRACTED_EXTERNAL_API_ADDRESS,
-                      )
+                      );
                       Payment.openPaymentGateway(
                         config.PAYMENT_API_KEY,
                         price,
@@ -673,41 +672,41 @@ module.exports = function (Business) {
                         config.PAYMENT_SUPPORT_MOBILE,
                         returnUrl,
                       )
-                        .then(function (response) {
-                          var url = response.url
-                          var paymentId = response.paymentId
+                        .then(function(response) {
+                          const url = response.url;
+                          const paymentId = response.paymentId;
                           invoice
                             .updateAttributes({
                               paymentId: paymentId,
                             })
                             .then(
-                              function () {
-                                return resolve({url: url})
+                              function() {
+                                return resolve({url: url});
                               },
-                              function (error) {
-                                log.error('invoice update error:', error)
-                                return reject(error)
+                              function(error) {
+                                log.error('invoice update error:', error);
+                                return reject(error);
                               },
-                            )
+                            );
                         })
-                        .fail(function (error) {
-                          log.error('failed to open payment gateway')
-                          log.error(error)
-                          return reject(error)
-                        })
+                        .fail(function(error) {
+                          log.error('failed to open payment gateway');
+                          log.error(error);
+                          return reject(error);
+                        });
                     },
-                  )
+                  );
                 }
               }
             })
-            .fail(function (error) {
-              log.error(error)
-              return reject(error)
-            })
+            .fail(function(error) {
+              log.error(error);
+              return reject(error);
+            });
         }
-      })
-    })
-  }
+      });
+    });
+  };
 
   Business.remoteMethod('buyPackage', {
     description: 'buyService for business',
@@ -724,42 +723,42 @@ module.exports = function (Business) {
       {arg: 'options', type: 'object', http: 'optionsFromRequest'},
     ],
     returns: {root: true},
-  })
+  });
 
-  Business.assignPackageToBusiness = function (businessId, packageId, options) {
-    return Q.Promise(function (resolve, reject) {
-      options = options || {}
+  Business.assignPackageToBusiness = function(businessId, packageId, options) {
+    return Q.Promise(function(resolve, reject) {
+      options = options || {};
       Business.getPackageById(packageId)
-        .then(function (selectedPkg) {
+        .then(function(selectedPkg) {
           if (!selectedPkg) {
-            return reject('pkg not found:' + packageId)
+            return reject('pkg not found:' + packageId);
           }
-          Business.findById(businessId).then(function (business) {
+          Business.findById(businessId).then(function(business) {
             if (!business) {
-              return reject('invalid biz id')
+              return reject('invalid biz id');
             }
-            var update = {}
-            var duration = options.duration || selectedPkg.duration
-            duration = Number(duration)
-            var durationInDays =
-              options.durationInDays || selectedPkg.durationInDays
-            durationInDays = Number(durationInDays)
-            var selectedService = selectedPkg.service
+            const update = {};
+            let duration = options.duration || selectedPkg.duration;
+            duration = Number(duration);
+            let durationInDays =
+              options.durationInDays || selectedPkg.durationInDays;
+            durationInDays = Number(durationInDays);
+            const selectedService = selectedPkg.service;
             if (selectedService) {
-              var serviceSubscriptionDate =
-                options.subscriptionDate || new Date().getTime()
-              log.debug('service duration:', duration)
-              var expiresAt
+              const serviceSubscriptionDate =
+                options.subscriptionDate || new Date().getTime();
+              log.debug('service duration:', duration);
+              let expiresAt;
               if (duration) {
                 expiresAt = new Date(serviceSubscriptionDate)
                   .add({months: duration})
-                  .getTime()
+                  .getTime();
               } else if (durationInDays) {
                 expiresAt = new Date(serviceSubscriptionDate)
                   .add({days: durationInDays})
-                  .getTime()
+                  .getTime();
               }
-              log.debug('service expires at:', expiresAt)
+              log.debug('service expires at:', expiresAt);
               update.services = {
                 allowedOnlineUsers:
                   options.allowedOnlineUsers ||
@@ -768,50 +767,50 @@ module.exports = function (Business) {
                 expiresAt: expiresAt,
                 duration: duration,
                 durationInDays: durationInDays,
-              }
+              };
             }
-            var selectedModules = selectedPkg.modules
+            const selectedModules = selectedPkg.modules;
             if (selectedModules) {
-              var modules = business.modules
-              underscore.each(selectedModules, function (module, moduleId) {
-                var modSubscriptionDate =
-                  options.subscriptionDate || new Date().getTime()
-                var modExpiresAt
-                log.debug('module duration ', duration)
+              const modules = business.modules;
+              underscore.each(selectedModules, function(module, moduleId) {
+                const modSubscriptionDate =
+                  options.subscriptionDate || new Date().getTime();
+                let modExpiresAt;
+                log.debug('module duration ', duration);
                 if (duration) {
                   modExpiresAt = new Date(modSubscriptionDate)
                     .add({months: duration})
-                    .getTime()
+                    .getTime();
                 } else if (durationInDays) {
                   modExpiresAt = new Date(modSubscriptionDate)
                     .add({days: durationInDays})
-                    .getTime()
+                    .getTime();
                 }
-                log.debug('module expires at:', modExpiresAt)
+                log.debug('module expires at:', modExpiresAt);
                 modules[moduleId] = {
                   subscriptionDate: modSubscriptionDate,
                   expiresAt: modExpiresAt,
                   duration: duration,
-                }
-              })
-              update.modules = modules
+                };
+              });
+              update.modules = modules;
             }
 
-            business.updateAttributes(update, function (error, updatedBiz) {
+            business.updateAttributes(update, function(error, updatedBiz) {
               if (error) {
-                log.error(error)
-                return reject(error)
+                log.error(error);
+                return reject(error);
               }
-              return resolve()
-            })
-          })
+              return resolve();
+            });
+          });
         })
-        .fail(function (error) {
-          log.error(error)
-          return reject(error)
-        })
-    })
-  }
+        .fail(function(error) {
+          log.error(error);
+          return reject(error);
+        });
+    });
+  };
 
   Business.remoteMethod('assignPackageToBusiness', {
     accepts: [
@@ -831,25 +830,25 @@ module.exports = function (Business) {
       },
     ],
     returns: {root: true},
-  })
+  });
 
-  Business.buyCredit = function (rialPrice, ctx) {
-    var Invoice = app.models.Invoice
-    var SystemConfig = app.models.SystemConfig
-    var issueDate = new Date().getTime()
-    var businessId = ctx.currentUserId
-    return Q.Promise(function (resolve, reject) {
+  Business.buyCredit = function(rialPrice, ctx) {
+    const Invoice = app.models.Invoice;
+    const SystemConfig = app.models.SystemConfig;
+    const issueDate = new Date().getTime();
+    const businessId = ctx.currentUserId;
+    return Q.Promise(function(resolve, reject) {
       SystemConfig.isLocal()
-        .then(function (isLocal) {
+        .then(function(isLocal) {
           if (isLocal) {
             utility
               .getSystemUuid(config.SYSTEM_ID_PATH)
-              .then(function (systemUuid) {
+              .then(function(systemUuid) {
                 auth
                   .loginToLicenseServer(config.CONFIG_SERVER_LOGIN)
-                  .then(function (authResult) {
-                    var token = authResult.token
-                    var providerId = authResult.userId
+                  .then(function(authResult) {
+                    const token = authResult.token;
+                    const providerId = authResult.userId;
                     needle.post(
                       config.CONFIG_SERVER_CHARGE_SMS.replace('{token}', token),
                       {
@@ -859,30 +858,30 @@ module.exports = function (Business) {
                         price: rialPrice,
                       },
                       {json: true},
-                      function (error, response, body) {
-                        log.debug('open api: ', body)
+                      function(error, response, body) {
+                        log.debug('open api: ', body);
                         if (error) {
-                          log.error(error)
-                          return reject(error)
+                          log.error(error);
+                          return reject(error);
                         }
                         if (response.statusCode !== 200) {
-                          return reject(response.body)
+                          return reject(response.body);
                         }
-                        return resolve({url: body.url})
+                        return resolve({url: body.url});
                       },
-                    )
+                    );
                   })
-                  .fail(function (error) {
-                    log.error(error)
-                    return reject(new Error('failed to authenticate'))
-                  })
+                  .fail(function(error) {
+                    log.error(error);
+                    return reject(new Error('failed to authenticate'));
+                  });
               })
-              .fail(function (error) {
-                log.error(error)
-                return reject(new Error('failed to load systemid'))
-              })
+              .fail(function(error) {
+                log.error(error);
+                return reject(new Error('failed to load systemid'));
+              });
           } else {
-            var price = rialPrice / 10
+            const price = rialPrice / 10;
             Invoice.create(
               {
                 price: price,
@@ -891,17 +890,17 @@ module.exports = function (Business) {
                 issueDate: issueDate,
                 businessId: businessId,
               },
-              function (error, invoice) {
+              function(error, invoice) {
                 if (error) {
-                  log.error('invoice create error:', error)
-                  return reject(error)
+                  log.error('invoice create error:', error);
+                  return reject(error);
                 }
-                var invoiceId = invoice.id
-                var returnUrl = config
+                const invoiceId = invoice.id;
+                const returnUrl = config
                   .CHARGE_PAYMENT_RETURN_URL()
                   .replace('{0}', 'invoiceId')
-                  .replace('{1}', invoiceId)
-                log.debug(returnUrl)
+                  .replace('{1}', invoiceId);
+                log.debug(returnUrl);
                 Payment.openPaymentGateway(
                   config.PAYMENT_API_KEY,
                   price,
@@ -910,34 +909,34 @@ module.exports = function (Business) {
                   config.PAYMENT_SUPPORT_MOBILE,
                   returnUrl,
                 )
-                  .then(function (response) {
-                    var url = response.url
-                    var paymentId = response.paymentId
+                  .then(function(response) {
+                    const url = response.url;
+                    const paymentId = response.paymentId;
                     invoice.updateAttributes({paymentId: paymentId}).then(
-                      function () {
-                        return resolve({url: url})
+                      function() {
+                        return resolve({url: url});
                       },
-                      function (error) {
-                        log.error('invoice update error:', error)
-                        log.error(error)
-                        return reject(error)
+                      function(error) {
+                        log.error('invoice update error:', error);
+                        log.error(error);
+                        return reject(error);
                       },
-                    )
+                    );
                   })
-                  .fail(function (error) {
-                    log.error('failed to open payment gateway')
-                    log.error(error)
-                    return reject(error)
-                  })
+                  .fail(function(error) {
+                    log.error('failed to open payment gateway');
+                    log.error(error);
+                    return reject(error);
+                  });
               },
-            )
+            );
           }
         })
-        .fail(function (error) {
-          return reject(error)
-        })
-    })
-  }
+        .fail(function(error) {
+          return reject(error);
+        });
+    });
+  };
 
   Business.remoteMethod('buyCredit', {
     description: 'payment by business',
@@ -950,57 +949,57 @@ module.exports = function (Business) {
       {arg: 'options', type: 'object', http: 'optionsFromRequest'},
     ],
     returns: {root: true},
-  })
+  });
 
   Business.observe('loaded', async (ctx) => {
-    //Set the default configs
+    // Set the default configs
     if (ctx.data) {
-      const currentService = await Business.getCurrentService(ctx.data)
-      ctx.data.services = currentService
-      const modules = await Business.getModules(ctx.data)
-      ctx.data.modules = modules
-      var themeId = ctx.data.selectedThemeId
-      var themeConfig = extend({}, ctx.data.themeConfig)
-      var oldThemeConfig = extend({}, themeConfig[themeId])
-      var serviceId = ctx.data.services.id
+      const currentService = await Business.getCurrentService(ctx.data);
+      ctx.data.services = currentService;
+      const modules = await Business.getModules(ctx.data);
+      ctx.data.modules = modules;
+      let themeId = ctx.data.selectedThemeId;
+      const themeConfig = extend({}, ctx.data.themeConfig);
+      const oldThemeConfig = extend({}, themeConfig[themeId]);
+      const serviceId = ctx.data.services.id;
       if (!ctx.data.selectedThemeId) {
-        themeId = config.DEFAULT_THEME_ID
-        themeConfig[themeId] = extend({}, returnThemeConfig(themeId))
+        themeId = config.DEFAULT_THEME_ID;
+        themeConfig[themeId] = extend({}, returnThemeConfig(themeId));
       } else if (
         ctx.data.selectedThemeId === config.PREVIOUS_DEFAULT_THEME_ID
       ) {
-        themeId = config.DEFAULT_THEME_ID
+        themeId = config.DEFAULT_THEME_ID;
         themeConfig[themeId] = extend(
           {},
           returnThemeConfig(themeId, oldThemeConfig, serviceId),
-        )
+        );
       } else if (
         ctx.data.selectedThemeId === config.PREVIOUS_HOTEL_THEME_ID
       ) {
-        themeId = config.HOTEL_THEME_ID
+        themeId = config.HOTEL_THEME_ID;
         themeConfig[themeId] = extend(
           {},
           returnThemeConfig(themeId, oldThemeConfig, serviceId),
-        )
+        );
       } else if (!hotspotTemplates[ctx.data.selectedThemeId]) {
-        themeId = config.DEFAULT_THEME_ID
+        themeId = config.DEFAULT_THEME_ID;
         themeConfig[themeId] = extend(
           {},
           returnThemeConfig(themeId, oldThemeConfig, serviceId),
-        )
+        );
       }
-      ctx.data.selectedThemeId = themeId
-      ctx.data.groupMemberHelps = ctx.data.groupMemberHelps || {}
-      ctx.data.themeConfig = themeConfig
-      ctx.data.nasSharedSecret = ctx.data.nasSharedSecret || config.PRIMARY_SHARED_SECRET
-      ctx.data.newNasSharedSecret = config.PRIMARY_SHARED_SECRET
-      ctx.data.passwordText = '#$*%&#$*%^(#$*&%(*#$%*&'
+      ctx.data.selectedThemeId = themeId;
+      ctx.data.groupMemberHelps = ctx.data.groupMemberHelps || {};
+      ctx.data.themeConfig = themeConfig;
+      ctx.data.nasSharedSecret = ctx.data.nasSharedSecret || config.PRIMARY_SHARED_SECRET;
+      ctx.data.newNasSharedSecret = config.PRIMARY_SHARED_SECRET;
+      ctx.data.passwordText = '#$*%&#$*%^(#$*&%(*#$%*&';
     }
 
-    function returnThemeConfig (themeId, oldThemeConfig, serviceId) {
-      //we check for premium service
+    function returnThemeConfig(themeId, oldThemeConfig, serviceId) {
+      // we check for premium service
       if (serviceId && serviceId === 'premium' && oldThemeConfig) {
-        var newThemeConfig = {
+        const newThemeConfig = {
           style: hotspotTemplates[themeId].styles[0].id,
           showLogo: oldThemeConfig.showLogo || true,
           logo: oldThemeConfig.logo || {},
@@ -1013,53 +1012,53 @@ module.exports = function (Business) {
           instagram: oldThemeConfig.instagram || null,
           verificationMethod: 'mobile',
           formConfig: hotspotTemplates[themeId].formConfig,
-        }
+        };
         if (oldThemeConfig.formConfig) {
-          for (var i = 0; i < newThemeConfig.formConfig.length; i++) {
-            for (var j = 0; j < oldThemeConfig.formConfig.length; j++) {
+          for (let i = 0; i < newThemeConfig.formConfig.length; i++) {
+            for (let j = 0; j < oldThemeConfig.formConfig.length; j++) {
               if (
                 newThemeConfig.formConfig[i].label ===
                 oldThemeConfig.formConfig.label
               ) {
                 newThemeConfig.formConfig[i].active =
-                  oldThemeConfig.formConfig[j].active
+                  oldThemeConfig.formConfig[j].active;
                 newThemeConfig.formConfig[i].required =
-                  oldThemeConfig.formConfig[j].required
+                  oldThemeConfig.formConfig[j].required;
               }
             }
           }
         }
-        return newThemeConfig
+        return newThemeConfig;
       } else {
-        return config.DEFAULT_THEME_CONFIG[config.DEFAULT_THEME_ID]
+        return config.DEFAULT_THEME_CONFIG[config.DEFAULT_THEME_ID];
       }
     }
-  })
+  });
 
-  Business.verifyBuyPackage = function (invoiceId, refId) {
-    return Q.Promise(function (resolve, reject) {
-      var Reseller = app.models.Reseller
-      var Invoice = app.models.Invoice
-      var Charge = app.models.Charge
-      var Business = app.models.Business
-      var returnUrl = config.BUSINESS_PAYMENT_RESULT_URL()
+  Business.verifyBuyPackage = function(invoiceId, refId) {
+    return Q.Promise(function(resolve, reject) {
+      const Reseller = app.models.Reseller;
+      const Invoice = app.models.Invoice;
+      const Charge = app.models.Charge;
+      const Business = app.models.Business;
+      const returnUrl = config.BUSINESS_PAYMENT_RESULT_URL();
       if (!invoiceId) {
         return resolve({
           code: 302,
           returnUrl: returnUrl
             .replace('{0}', 'false')
             .replace('{1}', '&error=No invoice id'),
-        })
+        });
       }
-      Invoice.findById(invoiceId, function (error, invoice) {
+      Invoice.findById(invoiceId, function(error, invoice) {
         if (error) {
-          log.error(error)
+          log.error(error);
           return resolve({
             code: 302,
             returnUrl: returnUrl
               .replace('{0}', 'false')
               .replace('{1}', '&error=Error in finding invoice'),
-          })
+          });
         }
         if (!invoice) {
           return resolve({
@@ -1067,33 +1066,32 @@ module.exports = function (Business) {
             returnUrl: returnUrl
               .replace('{0}', 'false')
               .replace('{1}', '&error=Invalid invoice id'),
-          })
+          });
         }
-        log.debug(invoice)
-        var businessId = invoice.businessId
-        var price = invoice.price
-        var invoiceType = invoice.invoiceType
+        log.debug(invoice);
+        const businessId = invoice.businessId;
+        const price = invoice.price;
+        const invoiceType = invoice.invoiceType;
         Payment.verifyPayment(config.PAYMENT_API_KEY, refId, price)
-          .then(function (result) {
-            log.debug(result)
+          .then(function(result) {
+            log.debug(result);
             if (!result.payed) {
               return resolve({
                 code: 302,
                 returnUrl: returnUrl
                   .replace('{0}', 'false')
                   .replace('{1}', '&error=Payment failed'),
-              })
+              });
             }
 
-            Business.findById(businessId).then(function (business) {
-
+            Business.findById(businessId).then(function(business) {
               if (!business) {
                 return resolve({
                   code: 302,
                   returnUrl: returnUrl
                     .replace('{0}', 'false')
                     .replace('{1}', '&error=Invalid business id'),
-                })
+                });
               }
 
               Charge.addCharge({
@@ -1102,16 +1100,16 @@ module.exports = function (Business) {
                 amount: price,
                 forThe: refId + ':' + invoice.paymentId + ':' + invoiceType,
                 date: new Date().getTime(),
-              })
+              });
               invoice.updateAttributes(
                 {
                   payed: true,
                   paymentRefId: refId,
                   paymentDate: new Date().getTime(),
                 },
-                function (error) {
+                function(error) {
                   if (error) {
-                    log.error(error)
+                    log.error(error);
                     return resolve({
                       code: 302,
                       returnUrl: returnUrl
@@ -1120,46 +1118,46 @@ module.exports = function (Business) {
                           '{1}',
                           '&error=Error in update invoice with payment reference Id',
                         ),
-                    })
+                    });
                   }
 
-                  var packageId = invoice.packageId
+                  const packageId = invoice.packageId;
                   // assign service to business
                   Business.assignPackageToBusiness(businessId, packageId)
-                    .then(function () {
+                    .then(function() {
                       Business.getPackageById(packageId)
-                        .then(function (selectedPackage) {
+                        .then(function(selectedPackage) {
                           Charge.addCharge({
                             businessId: businessId,
                             type: config.BUY_SERVICE_CHARGE,
                             amount: price * -1,
                             forThe: selectedPackage.title,
                             date: new Date().getTime(),
-                          })
+                          });
 
-                          //add credit for business reseller
+                          // add credit for business reseller
                           if (business.resellerId) {
                             Reseller.addResellerCommission(
                               business.resellerId,
                               businessId,
                               invoice.price,
                             )
-                              .then(function () {
-                                log.debug('Reseller commission added ')
+                              .then(function() {
+                                log.debug('Reseller commission added ');
                               })
-                              .fail(function (error) {
-                                log.error(error)
-                              })
+                              .fail(function(error) {
+                                log.error(error);
+                              });
                           }
                           return resolve({
                             code: 302,
                             returnUrl: returnUrl
                               .replace('{0}', 'true')
                               .replace('{1}', '&desc=success'),
-                          })
+                          });
                         })
-                        .fail(function (error) {
-                          log.error(error)
+                        .fail(function(error) {
+                          log.error(error);
                           return resolve({
                             code: 302,
                             returnUrl: returnUrl
@@ -1168,11 +1166,11 @@ module.exports = function (Business) {
                                 '{1}',
                                 '&error=Error in update business with packageId',
                               ),
-                          })
-                        })
+                          });
+                        });
                     })
-                    .fail(function (error) {
-                      log.error(error)
+                    .fail(function(error) {
+                      log.error(error);
                       return resolve({
                         code: 302,
                         returnUrl: returnUrl
@@ -1181,47 +1179,47 @@ module.exports = function (Business) {
                             '{1}',
                             '&error=Error in update business with packageId',
                           ),
-                      })
-                    })
+                      });
+                    });
                 },
-              )
-            })
+              );
+            });
           })
-          .fail(function (error) {
-            log.error(error)
+          .fail(function(error) {
+            log.error(error);
             return resolve({
               code: 302,
               returnUrl: returnUrl
                 .replace('{0}', 'false')
                 .replace('{1}', '&error=Error in verifying payment'),
-            })
-          })
-      })
-    })
-  }
-  Business.verifyBuyCredit = function (invoiceId, refId) {
-    return Q.Promise(function (resolve, reject) {
-      var Invoice = app.models.Invoice
-      var Charge = app.models.Charge
-      var Business = app.models.Business
-      var returnUrl = config.BUSINESS_PAYMENT_RESULT_URL()
+            });
+          });
+      });
+    });
+  };
+  Business.verifyBuyCredit = function(invoiceId, refId) {
+    return Q.Promise(function(resolve, reject) {
+      const Invoice = app.models.Invoice;
+      const Charge = app.models.Charge;
+      const Business = app.models.Business;
+      const returnUrl = config.BUSINESS_PAYMENT_RESULT_URL();
       if (!invoiceId) {
         return resolve({
           code: 302,
           returnUrl: returnUrl
             .replace('{0}', 'false')
             .replace('{1}', '&error=No invoice id'),
-        })
+        });
       }
-      Invoice.findById(invoiceId, function (error, invoice) {
+      Invoice.findById(invoiceId, function(error, invoice) {
         if (error) {
-          log.error(error)
+          log.error(error);
           return resolve({
             code: 302,
             returnUrl: returnUrl
               .replace('{0}', 'false')
               .replace('{1}', '&error=Error in finding invoice'),
-          })
+          });
         }
         if (!invoice) {
           return resolve({
@@ -1229,36 +1227,36 @@ module.exports = function (Business) {
             returnUrl: returnUrl
               .replace('{0}', 'false')
               .replace('{1}', '&error=Invalid invoice id'),
-          })
+          });
         }
-        log.debug(invoice)
-        var businessId = invoice.businessId
-        var price = invoice.price
-        var invoiceType = invoice.invoiceType
+        log.debug(invoice);
+        const businessId = invoice.businessId;
+        const price = invoice.price;
+        const invoiceType = invoice.invoiceType;
         Payment.verifyPayment(config.PAYMENT_API_KEY, refId, price)
-          .then(function (result) {
-            log.debug(result)
+          .then(function(result) {
+            log.debug(result);
             if (result.payed) {
-              Business.findById(businessId).then(function (business) {
+              Business.findById(businessId).then(function(business) {
                 if (!business) {
                   return resolve({
                     code: 302,
                     returnUrl: returnUrl
                       .replace('{0}', 'false')
                       .replace('{1}', '&error=Invalid business id'),
-                  })
+                  });
                 }
 
-                log.debug('sending resolve updating')
+                log.debug('sending resolve updating');
                 invoice.updateAttributes(
                   {
                     payed: true,
                     paymentRefId: refId,
                     paymentDate: new Date().getTime(),
                   },
-                  function (error) {
+                  function(error) {
                     if (error) {
-                      log.error(error)
+                      log.error(error);
                       return resolve({
                         code: 302,
                         returnUrl: returnUrl
@@ -1267,7 +1265,7 @@ module.exports = function (Business) {
                             '{1}',
                             '&error=Error in update invoice with payment reference Id',
                           ),
-                      })
+                      });
                     }
                     Charge.addCharge({
                       businessId: businessId,
@@ -1277,44 +1275,44 @@ module.exports = function (Business) {
                       forThe:
                         refId + ':' + invoice.paymentId + ':' + invoiceType,
                       date: new Date().getTime(),
-                    })
+                    });
                     return resolve({
                       code: 302,
                       returnUrl: returnUrl
                         .replace('{0}', 'true')
                         .replace('{1}', '&desc=success'),
-                    })
+                    });
                   },
-                )
-              })
+                );
+              });
             } else {
               return resolve({
                 code: 302,
                 returnUrl: returnUrl
                   .replace('{0}', 'false')
                   .replace('{1}', '&error=Payment failed'),
-              })
+              });
             }
           })
-          .fail(function (error) {
-            log.error(error)
+          .fail(function(error) {
+            log.error(error);
             return resolve({
               code: 302,
               returnUrl: returnUrl
                 .replace('{0}', 'false')
                 .replace('{1}', '&error=Error in verifying payment'),
-            })
-          })
-      })
-    })
-  }
+            });
+          });
+      });
+    });
+  };
 
-  Business.adminChargeCredit = function (businessId, rialPrice, cb) {
-    var Invoice = app.models.Invoice
-    var Charge = app.models.Charge
-    var issueDate = new Date().getTime()
-    var paymentDate = new Date().getTime()
-    var price = rialPrice / 10
+  Business.adminChargeCredit = function(businessId, rialPrice, cb) {
+    const Invoice = app.models.Invoice;
+    const Charge = app.models.Charge;
+    const issueDate = new Date().getTime();
+    const paymentDate = new Date().getTime();
+    const price = rialPrice / 10;
 
     Invoice.create(
       {
@@ -1325,16 +1323,16 @@ module.exports = function (Business) {
         paymentDate: paymentDate,
         businessId: businessId,
       },
-      function (error, invoice) {
+      function(error, invoice) {
         if (error) {
-          log.error('@adminPayment, invoice create error:', error)
-          return cb && cb(error)
+          log.error('@adminPayment, invoice create error:', error);
+          return cb && cb(error);
         }
 
-        Business.findById(businessId).then(function (business) {
+        Business.findById(businessId).then(function(business) {
           if (!business) {
-            log.error('@adminPayment, Invalid business id')
-            return cb && cb(new Error('Invalid business id'))
+            log.error('@adminPayment, Invalid business id');
+            return cb && cb(new Error('Invalid business id'));
           }
           Charge.addCharge({
             businessId: businessId,
@@ -1343,14 +1341,14 @@ module.exports = function (Business) {
             notifyOwner: business.mobile,
             forThe: config.ADMIN_CHARGE,
             date: new Date().getTime(),
-          })
+          });
 
-          log.debug('@adminPayment, smsCharge', price)
-          return cb && cb(null, invoice)
-        })
+          log.debug('@adminPayment, smsCharge', price);
+          return cb && cb(null, invoice);
+        });
       },
-    )
-  }
+    );
+  };
 
   Business.remoteMethod('adminChargeCredit', {
     description: 'payment by admin',
@@ -1367,74 +1365,74 @@ module.exports = function (Business) {
       },
     ],
     returns: {root: true},
-  })
+  });
 
-  Business.getBalance = function (businessId, ctx, cb) {
-    log.debug('@getProfileBalance')
-    var SystemConfig = app.models.SystemConfig
+  Business.getBalance = function(businessId, ctx, cb) {
+    log.debug('@getProfileBalance');
+    const SystemConfig = app.models.SystemConfig;
     SystemConfig.isLocal()
-      .then(function (isLocal) {
+      .then(function(isLocal) {
         if (isLocal) {
           utility
             .getSystemUuid(config.SYSTEM_ID_PATH)
-            .then(function (systemUuid) {
+            .then(function(systemUuid) {
               auth
                 .loginToLicenseServer(config.CONFIG_SERVER_LOGIN)
-                .then(function (authResult) {
-                  var token = authResult.token
-                  var userId = authResult.userId
-                  log.debug(config.CONFIG_SERVER_LOCAL_CHARGE)
+                .then(function(authResult) {
+                  const token = authResult.token;
+                  const userId = authResult.userId;
+                  log.debug(config.CONFIG_SERVER_LOCAL_CHARGE);
                   needle.post(
                     config.CONFIG_SERVER_LOCAL_CHARGE.replace('{token}', token),
                     {
                       systemUuid: systemUuid,
                     },
                     {json: true},
-                    function (error, response, body) {
-                      //log.debug('load charge result: ', response.body)
-                      //log.debug('load charge code: ', response.statusCode)
+                    function(error, response, body) {
+                      // log.debug('load charge result: ', response.body)
+                      // log.debug('load charge code: ', response.statusCode)
                       if (error) {
-                        log.error(error)
-                        return cb(new Error('failed to load charges'))
+                        log.error(error);
+                        return cb(new Error('failed to load charges'));
                       }
                       if (response.statusCode !== 200) {
-                        log.error(body)
-                        return cb(new Error('failed to load charges'))
+                        log.error(body);
+                        return cb(new Error('failed to load charges'));
                       }
                       if (body.remaincredit === undefined) {
-                        log.error('failed to load sms credit ', body)
-                        return cb(new Error('failed to load credit '))
+                        log.error('failed to load sms credit ', body);
+                        return cb(new Error('failed to load credit '));
                       }
-                      return cb(null, {balance: body.remaincredit})
+                      return cb(null, {balance: body.remaincredit});
                     },
-                  )
+                  );
                 })
-                .fail(function (error) {
-                  log.error(error)
-                  return cb(error)
-                })
+                .fail(function(error) {
+                  log.error(error);
+                  return cb(error);
+                });
             })
-            .fail(function (error) {
-              log.error(error)
-              return cb(error)
-            })
+            .fail(function(error) {
+              log.error(error);
+              return cb(error);
+            });
         } else {
           db.getProfileBalance(businessId)
-            .then(function (balance) {
-              log.debug(balance)
-              return cb(null, balance)
+            .then(function(balance) {
+              log.debug(balance);
+              return cb(null, balance);
             })
-            .fail(function (error) {
-              log.error(error)
-              return cb(error)
-            })
+            .fail(function(error) {
+              log.error(error);
+              return cb(error);
+            });
         }
       })
-      .fail(function (error) {
-        log.error(error)
-        return reject(error)
-      })
-  }
+      .fail(function(error) {
+        log.error(error);
+        return cb(error);
+      });
+  };
 
   Business.remoteMethod('getBalance', {
     description: 'get balance of the business',
@@ -1447,47 +1445,47 @@ module.exports = function (Business) {
       {arg: 'options', type: 'object', http: 'optionsFromRequest'},
     ],
     returns: {root: true},
-  })
+  });
 
   Business.getTrafficUsage = async (startDate, endDate, departmentId, ctx) => {
-    var businessId = ctx.currentUserId
-    var fromDate = Number.parseInt(startDate)
-    var toDate = Number.parseInt(endDate)
+    const businessId = ctx.currentUserId;
+    const fromDate = Number.parseInt(startDate);
+    const toDate = Number.parseInt(endDate);
 
-    const date = []
-    const upload = []
-    const download = []
-    const sessionTime = []
+    const date = [];
+    const upload = [];
+    const download = [];
+    const sessionTime = [];
     if (!departmentId) {
       return {
         date,
         upload,
         download,
         sessionTime,
-      }
+      };
     }
     if (departmentId === 'all') {
-      departmentId = null
+      departmentId = null;
     }
     const result = await db.getUsageByInterval(
       businessId,
       departmentId,
       fromDate,
       toDate,
-    )
+    );
     for (const res of result) {
-      date.push(res.date)
-      upload.push(Number(res.upload))
-      download.push(Number(res.download))
-      sessionTime.push(Number(res.sessionTime))
+      date.push(res.date);
+      upload.push(Number(res.upload));
+      download.push(Number(res.download));
+      sessionTime.push(Number(res.sessionTime));
     }
     return {
       date,
       upload,
       download,
-      sessionTime
-    }
-  }
+      sessionTime,
+    };
+  };
 
   Business.remoteMethod('getTrafficUsage', {
     description: 'Find data for traffic usage chart from data source.',
@@ -1512,30 +1510,30 @@ module.exports = function (Business) {
       {arg: 'options', type: 'object', http: 'optionsFromRequest'},
     ],
     returns: {arg: 'result', type: 'object'},
-  })
+  });
 
-  Business.loadServiceInfo = function (clbk) {
-    return clbk(null, serviceInfo)
-  }
+  Business.loadServiceInfo = function(clbk) {
+    return clbk(null, serviceInfo);
+  };
 
   Business.remoteMethod('loadServiceInfo', {
     description: 'Load business packages',
     accepts: [],
     returns: {root: true},
-  })
+  });
 
-  Business.getResellerMobile = function (businessId, cb) {
-    log.debug('@getResellerMobile')
+  Business.getResellerMobile = function(businessId, cb) {
+    log.debug('@getResellerMobile');
     if (!businessId) {
-      log.error('invalid business id')
-      return cb(new Error('invalid business id'))
+      log.error('invalid business id');
+      return cb(new Error('invalid business id'));
     }
-    Business.findById(businessId).then(function (business) {
+    Business.findById(businessId).then(function(business) {
       if (!business) {
-        return cb(new Error('business not found'))
+        return cb(new Error('business not found'));
       }
-      var resellerId = business.resellerId
-      var Reseller = app.models.Reseller
+      const resellerId = business.resellerId;
+      const Reseller = app.models.Reseller;
       Reseller.findOne(
         {
           where: {
@@ -1545,20 +1543,20 @@ module.exports = function (Business) {
             mobile: true,
           },
         },
-        function (error, reseller) {
+        function(error, reseller) {
           if (error) {
-            log.error(error)
-            return cb(error)
+            log.error(error);
+            return cb(error);
           }
           if (!reseller) {
-            log.error('reseller not found')
-            return cb(new Error('reseller not found'))
+            log.error('reseller not found');
+            return cb(new Error('reseller not found'));
           }
-          return cb(null, reseller)
+          return cb(null, reseller);
         },
-      )
-    })
-  }
+      );
+    });
+  };
 
   Business.remoteMethod('getResellerMobile', {
     description: 'Get Reseller Mobile Number of Business',
@@ -1570,37 +1568,37 @@ module.exports = function (Business) {
       },
     ],
     returns: {root: true},
-  })
+  });
 
-  Business.hasValidSubscription = function (business) {
-    return Q.Promise(function (resolve, reject) {
+  Business.hasValidSubscription = function(business) {
+    return Q.Promise(function(resolve, reject) {
       if (!business || !business.services) {
-        return reject('business is empty or has no service')
+        return reject('business is empty or has no service');
       }
-      var services = business.services
-      /*var totalDurationInMonths = services.duration;
+      const services = business.services;
+      /* var totalDurationInMonths = services.duration;
 if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
   log.warn ( 'business service has no duration', totalDurationInMonths );
   return reject ( 'business service has no duration' );
-}*/
-      var businessId = business.id
-      var now = new Date()
-      var fromDate = new Date(services.subscriptionDate)
-      var endDate = new Date(services.expiresAt)
-      //endDate.addMonths ( totalDurationInMonths );
-      //endDate.addDays ( config.THRESHOLD_BEFORE_BLOCKING_SERVICE_IN_DAYS );
+} */
+      const businessId = business.id;
+      const now = new Date();
+      const fromDate = new Date(services.subscriptionDate);
+      const endDate = new Date(services.expiresAt);
+      // endDate.addMonths ( totalDurationInMonths );
+      // endDate.addDays ( config.THRESHOLD_BEFORE_BLOCKING_SERVICE_IN_DAYS );
       if (now.isBefore(endDate)) {
         log.warn(
           'This business has valid subscription ',
           business.title,
           businessId,
-        )
-        return resolve(true)
+        );
+        return resolve(true);
       } else {
-        return resolve(false)
+        return resolve(false);
       }
-    })
-  }
+    });
+  };
 
   Business.remoteMethod('hasValidSubscription', {
     description: 'Check if business has valid subscription',
@@ -1612,90 +1610,90 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
       },
     ],
     returns: {root: true},
-  })
+  });
 
-  Business.getPackages = function () {
-    return Q.Promise(function (resolve, reject) {
-      var SystemConfig = app.models.SystemConfig
-      SystemConfig.isLocal().then(function (isLocal) {
+  Business.getPackages = function() {
+    return Q.Promise(function(resolve, reject) {
+      const SystemConfig = app.models.SystemConfig;
+      SystemConfig.isLocal().then(function(isLocal) {
         if (isLocal) {
           needle.post(
             config.CONFIG_SERVER_LOCAL_MODULES,
             {},
             {json: true},
-            function (error, response, body) {
+            function(error, response, body) {
               if (error) {
-                log.error(error)
-                return reject(error)
+                log.error(error);
+                return reject(error);
               }
               if (response.statusCode !== 200) {
-                return reject('failed to load pkgs')
+                return reject('failed to load pkgs');
               }
-              return resolve(body.packages)
+              return resolve(body.packages);
             },
-          )
+          );
         } else {
-          return resolve(config.SERVICES.packages)
+          return resolve(config.SERVICES.packages);
         }
-      })
-    })
-  }
-  Business.loadServices = function (cb) {
+      });
+    });
+  };
+  Business.loadServices = function(cb) {
     Business.getPackages()
-      .then(function (pkgs) {
-        return cb(null, {packages: pkgs})
+      .then(function(pkgs) {
+        return cb(null, {packages: pkgs});
       })
-      .fail(function (error) {
-        log.error(error)
-        return cb(error)
-      })
-  }
+      .fail(function(error) {
+        log.error(error);
+        return cb(error);
+      });
+  };
 
   Business.remoteMethod('loadServices', {
     accepts: [],
     returns: {root: true},
-  })
+  });
 
-  Business.loadResellersPackages = function (cb) {
-    return cb(null, config.RESELLERS_TARIFFS)
-  }
+  Business.loadResellersPackages = function(cb) {
+    return cb(null, config.RESELLERS_TARIFFS);
+  };
 
   Business.remoteMethod('loadResellersPackages', {
     accepts: [],
     returns: {root: true},
-  })
+  });
 
-  Business.resetPasswordByAdmin = function (businessId, password) {
-    return Q.Promise(function (resolve, reject) {
+  Business.resetPasswordByAdmin = function(businessId, password) {
+    return Q.Promise(function(resolve, reject) {
       if (!businessId) {
-        return reject('biz id is empty')
+        return reject('biz id is empty');
       }
-      password = password || utility.createRandomLongNumericalPassword()
-      Business.findById(businessId).then(function (business) {
+      password = password || utility.createRandomLongNumericalPassword();
+      Business.findById(businessId).then(function(business) {
         if (!business) {
-          return reject('biz not found')
+          return reject('biz not found');
         }
         business.updateAttributes(
           {
             password: password,
           },
-          function (error) {
+          function(error) {
             if (error) {
-              log.error(error)
-              return reject(error)
+              log.error(error);
+              return reject(error);
             }
             smsModule.send({
               token1: business.username,
               token2: password,
               mobile: business.mobile,
               template: config.PASSWORD_RESET_TEMPLATE,
-            })
-            return resolve({password: password})
+            });
+            return resolve({password: password});
           },
-        )
-      })
-    })
-  }
+        );
+      });
+    });
+  };
 
   Business.remoteMethod('resetPasswordByAdmin', {
     description: '',
@@ -1711,58 +1709,57 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
       },
     ],
     returns: {root: true},
-  })
+  });
 
-  Business.makeBackup = function (ctx) {
-    return Q.Promise(function (resolve, reject) {
-      var businessId = ctx.currentUserId
-      Business.findById(businessId).then(function (business) {
-
-        var Member = app.models.Member
-        var InternetPlan = app.models.InternetPlan
-        var MemberGroup = app.models.MemberGroup
-        var tasks = []
-        var numberOfMembers = 10000
-        var partitionSize = 100
-        var numberOfTaskPartitions = Math.ceil(numberOfMembers / partitionSize)
+  Business.makeBackup = function(ctx) {
+    return Q.Promise(function(resolve, reject) {
+      const businessId = ctx.currentUserId;
+      Business.findById(businessId).then(function(business) {
+        const Member = app.models.Member;
+        const InternetPlan = app.models.InternetPlan;
+        const MemberGroup = app.models.MemberGroup;
+        const tasks = [];
+        const numberOfMembers = 10000;
+        const partitionSize = 100;
+        const numberOfTaskPartitions = Math.ceil(numberOfMembers / partitionSize);
         if (!businessId) {
-          return reject('invalid biz id')
+          return reject('invalid biz id');
         }
-        for (var i = 0; i <= numberOfTaskPartitions; i++) {
+        for (let i = 0; i <= numberOfTaskPartitions; i++) {
           tasks.push(
-            (function (j) {
-              return function (result) {
+            (function(j) {
+              return function(result) {
                 return Member.find({
                   where: {
                     businessId: businessId,
                   },
                   skip: j * partitionSize,
                   limit: partitionSize,
-                }).then(function (members) {
-                  members.forEach(function (member) {
+                }).then(function(members) {
+                  members.forEach(function(member) {
                     member.passwordText = utility.decrypt(
                       member.passwordText,
                       config.ENCRYPTION_KEY,
-                    )
-                    member.internetPlanHistory = []
-                    result.push(member)
-                  })
-                  return result
-                })
-              }
+                    );
+                    member.internetPlanHistory = [];
+                    result.push(member);
+                  });
+                  return result;
+                });
+              };
             })(i),
-          )
+          );
         }
-        var result = Q([])
-        tasks.forEach(function (f) {
-          result = result.then(f)
-        })
+        let result = Q([]);
+        tasks.forEach(function(f) {
+          result = result.then(f);
+        });
         result
-          .then(function (members) {
+          .then(function(members) {
             InternetPlan.find({where: {businessId: businessId}})
-              .then(function (internetPlans) {
+              .then(function(internetPlans) {
                 MemberGroup.find({where: {businessId: businessId}})
-                  .then(function (memberGroups) {
+                  .then(function(memberGroups) {
                     return resolve({
                       groupMemberCounter: business.groupMemberCounter,
                       memberGroups: memberGroups || [],
@@ -1771,53 +1768,53 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
                       membersSize: members.length || 0,
                       internetPlans: internetPlans || [],
                       internetPlansSize: internetPlans.length || 0,
-                    })
+                    });
                   })
-                  .catch(function (error) {
-                    return reject(error)
-                  })
+                  .catch(function(error) {
+                    return reject(error);
+                  });
               })
-              .catch(function (error) {
-                return reject(error)
-              })
+              .catch(function(error) {
+                return reject(error);
+              });
           })
-          .fail(function (error) {
-            return reject(error)
-          })
-      })
-    })
-  }
+          .fail(function(error) {
+            return reject(error);
+          });
+      });
+    });
+  };
 
   Business.remoteMethod('makeBackup', {
     http: {verb: 'get'},
     accepts: [{arg: 'options', type: 'object', http: 'optionsFromRequest'}],
     returns: {root: true},
-  })
+  });
 
-  Business.restoreBackupFromApi = function (url, ctx) {
-    return Q.Promise(function (resolve, reject) {
+  Business.restoreBackupFromApi = function(url, ctx) {
+    return Q.Promise(function(resolve, reject) {
       if (!url) {
-        return reject('invalid api address')
+        return reject('invalid api address');
       }
-      needle.get(url, {json: true}, function (error, response, body) {
+      needle.get(url, {json: true}, function(error, response, body) {
         if (error) {
-          log.error(error)
-          return reject(error)
+          log.error(error);
+          return reject(error);
         }
         if (!body) {
-          return reject('invalid response, empty body')
+          return reject('invalid response, empty body');
         }
         Business.restoreBackup(body, ctx)
-          .then(function (result) {
-            return resolve(result)
+          .then(function(result) {
+            return resolve(result);
           })
-          .fail(function (error) {
-            log.error(error)
-            return reject(error)
-          })
-      })
-    })
-  }
+          .fail(function(error) {
+            log.error(error);
+            return reject(error);
+          });
+      });
+    });
+  };
 
   Business.remoteMethod('restoreBackupFromApi', {
     accepts: [
@@ -1829,71 +1826,71 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
       {arg: 'options', type: 'object', http: 'optionsFromRequest'},
     ],
     returns: {root: true},
-  })
+  });
 
-  Business.restoreBackup = function (backup, ctx) {
-    var businessId = ctx.currentUserId
-    var Member = app.models.Member
-    var InternetPlan = app.models.InternetPlan
-    var MemberGroup = app.models.MemberGroup
+  Business.restoreBackup = function(backup, ctx) {
+    const businessId = ctx.currentUserId;
+    const Member = app.models.Member;
+    const InternetPlan = app.models.InternetPlan;
+    const MemberGroup = app.models.MemberGroup;
 
-    return Q.Promise(function (resolve, reject) {
-      var createMemberGroupTasks = []
-      backup.memberGroups.forEach(function (memberGroup) {
+    return Q.Promise(function(resolve, reject) {
+      const createMemberGroupTasks = [];
+      backup.memberGroups.forEach(function(memberGroup) {
         createMemberGroupTasks.push(
-          (function (memberGroupId) {
-            return function (memberGroupDic) {
-              memberGroup.businessId = businessId
-              delete memberGroup.id
-              log.debug('go add memberGroup', memberGroup)
-              return MemberGroup.create(memberGroup).then(function (
+          (function(memberGroupId) {
+            return function(memberGroupDic) {
+              memberGroup.businessId = businessId;
+              delete memberGroup.id;
+              log.debug('go add memberGroup', memberGroup);
+              return MemberGroup.create(memberGroup).then(function(
                 createdMemberGroup,
               ) {
-                memberGroupDic[memberGroupId] = createdMemberGroup.id
-                return memberGroupDic
-              })
-            }
+                memberGroupDic[memberGroupId] = createdMemberGroup.id;
+                return memberGroupDic;
+              });
+            };
           })(memberGroup.id),
-        )
-      })
+        );
+      });
 
-      var memberGroupResult = Q({})
-      createMemberGroupTasks.forEach(function (f) {
-        memberGroupResult = memberGroupResult.then(f)
-      })
+      let memberGroupResult = Q({});
+      createMemberGroupTasks.forEach(function(f) {
+        memberGroupResult = memberGroupResult.then(f);
+      });
       memberGroupResult
-        .then(function (memberGroupCreateResult) {
-          var createInternetPlanTasks = []
-          backup.internetPlans.forEach(function (internetPlan) {
+        .then(function(memberGroupCreateResult) {
+          const createInternetPlanTasks = [];
+          backup.internetPlans.forEach(function(internetPlan) {
             createInternetPlanTasks.push(
-              (function (internetPlanId) {
-                return function (internetPlanDic) {
-                  internetPlan.businessId = businessId
-                  delete internetPlan.id
-                  log.debug('go add ip', internetPlan)
-                  return InternetPlan.create(internetPlan).then(function (
+              (function(internetPlanId) {
+                return function(internetPlanDic) {
+                  internetPlan.businessId = businessId;
+                  delete internetPlan.id;
+                  log.debug('go add ip', internetPlan);
+                  return InternetPlan.create(internetPlan).then(function(
                     createdInternetPlan,
                   ) {
-                    internetPlanDic[internetPlanId] = createdInternetPlan.id
-                    return internetPlanDic
-                  })
-                }
+                    internetPlanDic[internetPlanId] = createdInternetPlan.id;
+                    return internetPlanDic;
+                  });
+                };
               })(internetPlan.id),
-            )
-          })
+            );
+          });
 
-          var internetPlanResult = Q({})
-          createInternetPlanTasks.forEach(function (f) {
-            internetPlanResult = internetPlanResult.then(f)
-          })
+          let internetPlanResult = Q({});
+          createInternetPlanTasks.forEach(function(f) {
+            internetPlanResult = internetPlanResult.then(f);
+          });
           internetPlanResult
-            .then(function (createInternetPlanResult) {
-              var createMembersTasks = []
-              backup.members.forEach(function (member) {
+            .then(function(createInternetPlanResult) {
+              const createMembersTasks = [];
+              backup.members.forEach(function(member) {
                 createMembersTasks.push(
-                  (function () {
-                    return function () {
-                      var options = {
+                  (function() {
+                    return function() {
+                      const options = {
                         businessId: businessId,
                         active: member.active,
                         sendVerificationSms: false,
@@ -1906,53 +1903,53 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
                         groupIdentityType: member.groupIdentityType,
                         username: member.username.split('@')[0],
                         password: member.passwordText,
-                      }
-                      log.debug('go add member', options)
-                      return Member.createNewMember(options, businessId)
-                    }
+                      };
+                      log.debug('go add member', options);
+                      return Member.createNewMember(options, businessId);
+                    };
                   })(),
-                )
-              })
+                );
+              });
 
-              var memberResult = Q({})
-              createMembersTasks.forEach(function (f) {
-                memberResult = memberResult.then(f)
-              })
+              let memberResult = Q({});
+              createMembersTasks.forEach(function(f) {
+                memberResult = memberResult.then(f);
+              });
               memberResult
-                .then(function () {
+                .then(function() {
                   Business.findById(businessId)
-                    .then(function (business) {
+                    .then(function(business) {
                       business.updateAttributes(
                         {
                           groupMemberCounter:
                             backup.groupMemberCounter ||
                             config.BUSINESS_GROUP_MEMBER_COUNTER_START,
                         },
-                        function (error) {
+                        function(error) {
                           if (error) {
-                            return reject(error)
+                            return reject(error);
                           }
-                          return resolve({ok: true})
+                          return resolve({ok: true});
                         },
-                      )
+                      );
                     })
-                    .catch(function (error) {
-                      return reject(error)
-                    })
+                    .catch(function(error) {
+                      return reject(error);
+                    });
                 })
-                .fail(function (error) {
-                  return reject(error)
-                })
+                .fail(function(error) {
+                  return reject(error);
+                });
             })
-            .fail(function (error) {
-              return reject(error)
-            })
+            .fail(function(error) {
+              return reject(error);
+            });
         })
-        .fail(function (error) {
-          return reject(error)
-        })
-    })
-  }
+        .fail(function(error) {
+          return reject(error);
+        });
+    });
+  };
 
   Business.remoteMethod('restoreBackup', {
     accepts: [
@@ -1964,56 +1961,56 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
       {arg: 'options', type: 'object', http: 'optionsFromRequest'},
     ],
     returns: {root: true},
-  })
+  });
 
   Business.isMoreSessionAllowed = async (business) => {
-    var ClientSession = app.models.ClientSession
-    const result = await ClientSession.getOnlineSessionCount(business.id, 'all')
-    var concurrentSession = result.count
-    var currentService = business.services
-    return concurrentSession <= currentService.allowedOnlineUsers
-  }
+    const ClientSession = app.models.ClientSession;
+    const result = await ClientSession.getOnlineSessionCount(business.id, 'all');
+    const concurrentSession = result.count;
+    const currentService = business.services;
+    return concurrentSession <= currentService.allowedOnlineUsers;
+  };
 
-  Business.destroyMembersById = function (memberIds, ctx) {
-    return Q.promise(function (resolve, reject) {
-      var businessId = ctx.currentUserId
-      var Member = app.models.Member
-      log.debug('@destroyMembersById')
+  Business.destroyMembersById = function(memberIds, ctx) {
+    return Q.promise(function(resolve, reject) {
+      const businessId = ctx.currentUserId;
+      const Member = app.models.Member;
+      log.debug('@destroyMembersById');
       if (!businessId) {
-        return reject('invalid businessId')
+        return reject('invalid businessId');
       }
       if (!memberIds || memberIds.length == 0) {
-        return reject('invalid array of members')
+        return reject('invalid array of members');
       }
-      var tasks = []
+      const tasks = [];
       for (var i = 0; i < memberIds.length; i++) {
-        (function () {
-          var memberId = memberIds[i]
+        (function() {
+          const memberId = memberIds[i];
           tasks.push(
-            Q.Promise(function (resolve, reject) {
-              Member.destroyById(memberId, {businessId: businessId}, function (
+            Q.Promise(function(resolve, reject) {
+              Member.destroyById(memberId, {businessId: businessId}, function(
                 error,
                 res,
               ) {
                 if (error) {
-                  log.error(error)
-                  return reject(error)
+                  log.error(error);
+                  return reject(error);
                 }
-                return resolve(res)
-              })
+                return resolve(res);
+              });
             }),
-          )
-        })()
+          );
+        })();
       }
       Q.all(tasks)
-        .then(function (resultArray) {
-          return resolve({result: resultArray})
+        .then(function(resultArray) {
+          return resolve({result: resultArray});
         })
-        .fail(function (error) {
-          return reject(error)
-        })
-    })
-  }
+        .fail(function(error) {
+          return reject(error);
+        });
+    });
+  };
 
   Business.remoteMethod('destroyMembersById', {
     accepts: [
@@ -2025,69 +2022,68 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
       {arg: 'options', type: 'object', http: 'optionsFromRequest'},
     ],
     returns: {root: true},
-  })
+  });
 
-  Business.paypingAuthorization = function (ctx, cb) {
-    var businessId = ctx.currentUserId
+  Business.paypingAuthorization = function(ctx, cb) {
+    const businessId = ctx.currentUserId;
     if (!businessId) {
-      return cb(new Error('invalid biz id'))
+      return cb(new Error('invalid biz id'));
     }
-    Business.findById(businessId).then(function (business) {
+    Business.findById(businessId).then(function(business) {
       if (!business) {
-        return cb(new Error('invalid biz id'))
+        return cb(new Error('invalid biz id'));
       }
-      const verifier = base64URLEncode(crypto.randomBytes(32))
-      log.debug('verifier', verifier)
+      const verifier = base64URLEncode(crypto.randomBytes(32));
+      log.debug('verifier', verifier);
       business.updateAttributes({
-          paypingCodeVerifier: verifier
-        }, (error) => {
-          if (error) {
-            return cb(error)
-          }
-          const challenge = base64URLEncode(sha256(verifier))
-          log.debug('challenge ', challenge)
-          const clientId = config.PAYPING_APP_CLIENT_ID
-          //const token = config.PAYPING_APP_TOKEN;
-          const returnUrl = config.PAYPING_AUTH_RETURN_URL
-          const scopes = config.PAYPING_APP_REQUESTED_SCOPES
-          const paypingAuthUrl = `https://oauth.payping.ir/connect/authorize?state=${businessId}&scope=${scopes}&response_type=code&client_id=${clientId}&code_challenge=${challenge}&code_challenge_method=S256&redirect_uri=${returnUrl}`
-          log.debug('@payping auth')
-          return cb(null, {
-            code: 302,
-            returnUrl: paypingAuthUrl,
-          })
-        },
-      )
-    })
+        paypingCodeVerifier: verifier,
+      }, (error) => {
+        if (error) {
+          return cb(error);
+        }
+        const challenge = base64URLEncode(sha256(verifier));
+        log.debug('challenge ', challenge);
+        const clientId = config.PAYPING_APP_CLIENT_ID;
+        // const token = config.PAYPING_APP_TOKEN;
+        const returnUrl = config.PAYPING_AUTH_RETURN_URL;
+        const scopes = config.PAYPING_APP_REQUESTED_SCOPES;
+        const paypingAuthUrl = `https://oauth.payping.ir/connect/authorize?state=${businessId}&scope=${scopes}&response_type=code&client_id=${clientId}&code_challenge=${challenge}&code_challenge_method=S256&redirect_uri=${returnUrl}`;
+        log.debug('@payping auth');
+        return cb(null, {
+          code: 302,
+          returnUrl: paypingAuthUrl,
+        });
+      },);
+    });
 
-    function sha256 (buffer) {
-      return crypto.createHash('sha256').update(buffer).digest()
+    function sha256(buffer) {
+      return crypto.createHash('sha256').update(buffer).digest();
     }
 
-    function base64URLEncode (str) {
+    function base64URLEncode(str) {
       return str.toString('base64')
         .replace(/\+/g, '-')
         .replace(/\//g, '_')
-        .replace(/=/g, '')
+        .replace(/=/g, '');
     }
-  }
+  };
 
   Business.remoteMethod('paypingAuthorization', {
     accepts: [{arg: 'options', type: 'object', http: 'optionsFromRequest'}],
     returns: {root: true},
-  })
+  });
 
-  Business.paypingSaveToken = function (options) {
-    return Q.Promise(function (resolve, reject) {
-      log.debug('@paypingSaveToken')
-      var returnUrl = config.PAYPING_AUTHORISE_RESULT_URL()
+  Business.paypingSaveToken = function(options) {
+    return Q.Promise(function(resolve, reject) {
+      log.debug('@paypingSaveToken');
+      const returnUrl = config.PAYPING_AUTHORISE_RESULT_URL();
       if (!options) {
         return resolve({
           code: 302,
           returnUrl: returnUrl
             .replace('{0}', 'false')
             .replace('{1}', '&error=No response'),
-        })
+        });
       }
       if (options.error && options.error === 'access_denied') {
         return resolve({
@@ -2095,7 +2091,7 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
           returnUrl: returnUrl
             .replace('{0}', 'false')
             .replace('{1}', '&error=Access denied'),
-        })
+        });
       }
       if (options.error) {
         return resolve({
@@ -2103,142 +2099,141 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
           returnUrl: returnUrl
             .replace('{0}', 'false')
             .replace('{1}', '&error=Error in connecting to Payping'),
-        })
+        });
       }
-      var Business = app.models.Business
-      var businessId = options.state
-      var code = options.code
-      Business.findById(businessId).then(function (business) {
+      const Business = app.models.Business;
+      const businessId = options.state;
+      const code = options.code;
+      Business.findById(businessId).then(function(business) {
         if (!business) {
           return resolve({
             code: 302,
             returnUrl: returnUrl
               .replace('{0}', 'false')
               .replace('{1}', '&error=Invalid business id'),
-          })
+          });
         }
         needle.post(config.PAYPING_OAUTH2, {
-            'grant_type': 'authorization_code',
-            'client_id': config.PAYPING_APP_CLIENT_ID,
-            'client_secret': config.PAYPING_APP_TOKEN,
-            'code_verifier': business.paypingCodeVerifier,
-            'code': code,
-            'redirect_uri': `${config.PAYPING_AUTH_RETURN_URL}`,
-          }, {'content-type': 'application/json'}, (error, resp) => {
-            const body = resp.body
-            if (error) {
-              log.error('failed to get access_token for code', code)
-              log.error(error)
-              return resolve({
-                code: 302,
-                returnUrl: returnUrl
-                  .replace('{0}', 'false')
-                  .replace('{1}', '&error=' + error),
-              })
-            }
-            try {
-              var accessToken = body.access_token
-              var accessTokenType = body.token_type
-              var tokenId = body.id_token
-              if (accessToken) {
-                business.updateAttributes(
-                  {
-                    paymentApiKey: accessToken,
-                    paypingTokenId: tokenId,
-                    paypingTokenType: accessTokenType,
-                  },
-                  function (error) {
-                    if (error) {
-                      log.error(error)
-                      return resolve({
-                        code: 302,
-                        returnUrl: returnUrl
-                          .replace('{0}', 'false')
-                          .replace(
-                            '{1}',
-                            '&error=Error in update business with new Payping token',
-                          ),
-                      })
-                    }
-                    log.debug(
-                      '@Payping token saved successfully for business: ',
-                      businessId,
-                    )
+          'grant_type': 'authorization_code',
+          'client_id': config.PAYPING_APP_CLIENT_ID,
+          'client_secret': config.PAYPING_APP_TOKEN,
+          'code_verifier': business.paypingCodeVerifier,
+          'code': code,
+          'redirect_uri': `${config.PAYPING_AUTH_RETURN_URL}`,
+        }, {'content-type': 'application/json'}, (error, resp) => {
+          const body = resp.body;
+          if (error) {
+            log.error('failed to get access_token for code', code);
+            log.error(error);
+            return resolve({
+              code: 302,
+              returnUrl: returnUrl
+                .replace('{0}', 'false')
+                .replace('{1}', '&error=' + error),
+            });
+          }
+          try {
+            const accessToken = body.access_token;
+            const accessTokenType = body.token_type;
+            const tokenId = body.id_token;
+            if (accessToken) {
+              business.updateAttributes(
+                {
+                  paymentApiKey: accessToken,
+                  paypingTokenId: tokenId,
+                  paypingTokenType: accessTokenType,
+                },
+                function(error) {
+                  if (error) {
+                    log.error(error);
                     return resolve({
                       code: 302,
                       returnUrl: returnUrl
-                        .replace('{0}', 'true')
-                        .replace('{1}', '&desc=success'),
-                    })
-                  },
-                )
-              } else {
-                log.error(body)
-                return resolve({
-                  code: 302,
-                  returnUrl: returnUrl
-                    .replace('{0}', 'false')
-                    .replace(
-                      '{1}',
-                      '&error=invalid access token or account id',
-                    ),
-                })
-              }
-            } catch (error) {
-              log.error(error)
+                        .replace('{0}', 'false')
+                        .replace(
+                          '{1}',
+                          '&error=Error in update business with new Payping token',
+                        ),
+                    });
+                  }
+                  log.debug(
+                    '@Payping token saved successfully for business: ',
+                    businessId,
+                  );
+                  return resolve({
+                    code: 302,
+                    returnUrl: returnUrl
+                      .replace('{0}', 'true')
+                      .replace('{1}', '&desc=success'),
+                  });
+                },
+              );
+            } else {
+              log.error(body);
               return resolve({
                 code: 302,
                 returnUrl: returnUrl
                   .replace('{0}', 'false')
-                  .replace('{1}', '&error=' + error),
-              })
+                  .replace(
+                    '{1}',
+                    '&error=invalid access token or account id',
+                  ),
+              });
             }
-          },
-        )
-      })
-    })
-  }
+          } catch (error) {
+            log.error(error);
+            return resolve({
+              code: 302,
+              returnUrl: returnUrl
+                .replace('{0}', 'false')
+                .replace('{1}', '&error=' + error),
+            });
+          }
+        },);
+      });
+    });
+  };
 
-  Business.dropBoxAuthorization = function (ctx, cb) {
-    var businessId = ctx.currentUserId
+  Business.dropBoxAuthorization = function(ctx, cb) {
+    const businessId = ctx.currentUserId;
     if (!businessId) {
-      return cb(new Error('invalid biz id'))
+      return cb(new Error('invalid biz id'));
     }
-    log.debug('@dropBoxAuthorization')
-    Business.findById(businessId).then(function (business) {
+    log.debug('@dropBoxAuthorization');
+    Business.findById(businessId).then(function(business) {
       if (!business) {
-        return cb(new Error('invalid biz id'))
+        return cb(new Error('invalid biz id'));
       }
-      var CSRFToken = businessId
-      var redirectURI = config.DROPBOX_REST_API()
-      var appKey = config.DROPBOX_APP_KEY()
-      var DROPBOX_AUTH_URL = config.DROPBOX_AUTHORISE_URL
-      var dropBoxAuthUrl = DROPBOX_AUTH_URL.replace('{0}', appKey)
+      const CSRFToken = businessId;
+      const redirectURI = config.DROPBOX_REST_API();
+      const appKey = config.DROPBOX_APP_KEY();
+      const DROPBOX_AUTH_URL = config.DROPBOX_AUTHORISE_URL;
+      const dropBoxAuthUrl = DROPBOX_AUTH_URL.replace('{0}', appKey)
         .replace('{1}', redirectURI)
-        .replace('{2}', CSRFToken)
+        .replace('{2}', CSRFToken);
       return cb(null, {
         code: 302,
         returnUrl: dropBoxAuthUrl,
-      })
-    })
-  }
+      });
+    });
+  };
 
   Business.remoteMethod('dropBoxAuthorization', {
     accepts: [{arg: 'options', type: 'object', http: 'optionsFromRequest'}],
     returns: {root: true},
-  })
+  });
 
-  Business.dropboxSaveToken = function (options) {
-    return Q.Promise(function (resolve, reject) {
-      log.debug('@dropboxSaveToken')
-      var returnUrl = config.DROPBOX_AUTHORISE_RESULT_URL()
+  Business.dropboxSaveToken = function(options) {
+    return Q.Promise(function(resolve, reject) {
+      log.debug('@dropboxSaveToken');
+      const returnUrl = config.DROPBOX_AUTHORISE_RESULT_URL();
       if (!options) {
         return resolve({
           code: 302,
           returnUrl: returnUrl
             .replace('{0}', 'false')
             .replace('{1}', '&error=No response'),
-        })
+        });
       }
       if (options.error && options.error === 'access_denied') {
         return resolve({
@@ -2246,7 +2241,7 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
           returnUrl: returnUrl
             .replace('{0}', 'false')
             .replace('{1}', '&error=Access denied'),
-        })
+        });
       }
       if (options.error) {
         return resolve({
@@ -2254,19 +2249,19 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
           returnUrl: returnUrl
             .replace('{0}', 'false')
             .replace('{1}', '&error=Error in connecting to dropbox'),
-        })
+        });
       }
-      var Business = app.models.Business
-      var businessId = options.state
-      var code = options.code
-      Business.findById(businessId).then(function (business) {
+      const Business = app.models.Business;
+      const businessId = options.state;
+      const code = options.code;
+      Business.findById(businessId).then(function(business) {
         if (!business) {
           return resolve({
             code: 302,
             returnUrl: returnUrl
               .replace('{0}', 'false')
               .replace('{1}', '&error=Invalid business id'),
-          })
+          });
         }
         request(
           {
@@ -2280,30 +2275,30 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
               redirect_uri: config.DROPBOX_REST_API(),
             },
           },
-          function (error, resp, body) {
+          function(error, resp, body) {
             if (error) {
-              log.error('failed to get access_token for code', code)
-              log.error(error)
+              log.error('failed to get access_token for code', code);
+              log.error(error);
               return resolve({
                 code: 302,
                 returnUrl: returnUrl
                   .replace('{0}', 'false')
                   .replace('{1}', '&error=' + error),
-              })
+              });
             }
             try {
-              var result = JSON.parse(body)
-              var access_token = result.access_token
-              var account_id = result.account_id
+              const result = JSON.parse(body);
+              const access_token = result.access_token;
+              const account_id = result.account_id;
               if (access_token && account_id) {
                 business.updateAttributes(
                   {
                     dropboxToken: access_token,
                     dropboxAccountId: account_id,
                   },
-                  function (error) {
+                  function(error) {
                     if (error) {
-                      log.error(error)
+                      log.error(error);
                       return resolve({
                         code: 302,
                         returnUrl: returnUrl
@@ -2312,22 +2307,22 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
                             '{1}',
                             '&error=Error in update business with new Dropbox token',
                           ),
-                      })
+                      });
                     }
                     log.debug(
                       '@Dropbox token saved successfully for business: ',
                       businessId,
-                    )
+                    );
                     return resolve({
                       code: 302,
                       returnUrl: returnUrl
                         .replace('{0}', 'true')
                         .replace('{1}', '&desc=success'),
-                    })
+                    });
                   },
-                )
+                );
               } else {
-                log.error(result)
+                log.error(result);
                 return resolve({
                   code: 302,
                   returnUrl: returnUrl
@@ -2336,32 +2331,32 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
                       '{1}',
                       '&error=invalid access token or account id',
                     ),
-                })
+                });
               }
             } catch (error) {
-              log.error(error)
+              log.error(error);
               return resolve({
                 code: 302,
                 returnUrl: returnUrl
                   .replace('{0}', 'false')
                   .replace('{1}', '&error=' + error),
-              })
+              });
             }
           },
-        )
-      })
-    })
-  }
+        );
+      });
+    });
+  };
 
-  Business.createLocalInvoice = function (
+  Business.createLocalInvoice = function(
     businessId,
     mobile,
     moduleId,
     duration,
   ) {
-    return Q.Promise(function (resolve, reject) {
-      var Invoice = app.models.Invoice
-      var price = config.LOCAL_MODULES[moduleId].price * duration
+    return Q.Promise(function(resolve, reject) {
+      const Invoice = app.models.Invoice;
+      const price = config.LOCAL_MODULES[moduleId].price * duration;
       Invoice.create(
         {
           price: price,
@@ -2374,16 +2369,16 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
           creationDate: new Date().getTime(),
           issueDate: new Date(),
         },
-        function (error, invoice) {
+        function(error, invoice) {
           if (error) {
-            log.error('failed to create invoice', error)
-            return reject(error)
+            log.error('failed to create invoice', error);
+            return reject(error);
           }
-          var invoiceId = invoice.id
-          var returnUrl = config
+          const invoiceId = invoice.id;
+          const returnUrl = config
             .LOCAL_PAYMENT_RETURN_URL()
             .replace('{0}', 'invoiceId')
-            .replace('{1}', invoiceId)
+            .replace('{1}', invoiceId);
           Payment.openPaymentGateway(
             config.PAYMENT_API_KEY,
             price,
@@ -2392,67 +2387,67 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
             config.PAYMENT_SUPPORT_MOBILE,
             returnUrl,
           )
-            .then(function (response) {
-              var url = response.url
-              var paymentId = response.paymentId
+            .then(function(response) {
+              const url = response.url;
+              const paymentId = response.paymentId;
               invoice
                 .updateAttributes({
                   paymentId: paymentId,
                 })
                 .then(
-                  function () {
-                    return resolve({url: url})
+                  function() {
+                    return resolve({url: url});
                   },
-                  function (error) {
-                    log.error('invoice update error:', error)
-                    return reject(error)
+                  function(error) {
+                    log.error('invoice update error:', error);
+                    return reject(error);
                   },
-                )
+                );
             })
-            .fail(function (error) {
-              log.error('failed to open payment gateway')
-              log.error(error)
-              return reject(error)
-            })
+            .fail(function(error) {
+              log.error('failed to open payment gateway');
+              log.error(error);
+              return reject(error);
+            });
         }
-      )
-    })
-  }
+      );
+    });
+  };
 
-  Business.loadMembersUsernames = function (businessId) {
-    var Member = app.models.Member
-    return Q.Promise(function (resolve, reject) {
+  Business.loadMembersUsernames = function(businessId) {
+    const Member = app.models.Member;
+    return Q.Promise(function(resolve, reject) {
       Member.find(
         {
           where: {
             and: [
-              {businessId: businessId}
-            ]
+              {businessId: businessId},
+            ],
           },
           fields: {
             username: true,
-            id: true
-          }
+            id: true,
+          },
         },
-        function (error, members) {
+        function(error, members) {
           if (error) {
-            log.error(error)
-            return reject(error)
+            log.error(error);
+            return reject(error);
           }
           if (members.length != 0) {
-            members.forEach(function (member) {
-              var username = member.username
-              member.username = username.split('@')[0]
-            })
-            return resolve(members)
+            members.forEach(function(member) {
+              const username = member.username;
+              member.username = username.split('@')[0];
+            });
+            return resolve(members);
           } else {
-            log.error('member not found')
-            return reject('member not found')
+            log.error('member not found');
+            return reject('member not found');
           }
         }
-      )
-    })
-  }
+      );
+    });
+  };
 
   Business.remoteMethod('loadMembersUsernames', {
     description: 'load members usernames',
@@ -2460,53 +2455,53 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
       {
         arg: 'businessId',
         type: 'string',
-        required: true
-      }
+        required: true,
+      },
     ],
-    returns: {arg: 'members', type: 'Array'}
+    returns: {arg: 'members', type: 'Array'},
 
-  })
+  });
 
-  Business.destroyReportsById = function (reportIds, ctx) {
-    return Q.promise(function (resolve, reject) {
-      var businessId = ctx.currentUserId
-      var Report = app.models.Report
-      log.debug('@destroyReportsById')
+  Business.destroyReportsById = function(reportIds, ctx) {
+    return Q.promise(function(resolve, reject) {
+      const businessId = ctx.currentUserId;
+      const Report = app.models.Report;
+      log.debug('@destroyReportsById');
       if (!businessId) {
-        return reject('invalid businessId')
+        return reject('invalid businessId');
       }
       if (!reportIds || reportIds.length == 0) {
-        return reject('invalid array of reports')
+        return reject('invalid array of reports');
       }
-      var tasks = []
+      const tasks = [];
       for (var i = 0; i < reportIds.length; i++) {
-        (function () {
-          var reportId = reportIds[i]
+        (function() {
+          const reportId = reportIds[i];
           tasks.push(
-            Q.Promise(function (resolve, reject) {
-              Report.destroyById(reportId, {businessId: businessId}, function (
+            Q.Promise(function(resolve, reject) {
+              Report.destroyById(reportId, {businessId: businessId}, function(
                 error,
                 res,
               ) {
                 if (error) {
-                  log.error(error)
-                  return reject(error)
+                  log.error(error);
+                  return reject(error);
                 }
-                return resolve(res)
-              })
+                return resolve(res);
+              });
             }),
-          )
-        })()
+          );
+        })();
       }
       Q.all(tasks)
-        .then(function (resultArray) {
-          return resolve({result: resultArray})
+        .then(function(resultArray) {
+          return resolve({result: resultArray});
         })
-        .fail(function (error) {
-          return reject(error)
-        })
-    })
-  }
+        .fail(function(error) {
+          return reject(error);
+        });
+    });
+  };
 
   Business.remoteMethod('destroyReportsById', {
     accepts: [
@@ -2518,38 +2513,38 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
       {arg: 'options', type: 'object', http: 'optionsFromRequest'},
     ],
     returns: {root: true},
-  })
+  });
 
-  Business.loadNasTitles = function (businessId) {
-    var Nas = app.models.Nas
-    return Q.Promise(function (resolve, reject) {
+  Business.loadNasTitles = function(businessId) {
+    const Nas = app.models.Nas;
+    return Q.Promise(function(resolve, reject) {
       Nas.find(
         {
           where: {
             and: [
-              {businessId: businessId}
-            ]
+              {businessId: businessId},
+            ],
           },
           fields: {
             title: true,
-            id: true
-          }
+            id: true,
+          },
         },
-        function (error, nas) {
+        function(error, nas) {
           if (error) {
-            log.error(error)
-            return reject(error)
+            log.error(error);
+            return reject(error);
           }
           if (nas.length != 0) {
-            return resolve(nas)
+            return resolve(nas);
           } else {
-            log.error('nas not found')
-            return reject('nas not found')
+            log.error('nas not found');
+            return reject('nas not found');
           }
         }
-      )
-    })
-  }
+      );
+    });
+  };
 
   Business.remoteMethod('loadNasTitles', {
     description: 'load nas by titles',
@@ -2557,11 +2552,10 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
       {
         arg: 'businessId',
         type: 'string',
-        required: true
-      }
+        required: true,
+      },
     ],
-    returns: {arg: 'nas', type: 'Array'}
+    returns: {arg: 'nas', type: 'Array'},
 
-  })
-
-}
+  });
+};

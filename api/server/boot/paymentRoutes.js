@@ -1,22 +1,22 @@
 /**
  * Created by rezanazari on 12/14/16.
  */
-var logger = require('../modules/logger');
-var log = logger.createLogger();
+const logger = require('../modules/logger');
+const log = logger.createLogger();
 
 module.exports = function(app) {
-  var router = app.loopback.Router();
+  const router = app.loopback.Router();
 
   router.get('/api/payment/hotspot/return', function(req, res) {
-    var invoiceId = req.query.invoiceId;
-    var username = req.query.username;
-    var password = req.query.password;
-    var businessId = req.query.businessId;
-    var refId = req.query.refid;
-    var memberId = req.query.memberId;
-    var nasId = req.query.nasId;
-    var host = req.query.host;
-    var Member = app.models.Member;
+    const invoiceId = req.query.invoiceId;
+    const username = req.query.username;
+    const password = req.query.password;
+    const businessId = req.query.businessId;
+    const refId = req.query.refid;
+    const memberId = req.query.memberId;
+    const nasId = req.query.nasId;
+    const host = req.query.host;
+    const Member = app.models.Member;
     Member.verifySubscriptionPayment(
       refId,
       invoiceId,
@@ -28,8 +28,8 @@ module.exports = function(app) {
       businessId
     )
       .then(function(result) {
-        var url = result.returnUrl;
-        var code = result.code;
+        const url = result.returnUrl;
+        const code = result.code;
         return res.status(code).redirect(url);
       })
       .fail(function(error) {
@@ -39,68 +39,68 @@ module.exports = function(app) {
   });
 
   router.get('/api/payment/business/return', function(req, res) {
-    var Business = app.models.Business;
-    var invoiceId = req.query.invoiceId;
-    var refId = req.query.refid;
+    const Business = app.models.Business;
+    const invoiceId = req.query.invoiceId;
+    const refId = req.query.refid;
 
-    Business.verifyBuyPackage(invoiceId,refId)
+    Business.verifyBuyPackage(invoiceId, refId)
       .then(function(result) {
-        var url = result.returnUrl;
-        var code = result.code;
+        const url = result.returnUrl;
+        const code = result.code;
         return res.status(code).redirect(url);
       })
       .fail(function(error) {
         log.error('error', error);
-        return res.json(500, { error: error });
+        return res.json(500, {error: error});
       });
   });
 
   router.get('/api/payment/external/return', function(req, res) {
-    var Invoice = app.models.Invoice;
-    var invoiceId = req.query.invoiceId;
-    var refId = req.query.refid;
-    Invoice.verifyExternalInvoice(invoiceId,refId)
+    const Invoice = app.models.Invoice;
+    const invoiceId = req.query.invoiceId;
+    const refId = req.query.refid;
+    Invoice.verifyExternalInvoice(invoiceId, refId)
       .then(function(result) {
-        var url = result.returnUrl;
-        var code = result.code;
+        const url = result.returnUrl;
+        const code = result.code;
         return res.status(code).redirect(url);
       })
       .fail(function(error) {
         log.error('error', error);
-        return res.json(500, { error: error });
+        return res.json(500, {error: error});
       });
   });
 
   router.get('/api/payment/charge/return', function(req, res) {
-    var Business = app.models.Business;
-    var invoiceId = req.query.invoiceId;
-    var refId = req.query.refid;
-    Business.verifyBuyCredit(invoiceId,refId)
+    const Business = app.models.Business;
+    const invoiceId = req.query.invoiceId;
+    const refId = req.query.refid;
+    Business.verifyBuyCredit(invoiceId, refId)
       .then(function(result) {
-        var url = result.returnUrl;
-        var code = result.code;
+        const url = result.returnUrl;
+        const code = result.code;
         return res.status(code).redirect(url);
       })
       .fail(function(error) {
         log.error('error', error);
-        return res.json(500, { error: error });
+        return res.json(500, {error: error});
       });
   });
 
   router.get('/api/payment/member/return', function(req, res) {
-    var Member = app.models.Member;
-    var invoiceId = req.query.invoiceId;
-    var refId = req.query.refid;
+    const Member = app.models.Member;
+    const invoiceId = req.query.invoiceId;
+    const refId = req.query.refid;
 
-    Member.verifyPayment(invoiceId,refId)
+    Member.verifyPayment(invoiceId, refId)
       .then(function(result) {
-        var url = result.returnUrl;
-        var code = result.code;
+        const url = result.returnUrl;
+        const code = result.code;
         return res.status(code).redirect(url);
       })
       .fail(function(error) {
         log.error('error', error);
-        return res.json(500, { error: error });
+        return res.json(500, {error: error});
       });
   });
 

@@ -7,13 +7,13 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
   //   import lbServices from './lb-services';
   //   angular.module('app', [lbServices]);
   //
-  module.exports = "lbServices";
+  module.exports = 'lbServices';
 }
 
 (function(window, angular, undefined) {
   'use strict';
 
-  var urlBase = "http://127.0.0.1:3000/api";
+  var urlBase = 'http://127.0.0.1:3000/api';
   var authHeader = 'authorization';
 
   function getHost(url) {
@@ -23,7 +23,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
 
   var urlBaseHost = getHost(urlBase) || location.host;
 
-/**
+  /**
  * @ngdoc overview
  * @name lbServices
  * @module
@@ -33,9 +33,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
  * the models exposed by the LoopBack server via the REST API.
  *
  */
-  var module = angular.module("lbServices", ['ngResource']);
+  var module = angular.module('lbServices', ['ngResource']);
 
-/**
+  /**
  * @ngdoc object
  * @name lbServices.User
  * @header lbServices.User
@@ -53,13 +53,13 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
  *
  */
   module.factory(
-    "User",
+    'User',
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
         var R = Resource(
-        urlBase + "/Users/:id",
-          { 'id': '@id' },
+          urlBase + '/Users/:id',
+          { id: '@id' },
           {
 
             /**
@@ -96,12 +96,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `User` object.)
              * </em>
              */
-            "prototype$__findById__accessTokens": {
+            prototype$__findById__accessTokens: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Users/:id/accessTokens/:fk",
-              method: "GET",
+              url: urlBase + '/Users/:id/accessTokens/:fk',
+              method: 'GET',
             },
 
             /**
@@ -135,12 +135,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * This method returns no data.
              */
-            "prototype$__destroyById__accessTokens": {
+            prototype$__destroyById__accessTokens: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Users/:id/accessTokens/:fk",
-              method: "DELETE",
+              url: urlBase + '/Users/:id/accessTokens/:fk',
+              method: 'DELETE',
             },
 
             /**
@@ -181,12 +181,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `User` object.)
              * </em>
              */
-            "prototype$__updateById__accessTokens": {
+            prototype$__updateById__accessTokens: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Users/:id/accessTokens/:fk",
-              method: "PUT",
+              url: urlBase + '/Users/:id/accessTokens/:fk',
+              method: 'PUT',
             },
 
             /**
@@ -223,10 +223,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `User` object.)
              * </em>
              */
-            "prototype$__get__accessTokens": {
+            prototype$__get__accessTokens: {
               isArray: true,
-              url: urlBase + "/Users/:id/accessTokens",
-              method: "GET",
+              url: urlBase + '/Users/:id/accessTokens',
+              method: 'GET',
             },
 
             /**
@@ -265,9 +265,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `User` object.)
              * </em>
              */
-            "prototype$__create__accessTokens": {
-              url: urlBase + "/Users/:id/accessTokens",
-              method: "POST",
+            prototype$__create__accessTokens: {
+              url: urlBase + '/Users/:id/accessTokens',
+              method: 'POST',
             },
 
             /**
@@ -301,9 +301,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * This method returns no data.
              */
-            "prototype$__delete__accessTokens": {
-              url: urlBase + "/Users/:id/accessTokens",
-              method: "DELETE",
+            prototype$__delete__accessTokens: {
+              url: urlBase + '/Users/:id/accessTokens',
+              method: 'DELETE',
             },
 
             /**
@@ -339,9 +339,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `count` – `{number=}` -
              */
-            "prototype$__count__accessTokens": {
-              url: urlBase + "/Users/:id/accessTokens/count",
-              method: "GET",
+            prototype$__count__accessTokens: {
+              url: urlBase + '/Users/:id/accessTokens/count',
+              method: 'GET',
             },
 
             /**
@@ -379,9 +379,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `User` object.)
              * </em>
              */
-            "create": {
-              url: urlBase + "/Users",
-              method: "POST",
+            create: {
+              url: urlBase + '/Users',
+              method: 'POST',
             },
 
             /**
@@ -419,10 +419,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `User` object.)
              * </em>
              */
-            "createMany": {
+            createMany: {
               isArray: true,
-              url: urlBase + "/Users",
-              method: "POST",
+              url: urlBase + '/Users',
+              method: 'POST',
             },
 
             /**
@@ -455,9 +455,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `User` object.)
              * </em>
              */
-            "patchOrCreate": {
-              url: urlBase + "/Users",
-              method: "PATCH",
+            patchOrCreate: {
+              url: urlBase + '/Users',
+              method: 'PATCH',
             },
 
             /**
@@ -495,9 +495,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `User` object.)
              * </em>
              */
-            "replaceOrCreate": {
-              url: urlBase + "/Users/replaceOrCreate",
-              method: "POST",
+            replaceOrCreate: {
+              url: urlBase + '/Users/replaceOrCreate',
+              method: 'POST',
             },
 
             /**
@@ -534,9 +534,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `User` object.)
              * </em>
              */
-            "upsertWithWhere": {
-              url: urlBase + "/Users/upsertWithWhere",
-              method: "POST",
+            upsertWithWhere: {
+              url: urlBase + '/Users/upsertWithWhere',
+              method: 'POST',
             },
 
             /**
@@ -568,9 +568,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `exists` – `{boolean=}` -
              */
-            "exists": {
-              url: urlBase + "/Users/:id/exists",
-              method: "GET",
+            exists: {
+              url: urlBase + '/Users/:id/exists',
+              method: 'GET',
             },
 
             /**
@@ -605,9 +605,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `User` object.)
              * </em>
              */
-            "findById": {
-              url: urlBase + "/Users/:id",
-              method: "GET",
+            findById: {
+              url: urlBase + '/Users/:id',
+              method: 'GET',
             },
 
             /**
@@ -644,9 +644,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `User` object.)
              * </em>
              */
-            "replaceById": {
-              url: urlBase + "/Users/:id/replace",
-              method: "POST",
+            replaceById: {
+              url: urlBase + '/Users/:id/replace',
+              method: 'POST',
             },
 
             /**
@@ -679,10 +679,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `User` object.)
              * </em>
              */
-            "find": {
+            find: {
               isArray: true,
-              url: urlBase + "/Users",
-              method: "GET",
+              url: urlBase + '/Users',
+              method: 'GET',
             },
 
             /**
@@ -715,9 +715,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `User` object.)
              * </em>
              */
-            "findOne": {
-              url: urlBase + "/Users/findOne",
-              method: "GET",
+            findOne: {
+              url: urlBase + '/Users/findOne',
+              method: 'GET',
             },
 
             /**
@@ -751,9 +751,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-            "updateAll": {
-              url: urlBase + "/Users/update",
-              method: "POST",
+            updateAll: {
+              url: urlBase + '/Users/update',
+              method: 'POST',
             },
 
             /**
@@ -786,9 +786,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `User` object.)
              * </em>
              */
-            "deleteById": {
-              url: urlBase + "/Users/:id",
-              method: "DELETE",
+            deleteById: {
+              url: urlBase + '/Users/:id',
+              method: 'DELETE',
             },
 
             /**
@@ -820,9 +820,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `count` – `{number=}` -
              */
-            "count": {
-              url: urlBase + "/Users/count",
-              method: "GET",
+            count: {
+              url: urlBase + '/Users/count',
+              method: 'GET',
             },
 
             /**
@@ -859,9 +859,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `User` object.)
              * </em>
              */
-            "prototype$patchAttributes": {
-              url: urlBase + "/Users/:id",
-              method: "PATCH",
+            prototype$patchAttributes: {
+              url: urlBase + '/Users/:id',
+              method: 'PATCH',
             },
 
             /**
@@ -896,9 +896,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `changes` – `{ReadableStream=}` -
              */
-            "createChangeStream": {
-              url: urlBase + "/Users/change-stream",
-              method: "POST",
+            createChangeStream: {
+              url: urlBase + '/Users/change-stream',
+              method: 'POST',
             },
 
             /**
@@ -938,7 +938,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *   - `user` - `U+007BUserU+007D` - Data of the currently logged in user. (`include=user`)
              *
              */
-            "login": {
+            login: {
               params: {
                 include: 'user',
               },
@@ -953,8 +953,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
                   return response.resource;
                 },
               },
-              url: urlBase + "/Users/login",
-              method: "POST",
+              url: urlBase + '/Users/login',
+              method: 'POST',
             },
 
             /**
@@ -987,7 +987,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * This method returns no data.
              */
-            "logout": {
+            logout: {
               interceptor: {
                 response: function(response) {
                   LoopBackAuth.clearUser();
@@ -1000,8 +1000,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
                   return responseError.resource;
                 },
               },
-              url: urlBase + "/Users/logout",
-              method: "POST",
+              url: urlBase + '/Users/logout',
+              method: 'POST',
             },
 
             /**
@@ -1037,9 +1037,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * This method returns no data.
              */
-            "prototype$verify": {
-              url: urlBase + "/Users/:id/verify",
-              method: "POST",
+            prototype$verify: {
+              url: urlBase + '/Users/:id/verify',
+              method: 'POST',
             },
 
             /**
@@ -1071,9 +1071,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * This method returns no data.
              */
-            "confirm": {
-              url: urlBase + "/Users/confirm",
-              method: "GET",
+            confirm: {
+              url: urlBase + '/Users/confirm',
+              method: 'GET',
             },
 
             /**
@@ -1106,9 +1106,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * This method returns no data.
              */
-            "resetPassword": {
-              url: urlBase + "/Users/reset",
-              method: "POST",
+            resetPassword: {
+              url: urlBase + '/Users/reset',
+              method: 'POST',
             },
 
             /**
@@ -1147,9 +1147,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * This method returns no data.
              */
-            "changePassword": {
-              url: urlBase + "/Users/change-password",
-              method: "POST",
+            changePassword: {
+              url: urlBase + '/Users/change-password',
+              method: 'POST',
             },
 
             /**
@@ -1186,9 +1186,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * This method returns no data.
              */
-            "setPassword": {
-              url: urlBase + "/Users/reset-password",
-              method: "POST",
+            setPassword: {
+              url: urlBase + '/Users/reset-password',
+              method: 'POST',
             },
 
             /**
@@ -1211,8 +1211,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *   populated with the actual data once the response is returned
              *   from the server.
              */
-            'getCurrent': {
-              url: urlBase + "/Users" + '/:id',
+            getCurrent: {
+              url: urlBase + '/Users' + '/:id',
               method: 'GET',
               params: {
                 id: function() {
@@ -1233,8 +1233,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         );
 
 
-
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.User#upsert
              * @methodOf lbServices.User
@@ -1264,9 +1263,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `User` object.)
              * </em>
              */
-        R["upsert"] = R["patchOrCreate"];
+        R['upsert'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.User#updateOrCreate
              * @methodOf lbServices.User
@@ -1296,9 +1295,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `User` object.)
              * </em>
              */
-        R["updateOrCreate"] = R["patchOrCreate"];
+        R['updateOrCreate'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.User#patchOrCreateWithWhere
              * @methodOf lbServices.User
@@ -1332,9 +1331,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `User` object.)
              * </em>
              */
-        R["patchOrCreateWithWhere"] = R["upsertWithWhere"];
+        R['patchOrCreateWithWhere'] = R['upsertWithWhere'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.User#update
              * @methodOf lbServices.User
@@ -1365,9 +1364,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-        R["update"] = R["updateAll"];
+        R['update'] = R['updateAll'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.User#destroyById
              * @methodOf lbServices.User
@@ -1397,9 +1396,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `User` object.)
              * </em>
              */
-        R["destroyById"] = R["deleteById"];
+        R['destroyById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.User#removeById
              * @methodOf lbServices.User
@@ -1429,9 +1428,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `User` object.)
              * </em>
              */
-        R["removeById"] = R["deleteById"];
+        R['removeById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.User#updateAttributes
              * @methodOf lbServices.User
@@ -1465,7 +1464,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `User` object.)
              * </em>
              */
-        R["updateAttributes"] = R["prototype$patchAttributes"];
+        R['updateAttributes'] = R['prototype$patchAttributes'];
 
         /**
          * @ngdoc method
@@ -1517,14 +1516,13 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         * The name of the model represented by this $resource,
         * i.e. `User`.
         */
-        R.modelName = "User";
-
+        R.modelName = 'User';
 
 
         return R;
       }]);
 
-/**
+  /**
  * @ngdoc object
  * @name lbServices.RoleMapping
  * @header lbServices.RoleMapping
@@ -1546,19 +1544,19 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
  *
  */
   module.factory(
-    "RoleMapping",
+    'RoleMapping',
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
         var R = Resource(
-        urlBase + "/RoleMappings/:id",
-          { 'id': '@id' },
+          urlBase + '/RoleMappings/:id',
+          { id: '@id' },
           {
 
             // INTERNAL. Use RoleMapping.role() instead.
-            "prototype$__get__role": {
-              url: urlBase + "/RoleMappings/:id/role",
-              method: "GET",
+            prototype$__get__role: {
+              url: urlBase + '/RoleMappings/:id/role',
+              method: 'GET',
             },
 
             /**
@@ -1596,9 +1594,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `RoleMapping` object.)
              * </em>
              */
-            "create": {
-              url: urlBase + "/RoleMappings",
-              method: "POST",
+            create: {
+              url: urlBase + '/RoleMappings',
+              method: 'POST',
             },
 
             /**
@@ -1636,10 +1634,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `RoleMapping` object.)
              * </em>
              */
-            "createMany": {
+            createMany: {
               isArray: true,
-              url: urlBase + "/RoleMappings",
-              method: "POST",
+              url: urlBase + '/RoleMappings',
+              method: 'POST',
             },
 
             /**
@@ -1672,9 +1670,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `RoleMapping` object.)
              * </em>
              */
-            "patchOrCreate": {
-              url: urlBase + "/RoleMappings",
-              method: "PATCH",
+            patchOrCreate: {
+              url: urlBase + '/RoleMappings',
+              method: 'PATCH',
             },
 
             /**
@@ -1712,9 +1710,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `RoleMapping` object.)
              * </em>
              */
-            "replaceOrCreate": {
-              url: urlBase + "/RoleMappings/replaceOrCreate",
-              method: "POST",
+            replaceOrCreate: {
+              url: urlBase + '/RoleMappings/replaceOrCreate',
+              method: 'POST',
             },
 
             /**
@@ -1751,9 +1749,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `RoleMapping` object.)
              * </em>
              */
-            "upsertWithWhere": {
-              url: urlBase + "/RoleMappings/upsertWithWhere",
-              method: "POST",
+            upsertWithWhere: {
+              url: urlBase + '/RoleMappings/upsertWithWhere',
+              method: 'POST',
             },
 
             /**
@@ -1785,9 +1783,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `exists` – `{boolean=}` -
              */
-            "exists": {
-              url: urlBase + "/RoleMappings/:id/exists",
-              method: "GET",
+            exists: {
+              url: urlBase + '/RoleMappings/:id/exists',
+              method: 'GET',
             },
 
             /**
@@ -1822,9 +1820,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `RoleMapping` object.)
              * </em>
              */
-            "findById": {
-              url: urlBase + "/RoleMappings/:id",
-              method: "GET",
+            findById: {
+              url: urlBase + '/RoleMappings/:id',
+              method: 'GET',
             },
 
             /**
@@ -1861,9 +1859,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `RoleMapping` object.)
              * </em>
              */
-            "replaceById": {
-              url: urlBase + "/RoleMappings/:id/replace",
-              method: "POST",
+            replaceById: {
+              url: urlBase + '/RoleMappings/:id/replace',
+              method: 'POST',
             },
 
             /**
@@ -1896,10 +1894,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `RoleMapping` object.)
              * </em>
              */
-            "find": {
+            find: {
               isArray: true,
-              url: urlBase + "/RoleMappings",
-              method: "GET",
+              url: urlBase + '/RoleMappings',
+              method: 'GET',
             },
 
             /**
@@ -1932,9 +1930,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `RoleMapping` object.)
              * </em>
              */
-            "findOne": {
-              url: urlBase + "/RoleMappings/findOne",
-              method: "GET",
+            findOne: {
+              url: urlBase + '/RoleMappings/findOne',
+              method: 'GET',
             },
 
             /**
@@ -1968,9 +1966,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-            "updateAll": {
-              url: urlBase + "/RoleMappings/update",
-              method: "POST",
+            updateAll: {
+              url: urlBase + '/RoleMappings/update',
+              method: 'POST',
             },
 
             /**
@@ -2003,9 +2001,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `RoleMapping` object.)
              * </em>
              */
-            "deleteById": {
-              url: urlBase + "/RoleMappings/:id",
-              method: "DELETE",
+            deleteById: {
+              url: urlBase + '/RoleMappings/:id',
+              method: 'DELETE',
             },
 
             /**
@@ -2037,9 +2035,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `count` – `{number=}` -
              */
-            "count": {
-              url: urlBase + "/RoleMappings/count",
-              method: "GET",
+            count: {
+              url: urlBase + '/RoleMappings/count',
+              method: 'GET',
             },
 
             /**
@@ -2076,9 +2074,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `RoleMapping` object.)
              * </em>
              */
-            "prototype$patchAttributes": {
-              url: urlBase + "/RoleMappings/:id",
-              method: "PATCH",
+            prototype$patchAttributes: {
+              url: urlBase + '/RoleMappings/:id',
+              method: 'PATCH',
             },
 
             /**
@@ -2113,75 +2111,74 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `changes` – `{ReadableStream=}` -
              */
-            "createChangeStream": {
-              url: urlBase + "/RoleMappings/change-stream",
-              method: "POST",
+            createChangeStream: {
+              url: urlBase + '/RoleMappings/change-stream',
+              method: 'POST',
             },
 
             // INTERNAL. Use Role.principals.findById() instead.
-            "::findById::Role::principals": {
+            '::findById::Role::principals': {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Roles/:id/principals/:fk",
-              method: "GET",
+              url: urlBase + '/Roles/:id/principals/:fk',
+              method: 'GET',
             },
 
             // INTERNAL. Use Role.principals.destroyById() instead.
-            "::destroyById::Role::principals": {
+            '::destroyById::Role::principals': {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Roles/:id/principals/:fk",
-              method: "DELETE",
+              url: urlBase + '/Roles/:id/principals/:fk',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Role.principals.updateById() instead.
-            "::updateById::Role::principals": {
+            '::updateById::Role::principals': {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Roles/:id/principals/:fk",
-              method: "PUT",
+              url: urlBase + '/Roles/:id/principals/:fk',
+              method: 'PUT',
             },
 
             // INTERNAL. Use Role.principals() instead.
-            "::get::Role::principals": {
+            '::get::Role::principals': {
               isArray: true,
-              url: urlBase + "/Roles/:id/principals",
-              method: "GET",
+              url: urlBase + '/Roles/:id/principals',
+              method: 'GET',
             },
 
             // INTERNAL. Use Role.principals.create() instead.
-            "::create::Role::principals": {
-              url: urlBase + "/Roles/:id/principals",
-              method: "POST",
+            '::create::Role::principals': {
+              url: urlBase + '/Roles/:id/principals',
+              method: 'POST',
             },
 
             // INTERNAL. Use Role.principals.createMany() instead.
-            "::createMany::Role::principals": {
+            '::createMany::Role::principals': {
               isArray: true,
-              url: urlBase + "/Roles/:id/principals",
-              method: "POST",
+              url: urlBase + '/Roles/:id/principals',
+              method: 'POST',
             },
 
             // INTERNAL. Use Role.principals.destroyAll() instead.
-            "::delete::Role::principals": {
-              url: urlBase + "/Roles/:id/principals",
-              method: "DELETE",
+            '::delete::Role::principals': {
+              url: urlBase + '/Roles/:id/principals',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Role.principals.count() instead.
-            "::count::Role::principals": {
-              url: urlBase + "/Roles/:id/principals/count",
-              method: "GET",
+            '::count::Role::principals': {
+              url: urlBase + '/Roles/:id/principals/count',
+              method: 'GET',
             },
           }
         );
 
 
-
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.RoleMapping#upsert
              * @methodOf lbServices.RoleMapping
@@ -2211,9 +2208,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `RoleMapping` object.)
              * </em>
              */
-        R["upsert"] = R["patchOrCreate"];
+        R['upsert'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.RoleMapping#updateOrCreate
              * @methodOf lbServices.RoleMapping
@@ -2243,9 +2240,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `RoleMapping` object.)
              * </em>
              */
-        R["updateOrCreate"] = R["patchOrCreate"];
+        R['updateOrCreate'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.RoleMapping#patchOrCreateWithWhere
              * @methodOf lbServices.RoleMapping
@@ -2279,9 +2276,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `RoleMapping` object.)
              * </em>
              */
-        R["patchOrCreateWithWhere"] = R["upsertWithWhere"];
+        R['patchOrCreateWithWhere'] = R['upsertWithWhere'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.RoleMapping#update
              * @methodOf lbServices.RoleMapping
@@ -2312,9 +2309,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-        R["update"] = R["updateAll"];
+        R['update'] = R['updateAll'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.RoleMapping#destroyById
              * @methodOf lbServices.RoleMapping
@@ -2344,9 +2341,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `RoleMapping` object.)
              * </em>
              */
-        R["destroyById"] = R["deleteById"];
+        R['destroyById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.RoleMapping#removeById
              * @methodOf lbServices.RoleMapping
@@ -2376,9 +2373,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `RoleMapping` object.)
              * </em>
              */
-        R["removeById"] = R["deleteById"];
+        R['removeById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.RoleMapping#updateAttributes
              * @methodOf lbServices.RoleMapping
@@ -2412,7 +2409,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `RoleMapping` object.)
              * </em>
              */
-        R["updateAttributes"] = R["prototype$patchAttributes"];
+        R['updateAttributes'] = R['prototype$patchAttributes'];
 
 
         /**
@@ -2423,10 +2420,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         * The name of the model represented by this $resource,
         * i.e. `RoleMapping`.
         */
-        R.modelName = "RoleMapping";
+        R.modelName = 'RoleMapping';
 
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.RoleMapping#role
              * @methodOf lbServices.RoleMapping
@@ -2461,8 +2458,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.role = function() {
-          var TargetResource = $injector.get("Role");
-          var action = TargetResource["::get::RoleMapping::role"];
+          var TargetResource = $injector.get('Role');
+          var action = TargetResource['::get::RoleMapping::role'];
           return action.apply(R, arguments);
         };
 
@@ -2470,7 +2467,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         return R;
       }]);
 
-/**
+  /**
  * @ngdoc object
  * @name lbServices.Role
  * @header lbServices.Role
@@ -2488,65 +2485,65 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
  *
  */
   module.factory(
-    "Role",
+    'Role',
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
         var R = Resource(
-        urlBase + "/Roles/:id",
-          { 'id': '@id' },
+          urlBase + '/Roles/:id',
+          { id: '@id' },
           {
 
             // INTERNAL. Use Role.principals.findById() instead.
-            "prototype$__findById__principals": {
+            prototype$__findById__principals: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Roles/:id/principals/:fk",
-              method: "GET",
+              url: urlBase + '/Roles/:id/principals/:fk',
+              method: 'GET',
             },
 
             // INTERNAL. Use Role.principals.destroyById() instead.
-            "prototype$__destroyById__principals": {
+            prototype$__destroyById__principals: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Roles/:id/principals/:fk",
-              method: "DELETE",
+              url: urlBase + '/Roles/:id/principals/:fk',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Role.principals.updateById() instead.
-            "prototype$__updateById__principals": {
+            prototype$__updateById__principals: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Roles/:id/principals/:fk",
-              method: "PUT",
+              url: urlBase + '/Roles/:id/principals/:fk',
+              method: 'PUT',
             },
 
             // INTERNAL. Use Role.principals() instead.
-            "prototype$__get__principals": {
+            prototype$__get__principals: {
               isArray: true,
-              url: urlBase + "/Roles/:id/principals",
-              method: "GET",
+              url: urlBase + '/Roles/:id/principals',
+              method: 'GET',
             },
 
             // INTERNAL. Use Role.principals.create() instead.
-            "prototype$__create__principals": {
-              url: urlBase + "/Roles/:id/principals",
-              method: "POST",
+            prototype$__create__principals: {
+              url: urlBase + '/Roles/:id/principals',
+              method: 'POST',
             },
 
             // INTERNAL. Use Role.principals.destroyAll() instead.
-            "prototype$__delete__principals": {
-              url: urlBase + "/Roles/:id/principals",
-              method: "DELETE",
+            prototype$__delete__principals: {
+              url: urlBase + '/Roles/:id/principals',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Role.principals.count() instead.
-            "prototype$__count__principals": {
-              url: urlBase + "/Roles/:id/principals/count",
-              method: "GET",
+            prototype$__count__principals: {
+              url: urlBase + '/Roles/:id/principals/count',
+              method: 'GET',
             },
 
             /**
@@ -2584,9 +2581,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Role` object.)
              * </em>
              */
-            "create": {
-              url: urlBase + "/Roles",
-              method: "POST",
+            create: {
+              url: urlBase + '/Roles',
+              method: 'POST',
             },
 
             /**
@@ -2624,10 +2621,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Role` object.)
              * </em>
              */
-            "createMany": {
+            createMany: {
               isArray: true,
-              url: urlBase + "/Roles",
-              method: "POST",
+              url: urlBase + '/Roles',
+              method: 'POST',
             },
 
             /**
@@ -2660,9 +2657,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Role` object.)
              * </em>
              */
-            "patchOrCreate": {
-              url: urlBase + "/Roles",
-              method: "PATCH",
+            patchOrCreate: {
+              url: urlBase + '/Roles',
+              method: 'PATCH',
             },
 
             /**
@@ -2700,9 +2697,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Role` object.)
              * </em>
              */
-            "replaceOrCreate": {
-              url: urlBase + "/Roles/replaceOrCreate",
-              method: "POST",
+            replaceOrCreate: {
+              url: urlBase + '/Roles/replaceOrCreate',
+              method: 'POST',
             },
 
             /**
@@ -2739,9 +2736,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Role` object.)
              * </em>
              */
-            "upsertWithWhere": {
-              url: urlBase + "/Roles/upsertWithWhere",
-              method: "POST",
+            upsertWithWhere: {
+              url: urlBase + '/Roles/upsertWithWhere',
+              method: 'POST',
             },
 
             /**
@@ -2773,9 +2770,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `exists` – `{boolean=}` -
              */
-            "exists": {
-              url: urlBase + "/Roles/:id/exists",
-              method: "GET",
+            exists: {
+              url: urlBase + '/Roles/:id/exists',
+              method: 'GET',
             },
 
             /**
@@ -2810,9 +2807,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Role` object.)
              * </em>
              */
-            "findById": {
-              url: urlBase + "/Roles/:id",
-              method: "GET",
+            findById: {
+              url: urlBase + '/Roles/:id',
+              method: 'GET',
             },
 
             /**
@@ -2849,9 +2846,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Role` object.)
              * </em>
              */
-            "replaceById": {
-              url: urlBase + "/Roles/:id/replace",
-              method: "POST",
+            replaceById: {
+              url: urlBase + '/Roles/:id/replace',
+              method: 'POST',
             },
 
             /**
@@ -2884,10 +2881,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Role` object.)
              * </em>
              */
-            "find": {
+            find: {
               isArray: true,
-              url: urlBase + "/Roles",
-              method: "GET",
+              url: urlBase + '/Roles',
+              method: 'GET',
             },
 
             /**
@@ -2920,9 +2917,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Role` object.)
              * </em>
              */
-            "findOne": {
-              url: urlBase + "/Roles/findOne",
-              method: "GET",
+            findOne: {
+              url: urlBase + '/Roles/findOne',
+              method: 'GET',
             },
 
             /**
@@ -2956,9 +2953,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-            "updateAll": {
-              url: urlBase + "/Roles/update",
-              method: "POST",
+            updateAll: {
+              url: urlBase + '/Roles/update',
+              method: 'POST',
             },
 
             /**
@@ -2991,9 +2988,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Role` object.)
              * </em>
              */
-            "deleteById": {
-              url: urlBase + "/Roles/:id",
-              method: "DELETE",
+            deleteById: {
+              url: urlBase + '/Roles/:id',
+              method: 'DELETE',
             },
 
             /**
@@ -3025,9 +3022,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `count` – `{number=}` -
              */
-            "count": {
-              url: urlBase + "/Roles/count",
-              method: "GET",
+            count: {
+              url: urlBase + '/Roles/count',
+              method: 'GET',
             },
 
             /**
@@ -3064,9 +3061,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Role` object.)
              * </em>
              */
-            "prototype$patchAttributes": {
-              url: urlBase + "/Roles/:id",
-              method: "PATCH",
+            prototype$patchAttributes: {
+              url: urlBase + '/Roles/:id',
+              method: 'PATCH',
             },
 
             /**
@@ -3101,22 +3098,21 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `changes` – `{ReadableStream=}` -
              */
-            "createChangeStream": {
-              url: urlBase + "/Roles/change-stream",
-              method: "POST",
+            createChangeStream: {
+              url: urlBase + '/Roles/change-stream',
+              method: 'POST',
             },
 
             // INTERNAL. Use RoleMapping.role() instead.
-            "::get::RoleMapping::role": {
-              url: urlBase + "/RoleMappings/:id/role",
-              method: "GET",
+            '::get::RoleMapping::role': {
+              url: urlBase + '/RoleMappings/:id/role',
+              method: 'GET',
             },
           }
         );
 
 
-
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Role#upsert
              * @methodOf lbServices.Role
@@ -3146,9 +3142,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Role` object.)
              * </em>
              */
-        R["upsert"] = R["patchOrCreate"];
+        R['upsert'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Role#updateOrCreate
              * @methodOf lbServices.Role
@@ -3178,9 +3174,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Role` object.)
              * </em>
              */
-        R["updateOrCreate"] = R["patchOrCreate"];
+        R['updateOrCreate'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Role#patchOrCreateWithWhere
              * @methodOf lbServices.Role
@@ -3214,9 +3210,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Role` object.)
              * </em>
              */
-        R["patchOrCreateWithWhere"] = R["upsertWithWhere"];
+        R['patchOrCreateWithWhere'] = R['upsertWithWhere'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Role#update
              * @methodOf lbServices.Role
@@ -3247,9 +3243,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-        R["update"] = R["updateAll"];
+        R['update'] = R['updateAll'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Role#destroyById
              * @methodOf lbServices.Role
@@ -3279,9 +3275,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Role` object.)
              * </em>
              */
-        R["destroyById"] = R["deleteById"];
+        R['destroyById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Role#removeById
              * @methodOf lbServices.Role
@@ -3311,9 +3307,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Role` object.)
              * </em>
              */
-        R["removeById"] = R["deleteById"];
+        R['removeById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Role#updateAttributes
              * @methodOf lbServices.Role
@@ -3347,7 +3343,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Role` object.)
              * </em>
              */
-        R["updateAttributes"] = R["prototype$patchAttributes"];
+        R['updateAttributes'] = R['prototype$patchAttributes'];
 
 
         /**
@@ -3358,9 +3354,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         * The name of the model represented by this $resource,
         * i.e. `Role`.
         */
-        R.modelName = "Role";
+        R.modelName = 'Role';
 
-    /**
+        /**
      * @ngdoc object
      * @name lbServices.Role.principals
      * @header lbServices.Role.principals
@@ -3375,7 +3371,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
      */
 
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Role#principals
              * @methodOf lbServices.Role
@@ -3410,12 +3406,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.principals = function() {
-          var TargetResource = $injector.get("RoleMapping");
-          var action = TargetResource["::get::Role::principals"];
+          var TargetResource = $injector.get('RoleMapping');
+          var action = TargetResource['::get::Role::principals'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Role.principals#count
              * @methodOf lbServices.Role.principals
@@ -3449,12 +3445,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *  - `count` – `{number=}` -
              */
         R.principals.count = function() {
-          var TargetResource = $injector.get("RoleMapping");
-          var action = TargetResource["::count::Role::principals"];
+          var TargetResource = $injector.get('RoleMapping');
+          var action = TargetResource['::count::Role::principals'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Role.principals#create
              * @methodOf lbServices.Role.principals
@@ -3491,12 +3487,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.principals.create = function() {
-          var TargetResource = $injector.get("RoleMapping");
-          var action = TargetResource["::create::Role::principals"];
+          var TargetResource = $injector.get('RoleMapping');
+          var action = TargetResource['::create::Role::principals'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Role.principals#createMany
              * @methodOf lbServices.Role.principals
@@ -3533,12 +3529,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.principals.createMany = function() {
-          var TargetResource = $injector.get("RoleMapping");
-          var action = TargetResource["::createMany::Role::principals"];
+          var TargetResource = $injector.get('RoleMapping');
+          var action = TargetResource['::createMany::Role::principals'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Role.principals#destroyAll
              * @methodOf lbServices.Role.principals
@@ -3570,12 +3566,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.principals.destroyAll = function() {
-          var TargetResource = $injector.get("RoleMapping");
-          var action = TargetResource["::delete::Role::principals"];
+          var TargetResource = $injector.get('RoleMapping');
+          var action = TargetResource['::delete::Role::principals'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Role.principals#destroyById
              * @methodOf lbServices.Role.principals
@@ -3607,12 +3603,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.principals.destroyById = function() {
-          var TargetResource = $injector.get("RoleMapping");
-          var action = TargetResource["::destroyById::Role::principals"];
+          var TargetResource = $injector.get('RoleMapping');
+          var action = TargetResource['::destroyById::Role::principals'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Role.principals#findById
              * @methodOf lbServices.Role.principals
@@ -3647,12 +3643,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.principals.findById = function() {
-          var TargetResource = $injector.get("RoleMapping");
-          var action = TargetResource["::findById::Role::principals"];
+          var TargetResource = $injector.get('RoleMapping');
+          var action = TargetResource['::findById::Role::principals'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Role.principals#updateById
              * @methodOf lbServices.Role.principals
@@ -3691,8 +3687,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.principals.updateById = function() {
-          var TargetResource = $injector.get("RoleMapping");
-          var action = TargetResource["::updateById::Role::principals"];
+          var TargetResource = $injector.get('RoleMapping');
+          var action = TargetResource['::updateById::Role::principals'];
           return action.apply(R, arguments);
         };
 
@@ -3700,7 +3696,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         return R;
       }]);
 
-/**
+  /**
  * @ngdoc object
  * @name lbServices.Business
  * @header lbServices.Business
@@ -3718,13 +3714,13 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
  *
  */
   module.factory(
-    "Business",
+    'Business',
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
         var R = Resource(
-        urlBase + "/Businesses/:id",
-          { 'id': '@id' },
+          urlBase + '/Businesses/:id',
+          { id: '@id' },
           {
 
             /**
@@ -3761,12 +3757,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-            "prototype$__findById__accessTokens": {
+            prototype$__findById__accessTokens: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/accessTokens/:fk",
-              method: "GET",
+              url: urlBase + '/Businesses/:id/accessTokens/:fk',
+              method: 'GET',
             },
 
             /**
@@ -3800,12 +3796,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * This method returns no data.
              */
-            "prototype$__destroyById__accessTokens": {
+            prototype$__destroyById__accessTokens: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/accessTokens/:fk",
-              method: "DELETE",
+              url: urlBase + '/Businesses/:id/accessTokens/:fk',
+              method: 'DELETE',
             },
 
             /**
@@ -3846,147 +3842,147 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-            "prototype$__updateById__accessTokens": {
+            prototype$__updateById__accessTokens: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/accessTokens/:fk",
-              method: "PUT",
+              url: urlBase + '/Businesses/:id/accessTokens/:fk',
+              method: 'PUT',
             },
 
             // INTERNAL. Use Business.nas.findById() instead.
-            "prototype$__findById__nas": {
+            prototype$__findById__nas: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/nas/:fk",
-              method: "GET",
+              url: urlBase + '/Businesses/:id/nas/:fk',
+              method: 'GET',
             },
 
             // INTERNAL. Use Business.nas.destroyById() instead.
-            "prototype$__destroyById__nas": {
+            prototype$__destroyById__nas: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/nas/:fk",
-              method: "DELETE",
+              url: urlBase + '/Businesses/:id/nas/:fk',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Business.nas.updateById() instead.
-            "prototype$__updateById__nas": {
+            prototype$__updateById__nas: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/nas/:fk",
-              method: "PUT",
+              url: urlBase + '/Businesses/:id/nas/:fk',
+              method: 'PUT',
             },
 
             // INTERNAL. Use Business.members.findById() instead.
-            "prototype$__findById__members": {
+            prototype$__findById__members: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/members/:fk",
-              method: "GET",
+              url: urlBase + '/Businesses/:id/members/:fk',
+              method: 'GET',
             },
 
             // INTERNAL. Use Business.members.destroyById() instead.
-            "prototype$__destroyById__members": {
+            prototype$__destroyById__members: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/members/:fk",
-              method: "DELETE",
+              url: urlBase + '/Businesses/:id/members/:fk',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Business.members.updateById() instead.
-            "prototype$__updateById__members": {
+            prototype$__updateById__members: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/members/:fk",
-              method: "PUT",
+              url: urlBase + '/Businesses/:id/members/:fk',
+              method: 'PUT',
             },
 
             // INTERNAL. Use Business.campaigns.findById() instead.
-            "prototype$__findById__campaigns": {
+            prototype$__findById__campaigns: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/campaigns/:fk",
-              method: "GET",
+              url: urlBase + '/Businesses/:id/campaigns/:fk',
+              method: 'GET',
             },
 
             // INTERNAL. Use Business.campaigns.destroyById() instead.
-            "prototype$__destroyById__campaigns": {
+            prototype$__destroyById__campaigns: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/campaigns/:fk",
-              method: "DELETE",
+              url: urlBase + '/Businesses/:id/campaigns/:fk',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Business.campaigns.updateById() instead.
-            "prototype$__updateById__campaigns": {
+            prototype$__updateById__campaigns: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/campaigns/:fk",
-              method: "PUT",
+              url: urlBase + '/Businesses/:id/campaigns/:fk',
+              method: 'PUT',
             },
 
             // INTERNAL. Use Business.internetPlans.findById() instead.
-            "prototype$__findById__internetPlans": {
+            prototype$__findById__internetPlans: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/internetPlans/:fk",
-              method: "GET",
+              url: urlBase + '/Businesses/:id/internetPlans/:fk',
+              method: 'GET',
             },
 
             // INTERNAL. Use Business.internetPlans.destroyById() instead.
-            "prototype$__destroyById__internetPlans": {
+            prototype$__destroyById__internetPlans: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/internetPlans/:fk",
-              method: "DELETE",
+              url: urlBase + '/Businesses/:id/internetPlans/:fk',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Business.internetPlans.updateById() instead.
-            "prototype$__updateById__internetPlans": {
+            prototype$__updateById__internetPlans: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/internetPlans/:fk",
-              method: "PUT",
+              url: urlBase + '/Businesses/:id/internetPlans/:fk',
+              method: 'PUT',
             },
 
             // INTERNAL. Use Business.invoices.findById() instead.
-            "prototype$__findById__invoices": {
+            prototype$__findById__invoices: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/invoices/:fk",
-              method: "GET",
+              url: urlBase + '/Businesses/:id/invoices/:fk',
+              method: 'GET',
             },
 
             // INTERNAL. Use Business.invoices.destroyById() instead.
-            "prototype$__destroyById__invoices": {
+            prototype$__destroyById__invoices: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/invoices/:fk",
-              method: "DELETE",
+              url: urlBase + '/Businesses/:id/invoices/:fk',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Business.invoices.updateById() instead.
-            "prototype$__updateById__invoices": {
+            prototype$__updateById__invoices: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/invoices/:fk",
-              method: "PUT",
+              url: urlBase + '/Businesses/:id/invoices/:fk',
+              method: 'PUT',
             },
 
             /**
@@ -4023,12 +4019,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-            "prototype$__findById__nasSessions": {
+            prototype$__findById__nasSessions: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/nasSessions/:fk",
-              method: "GET",
+              url: urlBase + '/Businesses/:id/nasSessions/:fk',
+              method: 'GET',
             },
 
             /**
@@ -4062,12 +4058,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * This method returns no data.
              */
-            "prototype$__destroyById__nasSessions": {
+            prototype$__destroyById__nasSessions: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/nasSessions/:fk",
-              method: "DELETE",
+              url: urlBase + '/Businesses/:id/nasSessions/:fk',
+              method: 'DELETE',
             },
 
             /**
@@ -4108,117 +4104,117 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-            "prototype$__updateById__nasSessions": {
+            prototype$__updateById__nasSessions: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/nasSessions/:fk",
-              method: "PUT",
+              url: urlBase + '/Businesses/:id/nasSessions/:fk',
+              method: 'PUT',
             },
 
             // INTERNAL. Use Business.resellers() instead.
-            "prototype$__get__resellers": {
-              url: urlBase + "/Businesses/:id/resellers",
-              method: "GET",
+            prototype$__get__resellers: {
+              url: urlBase + '/Businesses/:id/resellers',
+              method: 'GET',
             },
 
             // INTERNAL. Use Business.resellers.create() instead.
-            "prototype$__create__resellers": {
-              url: urlBase + "/Businesses/:id/resellers",
-              method: "POST",
+            prototype$__create__resellers: {
+              url: urlBase + '/Businesses/:id/resellers',
+              method: 'POST',
             },
 
             // INTERNAL. Use Business.resellers.update() instead.
-            "prototype$__update__resellers": {
-              url: urlBase + "/Businesses/:id/resellers",
-              method: "PUT",
+            prototype$__update__resellers: {
+              url: urlBase + '/Businesses/:id/resellers',
+              method: 'PUT',
             },
 
             // INTERNAL. Use Business.resellers.destroy() instead.
-            "prototype$__destroy__resellers": {
-              url: urlBase + "/Businesses/:id/resellers",
-              method: "DELETE",
+            prototype$__destroy__resellers: {
+              url: urlBase + '/Businesses/:id/resellers',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Business.coupons.findById() instead.
-            "prototype$__findById__coupons": {
+            prototype$__findById__coupons: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/coupons/:fk",
-              method: "GET",
+              url: urlBase + '/Businesses/:id/coupons/:fk',
+              method: 'GET',
             },
 
             // INTERNAL. Use Business.coupons.destroyById() instead.
-            "prototype$__destroyById__coupons": {
+            prototype$__destroyById__coupons: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/coupons/:fk",
-              method: "DELETE",
+              url: urlBase + '/Businesses/:id/coupons/:fk',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Business.coupons.updateById() instead.
-            "prototype$__updateById__coupons": {
+            prototype$__updateById__coupons: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/coupons/:fk",
-              method: "PUT",
+              url: urlBase + '/Businesses/:id/coupons/:fk',
+              method: 'PUT',
             },
 
             // INTERNAL. Use Business.tickets.findById() instead.
-            "prototype$__findById__tickets": {
+            prototype$__findById__tickets: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/tickets/:fk",
-              method: "GET",
+              url: urlBase + '/Businesses/:id/tickets/:fk',
+              method: 'GET',
             },
 
             // INTERNAL. Use Business.tickets.destroyById() instead.
-            "prototype$__destroyById__tickets": {
+            prototype$__destroyById__tickets: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/tickets/:fk",
-              method: "DELETE",
+              url: urlBase + '/Businesses/:id/tickets/:fk',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Business.tickets.updateById() instead.
-            "prototype$__updateById__tickets": {
+            prototype$__updateById__tickets: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/tickets/:fk",
-              method: "PUT",
+              url: urlBase + '/Businesses/:id/tickets/:fk',
+              method: 'PUT',
             },
 
             // INTERNAL. Use Business.reports.findById() instead.
-            "prototype$__findById__reports": {
+            prototype$__findById__reports: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/reports/:fk",
-              method: "GET",
+              url: urlBase + '/Businesses/:id/reports/:fk',
+              method: 'GET',
             },
 
             // INTERNAL. Use Business.reports.destroyById() instead.
-            "prototype$__destroyById__reports": {
+            prototype$__destroyById__reports: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/reports/:fk",
-              method: "DELETE",
+              url: urlBase + '/Businesses/:id/reports/:fk',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Business.reports.updateById() instead.
-            "prototype$__updateById__reports": {
+            prototype$__updateById__reports: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/reports/:fk",
-              method: "PUT",
+              url: urlBase + '/Businesses/:id/reports/:fk',
+              method: 'PUT',
             },
 
             /**
@@ -4255,10 +4251,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-            "prototype$__get__accessTokens": {
+            prototype$__get__accessTokens: {
               isArray: true,
-              url: urlBase + "/Businesses/:id/accessTokens",
-              method: "GET",
+              url: urlBase + '/Businesses/:id/accessTokens',
+              method: 'GET',
             },
 
             /**
@@ -4297,9 +4293,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-            "prototype$__create__accessTokens": {
-              url: urlBase + "/Businesses/:id/accessTokens",
-              method: "POST",
+            prototype$__create__accessTokens: {
+              url: urlBase + '/Businesses/:id/accessTokens',
+              method: 'POST',
             },
 
             /**
@@ -4333,9 +4329,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * This method returns no data.
              */
-            "prototype$__delete__accessTokens": {
-              url: urlBase + "/Businesses/:id/accessTokens",
-              method: "DELETE",
+            prototype$__delete__accessTokens: {
+              url: urlBase + '/Businesses/:id/accessTokens',
+              method: 'DELETE',
             },
 
             /**
@@ -4371,134 +4367,134 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `count` – `{number=}` -
              */
-            "prototype$__count__accessTokens": {
-              url: urlBase + "/Businesses/:id/accessTokens/count",
-              method: "GET",
+            prototype$__count__accessTokens: {
+              url: urlBase + '/Businesses/:id/accessTokens/count',
+              method: 'GET',
             },
 
             // INTERNAL. Use Business.nas() instead.
-            "prototype$__get__nas": {
+            prototype$__get__nas: {
               isArray: true,
-              url: urlBase + "/Businesses/:id/nas",
-              method: "GET",
+              url: urlBase + '/Businesses/:id/nas',
+              method: 'GET',
             },
 
             // INTERNAL. Use Business.nas.create() instead.
-            "prototype$__create__nas": {
-              url: urlBase + "/Businesses/:id/nas",
-              method: "POST",
+            prototype$__create__nas: {
+              url: urlBase + '/Businesses/:id/nas',
+              method: 'POST',
             },
 
             // INTERNAL. Use Business.nas.destroyAll() instead.
-            "prototype$__delete__nas": {
-              url: urlBase + "/Businesses/:id/nas",
-              method: "DELETE",
+            prototype$__delete__nas: {
+              url: urlBase + '/Businesses/:id/nas',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Business.nas.count() instead.
-            "prototype$__count__nas": {
-              url: urlBase + "/Businesses/:id/nas/count",
-              method: "GET",
+            prototype$__count__nas: {
+              url: urlBase + '/Businesses/:id/nas/count',
+              method: 'GET',
             },
 
             // INTERNAL. Use Business.members() instead.
-            "prototype$__get__members": {
+            prototype$__get__members: {
               isArray: true,
-              url: urlBase + "/Businesses/:id/members",
-              method: "GET",
+              url: urlBase + '/Businesses/:id/members',
+              method: 'GET',
             },
 
             // INTERNAL. Use Business.members.create() instead.
-            "prototype$__create__members": {
-              url: urlBase + "/Businesses/:id/members",
-              method: "POST",
+            prototype$__create__members: {
+              url: urlBase + '/Businesses/:id/members',
+              method: 'POST',
             },
 
             // INTERNAL. Use Business.members.destroyAll() instead.
-            "prototype$__delete__members": {
-              url: urlBase + "/Businesses/:id/members",
-              method: "DELETE",
+            prototype$__delete__members: {
+              url: urlBase + '/Businesses/:id/members',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Business.members.count() instead.
-            "prototype$__count__members": {
-              url: urlBase + "/Businesses/:id/members/count",
-              method: "GET",
+            prototype$__count__members: {
+              url: urlBase + '/Businesses/:id/members/count',
+              method: 'GET',
             },
 
             // INTERNAL. Use Business.campaigns() instead.
-            "prototype$__get__campaigns": {
+            prototype$__get__campaigns: {
               isArray: true,
-              url: urlBase + "/Businesses/:id/campaigns",
-              method: "GET",
+              url: urlBase + '/Businesses/:id/campaigns',
+              method: 'GET',
             },
 
             // INTERNAL. Use Business.campaigns.create() instead.
-            "prototype$__create__campaigns": {
-              url: urlBase + "/Businesses/:id/campaigns",
-              method: "POST",
+            prototype$__create__campaigns: {
+              url: urlBase + '/Businesses/:id/campaigns',
+              method: 'POST',
             },
 
             // INTERNAL. Use Business.campaigns.destroyAll() instead.
-            "prototype$__delete__campaigns": {
-              url: urlBase + "/Businesses/:id/campaigns",
-              method: "DELETE",
+            prototype$__delete__campaigns: {
+              url: urlBase + '/Businesses/:id/campaigns',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Business.campaigns.count() instead.
-            "prototype$__count__campaigns": {
-              url: urlBase + "/Businesses/:id/campaigns/count",
-              method: "GET",
+            prototype$__count__campaigns: {
+              url: urlBase + '/Businesses/:id/campaigns/count',
+              method: 'GET',
             },
 
             // INTERNAL. Use Business.internetPlans() instead.
-            "prototype$__get__internetPlans": {
+            prototype$__get__internetPlans: {
               isArray: true,
-              url: urlBase + "/Businesses/:id/internetPlans",
-              method: "GET",
+              url: urlBase + '/Businesses/:id/internetPlans',
+              method: 'GET',
             },
 
             // INTERNAL. Use Business.internetPlans.create() instead.
-            "prototype$__create__internetPlans": {
-              url: urlBase + "/Businesses/:id/internetPlans",
-              method: "POST",
+            prototype$__create__internetPlans: {
+              url: urlBase + '/Businesses/:id/internetPlans',
+              method: 'POST',
             },
 
             // INTERNAL. Use Business.internetPlans.destroyAll() instead.
-            "prototype$__delete__internetPlans": {
-              url: urlBase + "/Businesses/:id/internetPlans",
-              method: "DELETE",
+            prototype$__delete__internetPlans: {
+              url: urlBase + '/Businesses/:id/internetPlans',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Business.internetPlans.count() instead.
-            "prototype$__count__internetPlans": {
-              url: urlBase + "/Businesses/:id/internetPlans/count",
-              method: "GET",
+            prototype$__count__internetPlans: {
+              url: urlBase + '/Businesses/:id/internetPlans/count',
+              method: 'GET',
             },
 
             // INTERNAL. Use Business.invoices() instead.
-            "prototype$__get__invoices": {
+            prototype$__get__invoices: {
               isArray: true,
-              url: urlBase + "/Businesses/:id/invoices",
-              method: "GET",
+              url: urlBase + '/Businesses/:id/invoices',
+              method: 'GET',
             },
 
             // INTERNAL. Use Business.invoices.create() instead.
-            "prototype$__create__invoices": {
-              url: urlBase + "/Businesses/:id/invoices",
-              method: "POST",
+            prototype$__create__invoices: {
+              url: urlBase + '/Businesses/:id/invoices',
+              method: 'POST',
             },
 
             // INTERNAL. Use Business.invoices.destroyAll() instead.
-            "prototype$__delete__invoices": {
-              url: urlBase + "/Businesses/:id/invoices",
-              method: "DELETE",
+            prototype$__delete__invoices: {
+              url: urlBase + '/Businesses/:id/invoices',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Business.invoices.count() instead.
-            "prototype$__count__invoices": {
-              url: urlBase + "/Businesses/:id/invoices/count",
-              method: "GET",
+            prototype$__count__invoices: {
+              url: urlBase + '/Businesses/:id/invoices/count',
+              method: 'GET',
             },
 
             /**
@@ -4535,10 +4531,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-            "prototype$__get__nasSessions": {
+            prototype$__get__nasSessions: {
               isArray: true,
-              url: urlBase + "/Businesses/:id/nasSessions",
-              method: "GET",
+              url: urlBase + '/Businesses/:id/nasSessions',
+              method: 'GET',
             },
 
             /**
@@ -4577,9 +4573,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-            "prototype$__create__nasSessions": {
-              url: urlBase + "/Businesses/:id/nasSessions",
-              method: "POST",
+            prototype$__create__nasSessions: {
+              url: urlBase + '/Businesses/:id/nasSessions',
+              method: 'POST',
             },
 
             /**
@@ -4613,9 +4609,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * This method returns no data.
              */
-            "prototype$__delete__nasSessions": {
-              url: urlBase + "/Businesses/:id/nasSessions",
-              method: "DELETE",
+            prototype$__delete__nasSessions: {
+              url: urlBase + '/Businesses/:id/nasSessions',
+              method: 'DELETE',
             },
 
             /**
@@ -4651,84 +4647,84 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `count` – `{number=}` -
              */
-            "prototype$__count__nasSessions": {
-              url: urlBase + "/Businesses/:id/nasSessions/count",
-              method: "GET",
+            prototype$__count__nasSessions: {
+              url: urlBase + '/Businesses/:id/nasSessions/count',
+              method: 'GET',
             },
 
             // INTERNAL. Use Business.coupons() instead.
-            "prototype$__get__coupons": {
+            prototype$__get__coupons: {
               isArray: true,
-              url: urlBase + "/Businesses/:id/coupons",
-              method: "GET",
+              url: urlBase + '/Businesses/:id/coupons',
+              method: 'GET',
             },
 
             // INTERNAL. Use Business.coupons.create() instead.
-            "prototype$__create__coupons": {
-              url: urlBase + "/Businesses/:id/coupons",
-              method: "POST",
+            prototype$__create__coupons: {
+              url: urlBase + '/Businesses/:id/coupons',
+              method: 'POST',
             },
 
             // INTERNAL. Use Business.coupons.destroyAll() instead.
-            "prototype$__delete__coupons": {
-              url: urlBase + "/Businesses/:id/coupons",
-              method: "DELETE",
+            prototype$__delete__coupons: {
+              url: urlBase + '/Businesses/:id/coupons',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Business.coupons.count() instead.
-            "prototype$__count__coupons": {
-              url: urlBase + "/Businesses/:id/coupons/count",
-              method: "GET",
+            prototype$__count__coupons: {
+              url: urlBase + '/Businesses/:id/coupons/count',
+              method: 'GET',
             },
 
             // INTERNAL. Use Business.tickets() instead.
-            "prototype$__get__tickets": {
+            prototype$__get__tickets: {
               isArray: true,
-              url: urlBase + "/Businesses/:id/tickets",
-              method: "GET",
+              url: urlBase + '/Businesses/:id/tickets',
+              method: 'GET',
             },
 
             // INTERNAL. Use Business.tickets.create() instead.
-            "prototype$__create__tickets": {
-              url: urlBase + "/Businesses/:id/tickets",
-              method: "POST",
+            prototype$__create__tickets: {
+              url: urlBase + '/Businesses/:id/tickets',
+              method: 'POST',
             },
 
             // INTERNAL. Use Business.tickets.destroyAll() instead.
-            "prototype$__delete__tickets": {
-              url: urlBase + "/Businesses/:id/tickets",
-              method: "DELETE",
+            prototype$__delete__tickets: {
+              url: urlBase + '/Businesses/:id/tickets',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Business.tickets.count() instead.
-            "prototype$__count__tickets": {
-              url: urlBase + "/Businesses/:id/tickets/count",
-              method: "GET",
+            prototype$__count__tickets: {
+              url: urlBase + '/Businesses/:id/tickets/count',
+              method: 'GET',
             },
 
             // INTERNAL. Use Business.reports() instead.
-            "prototype$__get__reports": {
+            prototype$__get__reports: {
               isArray: true,
-              url: urlBase + "/Businesses/:id/reports",
-              method: "GET",
+              url: urlBase + '/Businesses/:id/reports',
+              method: 'GET',
             },
 
             // INTERNAL. Use Business.reports.create() instead.
-            "prototype$__create__reports": {
-              url: urlBase + "/Businesses/:id/reports",
-              method: "POST",
+            prototype$__create__reports: {
+              url: urlBase + '/Businesses/:id/reports',
+              method: 'POST',
             },
 
             // INTERNAL. Use Business.reports.destroyAll() instead.
-            "prototype$__delete__reports": {
-              url: urlBase + "/Businesses/:id/reports",
-              method: "DELETE",
+            prototype$__delete__reports: {
+              url: urlBase + '/Businesses/:id/reports',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Business.reports.count() instead.
-            "prototype$__count__reports": {
-              url: urlBase + "/Businesses/:id/reports/count",
-              method: "GET",
+            prototype$__count__reports: {
+              url: urlBase + '/Businesses/:id/reports/count',
+              method: 'GET',
             },
 
             /**
@@ -4766,9 +4762,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-            "create": {
-              url: urlBase + "/Businesses",
-              method: "POST",
+            create: {
+              url: urlBase + '/Businesses',
+              method: 'POST',
             },
 
             /**
@@ -4806,10 +4802,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-            "createMany": {
+            createMany: {
               isArray: true,
-              url: urlBase + "/Businesses",
-              method: "POST",
+              url: urlBase + '/Businesses',
+              method: 'POST',
             },
 
             /**
@@ -4847,9 +4843,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-            "patchOrCreate": {
-              url: urlBase + "/Businesses",
-              method: "PUT",
+            patchOrCreate: {
+              url: urlBase + '/Businesses',
+              method: 'PUT',
             },
 
             /**
@@ -4887,9 +4883,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-            "replaceOrCreate": {
-              url: urlBase + "/Businesses/replaceOrCreate",
-              method: "POST",
+            replaceOrCreate: {
+              url: urlBase + '/Businesses/replaceOrCreate',
+              method: 'POST',
             },
 
             /**
@@ -4926,9 +4922,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-            "upsertWithWhere": {
-              url: urlBase + "/Businesses/upsertWithWhere",
-              method: "POST",
+            upsertWithWhere: {
+              url: urlBase + '/Businesses/upsertWithWhere',
+              method: 'POST',
             },
 
             /**
@@ -4960,9 +4956,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `exists` – `{boolean=}` -
              */
-            "exists": {
-              url: urlBase + "/Businesses/:id/exists",
-              method: "GET",
+            exists: {
+              url: urlBase + '/Businesses/:id/exists',
+              method: 'GET',
             },
 
             /**
@@ -4997,9 +4993,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-            "findById": {
-              url: urlBase + "/Businesses/:id",
-              method: "GET",
+            findById: {
+              url: urlBase + '/Businesses/:id',
+              method: 'GET',
             },
 
             /**
@@ -5036,9 +5032,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-            "replaceById": {
-              url: urlBase + "/Businesses/:id/replace",
-              method: "POST",
+            replaceById: {
+              url: urlBase + '/Businesses/:id/replace',
+              method: 'POST',
             },
 
             /**
@@ -5071,10 +5067,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-            "find": {
+            find: {
               isArray: true,
-              url: urlBase + "/Businesses",
-              method: "GET",
+              url: urlBase + '/Businesses',
+              method: 'GET',
             },
 
             /**
@@ -5107,9 +5103,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-            "findOne": {
-              url: urlBase + "/Businesses/findOne",
-              method: "GET",
+            findOne: {
+              url: urlBase + '/Businesses/findOne',
+              method: 'GET',
             },
 
             /**
@@ -5143,9 +5139,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-            "updateAll": {
-              url: urlBase + "/Businesses/update",
-              method: "POST",
+            updateAll: {
+              url: urlBase + '/Businesses/update',
+              method: 'POST',
             },
 
             /**
@@ -5178,9 +5174,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-            "deleteById": {
-              url: urlBase + "/Businesses/:id",
-              method: "DELETE",
+            deleteById: {
+              url: urlBase + '/Businesses/:id',
+              method: 'DELETE',
             },
 
             /**
@@ -5212,9 +5208,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `count` – `{number=}` -
              */
-            "count": {
-              url: urlBase + "/Businesses/count",
-              method: "GET",
+            count: {
+              url: urlBase + '/Businesses/count',
+              method: 'GET',
             },
 
             /**
@@ -5253,9 +5249,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-            "prototype$patchAttributes": {
-              url: urlBase + "/Businesses/:id",
-              method: "PUT",
+            prototype$patchAttributes: {
+              url: urlBase + '/Businesses/:id',
+              method: 'PUT',
             },
 
             /**
@@ -5290,9 +5286,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `changes` – `{ReadableStream=}` -
              */
-            "createChangeStream": {
-              url: urlBase + "/Businesses/change-stream",
-              method: "POST",
+            createChangeStream: {
+              url: urlBase + '/Businesses/change-stream',
+              method: 'POST',
             },
 
             /**
@@ -5332,7 +5328,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *   - `user` - `U+007BUserU+007D` - Data of the currently logged in user. (`include=user`)
              *
              */
-            "login": {
+            login: {
               params: {
                 include: 'user',
               },
@@ -5347,8 +5343,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
                   return response.resource;
                 },
               },
-              url: urlBase + "/Businesses/login",
-              method: "POST",
+              url: urlBase + '/Businesses/login',
+              method: 'POST',
             },
 
             /**
@@ -5381,7 +5377,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * This method returns no data.
              */
-            "logout": {
+            logout: {
               interceptor: {
                 response: function(response) {
                   LoopBackAuth.clearUser();
@@ -5394,8 +5390,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
                   return responseError.resource;
                 },
               },
-              url: urlBase + "/Businesses/logout",
-              method: "POST",
+              url: urlBase + '/Businesses/logout',
+              method: 'POST',
             },
 
             /**
@@ -5431,9 +5427,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * This method returns no data.
              */
-            "prototype$verify": {
-              url: urlBase + "/Businesses/:id/verify",
-              method: "POST",
+            prototype$verify: {
+              url: urlBase + '/Businesses/:id/verify',
+              method: 'POST',
             },
 
             /**
@@ -5465,9 +5461,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * This method returns no data.
              */
-            "confirm": {
-              url: urlBase + "/Businesses/confirm",
-              method: "GET",
+            confirm: {
+              url: urlBase + '/Businesses/confirm',
+              method: 'GET',
             },
 
             /**
@@ -5500,9 +5496,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * This method returns no data.
              */
-            "resetPassword": {
-              url: urlBase + "/Businesses/reset",
-              method: "POST",
+            resetPassword: {
+              url: urlBase + '/Businesses/reset',
+              method: 'POST',
             },
 
             /**
@@ -5541,9 +5537,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * This method returns no data.
              */
-            "changePassword": {
-              url: urlBase + "/Businesses/change-password",
-              method: "POST",
+            changePassword: {
+              url: urlBase + '/Businesses/change-password',
+              method: 'POST',
             },
 
             /**
@@ -5580,9 +5576,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * This method returns no data.
              */
-            "setPassword": {
-              url: urlBase + "/Businesses/reset-password",
-              method: "POST",
+            setPassword: {
+              url: urlBase + '/Businesses/reset-password',
+              method: 'POST',
             },
 
             /**
@@ -5592,7 +5588,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * @description
              *
-             * Register A New License 
+             * Register A New License
              *
              * @param {Object=} parameters Request parameters.
              *
@@ -5622,9 +5618,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-            "registerNewLicense": {
-              url: urlBase + "/Businesses/registerNewLicense",
-              method: "POST",
+            registerNewLicense: {
+              url: urlBase + '/Businesses/registerNewLicense',
+              method: 'POST',
             },
 
             /**
@@ -5660,9 +5656,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-            "loadConfig": {
-              url: urlBase + "/Businesses/loadConfig",
-              method: "POST",
+            loadConfig: {
+              url: urlBase + '/Businesses/loadConfig',
+              method: 'POST',
             },
 
             /**
@@ -5698,9 +5694,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-            "reloadLicense": {
-              url: urlBase + "/Businesses/reloadLicense",
-              method: "POST",
+            reloadLicense: {
+              url: urlBase + '/Businesses/reloadLicense',
+              method: 'POST',
             },
 
             /**
@@ -5740,9 +5736,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-            "buyPackage": {
-              url: urlBase + "/Businesses/buyPackage",
-              method: "POST",
+            buyPackage: {
+              url: urlBase + '/Businesses/buyPackage',
+              method: 'POST',
             },
 
             /**
@@ -5784,9 +5780,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-            "assignPackageToBusiness": {
-              url: urlBase + "/Businesses/assignPackageToBusiness",
-              method: "POST",
+            assignPackageToBusiness: {
+              url: urlBase + '/Businesses/assignPackageToBusiness',
+              method: 'POST',
             },
 
             /**
@@ -5824,9 +5820,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-            "buyCredit": {
-              url: urlBase + "/Businesses/buyCredit",
-              method: "POST",
+            buyCredit: {
+              url: urlBase + '/Businesses/buyCredit',
+              method: 'POST',
             },
 
             /**
@@ -5864,9 +5860,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-            "adminChargeCredit": {
-              url: urlBase + "/Businesses/adminChargeCredit",
-              method: "POST",
+            adminChargeCredit: {
+              url: urlBase + '/Businesses/adminChargeCredit',
+              method: 'POST',
             },
 
             /**
@@ -5904,9 +5900,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-            "getBalance": {
-              url: urlBase + "/Businesses/getBalance",
-              method: "POST",
+            getBalance: {
+              url: urlBase + '/Businesses/getBalance',
+              method: 'POST',
             },
 
             /**
@@ -5949,9 +5945,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `result` – `{object=}` -
              */
-            "getTrafficUsage": {
-              url: urlBase + "/Businesses/getTrafficUsage",
-              method: "POST",
+            getTrafficUsage: {
+              url: urlBase + '/Businesses/getTrafficUsage',
+              method: 'POST',
             },
 
             /**
@@ -5987,9 +5983,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-            "loadServiceInfo": {
-              url: urlBase + "/Businesses/loadServiceInfo",
-              method: "POST",
+            loadServiceInfo: {
+              url: urlBase + '/Businesses/loadServiceInfo',
+              method: 'POST',
             },
 
             /**
@@ -6039,9 +6035,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-            "getNetflowReport": {
-              url: urlBase + "/Businesses/getNetflowReport",
-              method: "POST",
+            getNetflowReport: {
+              url: urlBase + '/Businesses/getNetflowReport',
+              method: 'POST',
             },
 
             /**
@@ -6087,9 +6083,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-            "getSyslogReport": {
-              url: urlBase + "/Businesses/getSyslogReport",
-              method: "POST",
+            getSyslogReport: {
+              url: urlBase + '/Businesses/getSyslogReport',
+              method: 'POST',
             },
 
             /**
@@ -6125,9 +6121,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-            "getResellerMobile": {
-              url: urlBase + "/Businesses/getResellerMobile",
-              method: "POST",
+            getResellerMobile: {
+              url: urlBase + '/Businesses/getResellerMobile',
+              method: 'POST',
             },
 
             /**
@@ -6163,9 +6159,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-            "hasValidSubscription": {
-              url: urlBase + "/Businesses/hasValidSubscription",
-              method: "POST",
+            hasValidSubscription: {
+              url: urlBase + '/Businesses/hasValidSubscription',
+              method: 'POST',
             },
 
             /**
@@ -6203,9 +6199,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-            "loadServices": {
-              url: urlBase + "/Businesses/loadServices",
-              method: "POST",
+            loadServices: {
+              url: urlBase + '/Businesses/loadServices',
+              method: 'POST',
             },
 
             /**
@@ -6243,9 +6239,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-            "loadResellersPackages": {
-              url: urlBase + "/Businesses/loadResellersPackages",
-              method: "POST",
+            loadResellersPackages: {
+              url: urlBase + '/Businesses/loadResellersPackages',
+              method: 'POST',
             },
 
             /**
@@ -6285,9 +6281,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-            "resetPasswordByAdmin": {
-              url: urlBase + "/Businesses/resetPasswordByAdmin",
-              method: "POST",
+            resetPasswordByAdmin: {
+              url: urlBase + '/Businesses/resetPasswordByAdmin',
+              method: 'POST',
             },
 
             /**
@@ -6320,9 +6316,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-            "makeBackup": {
-              url: urlBase + "/Businesses/makeBackup",
-              method: "GET",
+            makeBackup: {
+              url: urlBase + '/Businesses/makeBackup',
+              method: 'GET',
             },
 
             /**
@@ -6362,9 +6358,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-            "restoreBackupFromApi": {
-              url: urlBase + "/Businesses/restoreBackupFromApi",
-              method: "POST",
+            restoreBackupFromApi: {
+              url: urlBase + '/Businesses/restoreBackupFromApi',
+              method: 'POST',
             },
 
             /**
@@ -6404,9 +6400,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-            "restoreBackup": {
-              url: urlBase + "/Businesses/restoreBackup",
-              method: "POST",
+            restoreBackup: {
+              url: urlBase + '/Businesses/restoreBackup',
+              method: 'POST',
             },
 
             /**
@@ -6446,9 +6442,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-            "destroyMembersById": {
-              url: urlBase + "/Businesses/destroyMembersById",
-              method: "POST",
+            destroyMembersById: {
+              url: urlBase + '/Businesses/destroyMembersById',
+              method: 'POST',
             },
 
             /**
@@ -6486,9 +6482,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-            "dropBoxAuthorization": {
-              url: urlBase + "/Businesses/dropBoxAuthorization",
-              method: "POST",
+            dropBoxAuthorization: {
+              url: urlBase + '/Businesses/dropBoxAuthorization',
+              method: 'POST',
             },
 
             /**
@@ -6523,9 +6519,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `members` – `{Array=}` -
              */
-            "loadMembersUsernames": {
-              url: urlBase + "/Businesses/loadMembersUsernames",
-              method: "POST",
+            loadMembersUsernames: {
+              url: urlBase + '/Businesses/loadMembersUsernames',
+              method: 'POST',
             },
 
             /**
@@ -6565,171 +6561,171 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-            "destroyReportsById": {
-              url: urlBase + "/Businesses/destroyReportsById",
-              method: "POST",
+            destroyReportsById: {
+              url: urlBase + '/Businesses/destroyReportsById',
+              method: 'POST',
             },
 
             // INTERNAL. Use Nas.business() instead.
-            "::get::Nas::business": {
-              url: urlBase + "/Nas/:id/business",
-              method: "GET",
+            '::get::Nas::business': {
+              url: urlBase + '/Nas/:id/business',
+              method: 'GET',
             },
 
             // INTERNAL. Use FootTraffic.business() instead.
-            "::get::FootTraffic::business": {
-              url: urlBase + "/FootTraffics/:id/business",
-              method: "GET",
+            '::get::FootTraffic::business': {
+              url: urlBase + '/FootTraffics/:id/business',
+              method: 'GET',
             },
 
             // INTERNAL. Use FootTraffic.business.create() instead.
-            "::create::FootTraffic::business": {
-              url: urlBase + "/FootTraffics/:id/business",
-              method: "POST",
+            '::create::FootTraffic::business': {
+              url: urlBase + '/FootTraffics/:id/business',
+              method: 'POST',
             },
 
             // INTERNAL. Use FootTraffic.business.createMany() instead.
-            "::createMany::FootTraffic::business": {
+            '::createMany::FootTraffic::business': {
               isArray: true,
-              url: urlBase + "/FootTraffics/:id/business",
-              method: "POST",
+              url: urlBase + '/FootTraffics/:id/business',
+              method: 'POST',
             },
 
             // INTERNAL. Use FootTraffic.business.update() instead.
-            "::update::FootTraffic::business": {
-              url: urlBase + "/FootTraffics/:id/business",
-              method: "PUT",
+            '::update::FootTraffic::business': {
+              url: urlBase + '/FootTraffics/:id/business',
+              method: 'PUT',
             },
 
             // INTERNAL. Use FootTraffic.business.destroy() instead.
-            "::destroy::FootTraffic::business": {
-              url: urlBase + "/FootTraffics/:id/business",
-              method: "DELETE",
+            '::destroy::FootTraffic::business': {
+              url: urlBase + '/FootTraffics/:id/business',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Member.business() instead.
-            "::get::Member::business": {
-              url: urlBase + "/Members/:id/business",
-              method: "GET",
+            '::get::Member::business': {
+              url: urlBase + '/Members/:id/business',
+              method: 'GET',
             },
 
             // INTERNAL. Use Campaign.business() instead.
-            "::get::Campaign::business": {
-              url: urlBase + "/Campaigns/:id/business",
-              method: "GET",
+            '::get::Campaign::business': {
+              url: urlBase + '/Campaigns/:id/business',
+              method: 'GET',
             },
 
             // INTERNAL. Use InternetPlan.business() instead.
-            "::get::InternetPlan::business": {
-              url: urlBase + "/InternetPlans/:id/business",
-              method: "GET",
+            '::get::InternetPlan::business': {
+              url: urlBase + '/InternetPlans/:id/business',
+              method: 'GET',
             },
 
             // INTERNAL. Use Invoice.business() instead.
-            "::get::Invoice::business": {
-              url: urlBase + "/Invoices/:id/business",
-              method: "GET",
+            '::get::Invoice::business': {
+              url: urlBase + '/Invoices/:id/business',
+              method: 'GET',
             },
 
             // INTERNAL. Use ClientSession.business() instead.
-            "::get::ClientSession::business": {
-              url: urlBase + "/ClientSessions/:id/business",
-              method: "GET",
+            '::get::ClientSession::business': {
+              url: urlBase + '/ClientSessions/:id/business',
+              method: 'GET',
             },
 
             // INTERNAL. Use FileStorage.business() instead.
-            "::get::FileStorage::business": {
-              url: urlBase + "/FileStorages/:id/business",
-              method: "GET",
+            '::get::FileStorage::business': {
+              url: urlBase + '/FileStorages/:id/business',
+              method: 'GET',
             },
 
             // INTERNAL. Use Reseller.businesses.findById() instead.
-            "::findById::Reseller::businesses": {
+            '::findById::Reseller::businesses': {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Resellers/:id/businesses/:fk",
-              method: "GET",
+              url: urlBase + '/Resellers/:id/businesses/:fk',
+              method: 'GET',
             },
 
             // INTERNAL. Use Reseller.businesses.destroyById() instead.
-            "::destroyById::Reseller::businesses": {
+            '::destroyById::Reseller::businesses': {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Resellers/:id/businesses/:fk",
-              method: "DELETE",
+              url: urlBase + '/Resellers/:id/businesses/:fk',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Reseller.businesses.updateById() instead.
-            "::updateById::Reseller::businesses": {
+            '::updateById::Reseller::businesses': {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Resellers/:id/businesses/:fk",
-              method: "PUT",
+              url: urlBase + '/Resellers/:id/businesses/:fk',
+              method: 'PUT',
             },
 
             // INTERNAL. Use Reseller.businesses() instead.
-            "::get::Reseller::businesses": {
+            '::get::Reseller::businesses': {
               isArray: true,
-              url: urlBase + "/Resellers/:id/businesses",
-              method: "GET",
+              url: urlBase + '/Resellers/:id/businesses',
+              method: 'GET',
             },
 
             // INTERNAL. Use Reseller.businesses.create() instead.
-            "::create::Reseller::businesses": {
-              url: urlBase + "/Resellers/:id/businesses",
-              method: "POST",
+            '::create::Reseller::businesses': {
+              url: urlBase + '/Resellers/:id/businesses',
+              method: 'POST',
             },
 
             // INTERNAL. Use Reseller.businesses.createMany() instead.
-            "::createMany::Reseller::businesses": {
+            '::createMany::Reseller::businesses': {
               isArray: true,
-              url: urlBase + "/Resellers/:id/businesses",
-              method: "POST",
+              url: urlBase + '/Resellers/:id/businesses',
+              method: 'POST',
             },
 
             // INTERNAL. Use Reseller.businesses.destroyAll() instead.
-            "::delete::Reseller::businesses": {
-              url: urlBase + "/Resellers/:id/businesses",
-              method: "DELETE",
+            '::delete::Reseller::businesses': {
+              url: urlBase + '/Resellers/:id/businesses',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Reseller.businesses.count() instead.
-            "::count::Reseller::businesses": {
-              url: urlBase + "/Resellers/:id/businesses/count",
-              method: "GET",
+            '::count::Reseller::businesses': {
+              url: urlBase + '/Resellers/:id/businesses/count',
+              method: 'GET',
             },
 
             // INTERNAL. Use Coupon.business() instead.
-            "::get::Coupon::business": {
-              url: urlBase + "/Coupons/:id/business",
-              method: "GET",
+            '::get::Coupon::business': {
+              url: urlBase + '/Coupons/:id/business',
+              method: 'GET',
             },
 
             // INTERNAL. Use Ticket.business() instead.
-            "::get::Ticket::business": {
-              url: urlBase + "/Tickets/:id/business",
-              method: "GET",
+            '::get::Ticket::business': {
+              url: urlBase + '/Tickets/:id/business',
+              method: 'GET',
             },
 
             // INTERNAL. Use Usage.business() instead.
-            "::get::Usage::business": {
-              url: urlBase + "/Usages/:id/business",
-              method: "GET",
+            '::get::Usage::business': {
+              url: urlBase + '/Usages/:id/business',
+              method: 'GET',
             },
 
             // INTERNAL. Use MemberGroup.business() instead.
-            "::get::MemberGroup::business": {
-              url: urlBase + "/MemberGroups/:id/business",
-              method: "GET",
+            '::get::MemberGroup::business': {
+              url: urlBase + '/MemberGroups/:id/business',
+              method: 'GET',
             },
 
             // INTERNAL. Use Report.business() instead.
-            "::get::Report::business": {
-              url: urlBase + "/Reports/:id/business",
-              method: "GET",
+            '::get::Report::business': {
+              url: urlBase + '/Reports/:id/business',
+              method: 'GET',
             },
 
             /**
@@ -6752,8 +6748,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *   populated with the actual data once the response is returned
              *   from the server.
              */
-            'getCurrent': {
-              url: urlBase + "/Businesses" + '/:id',
+            getCurrent: {
+              url: urlBase + '/Businesses' + '/:id',
               method: 'GET',
               params: {
                 id: function() {
@@ -6774,8 +6770,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         );
 
 
-
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business#upsert
              * @methodOf lbServices.Business
@@ -6810,9 +6805,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-        R["upsert"] = R["patchOrCreate"];
+        R['upsert'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business#updateOrCreate
              * @methodOf lbServices.Business
@@ -6847,9 +6842,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-        R["updateOrCreate"] = R["patchOrCreate"];
+        R['updateOrCreate'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business#patchOrCreateWithWhere
              * @methodOf lbServices.Business
@@ -6883,9 +6878,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-        R["patchOrCreateWithWhere"] = R["upsertWithWhere"];
+        R['patchOrCreateWithWhere'] = R['upsertWithWhere'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business#update
              * @methodOf lbServices.Business
@@ -6916,9 +6911,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-        R["update"] = R["updateAll"];
+        R['update'] = R['updateAll'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business#destroyById
              * @methodOf lbServices.Business
@@ -6948,9 +6943,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-        R["destroyById"] = R["deleteById"];
+        R['destroyById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business#removeById
              * @methodOf lbServices.Business
@@ -6980,9 +6975,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-        R["removeById"] = R["deleteById"];
+        R['removeById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business#updateAttributes
              * @methodOf lbServices.Business
@@ -7018,7 +7013,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Business` object.)
              * </em>
              */
-        R["updateAttributes"] = R["prototype$patchAttributes"];
+        R['updateAttributes'] = R['prototype$patchAttributes'];
 
         /**
          * @ngdoc method
@@ -7070,9 +7065,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         * The name of the model represented by this $resource,
         * i.e. `Business`.
         */
-        R.modelName = "Business";
+        R.modelName = 'Business';
 
-    /**
+        /**
      * @ngdoc object
      * @name lbServices.Business.nas
      * @header lbServices.Business.nas
@@ -7087,7 +7082,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
      */
 
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business#nas
              * @methodOf lbServices.Business
@@ -7122,12 +7117,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.nas = function() {
-          var TargetResource = $injector.get("Nas");
-          var action = TargetResource["::get::Business::nas"];
+          var TargetResource = $injector.get('Nas');
+          var action = TargetResource['::get::Business::nas'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.nas#count
              * @methodOf lbServices.Business.nas
@@ -7161,12 +7156,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *  - `count` – `{number=}` -
              */
         R.nas.count = function() {
-          var TargetResource = $injector.get("Nas");
-          var action = TargetResource["::count::Business::nas"];
+          var TargetResource = $injector.get('Nas');
+          var action = TargetResource['::count::Business::nas'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.nas#create
              * @methodOf lbServices.Business.nas
@@ -7203,12 +7198,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.nas.create = function() {
-          var TargetResource = $injector.get("Nas");
-          var action = TargetResource["::create::Business::nas"];
+          var TargetResource = $injector.get('Nas');
+          var action = TargetResource['::create::Business::nas'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.nas#createMany
              * @methodOf lbServices.Business.nas
@@ -7245,12 +7240,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.nas.createMany = function() {
-          var TargetResource = $injector.get("Nas");
-          var action = TargetResource["::createMany::Business::nas"];
+          var TargetResource = $injector.get('Nas');
+          var action = TargetResource['::createMany::Business::nas'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.nas#destroyAll
              * @methodOf lbServices.Business.nas
@@ -7282,12 +7277,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.nas.destroyAll = function() {
-          var TargetResource = $injector.get("Nas");
-          var action = TargetResource["::delete::Business::nas"];
+          var TargetResource = $injector.get('Nas');
+          var action = TargetResource['::delete::Business::nas'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.nas#destroyById
              * @methodOf lbServices.Business.nas
@@ -7319,12 +7314,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.nas.destroyById = function() {
-          var TargetResource = $injector.get("Nas");
-          var action = TargetResource["::destroyById::Business::nas"];
+          var TargetResource = $injector.get('Nas');
+          var action = TargetResource['::destroyById::Business::nas'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.nas#findById
              * @methodOf lbServices.Business.nas
@@ -7359,12 +7354,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.nas.findById = function() {
-          var TargetResource = $injector.get("Nas");
-          var action = TargetResource["::findById::Business::nas"];
+          var TargetResource = $injector.get('Nas');
+          var action = TargetResource['::findById::Business::nas'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.nas#updateById
              * @methodOf lbServices.Business.nas
@@ -7403,11 +7398,11 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.nas.updateById = function() {
-          var TargetResource = $injector.get("Nas");
-          var action = TargetResource["::updateById::Business::nas"];
+          var TargetResource = $injector.get('Nas');
+          var action = TargetResource['::updateById::Business::nas'];
           return action.apply(R, arguments);
         };
-    /**
+        /**
      * @ngdoc object
      * @name lbServices.Business.members
      * @header lbServices.Business.members
@@ -7422,7 +7417,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
      */
 
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business#members
              * @methodOf lbServices.Business
@@ -7457,12 +7452,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.members = function() {
-          var TargetResource = $injector.get("Member");
-          var action = TargetResource["::get::Business::members"];
+          var TargetResource = $injector.get('Member');
+          var action = TargetResource['::get::Business::members'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.members#count
              * @methodOf lbServices.Business.members
@@ -7496,12 +7491,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *  - `count` – `{number=}` -
              */
         R.members.count = function() {
-          var TargetResource = $injector.get("Member");
-          var action = TargetResource["::count::Business::members"];
+          var TargetResource = $injector.get('Member');
+          var action = TargetResource['::count::Business::members'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.members#create
              * @methodOf lbServices.Business.members
@@ -7538,12 +7533,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.members.create = function() {
-          var TargetResource = $injector.get("Member");
-          var action = TargetResource["::create::Business::members"];
+          var TargetResource = $injector.get('Member');
+          var action = TargetResource['::create::Business::members'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.members#createMany
              * @methodOf lbServices.Business.members
@@ -7580,12 +7575,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.members.createMany = function() {
-          var TargetResource = $injector.get("Member");
-          var action = TargetResource["::createMany::Business::members"];
+          var TargetResource = $injector.get('Member');
+          var action = TargetResource['::createMany::Business::members'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.members#destroyAll
              * @methodOf lbServices.Business.members
@@ -7617,12 +7612,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.members.destroyAll = function() {
-          var TargetResource = $injector.get("Member");
-          var action = TargetResource["::delete::Business::members"];
+          var TargetResource = $injector.get('Member');
+          var action = TargetResource['::delete::Business::members'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.members#destroyById
              * @methodOf lbServices.Business.members
@@ -7654,12 +7649,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.members.destroyById = function() {
-          var TargetResource = $injector.get("Member");
-          var action = TargetResource["::destroyById::Business::members"];
+          var TargetResource = $injector.get('Member');
+          var action = TargetResource['::destroyById::Business::members'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.members#findById
              * @methodOf lbServices.Business.members
@@ -7694,12 +7689,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.members.findById = function() {
-          var TargetResource = $injector.get("Member");
-          var action = TargetResource["::findById::Business::members"];
+          var TargetResource = $injector.get('Member');
+          var action = TargetResource['::findById::Business::members'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.members#updateById
              * @methodOf lbServices.Business.members
@@ -7738,11 +7733,11 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.members.updateById = function() {
-          var TargetResource = $injector.get("Member");
-          var action = TargetResource["::updateById::Business::members"];
+          var TargetResource = $injector.get('Member');
+          var action = TargetResource['::updateById::Business::members'];
           return action.apply(R, arguments);
         };
-    /**
+        /**
      * @ngdoc object
      * @name lbServices.Business.campaigns
      * @header lbServices.Business.campaigns
@@ -7757,7 +7752,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
      */
 
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business#campaigns
              * @methodOf lbServices.Business
@@ -7792,12 +7787,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.campaigns = function() {
-          var TargetResource = $injector.get("Campaign");
-          var action = TargetResource["::get::Business::campaigns"];
+          var TargetResource = $injector.get('Campaign');
+          var action = TargetResource['::get::Business::campaigns'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.campaigns#count
              * @methodOf lbServices.Business.campaigns
@@ -7831,12 +7826,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *  - `count` – `{number=}` -
              */
         R.campaigns.count = function() {
-          var TargetResource = $injector.get("Campaign");
-          var action = TargetResource["::count::Business::campaigns"];
+          var TargetResource = $injector.get('Campaign');
+          var action = TargetResource['::count::Business::campaigns'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.campaigns#create
              * @methodOf lbServices.Business.campaigns
@@ -7873,12 +7868,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.campaigns.create = function() {
-          var TargetResource = $injector.get("Campaign");
-          var action = TargetResource["::create::Business::campaigns"];
+          var TargetResource = $injector.get('Campaign');
+          var action = TargetResource['::create::Business::campaigns'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.campaigns#createMany
              * @methodOf lbServices.Business.campaigns
@@ -7915,12 +7910,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.campaigns.createMany = function() {
-          var TargetResource = $injector.get("Campaign");
-          var action = TargetResource["::createMany::Business::campaigns"];
+          var TargetResource = $injector.get('Campaign');
+          var action = TargetResource['::createMany::Business::campaigns'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.campaigns#destroyAll
              * @methodOf lbServices.Business.campaigns
@@ -7952,12 +7947,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.campaigns.destroyAll = function() {
-          var TargetResource = $injector.get("Campaign");
-          var action = TargetResource["::delete::Business::campaigns"];
+          var TargetResource = $injector.get('Campaign');
+          var action = TargetResource['::delete::Business::campaigns'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.campaigns#destroyById
              * @methodOf lbServices.Business.campaigns
@@ -7989,12 +7984,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.campaigns.destroyById = function() {
-          var TargetResource = $injector.get("Campaign");
-          var action = TargetResource["::destroyById::Business::campaigns"];
+          var TargetResource = $injector.get('Campaign');
+          var action = TargetResource['::destroyById::Business::campaigns'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.campaigns#findById
              * @methodOf lbServices.Business.campaigns
@@ -8029,12 +8024,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.campaigns.findById = function() {
-          var TargetResource = $injector.get("Campaign");
-          var action = TargetResource["::findById::Business::campaigns"];
+          var TargetResource = $injector.get('Campaign');
+          var action = TargetResource['::findById::Business::campaigns'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.campaigns#updateById
              * @methodOf lbServices.Business.campaigns
@@ -8073,11 +8068,11 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.campaigns.updateById = function() {
-          var TargetResource = $injector.get("Campaign");
-          var action = TargetResource["::updateById::Business::campaigns"];
+          var TargetResource = $injector.get('Campaign');
+          var action = TargetResource['::updateById::Business::campaigns'];
           return action.apply(R, arguments);
         };
-    /**
+        /**
      * @ngdoc object
      * @name lbServices.Business.internetPlans
      * @header lbServices.Business.internetPlans
@@ -8092,7 +8087,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
      */
 
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business#internetPlans
              * @methodOf lbServices.Business
@@ -8127,12 +8122,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.internetPlans = function() {
-          var TargetResource = $injector.get("InternetPlan");
-          var action = TargetResource["::get::Business::internetPlans"];
+          var TargetResource = $injector.get('InternetPlan');
+          var action = TargetResource['::get::Business::internetPlans'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.internetPlans#count
              * @methodOf lbServices.Business.internetPlans
@@ -8166,12 +8161,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *  - `count` – `{number=}` -
              */
         R.internetPlans.count = function() {
-          var TargetResource = $injector.get("InternetPlan");
-          var action = TargetResource["::count::Business::internetPlans"];
+          var TargetResource = $injector.get('InternetPlan');
+          var action = TargetResource['::count::Business::internetPlans'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.internetPlans#create
              * @methodOf lbServices.Business.internetPlans
@@ -8208,12 +8203,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.internetPlans.create = function() {
-          var TargetResource = $injector.get("InternetPlan");
-          var action = TargetResource["::create::Business::internetPlans"];
+          var TargetResource = $injector.get('InternetPlan');
+          var action = TargetResource['::create::Business::internetPlans'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.internetPlans#createMany
              * @methodOf lbServices.Business.internetPlans
@@ -8250,12 +8245,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.internetPlans.createMany = function() {
-          var TargetResource = $injector.get("InternetPlan");
-          var action = TargetResource["::createMany::Business::internetPlans"];
+          var TargetResource = $injector.get('InternetPlan');
+          var action = TargetResource['::createMany::Business::internetPlans'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.internetPlans#destroyAll
              * @methodOf lbServices.Business.internetPlans
@@ -8287,12 +8282,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.internetPlans.destroyAll = function() {
-          var TargetResource = $injector.get("InternetPlan");
-          var action = TargetResource["::delete::Business::internetPlans"];
+          var TargetResource = $injector.get('InternetPlan');
+          var action = TargetResource['::delete::Business::internetPlans'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.internetPlans#destroyById
              * @methodOf lbServices.Business.internetPlans
@@ -8324,12 +8319,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.internetPlans.destroyById = function() {
-          var TargetResource = $injector.get("InternetPlan");
-          var action = TargetResource["::destroyById::Business::internetPlans"];
+          var TargetResource = $injector.get('InternetPlan');
+          var action = TargetResource['::destroyById::Business::internetPlans'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.internetPlans#findById
              * @methodOf lbServices.Business.internetPlans
@@ -8364,12 +8359,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.internetPlans.findById = function() {
-          var TargetResource = $injector.get("InternetPlan");
-          var action = TargetResource["::findById::Business::internetPlans"];
+          var TargetResource = $injector.get('InternetPlan');
+          var action = TargetResource['::findById::Business::internetPlans'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.internetPlans#updateById
              * @methodOf lbServices.Business.internetPlans
@@ -8408,11 +8403,11 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.internetPlans.updateById = function() {
-          var TargetResource = $injector.get("InternetPlan");
-          var action = TargetResource["::updateById::Business::internetPlans"];
+          var TargetResource = $injector.get('InternetPlan');
+          var action = TargetResource['::updateById::Business::internetPlans'];
           return action.apply(R, arguments);
         };
-    /**
+        /**
      * @ngdoc object
      * @name lbServices.Business.invoices
      * @header lbServices.Business.invoices
@@ -8427,7 +8422,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
      */
 
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business#invoices
              * @methodOf lbServices.Business
@@ -8462,12 +8457,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.invoices = function() {
-          var TargetResource = $injector.get("Invoice");
-          var action = TargetResource["::get::Business::invoices"];
+          var TargetResource = $injector.get('Invoice');
+          var action = TargetResource['::get::Business::invoices'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.invoices#count
              * @methodOf lbServices.Business.invoices
@@ -8501,12 +8496,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *  - `count` – `{number=}` -
              */
         R.invoices.count = function() {
-          var TargetResource = $injector.get("Invoice");
-          var action = TargetResource["::count::Business::invoices"];
+          var TargetResource = $injector.get('Invoice');
+          var action = TargetResource['::count::Business::invoices'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.invoices#create
              * @methodOf lbServices.Business.invoices
@@ -8543,12 +8538,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.invoices.create = function() {
-          var TargetResource = $injector.get("Invoice");
-          var action = TargetResource["::create::Business::invoices"];
+          var TargetResource = $injector.get('Invoice');
+          var action = TargetResource['::create::Business::invoices'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.invoices#createMany
              * @methodOf lbServices.Business.invoices
@@ -8585,12 +8580,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.invoices.createMany = function() {
-          var TargetResource = $injector.get("Invoice");
-          var action = TargetResource["::createMany::Business::invoices"];
+          var TargetResource = $injector.get('Invoice');
+          var action = TargetResource['::createMany::Business::invoices'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.invoices#destroyAll
              * @methodOf lbServices.Business.invoices
@@ -8622,12 +8617,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.invoices.destroyAll = function() {
-          var TargetResource = $injector.get("Invoice");
-          var action = TargetResource["::delete::Business::invoices"];
+          var TargetResource = $injector.get('Invoice');
+          var action = TargetResource['::delete::Business::invoices'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.invoices#destroyById
              * @methodOf lbServices.Business.invoices
@@ -8659,12 +8654,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.invoices.destroyById = function() {
-          var TargetResource = $injector.get("Invoice");
-          var action = TargetResource["::destroyById::Business::invoices"];
+          var TargetResource = $injector.get('Invoice');
+          var action = TargetResource['::destroyById::Business::invoices'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.invoices#findById
              * @methodOf lbServices.Business.invoices
@@ -8699,12 +8694,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.invoices.findById = function() {
-          var TargetResource = $injector.get("Invoice");
-          var action = TargetResource["::findById::Business::invoices"];
+          var TargetResource = $injector.get('Invoice');
+          var action = TargetResource['::findById::Business::invoices'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.invoices#updateById
              * @methodOf lbServices.Business.invoices
@@ -8743,11 +8738,11 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.invoices.updateById = function() {
-          var TargetResource = $injector.get("Invoice");
-          var action = TargetResource["::updateById::Business::invoices"];
+          var TargetResource = $injector.get('Invoice');
+          var action = TargetResource['::updateById::Business::invoices'];
           return action.apply(R, arguments);
         };
-    /**
+        /**
      * @ngdoc object
      * @name lbServices.Business.resellers
      * @header lbServices.Business.resellers
@@ -8762,7 +8757,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
      */
 
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business#resellers
              * @methodOf lbServices.Business
@@ -8797,12 +8792,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.resellers = function() {
-          var TargetResource = $injector.get("Reseller");
-          var action = TargetResource["::get::Business::resellers"];
+          var TargetResource = $injector.get('Reseller');
+          var action = TargetResource['::get::Business::resellers'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.resellers#create
              * @methodOf lbServices.Business.resellers
@@ -8839,12 +8834,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.resellers.create = function() {
-          var TargetResource = $injector.get("Reseller");
-          var action = TargetResource["::create::Business::resellers"];
+          var TargetResource = $injector.get('Reseller');
+          var action = TargetResource['::create::Business::resellers'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.resellers#createMany
              * @methodOf lbServices.Business.resellers
@@ -8881,12 +8876,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.resellers.createMany = function() {
-          var TargetResource = $injector.get("Reseller");
-          var action = TargetResource["::createMany::Business::resellers"];
+          var TargetResource = $injector.get('Reseller');
+          var action = TargetResource['::createMany::Business::resellers'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.resellers#destroy
              * @methodOf lbServices.Business.resellers
@@ -8916,12 +8911,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.resellers.destroy = function() {
-          var TargetResource = $injector.get("Reseller");
-          var action = TargetResource["::destroy::Business::resellers"];
+          var TargetResource = $injector.get('Reseller');
+          var action = TargetResource['::destroy::Business::resellers'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.resellers#update
              * @methodOf lbServices.Business.resellers
@@ -8958,11 +8953,11 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.resellers.update = function() {
-          var TargetResource = $injector.get("Reseller");
-          var action = TargetResource["::update::Business::resellers"];
+          var TargetResource = $injector.get('Reseller');
+          var action = TargetResource['::update::Business::resellers'];
           return action.apply(R, arguments);
         };
-    /**
+        /**
      * @ngdoc object
      * @name lbServices.Business.coupons
      * @header lbServices.Business.coupons
@@ -8977,7 +8972,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
      */
 
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business#coupons
              * @methodOf lbServices.Business
@@ -9012,12 +9007,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.coupons = function() {
-          var TargetResource = $injector.get("Coupon");
-          var action = TargetResource["::get::Business::coupons"];
+          var TargetResource = $injector.get('Coupon');
+          var action = TargetResource['::get::Business::coupons'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.coupons#count
              * @methodOf lbServices.Business.coupons
@@ -9051,12 +9046,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *  - `count` – `{number=}` -
              */
         R.coupons.count = function() {
-          var TargetResource = $injector.get("Coupon");
-          var action = TargetResource["::count::Business::coupons"];
+          var TargetResource = $injector.get('Coupon');
+          var action = TargetResource['::count::Business::coupons'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.coupons#create
              * @methodOf lbServices.Business.coupons
@@ -9093,12 +9088,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.coupons.create = function() {
-          var TargetResource = $injector.get("Coupon");
-          var action = TargetResource["::create::Business::coupons"];
+          var TargetResource = $injector.get('Coupon');
+          var action = TargetResource['::create::Business::coupons'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.coupons#createMany
              * @methodOf lbServices.Business.coupons
@@ -9135,12 +9130,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.coupons.createMany = function() {
-          var TargetResource = $injector.get("Coupon");
-          var action = TargetResource["::createMany::Business::coupons"];
+          var TargetResource = $injector.get('Coupon');
+          var action = TargetResource['::createMany::Business::coupons'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.coupons#destroyAll
              * @methodOf lbServices.Business.coupons
@@ -9172,12 +9167,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.coupons.destroyAll = function() {
-          var TargetResource = $injector.get("Coupon");
-          var action = TargetResource["::delete::Business::coupons"];
+          var TargetResource = $injector.get('Coupon');
+          var action = TargetResource['::delete::Business::coupons'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.coupons#destroyById
              * @methodOf lbServices.Business.coupons
@@ -9209,12 +9204,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.coupons.destroyById = function() {
-          var TargetResource = $injector.get("Coupon");
-          var action = TargetResource["::destroyById::Business::coupons"];
+          var TargetResource = $injector.get('Coupon');
+          var action = TargetResource['::destroyById::Business::coupons'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.coupons#findById
              * @methodOf lbServices.Business.coupons
@@ -9249,12 +9244,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.coupons.findById = function() {
-          var TargetResource = $injector.get("Coupon");
-          var action = TargetResource["::findById::Business::coupons"];
+          var TargetResource = $injector.get('Coupon');
+          var action = TargetResource['::findById::Business::coupons'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.coupons#updateById
              * @methodOf lbServices.Business.coupons
@@ -9293,11 +9288,11 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.coupons.updateById = function() {
-          var TargetResource = $injector.get("Coupon");
-          var action = TargetResource["::updateById::Business::coupons"];
+          var TargetResource = $injector.get('Coupon');
+          var action = TargetResource['::updateById::Business::coupons'];
           return action.apply(R, arguments);
         };
-    /**
+        /**
      * @ngdoc object
      * @name lbServices.Business.tickets
      * @header lbServices.Business.tickets
@@ -9312,7 +9307,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
      */
 
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business#tickets
              * @methodOf lbServices.Business
@@ -9347,12 +9342,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.tickets = function() {
-          var TargetResource = $injector.get("Ticket");
-          var action = TargetResource["::get::Business::tickets"];
+          var TargetResource = $injector.get('Ticket');
+          var action = TargetResource['::get::Business::tickets'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.tickets#count
              * @methodOf lbServices.Business.tickets
@@ -9386,12 +9381,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *  - `count` – `{number=}` -
              */
         R.tickets.count = function() {
-          var TargetResource = $injector.get("Ticket");
-          var action = TargetResource["::count::Business::tickets"];
+          var TargetResource = $injector.get('Ticket');
+          var action = TargetResource['::count::Business::tickets'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.tickets#create
              * @methodOf lbServices.Business.tickets
@@ -9428,12 +9423,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.tickets.create = function() {
-          var TargetResource = $injector.get("Ticket");
-          var action = TargetResource["::create::Business::tickets"];
+          var TargetResource = $injector.get('Ticket');
+          var action = TargetResource['::create::Business::tickets'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.tickets#createMany
              * @methodOf lbServices.Business.tickets
@@ -9470,12 +9465,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.tickets.createMany = function() {
-          var TargetResource = $injector.get("Ticket");
-          var action = TargetResource["::createMany::Business::tickets"];
+          var TargetResource = $injector.get('Ticket');
+          var action = TargetResource['::createMany::Business::tickets'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.tickets#destroyAll
              * @methodOf lbServices.Business.tickets
@@ -9507,12 +9502,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.tickets.destroyAll = function() {
-          var TargetResource = $injector.get("Ticket");
-          var action = TargetResource["::delete::Business::tickets"];
+          var TargetResource = $injector.get('Ticket');
+          var action = TargetResource['::delete::Business::tickets'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.tickets#destroyById
              * @methodOf lbServices.Business.tickets
@@ -9544,12 +9539,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.tickets.destroyById = function() {
-          var TargetResource = $injector.get("Ticket");
-          var action = TargetResource["::destroyById::Business::tickets"];
+          var TargetResource = $injector.get('Ticket');
+          var action = TargetResource['::destroyById::Business::tickets'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.tickets#findById
              * @methodOf lbServices.Business.tickets
@@ -9584,12 +9579,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.tickets.findById = function() {
-          var TargetResource = $injector.get("Ticket");
-          var action = TargetResource["::findById::Business::tickets"];
+          var TargetResource = $injector.get('Ticket');
+          var action = TargetResource['::findById::Business::tickets'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.tickets#updateById
              * @methodOf lbServices.Business.tickets
@@ -9628,11 +9623,11 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.tickets.updateById = function() {
-          var TargetResource = $injector.get("Ticket");
-          var action = TargetResource["::updateById::Business::tickets"];
+          var TargetResource = $injector.get('Ticket');
+          var action = TargetResource['::updateById::Business::tickets'];
           return action.apply(R, arguments);
         };
-    /**
+        /**
      * @ngdoc object
      * @name lbServices.Business.reports
      * @header lbServices.Business.reports
@@ -9647,7 +9642,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
      */
 
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business#reports
              * @methodOf lbServices.Business
@@ -9682,12 +9677,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.reports = function() {
-          var TargetResource = $injector.get("Report");
-          var action = TargetResource["::get::Business::reports"];
+          var TargetResource = $injector.get('Report');
+          var action = TargetResource['::get::Business::reports'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.reports#count
              * @methodOf lbServices.Business.reports
@@ -9721,12 +9716,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *  - `count` – `{number=}` -
              */
         R.reports.count = function() {
-          var TargetResource = $injector.get("Report");
-          var action = TargetResource["::count::Business::reports"];
+          var TargetResource = $injector.get('Report');
+          var action = TargetResource['::count::Business::reports'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.reports#create
              * @methodOf lbServices.Business.reports
@@ -9763,12 +9758,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.reports.create = function() {
-          var TargetResource = $injector.get("Report");
-          var action = TargetResource["::create::Business::reports"];
+          var TargetResource = $injector.get('Report');
+          var action = TargetResource['::create::Business::reports'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.reports#createMany
              * @methodOf lbServices.Business.reports
@@ -9805,12 +9800,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.reports.createMany = function() {
-          var TargetResource = $injector.get("Report");
-          var action = TargetResource["::createMany::Business::reports"];
+          var TargetResource = $injector.get('Report');
+          var action = TargetResource['::createMany::Business::reports'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.reports#destroyAll
              * @methodOf lbServices.Business.reports
@@ -9842,12 +9837,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.reports.destroyAll = function() {
-          var TargetResource = $injector.get("Report");
-          var action = TargetResource["::delete::Business::reports"];
+          var TargetResource = $injector.get('Report');
+          var action = TargetResource['::delete::Business::reports'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.reports#destroyById
              * @methodOf lbServices.Business.reports
@@ -9879,12 +9874,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.reports.destroyById = function() {
-          var TargetResource = $injector.get("Report");
-          var action = TargetResource["::destroyById::Business::reports"];
+          var TargetResource = $injector.get('Report');
+          var action = TargetResource['::destroyById::Business::reports'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.reports#findById
              * @methodOf lbServices.Business.reports
@@ -9919,12 +9914,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.reports.findById = function() {
-          var TargetResource = $injector.get("Report");
-          var action = TargetResource["::findById::Business::reports"];
+          var TargetResource = $injector.get('Report');
+          var action = TargetResource['::findById::Business::reports'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Business.reports#updateById
              * @methodOf lbServices.Business.reports
@@ -9963,8 +9958,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.reports.updateById = function() {
-          var TargetResource = $injector.get("Report");
-          var action = TargetResource["::updateById::Business::reports"];
+          var TargetResource = $injector.get('Report');
+          var action = TargetResource['::updateById::Business::reports'];
           return action.apply(R, arguments);
         };
 
@@ -9972,7 +9967,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         return R;
       }]);
 
-/**
+  /**
  * @ngdoc object
  * @name lbServices.Nas
  * @header lbServices.Nas
@@ -9990,71 +9985,71 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
  *
  */
   module.factory(
-    "Nas",
+    'Nas',
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
         var R = Resource(
-        urlBase + "/Nas/:id",
-          { 'id': '@id' },
+          urlBase + '/Nas/:id',
+          { id: '@id' },
           {
 
             // INTERNAL. Use Nas.business() instead.
-            "prototype$__get__business": {
-              url: urlBase + "/Nas/:id/business",
-              method: "GET",
+            prototype$__get__business: {
+              url: urlBase + '/Nas/:id/business',
+              method: 'GET',
             },
 
             // INTERNAL. Use Nas.FootTraffics.findById() instead.
-            "prototype$__findById__FootTraffics": {
+            prototype$__findById__FootTraffics: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Nas/:id/FootTraffics/:fk",
-              method: "GET",
+              url: urlBase + '/Nas/:id/FootTraffics/:fk',
+              method: 'GET',
             },
 
             // INTERNAL. Use Nas.FootTraffics.destroyById() instead.
-            "prototype$__destroyById__FootTraffics": {
+            prototype$__destroyById__FootTraffics: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Nas/:id/FootTraffics/:fk",
-              method: "DELETE",
+              url: urlBase + '/Nas/:id/FootTraffics/:fk',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Nas.FootTraffics.updateById() instead.
-            "prototype$__updateById__FootTraffics": {
+            prototype$__updateById__FootTraffics: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Nas/:id/FootTraffics/:fk",
-              method: "PUT",
+              url: urlBase + '/Nas/:id/FootTraffics/:fk',
+              method: 'PUT',
             },
 
             // INTERNAL. Use Nas.FootTraffics() instead.
-            "prototype$__get__FootTraffics": {
+            prototype$__get__FootTraffics: {
               isArray: true,
-              url: urlBase + "/Nas/:id/FootTraffics",
-              method: "GET",
+              url: urlBase + '/Nas/:id/FootTraffics',
+              method: 'GET',
             },
 
             // INTERNAL. Use Nas.FootTraffics.create() instead.
-            "prototype$__create__FootTraffics": {
-              url: urlBase + "/Nas/:id/FootTraffics",
-              method: "POST",
+            prototype$__create__FootTraffics: {
+              url: urlBase + '/Nas/:id/FootTraffics',
+              method: 'POST',
             },
 
             // INTERNAL. Use Nas.FootTraffics.destroyAll() instead.
-            "prototype$__delete__FootTraffics": {
-              url: urlBase + "/Nas/:id/FootTraffics",
-              method: "DELETE",
+            prototype$__delete__FootTraffics: {
+              url: urlBase + '/Nas/:id/FootTraffics',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Nas.FootTraffics.count() instead.
-            "prototype$__count__FootTraffics": {
-              url: urlBase + "/Nas/:id/FootTraffics/count",
-              method: "GET",
+            prototype$__count__FootTraffics: {
+              url: urlBase + '/Nas/:id/FootTraffics/count',
+              method: 'GET',
             },
 
             /**
@@ -10092,9 +10087,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Nas` object.)
              * </em>
              */
-            "create": {
-              url: urlBase + "/Nas",
-              method: "POST",
+            create: {
+              url: urlBase + '/Nas',
+              method: 'POST',
             },
 
             /**
@@ -10132,10 +10127,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Nas` object.)
              * </em>
              */
-            "createMany": {
+            createMany: {
               isArray: true,
-              url: urlBase + "/Nas",
-              method: "POST",
+              url: urlBase + '/Nas',
+              method: 'POST',
             },
 
             /**
@@ -10173,9 +10168,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Nas` object.)
              * </em>
              */
-            "patchOrCreate": {
-              url: urlBase + "/Nas",
-              method: "PUT",
+            patchOrCreate: {
+              url: urlBase + '/Nas',
+              method: 'PUT',
             },
 
             /**
@@ -10213,9 +10208,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Nas` object.)
              * </em>
              */
-            "replaceOrCreate": {
-              url: urlBase + "/Nas/replaceOrCreate",
-              method: "POST",
+            replaceOrCreate: {
+              url: urlBase + '/Nas/replaceOrCreate',
+              method: 'POST',
             },
 
             /**
@@ -10252,9 +10247,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Nas` object.)
              * </em>
              */
-            "upsertWithWhere": {
-              url: urlBase + "/Nas/upsertWithWhere",
-              method: "POST",
+            upsertWithWhere: {
+              url: urlBase + '/Nas/upsertWithWhere',
+              method: 'POST',
             },
 
             /**
@@ -10286,9 +10281,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `exists` – `{boolean=}` -
              */
-            "exists": {
-              url: urlBase + "/Nas/:id/exists",
-              method: "GET",
+            exists: {
+              url: urlBase + '/Nas/:id/exists',
+              method: 'GET',
             },
 
             /**
@@ -10323,9 +10318,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Nas` object.)
              * </em>
              */
-            "findById": {
-              url: urlBase + "/Nas/:id",
-              method: "GET",
+            findById: {
+              url: urlBase + '/Nas/:id',
+              method: 'GET',
             },
 
             /**
@@ -10362,9 +10357,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Nas` object.)
              * </em>
              */
-            "replaceById": {
-              url: urlBase + "/Nas/:id/replace",
-              method: "POST",
+            replaceById: {
+              url: urlBase + '/Nas/:id/replace',
+              method: 'POST',
             },
 
             /**
@@ -10397,10 +10392,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Nas` object.)
              * </em>
              */
-            "find": {
+            find: {
               isArray: true,
-              url: urlBase + "/Nas",
-              method: "GET",
+              url: urlBase + '/Nas',
+              method: 'GET',
             },
 
             /**
@@ -10433,9 +10428,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Nas` object.)
              * </em>
              */
-            "findOne": {
-              url: urlBase + "/Nas/findOne",
-              method: "GET",
+            findOne: {
+              url: urlBase + '/Nas/findOne',
+              method: 'GET',
             },
 
             /**
@@ -10469,9 +10464,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-            "updateAll": {
-              url: urlBase + "/Nas/update",
-              method: "POST",
+            updateAll: {
+              url: urlBase + '/Nas/update',
+              method: 'POST',
             },
 
             /**
@@ -10504,9 +10499,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Nas` object.)
              * </em>
              */
-            "deleteById": {
-              url: urlBase + "/Nas/:id",
-              method: "DELETE",
+            deleteById: {
+              url: urlBase + '/Nas/:id',
+              method: 'DELETE',
             },
 
             /**
@@ -10538,9 +10533,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `count` – `{number=}` -
              */
-            "count": {
-              url: urlBase + "/Nas/count",
-              method: "GET",
+            count: {
+              url: urlBase + '/Nas/count',
+              method: 'GET',
             },
 
             /**
@@ -10579,9 +10574,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Nas` object.)
              * </em>
              */
-            "prototype$patchAttributes": {
-              url: urlBase + "/Nas/:id",
-              method: "PUT",
+            prototype$patchAttributes: {
+              url: urlBase + '/Nas/:id',
+              method: 'PUT',
             },
 
             /**
@@ -10616,9 +10611,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `changes` – `{ReadableStream=}` -
              */
-            "createChangeStream": {
-              url: urlBase + "/Nas/change-stream",
-              method: "POST",
+            createChangeStream: {
+              url: urlBase + '/Nas/change-stream',
+              method: 'POST',
             },
 
             /**
@@ -10654,9 +10649,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Nas` object.)
              * </em>
              */
-            "loadRouterInfo": {
-              url: urlBase + "/Nas/loadRouterInfo",
-              method: "POST",
+            loadRouterInfo: {
+              url: urlBase + '/Nas/loadRouterInfo',
+              method: 'POST',
             },
 
             /**
@@ -10666,7 +10661,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * @description
              *
-             * Load loadThemeConfigById 
+             * Load loadThemeConfigById
              *
              * @param {Object=} parameters Request parameters.
              *
@@ -10692,9 +10687,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Nas` object.)
              * </em>
              */
-            "loadThemeConfigById": {
-              url: urlBase + "/Nas/loadThemeConfigById",
-              method: "POST",
+            loadThemeConfigById: {
+              url: urlBase + '/Nas/loadThemeConfigById',
+              method: 'POST',
             },
 
             /**
@@ -10730,9 +10725,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Nas` object.)
              * </em>
              */
-            "loadRadiusInfo": {
-              url: urlBase + "/Nas/loadRadiusInfo",
-              method: "POST",
+            loadRadiusInfo: {
+              url: urlBase + '/Nas/loadRadiusInfo',
+              method: 'POST',
             },
 
             /**
@@ -10768,106 +10763,105 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Nas` object.)
              * </em>
              */
-            "getStatus": {
-              url: urlBase + "/Nas/getStatus",
-              method: "POST",
+            getStatus: {
+              url: urlBase + '/Nas/getStatus',
+              method: 'POST',
             },
 
             // INTERNAL. Use Business.nas.findById() instead.
-            "::findById::Business::nas": {
+            '::findById::Business::nas': {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/nas/:fk",
-              method: "GET",
+              url: urlBase + '/Businesses/:id/nas/:fk',
+              method: 'GET',
             },
 
             // INTERNAL. Use Business.nas.destroyById() instead.
-            "::destroyById::Business::nas": {
+            '::destroyById::Business::nas': {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/nas/:fk",
-              method: "DELETE",
+              url: urlBase + '/Businesses/:id/nas/:fk',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Business.nas.updateById() instead.
-            "::updateById::Business::nas": {
+            '::updateById::Business::nas': {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/nas/:fk",
-              method: "PUT",
+              url: urlBase + '/Businesses/:id/nas/:fk',
+              method: 'PUT',
             },
 
             // INTERNAL. Use Business.nas() instead.
-            "::get::Business::nas": {
+            '::get::Business::nas': {
               isArray: true,
-              url: urlBase + "/Businesses/:id/nas",
-              method: "GET",
+              url: urlBase + '/Businesses/:id/nas',
+              method: 'GET',
             },
 
             // INTERNAL. Use Business.nas.create() instead.
-            "::create::Business::nas": {
-              url: urlBase + "/Businesses/:id/nas",
-              method: "POST",
+            '::create::Business::nas': {
+              url: urlBase + '/Businesses/:id/nas',
+              method: 'POST',
             },
 
             // INTERNAL. Use Business.nas.createMany() instead.
-            "::createMany::Business::nas": {
+            '::createMany::Business::nas': {
               isArray: true,
-              url: urlBase + "/Businesses/:id/nas",
-              method: "POST",
+              url: urlBase + '/Businesses/:id/nas',
+              method: 'POST',
             },
 
             // INTERNAL. Use Business.nas.destroyAll() instead.
-            "::delete::Business::nas": {
-              url: urlBase + "/Businesses/:id/nas",
-              method: "DELETE",
+            '::delete::Business::nas': {
+              url: urlBase + '/Businesses/:id/nas',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Business.nas.count() instead.
-            "::count::Business::nas": {
-              url: urlBase + "/Businesses/:id/nas/count",
-              method: "GET",
+            '::count::Business::nas': {
+              url: urlBase + '/Businesses/:id/nas/count',
+              method: 'GET',
             },
 
             // INTERNAL. Use FootTraffic.nas() instead.
-            "::get::FootTraffic::nas": {
-              url: urlBase + "/FootTraffics/:id/nas",
-              method: "GET",
+            '::get::FootTraffic::nas': {
+              url: urlBase + '/FootTraffics/:id/nas',
+              method: 'GET',
             },
 
             // INTERNAL. Use FootTraffic.nas.create() instead.
-            "::create::FootTraffic::nas": {
-              url: urlBase + "/FootTraffics/:id/nas",
-              method: "POST",
+            '::create::FootTraffic::nas': {
+              url: urlBase + '/FootTraffics/:id/nas',
+              method: 'POST',
             },
 
             // INTERNAL. Use FootTraffic.nas.createMany() instead.
-            "::createMany::FootTraffic::nas": {
+            '::createMany::FootTraffic::nas': {
               isArray: true,
-              url: urlBase + "/FootTraffics/:id/nas",
-              method: "POST",
+              url: urlBase + '/FootTraffics/:id/nas',
+              method: 'POST',
             },
 
             // INTERNAL. Use FootTraffic.nas.update() instead.
-            "::update::FootTraffic::nas": {
-              url: urlBase + "/FootTraffics/:id/nas",
-              method: "PUT",
+            '::update::FootTraffic::nas': {
+              url: urlBase + '/FootTraffics/:id/nas',
+              method: 'PUT',
             },
 
             // INTERNAL. Use FootTraffic.nas.destroy() instead.
-            "::destroy::FootTraffic::nas": {
-              url: urlBase + "/FootTraffics/:id/nas",
-              method: "DELETE",
+            '::destroy::FootTraffic::nas': {
+              url: urlBase + '/FootTraffics/:id/nas',
+              method: 'DELETE',
             },
           }
         );
 
 
-
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Nas#upsert
              * @methodOf lbServices.Nas
@@ -10902,9 +10896,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Nas` object.)
              * </em>
              */
-        R["upsert"] = R["patchOrCreate"];
+        R['upsert'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Nas#updateOrCreate
              * @methodOf lbServices.Nas
@@ -10939,9 +10933,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Nas` object.)
              * </em>
              */
-        R["updateOrCreate"] = R["patchOrCreate"];
+        R['updateOrCreate'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Nas#patchOrCreateWithWhere
              * @methodOf lbServices.Nas
@@ -10975,9 +10969,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Nas` object.)
              * </em>
              */
-        R["patchOrCreateWithWhere"] = R["upsertWithWhere"];
+        R['patchOrCreateWithWhere'] = R['upsertWithWhere'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Nas#update
              * @methodOf lbServices.Nas
@@ -11008,9 +11002,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-        R["update"] = R["updateAll"];
+        R['update'] = R['updateAll'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Nas#destroyById
              * @methodOf lbServices.Nas
@@ -11040,9 +11034,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Nas` object.)
              * </em>
              */
-        R["destroyById"] = R["deleteById"];
+        R['destroyById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Nas#removeById
              * @methodOf lbServices.Nas
@@ -11072,9 +11066,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Nas` object.)
              * </em>
              */
-        R["removeById"] = R["deleteById"];
+        R['removeById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Nas#updateAttributes
              * @methodOf lbServices.Nas
@@ -11110,7 +11104,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Nas` object.)
              * </em>
              */
-        R["updateAttributes"] = R["prototype$patchAttributes"];
+        R['updateAttributes'] = R['prototype$patchAttributes'];
 
 
         /**
@@ -11121,10 +11115,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         * The name of the model represented by this $resource,
         * i.e. `Nas`.
         */
-        R.modelName = "Nas";
+        R.modelName = 'Nas';
 
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Nas#business
              * @methodOf lbServices.Nas
@@ -11159,11 +11153,11 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.business = function() {
-          var TargetResource = $injector.get("Business");
-          var action = TargetResource["::get::Nas::business"];
+          var TargetResource = $injector.get('Business');
+          var action = TargetResource['::get::Nas::business'];
           return action.apply(R, arguments);
         };
-    /**
+        /**
      * @ngdoc object
      * @name lbServices.Nas.FootTraffics
      * @header lbServices.Nas.FootTraffics
@@ -11178,7 +11172,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
      */
 
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Nas#FootTraffics
              * @methodOf lbServices.Nas
@@ -11213,12 +11207,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.FootTraffics = function() {
-          var TargetResource = $injector.get("FootTraffic");
-          var action = TargetResource["::get::Nas::FootTraffics"];
+          var TargetResource = $injector.get('FootTraffic');
+          var action = TargetResource['::get::Nas::FootTraffics'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Nas.FootTraffics#count
              * @methodOf lbServices.Nas.FootTraffics
@@ -11252,12 +11246,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *  - `count` – `{number=}` -
              */
         R.FootTraffics.count = function() {
-          var TargetResource = $injector.get("FootTraffic");
-          var action = TargetResource["::count::Nas::FootTraffics"];
+          var TargetResource = $injector.get('FootTraffic');
+          var action = TargetResource['::count::Nas::FootTraffics'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Nas.FootTraffics#create
              * @methodOf lbServices.Nas.FootTraffics
@@ -11294,12 +11288,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.FootTraffics.create = function() {
-          var TargetResource = $injector.get("FootTraffic");
-          var action = TargetResource["::create::Nas::FootTraffics"];
+          var TargetResource = $injector.get('FootTraffic');
+          var action = TargetResource['::create::Nas::FootTraffics'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Nas.FootTraffics#createMany
              * @methodOf lbServices.Nas.FootTraffics
@@ -11336,12 +11330,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.FootTraffics.createMany = function() {
-          var TargetResource = $injector.get("FootTraffic");
-          var action = TargetResource["::createMany::Nas::FootTraffics"];
+          var TargetResource = $injector.get('FootTraffic');
+          var action = TargetResource['::createMany::Nas::FootTraffics'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Nas.FootTraffics#destroyAll
              * @methodOf lbServices.Nas.FootTraffics
@@ -11373,12 +11367,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.FootTraffics.destroyAll = function() {
-          var TargetResource = $injector.get("FootTraffic");
-          var action = TargetResource["::delete::Nas::FootTraffics"];
+          var TargetResource = $injector.get('FootTraffic');
+          var action = TargetResource['::delete::Nas::FootTraffics'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Nas.FootTraffics#destroyById
              * @methodOf lbServices.Nas.FootTraffics
@@ -11410,12 +11404,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.FootTraffics.destroyById = function() {
-          var TargetResource = $injector.get("FootTraffic");
-          var action = TargetResource["::destroyById::Nas::FootTraffics"];
+          var TargetResource = $injector.get('FootTraffic');
+          var action = TargetResource['::destroyById::Nas::FootTraffics'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Nas.FootTraffics#findById
              * @methodOf lbServices.Nas.FootTraffics
@@ -11450,12 +11444,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.FootTraffics.findById = function() {
-          var TargetResource = $injector.get("FootTraffic");
-          var action = TargetResource["::findById::Nas::FootTraffics"];
+          var TargetResource = $injector.get('FootTraffic');
+          var action = TargetResource['::findById::Nas::FootTraffics'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Nas.FootTraffics#updateById
              * @methodOf lbServices.Nas.FootTraffics
@@ -11494,8 +11488,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.FootTraffics.updateById = function() {
-          var TargetResource = $injector.get("FootTraffic");
-          var action = TargetResource["::updateById::Nas::FootTraffics"];
+          var TargetResource = $injector.get('FootTraffic');
+          var action = TargetResource['::updateById::Nas::FootTraffics'];
           return action.apply(R, arguments);
         };
 
@@ -11503,7 +11497,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         return R;
       }]);
 
-/**
+  /**
  * @ngdoc object
  * @name lbServices.FootTraffic
  * @header lbServices.FootTraffic
@@ -11521,67 +11515,67 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
  *
  */
   module.factory(
-    "FootTraffic",
+    'FootTraffic',
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
         var R = Resource(
-        urlBase + "/FootTraffics/:id",
-          { 'id': '@id' },
+          urlBase + '/FootTraffics/:id',
+          { id: '@id' },
           {
 
             // INTERNAL. Use FootTraffic.nas() instead.
-            "prototype$__get__nas": {
-              url: urlBase + "/FootTraffics/:id/nas",
-              method: "GET",
+            prototype$__get__nas: {
+              url: urlBase + '/FootTraffics/:id/nas',
+              method: 'GET',
             },
 
             // INTERNAL. Use FootTraffic.nas.create() instead.
-            "prototype$__create__nas": {
-              url: urlBase + "/FootTraffics/:id/nas",
-              method: "POST",
+            prototype$__create__nas: {
+              url: urlBase + '/FootTraffics/:id/nas',
+              method: 'POST',
             },
 
             // INTERNAL. Use FootTraffic.nas.update() instead.
-            "prototype$__update__nas": {
-              url: urlBase + "/FootTraffics/:id/nas",
-              method: "PUT",
+            prototype$__update__nas: {
+              url: urlBase + '/FootTraffics/:id/nas',
+              method: 'PUT',
             },
 
             // INTERNAL. Use FootTraffic.nas.destroy() instead.
-            "prototype$__destroy__nas": {
-              url: urlBase + "/FootTraffics/:id/nas",
-              method: "DELETE",
+            prototype$__destroy__nas: {
+              url: urlBase + '/FootTraffics/:id/nas',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use FootTraffic.business() instead.
-            "prototype$__get__business": {
-              url: urlBase + "/FootTraffics/:id/business",
-              method: "GET",
+            prototype$__get__business: {
+              url: urlBase + '/FootTraffics/:id/business',
+              method: 'GET',
             },
 
             // INTERNAL. Use FootTraffic.business.create() instead.
-            "prototype$__create__business": {
-              url: urlBase + "/FootTraffics/:id/business",
-              method: "POST",
+            prototype$__create__business: {
+              url: urlBase + '/FootTraffics/:id/business',
+              method: 'POST',
             },
 
             // INTERNAL. Use FootTraffic.business.update() instead.
-            "prototype$__update__business": {
-              url: urlBase + "/FootTraffics/:id/business",
-              method: "PUT",
+            prototype$__update__business: {
+              url: urlBase + '/FootTraffics/:id/business',
+              method: 'PUT',
             },
 
             // INTERNAL. Use FootTraffic.business.destroy() instead.
-            "prototype$__destroy__business": {
-              url: urlBase + "/FootTraffics/:id/business",
-              method: "DELETE",
+            prototype$__destroy__business: {
+              url: urlBase + '/FootTraffics/:id/business',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use FootTraffic.device() instead.
-            "prototype$__get__device": {
-              url: urlBase + "/FootTraffics/:id/device",
-              method: "GET",
+            prototype$__get__device: {
+              url: urlBase + '/FootTraffics/:id/device',
+              method: 'GET',
             },
 
             /**
@@ -11619,9 +11613,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `FootTraffic` object.)
              * </em>
              */
-            "create": {
-              url: urlBase + "/FootTraffics",
-              method: "POST",
+            create: {
+              url: urlBase + '/FootTraffics',
+              method: 'POST',
             },
 
             /**
@@ -11659,10 +11653,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `FootTraffic` object.)
              * </em>
              */
-            "createMany": {
+            createMany: {
               isArray: true,
-              url: urlBase + "/FootTraffics",
-              method: "POST",
+              url: urlBase + '/FootTraffics',
+              method: 'POST',
             },
 
             /**
@@ -11700,9 +11694,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `FootTraffic` object.)
              * </em>
              */
-            "patchOrCreate": {
-              url: urlBase + "/FootTraffics",
-              method: "PUT",
+            patchOrCreate: {
+              url: urlBase + '/FootTraffics',
+              method: 'PUT',
             },
 
             /**
@@ -11740,9 +11734,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `FootTraffic` object.)
              * </em>
              */
-            "replaceOrCreate": {
-              url: urlBase + "/FootTraffics/replaceOrCreate",
-              method: "POST",
+            replaceOrCreate: {
+              url: urlBase + '/FootTraffics/replaceOrCreate',
+              method: 'POST',
             },
 
             /**
@@ -11779,9 +11773,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `FootTraffic` object.)
              * </em>
              */
-            "upsertWithWhere": {
-              url: urlBase + "/FootTraffics/upsertWithWhere",
-              method: "POST",
+            upsertWithWhere: {
+              url: urlBase + '/FootTraffics/upsertWithWhere',
+              method: 'POST',
             },
 
             /**
@@ -11813,9 +11807,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `exists` – `{boolean=}` -
              */
-            "exists": {
-              url: urlBase + "/FootTraffics/:id/exists",
-              method: "GET",
+            exists: {
+              url: urlBase + '/FootTraffics/:id/exists',
+              method: 'GET',
             },
 
             /**
@@ -11850,9 +11844,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `FootTraffic` object.)
              * </em>
              */
-            "findById": {
-              url: urlBase + "/FootTraffics/:id",
-              method: "GET",
+            findById: {
+              url: urlBase + '/FootTraffics/:id',
+              method: 'GET',
             },
 
             /**
@@ -11889,9 +11883,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `FootTraffic` object.)
              * </em>
              */
-            "replaceById": {
-              url: urlBase + "/FootTraffics/:id/replace",
-              method: "POST",
+            replaceById: {
+              url: urlBase + '/FootTraffics/:id/replace',
+              method: 'POST',
             },
 
             /**
@@ -11924,10 +11918,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `FootTraffic` object.)
              * </em>
              */
-            "find": {
+            find: {
               isArray: true,
-              url: urlBase + "/FootTraffics",
-              method: "GET",
+              url: urlBase + '/FootTraffics',
+              method: 'GET',
             },
 
             /**
@@ -11960,9 +11954,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `FootTraffic` object.)
              * </em>
              */
-            "findOne": {
-              url: urlBase + "/FootTraffics/findOne",
-              method: "GET",
+            findOne: {
+              url: urlBase + '/FootTraffics/findOne',
+              method: 'GET',
             },
 
             /**
@@ -11996,9 +11990,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-            "updateAll": {
-              url: urlBase + "/FootTraffics/update",
-              method: "POST",
+            updateAll: {
+              url: urlBase + '/FootTraffics/update',
+              method: 'POST',
             },
 
             /**
@@ -12031,9 +12025,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `FootTraffic` object.)
              * </em>
              */
-            "deleteById": {
-              url: urlBase + "/FootTraffics/:id",
-              method: "DELETE",
+            deleteById: {
+              url: urlBase + '/FootTraffics/:id',
+              method: 'DELETE',
             },
 
             /**
@@ -12065,9 +12059,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `count` – `{number=}` -
              */
-            "count": {
-              url: urlBase + "/FootTraffics/count",
-              method: "GET",
+            count: {
+              url: urlBase + '/FootTraffics/count',
+              method: 'GET',
             },
 
             /**
@@ -12106,9 +12100,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `FootTraffic` object.)
              * </em>
              */
-            "prototype$patchAttributes": {
-              url: urlBase + "/FootTraffics/:id",
-              method: "PUT",
+            prototype$patchAttributes: {
+              url: urlBase + '/FootTraffics/:id',
+              method: 'PUT',
             },
 
             /**
@@ -12143,75 +12137,74 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `changes` – `{ReadableStream=}` -
              */
-            "createChangeStream": {
-              url: urlBase + "/FootTraffics/change-stream",
-              method: "POST",
+            createChangeStream: {
+              url: urlBase + '/FootTraffics/change-stream',
+              method: 'POST',
             },
 
             // INTERNAL. Use Nas.FootTraffics.findById() instead.
-            "::findById::Nas::FootTraffics": {
+            '::findById::Nas::FootTraffics': {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Nas/:id/FootTraffics/:fk",
-              method: "GET",
+              url: urlBase + '/Nas/:id/FootTraffics/:fk',
+              method: 'GET',
             },
 
             // INTERNAL. Use Nas.FootTraffics.destroyById() instead.
-            "::destroyById::Nas::FootTraffics": {
+            '::destroyById::Nas::FootTraffics': {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Nas/:id/FootTraffics/:fk",
-              method: "DELETE",
+              url: urlBase + '/Nas/:id/FootTraffics/:fk',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Nas.FootTraffics.updateById() instead.
-            "::updateById::Nas::FootTraffics": {
+            '::updateById::Nas::FootTraffics': {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Nas/:id/FootTraffics/:fk",
-              method: "PUT",
+              url: urlBase + '/Nas/:id/FootTraffics/:fk',
+              method: 'PUT',
             },
 
             // INTERNAL. Use Nas.FootTraffics() instead.
-            "::get::Nas::FootTraffics": {
+            '::get::Nas::FootTraffics': {
               isArray: true,
-              url: urlBase + "/Nas/:id/FootTraffics",
-              method: "GET",
+              url: urlBase + '/Nas/:id/FootTraffics',
+              method: 'GET',
             },
 
             // INTERNAL. Use Nas.FootTraffics.create() instead.
-            "::create::Nas::FootTraffics": {
-              url: urlBase + "/Nas/:id/FootTraffics",
-              method: "POST",
+            '::create::Nas::FootTraffics': {
+              url: urlBase + '/Nas/:id/FootTraffics',
+              method: 'POST',
             },
 
             // INTERNAL. Use Nas.FootTraffics.createMany() instead.
-            "::createMany::Nas::FootTraffics": {
+            '::createMany::Nas::FootTraffics': {
               isArray: true,
-              url: urlBase + "/Nas/:id/FootTraffics",
-              method: "POST",
+              url: urlBase + '/Nas/:id/FootTraffics',
+              method: 'POST',
             },
 
             // INTERNAL. Use Nas.FootTraffics.destroyAll() instead.
-            "::delete::Nas::FootTraffics": {
-              url: urlBase + "/Nas/:id/FootTraffics",
-              method: "DELETE",
+            '::delete::Nas::FootTraffics': {
+              url: urlBase + '/Nas/:id/FootTraffics',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Nas.FootTraffics.count() instead.
-            "::count::Nas::FootTraffics": {
-              url: urlBase + "/Nas/:id/FootTraffics/count",
-              method: "GET",
+            '::count::Nas::FootTraffics': {
+              url: urlBase + '/Nas/:id/FootTraffics/count',
+              method: 'GET',
             },
           }
         );
 
 
-
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.FootTraffic#upsert
              * @methodOf lbServices.FootTraffic
@@ -12246,9 +12239,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `FootTraffic` object.)
              * </em>
              */
-        R["upsert"] = R["patchOrCreate"];
+        R['upsert'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.FootTraffic#updateOrCreate
              * @methodOf lbServices.FootTraffic
@@ -12283,9 +12276,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `FootTraffic` object.)
              * </em>
              */
-        R["updateOrCreate"] = R["patchOrCreate"];
+        R['updateOrCreate'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.FootTraffic#patchOrCreateWithWhere
              * @methodOf lbServices.FootTraffic
@@ -12319,9 +12312,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `FootTraffic` object.)
              * </em>
              */
-        R["patchOrCreateWithWhere"] = R["upsertWithWhere"];
+        R['patchOrCreateWithWhere'] = R['upsertWithWhere'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.FootTraffic#update
              * @methodOf lbServices.FootTraffic
@@ -12352,9 +12345,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-        R["update"] = R["updateAll"];
+        R['update'] = R['updateAll'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.FootTraffic#destroyById
              * @methodOf lbServices.FootTraffic
@@ -12384,9 +12377,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `FootTraffic` object.)
              * </em>
              */
-        R["destroyById"] = R["deleteById"];
+        R['destroyById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.FootTraffic#removeById
              * @methodOf lbServices.FootTraffic
@@ -12416,9 +12409,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `FootTraffic` object.)
              * </em>
              */
-        R["removeById"] = R["deleteById"];
+        R['removeById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.FootTraffic#updateAttributes
              * @methodOf lbServices.FootTraffic
@@ -12454,7 +12447,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `FootTraffic` object.)
              * </em>
              */
-        R["updateAttributes"] = R["prototype$patchAttributes"];
+        R['updateAttributes'] = R['prototype$patchAttributes'];
 
 
         /**
@@ -12465,9 +12458,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         * The name of the model represented by this $resource,
         * i.e. `FootTraffic`.
         */
-        R.modelName = "FootTraffic";
+        R.modelName = 'FootTraffic';
 
-    /**
+        /**
      * @ngdoc object
      * @name lbServices.FootTraffic.nas
      * @header lbServices.FootTraffic.nas
@@ -12482,7 +12475,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
      */
 
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.FootTraffic#nas
              * @methodOf lbServices.FootTraffic
@@ -12517,12 +12510,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.nas = function() {
-          var TargetResource = $injector.get("Nas");
-          var action = TargetResource["::get::FootTraffic::nas"];
+          var TargetResource = $injector.get('Nas');
+          var action = TargetResource['::get::FootTraffic::nas'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.FootTraffic.nas#create
              * @methodOf lbServices.FootTraffic.nas
@@ -12559,12 +12552,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.nas.create = function() {
-          var TargetResource = $injector.get("Nas");
-          var action = TargetResource["::create::FootTraffic::nas"];
+          var TargetResource = $injector.get('Nas');
+          var action = TargetResource['::create::FootTraffic::nas'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.FootTraffic.nas#createMany
              * @methodOf lbServices.FootTraffic.nas
@@ -12601,12 +12594,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.nas.createMany = function() {
-          var TargetResource = $injector.get("Nas");
-          var action = TargetResource["::createMany::FootTraffic::nas"];
+          var TargetResource = $injector.get('Nas');
+          var action = TargetResource['::createMany::FootTraffic::nas'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.FootTraffic.nas#destroy
              * @methodOf lbServices.FootTraffic.nas
@@ -12636,12 +12629,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.nas.destroy = function() {
-          var TargetResource = $injector.get("Nas");
-          var action = TargetResource["::destroy::FootTraffic::nas"];
+          var TargetResource = $injector.get('Nas');
+          var action = TargetResource['::destroy::FootTraffic::nas'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.FootTraffic.nas#update
              * @methodOf lbServices.FootTraffic.nas
@@ -12678,11 +12671,11 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.nas.update = function() {
-          var TargetResource = $injector.get("Nas");
-          var action = TargetResource["::update::FootTraffic::nas"];
+          var TargetResource = $injector.get('Nas');
+          var action = TargetResource['::update::FootTraffic::nas'];
           return action.apply(R, arguments);
         };
-    /**
+        /**
      * @ngdoc object
      * @name lbServices.FootTraffic.business
      * @header lbServices.FootTraffic.business
@@ -12697,7 +12690,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
      */
 
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.FootTraffic#business
              * @methodOf lbServices.FootTraffic
@@ -12732,12 +12725,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.business = function() {
-          var TargetResource = $injector.get("Business");
-          var action = TargetResource["::get::FootTraffic::business"];
+          var TargetResource = $injector.get('Business');
+          var action = TargetResource['::get::FootTraffic::business'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.FootTraffic.business#create
              * @methodOf lbServices.FootTraffic.business
@@ -12774,12 +12767,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.business.create = function() {
-          var TargetResource = $injector.get("Business");
-          var action = TargetResource["::create::FootTraffic::business"];
+          var TargetResource = $injector.get('Business');
+          var action = TargetResource['::create::FootTraffic::business'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.FootTraffic.business#createMany
              * @methodOf lbServices.FootTraffic.business
@@ -12816,12 +12809,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.business.createMany = function() {
-          var TargetResource = $injector.get("Business");
-          var action = TargetResource["::createMany::FootTraffic::business"];
+          var TargetResource = $injector.get('Business');
+          var action = TargetResource['::createMany::FootTraffic::business'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.FootTraffic.business#destroy
              * @methodOf lbServices.FootTraffic.business
@@ -12851,12 +12844,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.business.destroy = function() {
-          var TargetResource = $injector.get("Business");
-          var action = TargetResource["::destroy::FootTraffic::business"];
+          var TargetResource = $injector.get('Business');
+          var action = TargetResource['::destroy::FootTraffic::business'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.FootTraffic.business#update
              * @methodOf lbServices.FootTraffic.business
@@ -12893,12 +12886,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.business.update = function() {
-          var TargetResource = $injector.get("Business");
-          var action = TargetResource["::update::FootTraffic::business"];
+          var TargetResource = $injector.get('Business');
+          var action = TargetResource['::update::FootTraffic::business'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.FootTraffic#device
              * @methodOf lbServices.FootTraffic
@@ -12933,8 +12926,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.device = function() {
-          var TargetResource = $injector.get("Device");
-          var action = TargetResource["::get::FootTraffic::device"];
+          var TargetResource = $injector.get('Device');
+          var action = TargetResource['::get::FootTraffic::device'];
           return action.apply(R, arguments);
         };
 
@@ -12942,7 +12935,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         return R;
       }]);
 
-/**
+  /**
  * @ngdoc object
  * @name lbServices.Member
  * @header lbServices.Member
@@ -12960,13 +12953,13 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
  *
  */
   module.factory(
-    "Member",
+    'Member',
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
         var R = Resource(
-        urlBase + "/Members/:id",
-          { 'id': '@id' },
+          urlBase + '/Members/:id',
+          { id: '@id' },
           {
 
             /**
@@ -13003,12 +12996,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-            "prototype$__findById__accessTokens": {
+            prototype$__findById__accessTokens: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Members/:id/accessTokens/:fk",
-              method: "GET",
+              url: urlBase + '/Members/:id/accessTokens/:fk',
+              method: 'GET',
             },
 
             /**
@@ -13042,12 +13035,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * This method returns no data.
              */
-            "prototype$__destroyById__accessTokens": {
+            prototype$__destroyById__accessTokens: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Members/:id/accessTokens/:fk",
-              method: "DELETE",
+              url: urlBase + '/Members/:id/accessTokens/:fk',
+              method: 'DELETE',
             },
 
             /**
@@ -13088,72 +13081,72 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-            "prototype$__updateById__accessTokens": {
+            prototype$__updateById__accessTokens: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Members/:id/accessTokens/:fk",
-              method: "PUT",
+              url: urlBase + '/Members/:id/accessTokens/:fk',
+              method: 'PUT',
             },
 
             // INTERNAL. Use Member.business() instead.
-            "prototype$__get__business": {
-              url: urlBase + "/Members/:id/business",
-              method: "GET",
+            prototype$__get__business: {
+              url: urlBase + '/Members/:id/business',
+              method: 'GET',
             },
 
             // INTERNAL. Use Member.invoices.findById() instead.
-            "prototype$__findById__invoices": {
+            prototype$__findById__invoices: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Members/:id/invoices/:fk",
-              method: "GET",
+              url: urlBase + '/Members/:id/invoices/:fk',
+              method: 'GET',
             },
 
             // INTERNAL. Use Member.invoices.destroyById() instead.
-            "prototype$__destroyById__invoices": {
+            prototype$__destroyById__invoices: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Members/:id/invoices/:fk",
-              method: "DELETE",
+              url: urlBase + '/Members/:id/invoices/:fk',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Member.invoices.updateById() instead.
-            "prototype$__updateById__invoices": {
+            prototype$__updateById__invoices: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Members/:id/invoices/:fk",
-              method: "PUT",
+              url: urlBase + '/Members/:id/invoices/:fk',
+              method: 'PUT',
             },
 
             // INTERNAL. Use Member.reports.findById() instead.
-            "prototype$__findById__reports": {
+            prototype$__findById__reports: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Members/:id/reports/:fk",
-              method: "GET",
+              url: urlBase + '/Members/:id/reports/:fk',
+              method: 'GET',
             },
 
             // INTERNAL. Use Member.reports.destroyById() instead.
-            "prototype$__destroyById__reports": {
+            prototype$__destroyById__reports: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Members/:id/reports/:fk",
-              method: "DELETE",
+              url: urlBase + '/Members/:id/reports/:fk',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Member.reports.updateById() instead.
-            "prototype$__updateById__reports": {
+            prototype$__updateById__reports: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Members/:id/reports/:fk",
-              method: "PUT",
+              url: urlBase + '/Members/:id/reports/:fk',
+              method: 'PUT',
             },
 
             /**
@@ -13190,10 +13183,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-            "prototype$__get__accessTokens": {
+            prototype$__get__accessTokens: {
               isArray: true,
-              url: urlBase + "/Members/:id/accessTokens",
-              method: "GET",
+              url: urlBase + '/Members/:id/accessTokens',
+              method: 'GET',
             },
 
             /**
@@ -13232,9 +13225,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-            "prototype$__create__accessTokens": {
-              url: urlBase + "/Members/:id/accessTokens",
-              method: "POST",
+            prototype$__create__accessTokens: {
+              url: urlBase + '/Members/:id/accessTokens',
+              method: 'POST',
             },
 
             /**
@@ -13268,9 +13261,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * This method returns no data.
              */
-            "prototype$__delete__accessTokens": {
-              url: urlBase + "/Members/:id/accessTokens",
-              method: "DELETE",
+            prototype$__delete__accessTokens: {
+              url: urlBase + '/Members/:id/accessTokens',
+              method: 'DELETE',
             },
 
             /**
@@ -13306,59 +13299,59 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `count` – `{number=}` -
              */
-            "prototype$__count__accessTokens": {
-              url: urlBase + "/Members/:id/accessTokens/count",
-              method: "GET",
+            prototype$__count__accessTokens: {
+              url: urlBase + '/Members/:id/accessTokens/count',
+              method: 'GET',
             },
 
             // INTERNAL. Use Member.invoices() instead.
-            "prototype$__get__invoices": {
+            prototype$__get__invoices: {
               isArray: true,
-              url: urlBase + "/Members/:id/invoices",
-              method: "GET",
+              url: urlBase + '/Members/:id/invoices',
+              method: 'GET',
             },
 
             // INTERNAL. Use Member.invoices.create() instead.
-            "prototype$__create__invoices": {
-              url: urlBase + "/Members/:id/invoices",
-              method: "POST",
+            prototype$__create__invoices: {
+              url: urlBase + '/Members/:id/invoices',
+              method: 'POST',
             },
 
             // INTERNAL. Use Member.invoices.destroyAll() instead.
-            "prototype$__delete__invoices": {
-              url: urlBase + "/Members/:id/invoices",
-              method: "DELETE",
+            prototype$__delete__invoices: {
+              url: urlBase + '/Members/:id/invoices',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Member.invoices.count() instead.
-            "prototype$__count__invoices": {
-              url: urlBase + "/Members/:id/invoices/count",
-              method: "GET",
+            prototype$__count__invoices: {
+              url: urlBase + '/Members/:id/invoices/count',
+              method: 'GET',
             },
 
             // INTERNAL. Use Member.reports() instead.
-            "prototype$__get__reports": {
+            prototype$__get__reports: {
               isArray: true,
-              url: urlBase + "/Members/:id/reports",
-              method: "GET",
+              url: urlBase + '/Members/:id/reports',
+              method: 'GET',
             },
 
             // INTERNAL. Use Member.reports.create() instead.
-            "prototype$__create__reports": {
-              url: urlBase + "/Members/:id/reports",
-              method: "POST",
+            prototype$__create__reports: {
+              url: urlBase + '/Members/:id/reports',
+              method: 'POST',
             },
 
             // INTERNAL. Use Member.reports.destroyAll() instead.
-            "prototype$__delete__reports": {
-              url: urlBase + "/Members/:id/reports",
-              method: "DELETE",
+            prototype$__delete__reports: {
+              url: urlBase + '/Members/:id/reports',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Member.reports.count() instead.
-            "prototype$__count__reports": {
-              url: urlBase + "/Members/:id/reports/count",
-              method: "GET",
+            prototype$__count__reports: {
+              url: urlBase + '/Members/:id/reports/count',
+              method: 'GET',
             },
 
             /**
@@ -13396,9 +13389,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-            "create": {
-              url: urlBase + "/Members",
-              method: "POST",
+            create: {
+              url: urlBase + '/Members',
+              method: 'POST',
             },
 
             /**
@@ -13436,10 +13429,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-            "createMany": {
+            createMany: {
               isArray: true,
-              url: urlBase + "/Members",
-              method: "POST",
+              url: urlBase + '/Members',
+              method: 'POST',
             },
 
             /**
@@ -13477,9 +13470,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-            "patchOrCreate": {
-              url: urlBase + "/Members",
-              method: "PUT",
+            patchOrCreate: {
+              url: urlBase + '/Members',
+              method: 'PUT',
             },
 
             /**
@@ -13517,9 +13510,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-            "replaceOrCreate": {
-              url: urlBase + "/Members/replaceOrCreate",
-              method: "POST",
+            replaceOrCreate: {
+              url: urlBase + '/Members/replaceOrCreate',
+              method: 'POST',
             },
 
             /**
@@ -13556,9 +13549,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-            "upsertWithWhere": {
-              url: urlBase + "/Members/upsertWithWhere",
-              method: "POST",
+            upsertWithWhere: {
+              url: urlBase + '/Members/upsertWithWhere',
+              method: 'POST',
             },
 
             /**
@@ -13590,9 +13583,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `exists` – `{boolean=}` -
              */
-            "exists": {
-              url: urlBase + "/Members/:id/exists",
-              method: "GET",
+            exists: {
+              url: urlBase + '/Members/:id/exists',
+              method: 'GET',
             },
 
             /**
@@ -13627,9 +13620,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-            "findById": {
-              url: urlBase + "/Members/:id",
-              method: "GET",
+            findById: {
+              url: urlBase + '/Members/:id',
+              method: 'GET',
             },
 
             /**
@@ -13666,9 +13659,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-            "replaceById": {
-              url: urlBase + "/Members/:id/replace",
-              method: "POST",
+            replaceById: {
+              url: urlBase + '/Members/:id/replace',
+              method: 'POST',
             },
 
             /**
@@ -13701,10 +13694,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-            "find": {
+            find: {
               isArray: true,
-              url: urlBase + "/Members",
-              method: "GET",
+              url: urlBase + '/Members',
+              method: 'GET',
             },
 
             /**
@@ -13737,9 +13730,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-            "findOne": {
-              url: urlBase + "/Members/findOne",
-              method: "GET",
+            findOne: {
+              url: urlBase + '/Members/findOne',
+              method: 'GET',
             },
 
             /**
@@ -13773,9 +13766,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-            "updateAll": {
-              url: urlBase + "/Members/update",
-              method: "POST",
+            updateAll: {
+              url: urlBase + '/Members/update',
+              method: 'POST',
             },
 
             /**
@@ -13808,9 +13801,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-            "deleteById": {
-              url: urlBase + "/Members/:id",
-              method: "DELETE",
+            deleteById: {
+              url: urlBase + '/Members/:id',
+              method: 'DELETE',
             },
 
             /**
@@ -13842,9 +13835,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `count` – `{number=}` -
              */
-            "count": {
-              url: urlBase + "/Members/count",
-              method: "GET",
+            count: {
+              url: urlBase + '/Members/count',
+              method: 'GET',
             },
 
             /**
@@ -13883,9 +13876,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-            "prototype$patchAttributes": {
-              url: urlBase + "/Members/:id",
-              method: "PUT",
+            prototype$patchAttributes: {
+              url: urlBase + '/Members/:id',
+              method: 'PUT',
             },
 
             /**
@@ -13920,9 +13913,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `changes` – `{ReadableStream=}` -
              */
-            "createChangeStream": {
-              url: urlBase + "/Members/change-stream",
-              method: "POST",
+            createChangeStream: {
+              url: urlBase + '/Members/change-stream',
+              method: 'POST',
             },
 
             /**
@@ -13962,7 +13955,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *   - `user` - `U+007BUserU+007D` - Data of the currently logged in user. (`include=user`)
              *
              */
-            "login": {
+            login: {
               params: {
                 include: 'user',
               },
@@ -13977,8 +13970,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
                   return response.resource;
                 },
               },
-              url: urlBase + "/Members/login",
-              method: "POST",
+              url: urlBase + '/Members/login',
+              method: 'POST',
             },
 
             /**
@@ -14011,7 +14004,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * This method returns no data.
              */
-            "logout": {
+            logout: {
               interceptor: {
                 response: function(response) {
                   LoopBackAuth.clearUser();
@@ -14024,8 +14017,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
                   return responseError.resource;
                 },
               },
-              url: urlBase + "/Members/logout",
-              method: "POST",
+              url: urlBase + '/Members/logout',
+              method: 'POST',
             },
 
             /**
@@ -14061,9 +14054,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * This method returns no data.
              */
-            "prototype$verify": {
-              url: urlBase + "/Members/:id/verify",
-              method: "POST",
+            prototype$verify: {
+              url: urlBase + '/Members/:id/verify',
+              method: 'POST',
             },
 
             /**
@@ -14095,9 +14088,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * This method returns no data.
              */
-            "confirm": {
-              url: urlBase + "/Members/confirm",
-              method: "GET",
+            confirm: {
+              url: urlBase + '/Members/confirm',
+              method: 'GET',
             },
 
             /**
@@ -14130,9 +14123,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * This method returns no data.
              */
-            "resetPassword": {
-              url: urlBase + "/Members/reset",
-              method: "POST",
+            resetPassword: {
+              url: urlBase + '/Members/reset',
+              method: 'POST',
             },
 
             /**
@@ -14171,9 +14164,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * This method returns no data.
              */
-            "changePassword": {
-              url: urlBase + "/Members/change-password",
-              method: "POST",
+            changePassword: {
+              url: urlBase + '/Members/change-password',
+              method: 'POST',
             },
 
             /**
@@ -14210,9 +14203,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * This method returns no data.
              */
-            "setPassword": {
-              url: urlBase + "/Members/reset-password",
-              method: "POST",
+            setPassword: {
+              url: urlBase + '/Members/reset-password',
+              method: 'POST',
             },
 
             /**
@@ -14262,9 +14255,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-            "signIn": {
-              url: urlBase + "/Members/signIn",
-              method: "POST",
+            signIn: {
+              url: urlBase + '/Members/signIn',
+              method: 'POST',
             },
 
             /**
@@ -14307,9 +14300,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `result` – `{Object=}` -
              */
-            "getMembersChart": {
-              url: urlBase + "/Members/getMembersChart",
-              method: "POST",
+            getMembersChart: {
+              url: urlBase + '/Members/getMembersChart',
+              method: 'POST',
             },
 
             /**
@@ -14347,9 +14340,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-            "sendPassword": {
-              url: urlBase + "/Members/sendPassword",
-              method: "POST",
+            sendPassword: {
+              url: urlBase + '/Members/sendPassword',
+              method: 'POST',
             },
 
             /**
@@ -14393,9 +14386,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-            "recoverHotspotUser": {
-              url: urlBase + "/Members/recoverHotspotUser",
-              method: "POST",
+            recoverHotspotUser: {
+              url: urlBase + '/Members/recoverHotspotUser',
+              method: 'POST',
             },
 
             /**
@@ -14433,9 +14426,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-            "loadMember": {
-              url: urlBase + "/Members/loadMember",
-              method: "POST",
+            loadMember: {
+              url: urlBase + '/Members/loadMember',
+              method: 'POST',
             },
 
             /**
@@ -14475,9 +14468,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-            "loadMemberPassword": {
-              url: urlBase + "/Members/loadMemberPassword",
-              method: "POST",
+            loadMemberPassword: {
+              url: urlBase + '/Members/loadMemberPassword',
+              method: 'POST',
             },
 
             /**
@@ -14515,9 +14508,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-            "loadMemberInternetPlans": {
-              url: urlBase + "/Members/loadMemberInternetPlans",
-              method: "POST",
+            loadMemberInternetPlans: {
+              url: urlBase + '/Members/loadMemberInternetPlans',
+              method: 'POST',
             },
 
             /**
@@ -14561,9 +14554,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-            "createNewMember": {
-              url: urlBase + "/Members/createNewMember",
-              method: "POST",
+            createNewMember: {
+              url: urlBase + '/Members/createNewMember',
+              method: 'POST',
             },
 
             /**
@@ -14645,9 +14638,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-            "createHotSpotMember": {
-              url: urlBase + "/Members/createHotSpotMember",
-              method: "POST",
+            createHotSpotMember: {
+              url: urlBase + '/Members/createHotSpotMember',
+              method: 'POST',
             },
 
             /**
@@ -14691,9 +14684,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-            "verifyHotSpot": {
-              url: urlBase + "/Members/verifyHotSpot",
-              method: "POST",
+            verifyHotSpot: {
+              url: urlBase + '/Members/verifyHotSpot',
+              method: 'POST',
             },
 
             /**
@@ -14743,9 +14736,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-            "paySubscription": {
-              url: urlBase + "/Members/paySubscription",
-              method: "POST",
+            paySubscription: {
+              url: urlBase + '/Members/paySubscription',
+              method: 'POST',
             },
 
             /**
@@ -14783,9 +14776,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-            "getSmsCostForAllMembers": {
-              url: urlBase + "/Members/getSmsCostForAllMembers",
-              method: "POST",
+            getSmsCostForAllMembers: {
+              url: urlBase + '/Members/getSmsCostForAllMembers',
+              method: 'POST',
             },
 
             /**
@@ -14823,9 +14816,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-            "sendMessageToAll": {
-              url: urlBase + "/Members/sendMessageToAll",
-              method: "POST",
+            sendMessageToAll: {
+              url: urlBase + '/Members/sendMessageToAll',
+              method: 'POST',
             },
 
             /**
@@ -14861,9 +14854,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-            "loadMemberUsage": {
-              url: urlBase + "/Members/loadMemberUsage",
-              method: "POST",
+            loadMemberUsage: {
+              url: urlBase + '/Members/loadMemberUsage',
+              method: 'POST',
             },
 
             /**
@@ -14901,9 +14894,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-            "getMemberBalance": {
-              url: urlBase + "/Members/getMemberBalance",
-              method: "POST",
+            getMemberBalance: {
+              url: urlBase + '/Members/getMemberBalance',
+              method: 'POST',
             },
 
             /**
@@ -14941,9 +14934,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-            "logOutHotSpot": {
-              url: urlBase + "/Members/logOutHotSpot",
-              method: "POST",
+            logOutHotSpot: {
+              url: urlBase + '/Members/logOutHotSpot',
+              method: 'POST',
             },
 
             /**
@@ -14981,9 +14974,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-            "getBusinessId": {
-              url: urlBase + "/Members/getBusinessId",
-              method: "POST",
+            getBusinessId: {
+              url: urlBase + '/Members/getBusinessId',
+              method: 'POST',
             },
 
             /**
@@ -15023,9 +15016,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-            "getDailyUsage": {
-              url: urlBase + "/Members/getDailyUsage",
-              method: "POST",
+            getDailyUsage: {
+              url: urlBase + '/Members/getDailyUsage',
+              method: 'POST',
             },
 
             /**
@@ -15065,9 +15058,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-            "buyPlan": {
-              url: urlBase + "/Members/buyPlan",
-              method: "POST",
+            buyPlan: {
+              url: urlBase + '/Members/buyPlan',
+              method: 'POST',
             },
 
             /**
@@ -15109,9 +15102,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-            "buyBulk": {
-              url: urlBase + "/Members/buyBulk",
-              method: "POST",
+            buyBulk: {
+              url: urlBase + '/Members/buyBulk',
+              method: 'POST',
             },
 
             /**
@@ -15153,9 +15146,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-            "checkDefaultPlan": {
-              url: urlBase + "/Members/checkDefaultPlan",
-              method: "POST",
+            checkDefaultPlan: {
+              url: urlBase + '/Members/checkDefaultPlan',
+              method: 'POST',
             },
 
             /**
@@ -15195,9 +15188,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-            "getAllMembersCount": {
-              url: urlBase + "/Members/getAllMembersCount",
-              method: "POST",
+            getAllMembersCount: {
+              url: urlBase + '/Members/getAllMembersCount',
+              method: 'POST',
             },
 
             /**
@@ -15239,9 +15232,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-            "importMemberFromCsv": {
-              url: urlBase + "/Members/importMemberFromCsv",
-              method: "POST",
+            importMemberFromCsv: {
+              url: urlBase + '/Members/importMemberFromCsv',
+              method: 'POST',
             },
 
             /**
@@ -15281,9 +15274,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-            "getNewMembersCount": {
-              url: urlBase + "/Members/getNewMembersCount",
-              method: "POST",
+            getNewMembersCount: {
+              url: urlBase + '/Members/getNewMembersCount',
+              method: 'POST',
             },
 
             /**
@@ -15321,9 +15314,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-            "loadProfile": {
-              url: urlBase + "/Members/loadProfile",
-              method: "POST",
+            loadProfile: {
+              url: urlBase + '/Members/loadProfile',
+              method: 'POST',
             },
 
             /**
@@ -15379,136 +15372,136 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-            "createMembersByGroup": {
-              url: urlBase + "/Members/createMembersByGroup",
-              method: "POST",
+            createMembersByGroup: {
+              url: urlBase + '/Members/createMembersByGroup',
+              method: 'POST',
             },
 
             // INTERNAL. Use Business.members.findById() instead.
-            "::findById::Business::members": {
+            '::findById::Business::members': {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/members/:fk",
-              method: "GET",
+              url: urlBase + '/Businesses/:id/members/:fk',
+              method: 'GET',
             },
 
             // INTERNAL. Use Business.members.destroyById() instead.
-            "::destroyById::Business::members": {
+            '::destroyById::Business::members': {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/members/:fk",
-              method: "DELETE",
+              url: urlBase + '/Businesses/:id/members/:fk',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Business.members.updateById() instead.
-            "::updateById::Business::members": {
+            '::updateById::Business::members': {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/members/:fk",
-              method: "PUT",
+              url: urlBase + '/Businesses/:id/members/:fk',
+              method: 'PUT',
             },
 
             // INTERNAL. Use Business.members() instead.
-            "::get::Business::members": {
+            '::get::Business::members': {
               isArray: true,
-              url: urlBase + "/Businesses/:id/members",
-              method: "GET",
+              url: urlBase + '/Businesses/:id/members',
+              method: 'GET',
             },
 
             // INTERNAL. Use Business.members.create() instead.
-            "::create::Business::members": {
-              url: urlBase + "/Businesses/:id/members",
-              method: "POST",
+            '::create::Business::members': {
+              url: urlBase + '/Businesses/:id/members',
+              method: 'POST',
             },
 
             // INTERNAL. Use Business.members.createMany() instead.
-            "::createMany::Business::members": {
+            '::createMany::Business::members': {
               isArray: true,
-              url: urlBase + "/Businesses/:id/members",
-              method: "POST",
+              url: urlBase + '/Businesses/:id/members',
+              method: 'POST',
             },
 
             // INTERNAL. Use Business.members.destroyAll() instead.
-            "::delete::Business::members": {
-              url: urlBase + "/Businesses/:id/members",
-              method: "DELETE",
+            '::delete::Business::members': {
+              url: urlBase + '/Businesses/:id/members',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Business.members.count() instead.
-            "::count::Business::members": {
-              url: urlBase + "/Businesses/:id/members/count",
-              method: "GET",
+            '::count::Business::members': {
+              url: urlBase + '/Businesses/:id/members/count',
+              method: 'GET',
             },
 
             // INTERNAL. Use Invoice.members() instead.
-            "::get::Invoice::members": {
-              url: urlBase + "/Invoices/:id/members",
-              method: "GET",
+            '::get::Invoice::members': {
+              url: urlBase + '/Invoices/:id/members',
+              method: 'GET',
             },
 
             // INTERNAL. Use Invoice.members.create() instead.
-            "::create::Invoice::members": {
-              url: urlBase + "/Invoices/:id/members",
-              method: "POST",
+            '::create::Invoice::members': {
+              url: urlBase + '/Invoices/:id/members',
+              method: 'POST',
             },
 
             // INTERNAL. Use Invoice.members.createMany() instead.
-            "::createMany::Invoice::members": {
+            '::createMany::Invoice::members': {
               isArray: true,
-              url: urlBase + "/Invoices/:id/members",
-              method: "POST",
+              url: urlBase + '/Invoices/:id/members',
+              method: 'POST',
             },
 
             // INTERNAL. Use Invoice.members.update() instead.
-            "::update::Invoice::members": {
-              url: urlBase + "/Invoices/:id/members",
-              method: "PUT",
+            '::update::Invoice::members': {
+              url: urlBase + '/Invoices/:id/members',
+              method: 'PUT',
             },
 
             // INTERNAL. Use Invoice.members.destroy() instead.
-            "::destroy::Invoice::members": {
-              url: urlBase + "/Invoices/:id/members",
-              method: "DELETE",
+            '::destroy::Invoice::members': {
+              url: urlBase + '/Invoices/:id/members',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use ClientSession.members() instead.
-            "::get::ClientSession::members": {
-              url: urlBase + "/ClientSessions/:id/members",
-              method: "GET",
+            '::get::ClientSession::members': {
+              url: urlBase + '/ClientSessions/:id/members',
+              method: 'GET',
             },
 
             // INTERNAL. Use ClientSession.members.create() instead.
-            "::create::ClientSession::members": {
-              url: urlBase + "/ClientSessions/:id/members",
-              method: "POST",
+            '::create::ClientSession::members': {
+              url: urlBase + '/ClientSessions/:id/members',
+              method: 'POST',
             },
 
             // INTERNAL. Use ClientSession.members.createMany() instead.
-            "::createMany::ClientSession::members": {
+            '::createMany::ClientSession::members': {
               isArray: true,
-              url: urlBase + "/ClientSessions/:id/members",
-              method: "POST",
+              url: urlBase + '/ClientSessions/:id/members',
+              method: 'POST',
             },
 
             // INTERNAL. Use ClientSession.members.update() instead.
-            "::update::ClientSession::members": {
-              url: urlBase + "/ClientSessions/:id/members",
-              method: "PUT",
+            '::update::ClientSession::members': {
+              url: urlBase + '/ClientSessions/:id/members',
+              method: 'PUT',
             },
 
             // INTERNAL. Use ClientSession.members.destroy() instead.
-            "::destroy::ClientSession::members": {
-              url: urlBase + "/ClientSessions/:id/members",
-              method: "DELETE",
+            '::destroy::ClientSession::members': {
+              url: urlBase + '/ClientSessions/:id/members',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Report.member() instead.
-            "::get::Report::member": {
-              url: urlBase + "/Reports/:id/member",
-              method: "GET",
+            '::get::Report::member': {
+              url: urlBase + '/Reports/:id/member',
+              method: 'GET',
             },
 
             /**
@@ -15531,8 +15524,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *   populated with the actual data once the response is returned
              *   from the server.
              */
-            'getCurrent': {
-              url: urlBase + "/Members" + '/:id',
+            getCurrent: {
+              url: urlBase + '/Members' + '/:id',
               method: 'GET',
               params: {
                 id: function() {
@@ -15553,8 +15546,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         );
 
 
-
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Member#upsert
              * @methodOf lbServices.Member
@@ -15589,9 +15581,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-        R["upsert"] = R["patchOrCreate"];
+        R['upsert'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Member#updateOrCreate
              * @methodOf lbServices.Member
@@ -15626,9 +15618,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-        R["updateOrCreate"] = R["patchOrCreate"];
+        R['updateOrCreate'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Member#patchOrCreateWithWhere
              * @methodOf lbServices.Member
@@ -15662,9 +15654,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-        R["patchOrCreateWithWhere"] = R["upsertWithWhere"];
+        R['patchOrCreateWithWhere'] = R['upsertWithWhere'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Member#update
              * @methodOf lbServices.Member
@@ -15695,9 +15687,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-        R["update"] = R["updateAll"];
+        R['update'] = R['updateAll'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Member#destroyById
              * @methodOf lbServices.Member
@@ -15727,9 +15719,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-        R["destroyById"] = R["deleteById"];
+        R['destroyById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Member#removeById
              * @methodOf lbServices.Member
@@ -15759,9 +15751,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-        R["removeById"] = R["deleteById"];
+        R['removeById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Member#updateAttributes
              * @methodOf lbServices.Member
@@ -15797,7 +15789,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Member` object.)
              * </em>
              */
-        R["updateAttributes"] = R["prototype$patchAttributes"];
+        R['updateAttributes'] = R['prototype$patchAttributes'];
 
         /**
          * @ngdoc method
@@ -15849,10 +15841,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         * The name of the model represented by this $resource,
         * i.e. `Member`.
         */
-        R.modelName = "Member";
+        R.modelName = 'Member';
 
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Member#business
              * @methodOf lbServices.Member
@@ -15887,11 +15879,11 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.business = function() {
-          var TargetResource = $injector.get("Business");
-          var action = TargetResource["::get::Member::business"];
+          var TargetResource = $injector.get('Business');
+          var action = TargetResource['::get::Member::business'];
           return action.apply(R, arguments);
         };
-    /**
+        /**
      * @ngdoc object
      * @name lbServices.Member.invoices
      * @header lbServices.Member.invoices
@@ -15906,7 +15898,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
      */
 
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Member#invoices
              * @methodOf lbServices.Member
@@ -15941,12 +15933,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.invoices = function() {
-          var TargetResource = $injector.get("Invoice");
-          var action = TargetResource["::get::Member::invoices"];
+          var TargetResource = $injector.get('Invoice');
+          var action = TargetResource['::get::Member::invoices'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Member.invoices#count
              * @methodOf lbServices.Member.invoices
@@ -15980,12 +15972,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *  - `count` – `{number=}` -
              */
         R.invoices.count = function() {
-          var TargetResource = $injector.get("Invoice");
-          var action = TargetResource["::count::Member::invoices"];
+          var TargetResource = $injector.get('Invoice');
+          var action = TargetResource['::count::Member::invoices'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Member.invoices#create
              * @methodOf lbServices.Member.invoices
@@ -16022,12 +16014,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.invoices.create = function() {
-          var TargetResource = $injector.get("Invoice");
-          var action = TargetResource["::create::Member::invoices"];
+          var TargetResource = $injector.get('Invoice');
+          var action = TargetResource['::create::Member::invoices'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Member.invoices#createMany
              * @methodOf lbServices.Member.invoices
@@ -16064,12 +16056,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.invoices.createMany = function() {
-          var TargetResource = $injector.get("Invoice");
-          var action = TargetResource["::createMany::Member::invoices"];
+          var TargetResource = $injector.get('Invoice');
+          var action = TargetResource['::createMany::Member::invoices'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Member.invoices#destroyAll
              * @methodOf lbServices.Member.invoices
@@ -16101,12 +16093,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.invoices.destroyAll = function() {
-          var TargetResource = $injector.get("Invoice");
-          var action = TargetResource["::delete::Member::invoices"];
+          var TargetResource = $injector.get('Invoice');
+          var action = TargetResource['::delete::Member::invoices'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Member.invoices#destroyById
              * @methodOf lbServices.Member.invoices
@@ -16138,12 +16130,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.invoices.destroyById = function() {
-          var TargetResource = $injector.get("Invoice");
-          var action = TargetResource["::destroyById::Member::invoices"];
+          var TargetResource = $injector.get('Invoice');
+          var action = TargetResource['::destroyById::Member::invoices'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Member.invoices#findById
              * @methodOf lbServices.Member.invoices
@@ -16178,12 +16170,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.invoices.findById = function() {
-          var TargetResource = $injector.get("Invoice");
-          var action = TargetResource["::findById::Member::invoices"];
+          var TargetResource = $injector.get('Invoice');
+          var action = TargetResource['::findById::Member::invoices'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Member.invoices#updateById
              * @methodOf lbServices.Member.invoices
@@ -16222,11 +16214,11 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.invoices.updateById = function() {
-          var TargetResource = $injector.get("Invoice");
-          var action = TargetResource["::updateById::Member::invoices"];
+          var TargetResource = $injector.get('Invoice');
+          var action = TargetResource['::updateById::Member::invoices'];
           return action.apply(R, arguments);
         };
-    /**
+        /**
      * @ngdoc object
      * @name lbServices.Member.reports
      * @header lbServices.Member.reports
@@ -16241,7 +16233,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
      */
 
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Member#reports
              * @methodOf lbServices.Member
@@ -16276,12 +16268,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.reports = function() {
-          var TargetResource = $injector.get("Report");
-          var action = TargetResource["::get::Member::reports"];
+          var TargetResource = $injector.get('Report');
+          var action = TargetResource['::get::Member::reports'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Member.reports#count
              * @methodOf lbServices.Member.reports
@@ -16315,12 +16307,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *  - `count` – `{number=}` -
              */
         R.reports.count = function() {
-          var TargetResource = $injector.get("Report");
-          var action = TargetResource["::count::Member::reports"];
+          var TargetResource = $injector.get('Report');
+          var action = TargetResource['::count::Member::reports'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Member.reports#create
              * @methodOf lbServices.Member.reports
@@ -16357,12 +16349,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.reports.create = function() {
-          var TargetResource = $injector.get("Report");
-          var action = TargetResource["::create::Member::reports"];
+          var TargetResource = $injector.get('Report');
+          var action = TargetResource['::create::Member::reports'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Member.reports#createMany
              * @methodOf lbServices.Member.reports
@@ -16399,12 +16391,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.reports.createMany = function() {
-          var TargetResource = $injector.get("Report");
-          var action = TargetResource["::createMany::Member::reports"];
+          var TargetResource = $injector.get('Report');
+          var action = TargetResource['::createMany::Member::reports'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Member.reports#destroyAll
              * @methodOf lbServices.Member.reports
@@ -16436,12 +16428,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.reports.destroyAll = function() {
-          var TargetResource = $injector.get("Report");
-          var action = TargetResource["::delete::Member::reports"];
+          var TargetResource = $injector.get('Report');
+          var action = TargetResource['::delete::Member::reports'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Member.reports#destroyById
              * @methodOf lbServices.Member.reports
@@ -16473,12 +16465,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.reports.destroyById = function() {
-          var TargetResource = $injector.get("Report");
-          var action = TargetResource["::destroyById::Member::reports"];
+          var TargetResource = $injector.get('Report');
+          var action = TargetResource['::destroyById::Member::reports'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Member.reports#findById
              * @methodOf lbServices.Member.reports
@@ -16513,12 +16505,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.reports.findById = function() {
-          var TargetResource = $injector.get("Report");
-          var action = TargetResource["::findById::Member::reports"];
+          var TargetResource = $injector.get('Report');
+          var action = TargetResource['::findById::Member::reports'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Member.reports#updateById
              * @methodOf lbServices.Member.reports
@@ -16557,8 +16549,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.reports.updateById = function() {
-          var TargetResource = $injector.get("Report");
-          var action = TargetResource["::updateById::Member::reports"];
+          var TargetResource = $injector.get('Report');
+          var action = TargetResource['::updateById::Member::reports'];
           return action.apply(R, arguments);
         };
 
@@ -16566,7 +16558,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         return R;
       }]);
 
-/**
+  /**
  * @ngdoc object
  * @name lbServices.Device
  * @header lbServices.Device
@@ -16584,13 +16576,13 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
  *
  */
   module.factory(
-    "Device",
+    'Device',
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
         var R = Resource(
-        urlBase + "/Devices/:id",
-          { 'id': '@id' },
+          urlBase + '/Devices/:id',
+          { id: '@id' },
           {
 
             /**
@@ -16628,9 +16620,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Device` object.)
              * </em>
              */
-            "create": {
-              url: urlBase + "/Devices",
-              method: "POST",
+            create: {
+              url: urlBase + '/Devices',
+              method: 'POST',
             },
 
             /**
@@ -16668,10 +16660,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Device` object.)
              * </em>
              */
-            "createMany": {
+            createMany: {
               isArray: true,
-              url: urlBase + "/Devices",
-              method: "POST",
+              url: urlBase + '/Devices',
+              method: 'POST',
             },
 
             /**
@@ -16709,9 +16701,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Device` object.)
              * </em>
              */
-            "patchOrCreate": {
-              url: urlBase + "/Devices",
-              method: "PUT",
+            patchOrCreate: {
+              url: urlBase + '/Devices',
+              method: 'PUT',
             },
 
             /**
@@ -16749,9 +16741,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Device` object.)
              * </em>
              */
-            "replaceOrCreate": {
-              url: urlBase + "/Devices/replaceOrCreate",
-              method: "POST",
+            replaceOrCreate: {
+              url: urlBase + '/Devices/replaceOrCreate',
+              method: 'POST',
             },
 
             /**
@@ -16788,9 +16780,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Device` object.)
              * </em>
              */
-            "upsertWithWhere": {
-              url: urlBase + "/Devices/upsertWithWhere",
-              method: "POST",
+            upsertWithWhere: {
+              url: urlBase + '/Devices/upsertWithWhere',
+              method: 'POST',
             },
 
             /**
@@ -16822,9 +16814,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `exists` – `{boolean=}` -
              */
-            "exists": {
-              url: urlBase + "/Devices/:id/exists",
-              method: "GET",
+            exists: {
+              url: urlBase + '/Devices/:id/exists',
+              method: 'GET',
             },
 
             /**
@@ -16859,9 +16851,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Device` object.)
              * </em>
              */
-            "findById": {
-              url: urlBase + "/Devices/:id",
-              method: "GET",
+            findById: {
+              url: urlBase + '/Devices/:id',
+              method: 'GET',
             },
 
             /**
@@ -16898,9 +16890,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Device` object.)
              * </em>
              */
-            "replaceById": {
-              url: urlBase + "/Devices/:id/replace",
-              method: "POST",
+            replaceById: {
+              url: urlBase + '/Devices/:id/replace',
+              method: 'POST',
             },
 
             /**
@@ -16933,10 +16925,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Device` object.)
              * </em>
              */
-            "find": {
+            find: {
               isArray: true,
-              url: urlBase + "/Devices",
-              method: "GET",
+              url: urlBase + '/Devices',
+              method: 'GET',
             },
 
             /**
@@ -16969,9 +16961,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Device` object.)
              * </em>
              */
-            "findOne": {
-              url: urlBase + "/Devices/findOne",
-              method: "GET",
+            findOne: {
+              url: urlBase + '/Devices/findOne',
+              method: 'GET',
             },
 
             /**
@@ -17005,9 +16997,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-            "updateAll": {
-              url: urlBase + "/Devices/update",
-              method: "POST",
+            updateAll: {
+              url: urlBase + '/Devices/update',
+              method: 'POST',
             },
 
             /**
@@ -17040,9 +17032,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Device` object.)
              * </em>
              */
-            "deleteById": {
-              url: urlBase + "/Devices/:id",
-              method: "DELETE",
+            deleteById: {
+              url: urlBase + '/Devices/:id',
+              method: 'DELETE',
             },
 
             /**
@@ -17074,9 +17066,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `count` – `{number=}` -
              */
-            "count": {
-              url: urlBase + "/Devices/count",
-              method: "GET",
+            count: {
+              url: urlBase + '/Devices/count',
+              method: 'GET',
             },
 
             /**
@@ -17115,9 +17107,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Device` object.)
              * </em>
              */
-            "prototype$patchAttributes": {
-              url: urlBase + "/Devices/:id",
-              method: "PUT",
+            prototype$patchAttributes: {
+              url: urlBase + '/Devices/:id',
+              method: 'PUT',
             },
 
             /**
@@ -17152,22 +17144,21 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `changes` – `{ReadableStream=}` -
              */
-            "createChangeStream": {
-              url: urlBase + "/Devices/change-stream",
-              method: "POST",
+            createChangeStream: {
+              url: urlBase + '/Devices/change-stream',
+              method: 'POST',
             },
 
             // INTERNAL. Use FootTraffic.device() instead.
-            "::get::FootTraffic::device": {
-              url: urlBase + "/FootTraffics/:id/device",
-              method: "GET",
+            '::get::FootTraffic::device': {
+              url: urlBase + '/FootTraffics/:id/device',
+              method: 'GET',
             },
           }
         );
 
 
-
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Device#upsert
              * @methodOf lbServices.Device
@@ -17202,9 +17193,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Device` object.)
              * </em>
              */
-        R["upsert"] = R["patchOrCreate"];
+        R['upsert'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Device#updateOrCreate
              * @methodOf lbServices.Device
@@ -17239,9 +17230,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Device` object.)
              * </em>
              */
-        R["updateOrCreate"] = R["patchOrCreate"];
+        R['updateOrCreate'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Device#patchOrCreateWithWhere
              * @methodOf lbServices.Device
@@ -17275,9 +17266,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Device` object.)
              * </em>
              */
-        R["patchOrCreateWithWhere"] = R["upsertWithWhere"];
+        R['patchOrCreateWithWhere'] = R['upsertWithWhere'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Device#update
              * @methodOf lbServices.Device
@@ -17308,9 +17299,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-        R["update"] = R["updateAll"];
+        R['update'] = R['updateAll'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Device#destroyById
              * @methodOf lbServices.Device
@@ -17340,9 +17331,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Device` object.)
              * </em>
              */
-        R["destroyById"] = R["deleteById"];
+        R['destroyById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Device#removeById
              * @methodOf lbServices.Device
@@ -17372,9 +17363,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Device` object.)
              * </em>
              */
-        R["removeById"] = R["deleteById"];
+        R['removeById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Device#updateAttributes
              * @methodOf lbServices.Device
@@ -17410,7 +17401,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Device` object.)
              * </em>
              */
-        R["updateAttributes"] = R["prototype$patchAttributes"];
+        R['updateAttributes'] = R['prototype$patchAttributes'];
 
 
         /**
@@ -17421,14 +17412,13 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         * The name of the model represented by this $resource,
         * i.e. `Device`.
         */
-        R.modelName = "Device";
-
+        R.modelName = 'Device';
 
 
         return R;
       }]);
 
-/**
+  /**
  * @ngdoc object
  * @name lbServices.Campaign
  * @header lbServices.Campaign
@@ -17446,19 +17436,19 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
  *
  */
   module.factory(
-    "Campaign",
+    'Campaign',
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
         var R = Resource(
-        urlBase + "/Campaigns/:id",
-          { 'id': '@id' },
+          urlBase + '/Campaigns/:id',
+          { id: '@id' },
           {
 
             // INTERNAL. Use Campaign.business() instead.
-            "prototype$__get__business": {
-              url: urlBase + "/Campaigns/:id/business",
-              method: "GET",
+            prototype$__get__business: {
+              url: urlBase + '/Campaigns/:id/business',
+              method: 'GET',
             },
 
             /**
@@ -17496,9 +17486,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Campaign` object.)
              * </em>
              */
-            "create": {
-              url: urlBase + "/Campaigns",
-              method: "POST",
+            create: {
+              url: urlBase + '/Campaigns',
+              method: 'POST',
             },
 
             /**
@@ -17536,10 +17526,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Campaign` object.)
              * </em>
              */
-            "createMany": {
+            createMany: {
               isArray: true,
-              url: urlBase + "/Campaigns",
-              method: "POST",
+              url: urlBase + '/Campaigns',
+              method: 'POST',
             },
 
             /**
@@ -17577,9 +17567,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Campaign` object.)
              * </em>
              */
-            "patchOrCreate": {
-              url: urlBase + "/Campaigns",
-              method: "PUT",
+            patchOrCreate: {
+              url: urlBase + '/Campaigns',
+              method: 'PUT',
             },
 
             /**
@@ -17617,9 +17607,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Campaign` object.)
              * </em>
              */
-            "replaceOrCreate": {
-              url: urlBase + "/Campaigns/replaceOrCreate",
-              method: "POST",
+            replaceOrCreate: {
+              url: urlBase + '/Campaigns/replaceOrCreate',
+              method: 'POST',
             },
 
             /**
@@ -17656,9 +17646,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Campaign` object.)
              * </em>
              */
-            "upsertWithWhere": {
-              url: urlBase + "/Campaigns/upsertWithWhere",
-              method: "POST",
+            upsertWithWhere: {
+              url: urlBase + '/Campaigns/upsertWithWhere',
+              method: 'POST',
             },
 
             /**
@@ -17690,9 +17680,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `exists` – `{boolean=}` -
              */
-            "exists": {
-              url: urlBase + "/Campaigns/:id/exists",
-              method: "GET",
+            exists: {
+              url: urlBase + '/Campaigns/:id/exists',
+              method: 'GET',
             },
 
             /**
@@ -17727,9 +17717,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Campaign` object.)
              * </em>
              */
-            "findById": {
-              url: urlBase + "/Campaigns/:id",
-              method: "GET",
+            findById: {
+              url: urlBase + '/Campaigns/:id',
+              method: 'GET',
             },
 
             /**
@@ -17766,9 +17756,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Campaign` object.)
              * </em>
              */
-            "replaceById": {
-              url: urlBase + "/Campaigns/:id/replace",
-              method: "POST",
+            replaceById: {
+              url: urlBase + '/Campaigns/:id/replace',
+              method: 'POST',
             },
 
             /**
@@ -17801,10 +17791,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Campaign` object.)
              * </em>
              */
-            "find": {
+            find: {
               isArray: true,
-              url: urlBase + "/Campaigns",
-              method: "GET",
+              url: urlBase + '/Campaigns',
+              method: 'GET',
             },
 
             /**
@@ -17837,9 +17827,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Campaign` object.)
              * </em>
              */
-            "findOne": {
-              url: urlBase + "/Campaigns/findOne",
-              method: "GET",
+            findOne: {
+              url: urlBase + '/Campaigns/findOne',
+              method: 'GET',
             },
 
             /**
@@ -17873,9 +17863,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-            "updateAll": {
-              url: urlBase + "/Campaigns/update",
-              method: "POST",
+            updateAll: {
+              url: urlBase + '/Campaigns/update',
+              method: 'POST',
             },
 
             /**
@@ -17908,9 +17898,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Campaign` object.)
              * </em>
              */
-            "deleteById": {
-              url: urlBase + "/Campaigns/:id",
-              method: "DELETE",
+            deleteById: {
+              url: urlBase + '/Campaigns/:id',
+              method: 'DELETE',
             },
 
             /**
@@ -17942,9 +17932,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `count` – `{number=}` -
              */
-            "count": {
-              url: urlBase + "/Campaigns/count",
-              method: "GET",
+            count: {
+              url: urlBase + '/Campaigns/count',
+              method: 'GET',
             },
 
             /**
@@ -17983,9 +17973,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Campaign` object.)
              * </em>
              */
-            "prototype$patchAttributes": {
-              url: urlBase + "/Campaigns/:id",
-              method: "PUT",
+            prototype$patchAttributes: {
+              url: urlBase + '/Campaigns/:id',
+              method: 'PUT',
             },
 
             /**
@@ -18020,9 +18010,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `changes` – `{ReadableStream=}` -
              */
-            "createChangeStream": {
-              url: urlBase + "/Campaigns/change-stream",
-              method: "POST",
+            createChangeStream: {
+              url: urlBase + '/Campaigns/change-stream',
+              method: 'POST',
             },
 
             /**
@@ -18058,75 +18048,74 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Campaign` object.)
              * </em>
              */
-            "sendBulkMessages": {
-              url: urlBase + "/Campaigns/sendBulkMessages",
-              method: "POST",
+            sendBulkMessages: {
+              url: urlBase + '/Campaigns/sendBulkMessages',
+              method: 'POST',
             },
 
             // INTERNAL. Use Business.campaigns.findById() instead.
-            "::findById::Business::campaigns": {
+            '::findById::Business::campaigns': {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/campaigns/:fk",
-              method: "GET",
+              url: urlBase + '/Businesses/:id/campaigns/:fk',
+              method: 'GET',
             },
 
             // INTERNAL. Use Business.campaigns.destroyById() instead.
-            "::destroyById::Business::campaigns": {
+            '::destroyById::Business::campaigns': {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/campaigns/:fk",
-              method: "DELETE",
+              url: urlBase + '/Businesses/:id/campaigns/:fk',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Business.campaigns.updateById() instead.
-            "::updateById::Business::campaigns": {
+            '::updateById::Business::campaigns': {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/campaigns/:fk",
-              method: "PUT",
+              url: urlBase + '/Businesses/:id/campaigns/:fk',
+              method: 'PUT',
             },
 
             // INTERNAL. Use Business.campaigns() instead.
-            "::get::Business::campaigns": {
+            '::get::Business::campaigns': {
               isArray: true,
-              url: urlBase + "/Businesses/:id/campaigns",
-              method: "GET",
+              url: urlBase + '/Businesses/:id/campaigns',
+              method: 'GET',
             },
 
             // INTERNAL. Use Business.campaigns.create() instead.
-            "::create::Business::campaigns": {
-              url: urlBase + "/Businesses/:id/campaigns",
-              method: "POST",
+            '::create::Business::campaigns': {
+              url: urlBase + '/Businesses/:id/campaigns',
+              method: 'POST',
             },
 
             // INTERNAL. Use Business.campaigns.createMany() instead.
-            "::createMany::Business::campaigns": {
+            '::createMany::Business::campaigns': {
               isArray: true,
-              url: urlBase + "/Businesses/:id/campaigns",
-              method: "POST",
+              url: urlBase + '/Businesses/:id/campaigns',
+              method: 'POST',
             },
 
             // INTERNAL. Use Business.campaigns.destroyAll() instead.
-            "::delete::Business::campaigns": {
-              url: urlBase + "/Businesses/:id/campaigns",
-              method: "DELETE",
+            '::delete::Business::campaigns': {
+              url: urlBase + '/Businesses/:id/campaigns',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Business.campaigns.count() instead.
-            "::count::Business::campaigns": {
-              url: urlBase + "/Businesses/:id/campaigns/count",
-              method: "GET",
+            '::count::Business::campaigns': {
+              url: urlBase + '/Businesses/:id/campaigns/count',
+              method: 'GET',
             },
           }
         );
 
 
-
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Campaign#upsert
              * @methodOf lbServices.Campaign
@@ -18161,9 +18150,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Campaign` object.)
              * </em>
              */
-        R["upsert"] = R["patchOrCreate"];
+        R['upsert'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Campaign#updateOrCreate
              * @methodOf lbServices.Campaign
@@ -18198,9 +18187,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Campaign` object.)
              * </em>
              */
-        R["updateOrCreate"] = R["patchOrCreate"];
+        R['updateOrCreate'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Campaign#patchOrCreateWithWhere
              * @methodOf lbServices.Campaign
@@ -18234,9 +18223,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Campaign` object.)
              * </em>
              */
-        R["patchOrCreateWithWhere"] = R["upsertWithWhere"];
+        R['patchOrCreateWithWhere'] = R['upsertWithWhere'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Campaign#update
              * @methodOf lbServices.Campaign
@@ -18267,9 +18256,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-        R["update"] = R["updateAll"];
+        R['update'] = R['updateAll'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Campaign#destroyById
              * @methodOf lbServices.Campaign
@@ -18299,9 +18288,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Campaign` object.)
              * </em>
              */
-        R["destroyById"] = R["deleteById"];
+        R['destroyById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Campaign#removeById
              * @methodOf lbServices.Campaign
@@ -18331,9 +18320,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Campaign` object.)
              * </em>
              */
-        R["removeById"] = R["deleteById"];
+        R['removeById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Campaign#updateAttributes
              * @methodOf lbServices.Campaign
@@ -18369,7 +18358,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Campaign` object.)
              * </em>
              */
-        R["updateAttributes"] = R["prototype$patchAttributes"];
+        R['updateAttributes'] = R['prototype$patchAttributes'];
 
 
         /**
@@ -18380,10 +18369,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         * The name of the model represented by this $resource,
         * i.e. `Campaign`.
         */
-        R.modelName = "Campaign";
+        R.modelName = 'Campaign';
 
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Campaign#business
              * @methodOf lbServices.Campaign
@@ -18418,8 +18407,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.business = function() {
-          var TargetResource = $injector.get("Business");
-          var action = TargetResource["::get::Campaign::business"];
+          var TargetResource = $injector.get('Business');
+          var action = TargetResource['::get::Campaign::business'];
           return action.apply(R, arguments);
         };
 
@@ -18427,7 +18416,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         return R;
       }]);
 
-/**
+  /**
  * @ngdoc object
  * @name lbServices.InternetPlan
  * @header lbServices.InternetPlan
@@ -18445,19 +18434,19 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
  *
  */
   module.factory(
-    "InternetPlan",
+    'InternetPlan',
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
         var R = Resource(
-        urlBase + "/InternetPlans/:id",
-          { 'id': '@id' },
+          urlBase + '/InternetPlans/:id',
+          { id: '@id' },
           {
 
             // INTERNAL. Use InternetPlan.business() instead.
-            "prototype$__get__business": {
-              url: urlBase + "/InternetPlans/:id/business",
-              method: "GET",
+            prototype$__get__business: {
+              url: urlBase + '/InternetPlans/:id/business',
+              method: 'GET',
             },
 
             /**
@@ -18495,9 +18484,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `InternetPlan` object.)
              * </em>
              */
-            "create": {
-              url: urlBase + "/InternetPlans",
-              method: "POST",
+            create: {
+              url: urlBase + '/InternetPlans',
+              method: 'POST',
             },
 
             /**
@@ -18535,10 +18524,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `InternetPlan` object.)
              * </em>
              */
-            "createMany": {
+            createMany: {
               isArray: true,
-              url: urlBase + "/InternetPlans",
-              method: "POST",
+              url: urlBase + '/InternetPlans',
+              method: 'POST',
             },
 
             /**
@@ -18576,9 +18565,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `InternetPlan` object.)
              * </em>
              */
-            "patchOrCreate": {
-              url: urlBase + "/InternetPlans",
-              method: "PUT",
+            patchOrCreate: {
+              url: urlBase + '/InternetPlans',
+              method: 'PUT',
             },
 
             /**
@@ -18616,9 +18605,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `InternetPlan` object.)
              * </em>
              */
-            "replaceOrCreate": {
-              url: urlBase + "/InternetPlans/replaceOrCreate",
-              method: "POST",
+            replaceOrCreate: {
+              url: urlBase + '/InternetPlans/replaceOrCreate',
+              method: 'POST',
             },
 
             /**
@@ -18655,9 +18644,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `InternetPlan` object.)
              * </em>
              */
-            "upsertWithWhere": {
-              url: urlBase + "/InternetPlans/upsertWithWhere",
-              method: "POST",
+            upsertWithWhere: {
+              url: urlBase + '/InternetPlans/upsertWithWhere',
+              method: 'POST',
             },
 
             /**
@@ -18689,9 +18678,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `exists` – `{boolean=}` -
              */
-            "exists": {
-              url: urlBase + "/InternetPlans/:id/exists",
-              method: "GET",
+            exists: {
+              url: urlBase + '/InternetPlans/:id/exists',
+              method: 'GET',
             },
 
             /**
@@ -18726,9 +18715,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `InternetPlan` object.)
              * </em>
              */
-            "findById": {
-              url: urlBase + "/InternetPlans/:id",
-              method: "GET",
+            findById: {
+              url: urlBase + '/InternetPlans/:id',
+              method: 'GET',
             },
 
             /**
@@ -18765,9 +18754,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `InternetPlan` object.)
              * </em>
              */
-            "replaceById": {
-              url: urlBase + "/InternetPlans/:id/replace",
-              method: "POST",
+            replaceById: {
+              url: urlBase + '/InternetPlans/:id/replace',
+              method: 'POST',
             },
 
             /**
@@ -18800,10 +18789,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `InternetPlan` object.)
              * </em>
              */
-            "find": {
+            find: {
               isArray: true,
-              url: urlBase + "/InternetPlans",
-              method: "GET",
+              url: urlBase + '/InternetPlans',
+              method: 'GET',
             },
 
             /**
@@ -18836,9 +18825,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `InternetPlan` object.)
              * </em>
              */
-            "findOne": {
-              url: urlBase + "/InternetPlans/findOne",
-              method: "GET",
+            findOne: {
+              url: urlBase + '/InternetPlans/findOne',
+              method: 'GET',
             },
 
             /**
@@ -18872,9 +18861,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-            "updateAll": {
-              url: urlBase + "/InternetPlans/update",
-              method: "POST",
+            updateAll: {
+              url: urlBase + '/InternetPlans/update',
+              method: 'POST',
             },
 
             /**
@@ -18907,9 +18896,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `InternetPlan` object.)
              * </em>
              */
-            "deleteById": {
-              url: urlBase + "/InternetPlans/:id",
-              method: "DELETE",
+            deleteById: {
+              url: urlBase + '/InternetPlans/:id',
+              method: 'DELETE',
             },
 
             /**
@@ -18941,9 +18930,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `count` – `{number=}` -
              */
-            "count": {
-              url: urlBase + "/InternetPlans/count",
-              method: "GET",
+            count: {
+              url: urlBase + '/InternetPlans/count',
+              method: 'GET',
             },
 
             /**
@@ -18982,9 +18971,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `InternetPlan` object.)
              * </em>
              */
-            "prototype$patchAttributes": {
-              url: urlBase + "/InternetPlans/:id",
-              method: "PUT",
+            prototype$patchAttributes: {
+              url: urlBase + '/InternetPlans/:id',
+              method: 'PUT',
             },
 
             /**
@@ -19019,9 +19008,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `changes` – `{ReadableStream=}` -
              */
-            "createChangeStream": {
-              url: urlBase + "/InternetPlans/change-stream",
-              method: "POST",
+            createChangeStream: {
+              url: urlBase + '/InternetPlans/change-stream',
+              method: 'POST',
             },
 
             /**
@@ -19065,9 +19054,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `InternetPlan` object.)
              * </em>
              */
-            "assignPlanToMember": {
-              url: urlBase + "/InternetPlans/assignPlanToMember",
-              method: "POST",
+            assignPlanToMember: {
+              url: urlBase + '/InternetPlans/assignPlanToMember',
+              method: 'POST',
             },
 
             /**
@@ -19107,9 +19096,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `InternetPlan` object.)
              * </em>
              */
-            "assignFreePlanToMember": {
-              url: urlBase + "/InternetPlans/assignFreePlanToMember",
-              method: "POST",
+            assignFreePlanToMember: {
+              url: urlBase + '/InternetPlans/assignFreePlanToMember',
+              method: 'POST',
             },
 
             /**
@@ -19147,75 +19136,74 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `InternetPlan` object.)
              * </em>
              */
-            "getPublicInternetPlans": {
-              url: urlBase + "/InternetPlans/getPublicInternetPlans",
-              method: "POST",
+            getPublicInternetPlans: {
+              url: urlBase + '/InternetPlans/getPublicInternetPlans',
+              method: 'POST',
             },
 
             // INTERNAL. Use Business.internetPlans.findById() instead.
-            "::findById::Business::internetPlans": {
+            '::findById::Business::internetPlans': {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/internetPlans/:fk",
-              method: "GET",
+              url: urlBase + '/Businesses/:id/internetPlans/:fk',
+              method: 'GET',
             },
 
             // INTERNAL. Use Business.internetPlans.destroyById() instead.
-            "::destroyById::Business::internetPlans": {
+            '::destroyById::Business::internetPlans': {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/internetPlans/:fk",
-              method: "DELETE",
+              url: urlBase + '/Businesses/:id/internetPlans/:fk',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Business.internetPlans.updateById() instead.
-            "::updateById::Business::internetPlans": {
+            '::updateById::Business::internetPlans': {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/internetPlans/:fk",
-              method: "PUT",
+              url: urlBase + '/Businesses/:id/internetPlans/:fk',
+              method: 'PUT',
             },
 
             // INTERNAL. Use Business.internetPlans() instead.
-            "::get::Business::internetPlans": {
+            '::get::Business::internetPlans': {
               isArray: true,
-              url: urlBase + "/Businesses/:id/internetPlans",
-              method: "GET",
+              url: urlBase + '/Businesses/:id/internetPlans',
+              method: 'GET',
             },
 
             // INTERNAL. Use Business.internetPlans.create() instead.
-            "::create::Business::internetPlans": {
-              url: urlBase + "/Businesses/:id/internetPlans",
-              method: "POST",
+            '::create::Business::internetPlans': {
+              url: urlBase + '/Businesses/:id/internetPlans',
+              method: 'POST',
             },
 
             // INTERNAL. Use Business.internetPlans.createMany() instead.
-            "::createMany::Business::internetPlans": {
+            '::createMany::Business::internetPlans': {
               isArray: true,
-              url: urlBase + "/Businesses/:id/internetPlans",
-              method: "POST",
+              url: urlBase + '/Businesses/:id/internetPlans',
+              method: 'POST',
             },
 
             // INTERNAL. Use Business.internetPlans.destroyAll() instead.
-            "::delete::Business::internetPlans": {
-              url: urlBase + "/Businesses/:id/internetPlans",
-              method: "DELETE",
+            '::delete::Business::internetPlans': {
+              url: urlBase + '/Businesses/:id/internetPlans',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Business.internetPlans.count() instead.
-            "::count::Business::internetPlans": {
-              url: urlBase + "/Businesses/:id/internetPlans/count",
-              method: "GET",
+            '::count::Business::internetPlans': {
+              url: urlBase + '/Businesses/:id/internetPlans/count',
+              method: 'GET',
             },
           }
         );
 
 
-
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.InternetPlan#upsert
              * @methodOf lbServices.InternetPlan
@@ -19250,9 +19238,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `InternetPlan` object.)
              * </em>
              */
-        R["upsert"] = R["patchOrCreate"];
+        R['upsert'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.InternetPlan#updateOrCreate
              * @methodOf lbServices.InternetPlan
@@ -19287,9 +19275,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `InternetPlan` object.)
              * </em>
              */
-        R["updateOrCreate"] = R["patchOrCreate"];
+        R['updateOrCreate'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.InternetPlan#patchOrCreateWithWhere
              * @methodOf lbServices.InternetPlan
@@ -19323,9 +19311,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `InternetPlan` object.)
              * </em>
              */
-        R["patchOrCreateWithWhere"] = R["upsertWithWhere"];
+        R['patchOrCreateWithWhere'] = R['upsertWithWhere'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.InternetPlan#update
              * @methodOf lbServices.InternetPlan
@@ -19356,9 +19344,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-        R["update"] = R["updateAll"];
+        R['update'] = R['updateAll'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.InternetPlan#destroyById
              * @methodOf lbServices.InternetPlan
@@ -19388,9 +19376,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `InternetPlan` object.)
              * </em>
              */
-        R["destroyById"] = R["deleteById"];
+        R['destroyById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.InternetPlan#removeById
              * @methodOf lbServices.InternetPlan
@@ -19420,9 +19408,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `InternetPlan` object.)
              * </em>
              */
-        R["removeById"] = R["deleteById"];
+        R['removeById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.InternetPlan#updateAttributes
              * @methodOf lbServices.InternetPlan
@@ -19458,7 +19446,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `InternetPlan` object.)
              * </em>
              */
-        R["updateAttributes"] = R["prototype$patchAttributes"];
+        R['updateAttributes'] = R['prototype$patchAttributes'];
 
 
         /**
@@ -19469,10 +19457,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         * The name of the model represented by this $resource,
         * i.e. `InternetPlan`.
         */
-        R.modelName = "InternetPlan";
+        R.modelName = 'InternetPlan';
 
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.InternetPlan#business
              * @methodOf lbServices.InternetPlan
@@ -19507,8 +19495,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.business = function() {
-          var TargetResource = $injector.get("Business");
-          var action = TargetResource["::get::InternetPlan::business"];
+          var TargetResource = $injector.get('Business');
+          var action = TargetResource['::get::InternetPlan::business'];
           return action.apply(R, arguments);
         };
 
@@ -19516,7 +19504,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         return R;
       }]);
 
-/**
+  /**
  * @ngdoc object
  * @name lbServices.Invoice
  * @header lbServices.Invoice
@@ -19534,49 +19522,49 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
  *
  */
   module.factory(
-    "Invoice",
+    'Invoice',
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
         var R = Resource(
-        urlBase + "/Invoices/:id",
-          { 'id': '@id' },
+          urlBase + '/Invoices/:id',
+          { id: '@id' },
           {
 
             // INTERNAL. Use Invoice.business() instead.
-            "prototype$__get__business": {
-              url: urlBase + "/Invoices/:id/business",
-              method: "GET",
+            prototype$__get__business: {
+              url: urlBase + '/Invoices/:id/business',
+              method: 'GET',
             },
 
             // INTERNAL. Use Invoice.members() instead.
-            "prototype$__get__members": {
-              url: urlBase + "/Invoices/:id/members",
-              method: "GET",
+            prototype$__get__members: {
+              url: urlBase + '/Invoices/:id/members',
+              method: 'GET',
             },
 
             // INTERNAL. Use Invoice.members.create() instead.
-            "prototype$__create__members": {
-              url: urlBase + "/Invoices/:id/members",
-              method: "POST",
+            prototype$__create__members: {
+              url: urlBase + '/Invoices/:id/members',
+              method: 'POST',
             },
 
             // INTERNAL. Use Invoice.members.update() instead.
-            "prototype$__update__members": {
-              url: urlBase + "/Invoices/:id/members",
-              method: "PUT",
+            prototype$__update__members: {
+              url: urlBase + '/Invoices/:id/members',
+              method: 'PUT',
             },
 
             // INTERNAL. Use Invoice.members.destroy() instead.
-            "prototype$__destroy__members": {
-              url: urlBase + "/Invoices/:id/members",
-              method: "DELETE",
+            prototype$__destroy__members: {
+              url: urlBase + '/Invoices/:id/members',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Invoice.reseller() instead.
-            "prototype$__get__reseller": {
-              url: urlBase + "/Invoices/:id/reseller",
-              method: "GET",
+            prototype$__get__reseller: {
+              url: urlBase + '/Invoices/:id/reseller',
+              method: 'GET',
             },
 
             /**
@@ -19614,9 +19602,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Invoice` object.)
              * </em>
              */
-            "create": {
-              url: urlBase + "/Invoices",
-              method: "POST",
+            create: {
+              url: urlBase + '/Invoices',
+              method: 'POST',
             },
 
             /**
@@ -19654,10 +19642,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Invoice` object.)
              * </em>
              */
-            "createMany": {
+            createMany: {
               isArray: true,
-              url: urlBase + "/Invoices",
-              method: "POST",
+              url: urlBase + '/Invoices',
+              method: 'POST',
             },
 
             /**
@@ -19695,9 +19683,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Invoice` object.)
              * </em>
              */
-            "patchOrCreate": {
-              url: urlBase + "/Invoices",
-              method: "PUT",
+            patchOrCreate: {
+              url: urlBase + '/Invoices',
+              method: 'PUT',
             },
 
             /**
@@ -19735,9 +19723,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Invoice` object.)
              * </em>
              */
-            "replaceOrCreate": {
-              url: urlBase + "/Invoices/replaceOrCreate",
-              method: "POST",
+            replaceOrCreate: {
+              url: urlBase + '/Invoices/replaceOrCreate',
+              method: 'POST',
             },
 
             /**
@@ -19774,9 +19762,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Invoice` object.)
              * </em>
              */
-            "upsertWithWhere": {
-              url: urlBase + "/Invoices/upsertWithWhere",
-              method: "POST",
+            upsertWithWhere: {
+              url: urlBase + '/Invoices/upsertWithWhere',
+              method: 'POST',
             },
 
             /**
@@ -19808,9 +19796,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `exists` – `{boolean=}` -
              */
-            "exists": {
-              url: urlBase + "/Invoices/:id/exists",
-              method: "GET",
+            exists: {
+              url: urlBase + '/Invoices/:id/exists',
+              method: 'GET',
             },
 
             /**
@@ -19845,9 +19833,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Invoice` object.)
              * </em>
              */
-            "findById": {
-              url: urlBase + "/Invoices/:id",
-              method: "GET",
+            findById: {
+              url: urlBase + '/Invoices/:id',
+              method: 'GET',
             },
 
             /**
@@ -19884,9 +19872,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Invoice` object.)
              * </em>
              */
-            "replaceById": {
-              url: urlBase + "/Invoices/:id/replace",
-              method: "POST",
+            replaceById: {
+              url: urlBase + '/Invoices/:id/replace',
+              method: 'POST',
             },
 
             /**
@@ -19919,10 +19907,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Invoice` object.)
              * </em>
              */
-            "find": {
+            find: {
               isArray: true,
-              url: urlBase + "/Invoices",
-              method: "GET",
+              url: urlBase + '/Invoices',
+              method: 'GET',
             },
 
             /**
@@ -19955,9 +19943,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Invoice` object.)
              * </em>
              */
-            "findOne": {
-              url: urlBase + "/Invoices/findOne",
-              method: "GET",
+            findOne: {
+              url: urlBase + '/Invoices/findOne',
+              method: 'GET',
             },
 
             /**
@@ -19991,9 +19979,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-            "updateAll": {
-              url: urlBase + "/Invoices/update",
-              method: "POST",
+            updateAll: {
+              url: urlBase + '/Invoices/update',
+              method: 'POST',
             },
 
             /**
@@ -20026,9 +20014,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Invoice` object.)
              * </em>
              */
-            "deleteById": {
-              url: urlBase + "/Invoices/:id",
-              method: "DELETE",
+            deleteById: {
+              url: urlBase + '/Invoices/:id',
+              method: 'DELETE',
             },
 
             /**
@@ -20060,9 +20048,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `count` – `{number=}` -
              */
-            "count": {
-              url: urlBase + "/Invoices/count",
-              method: "GET",
+            count: {
+              url: urlBase + '/Invoices/count',
+              method: 'GET',
             },
 
             /**
@@ -20101,9 +20089,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Invoice` object.)
              * </em>
              */
-            "prototype$patchAttributes": {
-              url: urlBase + "/Invoices/:id",
-              method: "PUT",
+            prototype$patchAttributes: {
+              url: urlBase + '/Invoices/:id',
+              method: 'PUT',
             },
 
             /**
@@ -20138,9 +20126,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `changes` – `{ReadableStream=}` -
              */
-            "createChangeStream": {
-              url: urlBase + "/Invoices/change-stream",
-              method: "POST",
+            createChangeStream: {
+              url: urlBase + '/Invoices/change-stream',
+              method: 'POST',
             },
 
             /**
@@ -20188,9 +20176,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Invoice` object.)
              * </em>
              */
-            "issueExternalInvoiceAndOpenPayment": {
-              url: urlBase + "/Invoices/issueExternalInvoiceAndOpenPayment",
-              method: "POST",
+            issueExternalInvoiceAndOpenPayment: {
+              url: urlBase + '/Invoices/issueExternalInvoiceAndOpenPayment',
+              method: 'POST',
             },
 
             /**
@@ -20228,193 +20216,192 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Invoice` object.)
              * </em>
              */
-            "verifyExternalInvoice": {
-              url: urlBase + "/Invoices/verifyExternalInvoice",
-              method: "POST",
+            verifyExternalInvoice: {
+              url: urlBase + '/Invoices/verifyExternalInvoice',
+              method: 'POST',
             },
 
             // INTERNAL. Use Business.invoices.findById() instead.
-            "::findById::Business::invoices": {
+            '::findById::Business::invoices': {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/invoices/:fk",
-              method: "GET",
+              url: urlBase + '/Businesses/:id/invoices/:fk',
+              method: 'GET',
             },
 
             // INTERNAL. Use Business.invoices.destroyById() instead.
-            "::destroyById::Business::invoices": {
+            '::destroyById::Business::invoices': {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/invoices/:fk",
-              method: "DELETE",
+              url: urlBase + '/Businesses/:id/invoices/:fk',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Business.invoices.updateById() instead.
-            "::updateById::Business::invoices": {
+            '::updateById::Business::invoices': {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/invoices/:fk",
-              method: "PUT",
+              url: urlBase + '/Businesses/:id/invoices/:fk',
+              method: 'PUT',
             },
 
             // INTERNAL. Use Business.invoices() instead.
-            "::get::Business::invoices": {
+            '::get::Business::invoices': {
               isArray: true,
-              url: urlBase + "/Businesses/:id/invoices",
-              method: "GET",
+              url: urlBase + '/Businesses/:id/invoices',
+              method: 'GET',
             },
 
             // INTERNAL. Use Business.invoices.create() instead.
-            "::create::Business::invoices": {
-              url: urlBase + "/Businesses/:id/invoices",
-              method: "POST",
+            '::create::Business::invoices': {
+              url: urlBase + '/Businesses/:id/invoices',
+              method: 'POST',
             },
 
             // INTERNAL. Use Business.invoices.createMany() instead.
-            "::createMany::Business::invoices": {
+            '::createMany::Business::invoices': {
               isArray: true,
-              url: urlBase + "/Businesses/:id/invoices",
-              method: "POST",
+              url: urlBase + '/Businesses/:id/invoices',
+              method: 'POST',
             },
 
             // INTERNAL. Use Business.invoices.destroyAll() instead.
-            "::delete::Business::invoices": {
-              url: urlBase + "/Businesses/:id/invoices",
-              method: "DELETE",
+            '::delete::Business::invoices': {
+              url: urlBase + '/Businesses/:id/invoices',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Business.invoices.count() instead.
-            "::count::Business::invoices": {
-              url: urlBase + "/Businesses/:id/invoices/count",
-              method: "GET",
+            '::count::Business::invoices': {
+              url: urlBase + '/Businesses/:id/invoices/count',
+              method: 'GET',
             },
 
             // INTERNAL. Use Member.invoices.findById() instead.
-            "::findById::Member::invoices": {
+            '::findById::Member::invoices': {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Members/:id/invoices/:fk",
-              method: "GET",
+              url: urlBase + '/Members/:id/invoices/:fk',
+              method: 'GET',
             },
 
             // INTERNAL. Use Member.invoices.destroyById() instead.
-            "::destroyById::Member::invoices": {
+            '::destroyById::Member::invoices': {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Members/:id/invoices/:fk",
-              method: "DELETE",
+              url: urlBase + '/Members/:id/invoices/:fk',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Member.invoices.updateById() instead.
-            "::updateById::Member::invoices": {
+            '::updateById::Member::invoices': {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Members/:id/invoices/:fk",
-              method: "PUT",
+              url: urlBase + '/Members/:id/invoices/:fk',
+              method: 'PUT',
             },
 
             // INTERNAL. Use Member.invoices() instead.
-            "::get::Member::invoices": {
+            '::get::Member::invoices': {
               isArray: true,
-              url: urlBase + "/Members/:id/invoices",
-              method: "GET",
+              url: urlBase + '/Members/:id/invoices',
+              method: 'GET',
             },
 
             // INTERNAL. Use Member.invoices.create() instead.
-            "::create::Member::invoices": {
-              url: urlBase + "/Members/:id/invoices",
-              method: "POST",
+            '::create::Member::invoices': {
+              url: urlBase + '/Members/:id/invoices',
+              method: 'POST',
             },
 
             // INTERNAL. Use Member.invoices.createMany() instead.
-            "::createMany::Member::invoices": {
+            '::createMany::Member::invoices': {
               isArray: true,
-              url: urlBase + "/Members/:id/invoices",
-              method: "POST",
+              url: urlBase + '/Members/:id/invoices',
+              method: 'POST',
             },
 
             // INTERNAL. Use Member.invoices.destroyAll() instead.
-            "::delete::Member::invoices": {
-              url: urlBase + "/Members/:id/invoices",
-              method: "DELETE",
+            '::delete::Member::invoices': {
+              url: urlBase + '/Members/:id/invoices',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Member.invoices.count() instead.
-            "::count::Member::invoices": {
-              url: urlBase + "/Members/:id/invoices/count",
-              method: "GET",
+            '::count::Member::invoices': {
+              url: urlBase + '/Members/:id/invoices/count',
+              method: 'GET',
             },
 
             // INTERNAL. Use Reseller.invoices.findById() instead.
-            "::findById::Reseller::invoices": {
+            '::findById::Reseller::invoices': {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Resellers/:id/invoices/:fk",
-              method: "GET",
+              url: urlBase + '/Resellers/:id/invoices/:fk',
+              method: 'GET',
             },
 
             // INTERNAL. Use Reseller.invoices.destroyById() instead.
-            "::destroyById::Reseller::invoices": {
+            '::destroyById::Reseller::invoices': {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Resellers/:id/invoices/:fk",
-              method: "DELETE",
+              url: urlBase + '/Resellers/:id/invoices/:fk',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Reseller.invoices.updateById() instead.
-            "::updateById::Reseller::invoices": {
+            '::updateById::Reseller::invoices': {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Resellers/:id/invoices/:fk",
-              method: "PUT",
+              url: urlBase + '/Resellers/:id/invoices/:fk',
+              method: 'PUT',
             },
 
             // INTERNAL. Use Reseller.invoices() instead.
-            "::get::Reseller::invoices": {
+            '::get::Reseller::invoices': {
               isArray: true,
-              url: urlBase + "/Resellers/:id/invoices",
-              method: "GET",
+              url: urlBase + '/Resellers/:id/invoices',
+              method: 'GET',
             },
 
             // INTERNAL. Use Reseller.invoices.create() instead.
-            "::create::Reseller::invoices": {
-              url: urlBase + "/Resellers/:id/invoices",
-              method: "POST",
+            '::create::Reseller::invoices': {
+              url: urlBase + '/Resellers/:id/invoices',
+              method: 'POST',
             },
 
             // INTERNAL. Use Reseller.invoices.createMany() instead.
-            "::createMany::Reseller::invoices": {
+            '::createMany::Reseller::invoices': {
               isArray: true,
-              url: urlBase + "/Resellers/:id/invoices",
-              method: "POST",
+              url: urlBase + '/Resellers/:id/invoices',
+              method: 'POST',
             },
 
             // INTERNAL. Use Reseller.invoices.destroyAll() instead.
-            "::delete::Reseller::invoices": {
-              url: urlBase + "/Resellers/:id/invoices",
-              method: "DELETE",
+            '::delete::Reseller::invoices': {
+              url: urlBase + '/Resellers/:id/invoices',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Reseller.invoices.count() instead.
-            "::count::Reseller::invoices": {
-              url: urlBase + "/Resellers/:id/invoices/count",
-              method: "GET",
+            '::count::Reseller::invoices': {
+              url: urlBase + '/Resellers/:id/invoices/count',
+              method: 'GET',
             },
           }
         );
 
 
-
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Invoice#upsert
              * @methodOf lbServices.Invoice
@@ -20449,9 +20436,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Invoice` object.)
              * </em>
              */
-        R["upsert"] = R["patchOrCreate"];
+        R['upsert'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Invoice#updateOrCreate
              * @methodOf lbServices.Invoice
@@ -20486,9 +20473,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Invoice` object.)
              * </em>
              */
-        R["updateOrCreate"] = R["patchOrCreate"];
+        R['updateOrCreate'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Invoice#patchOrCreateWithWhere
              * @methodOf lbServices.Invoice
@@ -20522,9 +20509,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Invoice` object.)
              * </em>
              */
-        R["patchOrCreateWithWhere"] = R["upsertWithWhere"];
+        R['patchOrCreateWithWhere'] = R['upsertWithWhere'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Invoice#update
              * @methodOf lbServices.Invoice
@@ -20555,9 +20542,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-        R["update"] = R["updateAll"];
+        R['update'] = R['updateAll'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Invoice#destroyById
              * @methodOf lbServices.Invoice
@@ -20587,9 +20574,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Invoice` object.)
              * </em>
              */
-        R["destroyById"] = R["deleteById"];
+        R['destroyById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Invoice#removeById
              * @methodOf lbServices.Invoice
@@ -20619,9 +20606,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Invoice` object.)
              * </em>
              */
-        R["removeById"] = R["deleteById"];
+        R['removeById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Invoice#updateAttributes
              * @methodOf lbServices.Invoice
@@ -20657,7 +20644,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Invoice` object.)
              * </em>
              */
-        R["updateAttributes"] = R["prototype$patchAttributes"];
+        R['updateAttributes'] = R['prototype$patchAttributes'];
 
 
         /**
@@ -20668,10 +20655,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         * The name of the model represented by this $resource,
         * i.e. `Invoice`.
         */
-        R.modelName = "Invoice";
+        R.modelName = 'Invoice';
 
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Invoice#business
              * @methodOf lbServices.Invoice
@@ -20706,11 +20693,11 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.business = function() {
-          var TargetResource = $injector.get("Business");
-          var action = TargetResource["::get::Invoice::business"];
+          var TargetResource = $injector.get('Business');
+          var action = TargetResource['::get::Invoice::business'];
           return action.apply(R, arguments);
         };
-    /**
+        /**
      * @ngdoc object
      * @name lbServices.Invoice.members
      * @header lbServices.Invoice.members
@@ -20725,7 +20712,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
      */
 
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Invoice#members
              * @methodOf lbServices.Invoice
@@ -20760,12 +20747,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.members = function() {
-          var TargetResource = $injector.get("Member");
-          var action = TargetResource["::get::Invoice::members"];
+          var TargetResource = $injector.get('Member');
+          var action = TargetResource['::get::Invoice::members'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Invoice.members#create
              * @methodOf lbServices.Invoice.members
@@ -20802,12 +20789,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.members.create = function() {
-          var TargetResource = $injector.get("Member");
-          var action = TargetResource["::create::Invoice::members"];
+          var TargetResource = $injector.get('Member');
+          var action = TargetResource['::create::Invoice::members'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Invoice.members#createMany
              * @methodOf lbServices.Invoice.members
@@ -20844,12 +20831,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.members.createMany = function() {
-          var TargetResource = $injector.get("Member");
-          var action = TargetResource["::createMany::Invoice::members"];
+          var TargetResource = $injector.get('Member');
+          var action = TargetResource['::createMany::Invoice::members'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Invoice.members#destroy
              * @methodOf lbServices.Invoice.members
@@ -20879,12 +20866,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.members.destroy = function() {
-          var TargetResource = $injector.get("Member");
-          var action = TargetResource["::destroy::Invoice::members"];
+          var TargetResource = $injector.get('Member');
+          var action = TargetResource['::destroy::Invoice::members'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Invoice.members#update
              * @methodOf lbServices.Invoice.members
@@ -20921,12 +20908,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.members.update = function() {
-          var TargetResource = $injector.get("Member");
-          var action = TargetResource["::update::Invoice::members"];
+          var TargetResource = $injector.get('Member');
+          var action = TargetResource['::update::Invoice::members'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Invoice#reseller
              * @methodOf lbServices.Invoice
@@ -20961,8 +20948,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.reseller = function() {
-          var TargetResource = $injector.get("Reseller");
-          var action = TargetResource["::get::Invoice::reseller"];
+          var TargetResource = $injector.get('Reseller');
+          var action = TargetResource['::get::Invoice::reseller'];
           return action.apply(R, arguments);
         };
 
@@ -20970,7 +20957,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         return R;
       }]);
 
-/**
+  /**
  * @ngdoc object
  * @name lbServices.Charge
  * @header lbServices.Charge
@@ -20988,13 +20975,13 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
  *
  */
   module.factory(
-    "Charge",
+    'Charge',
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
         var R = Resource(
-        urlBase + "/Charges/:id",
-          { 'id': '@id' },
+          urlBase + '/Charges/:id',
+          { id: '@id' },
           {
 
             /**
@@ -21032,9 +21019,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Charge` object.)
              * </em>
              */
-            "create": {
-              url: urlBase + "/Charges",
-              method: "POST",
+            create: {
+              url: urlBase + '/Charges',
+              method: 'POST',
             },
 
             /**
@@ -21072,10 +21059,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Charge` object.)
              * </em>
              */
-            "createMany": {
+            createMany: {
               isArray: true,
-              url: urlBase + "/Charges",
-              method: "POST",
+              url: urlBase + '/Charges',
+              method: 'POST',
             },
 
             /**
@@ -21113,9 +21100,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Charge` object.)
              * </em>
              */
-            "patchOrCreate": {
-              url: urlBase + "/Charges",
-              method: "PUT",
+            patchOrCreate: {
+              url: urlBase + '/Charges',
+              method: 'PUT',
             },
 
             /**
@@ -21153,9 +21140,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Charge` object.)
              * </em>
              */
-            "replaceOrCreate": {
-              url: urlBase + "/Charges/replaceOrCreate",
-              method: "POST",
+            replaceOrCreate: {
+              url: urlBase + '/Charges/replaceOrCreate',
+              method: 'POST',
             },
 
             /**
@@ -21192,9 +21179,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Charge` object.)
              * </em>
              */
-            "upsertWithWhere": {
-              url: urlBase + "/Charges/upsertWithWhere",
-              method: "POST",
+            upsertWithWhere: {
+              url: urlBase + '/Charges/upsertWithWhere',
+              method: 'POST',
             },
 
             /**
@@ -21226,9 +21213,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `exists` – `{boolean=}` -
              */
-            "exists": {
-              url: urlBase + "/Charges/:id/exists",
-              method: "GET",
+            exists: {
+              url: urlBase + '/Charges/:id/exists',
+              method: 'GET',
             },
 
             /**
@@ -21263,9 +21250,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Charge` object.)
              * </em>
              */
-            "findById": {
-              url: urlBase + "/Charges/:id",
-              method: "GET",
+            findById: {
+              url: urlBase + '/Charges/:id',
+              method: 'GET',
             },
 
             /**
@@ -21302,9 +21289,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Charge` object.)
              * </em>
              */
-            "replaceById": {
-              url: urlBase + "/Charges/:id/replace",
-              method: "POST",
+            replaceById: {
+              url: urlBase + '/Charges/:id/replace',
+              method: 'POST',
             },
 
             /**
@@ -21337,10 +21324,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Charge` object.)
              * </em>
              */
-            "find": {
+            find: {
               isArray: true,
-              url: urlBase + "/Charges",
-              method: "GET",
+              url: urlBase + '/Charges',
+              method: 'GET',
             },
 
             /**
@@ -21373,9 +21360,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Charge` object.)
              * </em>
              */
-            "findOne": {
-              url: urlBase + "/Charges/findOne",
-              method: "GET",
+            findOne: {
+              url: urlBase + '/Charges/findOne',
+              method: 'GET',
             },
 
             /**
@@ -21409,9 +21396,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-            "updateAll": {
-              url: urlBase + "/Charges/update",
-              method: "POST",
+            updateAll: {
+              url: urlBase + '/Charges/update',
+              method: 'POST',
             },
 
             /**
@@ -21444,9 +21431,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Charge` object.)
              * </em>
              */
-            "deleteById": {
-              url: urlBase + "/Charges/:id",
-              method: "DELETE",
+            deleteById: {
+              url: urlBase + '/Charges/:id',
+              method: 'DELETE',
             },
 
             /**
@@ -21478,9 +21465,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `count` – `{number=}` -
              */
-            "count": {
-              url: urlBase + "/Charges/count",
-              method: "GET",
+            count: {
+              url: urlBase + '/Charges/count',
+              method: 'GET',
             },
 
             /**
@@ -21519,9 +21506,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Charge` object.)
              * </em>
              */
-            "prototype$patchAttributes": {
-              url: urlBase + "/Charges/:id",
-              method: "PUT",
+            prototype$patchAttributes: {
+              url: urlBase + '/Charges/:id',
+              method: 'PUT',
             },
 
             /**
@@ -21556,9 +21543,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `changes` – `{ReadableStream=}` -
              */
-            "createChangeStream": {
-              url: urlBase + "/Charges/change-stream",
-              method: "POST",
+            createChangeStream: {
+              url: urlBase + '/Charges/change-stream',
+              method: 'POST',
             },
 
             /**
@@ -21600,16 +21587,15 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Charge` object.)
              * </em>
              */
-            "loadCharges": {
-              url: urlBase + "/Charges/loadCharges",
-              method: "POST",
+            loadCharges: {
+              url: urlBase + '/Charges/loadCharges',
+              method: 'POST',
             },
           }
         );
 
 
-
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Charge#upsert
              * @methodOf lbServices.Charge
@@ -21644,9 +21630,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Charge` object.)
              * </em>
              */
-        R["upsert"] = R["patchOrCreate"];
+        R['upsert'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Charge#updateOrCreate
              * @methodOf lbServices.Charge
@@ -21681,9 +21667,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Charge` object.)
              * </em>
              */
-        R["updateOrCreate"] = R["patchOrCreate"];
+        R['updateOrCreate'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Charge#patchOrCreateWithWhere
              * @methodOf lbServices.Charge
@@ -21717,9 +21703,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Charge` object.)
              * </em>
              */
-        R["patchOrCreateWithWhere"] = R["upsertWithWhere"];
+        R['patchOrCreateWithWhere'] = R['upsertWithWhere'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Charge#update
              * @methodOf lbServices.Charge
@@ -21750,9 +21736,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-        R["update"] = R["updateAll"];
+        R['update'] = R['updateAll'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Charge#destroyById
              * @methodOf lbServices.Charge
@@ -21782,9 +21768,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Charge` object.)
              * </em>
              */
-        R["destroyById"] = R["deleteById"];
+        R['destroyById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Charge#removeById
              * @methodOf lbServices.Charge
@@ -21814,9 +21800,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Charge` object.)
              * </em>
              */
-        R["removeById"] = R["deleteById"];
+        R['removeById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Charge#updateAttributes
              * @methodOf lbServices.Charge
@@ -21852,7 +21838,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Charge` object.)
              * </em>
              */
-        R["updateAttributes"] = R["prototype$patchAttributes"];
+        R['updateAttributes'] = R['prototype$patchAttributes'];
 
 
         /**
@@ -21863,14 +21849,13 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         * The name of the model represented by this $resource,
         * i.e. `Charge`.
         */
-        R.modelName = "Charge";
-
+        R.modelName = 'Charge';
 
 
         return R;
       }]);
 
-/**
+  /**
  * @ngdoc object
  * @name lbServices.ClientSession
  * @header lbServices.ClientSession
@@ -21888,43 +21873,43 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
  *
  */
   module.factory(
-    "ClientSession",
+    'ClientSession',
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
         var R = Resource(
-        urlBase + "/ClientSessions/:id",
-          { 'id': '@id' },
+          urlBase + '/ClientSessions/:id',
+          { id: '@id' },
           {
 
             // INTERNAL. Use ClientSession.business() instead.
-            "prototype$__get__business": {
-              url: urlBase + "/ClientSessions/:id/business",
-              method: "GET",
+            prototype$__get__business: {
+              url: urlBase + '/ClientSessions/:id/business',
+              method: 'GET',
             },
 
             // INTERNAL. Use ClientSession.members() instead.
-            "prototype$__get__members": {
-              url: urlBase + "/ClientSessions/:id/members",
-              method: "GET",
+            prototype$__get__members: {
+              url: urlBase + '/ClientSessions/:id/members',
+              method: 'GET',
             },
 
             // INTERNAL. Use ClientSession.members.create() instead.
-            "prototype$__create__members": {
-              url: urlBase + "/ClientSessions/:id/members",
-              method: "POST",
+            prototype$__create__members: {
+              url: urlBase + '/ClientSessions/:id/members',
+              method: 'POST',
             },
 
             // INTERNAL. Use ClientSession.members.update() instead.
-            "prototype$__update__members": {
-              url: urlBase + "/ClientSessions/:id/members",
-              method: "PUT",
+            prototype$__update__members: {
+              url: urlBase + '/ClientSessions/:id/members',
+              method: 'PUT',
             },
 
             // INTERNAL. Use ClientSession.members.destroy() instead.
-            "prototype$__destroy__members": {
-              url: urlBase + "/ClientSessions/:id/members",
-              method: "DELETE",
+            prototype$__destroy__members: {
+              url: urlBase + '/ClientSessions/:id/members',
+              method: 'DELETE',
             },
 
             /**
@@ -21962,9 +21947,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `ClientSession` object.)
              * </em>
              */
-            "create": {
-              url: urlBase + "/ClientSessions",
-              method: "POST",
+            create: {
+              url: urlBase + '/ClientSessions',
+              method: 'POST',
             },
 
             /**
@@ -22002,10 +21987,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `ClientSession` object.)
              * </em>
              */
-            "createMany": {
+            createMany: {
               isArray: true,
-              url: urlBase + "/ClientSessions",
-              method: "POST",
+              url: urlBase + '/ClientSessions',
+              method: 'POST',
             },
 
             /**
@@ -22043,9 +22028,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `ClientSession` object.)
              * </em>
              */
-            "patchOrCreate": {
-              url: urlBase + "/ClientSessions",
-              method: "PUT",
+            patchOrCreate: {
+              url: urlBase + '/ClientSessions',
+              method: 'PUT',
             },
 
             /**
@@ -22083,9 +22068,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `ClientSession` object.)
              * </em>
              */
-            "replaceOrCreate": {
-              url: urlBase + "/ClientSessions/replaceOrCreate",
-              method: "POST",
+            replaceOrCreate: {
+              url: urlBase + '/ClientSessions/replaceOrCreate',
+              method: 'POST',
             },
 
             /**
@@ -22122,9 +22107,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `ClientSession` object.)
              * </em>
              */
-            "upsertWithWhere": {
-              url: urlBase + "/ClientSessions/upsertWithWhere",
-              method: "POST",
+            upsertWithWhere: {
+              url: urlBase + '/ClientSessions/upsertWithWhere',
+              method: 'POST',
             },
 
             /**
@@ -22156,9 +22141,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `exists` – `{boolean=}` -
              */
-            "exists": {
-              url: urlBase + "/ClientSessions/:id/exists",
-              method: "GET",
+            exists: {
+              url: urlBase + '/ClientSessions/:id/exists',
+              method: 'GET',
             },
 
             /**
@@ -22193,9 +22178,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `ClientSession` object.)
              * </em>
              */
-            "findById": {
-              url: urlBase + "/ClientSessions/:id",
-              method: "GET",
+            findById: {
+              url: urlBase + '/ClientSessions/:id',
+              method: 'GET',
             },
 
             /**
@@ -22232,9 +22217,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `ClientSession` object.)
              * </em>
              */
-            "replaceById": {
-              url: urlBase + "/ClientSessions/:id/replace",
-              method: "POST",
+            replaceById: {
+              url: urlBase + '/ClientSessions/:id/replace',
+              method: 'POST',
             },
 
             /**
@@ -22267,10 +22252,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `ClientSession` object.)
              * </em>
              */
-            "find": {
+            find: {
               isArray: true,
-              url: urlBase + "/ClientSessions",
-              method: "GET",
+              url: urlBase + '/ClientSessions',
+              method: 'GET',
             },
 
             /**
@@ -22303,9 +22288,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `ClientSession` object.)
              * </em>
              */
-            "findOne": {
-              url: urlBase + "/ClientSessions/findOne",
-              method: "GET",
+            findOne: {
+              url: urlBase + '/ClientSessions/findOne',
+              method: 'GET',
             },
 
             /**
@@ -22339,9 +22324,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-            "updateAll": {
-              url: urlBase + "/ClientSessions/update",
-              method: "POST",
+            updateAll: {
+              url: urlBase + '/ClientSessions/update',
+              method: 'POST',
             },
 
             /**
@@ -22374,9 +22359,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `ClientSession` object.)
              * </em>
              */
-            "deleteById": {
-              url: urlBase + "/ClientSessions/:id",
-              method: "DELETE",
+            deleteById: {
+              url: urlBase + '/ClientSessions/:id',
+              method: 'DELETE',
             },
 
             /**
@@ -22408,9 +22393,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `count` – `{number=}` -
              */
-            "count": {
-              url: urlBase + "/ClientSessions/count",
-              method: "GET",
+            count: {
+              url: urlBase + '/ClientSessions/count',
+              method: 'GET',
             },
 
             /**
@@ -22449,9 +22434,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `ClientSession` object.)
              * </em>
              */
-            "prototype$patchAttributes": {
-              url: urlBase + "/ClientSessions/:id",
-              method: "PUT",
+            prototype$patchAttributes: {
+              url: urlBase + '/ClientSessions/:id',
+              method: 'PUT',
             },
 
             /**
@@ -22486,9 +22471,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `changes` – `{ReadableStream=}` -
              */
-            "createChangeStream": {
-              url: urlBase + "/ClientSessions/change-stream",
-              method: "POST",
+            createChangeStream: {
+              url: urlBase + '/ClientSessions/change-stream',
+              method: 'POST',
             },
 
             /**
@@ -22529,9 +22514,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `result` – `{Object=}` -
              */
-            "getOnlineUsers": {
-              url: urlBase + "/ClientSessions/getOnlineUsers",
-              method: "POST",
+            getOnlineUsers: {
+              url: urlBase + '/ClientSessions/getOnlineUsers',
+              method: 'POST',
             },
 
             /**
@@ -22567,9 +22552,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `ClientSession` object.)
              * </em>
              */
-            "getOnlineSessionCount": {
-              url: urlBase + "/ClientSessions/getOnlineSessionCount",
-              method: "POST",
+            getOnlineSessionCount: {
+              url: urlBase + '/ClientSessions/getOnlineSessionCount',
+              method: 'POST',
             },
 
             /**
@@ -22607,16 +22592,15 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `ClientSession` object.)
              * </em>
              */
-            "killOnlineSession": {
-              url: urlBase + "/ClientSessions/killOnlineSession",
-              method: "POST",
+            killOnlineSession: {
+              url: urlBase + '/ClientSessions/killOnlineSession',
+              method: 'POST',
             },
           }
         );
 
 
-
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.ClientSession#upsert
              * @methodOf lbServices.ClientSession
@@ -22651,9 +22635,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `ClientSession` object.)
              * </em>
              */
-        R["upsert"] = R["patchOrCreate"];
+        R['upsert'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.ClientSession#updateOrCreate
              * @methodOf lbServices.ClientSession
@@ -22688,9 +22672,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `ClientSession` object.)
              * </em>
              */
-        R["updateOrCreate"] = R["patchOrCreate"];
+        R['updateOrCreate'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.ClientSession#patchOrCreateWithWhere
              * @methodOf lbServices.ClientSession
@@ -22724,9 +22708,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `ClientSession` object.)
              * </em>
              */
-        R["patchOrCreateWithWhere"] = R["upsertWithWhere"];
+        R['patchOrCreateWithWhere'] = R['upsertWithWhere'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.ClientSession#update
              * @methodOf lbServices.ClientSession
@@ -22757,9 +22741,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-        R["update"] = R["updateAll"];
+        R['update'] = R['updateAll'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.ClientSession#destroyById
              * @methodOf lbServices.ClientSession
@@ -22789,9 +22773,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `ClientSession` object.)
              * </em>
              */
-        R["destroyById"] = R["deleteById"];
+        R['destroyById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.ClientSession#removeById
              * @methodOf lbServices.ClientSession
@@ -22821,9 +22805,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `ClientSession` object.)
              * </em>
              */
-        R["removeById"] = R["deleteById"];
+        R['removeById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.ClientSession#updateAttributes
              * @methodOf lbServices.ClientSession
@@ -22859,7 +22843,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `ClientSession` object.)
              * </em>
              */
-        R["updateAttributes"] = R["prototype$patchAttributes"];
+        R['updateAttributes'] = R['prototype$patchAttributes'];
 
 
         /**
@@ -22870,10 +22854,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         * The name of the model represented by this $resource,
         * i.e. `ClientSession`.
         */
-        R.modelName = "ClientSession";
+        R.modelName = 'ClientSession';
 
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.ClientSession#business
              * @methodOf lbServices.ClientSession
@@ -22908,11 +22892,11 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.business = function() {
-          var TargetResource = $injector.get("Business");
-          var action = TargetResource["::get::ClientSession::business"];
+          var TargetResource = $injector.get('Business');
+          var action = TargetResource['::get::ClientSession::business'];
           return action.apply(R, arguments);
         };
-    /**
+        /**
      * @ngdoc object
      * @name lbServices.ClientSession.members
      * @header lbServices.ClientSession.members
@@ -22927,7 +22911,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
      */
 
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.ClientSession#members
              * @methodOf lbServices.ClientSession
@@ -22962,12 +22946,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.members = function() {
-          var TargetResource = $injector.get("Member");
-          var action = TargetResource["::get::ClientSession::members"];
+          var TargetResource = $injector.get('Member');
+          var action = TargetResource['::get::ClientSession::members'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.ClientSession.members#create
              * @methodOf lbServices.ClientSession.members
@@ -23004,12 +22988,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.members.create = function() {
-          var TargetResource = $injector.get("Member");
-          var action = TargetResource["::create::ClientSession::members"];
+          var TargetResource = $injector.get('Member');
+          var action = TargetResource['::create::ClientSession::members'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.ClientSession.members#createMany
              * @methodOf lbServices.ClientSession.members
@@ -23046,12 +23030,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.members.createMany = function() {
-          var TargetResource = $injector.get("Member");
-          var action = TargetResource["::createMany::ClientSession::members"];
+          var TargetResource = $injector.get('Member');
+          var action = TargetResource['::createMany::ClientSession::members'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.ClientSession.members#destroy
              * @methodOf lbServices.ClientSession.members
@@ -23081,12 +23065,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.members.destroy = function() {
-          var TargetResource = $injector.get("Member");
-          var action = TargetResource["::destroy::ClientSession::members"];
+          var TargetResource = $injector.get('Member');
+          var action = TargetResource['::destroy::ClientSession::members'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.ClientSession.members#update
              * @methodOf lbServices.ClientSession.members
@@ -23123,8 +23107,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.members.update = function() {
-          var TargetResource = $injector.get("Member");
-          var action = TargetResource["::update::ClientSession::members"];
+          var TargetResource = $injector.get('Member');
+          var action = TargetResource['::update::ClientSession::members'];
           return action.apply(R, arguments);
         };
 
@@ -23132,7 +23116,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         return R;
       }]);
 
-/**
+  /**
  * @ngdoc object
  * @name lbServices.FileStorage
  * @header lbServices.FileStorage
@@ -23150,19 +23134,19 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
  *
  */
   module.factory(
-    "FileStorage",
+    'FileStorage',
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
         var R = Resource(
-        urlBase + "/FileStorages/:id",
-          { 'id': '@id' },
+          urlBase + '/FileStorages/:id',
+          { id: '@id' },
           {
 
             // INTERNAL. Use FileStorage.business() instead.
-            "prototype$__get__business": {
-              url: urlBase + "/FileStorages/:id/business",
-              method: "GET",
+            prototype$__get__business: {
+              url: urlBase + '/FileStorages/:id/business',
+              method: 'GET',
             },
 
             /**
@@ -23200,9 +23184,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `FileStorage` object.)
              * </em>
              */
-            "create": {
-              url: urlBase + "/FileStorages",
-              method: "POST",
+            create: {
+              url: urlBase + '/FileStorages',
+              method: 'POST',
             },
 
             /**
@@ -23240,10 +23224,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `FileStorage` object.)
              * </em>
              */
-            "createMany": {
+            createMany: {
               isArray: true,
-              url: urlBase + "/FileStorages",
-              method: "POST",
+              url: urlBase + '/FileStorages',
+              method: 'POST',
             },
 
             /**
@@ -23276,9 +23260,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `FileStorage` object.)
              * </em>
              */
-            "patchOrCreate": {
-              url: urlBase + "/FileStorages",
-              method: "PATCH",
+            patchOrCreate: {
+              url: urlBase + '/FileStorages',
+              method: 'PATCH',
             },
 
             /**
@@ -23316,9 +23300,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `FileStorage` object.)
              * </em>
              */
-            "replaceOrCreate": {
-              url: urlBase + "/FileStorages/replaceOrCreate",
-              method: "POST",
+            replaceOrCreate: {
+              url: urlBase + '/FileStorages/replaceOrCreate',
+              method: 'POST',
             },
 
             /**
@@ -23355,9 +23339,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `FileStorage` object.)
              * </em>
              */
-            "upsertWithWhere": {
-              url: urlBase + "/FileStorages/upsertWithWhere",
-              method: "POST",
+            upsertWithWhere: {
+              url: urlBase + '/FileStorages/upsertWithWhere',
+              method: 'POST',
             },
 
             /**
@@ -23389,9 +23373,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `exists` – `{boolean=}` -
              */
-            "exists": {
-              url: urlBase + "/FileStorages/:id/exists",
-              method: "GET",
+            exists: {
+              url: urlBase + '/FileStorages/:id/exists',
+              method: 'GET',
             },
 
             /**
@@ -23426,9 +23410,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `FileStorage` object.)
              * </em>
              */
-            "findById": {
-              url: urlBase + "/FileStorages/:id",
-              method: "GET",
+            findById: {
+              url: urlBase + '/FileStorages/:id',
+              method: 'GET',
             },
 
             /**
@@ -23465,9 +23449,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `FileStorage` object.)
              * </em>
              */
-            "replaceById": {
-              url: urlBase + "/FileStorages/:id/replace",
-              method: "POST",
+            replaceById: {
+              url: urlBase + '/FileStorages/:id/replace',
+              method: 'POST',
             },
 
             /**
@@ -23500,10 +23484,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `FileStorage` object.)
              * </em>
              */
-            "find": {
+            find: {
               isArray: true,
-              url: urlBase + "/FileStorages",
-              method: "GET",
+              url: urlBase + '/FileStorages',
+              method: 'GET',
             },
 
             /**
@@ -23536,9 +23520,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `FileStorage` object.)
              * </em>
              */
-            "findOne": {
-              url: urlBase + "/FileStorages/findOne",
-              method: "GET",
+            findOne: {
+              url: urlBase + '/FileStorages/findOne',
+              method: 'GET',
             },
 
             /**
@@ -23572,9 +23556,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-            "updateAll": {
-              url: urlBase + "/FileStorages/update",
-              method: "POST",
+            updateAll: {
+              url: urlBase + '/FileStorages/update',
+              method: 'POST',
             },
 
             /**
@@ -23607,9 +23591,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `FileStorage` object.)
              * </em>
              */
-            "deleteById": {
-              url: urlBase + "/FileStorages/:id",
-              method: "DELETE",
+            deleteById: {
+              url: urlBase + '/FileStorages/:id',
+              method: 'DELETE',
             },
 
             /**
@@ -23641,9 +23625,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `count` – `{number=}` -
              */
-            "count": {
-              url: urlBase + "/FileStorages/count",
-              method: "GET",
+            count: {
+              url: urlBase + '/FileStorages/count',
+              method: 'GET',
             },
 
             /**
@@ -23680,9 +23664,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `FileStorage` object.)
              * </em>
              */
-            "prototype$patchAttributes": {
-              url: urlBase + "/FileStorages/:id",
-              method: "PATCH",
+            prototype$patchAttributes: {
+              url: urlBase + '/FileStorages/:id',
+              method: 'PATCH',
             },
 
             /**
@@ -23717,9 +23701,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `changes` – `{ReadableStream=}` -
              */
-            "createChangeStream": {
-              url: urlBase + "/FileStorages/change-stream",
-              method: "POST",
+            createChangeStream: {
+              url: urlBase + '/FileStorages/change-stream',
+              method: 'POST',
             },
 
             /**
@@ -23756,47 +23740,46 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `result` – `{*=}` -
              */
-            "getFilesByBusinessId": {
-              url: urlBase + "/FileStorages/getFilesByBusinessId",
-              method: "POST",
+            getFilesByBusinessId: {
+              url: urlBase + '/FileStorages/getFilesByBusinessId',
+              method: 'POST',
             },
 
             // INTERNAL. Use Report.fileStorage() instead.
-            "::get::Report::fileStorage": {
-              url: urlBase + "/Reports/:id/fileStorage",
-              method: "GET",
+            '::get::Report::fileStorage': {
+              url: urlBase + '/Reports/:id/fileStorage',
+              method: 'GET',
             },
 
             // INTERNAL. Use Report.fileStorage.create() instead.
-            "::create::Report::fileStorage": {
-              url: urlBase + "/Reports/:id/fileStorage",
-              method: "POST",
+            '::create::Report::fileStorage': {
+              url: urlBase + '/Reports/:id/fileStorage',
+              method: 'POST',
             },
 
             // INTERNAL. Use Report.fileStorage.createMany() instead.
-            "::createMany::Report::fileStorage": {
+            '::createMany::Report::fileStorage': {
               isArray: true,
-              url: urlBase + "/Reports/:id/fileStorage",
-              method: "POST",
+              url: urlBase + '/Reports/:id/fileStorage',
+              method: 'POST',
             },
 
             // INTERNAL. Use Report.fileStorage.update() instead.
-            "::update::Report::fileStorage": {
-              url: urlBase + "/Reports/:id/fileStorage",
-              method: "PUT",
+            '::update::Report::fileStorage': {
+              url: urlBase + '/Reports/:id/fileStorage',
+              method: 'PUT',
             },
 
             // INTERNAL. Use Report.fileStorage.destroy() instead.
-            "::destroy::Report::fileStorage": {
-              url: urlBase + "/Reports/:id/fileStorage",
-              method: "DELETE",
+            '::destroy::Report::fileStorage': {
+              url: urlBase + '/Reports/:id/fileStorage',
+              method: 'DELETE',
             },
           }
         );
 
 
-
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.FileStorage#upsert
              * @methodOf lbServices.FileStorage
@@ -23826,9 +23809,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `FileStorage` object.)
              * </em>
              */
-        R["upsert"] = R["patchOrCreate"];
+        R['upsert'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.FileStorage#updateOrCreate
              * @methodOf lbServices.FileStorage
@@ -23858,9 +23841,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `FileStorage` object.)
              * </em>
              */
-        R["updateOrCreate"] = R["patchOrCreate"];
+        R['updateOrCreate'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.FileStorage#patchOrCreateWithWhere
              * @methodOf lbServices.FileStorage
@@ -23894,9 +23877,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `FileStorage` object.)
              * </em>
              */
-        R["patchOrCreateWithWhere"] = R["upsertWithWhere"];
+        R['patchOrCreateWithWhere'] = R['upsertWithWhere'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.FileStorage#update
              * @methodOf lbServices.FileStorage
@@ -23927,9 +23910,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-        R["update"] = R["updateAll"];
+        R['update'] = R['updateAll'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.FileStorage#destroyById
              * @methodOf lbServices.FileStorage
@@ -23959,9 +23942,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `FileStorage` object.)
              * </em>
              */
-        R["destroyById"] = R["deleteById"];
+        R['destroyById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.FileStorage#removeById
              * @methodOf lbServices.FileStorage
@@ -23991,9 +23974,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `FileStorage` object.)
              * </em>
              */
-        R["removeById"] = R["deleteById"];
+        R['removeById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.FileStorage#updateAttributes
              * @methodOf lbServices.FileStorage
@@ -24027,7 +24010,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `FileStorage` object.)
              * </em>
              */
-        R["updateAttributes"] = R["prototype$patchAttributes"];
+        R['updateAttributes'] = R['prototype$patchAttributes'];
 
 
         /**
@@ -24038,10 +24021,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         * The name of the model represented by this $resource,
         * i.e. `FileStorage`.
         */
-        R.modelName = "FileStorage";
+        R.modelName = 'FileStorage';
 
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.FileStorage#business
              * @methodOf lbServices.FileStorage
@@ -24076,8 +24059,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.business = function() {
-          var TargetResource = $injector.get("Business");
-          var action = TargetResource["::get::FileStorage::business"];
+          var TargetResource = $injector.get('Business');
+          var action = TargetResource['::get::FileStorage::business'];
           return action.apply(R, arguments);
         };
 
@@ -24085,7 +24068,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         return R;
       }]);
 
-/**
+  /**
  * @ngdoc object
  * @name lbServices.Theme
  * @header lbServices.Theme
@@ -24103,13 +24086,13 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
  *
  */
   module.factory(
-    "Theme",
+    'Theme',
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
         var R = Resource(
-        urlBase + "/Themes/:id",
-          { 'id': '@id' },
+          urlBase + '/Themes/:id',
+          { id: '@id' },
           {
 
             /**
@@ -24147,9 +24130,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Theme` object.)
              * </em>
              */
-            "create": {
-              url: urlBase + "/Themes",
-              method: "POST",
+            create: {
+              url: urlBase + '/Themes',
+              method: 'POST',
             },
 
             /**
@@ -24187,10 +24170,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Theme` object.)
              * </em>
              */
-            "createMany": {
+            createMany: {
               isArray: true,
-              url: urlBase + "/Themes",
-              method: "POST",
+              url: urlBase + '/Themes',
+              method: 'POST',
             },
 
             /**
@@ -24228,9 +24211,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Theme` object.)
              * </em>
              */
-            "patchOrCreate": {
-              url: urlBase + "/Themes",
-              method: "PUT",
+            patchOrCreate: {
+              url: urlBase + '/Themes',
+              method: 'PUT',
             },
 
             /**
@@ -24268,9 +24251,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Theme` object.)
              * </em>
              */
-            "replaceOrCreate": {
-              url: urlBase + "/Themes/replaceOrCreate",
-              method: "POST",
+            replaceOrCreate: {
+              url: urlBase + '/Themes/replaceOrCreate',
+              method: 'POST',
             },
 
             /**
@@ -24307,9 +24290,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Theme` object.)
              * </em>
              */
-            "upsertWithWhere": {
-              url: urlBase + "/Themes/upsertWithWhere",
-              method: "POST",
+            upsertWithWhere: {
+              url: urlBase + '/Themes/upsertWithWhere',
+              method: 'POST',
             },
 
             /**
@@ -24341,9 +24324,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `exists` – `{boolean=}` -
              */
-            "exists": {
-              url: urlBase + "/Themes/:id/exists",
-              method: "GET",
+            exists: {
+              url: urlBase + '/Themes/:id/exists',
+              method: 'GET',
             },
 
             /**
@@ -24378,9 +24361,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Theme` object.)
              * </em>
              */
-            "findById": {
-              url: urlBase + "/Themes/:id",
-              method: "GET",
+            findById: {
+              url: urlBase + '/Themes/:id',
+              method: 'GET',
             },
 
             /**
@@ -24417,9 +24400,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Theme` object.)
              * </em>
              */
-            "replaceById": {
-              url: urlBase + "/Themes/:id/replace",
-              method: "POST",
+            replaceById: {
+              url: urlBase + '/Themes/:id/replace',
+              method: 'POST',
             },
 
             /**
@@ -24452,10 +24435,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Theme` object.)
              * </em>
              */
-            "find": {
+            find: {
               isArray: true,
-              url: urlBase + "/Themes",
-              method: "GET",
+              url: urlBase + '/Themes',
+              method: 'GET',
             },
 
             /**
@@ -24488,9 +24471,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Theme` object.)
              * </em>
              */
-            "findOne": {
-              url: urlBase + "/Themes/findOne",
-              method: "GET",
+            findOne: {
+              url: urlBase + '/Themes/findOne',
+              method: 'GET',
             },
 
             /**
@@ -24524,9 +24507,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-            "updateAll": {
-              url: urlBase + "/Themes/update",
-              method: "POST",
+            updateAll: {
+              url: urlBase + '/Themes/update',
+              method: 'POST',
             },
 
             /**
@@ -24559,9 +24542,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Theme` object.)
              * </em>
              */
-            "deleteById": {
-              url: urlBase + "/Themes/:id",
-              method: "DELETE",
+            deleteById: {
+              url: urlBase + '/Themes/:id',
+              method: 'DELETE',
             },
 
             /**
@@ -24593,9 +24576,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `count` – `{number=}` -
              */
-            "count": {
-              url: urlBase + "/Themes/count",
-              method: "GET",
+            count: {
+              url: urlBase + '/Themes/count',
+              method: 'GET',
             },
 
             /**
@@ -24634,9 +24617,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Theme` object.)
              * </em>
              */
-            "prototype$patchAttributes": {
-              url: urlBase + "/Themes/:id",
-              method: "PUT",
+            prototype$patchAttributes: {
+              url: urlBase + '/Themes/:id',
+              method: 'PUT',
             },
 
             /**
@@ -24671,9 +24654,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `changes` – `{ReadableStream=}` -
              */
-            "createChangeStream": {
-              url: urlBase + "/Themes/change-stream",
-              method: "POST",
+            createChangeStream: {
+              url: urlBase + '/Themes/change-stream',
+              method: 'POST',
             },
 
             /**
@@ -24709,16 +24692,15 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Theme` object.)
              * </em>
              */
-            "loadHotspotThemes": {
-              url: urlBase + "/Themes/loadHotspotThemes",
-              method: "POST",
+            loadHotspotThemes: {
+              url: urlBase + '/Themes/loadHotspotThemes',
+              method: 'POST',
             },
           }
         );
 
 
-
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Theme#upsert
              * @methodOf lbServices.Theme
@@ -24753,9 +24735,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Theme` object.)
              * </em>
              */
-        R["upsert"] = R["patchOrCreate"];
+        R['upsert'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Theme#updateOrCreate
              * @methodOf lbServices.Theme
@@ -24790,9 +24772,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Theme` object.)
              * </em>
              */
-        R["updateOrCreate"] = R["patchOrCreate"];
+        R['updateOrCreate'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Theme#patchOrCreateWithWhere
              * @methodOf lbServices.Theme
@@ -24826,9 +24808,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Theme` object.)
              * </em>
              */
-        R["patchOrCreateWithWhere"] = R["upsertWithWhere"];
+        R['patchOrCreateWithWhere'] = R['upsertWithWhere'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Theme#update
              * @methodOf lbServices.Theme
@@ -24859,9 +24841,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-        R["update"] = R["updateAll"];
+        R['update'] = R['updateAll'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Theme#destroyById
              * @methodOf lbServices.Theme
@@ -24891,9 +24873,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Theme` object.)
              * </em>
              */
-        R["destroyById"] = R["deleteById"];
+        R['destroyById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Theme#removeById
              * @methodOf lbServices.Theme
@@ -24923,9 +24905,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Theme` object.)
              * </em>
              */
-        R["removeById"] = R["deleteById"];
+        R['removeById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Theme#updateAttributes
              * @methodOf lbServices.Theme
@@ -24961,7 +24943,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Theme` object.)
              * </em>
              */
-        R["updateAttributes"] = R["prototype$patchAttributes"];
+        R['updateAttributes'] = R['prototype$patchAttributes'];
 
 
         /**
@@ -24972,14 +24954,13 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         * The name of the model represented by this $resource,
         * i.e. `Theme`.
         */
-        R.modelName = "Theme";
-
+        R.modelName = 'Theme';
 
 
         return R;
       }]);
 
-/**
+  /**
  * @ngdoc object
  * @name lbServices.Reseller
  * @header lbServices.Reseller
@@ -24997,13 +24978,13 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
  *
  */
   module.factory(
-    "Reseller",
+    'Reseller',
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
         var R = Resource(
-        urlBase + "/Resellers/:id",
-          { 'id': '@id' },
+          urlBase + '/Resellers/:id',
+          { id: '@id' },
           {
 
             /**
@@ -25040,12 +25021,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Reseller` object.)
              * </em>
              */
-            "prototype$__findById__accessTokens": {
+            prototype$__findById__accessTokens: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Resellers/:id/accessTokens/:fk",
-              method: "GET",
+              url: urlBase + '/Resellers/:id/accessTokens/:fk',
+              method: 'GET',
             },
 
             /**
@@ -25079,12 +25060,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * This method returns no data.
              */
-            "prototype$__destroyById__accessTokens": {
+            prototype$__destroyById__accessTokens: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Resellers/:id/accessTokens/:fk",
-              method: "DELETE",
+              url: urlBase + '/Resellers/:id/accessTokens/:fk',
+              method: 'DELETE',
             },
 
             /**
@@ -25125,66 +25106,66 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Reseller` object.)
              * </em>
              */
-            "prototype$__updateById__accessTokens": {
+            prototype$__updateById__accessTokens: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Resellers/:id/accessTokens/:fk",
-              method: "PUT",
+              url: urlBase + '/Resellers/:id/accessTokens/:fk',
+              method: 'PUT',
             },
 
             // INTERNAL. Use Reseller.businesses.findById() instead.
-            "prototype$__findById__businesses": {
+            prototype$__findById__businesses: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Resellers/:id/businesses/:fk",
-              method: "GET",
+              url: urlBase + '/Resellers/:id/businesses/:fk',
+              method: 'GET',
             },
 
             // INTERNAL. Use Reseller.businesses.destroyById() instead.
-            "prototype$__destroyById__businesses": {
+            prototype$__destroyById__businesses: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Resellers/:id/businesses/:fk",
-              method: "DELETE",
+              url: urlBase + '/Resellers/:id/businesses/:fk',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Reseller.businesses.updateById() instead.
-            "prototype$__updateById__businesses": {
+            prototype$__updateById__businesses: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Resellers/:id/businesses/:fk",
-              method: "PUT",
+              url: urlBase + '/Resellers/:id/businesses/:fk',
+              method: 'PUT',
             },
 
             // INTERNAL. Use Reseller.invoices.findById() instead.
-            "prototype$__findById__invoices": {
+            prototype$__findById__invoices: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Resellers/:id/invoices/:fk",
-              method: "GET",
+              url: urlBase + '/Resellers/:id/invoices/:fk',
+              method: 'GET',
             },
 
             // INTERNAL. Use Reseller.invoices.destroyById() instead.
-            "prototype$__destroyById__invoices": {
+            prototype$__destroyById__invoices: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Resellers/:id/invoices/:fk",
-              method: "DELETE",
+              url: urlBase + '/Resellers/:id/invoices/:fk',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Reseller.invoices.updateById() instead.
-            "prototype$__updateById__invoices": {
+            prototype$__updateById__invoices: {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Resellers/:id/invoices/:fk",
-              method: "PUT",
+              url: urlBase + '/Resellers/:id/invoices/:fk',
+              method: 'PUT',
             },
 
             /**
@@ -25221,10 +25202,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Reseller` object.)
              * </em>
              */
-            "prototype$__get__accessTokens": {
+            prototype$__get__accessTokens: {
               isArray: true,
-              url: urlBase + "/Resellers/:id/accessTokens",
-              method: "GET",
+              url: urlBase + '/Resellers/:id/accessTokens',
+              method: 'GET',
             },
 
             /**
@@ -25263,9 +25244,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Reseller` object.)
              * </em>
              */
-            "prototype$__create__accessTokens": {
-              url: urlBase + "/Resellers/:id/accessTokens",
-              method: "POST",
+            prototype$__create__accessTokens: {
+              url: urlBase + '/Resellers/:id/accessTokens',
+              method: 'POST',
             },
 
             /**
@@ -25299,9 +25280,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * This method returns no data.
              */
-            "prototype$__delete__accessTokens": {
-              url: urlBase + "/Resellers/:id/accessTokens",
-              method: "DELETE",
+            prototype$__delete__accessTokens: {
+              url: urlBase + '/Resellers/:id/accessTokens',
+              method: 'DELETE',
             },
 
             /**
@@ -25337,59 +25318,59 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `count` – `{number=}` -
              */
-            "prototype$__count__accessTokens": {
-              url: urlBase + "/Resellers/:id/accessTokens/count",
-              method: "GET",
+            prototype$__count__accessTokens: {
+              url: urlBase + '/Resellers/:id/accessTokens/count',
+              method: 'GET',
             },
 
             // INTERNAL. Use Reseller.businesses() instead.
-            "prototype$__get__businesses": {
+            prototype$__get__businesses: {
               isArray: true,
-              url: urlBase + "/Resellers/:id/businesses",
-              method: "GET",
+              url: urlBase + '/Resellers/:id/businesses',
+              method: 'GET',
             },
 
             // INTERNAL. Use Reseller.businesses.create() instead.
-            "prototype$__create__businesses": {
-              url: urlBase + "/Resellers/:id/businesses",
-              method: "POST",
+            prototype$__create__businesses: {
+              url: urlBase + '/Resellers/:id/businesses',
+              method: 'POST',
             },
 
             // INTERNAL. Use Reseller.businesses.destroyAll() instead.
-            "prototype$__delete__businesses": {
-              url: urlBase + "/Resellers/:id/businesses",
-              method: "DELETE",
+            prototype$__delete__businesses: {
+              url: urlBase + '/Resellers/:id/businesses',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Reseller.businesses.count() instead.
-            "prototype$__count__businesses": {
-              url: urlBase + "/Resellers/:id/businesses/count",
-              method: "GET",
+            prototype$__count__businesses: {
+              url: urlBase + '/Resellers/:id/businesses/count',
+              method: 'GET',
             },
 
             // INTERNAL. Use Reseller.invoices() instead.
-            "prototype$__get__invoices": {
+            prototype$__get__invoices: {
               isArray: true,
-              url: urlBase + "/Resellers/:id/invoices",
-              method: "GET",
+              url: urlBase + '/Resellers/:id/invoices',
+              method: 'GET',
             },
 
             // INTERNAL. Use Reseller.invoices.create() instead.
-            "prototype$__create__invoices": {
-              url: urlBase + "/Resellers/:id/invoices",
-              method: "POST",
+            prototype$__create__invoices: {
+              url: urlBase + '/Resellers/:id/invoices',
+              method: 'POST',
             },
 
             // INTERNAL. Use Reseller.invoices.destroyAll() instead.
-            "prototype$__delete__invoices": {
-              url: urlBase + "/Resellers/:id/invoices",
-              method: "DELETE",
+            prototype$__delete__invoices: {
+              url: urlBase + '/Resellers/:id/invoices',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Reseller.invoices.count() instead.
-            "prototype$__count__invoices": {
-              url: urlBase + "/Resellers/:id/invoices/count",
-              method: "GET",
+            prototype$__count__invoices: {
+              url: urlBase + '/Resellers/:id/invoices/count',
+              method: 'GET',
             },
 
             /**
@@ -25427,9 +25408,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Reseller` object.)
              * </em>
              */
-            "create": {
-              url: urlBase + "/Resellers",
-              method: "POST",
+            create: {
+              url: urlBase + '/Resellers',
+              method: 'POST',
             },
 
             /**
@@ -25467,10 +25448,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Reseller` object.)
              * </em>
              */
-            "createMany": {
+            createMany: {
               isArray: true,
-              url: urlBase + "/Resellers",
-              method: "POST",
+              url: urlBase + '/Resellers',
+              method: 'POST',
             },
 
             /**
@@ -25508,9 +25489,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Reseller` object.)
              * </em>
              */
-            "patchOrCreate": {
-              url: urlBase + "/Resellers",
-              method: "PUT",
+            patchOrCreate: {
+              url: urlBase + '/Resellers',
+              method: 'PUT',
             },
 
             /**
@@ -25548,9 +25529,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Reseller` object.)
              * </em>
              */
-            "replaceOrCreate": {
-              url: urlBase + "/Resellers/replaceOrCreate",
-              method: "POST",
+            replaceOrCreate: {
+              url: urlBase + '/Resellers/replaceOrCreate',
+              method: 'POST',
             },
 
             /**
@@ -25587,9 +25568,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Reseller` object.)
              * </em>
              */
-            "upsertWithWhere": {
-              url: urlBase + "/Resellers/upsertWithWhere",
-              method: "POST",
+            upsertWithWhere: {
+              url: urlBase + '/Resellers/upsertWithWhere',
+              method: 'POST',
             },
 
             /**
@@ -25621,9 +25602,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `exists` – `{boolean=}` -
              */
-            "exists": {
-              url: urlBase + "/Resellers/:id/exists",
-              method: "GET",
+            exists: {
+              url: urlBase + '/Resellers/:id/exists',
+              method: 'GET',
             },
 
             /**
@@ -25658,9 +25639,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Reseller` object.)
              * </em>
              */
-            "findById": {
-              url: urlBase + "/Resellers/:id",
-              method: "GET",
+            findById: {
+              url: urlBase + '/Resellers/:id',
+              method: 'GET',
             },
 
             /**
@@ -25697,9 +25678,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Reseller` object.)
              * </em>
              */
-            "replaceById": {
-              url: urlBase + "/Resellers/:id/replace",
-              method: "POST",
+            replaceById: {
+              url: urlBase + '/Resellers/:id/replace',
+              method: 'POST',
             },
 
             /**
@@ -25732,10 +25713,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Reseller` object.)
              * </em>
              */
-            "find": {
+            find: {
               isArray: true,
-              url: urlBase + "/Resellers",
-              method: "GET",
+              url: urlBase + '/Resellers',
+              method: 'GET',
             },
 
             /**
@@ -25768,9 +25749,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Reseller` object.)
              * </em>
              */
-            "findOne": {
-              url: urlBase + "/Resellers/findOne",
-              method: "GET",
+            findOne: {
+              url: urlBase + '/Resellers/findOne',
+              method: 'GET',
             },
 
             /**
@@ -25804,9 +25785,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-            "updateAll": {
-              url: urlBase + "/Resellers/update",
-              method: "POST",
+            updateAll: {
+              url: urlBase + '/Resellers/update',
+              method: 'POST',
             },
 
             /**
@@ -25839,9 +25820,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Reseller` object.)
              * </em>
              */
-            "deleteById": {
-              url: urlBase + "/Resellers/:id",
-              method: "DELETE",
+            deleteById: {
+              url: urlBase + '/Resellers/:id',
+              method: 'DELETE',
             },
 
             /**
@@ -25873,9 +25854,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `count` – `{number=}` -
              */
-            "count": {
-              url: urlBase + "/Resellers/count",
-              method: "GET",
+            count: {
+              url: urlBase + '/Resellers/count',
+              method: 'GET',
             },
 
             /**
@@ -25914,9 +25895,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Reseller` object.)
              * </em>
              */
-            "prototype$patchAttributes": {
-              url: urlBase + "/Resellers/:id",
-              method: "PUT",
+            prototype$patchAttributes: {
+              url: urlBase + '/Resellers/:id',
+              method: 'PUT',
             },
 
             /**
@@ -25951,9 +25932,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `changes` – `{ReadableStream=}` -
              */
-            "createChangeStream": {
-              url: urlBase + "/Resellers/change-stream",
-              method: "POST",
+            createChangeStream: {
+              url: urlBase + '/Resellers/change-stream',
+              method: 'POST',
             },
 
             /**
@@ -25993,7 +25974,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *   - `user` - `U+007BUserU+007D` - Data of the currently logged in user. (`include=user`)
              *
              */
-            "login": {
+            login: {
               params: {
                 include: 'user',
               },
@@ -26008,8 +25989,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
                   return response.resource;
                 },
               },
-              url: urlBase + "/Resellers/login",
-              method: "POST",
+              url: urlBase + '/Resellers/login',
+              method: 'POST',
             },
 
             /**
@@ -26042,7 +26023,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * This method returns no data.
              */
-            "logout": {
+            logout: {
               interceptor: {
                 response: function(response) {
                   LoopBackAuth.clearUser();
@@ -26055,8 +26036,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
                   return responseError.resource;
                 },
               },
-              url: urlBase + "/Resellers/logout",
-              method: "POST",
+              url: urlBase + '/Resellers/logout',
+              method: 'POST',
             },
 
             /**
@@ -26092,9 +26073,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * This method returns no data.
              */
-            "prototype$verify": {
-              url: urlBase + "/Resellers/:id/verify",
-              method: "POST",
+            prototype$verify: {
+              url: urlBase + '/Resellers/:id/verify',
+              method: 'POST',
             },
 
             /**
@@ -26126,9 +26107,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * This method returns no data.
              */
-            "confirm": {
-              url: urlBase + "/Resellers/confirm",
-              method: "GET",
+            confirm: {
+              url: urlBase + '/Resellers/confirm',
+              method: 'GET',
             },
 
             /**
@@ -26161,9 +26142,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * This method returns no data.
              */
-            "resetPassword": {
-              url: urlBase + "/Resellers/reset",
-              method: "POST",
+            resetPassword: {
+              url: urlBase + '/Resellers/reset',
+              method: 'POST',
             },
 
             /**
@@ -26202,9 +26183,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * This method returns no data.
              */
-            "changePassword": {
-              url: urlBase + "/Resellers/change-password",
-              method: "POST",
+            changePassword: {
+              url: urlBase + '/Resellers/change-password',
+              method: 'POST',
             },
 
             /**
@@ -26241,9 +26222,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * This method returns no data.
              */
-            "setPassword": {
-              url: urlBase + "/Resellers/reset-password",
-              method: "POST",
+            setPassword: {
+              url: urlBase + '/Resellers/reset-password',
+              method: 'POST',
             },
 
             /**
@@ -26279,9 +26260,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Reseller` object.)
              * </em>
              */
-            "getBalance": {
-              url: urlBase + "/Resellers/getBalance",
-              method: "POST",
+            getBalance: {
+              url: urlBase + '/Resellers/getBalance',
+              method: 'POST',
             },
 
             /**
@@ -26317,9 +26298,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Reseller` object.)
              * </em>
              */
-            "loadBusiness": {
-              url: urlBase + "/Resellers/loadBusiness",
-              method: "POST",
+            loadBusiness: {
+              url: urlBase + '/Resellers/loadBusiness',
+              method: 'POST',
             },
 
             /**
@@ -26355,9 +26336,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Reseller` object.)
              * </em>
              */
-            "createBusiness": {
-              url: urlBase + "/Resellers/createBusiness",
-              method: "POST",
+            createBusiness: {
+              url: urlBase + '/Resellers/createBusiness',
+              method: 'POST',
             },
 
             /**
@@ -26395,9 +26376,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Reseller` object.)
              * </em>
              */
-            "assignBusinessToReseller": {
-              url: urlBase + "/Resellers/assignBusinessToReseller",
-              method: "POST",
+            assignBusinessToReseller: {
+              url: urlBase + '/Resellers/assignBusinessToReseller',
+              method: 'POST',
             },
 
             /**
@@ -26435,9 +26416,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Reseller` object.)
              * </em>
              */
-            "findBusiness": {
-              url: urlBase + "/Resellers/findBusiness",
-              method: "POST",
+            findBusiness: {
+              url: urlBase + '/Resellers/findBusiness',
+              method: 'POST',
             },
 
             /**
@@ -26473,9 +26454,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Reseller` object.)
              * </em>
              */
-            "updateBusiness": {
-              url: urlBase + "/Resellers/updateBusiness",
-              method: "POST",
+            updateBusiness: {
+              url: urlBase + '/Resellers/updateBusiness',
+              method: 'POST',
             },
 
             /**
@@ -26513,9 +26494,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Reseller` object.)
              * </em>
              */
-            "removeBusiness": {
-              url: urlBase + "/Resellers/removeBusiness",
-              method: "POST",
+            removeBusiness: {
+              url: urlBase + '/Resellers/removeBusiness',
+              method: 'POST',
             },
 
             /**
@@ -26553,46 +26534,46 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Reseller` object.)
              * </em>
              */
-            "countResellersActiveUsers": {
-              url: urlBase + "/Resellers/countResellersActiveUsers",
-              method: "POST",
+            countResellersActiveUsers: {
+              url: urlBase + '/Resellers/countResellersActiveUsers',
+              method: 'POST',
             },
 
             // INTERNAL. Use Business.resellers() instead.
-            "::get::Business::resellers": {
-              url: urlBase + "/Businesses/:id/resellers",
-              method: "GET",
+            '::get::Business::resellers': {
+              url: urlBase + '/Businesses/:id/resellers',
+              method: 'GET',
             },
 
             // INTERNAL. Use Business.resellers.create() instead.
-            "::create::Business::resellers": {
-              url: urlBase + "/Businesses/:id/resellers",
-              method: "POST",
+            '::create::Business::resellers': {
+              url: urlBase + '/Businesses/:id/resellers',
+              method: 'POST',
             },
 
             // INTERNAL. Use Business.resellers.createMany() instead.
-            "::createMany::Business::resellers": {
+            '::createMany::Business::resellers': {
               isArray: true,
-              url: urlBase + "/Businesses/:id/resellers",
-              method: "POST",
+              url: urlBase + '/Businesses/:id/resellers',
+              method: 'POST',
             },
 
             // INTERNAL. Use Business.resellers.update() instead.
-            "::update::Business::resellers": {
-              url: urlBase + "/Businesses/:id/resellers",
-              method: "PUT",
+            '::update::Business::resellers': {
+              url: urlBase + '/Businesses/:id/resellers',
+              method: 'PUT',
             },
 
             // INTERNAL. Use Business.resellers.destroy() instead.
-            "::destroy::Business::resellers": {
-              url: urlBase + "/Businesses/:id/resellers",
-              method: "DELETE",
+            '::destroy::Business::resellers': {
+              url: urlBase + '/Businesses/:id/resellers',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Invoice.reseller() instead.
-            "::get::Invoice::reseller": {
-              url: urlBase + "/Invoices/:id/reseller",
-              method: "GET",
+            '::get::Invoice::reseller': {
+              url: urlBase + '/Invoices/:id/reseller',
+              method: 'GET',
             },
 
             /**
@@ -26615,8 +26596,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *   populated with the actual data once the response is returned
              *   from the server.
              */
-            'getCurrent': {
-              url: urlBase + "/Resellers" + '/:id',
+            getCurrent: {
+              url: urlBase + '/Resellers' + '/:id',
               method: 'GET',
               params: {
                 id: function() {
@@ -26637,8 +26618,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         );
 
 
-
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Reseller#upsert
              * @methodOf lbServices.Reseller
@@ -26673,9 +26653,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Reseller` object.)
              * </em>
              */
-        R["upsert"] = R["patchOrCreate"];
+        R['upsert'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Reseller#updateOrCreate
              * @methodOf lbServices.Reseller
@@ -26710,9 +26690,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Reseller` object.)
              * </em>
              */
-        R["updateOrCreate"] = R["patchOrCreate"];
+        R['updateOrCreate'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Reseller#patchOrCreateWithWhere
              * @methodOf lbServices.Reseller
@@ -26746,9 +26726,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Reseller` object.)
              * </em>
              */
-        R["patchOrCreateWithWhere"] = R["upsertWithWhere"];
+        R['patchOrCreateWithWhere'] = R['upsertWithWhere'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Reseller#update
              * @methodOf lbServices.Reseller
@@ -26779,9 +26759,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-        R["update"] = R["updateAll"];
+        R['update'] = R['updateAll'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Reseller#destroyById
              * @methodOf lbServices.Reseller
@@ -26811,9 +26791,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Reseller` object.)
              * </em>
              */
-        R["destroyById"] = R["deleteById"];
+        R['destroyById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Reseller#removeById
              * @methodOf lbServices.Reseller
@@ -26843,9 +26823,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Reseller` object.)
              * </em>
              */
-        R["removeById"] = R["deleteById"];
+        R['removeById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Reseller#updateAttributes
              * @methodOf lbServices.Reseller
@@ -26881,7 +26861,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Reseller` object.)
              * </em>
              */
-        R["updateAttributes"] = R["prototype$patchAttributes"];
+        R['updateAttributes'] = R['prototype$patchAttributes'];
 
         /**
          * @ngdoc method
@@ -26933,9 +26913,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         * The name of the model represented by this $resource,
         * i.e. `Reseller`.
         */
-        R.modelName = "Reseller";
+        R.modelName = 'Reseller';
 
-    /**
+        /**
      * @ngdoc object
      * @name lbServices.Reseller.businesses
      * @header lbServices.Reseller.businesses
@@ -26950,7 +26930,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
      */
 
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Reseller#businesses
              * @methodOf lbServices.Reseller
@@ -26985,12 +26965,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.businesses = function() {
-          var TargetResource = $injector.get("Business");
-          var action = TargetResource["::get::Reseller::businesses"];
+          var TargetResource = $injector.get('Business');
+          var action = TargetResource['::get::Reseller::businesses'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Reseller.businesses#count
              * @methodOf lbServices.Reseller.businesses
@@ -27024,12 +27004,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *  - `count` – `{number=}` -
              */
         R.businesses.count = function() {
-          var TargetResource = $injector.get("Business");
-          var action = TargetResource["::count::Reseller::businesses"];
+          var TargetResource = $injector.get('Business');
+          var action = TargetResource['::count::Reseller::businesses'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Reseller.businesses#create
              * @methodOf lbServices.Reseller.businesses
@@ -27066,12 +27046,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.businesses.create = function() {
-          var TargetResource = $injector.get("Business");
-          var action = TargetResource["::create::Reseller::businesses"];
+          var TargetResource = $injector.get('Business');
+          var action = TargetResource['::create::Reseller::businesses'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Reseller.businesses#createMany
              * @methodOf lbServices.Reseller.businesses
@@ -27108,12 +27088,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.businesses.createMany = function() {
-          var TargetResource = $injector.get("Business");
-          var action = TargetResource["::createMany::Reseller::businesses"];
+          var TargetResource = $injector.get('Business');
+          var action = TargetResource['::createMany::Reseller::businesses'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Reseller.businesses#destroyAll
              * @methodOf lbServices.Reseller.businesses
@@ -27145,12 +27125,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.businesses.destroyAll = function() {
-          var TargetResource = $injector.get("Business");
-          var action = TargetResource["::delete::Reseller::businesses"];
+          var TargetResource = $injector.get('Business');
+          var action = TargetResource['::delete::Reseller::businesses'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Reseller.businesses#destroyById
              * @methodOf lbServices.Reseller.businesses
@@ -27182,12 +27162,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.businesses.destroyById = function() {
-          var TargetResource = $injector.get("Business");
-          var action = TargetResource["::destroyById::Reseller::businesses"];
+          var TargetResource = $injector.get('Business');
+          var action = TargetResource['::destroyById::Reseller::businesses'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Reseller.businesses#findById
              * @methodOf lbServices.Reseller.businesses
@@ -27222,12 +27202,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.businesses.findById = function() {
-          var TargetResource = $injector.get("Business");
-          var action = TargetResource["::findById::Reseller::businesses"];
+          var TargetResource = $injector.get('Business');
+          var action = TargetResource['::findById::Reseller::businesses'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Reseller.businesses#updateById
              * @methodOf lbServices.Reseller.businesses
@@ -27266,11 +27246,11 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.businesses.updateById = function() {
-          var TargetResource = $injector.get("Business");
-          var action = TargetResource["::updateById::Reseller::businesses"];
+          var TargetResource = $injector.get('Business');
+          var action = TargetResource['::updateById::Reseller::businesses'];
           return action.apply(R, arguments);
         };
-    /**
+        /**
      * @ngdoc object
      * @name lbServices.Reseller.invoices
      * @header lbServices.Reseller.invoices
@@ -27285,7 +27265,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
      */
 
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Reseller#invoices
              * @methodOf lbServices.Reseller
@@ -27320,12 +27300,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.invoices = function() {
-          var TargetResource = $injector.get("Invoice");
-          var action = TargetResource["::get::Reseller::invoices"];
+          var TargetResource = $injector.get('Invoice');
+          var action = TargetResource['::get::Reseller::invoices'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Reseller.invoices#count
              * @methodOf lbServices.Reseller.invoices
@@ -27359,12 +27339,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *  - `count` – `{number=}` -
              */
         R.invoices.count = function() {
-          var TargetResource = $injector.get("Invoice");
-          var action = TargetResource["::count::Reseller::invoices"];
+          var TargetResource = $injector.get('Invoice');
+          var action = TargetResource['::count::Reseller::invoices'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Reseller.invoices#create
              * @methodOf lbServices.Reseller.invoices
@@ -27401,12 +27381,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.invoices.create = function() {
-          var TargetResource = $injector.get("Invoice");
-          var action = TargetResource["::create::Reseller::invoices"];
+          var TargetResource = $injector.get('Invoice');
+          var action = TargetResource['::create::Reseller::invoices'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Reseller.invoices#createMany
              * @methodOf lbServices.Reseller.invoices
@@ -27443,12 +27423,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.invoices.createMany = function() {
-          var TargetResource = $injector.get("Invoice");
-          var action = TargetResource["::createMany::Reseller::invoices"];
+          var TargetResource = $injector.get('Invoice');
+          var action = TargetResource['::createMany::Reseller::invoices'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Reseller.invoices#destroyAll
              * @methodOf lbServices.Reseller.invoices
@@ -27480,12 +27460,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.invoices.destroyAll = function() {
-          var TargetResource = $injector.get("Invoice");
-          var action = TargetResource["::delete::Reseller::invoices"];
+          var TargetResource = $injector.get('Invoice');
+          var action = TargetResource['::delete::Reseller::invoices'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Reseller.invoices#destroyById
              * @methodOf lbServices.Reseller.invoices
@@ -27517,12 +27497,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.invoices.destroyById = function() {
-          var TargetResource = $injector.get("Invoice");
-          var action = TargetResource["::destroyById::Reseller::invoices"];
+          var TargetResource = $injector.get('Invoice');
+          var action = TargetResource['::destroyById::Reseller::invoices'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Reseller.invoices#findById
              * @methodOf lbServices.Reseller.invoices
@@ -27557,12 +27537,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.invoices.findById = function() {
-          var TargetResource = $injector.get("Invoice");
-          var action = TargetResource["::findById::Reseller::invoices"];
+          var TargetResource = $injector.get('Invoice');
+          var action = TargetResource['::findById::Reseller::invoices'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Reseller.invoices#updateById
              * @methodOf lbServices.Reseller.invoices
@@ -27601,8 +27581,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.invoices.updateById = function() {
-          var TargetResource = $injector.get("Invoice");
-          var action = TargetResource["::updateById::Reseller::invoices"];
+          var TargetResource = $injector.get('Invoice');
+          var action = TargetResource['::updateById::Reseller::invoices'];
           return action.apply(R, arguments);
         };
 
@@ -27610,7 +27590,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         return R;
       }]);
 
-/**
+  /**
  * @ngdoc object
  * @name lbServices.Coupon
  * @header lbServices.Coupon
@@ -27628,19 +27608,19 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
  *
  */
   module.factory(
-    "Coupon",
+    'Coupon',
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
         var R = Resource(
-        urlBase + "/Coupons/:id",
-          { 'id': '@id' },
+          urlBase + '/Coupons/:id',
+          { id: '@id' },
           {
 
             // INTERNAL. Use Coupon.business() instead.
-            "prototype$__get__business": {
-              url: urlBase + "/Coupons/:id/business",
-              method: "GET",
+            prototype$__get__business: {
+              url: urlBase + '/Coupons/:id/business',
+              method: 'GET',
             },
 
             /**
@@ -27678,9 +27658,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Coupon` object.)
              * </em>
              */
-            "create": {
-              url: urlBase + "/Coupons",
-              method: "POST",
+            create: {
+              url: urlBase + '/Coupons',
+              method: 'POST',
             },
 
             /**
@@ -27718,10 +27698,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Coupon` object.)
              * </em>
              */
-            "createMany": {
+            createMany: {
               isArray: true,
-              url: urlBase + "/Coupons",
-              method: "POST",
+              url: urlBase + '/Coupons',
+              method: 'POST',
             },
 
             /**
@@ -27759,9 +27739,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Coupon` object.)
              * </em>
              */
-            "patchOrCreate": {
-              url: urlBase + "/Coupons",
-              method: "PUT",
+            patchOrCreate: {
+              url: urlBase + '/Coupons',
+              method: 'PUT',
             },
 
             /**
@@ -27799,9 +27779,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Coupon` object.)
              * </em>
              */
-            "replaceOrCreate": {
-              url: urlBase + "/Coupons/replaceOrCreate",
-              method: "POST",
+            replaceOrCreate: {
+              url: urlBase + '/Coupons/replaceOrCreate',
+              method: 'POST',
             },
 
             /**
@@ -27838,9 +27818,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Coupon` object.)
              * </em>
              */
-            "upsertWithWhere": {
-              url: urlBase + "/Coupons/upsertWithWhere",
-              method: "POST",
+            upsertWithWhere: {
+              url: urlBase + '/Coupons/upsertWithWhere',
+              method: 'POST',
             },
 
             /**
@@ -27872,9 +27852,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `exists` – `{boolean=}` -
              */
-            "exists": {
-              url: urlBase + "/Coupons/:id/exists",
-              method: "GET",
+            exists: {
+              url: urlBase + '/Coupons/:id/exists',
+              method: 'GET',
             },
 
             /**
@@ -27909,9 +27889,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Coupon` object.)
              * </em>
              */
-            "findById": {
-              url: urlBase + "/Coupons/:id",
-              method: "GET",
+            findById: {
+              url: urlBase + '/Coupons/:id',
+              method: 'GET',
             },
 
             /**
@@ -27948,9 +27928,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Coupon` object.)
              * </em>
              */
-            "replaceById": {
-              url: urlBase + "/Coupons/:id/replace",
-              method: "POST",
+            replaceById: {
+              url: urlBase + '/Coupons/:id/replace',
+              method: 'POST',
             },
 
             /**
@@ -27983,10 +27963,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Coupon` object.)
              * </em>
              */
-            "find": {
+            find: {
               isArray: true,
-              url: urlBase + "/Coupons",
-              method: "GET",
+              url: urlBase + '/Coupons',
+              method: 'GET',
             },
 
             /**
@@ -28019,9 +27999,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Coupon` object.)
              * </em>
              */
-            "findOne": {
-              url: urlBase + "/Coupons/findOne",
-              method: "GET",
+            findOne: {
+              url: urlBase + '/Coupons/findOne',
+              method: 'GET',
             },
 
             /**
@@ -28055,9 +28035,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-            "updateAll": {
-              url: urlBase + "/Coupons/update",
-              method: "POST",
+            updateAll: {
+              url: urlBase + '/Coupons/update',
+              method: 'POST',
             },
 
             /**
@@ -28090,9 +28070,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Coupon` object.)
              * </em>
              */
-            "deleteById": {
-              url: urlBase + "/Coupons/:id",
-              method: "DELETE",
+            deleteById: {
+              url: urlBase + '/Coupons/:id',
+              method: 'DELETE',
             },
 
             /**
@@ -28124,9 +28104,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `count` – `{number=}` -
              */
-            "count": {
-              url: urlBase + "/Coupons/count",
-              method: "GET",
+            count: {
+              url: urlBase + '/Coupons/count',
+              method: 'GET',
             },
 
             /**
@@ -28165,9 +28145,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Coupon` object.)
              * </em>
              */
-            "prototype$patchAttributes": {
-              url: urlBase + "/Coupons/:id",
-              method: "PUT",
+            prototype$patchAttributes: {
+              url: urlBase + '/Coupons/:id',
+              method: 'PUT',
             },
 
             /**
@@ -28202,9 +28182,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `changes` – `{ReadableStream=}` -
              */
-            "createChangeStream": {
-              url: urlBase + "/Coupons/change-stream",
-              method: "POST",
+            createChangeStream: {
+              url: urlBase + '/Coupons/change-stream',
+              method: 'POST',
             },
 
             /**
@@ -28242,75 +28222,74 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Coupon` object.)
              * </em>
              */
-            "verifyGiftCode": {
-              url: urlBase + "/Coupons/verifyGiftCode",
-              method: "POST",
+            verifyGiftCode: {
+              url: urlBase + '/Coupons/verifyGiftCode',
+              method: 'POST',
             },
 
             // INTERNAL. Use Business.coupons.findById() instead.
-            "::findById::Business::coupons": {
+            '::findById::Business::coupons': {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/coupons/:fk",
-              method: "GET",
+              url: urlBase + '/Businesses/:id/coupons/:fk',
+              method: 'GET',
             },
 
             // INTERNAL. Use Business.coupons.destroyById() instead.
-            "::destroyById::Business::coupons": {
+            '::destroyById::Business::coupons': {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/coupons/:fk",
-              method: "DELETE",
+              url: urlBase + '/Businesses/:id/coupons/:fk',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Business.coupons.updateById() instead.
-            "::updateById::Business::coupons": {
+            '::updateById::Business::coupons': {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/coupons/:fk",
-              method: "PUT",
+              url: urlBase + '/Businesses/:id/coupons/:fk',
+              method: 'PUT',
             },
 
             // INTERNAL. Use Business.coupons() instead.
-            "::get::Business::coupons": {
+            '::get::Business::coupons': {
               isArray: true,
-              url: urlBase + "/Businesses/:id/coupons",
-              method: "GET",
+              url: urlBase + '/Businesses/:id/coupons',
+              method: 'GET',
             },
 
             // INTERNAL. Use Business.coupons.create() instead.
-            "::create::Business::coupons": {
-              url: urlBase + "/Businesses/:id/coupons",
-              method: "POST",
+            '::create::Business::coupons': {
+              url: urlBase + '/Businesses/:id/coupons',
+              method: 'POST',
             },
 
             // INTERNAL. Use Business.coupons.createMany() instead.
-            "::createMany::Business::coupons": {
+            '::createMany::Business::coupons': {
               isArray: true,
-              url: urlBase + "/Businesses/:id/coupons",
-              method: "POST",
+              url: urlBase + '/Businesses/:id/coupons',
+              method: 'POST',
             },
 
             // INTERNAL. Use Business.coupons.destroyAll() instead.
-            "::delete::Business::coupons": {
-              url: urlBase + "/Businesses/:id/coupons",
-              method: "DELETE",
+            '::delete::Business::coupons': {
+              url: urlBase + '/Businesses/:id/coupons',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Business.coupons.count() instead.
-            "::count::Business::coupons": {
-              url: urlBase + "/Businesses/:id/coupons/count",
-              method: "GET",
+            '::count::Business::coupons': {
+              url: urlBase + '/Businesses/:id/coupons/count',
+              method: 'GET',
             },
           }
         );
 
 
-
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Coupon#upsert
              * @methodOf lbServices.Coupon
@@ -28345,9 +28324,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Coupon` object.)
              * </em>
              */
-        R["upsert"] = R["patchOrCreate"];
+        R['upsert'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Coupon#updateOrCreate
              * @methodOf lbServices.Coupon
@@ -28382,9 +28361,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Coupon` object.)
              * </em>
              */
-        R["updateOrCreate"] = R["patchOrCreate"];
+        R['updateOrCreate'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Coupon#patchOrCreateWithWhere
              * @methodOf lbServices.Coupon
@@ -28418,9 +28397,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Coupon` object.)
              * </em>
              */
-        R["patchOrCreateWithWhere"] = R["upsertWithWhere"];
+        R['patchOrCreateWithWhere'] = R['upsertWithWhere'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Coupon#update
              * @methodOf lbServices.Coupon
@@ -28451,9 +28430,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-        R["update"] = R["updateAll"];
+        R['update'] = R['updateAll'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Coupon#destroyById
              * @methodOf lbServices.Coupon
@@ -28483,9 +28462,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Coupon` object.)
              * </em>
              */
-        R["destroyById"] = R["deleteById"];
+        R['destroyById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Coupon#removeById
              * @methodOf lbServices.Coupon
@@ -28515,9 +28494,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Coupon` object.)
              * </em>
              */
-        R["removeById"] = R["deleteById"];
+        R['removeById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Coupon#updateAttributes
              * @methodOf lbServices.Coupon
@@ -28553,7 +28532,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Coupon` object.)
              * </em>
              */
-        R["updateAttributes"] = R["prototype$patchAttributes"];
+        R['updateAttributes'] = R['prototype$patchAttributes'];
 
 
         /**
@@ -28564,10 +28543,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         * The name of the model represented by this $resource,
         * i.e. `Coupon`.
         */
-        R.modelName = "Coupon";
+        R.modelName = 'Coupon';
 
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Coupon#business
              * @methodOf lbServices.Coupon
@@ -28602,8 +28581,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.business = function() {
-          var TargetResource = $injector.get("Business");
-          var action = TargetResource["::get::Coupon::business"];
+          var TargetResource = $injector.get('Business');
+          var action = TargetResource['::get::Coupon::business'];
           return action.apply(R, arguments);
         };
 
@@ -28611,7 +28590,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         return R;
       }]);
 
-/**
+  /**
  * @ngdoc object
  * @name lbServices.Ticket
  * @header lbServices.Ticket
@@ -28629,19 +28608,19 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
  *
  */
   module.factory(
-    "Ticket",
+    'Ticket',
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
         var R = Resource(
-        urlBase + "/Tickets/:id",
-          { 'id': '@id' },
+          urlBase + '/Tickets/:id',
+          { id: '@id' },
           {
 
             // INTERNAL. Use Ticket.business() instead.
-            "prototype$__get__business": {
-              url: urlBase + "/Tickets/:id/business",
-              method: "GET",
+            prototype$__get__business: {
+              url: urlBase + '/Tickets/:id/business',
+              method: 'GET',
             },
 
             /**
@@ -28679,9 +28658,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Ticket` object.)
              * </em>
              */
-            "create": {
-              url: urlBase + "/Tickets",
-              method: "POST",
+            create: {
+              url: urlBase + '/Tickets',
+              method: 'POST',
             },
 
             /**
@@ -28719,10 +28698,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Ticket` object.)
              * </em>
              */
-            "createMany": {
+            createMany: {
               isArray: true,
-              url: urlBase + "/Tickets",
-              method: "POST",
+              url: urlBase + '/Tickets',
+              method: 'POST',
             },
 
             /**
@@ -28760,9 +28739,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Ticket` object.)
              * </em>
              */
-            "patchOrCreate": {
-              url: urlBase + "/Tickets",
-              method: "PUT",
+            patchOrCreate: {
+              url: urlBase + '/Tickets',
+              method: 'PUT',
             },
 
             /**
@@ -28800,9 +28779,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Ticket` object.)
              * </em>
              */
-            "replaceOrCreate": {
-              url: urlBase + "/Tickets/replaceOrCreate",
-              method: "POST",
+            replaceOrCreate: {
+              url: urlBase + '/Tickets/replaceOrCreate',
+              method: 'POST',
             },
 
             /**
@@ -28839,9 +28818,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Ticket` object.)
              * </em>
              */
-            "upsertWithWhere": {
-              url: urlBase + "/Tickets/upsertWithWhere",
-              method: "POST",
+            upsertWithWhere: {
+              url: urlBase + '/Tickets/upsertWithWhere',
+              method: 'POST',
             },
 
             /**
@@ -28873,9 +28852,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `exists` – `{boolean=}` -
              */
-            "exists": {
-              url: urlBase + "/Tickets/:id/exists",
-              method: "GET",
+            exists: {
+              url: urlBase + '/Tickets/:id/exists',
+              method: 'GET',
             },
 
             /**
@@ -28910,9 +28889,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Ticket` object.)
              * </em>
              */
-            "findById": {
-              url: urlBase + "/Tickets/:id",
-              method: "GET",
+            findById: {
+              url: urlBase + '/Tickets/:id',
+              method: 'GET',
             },
 
             /**
@@ -28949,9 +28928,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Ticket` object.)
              * </em>
              */
-            "replaceById": {
-              url: urlBase + "/Tickets/:id/replace",
-              method: "POST",
+            replaceById: {
+              url: urlBase + '/Tickets/:id/replace',
+              method: 'POST',
             },
 
             /**
@@ -28984,10 +28963,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Ticket` object.)
              * </em>
              */
-            "find": {
+            find: {
               isArray: true,
-              url: urlBase + "/Tickets",
-              method: "GET",
+              url: urlBase + '/Tickets',
+              method: 'GET',
             },
 
             /**
@@ -29020,9 +28999,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Ticket` object.)
              * </em>
              */
-            "findOne": {
-              url: urlBase + "/Tickets/findOne",
-              method: "GET",
+            findOne: {
+              url: urlBase + '/Tickets/findOne',
+              method: 'GET',
             },
 
             /**
@@ -29056,9 +29035,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-            "updateAll": {
-              url: urlBase + "/Tickets/update",
-              method: "POST",
+            updateAll: {
+              url: urlBase + '/Tickets/update',
+              method: 'POST',
             },
 
             /**
@@ -29091,9 +29070,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Ticket` object.)
              * </em>
              */
-            "deleteById": {
-              url: urlBase + "/Tickets/:id",
-              method: "DELETE",
+            deleteById: {
+              url: urlBase + '/Tickets/:id',
+              method: 'DELETE',
             },
 
             /**
@@ -29125,9 +29104,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `count` – `{number=}` -
              */
-            "count": {
-              url: urlBase + "/Tickets/count",
-              method: "GET",
+            count: {
+              url: urlBase + '/Tickets/count',
+              method: 'GET',
             },
 
             /**
@@ -29166,9 +29145,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Ticket` object.)
              * </em>
              */
-            "prototype$patchAttributes": {
-              url: urlBase + "/Tickets/:id",
-              method: "PUT",
+            prototype$patchAttributes: {
+              url: urlBase + '/Tickets/:id',
+              method: 'PUT',
             },
 
             /**
@@ -29203,9 +29182,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `changes` – `{ReadableStream=}` -
              */
-            "createChangeStream": {
-              url: urlBase + "/Tickets/change-stream",
-              method: "POST",
+            createChangeStream: {
+              url: urlBase + '/Tickets/change-stream',
+              method: 'POST',
             },
 
             /**
@@ -29245,75 +29224,74 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Ticket` object.)
              * </em>
              */
-            "replyToTicket": {
-              url: urlBase + "/Tickets/replyToTicket",
-              method: "POST",
+            replyToTicket: {
+              url: urlBase + '/Tickets/replyToTicket',
+              method: 'POST',
             },
 
             // INTERNAL. Use Business.tickets.findById() instead.
-            "::findById::Business::tickets": {
+            '::findById::Business::tickets': {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/tickets/:fk",
-              method: "GET",
+              url: urlBase + '/Businesses/:id/tickets/:fk',
+              method: 'GET',
             },
 
             // INTERNAL. Use Business.tickets.destroyById() instead.
-            "::destroyById::Business::tickets": {
+            '::destroyById::Business::tickets': {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/tickets/:fk",
-              method: "DELETE",
+              url: urlBase + '/Businesses/:id/tickets/:fk',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Business.tickets.updateById() instead.
-            "::updateById::Business::tickets": {
+            '::updateById::Business::tickets': {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/tickets/:fk",
-              method: "PUT",
+              url: urlBase + '/Businesses/:id/tickets/:fk',
+              method: 'PUT',
             },
 
             // INTERNAL. Use Business.tickets() instead.
-            "::get::Business::tickets": {
+            '::get::Business::tickets': {
               isArray: true,
-              url: urlBase + "/Businesses/:id/tickets",
-              method: "GET",
+              url: urlBase + '/Businesses/:id/tickets',
+              method: 'GET',
             },
 
             // INTERNAL. Use Business.tickets.create() instead.
-            "::create::Business::tickets": {
-              url: urlBase + "/Businesses/:id/tickets",
-              method: "POST",
+            '::create::Business::tickets': {
+              url: urlBase + '/Businesses/:id/tickets',
+              method: 'POST',
             },
 
             // INTERNAL. Use Business.tickets.createMany() instead.
-            "::createMany::Business::tickets": {
+            '::createMany::Business::tickets': {
               isArray: true,
-              url: urlBase + "/Businesses/:id/tickets",
-              method: "POST",
+              url: urlBase + '/Businesses/:id/tickets',
+              method: 'POST',
             },
 
             // INTERNAL. Use Business.tickets.destroyAll() instead.
-            "::delete::Business::tickets": {
-              url: urlBase + "/Businesses/:id/tickets",
-              method: "DELETE",
+            '::delete::Business::tickets': {
+              url: urlBase + '/Businesses/:id/tickets',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Business.tickets.count() instead.
-            "::count::Business::tickets": {
-              url: urlBase + "/Businesses/:id/tickets/count",
-              method: "GET",
+            '::count::Business::tickets': {
+              url: urlBase + '/Businesses/:id/tickets/count',
+              method: 'GET',
             },
           }
         );
 
 
-
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Ticket#upsert
              * @methodOf lbServices.Ticket
@@ -29348,9 +29326,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Ticket` object.)
              * </em>
              */
-        R["upsert"] = R["patchOrCreate"];
+        R['upsert'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Ticket#updateOrCreate
              * @methodOf lbServices.Ticket
@@ -29385,9 +29363,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Ticket` object.)
              * </em>
              */
-        R["updateOrCreate"] = R["patchOrCreate"];
+        R['updateOrCreate'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Ticket#patchOrCreateWithWhere
              * @methodOf lbServices.Ticket
@@ -29421,9 +29399,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Ticket` object.)
              * </em>
              */
-        R["patchOrCreateWithWhere"] = R["upsertWithWhere"];
+        R['patchOrCreateWithWhere'] = R['upsertWithWhere'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Ticket#update
              * @methodOf lbServices.Ticket
@@ -29454,9 +29432,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-        R["update"] = R["updateAll"];
+        R['update'] = R['updateAll'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Ticket#destroyById
              * @methodOf lbServices.Ticket
@@ -29486,9 +29464,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Ticket` object.)
              * </em>
              */
-        R["destroyById"] = R["deleteById"];
+        R['destroyById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Ticket#removeById
              * @methodOf lbServices.Ticket
@@ -29518,9 +29496,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Ticket` object.)
              * </em>
              */
-        R["removeById"] = R["deleteById"];
+        R['removeById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Ticket#updateAttributes
              * @methodOf lbServices.Ticket
@@ -29556,7 +29534,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Ticket` object.)
              * </em>
              */
-        R["updateAttributes"] = R["prototype$patchAttributes"];
+        R['updateAttributes'] = R['prototype$patchAttributes'];
 
 
         /**
@@ -29567,10 +29545,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         * The name of the model represented by this $resource,
         * i.e. `Ticket`.
         */
-        R.modelName = "Ticket";
+        R.modelName = 'Ticket';
 
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Ticket#business
              * @methodOf lbServices.Ticket
@@ -29605,8 +29583,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.business = function() {
-          var TargetResource = $injector.get("Business");
-          var action = TargetResource["::get::Ticket::business"];
+          var TargetResource = $injector.get('Business');
+          var action = TargetResource['::get::Ticket::business'];
           return action.apply(R, arguments);
         };
 
@@ -29614,7 +29592,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         return R;
       }]);
 
-/**
+  /**
  * @ngdoc object
  * @name lbServices.Usage
  * @header lbServices.Usage
@@ -29632,19 +29610,19 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
  *
  */
   module.factory(
-    "Usage",
+    'Usage',
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
         var R = Resource(
-        urlBase + "/Usages/:id",
-          { 'id': '@id' },
+          urlBase + '/Usages/:id',
+          { id: '@id' },
           {
 
             // INTERNAL. Use Usage.business() instead.
-            "prototype$__get__business": {
-              url: urlBase + "/Usages/:id/business",
-              method: "GET",
+            prototype$__get__business: {
+              url: urlBase + '/Usages/:id/business',
+              method: 'GET',
             },
 
             /**
@@ -29682,9 +29660,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Usage` object.)
              * </em>
              */
-            "create": {
-              url: urlBase + "/Usages",
-              method: "POST",
+            create: {
+              url: urlBase + '/Usages',
+              method: 'POST',
             },
 
             /**
@@ -29722,10 +29700,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Usage` object.)
              * </em>
              */
-            "createMany": {
+            createMany: {
               isArray: true,
-              url: urlBase + "/Usages",
-              method: "POST",
+              url: urlBase + '/Usages',
+              method: 'POST',
             },
 
             /**
@@ -29763,9 +29741,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Usage` object.)
              * </em>
              */
-            "patchOrCreate": {
-              url: urlBase + "/Usages",
-              method: "PUT",
+            patchOrCreate: {
+              url: urlBase + '/Usages',
+              method: 'PUT',
             },
 
             /**
@@ -29803,9 +29781,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Usage` object.)
              * </em>
              */
-            "replaceOrCreate": {
-              url: urlBase + "/Usages/replaceOrCreate",
-              method: "POST",
+            replaceOrCreate: {
+              url: urlBase + '/Usages/replaceOrCreate',
+              method: 'POST',
             },
 
             /**
@@ -29842,9 +29820,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Usage` object.)
              * </em>
              */
-            "upsertWithWhere": {
-              url: urlBase + "/Usages/upsertWithWhere",
-              method: "POST",
+            upsertWithWhere: {
+              url: urlBase + '/Usages/upsertWithWhere',
+              method: 'POST',
             },
 
             /**
@@ -29876,9 +29854,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `exists` – `{boolean=}` -
              */
-            "exists": {
-              url: urlBase + "/Usages/:id/exists",
-              method: "GET",
+            exists: {
+              url: urlBase + '/Usages/:id/exists',
+              method: 'GET',
             },
 
             /**
@@ -29913,9 +29891,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Usage` object.)
              * </em>
              */
-            "findById": {
-              url: urlBase + "/Usages/:id",
-              method: "GET",
+            findById: {
+              url: urlBase + '/Usages/:id',
+              method: 'GET',
             },
 
             /**
@@ -29952,9 +29930,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Usage` object.)
              * </em>
              */
-            "replaceById": {
-              url: urlBase + "/Usages/:id/replace",
-              method: "POST",
+            replaceById: {
+              url: urlBase + '/Usages/:id/replace',
+              method: 'POST',
             },
 
             /**
@@ -29987,10 +29965,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Usage` object.)
              * </em>
              */
-            "find": {
+            find: {
               isArray: true,
-              url: urlBase + "/Usages",
-              method: "GET",
+              url: urlBase + '/Usages',
+              method: 'GET',
             },
 
             /**
@@ -30023,9 +30001,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Usage` object.)
              * </em>
              */
-            "findOne": {
-              url: urlBase + "/Usages/findOne",
-              method: "GET",
+            findOne: {
+              url: urlBase + '/Usages/findOne',
+              method: 'GET',
             },
 
             /**
@@ -30059,9 +30037,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-            "updateAll": {
-              url: urlBase + "/Usages/update",
-              method: "POST",
+            updateAll: {
+              url: urlBase + '/Usages/update',
+              method: 'POST',
             },
 
             /**
@@ -30094,9 +30072,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Usage` object.)
              * </em>
              */
-            "deleteById": {
-              url: urlBase + "/Usages/:id",
-              method: "DELETE",
+            deleteById: {
+              url: urlBase + '/Usages/:id',
+              method: 'DELETE',
             },
 
             /**
@@ -30128,9 +30106,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `count` – `{number=}` -
              */
-            "count": {
-              url: urlBase + "/Usages/count",
-              method: "GET",
+            count: {
+              url: urlBase + '/Usages/count',
+              method: 'GET',
             },
 
             /**
@@ -30169,9 +30147,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Usage` object.)
              * </em>
              */
-            "prototype$patchAttributes": {
-              url: urlBase + "/Usages/:id",
-              method: "PUT",
+            prototype$patchAttributes: {
+              url: urlBase + '/Usages/:id',
+              method: 'PUT',
             },
 
             /**
@@ -30206,16 +30184,15 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `changes` – `{ReadableStream=}` -
              */
-            "createChangeStream": {
-              url: urlBase + "/Usages/change-stream",
-              method: "POST",
+            createChangeStream: {
+              url: urlBase + '/Usages/change-stream',
+              method: 'POST',
             },
           }
         );
 
 
-
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Usage#upsert
              * @methodOf lbServices.Usage
@@ -30250,9 +30227,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Usage` object.)
              * </em>
              */
-        R["upsert"] = R["patchOrCreate"];
+        R['upsert'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Usage#updateOrCreate
              * @methodOf lbServices.Usage
@@ -30287,9 +30264,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Usage` object.)
              * </em>
              */
-        R["updateOrCreate"] = R["patchOrCreate"];
+        R['updateOrCreate'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Usage#patchOrCreateWithWhere
              * @methodOf lbServices.Usage
@@ -30323,9 +30300,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Usage` object.)
              * </em>
              */
-        R["patchOrCreateWithWhere"] = R["upsertWithWhere"];
+        R['patchOrCreateWithWhere'] = R['upsertWithWhere'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Usage#update
              * @methodOf lbServices.Usage
@@ -30356,9 +30333,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-        R["update"] = R["updateAll"];
+        R['update'] = R['updateAll'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Usage#destroyById
              * @methodOf lbServices.Usage
@@ -30388,9 +30365,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Usage` object.)
              * </em>
              */
-        R["destroyById"] = R["deleteById"];
+        R['destroyById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Usage#removeById
              * @methodOf lbServices.Usage
@@ -30420,9 +30397,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Usage` object.)
              * </em>
              */
-        R["removeById"] = R["deleteById"];
+        R['removeById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Usage#updateAttributes
              * @methodOf lbServices.Usage
@@ -30458,7 +30435,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Usage` object.)
              * </em>
              */
-        R["updateAttributes"] = R["prototype$patchAttributes"];
+        R['updateAttributes'] = R['prototype$patchAttributes'];
 
 
         /**
@@ -30469,10 +30446,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         * The name of the model represented by this $resource,
         * i.e. `Usage`.
         */
-        R.modelName = "Usage";
+        R.modelName = 'Usage';
 
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Usage#business
              * @methodOf lbServices.Usage
@@ -30507,8 +30484,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.business = function() {
-          var TargetResource = $injector.get("Business");
-          var action = TargetResource["::get::Usage::business"];
+          var TargetResource = $injector.get('Business');
+          var action = TargetResource['::get::Usage::business'];
           return action.apply(R, arguments);
         };
 
@@ -30516,7 +30493,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         return R;
       }]);
 
-/**
+  /**
  * @ngdoc object
  * @name lbServices.Netflow
  * @header lbServices.Netflow
@@ -30534,13 +30511,13 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
  *
  */
   module.factory(
-    "Netflow",
+    'Netflow',
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
         var R = Resource(
-        urlBase + "/Netflows/:id",
-          { 'id': '@id' },
+          urlBase + '/Netflows/:id',
+          { id: '@id' },
           {
 
             /**
@@ -30578,9 +30555,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Netflow` object.)
              * </em>
              */
-            "create": {
-              url: urlBase + "/Netflows",
-              method: "POST",
+            create: {
+              url: urlBase + '/Netflows',
+              method: 'POST',
             },
 
             /**
@@ -30618,10 +30595,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Netflow` object.)
              * </em>
              */
-            "createMany": {
+            createMany: {
               isArray: true,
-              url: urlBase + "/Netflows",
-              method: "POST",
+              url: urlBase + '/Netflows',
+              method: 'POST',
             },
 
             /**
@@ -30659,9 +30636,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Netflow` object.)
              * </em>
              */
-            "patchOrCreate": {
-              url: urlBase + "/Netflows",
-              method: "PUT",
+            patchOrCreate: {
+              url: urlBase + '/Netflows',
+              method: 'PUT',
             },
 
             /**
@@ -30699,9 +30676,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Netflow` object.)
              * </em>
              */
-            "replaceOrCreate": {
-              url: urlBase + "/Netflows/replaceOrCreate",
-              method: "POST",
+            replaceOrCreate: {
+              url: urlBase + '/Netflows/replaceOrCreate',
+              method: 'POST',
             },
 
             /**
@@ -30738,9 +30715,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Netflow` object.)
              * </em>
              */
-            "upsertWithWhere": {
-              url: urlBase + "/Netflows/upsertWithWhere",
-              method: "POST",
+            upsertWithWhere: {
+              url: urlBase + '/Netflows/upsertWithWhere',
+              method: 'POST',
             },
 
             /**
@@ -30772,9 +30749,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `exists` – `{boolean=}` -
              */
-            "exists": {
-              url: urlBase + "/Netflows/:id/exists",
-              method: "GET",
+            exists: {
+              url: urlBase + '/Netflows/:id/exists',
+              method: 'GET',
             },
 
             /**
@@ -30809,9 +30786,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Netflow` object.)
              * </em>
              */
-            "findById": {
-              url: urlBase + "/Netflows/:id",
-              method: "GET",
+            findById: {
+              url: urlBase + '/Netflows/:id',
+              method: 'GET',
             },
 
             /**
@@ -30848,9 +30825,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Netflow` object.)
              * </em>
              */
-            "replaceById": {
-              url: urlBase + "/Netflows/:id/replace",
-              method: "POST",
+            replaceById: {
+              url: urlBase + '/Netflows/:id/replace',
+              method: 'POST',
             },
 
             /**
@@ -30883,10 +30860,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Netflow` object.)
              * </em>
              */
-            "find": {
+            find: {
               isArray: true,
-              url: urlBase + "/Netflows",
-              method: "GET",
+              url: urlBase + '/Netflows',
+              method: 'GET',
             },
 
             /**
@@ -30919,9 +30896,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Netflow` object.)
              * </em>
              */
-            "findOne": {
-              url: urlBase + "/Netflows/findOne",
-              method: "GET",
+            findOne: {
+              url: urlBase + '/Netflows/findOne',
+              method: 'GET',
             },
 
             /**
@@ -30955,9 +30932,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-            "updateAll": {
-              url: urlBase + "/Netflows/update",
-              method: "POST",
+            updateAll: {
+              url: urlBase + '/Netflows/update',
+              method: 'POST',
             },
 
             /**
@@ -30990,9 +30967,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Netflow` object.)
              * </em>
              */
-            "deleteById": {
-              url: urlBase + "/Netflows/:id",
-              method: "DELETE",
+            deleteById: {
+              url: urlBase + '/Netflows/:id',
+              method: 'DELETE',
             },
 
             /**
@@ -31024,9 +31001,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `count` – `{number=}` -
              */
-            "count": {
-              url: urlBase + "/Netflows/count",
-              method: "GET",
+            count: {
+              url: urlBase + '/Netflows/count',
+              method: 'GET',
             },
 
             /**
@@ -31065,9 +31042,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Netflow` object.)
              * </em>
              */
-            "prototype$patchAttributes": {
-              url: urlBase + "/Netflows/:id",
-              method: "PUT",
+            prototype$patchAttributes: {
+              url: urlBase + '/Netflows/:id',
+              method: 'PUT',
             },
 
             /**
@@ -31102,16 +31079,15 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `changes` – `{ReadableStream=}` -
              */
-            "createChangeStream": {
-              url: urlBase + "/Netflows/change-stream",
-              method: "POST",
+            createChangeStream: {
+              url: urlBase + '/Netflows/change-stream',
+              method: 'POST',
             },
           }
         );
 
 
-
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Netflow#upsert
              * @methodOf lbServices.Netflow
@@ -31146,9 +31122,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Netflow` object.)
              * </em>
              */
-        R["upsert"] = R["patchOrCreate"];
+        R['upsert'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Netflow#updateOrCreate
              * @methodOf lbServices.Netflow
@@ -31183,9 +31159,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Netflow` object.)
              * </em>
              */
-        R["updateOrCreate"] = R["patchOrCreate"];
+        R['updateOrCreate'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Netflow#patchOrCreateWithWhere
              * @methodOf lbServices.Netflow
@@ -31219,9 +31195,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Netflow` object.)
              * </em>
              */
-        R["patchOrCreateWithWhere"] = R["upsertWithWhere"];
+        R['patchOrCreateWithWhere'] = R['upsertWithWhere'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Netflow#update
              * @methodOf lbServices.Netflow
@@ -31252,9 +31228,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-        R["update"] = R["updateAll"];
+        R['update'] = R['updateAll'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Netflow#destroyById
              * @methodOf lbServices.Netflow
@@ -31284,9 +31260,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Netflow` object.)
              * </em>
              */
-        R["destroyById"] = R["deleteById"];
+        R['destroyById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Netflow#removeById
              * @methodOf lbServices.Netflow
@@ -31316,9 +31292,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Netflow` object.)
              * </em>
              */
-        R["removeById"] = R["deleteById"];
+        R['removeById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Netflow#updateAttributes
              * @methodOf lbServices.Netflow
@@ -31354,7 +31330,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Netflow` object.)
              * </em>
              */
-        R["updateAttributes"] = R["prototype$patchAttributes"];
+        R['updateAttributes'] = R['prototype$patchAttributes'];
 
 
         /**
@@ -31365,14 +31341,13 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         * The name of the model represented by this $resource,
         * i.e. `Netflow`.
         */
-        R.modelName = "Netflow";
-
+        R.modelName = 'Netflow';
 
 
         return R;
       }]);
 
-/**
+  /**
  * @ngdoc object
  * @name lbServices.Syslog
  * @header lbServices.Syslog
@@ -31390,13 +31365,13 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
  *
  */
   module.factory(
-    "Syslog",
+    'Syslog',
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
         var R = Resource(
-        urlBase + "/Syslogs/:id",
-          { 'id': '@id' },
+          urlBase + '/Syslogs/:id',
+          { id: '@id' },
           {
 
             /**
@@ -31434,9 +31409,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Syslog` object.)
              * </em>
              */
-            "create": {
-              url: urlBase + "/Syslogs",
-              method: "POST",
+            create: {
+              url: urlBase + '/Syslogs',
+              method: 'POST',
             },
 
             /**
@@ -31474,10 +31449,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Syslog` object.)
              * </em>
              */
-            "createMany": {
+            createMany: {
               isArray: true,
-              url: urlBase + "/Syslogs",
-              method: "POST",
+              url: urlBase + '/Syslogs',
+              method: 'POST',
             },
 
             /**
@@ -31515,9 +31490,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Syslog` object.)
              * </em>
              */
-            "patchOrCreate": {
-              url: urlBase + "/Syslogs",
-              method: "PUT",
+            patchOrCreate: {
+              url: urlBase + '/Syslogs',
+              method: 'PUT',
             },
 
             /**
@@ -31555,9 +31530,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Syslog` object.)
              * </em>
              */
-            "replaceOrCreate": {
-              url: urlBase + "/Syslogs/replaceOrCreate",
-              method: "POST",
+            replaceOrCreate: {
+              url: urlBase + '/Syslogs/replaceOrCreate',
+              method: 'POST',
             },
 
             /**
@@ -31594,9 +31569,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Syslog` object.)
              * </em>
              */
-            "upsertWithWhere": {
-              url: urlBase + "/Syslogs/upsertWithWhere",
-              method: "POST",
+            upsertWithWhere: {
+              url: urlBase + '/Syslogs/upsertWithWhere',
+              method: 'POST',
             },
 
             /**
@@ -31628,9 +31603,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `exists` – `{boolean=}` -
              */
-            "exists": {
-              url: urlBase + "/Syslogs/:id/exists",
-              method: "GET",
+            exists: {
+              url: urlBase + '/Syslogs/:id/exists',
+              method: 'GET',
             },
 
             /**
@@ -31665,9 +31640,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Syslog` object.)
              * </em>
              */
-            "findById": {
-              url: urlBase + "/Syslogs/:id",
-              method: "GET",
+            findById: {
+              url: urlBase + '/Syslogs/:id',
+              method: 'GET',
             },
 
             /**
@@ -31704,9 +31679,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Syslog` object.)
              * </em>
              */
-            "replaceById": {
-              url: urlBase + "/Syslogs/:id/replace",
-              method: "POST",
+            replaceById: {
+              url: urlBase + '/Syslogs/:id/replace',
+              method: 'POST',
             },
 
             /**
@@ -31739,10 +31714,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Syslog` object.)
              * </em>
              */
-            "find": {
+            find: {
               isArray: true,
-              url: urlBase + "/Syslogs",
-              method: "GET",
+              url: urlBase + '/Syslogs',
+              method: 'GET',
             },
 
             /**
@@ -31775,9 +31750,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Syslog` object.)
              * </em>
              */
-            "findOne": {
-              url: urlBase + "/Syslogs/findOne",
-              method: "GET",
+            findOne: {
+              url: urlBase + '/Syslogs/findOne',
+              method: 'GET',
             },
 
             /**
@@ -31811,9 +31786,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-            "updateAll": {
-              url: urlBase + "/Syslogs/update",
-              method: "POST",
+            updateAll: {
+              url: urlBase + '/Syslogs/update',
+              method: 'POST',
             },
 
             /**
@@ -31846,9 +31821,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Syslog` object.)
              * </em>
              */
-            "deleteById": {
-              url: urlBase + "/Syslogs/:id",
-              method: "DELETE",
+            deleteById: {
+              url: urlBase + '/Syslogs/:id',
+              method: 'DELETE',
             },
 
             /**
@@ -31880,9 +31855,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `count` – `{number=}` -
              */
-            "count": {
-              url: urlBase + "/Syslogs/count",
-              method: "GET",
+            count: {
+              url: urlBase + '/Syslogs/count',
+              method: 'GET',
             },
 
             /**
@@ -31921,9 +31896,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Syslog` object.)
              * </em>
              */
-            "prototype$patchAttributes": {
-              url: urlBase + "/Syslogs/:id",
-              method: "PUT",
+            prototype$patchAttributes: {
+              url: urlBase + '/Syslogs/:id',
+              method: 'PUT',
             },
 
             /**
@@ -31958,16 +31933,15 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `changes` – `{ReadableStream=}` -
              */
-            "createChangeStream": {
-              url: urlBase + "/Syslogs/change-stream",
-              method: "POST",
+            createChangeStream: {
+              url: urlBase + '/Syslogs/change-stream',
+              method: 'POST',
             },
           }
         );
 
 
-
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Syslog#upsert
              * @methodOf lbServices.Syslog
@@ -32002,9 +31976,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Syslog` object.)
              * </em>
              */
-        R["upsert"] = R["patchOrCreate"];
+        R['upsert'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Syslog#updateOrCreate
              * @methodOf lbServices.Syslog
@@ -32039,9 +32013,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Syslog` object.)
              * </em>
              */
-        R["updateOrCreate"] = R["patchOrCreate"];
+        R['updateOrCreate'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Syslog#patchOrCreateWithWhere
              * @methodOf lbServices.Syslog
@@ -32075,9 +32049,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Syslog` object.)
              * </em>
              */
-        R["patchOrCreateWithWhere"] = R["upsertWithWhere"];
+        R['patchOrCreateWithWhere'] = R['upsertWithWhere'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Syslog#update
              * @methodOf lbServices.Syslog
@@ -32108,9 +32082,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-        R["update"] = R["updateAll"];
+        R['update'] = R['updateAll'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Syslog#destroyById
              * @methodOf lbServices.Syslog
@@ -32140,9 +32114,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Syslog` object.)
              * </em>
              */
-        R["destroyById"] = R["deleteById"];
+        R['destroyById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Syslog#removeById
              * @methodOf lbServices.Syslog
@@ -32172,9 +32146,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Syslog` object.)
              * </em>
              */
-        R["removeById"] = R["deleteById"];
+        R['removeById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Syslog#updateAttributes
              * @methodOf lbServices.Syslog
@@ -32210,7 +32184,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Syslog` object.)
              * </em>
              */
-        R["updateAttributes"] = R["prototype$patchAttributes"];
+        R['updateAttributes'] = R['prototype$patchAttributes'];
 
 
         /**
@@ -32221,14 +32195,13 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         * The name of the model represented by this $resource,
         * i.e. `Syslog`.
         */
-        R.modelName = "Syslog";
-
+        R.modelName = 'Syslog';
 
 
         return R;
       }]);
 
-/**
+  /**
  * @ngdoc object
  * @name lbServices.MemberGroup
  * @header lbServices.MemberGroup
@@ -32246,19 +32219,19 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
  *
  */
   module.factory(
-    "MemberGroup",
+    'MemberGroup',
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
         var R = Resource(
-        urlBase + "/MemberGroups/:id",
-          { 'id': '@id' },
+          urlBase + '/MemberGroups/:id',
+          { id: '@id' },
           {
 
             // INTERNAL. Use MemberGroup.business() instead.
-            "prototype$__get__business": {
-              url: urlBase + "/MemberGroups/:id/business",
-              method: "GET",
+            prototype$__get__business: {
+              url: urlBase + '/MemberGroups/:id/business',
+              method: 'GET',
             },
 
             /**
@@ -32296,9 +32269,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `MemberGroup` object.)
              * </em>
              */
-            "create": {
-              url: urlBase + "/MemberGroups",
-              method: "POST",
+            create: {
+              url: urlBase + '/MemberGroups',
+              method: 'POST',
             },
 
             /**
@@ -32336,10 +32309,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `MemberGroup` object.)
              * </em>
              */
-            "createMany": {
+            createMany: {
               isArray: true,
-              url: urlBase + "/MemberGroups",
-              method: "POST",
+              url: urlBase + '/MemberGroups',
+              method: 'POST',
             },
 
             /**
@@ -32377,9 +32350,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `MemberGroup` object.)
              * </em>
              */
-            "patchOrCreate": {
-              url: urlBase + "/MemberGroups",
-              method: "PUT",
+            patchOrCreate: {
+              url: urlBase + '/MemberGroups',
+              method: 'PUT',
             },
 
             /**
@@ -32417,9 +32390,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `MemberGroup` object.)
              * </em>
              */
-            "replaceOrCreate": {
-              url: urlBase + "/MemberGroups/replaceOrCreate",
-              method: "POST",
+            replaceOrCreate: {
+              url: urlBase + '/MemberGroups/replaceOrCreate',
+              method: 'POST',
             },
 
             /**
@@ -32456,9 +32429,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `MemberGroup` object.)
              * </em>
              */
-            "upsertWithWhere": {
-              url: urlBase + "/MemberGroups/upsertWithWhere",
-              method: "POST",
+            upsertWithWhere: {
+              url: urlBase + '/MemberGroups/upsertWithWhere',
+              method: 'POST',
             },
 
             /**
@@ -32490,9 +32463,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `exists` – `{boolean=}` -
              */
-            "exists": {
-              url: urlBase + "/MemberGroups/:id/exists",
-              method: "GET",
+            exists: {
+              url: urlBase + '/MemberGroups/:id/exists',
+              method: 'GET',
             },
 
             /**
@@ -32527,9 +32500,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `MemberGroup` object.)
              * </em>
              */
-            "findById": {
-              url: urlBase + "/MemberGroups/:id",
-              method: "GET",
+            findById: {
+              url: urlBase + '/MemberGroups/:id',
+              method: 'GET',
             },
 
             /**
@@ -32566,9 +32539,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `MemberGroup` object.)
              * </em>
              */
-            "replaceById": {
-              url: urlBase + "/MemberGroups/:id/replace",
-              method: "POST",
+            replaceById: {
+              url: urlBase + '/MemberGroups/:id/replace',
+              method: 'POST',
             },
 
             /**
@@ -32601,10 +32574,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `MemberGroup` object.)
              * </em>
              */
-            "find": {
+            find: {
               isArray: true,
-              url: urlBase + "/MemberGroups",
-              method: "GET",
+              url: urlBase + '/MemberGroups',
+              method: 'GET',
             },
 
             /**
@@ -32637,9 +32610,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `MemberGroup` object.)
              * </em>
              */
-            "findOne": {
-              url: urlBase + "/MemberGroups/findOne",
-              method: "GET",
+            findOne: {
+              url: urlBase + '/MemberGroups/findOne',
+              method: 'GET',
             },
 
             /**
@@ -32673,9 +32646,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-            "updateAll": {
-              url: urlBase + "/MemberGroups/update",
-              method: "POST",
+            updateAll: {
+              url: urlBase + '/MemberGroups/update',
+              method: 'POST',
             },
 
             /**
@@ -32708,9 +32681,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `MemberGroup` object.)
              * </em>
              */
-            "deleteById": {
-              url: urlBase + "/MemberGroups/:id",
-              method: "DELETE",
+            deleteById: {
+              url: urlBase + '/MemberGroups/:id',
+              method: 'DELETE',
             },
 
             /**
@@ -32742,9 +32715,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `count` – `{number=}` -
              */
-            "count": {
-              url: urlBase + "/MemberGroups/count",
-              method: "GET",
+            count: {
+              url: urlBase + '/MemberGroups/count',
+              method: 'GET',
             },
 
             /**
@@ -32783,9 +32756,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `MemberGroup` object.)
              * </em>
              */
-            "prototype$patchAttributes": {
-              url: urlBase + "/MemberGroups/:id",
-              method: "PUT",
+            prototype$patchAttributes: {
+              url: urlBase + '/MemberGroups/:id',
+              method: 'PUT',
             },
 
             /**
@@ -32820,16 +32793,15 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `changes` – `{ReadableStream=}` -
              */
-            "createChangeStream": {
-              url: urlBase + "/MemberGroups/change-stream",
-              method: "POST",
+            createChangeStream: {
+              url: urlBase + '/MemberGroups/change-stream',
+              method: 'POST',
             },
           }
         );
 
 
-
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.MemberGroup#upsert
              * @methodOf lbServices.MemberGroup
@@ -32864,9 +32836,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `MemberGroup` object.)
              * </em>
              */
-        R["upsert"] = R["patchOrCreate"];
+        R['upsert'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.MemberGroup#updateOrCreate
              * @methodOf lbServices.MemberGroup
@@ -32901,9 +32873,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `MemberGroup` object.)
              * </em>
              */
-        R["updateOrCreate"] = R["patchOrCreate"];
+        R['updateOrCreate'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.MemberGroup#patchOrCreateWithWhere
              * @methodOf lbServices.MemberGroup
@@ -32937,9 +32909,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `MemberGroup` object.)
              * </em>
              */
-        R["patchOrCreateWithWhere"] = R["upsertWithWhere"];
+        R['patchOrCreateWithWhere'] = R['upsertWithWhere'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.MemberGroup#update
              * @methodOf lbServices.MemberGroup
@@ -32970,9 +32942,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-        R["update"] = R["updateAll"];
+        R['update'] = R['updateAll'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.MemberGroup#destroyById
              * @methodOf lbServices.MemberGroup
@@ -33002,9 +32974,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `MemberGroup` object.)
              * </em>
              */
-        R["destroyById"] = R["deleteById"];
+        R['destroyById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.MemberGroup#removeById
              * @methodOf lbServices.MemberGroup
@@ -33034,9 +33006,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `MemberGroup` object.)
              * </em>
              */
-        R["removeById"] = R["deleteById"];
+        R['removeById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.MemberGroup#updateAttributes
              * @methodOf lbServices.MemberGroup
@@ -33072,7 +33044,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `MemberGroup` object.)
              * </em>
              */
-        R["updateAttributes"] = R["prototype$patchAttributes"];
+        R['updateAttributes'] = R['prototype$patchAttributes'];
 
 
         /**
@@ -33083,10 +33055,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         * The name of the model represented by this $resource,
         * i.e. `MemberGroup`.
         */
-        R.modelName = "MemberGroup";
+        R.modelName = 'MemberGroup';
 
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.MemberGroup#business
              * @methodOf lbServices.MemberGroup
@@ -33121,8 +33093,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.business = function() {
-          var TargetResource = $injector.get("Business");
-          var action = TargetResource["::get::MemberGroup::business"];
+          var TargetResource = $injector.get('Business');
+          var action = TargetResource['::get::MemberGroup::business'];
           return action.apply(R, arguments);
         };
 
@@ -33130,7 +33102,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         return R;
       }]);
 
-/**
+  /**
  * @ngdoc object
  * @name lbServices.Report
  * @header lbServices.Report
@@ -33148,49 +33120,49 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
  *
  */
   module.factory(
-    "Report",
+    'Report',
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
         var R = Resource(
-        urlBase + "/Reports/:id",
-          { 'id': '@id' },
+          urlBase + '/Reports/:id',
+          { id: '@id' },
           {
 
             // INTERNAL. Use Report.member() instead.
-            "prototype$__get__member": {
-              url: urlBase + "/Reports/:id/member",
-              method: "GET",
+            prototype$__get__member: {
+              url: urlBase + '/Reports/:id/member',
+              method: 'GET',
             },
 
             // INTERNAL. Use Report.business() instead.
-            "prototype$__get__business": {
-              url: urlBase + "/Reports/:id/business",
-              method: "GET",
+            prototype$__get__business: {
+              url: urlBase + '/Reports/:id/business',
+              method: 'GET',
             },
 
             // INTERNAL. Use Report.fileStorage() instead.
-            "prototype$__get__fileStorage": {
-              url: urlBase + "/Reports/:id/fileStorage",
-              method: "GET",
+            prototype$__get__fileStorage: {
+              url: urlBase + '/Reports/:id/fileStorage',
+              method: 'GET',
             },
 
             // INTERNAL. Use Report.fileStorage.create() instead.
-            "prototype$__create__fileStorage": {
-              url: urlBase + "/Reports/:id/fileStorage",
-              method: "POST",
+            prototype$__create__fileStorage: {
+              url: urlBase + '/Reports/:id/fileStorage',
+              method: 'POST',
             },
 
             // INTERNAL. Use Report.fileStorage.update() instead.
-            "prototype$__update__fileStorage": {
-              url: urlBase + "/Reports/:id/fileStorage",
-              method: "PUT",
+            prototype$__update__fileStorage: {
+              url: urlBase + '/Reports/:id/fileStorage',
+              method: 'PUT',
             },
 
             // INTERNAL. Use Report.fileStorage.destroy() instead.
-            "prototype$__destroy__fileStorage": {
-              url: urlBase + "/Reports/:id/fileStorage",
-              method: "DELETE",
+            prototype$__destroy__fileStorage: {
+              url: urlBase + '/Reports/:id/fileStorage',
+              method: 'DELETE',
             },
 
             /**
@@ -33228,9 +33200,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Report` object.)
              * </em>
              */
-            "create": {
-              url: urlBase + "/Reports",
-              method: "POST",
+            create: {
+              url: urlBase + '/Reports',
+              method: 'POST',
             },
 
             /**
@@ -33268,10 +33240,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Report` object.)
              * </em>
              */
-            "createMany": {
+            createMany: {
               isArray: true,
-              url: urlBase + "/Reports",
-              method: "POST",
+              url: urlBase + '/Reports',
+              method: 'POST',
             },
 
             /**
@@ -33304,9 +33276,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Report` object.)
              * </em>
              */
-            "patchOrCreate": {
-              url: urlBase + "/Reports",
-              method: "PATCH",
+            patchOrCreate: {
+              url: urlBase + '/Reports',
+              method: 'PATCH',
             },
 
             /**
@@ -33344,9 +33316,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Report` object.)
              * </em>
              */
-            "replaceOrCreate": {
-              url: urlBase + "/Reports/replaceOrCreate",
-              method: "POST",
+            replaceOrCreate: {
+              url: urlBase + '/Reports/replaceOrCreate',
+              method: 'POST',
             },
 
             /**
@@ -33383,9 +33355,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Report` object.)
              * </em>
              */
-            "upsertWithWhere": {
-              url: urlBase + "/Reports/upsertWithWhere",
-              method: "POST",
+            upsertWithWhere: {
+              url: urlBase + '/Reports/upsertWithWhere',
+              method: 'POST',
             },
 
             /**
@@ -33417,9 +33389,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `exists` – `{boolean=}` -
              */
-            "exists": {
-              url: urlBase + "/Reports/:id/exists",
-              method: "GET",
+            exists: {
+              url: urlBase + '/Reports/:id/exists',
+              method: 'GET',
             },
 
             /**
@@ -33454,9 +33426,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Report` object.)
              * </em>
              */
-            "findById": {
-              url: urlBase + "/Reports/:id",
-              method: "GET",
+            findById: {
+              url: urlBase + '/Reports/:id',
+              method: 'GET',
             },
 
             /**
@@ -33493,9 +33465,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Report` object.)
              * </em>
              */
-            "replaceById": {
-              url: urlBase + "/Reports/:id/replace",
-              method: "POST",
+            replaceById: {
+              url: urlBase + '/Reports/:id/replace',
+              method: 'POST',
             },
 
             /**
@@ -33528,10 +33500,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Report` object.)
              * </em>
              */
-            "find": {
+            find: {
               isArray: true,
-              url: urlBase + "/Reports",
-              method: "GET",
+              url: urlBase + '/Reports',
+              method: 'GET',
             },
 
             /**
@@ -33564,9 +33536,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Report` object.)
              * </em>
              */
-            "findOne": {
-              url: urlBase + "/Reports/findOne",
-              method: "GET",
+            findOne: {
+              url: urlBase + '/Reports/findOne',
+              method: 'GET',
             },
 
             /**
@@ -33600,9 +33572,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-            "updateAll": {
-              url: urlBase + "/Reports/update",
-              method: "POST",
+            updateAll: {
+              url: urlBase + '/Reports/update',
+              method: 'POST',
             },
 
             /**
@@ -33635,9 +33607,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Report` object.)
              * </em>
              */
-            "deleteById": {
-              url: urlBase + "/Reports/:id",
-              method: "DELETE",
+            deleteById: {
+              url: urlBase + '/Reports/:id',
+              method: 'DELETE',
             },
 
             /**
@@ -33669,9 +33641,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `count` – `{number=}` -
              */
-            "count": {
-              url: urlBase + "/Reports/count",
-              method: "GET",
+            count: {
+              url: urlBase + '/Reports/count',
+              method: 'GET',
             },
 
             /**
@@ -33708,9 +33680,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Report` object.)
              * </em>
              */
-            "prototype$patchAttributes": {
-              url: urlBase + "/Reports/:id",
-              method: "PATCH",
+            prototype$patchAttributes: {
+              url: urlBase + '/Reports/:id',
+              method: 'PATCH',
             },
 
             /**
@@ -33745,9 +33717,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              *  - `changes` – `{ReadableStream=}` -
              */
-            "createChangeStream": {
-              url: urlBase + "/Reports/change-stream",
-              method: "POST",
+            createChangeStream: {
+              url: urlBase + '/Reports/change-stream',
+              method: 'POST',
             },
 
             /**
@@ -33783,134 +33755,133 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Report` object.)
              * </em>
              */
-            "downloadReport": {
-              url: urlBase + "/Reports/downloadReport",
-              method: "POST",
+            downloadReport: {
+              url: urlBase + '/Reports/downloadReport',
+              method: 'POST',
             },
 
             // INTERNAL. Use Business.reports.findById() instead.
-            "::findById::Business::reports": {
+            '::findById::Business::reports': {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/reports/:fk",
-              method: "GET",
+              url: urlBase + '/Businesses/:id/reports/:fk',
+              method: 'GET',
             },
 
             // INTERNAL. Use Business.reports.destroyById() instead.
-            "::destroyById::Business::reports": {
+            '::destroyById::Business::reports': {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/reports/:fk",
-              method: "DELETE",
+              url: urlBase + '/Businesses/:id/reports/:fk',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Business.reports.updateById() instead.
-            "::updateById::Business::reports": {
+            '::updateById::Business::reports': {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Businesses/:id/reports/:fk",
-              method: "PUT",
+              url: urlBase + '/Businesses/:id/reports/:fk',
+              method: 'PUT',
             },
 
             // INTERNAL. Use Business.reports() instead.
-            "::get::Business::reports": {
+            '::get::Business::reports': {
               isArray: true,
-              url: urlBase + "/Businesses/:id/reports",
-              method: "GET",
+              url: urlBase + '/Businesses/:id/reports',
+              method: 'GET',
             },
 
             // INTERNAL. Use Business.reports.create() instead.
-            "::create::Business::reports": {
-              url: urlBase + "/Businesses/:id/reports",
-              method: "POST",
+            '::create::Business::reports': {
+              url: urlBase + '/Businesses/:id/reports',
+              method: 'POST',
             },
 
             // INTERNAL. Use Business.reports.createMany() instead.
-            "::createMany::Business::reports": {
+            '::createMany::Business::reports': {
               isArray: true,
-              url: urlBase + "/Businesses/:id/reports",
-              method: "POST",
+              url: urlBase + '/Businesses/:id/reports',
+              method: 'POST',
             },
 
             // INTERNAL. Use Business.reports.destroyAll() instead.
-            "::delete::Business::reports": {
-              url: urlBase + "/Businesses/:id/reports",
-              method: "DELETE",
+            '::delete::Business::reports': {
+              url: urlBase + '/Businesses/:id/reports',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Business.reports.count() instead.
-            "::count::Business::reports": {
-              url: urlBase + "/Businesses/:id/reports/count",
-              method: "GET",
+            '::count::Business::reports': {
+              url: urlBase + '/Businesses/:id/reports/count',
+              method: 'GET',
             },
 
             // INTERNAL. Use Member.reports.findById() instead.
-            "::findById::Member::reports": {
+            '::findById::Member::reports': {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Members/:id/reports/:fk",
-              method: "GET",
+              url: urlBase + '/Members/:id/reports/:fk',
+              method: 'GET',
             },
 
             // INTERNAL. Use Member.reports.destroyById() instead.
-            "::destroyById::Member::reports": {
+            '::destroyById::Member::reports': {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Members/:id/reports/:fk",
-              method: "DELETE",
+              url: urlBase + '/Members/:id/reports/:fk',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Member.reports.updateById() instead.
-            "::updateById::Member::reports": {
+            '::updateById::Member::reports': {
               params: {
-                'fk': '@fk',
+                fk: '@fk',
               },
-              url: urlBase + "/Members/:id/reports/:fk",
-              method: "PUT",
+              url: urlBase + '/Members/:id/reports/:fk',
+              method: 'PUT',
             },
 
             // INTERNAL. Use Member.reports() instead.
-            "::get::Member::reports": {
+            '::get::Member::reports': {
               isArray: true,
-              url: urlBase + "/Members/:id/reports",
-              method: "GET",
+              url: urlBase + '/Members/:id/reports',
+              method: 'GET',
             },
 
             // INTERNAL. Use Member.reports.create() instead.
-            "::create::Member::reports": {
-              url: urlBase + "/Members/:id/reports",
-              method: "POST",
+            '::create::Member::reports': {
+              url: urlBase + '/Members/:id/reports',
+              method: 'POST',
             },
 
             // INTERNAL. Use Member.reports.createMany() instead.
-            "::createMany::Member::reports": {
+            '::createMany::Member::reports': {
               isArray: true,
-              url: urlBase + "/Members/:id/reports",
-              method: "POST",
+              url: urlBase + '/Members/:id/reports',
+              method: 'POST',
             },
 
             // INTERNAL. Use Member.reports.destroyAll() instead.
-            "::delete::Member::reports": {
-              url: urlBase + "/Members/:id/reports",
-              method: "DELETE",
+            '::delete::Member::reports': {
+              url: urlBase + '/Members/:id/reports',
+              method: 'DELETE',
             },
 
             // INTERNAL. Use Member.reports.count() instead.
-            "::count::Member::reports": {
-              url: urlBase + "/Members/:id/reports/count",
-              method: "GET",
+            '::count::Member::reports': {
+              url: urlBase + '/Members/:id/reports/count',
+              method: 'GET',
             },
           }
         );
 
 
-
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Report#upsert
              * @methodOf lbServices.Report
@@ -33940,9 +33911,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Report` object.)
              * </em>
              */
-        R["upsert"] = R["patchOrCreate"];
+        R['upsert'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Report#updateOrCreate
              * @methodOf lbServices.Report
@@ -33972,9 +33943,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Report` object.)
              * </em>
              */
-        R["updateOrCreate"] = R["patchOrCreate"];
+        R['updateOrCreate'] = R['patchOrCreate'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Report#patchOrCreateWithWhere
              * @methodOf lbServices.Report
@@ -34008,9 +33979,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Report` object.)
              * </em>
              */
-        R["patchOrCreateWithWhere"] = R["upsertWithWhere"];
+        R['patchOrCreateWithWhere'] = R['upsertWithWhere'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Report#update
              * @methodOf lbServices.Report
@@ -34041,9 +34012,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *
              * Information related to the outcome of the operation
              */
-        R["update"] = R["updateAll"];
+        R['update'] = R['updateAll'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Report#destroyById
              * @methodOf lbServices.Report
@@ -34073,9 +34044,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Report` object.)
              * </em>
              */
-        R["destroyById"] = R["deleteById"];
+        R['destroyById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Report#removeById
              * @methodOf lbServices.Report
@@ -34105,9 +34076,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Report` object.)
              * </em>
              */
-        R["removeById"] = R["deleteById"];
+        R['removeById'] = R['deleteById'];
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Report#updateAttributes
              * @methodOf lbServices.Report
@@ -34141,7 +34112,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This usually means the response is a `Report` object.)
              * </em>
              */
-        R["updateAttributes"] = R["prototype$patchAttributes"];
+        R['updateAttributes'] = R['prototype$patchAttributes'];
 
 
         /**
@@ -34152,10 +34123,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         * The name of the model represented by this $resource,
         * i.e. `Report`.
         */
-        R.modelName = "Report";
+        R.modelName = 'Report';
 
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Report#member
              * @methodOf lbServices.Report
@@ -34190,12 +34161,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.member = function() {
-          var TargetResource = $injector.get("Member");
-          var action = TargetResource["::get::Report::member"];
+          var TargetResource = $injector.get('Member');
+          var action = TargetResource['::get::Report::member'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Report#business
              * @methodOf lbServices.Report
@@ -34230,11 +34201,11 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.business = function() {
-          var TargetResource = $injector.get("Business");
-          var action = TargetResource["::get::Report::business"];
+          var TargetResource = $injector.get('Business');
+          var action = TargetResource['::get::Report::business'];
           return action.apply(R, arguments);
         };
-    /**
+        /**
      * @ngdoc object
      * @name lbServices.Report.fileStorage
      * @header lbServices.Report.fileStorage
@@ -34249,7 +34220,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
      */
 
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Report#fileStorage
              * @methodOf lbServices.Report
@@ -34284,12 +34255,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.fileStorage = function() {
-          var TargetResource = $injector.get("FileStorage");
-          var action = TargetResource["::get::Report::fileStorage"];
+          var TargetResource = $injector.get('FileStorage');
+          var action = TargetResource['::get::Report::fileStorage'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Report.fileStorage#create
              * @methodOf lbServices.Report.fileStorage
@@ -34326,12 +34297,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.fileStorage.create = function() {
-          var TargetResource = $injector.get("FileStorage");
-          var action = TargetResource["::create::Report::fileStorage"];
+          var TargetResource = $injector.get('FileStorage');
+          var action = TargetResource['::create::Report::fileStorage'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Report.fileStorage#createMany
              * @methodOf lbServices.Report.fileStorage
@@ -34368,12 +34339,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.fileStorage.createMany = function() {
-          var TargetResource = $injector.get("FileStorage");
-          var action = TargetResource["::createMany::Report::fileStorage"];
+          var TargetResource = $injector.get('FileStorage');
+          var action = TargetResource['::createMany::Report::fileStorage'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Report.fileStorage#destroy
              * @methodOf lbServices.Report.fileStorage
@@ -34403,12 +34374,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.fileStorage.destroy = function() {
-          var TargetResource = $injector.get("FileStorage");
-          var action = TargetResource["::destroy::Report::fileStorage"];
+          var TargetResource = $injector.get('FileStorage');
+          var action = TargetResource['::destroy::Report::fileStorage'];
           return action.apply(R, arguments);
         };
 
-            /**
+        /**
              * @ngdoc method
              * @name lbServices.Report.fileStorage#update
              * @methodOf lbServices.Report.fileStorage
@@ -34445,8 +34416,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.fileStorage.update = function() {
-          var TargetResource = $injector.get("FileStorage");
-          var action = TargetResource["::update::Report::fileStorage"];
+          var TargetResource = $injector.get('FileStorage');
+          var action = TargetResource['::update::Report::fileStorage'];
           return action.apply(R, arguments);
         };
 
@@ -34456,94 +34427,94 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
 
 
   module
-  .factory('LoopBackAuth', function() {
-    var props = ['accessTokenId', 'currentUserId', 'rememberMe'];
-    var propsPrefix = '$LoopBack$';
+    .factory('LoopBackAuth', function() {
+      var props = ['accessTokenId', 'currentUserId', 'rememberMe'];
+      var propsPrefix = '$LoopBack$';
 
-    function LoopBackAuth() {
-      var self = this;
-      props.forEach(function(name) {
-        self[name] = load(name);
-      });
-      this.currentUserData = null;
-    }
-
-    LoopBackAuth.prototype.save = function() {
-      var self = this;
-      var storage = this.rememberMe ? localStorage : sessionStorage;
-      props.forEach(function(name) {
-        save(storage, name, self[name]);
-      });
-    };
-
-    LoopBackAuth.prototype.setUser = function(accessTokenId, userId, userData) {
-      this.accessTokenId = accessTokenId;
-      this.currentUserId = userId;
-      this.currentUserData = userData;
-    };
-
-    LoopBackAuth.prototype.clearUser = function() {
-      this.accessTokenId = null;
-      this.currentUserId = null;
-      this.currentUserData = null;
-    };
-
-    LoopBackAuth.prototype.clearStorage = function() {
-      props.forEach(function(name) {
-        save(sessionStorage, name, null);
-        save(localStorage, name, null);
-      });
-    };
-
-    return new LoopBackAuth();
-
-    // Note: LocalStorage converts the value to string
-    // We are using empty string as a marker for null/undefined values.
-    function save(storage, name, value) {
-      try {
-        var key = propsPrefix + name;
-        if (value == null) value = '';
-        storage[key] = value;
-      } catch (err) {
-        console.log('Cannot access local/session storage:', err);
+      function LoopBackAuth() {
+        var self = this;
+        props.forEach(function(name) {
+          self[name] = load(name);
+        });
+        this.currentUserData = null;
       }
-    }
 
-    function load(name) {
-      var key = propsPrefix + name;
-      return localStorage[key] || sessionStorage[key] || null;
-    }
-  })
-  .config(['$httpProvider', function($httpProvider) {
-    $httpProvider.interceptors.push('LoopBackAuthRequestInterceptor');
-  }])
-  .factory('LoopBackAuthRequestInterceptor', ['$q', 'LoopBackAuth',
-    function($q, LoopBackAuth) {
-      return {
-        'request': function(config) {
+      LoopBackAuth.prototype.save = function() {
+        var self = this;
+        var storage = this.rememberMe ? localStorage : sessionStorage;
+        props.forEach(function(name) {
+          save(storage, name, self[name]);
+        });
+      };
+
+      LoopBackAuth.prototype.setUser = function(accessTokenId, userId, userData) {
+        this.accessTokenId = accessTokenId;
+        this.currentUserId = userId;
+        this.currentUserData = userData;
+      };
+
+      LoopBackAuth.prototype.clearUser = function() {
+        this.accessTokenId = null;
+        this.currentUserId = null;
+        this.currentUserData = null;
+      };
+
+      LoopBackAuth.prototype.clearStorage = function() {
+        props.forEach(function(name) {
+          save(sessionStorage, name, null);
+          save(localStorage, name, null);
+        });
+      };
+
+      return new LoopBackAuth();
+
+      // Note: LocalStorage converts the value to string
+      // We are using empty string as a marker for null/undefined values.
+      function save(storage, name, value) {
+        try {
+          var key = propsPrefix + name;
+          if (value == null) value = '';
+          storage[key] = value;
+        } catch (err) {
+          console.log('Cannot access local/session storage:', err);
+        }
+      }
+
+      function load(name) {
+        var key = propsPrefix + name;
+        return localStorage[key] || sessionStorage[key] || null;
+      }
+    })
+    .config(['$httpProvider', function($httpProvider) {
+      $httpProvider.interceptors.push('LoopBackAuthRequestInterceptor');
+    }])
+    .factory('LoopBackAuthRequestInterceptor', ['$q', 'LoopBackAuth',
+      function($q, LoopBackAuth) {
+        return {
+          request: function(config) {
           // filter out external requests
-          var host = getHost(config.url);
-          if (host && host !== urlBaseHost) {
-            return config;
-          }
+            var host = getHost(config.url);
+            if (host && host !== urlBaseHost) {
+              return config;
+            }
 
-          if (LoopBackAuth.accessTokenId) {
-            config.headers[authHeader] = LoopBackAuth.accessTokenId;
-          } else if (config.__isGetCurrentUser__) {
+            if (LoopBackAuth.accessTokenId) {
+              config.headers[authHeader] = LoopBackAuth.accessTokenId;
+            } else if (config.__isGetCurrentUser__) {
             // Return a stub 401 error for User.getCurrent() when
             // there is no user logged in
-            var res = {
-              body: { error: { status: 401 }},
-              status: 401,
-              config: config,
-              headers: function() { return undefined; },
-            };
-            return $q.reject(res);
-          }
-          return config || $q.when(config);
-        },
-      };
-    }])
+              var res = {
+                body: { error: { status: 401 }},
+                status: 401,
+                config: config,
+                headers: function() { return undefined; },
+              };
+              return $q.reject(res);
+            }
+            return config || $q.when(config);
+          },
+        };
+      }])
 
   /**
    * @ngdoc object
@@ -34565,7 +34536,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
    *  });
    * ```
    */
-  .provider('LoopBackResource', function LoopBackResourceProvider() {
+    .provider('LoopBackResource', function LoopBackResourceProvider() {
     /**
      * @ngdoc method
      * @name lbServices.LoopBackResourceProvider#setAuthHeader
@@ -34576,22 +34547,22 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
      * the authentication token. It is sent in the `Authorization` header
      * by default.
      */
-    this.setAuthHeader = function(header) {
-      authHeader = header;
-    };
+      this.setAuthHeader = function(header) {
+        authHeader = header;
+      };
 
-    /**
+      /**
      * @ngdoc method
      * @name lbServices.LoopBackResourceProvider#getAuthHeader
      * @methodOf lbServices.LoopBackResourceProvider
      * @description
      * Get the header name that is used for sending the authentication token.
      */
-    this.getAuthHeader = function() {
-      return authHeader;
-    };
+      this.getAuthHeader = function() {
+        return authHeader;
+      };
 
-    /**
+      /**
      * @ngdoc method
      * @name lbServices.LoopBackResourceProvider#setUrlBase
      * @methodOf lbServices.LoopBackResourceProvider
@@ -34600,12 +34571,12 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
      * Change the URL of the REST API server. By default, the URL provided
      * to the code generator (`lb-ng` or `grunt-loopback-sdk-angular`) is used.
      */
-    this.setUrlBase = function(url) {
-      urlBase = url;
-      urlBaseHost = getHost(urlBase) || location.host;
-    };
+      this.setUrlBase = function(url) {
+        urlBase = url;
+        urlBaseHost = getHost(urlBase) || location.host;
+      };
 
-    /**
+      /**
      * @ngdoc method
      * @name lbServices.LoopBackResourceProvider#getUrlBase
      * @methodOf lbServices.LoopBackResourceProvider
@@ -34613,35 +34584,35 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
      * Get the URL of the REST API server. The URL provided
      * to the code generator (`lb-ng` or `grunt-loopback-sdk-angular`) is used.
      */
-    this.getUrlBase = function() {
-      return urlBase;
-    };
-
-    this.$get = ['$resource', function($resource) {
-      var LoopBackResource = function(url, params, actions) {
-        var resource = $resource(url, params, actions);
-
-        // Angular always calls POST on $save()
-        // This hack is based on
-        // http://kirkbushell.me/angular-js-using-ng-resource-in-a-more-restful-manner/
-        resource.prototype.$save = function(success, error) {
-          // Fortunately, LoopBack provides a convenient `upsert` method
-          // that exactly fits our needs.
-          var result = resource.upsert.call(this, {}, this, success, error);
-          return result.$promise || result;
-        };
-        return resource;
-      };
-
-      LoopBackResource.getUrlBase = function() {
+      this.getUrlBase = function() {
         return urlBase;
       };
 
-      LoopBackResource.getAuthHeader = function() {
-        return authHeader;
-      };
+      this.$get = ['$resource', function($resource) {
+        var LoopBackResource = function(url, params, actions) {
+          var resource = $resource(url, params, actions);
 
-      return LoopBackResource;
-    }];
-  });
+          // Angular always calls POST on $save()
+          // This hack is based on
+          // http://kirkbushell.me/angular-js-using-ng-resource-in-a-more-restful-manner/
+          resource.prototype.$save = function(success, error) {
+          // Fortunately, LoopBack provides a convenient `upsert` method
+          // that exactly fits our needs.
+            var result = resource.upsert.call(this, {}, this, success, error);
+            return result.$promise || result;
+          };
+          return resource;
+        };
+
+        LoopBackResource.getUrlBase = function() {
+          return urlBase;
+        };
+
+        LoopBackResource.getAuthHeader = function() {
+          return authHeader;
+        };
+
+        return LoopBackResource;
+      }];
+    });
 })(window, window.angular);

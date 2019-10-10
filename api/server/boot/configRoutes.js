@@ -1,17 +1,17 @@
 /**
  * Created by payamyousefi on 5/11/15.
  */
-var logger = require('../modules/logger');
-var log = logger.createLogger();
-var utility = require('../modules/utility');
-var url = require('url');
-var underscore = require('underscore');
-var config = require('../modules/config');
+const logger = require('../modules/logger');
+const log = logger.createLogger();
+const utility = require('../modules/utility');
+const url = require('url');
+const underscore = require('underscore');
+const config = require('../modules/config');
 module.exports = function(app) {
-  var router = app.loopback.Router();
+  const router = app.loopback.Router();
 
   router.post('/api/config/systemConfig', function(req, res) {
-    var SystemConfig = app.models.SystemConfig;
+    const SystemConfig = app.models.SystemConfig;
     SystemConfig.getConfig()
       .then(function(systemConfig) {
         systemConfig.version = config.VERSION;
@@ -25,21 +25,21 @@ module.exports = function(app) {
       })
       .fail(function(error) {
         log.error(error);
-        return res.status(500).json({ error: 'failed to load config' });
+        return res.status(500).json({error: 'failed to load config'});
       });
   });
 
   router.post('/api/radius/loadThemeConfig', function(req, res) {
-    var Nas = app.models.Nas;
-    var Member = app.models.Member;
+    const Nas = app.models.Nas;
+    const Member = app.models.Member;
     log.debug(req.body);
     try {
       if (!req.body || !req.body.url) {
-        return res.status(500).json({ error: 'url parameters is required' });
+        return res.status(500).json({error: 'url parameters is required'});
       }
-      var urlParameter = req.body.url;
+      let urlParameter = req.body.url;
       urlParameter = urlParameter.replace('#!/', '');
-      var parsedUrl = url.parse(urlParameter, true);
+      const parsedUrl = url.parse(urlParameter, true);
       log.debug(parsedUrl);
       if (
         !parsedUrl.query.loginurl &&
@@ -48,13 +48,13 @@ module.exports = function(app) {
         !parsedUrl.query.nasid &&
         !parsedUrl.query.staticnasid
       ) {
-        return res.status(500).json({ error: 'Invalid parameters' });
+        return res.status(500).json({error: 'Invalid parameters'});
       }
-      var called, loginurl;
-      var responseQuery = {};
+      let called, loginurl;
+      let responseQuery = {};
       if (parsedUrl.query && parsedUrl.query.loginurl) {
-        //Handle coova chilli routers
-        var parsedLoginUrl = url.parse(parsedUrl.query.loginurl, true);
+        // Handle coova chilli routers
+        const parsedLoginUrl = url.parse(parsedUrl.query.loginurl, true);
         responseQuery = parsedLoginUrl.query;
         called = parsedLoginUrl.query.called;
         responseQuery.nasId = utility.trimMac(called);
@@ -65,8 +65,8 @@ module.exports = function(app) {
           responseQuery.uamport +
           '/login';
       } else if (parsedUrl.query && parsedUrl.query.actionurl) {
-        //Handle EnGenius routers
-        var parsedActionUrl = url.parse(parsedUrl.query.actionurl, true);
+        // Handle EnGenius routers
+        const parsedActionUrl = url.parse(parsedUrl.query.actionurl, true);
         responseQuery = parsedActionUrl.query;
         responseQuery.nasId = parsedUrl.query.staticnasid;
         responseQuery.uamip = parsedActionUrl.hostname;
@@ -78,17 +78,17 @@ module.exports = function(app) {
           responseQuery.uamport +
           '/www/login.chi';
       } else if (parsedUrl.query.staticnasid) {
-        //Handle EnGenius after login
+        // Handle EnGenius after login
         responseQuery.uamip = parsedUrl.query.uamip;
         responseQuery.uamport = parsedUrl.query.uamport;
         responseQuery.nasId = parsedUrl.query.staticnasid;
       } else if (parsedUrl.query.nasId) {
-        //Handle mikrotik routers
+        // Handle mikrotik routers
         responseQuery = parsedUrl.query;
         responseQuery.nasId = parsedUrl.query.nasId;
         responseQuery.signInUrl = 'http://' + responseQuery.host + '/login';
       } else if (parsedUrl.query.nasid) {
-        //Handle xclaim routers
+        // Handle xclaim routers
         responseQuery = parsedUrl.query;
         responseQuery.nasId = parsedUrl.query.nasid;
         responseQuery.signInUrl =
@@ -100,7 +100,7 @@ module.exports = function(app) {
       } else {
         return res
           .status(500)
-          .json({ error: 'failed to extract required params' });
+          .json({error: 'failed to extract required params'});
       }
 
       Nas.loadThemeConfigById(responseQuery.nasId, function(
@@ -122,7 +122,7 @@ module.exports = function(app) {
             if (themeConfig.enableMemberAutoLogin === true) {
               underscore.extend(themeConfig, credentials);
             }
-            //log.debug ( "merged config:", themeConfig );
+            // log.debug ( "merged config:", themeConfig );
             return res.status(200).json(themeConfig);
           })
           .fail(function(error) {

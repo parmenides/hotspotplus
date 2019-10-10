@@ -1,5 +1,4 @@
-var logger = require('../modules/logger');
-
+const logger = require('../modules/logger');
 
 module.exports = function(Generic) {
   Generic.getLogger = function() {
@@ -13,9 +12,8 @@ module.exports = function(Generic) {
   };
 
   Generic.createOptionsFromRemotingContext = function(ctx) {
-    var base = this.base.createOptionsFromRemotingContext(ctx);
+    const base = this.base.createOptionsFromRemotingContext(ctx);
     base.currentUserId = base.accessToken && base.accessToken.userId;
     return base;
   };
-
 };

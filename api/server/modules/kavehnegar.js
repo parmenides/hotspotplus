@@ -1,7 +1,7 @@
 require('date-utils');
-var needle = require('needle');
-var logger = require('./logger');
-var log = logger.createLogger();
+const needle = require('needle');
+const logger = require('./logger');
+const log = logger.createLogger();
 
 module.exports.sendMessageToKavehnegar = function(
   SMS_API_KEY,
@@ -13,9 +13,9 @@ module.exports.sendMessageToKavehnegar = function(
   template
 ) {
   log.debug('@sendMessageToKavehnegar');
-  var LOOKUP_SMS_PROVIDER =
+  const LOOKUP_SMS_PROVIDER =
     'https://api.kavenegar.com/v1/' + SMS_API_KEY + '/verify/lookup.json';
-  var data = {};
+  const data = {};
   data.receptor = receptor;
   data.token = token;
   data.token2 = token2;
@@ -24,7 +24,7 @@ module.exports.sendMessageToKavehnegar = function(
   data.template = template;
   log.debug(LOOKUP_SMS_PROVIDER);
   return needle('post', LOOKUP_SMS_PROVIDER, data).then(function(result) {
-    var body = result.body;
+    const body = result.body;
     log.debug('Response:', typeof body);
     log.debug('Response:', body);
     if (body && body.return.status !== 200) {
@@ -44,25 +44,25 @@ module.exports.sendGroupMessageToKavehnegar = function(
   receptors,
   message
 ) {
-  var GROUP_SMS_PROVIDER =
+  const GROUP_SMS_PROVIDER =
     'https://api.kavenegar.com/v1/' + SMS_API_KEY + '/sms/send.json';
-  var data = {};
+  const data = {};
   data.receptor = receptors.join(',').toString();
   data.message = message;
   log.debug(GROUP_SMS_PROVIDER);
   log.debug(data);
   return needle('post', GROUP_SMS_PROVIDER, data).then(function(result) {
-    var body = result.body;
+    const body = result.body;
     log.debug('Response:', body);
     if (body && body.return && body.return.status !== 200) {
       log.error(body);
       throw new Error(JSON.stringify(body));
     }
     if (body && body.entries) {
-      var entries = result.body.entries;
-      var cost = 0;
-      for (var i = 0; i < entries.length; i++) {
-        var entry = entries[i];
+      const entries = result.body.entries;
+      let cost = 0;
+      for (let i = 0; i < entries.length; i++) {
+        const entry = entries[i];
         cost = cost + (entry.cost / 10) * -1;
       }
       return cost;

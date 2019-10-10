@@ -1,48 +1,47 @@
-var app = require('../../server/server')
-var utility = require('../../server/modules/utility')
-var Q = require('q')
-var config = require('../../server/modules/config.js')
-var smsModule = require('../../server/modules/sms')
-var logger = require('../../server/modules/logger')
-const db = require('../../server/modules/db.factory')
+const app = require('../../server/server');
+const utility = require('../../server/modules/utility');
+const Q = require('q');
+const config = require('../../server/modules/config.js');
+const smsModule = require('../../server/modules/sms');
+const logger = require('../../server/modules/logger');
+const db = require('../../server/modules/db.factory');
 
+module.exports = function(Charge) {
+  const log = logger.createLogger();
 
-module.exports = function (Charge) {
-  var log = logger.createLogger()
-
-  Charge.loadCharges = function (businessId, startDate, skip, limit) {
-    return Q.Promise(function (resolve, reject) {
+  Charge.loadCharges = function(businessId, startDate, skip, limit) {
+    return Q.Promise(function(resolve, reject) {
       db.getCharges(businessId, startDate, skip, limit)
-        .then(function (charges) {
-          //log.debug( '@getCharges', startDate, skip, limit )
-          return resolve(charges)
+        .then(function(charges) {
+          // log.debug( '@getCharges', startDate, skip, limit )
+          return resolve(charges);
         })
-        .fail(function (error) {
-          log.error('@getCharges', error)
-          return reject(error)
-        })
-    })
-  }
+        .fail(function(error) {
+          log.error('@getCharges', error);
+          return reject(error);
+        });
+    });
+  };
 
-  Charge.addCharge = function (chargeInfo) {
-    var ownerMobile = chargeInfo.notifyOwner
-    log.debug(chargeInfo)
-    var charge = {
+  Charge.addCharge = function(chargeInfo) {
+    const ownerMobile = chargeInfo.notifyOwner;
+    log.debug(chargeInfo);
+    const charge = {
       amount: chargeInfo.amount,
       type: chargeInfo.type,
       forThe: chargeInfo.forThe, // description
       businessId: chargeInfo.businessId,
-    }
-    return db.addCharge(charge).then(function () {
+    };
+    return db.addCharge(charge).then(function() {
       if (chargeInfo.amount > 0 && ownerMobile) {
         smsModule.send({
           token1: charge.amount,
           mobile: ownerMobile,
-          template: config.BUSINESS_SMS_CHARGE_CONFIRM
-        })
+          template: config.BUSINESS_SMS_CHARGE_CONFIRM,
+        });
       }
-    })
-  }
+    });
+  };
 
   Charge.remoteMethod('loadCharges', {
     description: 'get charges of a business between two dates, skip and limit',
@@ -50,24 +49,24 @@ module.exports = function (Charge) {
       {
         arg: 'businessId',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'startDate',
         type: 'number',
-        required: true
+        required: true,
       },
       {
         arg: 'skip',
         type: 'number',
-        required: true
+        required: true,
       },
       {
         arg: 'limit',
         type: 'number',
-        required: true
-      }
+        required: true,
+      },
     ],
-    returns: {root: true}
-  })
-}
+    returns: {root: true},
+  });
+};

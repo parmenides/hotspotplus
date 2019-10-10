@@ -164,6 +164,8 @@ services:
       - ALLOW_EMPTY_PASSWORD=yes
     networks:
       - hotspotplusgate
+    ports:
+      - 6379:6379
   clickhouse:
     image: yandex/clickhouse-server:19.13.5.44
     hostname: clickhouse

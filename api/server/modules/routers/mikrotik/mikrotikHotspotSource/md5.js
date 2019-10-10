@@ -11,8 +11,8 @@
  * to work around bugs in some JS interpreters.
  */
 function safe_add(x, y) {
-  var lsw = (x & 0xffff) + (y & 0xffff);
-  var msw = (x >> 16) + (y >> 16) + (lsw >> 16);
+  const lsw = (x & 0xffff) + (y & 0xffff);
+  const msw = (x >> 16) + (y >> 16) + (lsw >> 16);
   return (msw << 16) | (lsw & 0xffff);
 }
 
@@ -47,16 +47,16 @@ function ii(a, b, c, d, x, s, t) {
  * of little-endian words.
  */
 function coreMD5(x) {
-  var a = 1732584193;
-  var b = -271733879;
-  var c = -1732584194;
-  var d = 271733878;
+  let a = 1732584193;
+  let b = -271733879;
+  let c = -1732584194;
+  let d = 271733878;
 
   for (i = 0; i < x.length; i += 16) {
-    var olda = a;
-    var oldb = b;
-    var oldc = c;
-    var oldd = d;
+    const olda = a;
+    const oldb = b;
+    const oldc = c;
+    const oldd = d;
 
     a = ff(a, b, c, d, x[i + 0], 7, -680876936);
     d = ff(d, a, b, c, x[i + 1], 12, -389564586);
@@ -138,9 +138,9 @@ function coreMD5(x) {
  * Convert an array of little-endian words to a hex string.
  */
 function binl2hex(binarray) {
-  var hex_tab = '0123456789abcdef';
-  var str = '';
-  for (var i = 0; i < binarray.length * 4; i++) {
+  const hex_tab = '0123456789abcdef';
+  let str = '';
+  for (let i = 0; i < binarray.length * 4; i++) {
     str +=
       hex_tab.charAt((binarray[i >> 2] >> ((i % 4) * 8 + 4)) & 0xf) +
       hex_tab.charAt((binarray[i >> 2] >> ((i % 4) * 8)) & 0xf);
@@ -152,9 +152,9 @@ function binl2hex(binarray) {
  * Convert an array of little-endian words to a base64 encoded string.
  */
 function binl2b64(binarray) {
-  var tab = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-  var str = '';
-  for (var i = 0; i < binarray.length * 32; i += 6) {
+  const tab = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+  let str = '';
+  for (let i = 0; i < binarray.length * 32; i += 6) {
     str += tab.charAt(
       ((binarray[i >> 5] << i % 32) & 0x3f) |
         ((binarray[i >> (5 + 1)] >> (32 - (i % 32))) & 0x3f)
@@ -169,8 +169,8 @@ function binl2b64(binarray) {
  * If any of the characters are >255, the high byte is silently ignored.
  */
 function str2binl(str) {
-  var nblk = ((str.length + 8) >> 6) + 1; // number of 16-word blocks
-  var blks = new Array(nblk * 16);
+  const nblk = ((str.length + 8) >> 6) + 1; // number of 16-word blocks
+  const blks = new Array(nblk * 16);
   for (var i = 0; i < nblk * 16; i++) blks[i] = 0;
   for (var i = 0; i < str.length; i++)
     blks[i >> 2] |= (str.charCodeAt(i) & 0xff) << ((i % 4) * 8);
@@ -184,8 +184,8 @@ function str2binl(str) {
  * an array, and append appropriate padding for MD4/5 calculation.
  */
 function strw2binl(str) {
-  var nblk = ((str.length + 4) >> 5) + 1; // number of 16-word blocks
-  var blks = new Array(nblk * 16);
+  const nblk = ((str.length + 4) >> 5) + 1; // number of 16-word blocks
+  const blks = new Array(nblk * 16);
   for (var i = 0; i < nblk * 16; i++) blks[i] = 0;
   for (var i = 0; i < str.length; i++)
     blks[i >> 1] |= str.charCodeAt(i) << ((i % 2) * 16);

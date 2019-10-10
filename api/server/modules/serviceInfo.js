@@ -7,13 +7,13 @@ module.exports = {
     'cafeAndRestaurant',
     'hotelsAndPassage',
     'dormitoryAndUniversity',
-    'customize'
+    'customize',
   ],
   serviceTemplates: {
-    cafeAndRestaurant: { onlineUsers: 20 },
-    hotelsAndPassage: { onlineUsers: 60 },
-    dormitoryAndUniversity: { onlineUsers: 150 },
-    customize: { onlineUsers: 20 }
+    cafeAndRestaurant: {onlineUsers: 20},
+    hotelsAndPassage: {onlineUsers: 60},
+    dormitoryAndUniversity: {onlineUsers: 150},
+    customize: {onlineUsers: 20},
   },
-  onlineUsersPrice: [{ from: 0, to: 1000, price: 400 }]
+  onlineUsersPrice: [{from: 0, to: 1000, price: 400}],
 };

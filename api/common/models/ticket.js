@@ -1,14 +1,14 @@
 'use strict';
-var app = require('../../server/server');
-var Q = require('q');
-var config = require('../../server/modules/config.js');
-var logger = require('../../server/modules/logger');
-var log = logger.createLogger();
-var smsModule = require('../../server/modules/sms');
+const app = require('../../server/server');
+const Q = require('q');
+const config = require('../../server/modules/config.js');
+const logger = require('../../server/modules/logger');
+const log = logger.createLogger();
+const smsModule = require('../../server/modules/sms');
 
 module.exports = function(Ticket) {
   Ticket.replyToTicket = function(ticketId, msg) {
-    var Business = app.models.Business;
+    const Business = app.models.Business;
     return Q.Promise(function(resolve, reject) {
       Ticket.findById(ticketId, function(error, ticket) {
         if (error) {
@@ -21,11 +21,11 @@ module.exports = function(Ticket) {
           error.status = 404;
           return reject(error);
         }
-        var messages = ticket.messages || [];
+        const messages = ticket.messages || [];
         messages.push(msg);
         log.debug(ticket);
         log.debug(ticket.messages);
-        ticket.updateAttributes({ messages: messages }, function(
+        ticket.updateAttributes({messages: messages}, function(
           error,
           result
         ) {
@@ -34,10 +34,10 @@ module.exports = function(Ticket) {
             return reject(error);
           }
 
-          Business.findById(ticket.businessId).then( function( business) {
-            var ticketCode = ticket.ticketCode;
-            var mobile;
-            var messageTemplate;
+          Business.findById(ticket.businessId).then(function(business) {
+            const ticketCode = ticket.ticketCode;
+            let mobile,
+              messageTemplate;
             if (msg.sendBy == 'customer') {
               messageTemplate = config.NOTIFY_SUPPORT_TEMPLATE;
               mobile = config.SUPPORT_MOBILE;
@@ -48,7 +48,7 @@ module.exports = function(Ticket) {
             smsModule.send({
               token1: ticketCode,
               mobile: mobile,
-              template: messageTemplate
+              template: messageTemplate,
             });
           });
           return resolve(result);
@@ -61,14 +61,14 @@ module.exports = function(Ticket) {
       {
         arg: 'ticketId',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'message',
         type: 'object',
-        required: true
-      }
+        required: true,
+      },
     ],
-    returns: { root: true }
+    returns: {root: true},
   });
 };

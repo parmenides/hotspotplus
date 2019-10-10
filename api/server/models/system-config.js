@@ -1,14 +1,14 @@
 'use strict';
-var app = require('../../server/server');
-var config = require('../modules/config');
-var utility = require('../modules/utility');
-var Q = require('q');
-var redis = require('redis');
-var redisClient = redis.createClient(config.REDIS.PORT, config.REDIS.HOST);
-var logger = require('../modules/logger');
+const app = require('../../server/server');
+const config = require('../modules/config');
+const utility = require('../modules/utility');
+const Q = require('q');
+const redis = require('redis');
+const redisClient = redis.createClient(config.REDIS.PORT, config.REDIS.HOST);
+const logger = require('../modules/logger');
 
 module.exports = function(Systemconfig) {
-  var log = logger.createLogger();
+  const log = logger.createLogger();
 
   Systemconfig.isLocal = function() {
     return Systemconfig.getConfig().then(function(systemConfig) {
@@ -42,7 +42,7 @@ module.exports = function(Systemconfig) {
           process.env.CALCULATED_HOTSPOT_ADDRESS =
             systemConfig.hotspotAddress ||
             process.env.EXTRACTED_HOTSPOT_ADDRESS;
-          //set env
+          // set env
           process.env.DROPBOX_APP_SECRET = systemConfig.dropBoxAppSecret;
           process.env.DROPBOX_APP_KEY = systemConfig.dropBoxAppKey;
 

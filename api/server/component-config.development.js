@@ -1,5 +1,5 @@
 module.exports = {
   'loopback-component-explorer': {
-    mountPath: '/explorer'
-  }
+    mountPath: '/explorer',
+  },
 };

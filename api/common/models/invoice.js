@@ -1,16 +1,16 @@
 'use strict';
-var logger = require('../../server/modules/logger');
-var app = require('../../server/server');
-var config = require('../../server/modules/config');
-var utility = require('../../server/modules/utility');
-var Payment = require('../../server/modules/payment');
-var Q = require('q');
-var serviceInfo = require('../../server/modules/serviceInfo.js');
+const logger = require('../../server/modules/logger');
+const app = require('../../server/server');
+const config = require('../../server/modules/config');
+const utility = require('../../server/modules/utility');
+const Payment = require('../../server/modules/payment');
+const Q = require('q');
+const serviceInfo = require('../../server/modules/serviceInfo.js');
 
 module.exports = function(Invoice) {
-  var log = logger.createLogger();
+  const log = logger.createLogger();
 
-  Invoice.verifyInvoice = function(invoiceId,refId) {
+  Invoice.verifyInvoice = function(invoiceId, refId) {
     return Q.Promise(function(resolve, reject) {
       if (!invoiceId) {
         return reject('invalid invoice id');
@@ -23,17 +23,17 @@ module.exports = function(Invoice) {
         if (!invoice) {
           return resolve('invoice not found');
         }
-        var price = invoice.price;
+        const price = invoice.price;
         Payment.verifyPayment(config.PAYMENT_API_KEY, refId, price)
           .then(function(result) {
             log.debug(result);
             if (result.payed) {
-              var refId = result.refId;
+              const refId = result.refId;
               invoice.updateAttributes(
                 {
                   payed: true,
                   paymentRefId: refId,
-                  paymentDate: new Date().getTime()
+                  paymentDate: new Date().getTime(),
                 },
                 function(error, updated) {
                   if (error) {
@@ -55,14 +55,14 @@ module.exports = function(Invoice) {
   };
 
   Invoice.verifyAndUseCoupon = function(price, couponCode) {
-    var Coupon = app.models.Coupon;
+    const Coupon = app.models.Coupon;
     return Q.Promise(function(resolve, reject) {
       if (price && couponCode) {
         Coupon.findOne(
           {
             where: {
-              and: [{ code: couponCode }, { ownerId: config.ADMIN_OWNER_ID }]
-            }
+              and: [{code: couponCode}, {ownerId: config.ADMIN_OWNER_ID}],
+            },
           },
           function(error, coupon) {
             if (error) {
@@ -73,10 +73,10 @@ module.exports = function(Invoice) {
               log.error('coupon not found');
               return reject('coupon not found');
             }
-            var unit = coupon.value.unit;
-            var amount = coupon.value.amount;
+            const unit = coupon.value.unit;
+            const amount = coupon.value.amount;
             if (unit === config.PERCENT_UNIT) {
-              var discountAmount = (price * amount) / 100;
+              const discountAmount = (price * amount) / 100;
               price = price - discountAmount;
             } else if (unit === config.TOMAN_UNIT) {
               price = price - amount;
@@ -84,7 +84,7 @@ module.exports = function(Invoice) {
             coupon
               .updateAttributes({
                 used: coupon.used + 1,
-                redeemDate: new Date().getTime()
+                redeemDate: new Date().getTime(),
               })
               .then(
                 function() {
@@ -115,7 +115,7 @@ module.exports = function(Invoice) {
       discountCoupon = discountCoupon || {};
       Invoice.verifyAndUseCoupon(price, discountCoupon.code)
         .then(function(discountedPrice) {
-          var issueDate = new Date().getTime();
+          const issueDate = new Date().getTime();
           Invoice.create(
             {
               price: discountedPrice,
@@ -124,15 +124,15 @@ module.exports = function(Invoice) {
               returnUrl: returnUrl,
               invoiceType: invoiceType,
               serviceInfo: serviceInfo,
-              issueDate: issueDate
+              issueDate: issueDate,
             },
             function(error, invoice) {
               if (error) {
                 log.error('failed to create invoice', error);
                 return reject(error);
               }
-              var invoiceId = invoice.id;
-              var returnUrl = config
+              const invoiceId = invoice.id;
+              const returnUrl = config
                 .EXTERNAL_PAYMENT_RETURN_URL()
                 .replace('{0}', 'invoiceId')
                 .replace('{1}', invoiceId);
@@ -145,18 +145,18 @@ module.exports = function(Invoice) {
                 returnUrl
               )
                 .then(function(response) {
-                  var url = response.url;
-                  var paymentId = response.paymentId;
+                  const url = response.url;
+                  const paymentId = response.paymentId;
                   invoice.updateAttributes(
                     {
-                      paymentId: paymentId
+                      paymentId: paymentId,
                     },
                     function(error) {
                       if (error) {
                         log.error('invoice update error:', error);
                         return reject(error);
                       }
-                      return resolve({ url: url });
+                      return resolve({url: url});
                     }
                   );
                 })
@@ -179,39 +179,39 @@ module.exports = function(Invoice) {
       {
         arg: 'price',
         type: 'number',
-        required: true
+        required: true,
       },
       {
         arg: 'uniqueId',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'invoiceType',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'returnUrl',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'serviceInfo',
         type: 'object',
-        required: true
+        required: true,
       },
       {
         arg: 'discountCoupon',
-        type: 'object'
-      }
+        type: 'object',
+      },
     ],
-    returns: { root: true }
+    returns: {root: true},
   });
 
-  Invoice.verifyExternalInvoice = function(invoiceId,refId) {
+  Invoice.verifyExternalInvoice = function(invoiceId, refId) {
     return Q.Promise(function(resolve, reject) {
-      var Invoice = app.models.Invoice;
+      const Invoice = app.models.Invoice;
       if (!invoiceId) {
         log.error('invoice not found');
         return reject('invoice id is empty');
@@ -224,7 +224,7 @@ module.exports = function(Invoice) {
         if (!invoice) {
           return reject('invoice not found');
         }
-        var price = invoice.price;
+        const price = invoice.price;
         log.debug(invoice);
         Payment.verifyPayment(config.PAYMENT_API_KEY, refId, price)
           .then(function(result) {
@@ -234,24 +234,24 @@ module.exports = function(Invoice) {
                 log.error(error);
                 return reject(error);
               }
-              var refId = result.refId;
+              const refId = result.refId;
               invoice.updateAttributes(
                 {
                   payed: true,
                   paymentRefId: refId,
-                  paymentDate: new Date().getTime()
+                  paymentDate: new Date().getTime(),
                 },
                 function(error) {
                   if (error) {
                     log.error(error);
                     return reject(error);
                   }
-                  //needle post to update license and then update
+                  // needle post to update license and then update
                   return resolve({
                     code: 302,
                     returnUrl: invoice.returnUrl
                       .replace('{invoiceId}', invoiceId)
-                      .replace('{status}', 'success')
+                      .replace('{status}', 'success'),
                   });
                 }
               );
@@ -260,7 +260,7 @@ module.exports = function(Invoice) {
                 code: 302,
                 returnUrl: invoice.returnUrl
                   .replace('{invoiceId}', invoiceId)
-                  .replace('{status}', 'failed')
+                  .replace('{status}', 'failed'),
               });
             }
           })
@@ -270,7 +270,7 @@ module.exports = function(Invoice) {
               code: 302,
               returnUrl: invoice.returnUrl
                 .replace('{invoiceId}', invoiceId)
-                .replace('{status}', 'failed')
+                .replace('{status}', 'failed'),
             });
           });
       });
@@ -282,13 +282,13 @@ module.exports = function(Invoice) {
       {
         arg: 'invoiceId',
         type: 'string',
-        required: true
-      },{
+        required: true,
+      }, {
         arg: 'refId',
         type: 'string',
-        required: true
-      }
+        required: true,
+      },
     ],
-    returns: { root: true }
+    returns: {root: true},
   });
 };

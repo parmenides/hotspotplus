@@ -2,25 +2,25 @@
  * Created by payamyousefi on 8/4/16.
  */
 
-var Q = require('q');
-var app = require('../server');
-var logger = require('./logger');
-var log = logger.createLogger();
-var radius = require('radius');
-var dgram = require('dgram');
+const Q = require('q');
+const app = require('../server');
+const logger = require('./logger');
+const log = logger.createLogger();
+const radius = require('radius');
+const dgram = require('dgram');
 
 exports.sendPod = function(clientSession) {
   return Q.Promise(function(resolve, reject) {
     log.debug('Going to dc ', clientSession);
-    var Business = app.models.Business;
-    var Nas = app.models.Nas;
+    const Business = app.models.Business;
+    const Nas = app.models.Nas;
     clientSession.source = 'Hotspotplus POD Service';
-    var username = clientSession.username;
-    var framedIpAddress = clientSession.framedIpAddress;
-    var nasSessionId = clientSession.nasSessionId;
-    var mac = clientSession.mac;
-    var nasId = clientSession.nasId;
-    var nasIp = clientSession.nasIp;
+    const username = clientSession.username;
+    const framedIpAddress = clientSession.framedIpAddress;
+    const nasSessionId = clientSession.nasSessionId;
+    const mac = clientSession.mac;
+    const nasId = clientSession.nasId;
+    const nasIp = clientSession.nasIp;
 
     if (!nasId || !username || !framedIpAddress || !nasSessionId || !mac) {
       return reject('invalid parameters, failed to dc user');
@@ -28,31 +28,31 @@ exports.sendPod = function(clientSession) {
 
     Nas.findById(nasId)
       .then(function(nas) {
-        var businessId = nas.businessId;
+        const businessId = nas.businessId;
         Business.findById(businessId)
           .then(function(business) {
             try {
-              var port = nas.port || '3799';
+              const port = nas.port || '3799';
               if (nasIp && port) {
                 log.debug('nas ip and port, IP: ', nasIp, ', Port:', port);
-                var secret = business.nasSharedSecret;
-                var routerAddress = nasIp;
-                var routerPort = port;
+                const secret = business.nasSharedSecret;
+                const routerAddress = nasIp;
+                const routerPort = port;
 
-                var podMessage = {
+                const podMessage = {
                   code: 'Disconnect-Request',
                   secret: secret,
                   attributes: [
                     ['User-Name', username],
                     ['Framed-IP-Address', framedIpAddress],
                     ['Acct-Session-Id', nasSessionId],
-                    ['Calling-Station-Id', mac]
-                  ]
+                    ['Calling-Station-Id', mac],
+                  ],
                 };
-                var podRequest = radius.encode(podMessage);
-                var server = dgram.createSocket('udp4');
+                const podRequest = radius.encode(podMessage);
+                const server = dgram.createSocket('udp4');
                 server.on('message', function(msg, rinfo) {
-                  var packet = radius.decode({ packet: msg, secret: secret });
+                  const packet = radius.decode({packet: msg, secret: secret});
                   if (packet.code === 'Disconnect-ACK') {
                     server.close(function() {
                       log.debug('Closed after Disconnect');

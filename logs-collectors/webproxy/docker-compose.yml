@@ -15,7 +15,7 @@ services:
     networks:
       - hotspotplusgate
   clickhouse-sinker-webproxy:
-    image: 'registry.gitlab.com/parmenides/hotspotplus/clickhouse-sinker:latest'
+    image: 'registry.gitlab.com/parmenides/hotspotplus/clickhousesinker:latest'
     restart: always
     volumes:
     - ./sinker-webproxy:/opt/config

@@ -1,17 +1,17 @@
 /**
  * Created by payamyousefi on 5/11/15.
  */
-var config = require('../modules/config');
-var logger = require('../modules/logger');
-var log = logger.createLogger();
-var temp = require('temp').track();
-var utility = require('../modules/utility');
-var requestIp = require('request-ip');
+const config = require('../modules/config');
+const logger = require('../modules/logger');
+const log = logger.createLogger();
+const temp = require('temp').track();
+const utility = require('../modules/utility');
+const requestIp = require('request-ip');
 require('date-utils');
-var licenseFile = require('nodejs-license-file');
+const licenseFile = require('nodejs-license-file');
 
 module.exports = function(app) {
-  var router = app.loopback.Router();
+  const router = app.loopback.Router();
 
   router.post('/api/radius/getLocalPackages', function(req, res) {
     return res.status(200).send(config.LOCAL_MODULES);
@@ -21,20 +21,20 @@ module.exports = function(app) {
   });
 
   router.post('/api/radius/config', function(req, res) {
-    var License = app.models.License;
-    var LicenseAudit = app.models.LicenseAudit;
-    var data = req.body;
-    var remoteIp = requestIp.getClientIp(req);
-    var reporterIp = data.ip;
-    var receivedLicense = data.lc;
+    const License = app.models.License;
+    const LicenseAudit = app.models.LicenseAudit;
+    const data = req.body;
+    const remoteIp = requestIp.getClientIp(req);
+    const reporterIp = data.ip;
+    const receivedLicense = data.lc;
     log.debug('checking license ', req.body);
     log.debug(data);
-    License.findOne({ where: { serial: receivedLicense.serial } }, function(
+    License.findOne({where: {serial: receivedLicense.serial}}, function(
       error,
       license
     ) {
       if (error) {
-        //deny
+        // deny
         log.debug(error);
         return res.status(500).json({});
       }
@@ -44,33 +44,33 @@ module.exports = function(app) {
         return res.status(500).json({});
       }
 
-      var statusCode;
+      let statusCode;
       if (license) {
         if (new Date(license.expiresAt).isAfter(new Date())) {
-          //allow
+          // allow
           statusCode = createOkayCode();
         } else {
-          //deny
+          // deny
           statusCode = createNokayCode();
         }
       } else {
-        //deny
+        // deny
         statusCode = createNokayCode();
       }
 
-      var smsStatusCode = createNokayCode();
+      let smsStatusCode = createNokayCode();
       if (license.sms === 1) {
         smsStatusCode = createOkayCode();
       }
-      var logStatusCode = createNokayCode();
+      let logStatusCode = createNokayCode();
       if (license.log === 1) {
         logStatusCode = createOkayCode();
       }
-      var memberStatusCode = createNokayCode();
+      let memberStatusCode = createNokayCode();
       if (license.member === 1) {
         memberStatusCode = createOkayCode();
       }
-      var paymentStatusCode = createNokayCode();
+      let paymentStatusCode = createNokayCode();
       if (license.payment === 1) {
         paymentStatusCode = createOkayCode();
       }
@@ -82,7 +82,7 @@ module.exports = function(app) {
           licenseId: license.id,
           status: statusCode,
           creationDate: new Date().getTime(),
-          creationDateObj: new Date()
+          creationDateObj: new Date(),
         },
         function(error) {
           if (error) {
@@ -91,7 +91,7 @@ module.exports = function(app) {
           }
           log.debug(statusCode);
 
-          var result = {};
+          const result = {};
           result.radius0 = utility.encrypt(statusCode, license.serial);
           result.radius1 = utility.encrypt(smsStatusCode, license.serial);
           result.radius2 = utility.encrypt(logStatusCode, license.serial);

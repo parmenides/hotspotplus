@@ -1,10 +1,10 @@
-var hotspotTemplates = require('../../server/modules/hotspotTemplates');
-var Q = require('q');
+const hotspotTemplates = require('../../server/modules/hotspotTemplates');
+const Q = require('q');
 
 module.exports = function(Theme) {
   Theme.loadHotspotThemes = function() {
     return Q.promise(function(resolve, reject) {
-      var themes = hotspotTemplates;
+      const themes = hotspotTemplates;
       if (!themes) {
         return reject('hotspot theme undefined');
       }
@@ -15,6 +15,6 @@ module.exports = function(Theme) {
   Theme.remoteMethod('loadHotspotThemes', {
     description: 'Load hotspot themes',
     accepts: [],
-    returns: { root: true }
+    returns: {root: true},
   });
 };

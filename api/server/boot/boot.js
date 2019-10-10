@@ -1,25 +1,24 @@
-var config = require('../modules/config');
-var Q = require('q');
-var logger = require('../modules/logger');
-var utility = require('../modules/utility');
-var redis = require('redis');
-const db = require('../modules/db.factory')
+const config = require('../modules/config');
+const Q = require('q');
+const logger = require('../modules/logger');
+const utility = require('../modules/utility');
+const redis = require('redis');
+const db = require('../modules/db.factory');
 
-var redisLicenseReload = redis.createClient(
+const redisLicenseReload = redis.createClient(
   process.env.REDIS_PORT,
   process.env.REDIS_IP
 );
 
-
-module.exports = async function (app) {
-  var User = app.models.User;
-  var Role = app.models.Role;
-  var SystemConfig = app.models.SystemConfig;
-  var log = logger.createLogger();
+module.exports = async function(app) {
+  const User = app.models.User;
+  const Role = app.models.Role;
+  const SystemConfig = app.models.SystemConfig;
+  const log = logger.createLogger();
 
   SystemConfig.getConfig();
   addDefaultRolesAndUsers();
-  await db.init()
+  await db.init();
 
   log.debug('App started');
 
@@ -33,7 +32,7 @@ module.exports = async function (app) {
       addOrLoadRole(config.ROLES.NAS),
       addOrLoadRole(config.ROLES.HOTSPOTMEMBER),
       addOrLoadRole(config.ROLES.SERVICEPROVIDER),
-      addOrLoadRole(config.ROLES.CUSTOMER)
+      addOrLoadRole(config.ROLES.CUSTOMER),
     ]).then(function(result) {
       log.debug('all roles added');
       addOrLoadUser(
@@ -47,22 +46,22 @@ module.exports = async function (app) {
         config.DEFAULTS.ADMIN_ROLES
       );
     }).fail((error)=>{
-      log.error(error)
+      log.error(error);
     });
   }
 
   function addOrLoadUser(username, password, roles) {
-    User.findOne({ where: { username: username } }, function(error, user) {
+    User.findOne({where: {username: username}}, function(error, user) {
       if (error) {
         log.error(error);
         return;
       }
 
-      var superuser = {
+      const superuser = {
         username: username,
         active: true,
         password: password,
-        email: username + '@' + config.DEFAULTS.USERS_DOMAIN
+        email: username + '@' + config.DEFAULTS.USERS_DOMAIN,
       };
       if (!user) {
         User.create(superuser, function(error, user) {
@@ -70,9 +69,9 @@ module.exports = async function (app) {
             log.error(error);
             return;
           }
-          for (var i = 0; i < roles.length; i++) {
+          for (let i = 0; i < roles.length; i++) {
             var roleName = roles[i];
-            Role.findOne({ where: { name: roleName } }, function(error, role) {
+            Role.findOne({where: {name: roleName}}, function(error, role) {
               if (error) {
                 log.error(error);
                 return;
@@ -81,7 +80,7 @@ module.exports = async function (app) {
                 log.error('no such a role to assign: ', roleName);
                 return;
               }
-              var roleMapping = { principalType: 'USER', principalId: user.id };
+              const roleMapping = {principalType: 'USER', principalId: user.id};
               role.principals.create(roleMapping, function(error) {
                 if (error) {
                   log.error('failed to assign role', error);
@@ -107,13 +106,13 @@ module.exports = async function (app) {
   function addOrLoadRole(roleName) {
     log.debug('Going to check role:', roleName);
     return Q.Promise(function(resolve, reject) {
-      Role.findOne({ where: { name: roleName } }, function(error, role) {
+      Role.findOne({where: {name: roleName}}, function(error, role) {
         if (error) {
           return reject(error);
         }
         if (!role) {
           log.debug('Going to Add role:', roleName);
-          Role.create({ name: roleName }, function(error, createdRole) {
+          Role.create({name: roleName}, function(error, createdRole) {
             if (error) {
               log.error('failed to create role', error);
               return reject(error);
@@ -129,8 +128,7 @@ module.exports = async function (app) {
     });
   }
 
-
-  //radius.startRadius ();
+  // radius.startRadius ();
   redisLicenseReload.on('message', function() {
     process.exit(1);
   });

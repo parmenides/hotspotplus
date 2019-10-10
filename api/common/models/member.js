@@ -1,25 +1,26 @@
-var app = require('../../server/server')
-var utility = require('../../server/modules/utility')
-var Q = require('q')
-var config = require('../../server/modules/config.js')
-var logger = require('../../server/modules/logger')
-var db = require('../../server/modules/db.factory')
-var redis = require('redis')
-var redisClient = redis.createClient(config.REDIS.PORT, config.REDIS.HOST)
-var log = logger.createLogger()
-var smsModule = require('../../server/modules/sms')
-var createError = require('http-errors')
-var radiusAdaptor = require('../../server/modules/radiusAdaptor')
-var Radius_Messages = require('../../server/modules/radiusMessages')
-var _ = require('underscore')
-var querystring = require('querystring')
-var radiusPod = require('../../server/modules/radiusDisconnectService')
-var dust = require('dustjs-helpers')
-var fs = require('fs')
+const app = require('../../server/server')
+const utility = require('../../server/modules/utility')
+const Q = require('q')
+const config = require('../../server/modules/config.js')
+const logger = require('../../server/modules/logger')
+const db = require('../../server/modules/db.factory')
+const redis = require('redis')
+const redisClient = redis.createClient(config.REDIS.PORT, config.REDIS.HOST)
+const log = logger.createLogger()
+const smsModule = require('../../server/modules/sms')
+const createError = require('http-errors')
+const radiusAdaptor = require('../../server/modules/radiusAdaptor')
+const Radius_Messages = require('../../server/modules/radiusMessages')
+const _ = require('underscore')
+const querystring = require('querystring')
+const radiusPod = require('../../server/modules/radiusDisconnectService')
+const dust = require('dustjs-helpers')
+const fs = require('fs')
 const createHttpError = require('http-errors')
-var hotspotMessages = require('../../server/modules/hotspotMessages')
-var csvtojson = require('csvtojson')
+const hotspotMessages = require('../../server/modules/hotspotMessages')
+const csvtojson = require('csvtojson')
 const cacheManager = require('../../server/modules/cacheManager')
+const Payment = require('../../server/modules/payment')
 
 module.exports = function (Member) {
   Member.validatesUniquenessOf('uniqueUserId')
@@ -33,7 +34,6 @@ module.exports = function (Member) {
       active: member.active,
       language: member.language,
     })
-
   }
 
   Member.remoteMethod('signIn', {
@@ -41,38 +41,38 @@ module.exports = function (Member) {
       {
         arg: 'businessId',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'username',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'password',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'routerType',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'nasId',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'pinCode',
-        type: 'string'
+        type: 'string',
       },
       {
         arg: 'mac',
-        type: 'string'
-      }
+        type: 'string',
+      },
     ],
-    returns: {root: true}
+    returns: {root: true},
   })
 
   /* return array of new & old count of members base on interval date from aggregates.js
@@ -88,13 +88,13 @@ module.exports = function (Member) {
     monthDays,
     cb
   ) {
-    //todo: replace with db aggregates
-    var fromDate = Number.parseInt(startDate)
-    var toDate = Number.parseInt(endDate)
+    // todo: replace with db aggregates
+    const fromDate = Number.parseInt(startDate)
+    const toDate = Number.parseInt(endDate)
     offset = -offset * config.AGGREGATE.HOUR_MILLISECONDS
-    var oneDay = config.AGGREGATE.DAY_MILLISECONDS
-    var intervalMilli = oneDay
-    //todo re implement me
+    const oneDay = config.AGGREGATE.DAY_MILLISECONDS
+    const intervalMilli = oneDay
+    // todo re implement me
     cb(null, {message: 'needs to reimplement'})
     /*
         aggregate
@@ -135,7 +135,7 @@ module.exports = function (Member) {
           .fail(function (error) {
             log.error(error)
             return cb(error)
-          })*/
+          }) */
   }
 
   Member.remoteMethod('getMembersChart', {
@@ -145,47 +145,48 @@ module.exports = function (Member) {
         arg: 'startDate',
         type: 'string',
         required: true,
-        description: 'Start Date'
+        description: 'Start Date',
       },
       {
         arg: 'endDate',
         type: 'string',
         required: true,
-        description: 'End Date'
+        description: 'End Date',
       },
       {
         arg: 'businessId',
         type: 'string',
         required: true,
-        description: 'business ID'
+        description: 'business ID',
       },
       {
         arg: 'offset',
         type: 'number',
         required: false,
-        description: 'Time Zone'
+        description: 'Time Zone',
       },
       {
         arg: 'monthDays',
         type: 'array',
         required: false,
-        description: 'Days Of Month'
-      }
+        description: 'Days Of Month',
+      },
     ],
-    returns: {arg: 'result', type: 'Object'}
+    returns: {arg: 'result', type: 'Object'},
   })
 
   Member.observe('after save', function (ctx, next) {
-    var Role = app.models.Role
+    const Role = app.models.Role
 
     if (ctx.instance) {
       const entity = ctx.instance
       cacheManager.clearCache(entity.id)
+      cacheManager.clearMemberUsageCache(entity.id)
       cacheManager.clearCache(`${entity.businessId}:${entity.username}`)
     }
 
     if (ctx.isNewInstance) {
-      var id = ctx.instance.id
+      const id = ctx.instance.id
       Role.findOne({where: {name: config.ROLES.HOTSPOTMEMBER}}, function (
         error,
         role
@@ -202,7 +203,7 @@ module.exports = function (Member) {
         if (!role) {
           return next('failed to load role')
         }
-        var roleMapping = {principalType: 'USER', principalId: id}
+        const roleMapping = {principalType: 'USER', principalId: id}
         role.principals.create(roleMapping, function (error, result) {
           if (error) {
             log.error('failed to assign role to business', error)
@@ -231,14 +232,14 @@ module.exports = function (Member) {
       if (member.mobile) {
         member.mobile = utility.verifyAndTrimMobile(member.mobile)
         if (!member.mobile) {
-          var error = new Error()
+          const error = new Error()
           error.status = 422
           error.message = hotspotMessages.invalidMobileNumber
           return clbk(error)
         }
       }
       if (member.passwordText) {
-        var password = member.passwordText
+        const password = member.passwordText
         member.password = password
         member.passwordText = utility.encrypt(password, config.ENCRYPTION_KEY)
       }
@@ -263,27 +264,28 @@ module.exports = function (Member) {
     const member = await Member.findOne(
       {
         where: {
-          and: [{id: memberId}, {businessId: businessId}]
-        }
-      })
+          and: [{id: memberId}, {businessId: businessId}],
+        },
+      }
+    )
     if (!member) {
       throw createHttpError(404, hotspotMessages.memberNotFound)
     }
     if (!member.mobile) {
       throw createHttpError(403, hotspotMessages.noMobileNumber)
     }
-    var plainPassword = utility.decrypt(
+    const plainPassword = utility.decrypt(
       member.passwordText,
       config.ENCRYPTION_KEY
     )
-    var plainUsername = member.username.split('@')[0]
+    const plainUsername = member.username.split('@')[0]
 
     Member.sendSms(businessId, {
       businessId: businessId,
       token1: plainUsername,
       token2: plainPassword,
       mobile: member.mobile,
-      template: config.HOTSPOT_CREDENTIALS_MESSAGE_TEMPLATE
+      template: config.HOTSPOT_CREDENTIALS_MESSAGE_TEMPLATE,
     })
     return 'sms added to Queue'
   }
@@ -294,15 +296,15 @@ module.exports = function (Member) {
       {
         arg: 'businessId',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'memberId',
         type: 'string',
-        required: true
-      }
+        required: true,
+      },
     ],
-    returns: {root: true}
+    returns: {root: true},
   })
 
   Member.recoverHotspotUser = function (userMobile, host, nasId, businessId) {
@@ -313,9 +315,9 @@ module.exports = function (Member) {
           where: {
             and: [
               {businessId: businessId},
-              {mobile: utility.verifyAndTrimMobile(userMobile)}
-            ]
-          }
+              {mobile: utility.verifyAndTrimMobile(userMobile)},
+            ],
+          },
         },
         function (error, member) {
           if (error) {
@@ -349,26 +351,26 @@ module.exports = function (Member) {
       {
         arg: 'usernameOrMobile',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'host',
-        type: 'string'
+        type: 'string',
       },
       {
         arg: 'nasId',
-        type: 'string'
+        type: 'string',
       },
       {
         arg: 'businessId',
         type: 'string',
-        required: true
-      }
+        required: true,
+      },
     ],
-    returns: {root: true}
+    returns: {root: true},
   })
 
-  /*Member.observe ( 'loaded', function ( ctx, next ) {
+  /* Member.observe ( 'loaded', function ( ctx, next ) {
 		if ( ctx.data ) {
 			if ( ctx.data.internetPlanHistory ) {
 				var internetPlanHistory = ctx.data.internetPlanHistory;
@@ -379,17 +381,17 @@ module.exports = function (Member) {
 			}
 		}
 		return next ();
-	} );*/
+	} ); */
 
   Member.loadMember = function (memberId, ctx, cb) {
     Member.findOne(
       {
         where: {
-          and: [{id: memberId}]
+          and: [{id: memberId}],
         },
         fields: {
-          passwordText: false
-        }
+          passwordText: false,
+        },
       },
       function (error, member) {
         if (error) {
@@ -412,11 +414,11 @@ module.exports = function (Member) {
       {
         arg: 'memberId',
         type: 'string',
-        required: true
+        required: true,
       },
-      {arg: 'options', type: 'object', http: 'optionsFromRequest'}
+      {arg: 'options', type: 'object', http: 'optionsFromRequest'},
     ],
-    returns: {root: true}
+    returns: {root: true},
   })
 
   Member.loadMemberPassword = function (memberId, businessId, ctx, cb) {
@@ -424,11 +426,11 @@ module.exports = function (Member) {
     Member.findOne(
       {
         where: {
-          and: [{id: memberId}, {businessId: businessId}]
+          and: [{id: memberId}, {businessId: businessId}],
         },
         fields: {
-          passwordText: true
-        }
+          passwordText: true,
+        },
       },
       function (error, member) {
         if (error) {
@@ -454,26 +456,26 @@ module.exports = function (Member) {
       {
         arg: 'memberId',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'businessId',
-        type: 'string'
+        type: 'string',
       },
-      {arg: 'options', type: 'object', http: 'optionsFromRequest'}
+      {arg: 'options', type: 'object', http: 'optionsFromRequest'},
     ],
-    returns: {root: true}
+    returns: {root: true},
   })
 
   Member.loadMemberInternetPlans = function (businessId, memberId, cb) {
     Member.findOne(
       {
         where: {
-          and: [{id: memberId}, {businessId: businessId}]
+          and: [{id: memberId}, {businessId: businessId}],
         },
         fields: {
-          internetPlanHistory: true
-        }
+          internetPlanHistory: true,
+        },
       },
       function (error, member) {
         if (error) {
@@ -495,15 +497,15 @@ module.exports = function (Member) {
       {
         arg: 'businessId',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'memberId',
         type: 'string',
-        required: true
-      }
+        required: true,
+      },
     ],
-    returns: {root: true}
+    returns: {root: true},
   })
 
   Member.getMemberByUserName = async function (businessId, username) {
@@ -516,9 +518,9 @@ module.exports = function (Member) {
       where: {
         and: [
           {businessId: businessId},
-          {username: Member.createUsername(businessId, username)}
-        ]
-      }
+          {username: Member.createUsername(businessId, username)},
+        ],
+      },
     })
     cacheManager.cacheIt(cacheKey, member)
     return member
@@ -526,23 +528,23 @@ module.exports = function (Member) {
 
   Member.radiusAuthorize = async (AccessRequest) => {
     log.debug('@RadiusAuthorize')
-    var RadiusResponse = new radiusAdaptor.RadiusResponse(AccessRequest)
-    var Member = app.models.Member
-    var username = AccessRequest.getAttribute('username')
-    var nas = AccessRequest.nas
-    var businessId = nas.businessId
+    const RadiusResponse = new radiusAdaptor.RadiusResponse(AccessRequest)
+    const Member = app.models.Member
+    const username = AccessRequest.getAttribute('username')
+    const nas = AccessRequest.nas
+    const businessId = nas.businessId
 
     const {member} = await Member.checkAuthorization(businessId, nas.id, username)
     log.debug('authorization passed')
-    var clearTextPass = utility.decrypt(member.passwordText, config.ENCRYPTION_KEY)
+    const clearTextPass = utility.decrypt(member.passwordText, config.ENCRYPTION_KEY)
     RadiusResponse.addControl('clearTextPass', clearTextPass)
     RadiusResponse.setCode(200)
     return RadiusResponse
   }
 
   Member.checkAuthorization = async (businessId, nasId, username) => {
-    var Business = app.models.Business
-    var InternetPlan = app.models.InternetPlan
+    const Business = app.models.Business
+    const InternetPlan = app.models.InternetPlan
     const business = await Business.loadById(businessId)
     const validSubscription = await Business.hasValidSubscription(business)
     if (!validSubscription) {
@@ -554,7 +556,7 @@ module.exports = function (Member) {
       throw createError(500, hotspotMessages.maxOnlineUsersReached)
     }
 
-    //has cache
+    // has cache
     const member = await Member.getMemberByUserName(businessId, username)
     if (!member) {
       throw createError(401, hotspotMessages.invalidUsernameOrPassword)
@@ -578,7 +580,7 @@ module.exports = function (Member) {
       throw createError(401, Radius_Messages.noActiveSubscription)
     }
 
-    //todo add cache
+    // todo add cache
     const usageReport = await Member.getInternetUsage(businessId.toString(), member.id.toString(), duration.from.getTime(), duration.to.getTime())
     log.error(usageReport)
     const remainingBulk = Member.hasEnoughBulk(internetPlan, usageReport.bulk, member.extraBulk)
@@ -595,23 +597,22 @@ module.exports = function (Member) {
   }
 
   Member.radiusPostAuth = async function (AccessRequest, dontUpdateSessions) {
-
-    var RadiusResponse = new radiusAdaptor.RadiusResponse(AccessRequest)
-    var nas = AccessRequest.nas
-    var nasId = nas.id
-    var businessId = nas.businessId.valueOf()
-    var username = AccessRequest.getAttribute('username')
+    const RadiusResponse = new radiusAdaptor.RadiusResponse(AccessRequest)
+    const nas = AccessRequest.nas
+    const nasId = nas.id
+    const businessId = nas.businessId.valueOf()
+    const username = AccessRequest.getAttribute('username')
 
     const {business, member, internetPlan, duration, remainingBulk, remainingTimeInSeconds} = await Member.checkAuthorization(businessId, nasId, username)
-    var memberId = member.id
+    const memberId = member.id
     const memberSessions = await Member.getMemberCurrentSessions(businessId, memberId)
-    var numberOfMembersSession = memberSessions.length
+    const numberOfMembersSession = memberSessions.length
     if (nas.sessionStatus !== 'multiSession') {
-      //Handle single session && kill other sessions
+      // Handle single session && kill other sessions
       if (nas.kickOnSingleSession) {
         if (numberOfMembersSession > 0) {
-          for (var k = 0; k < sessions.length; k++) {
-            var singleSession = sessions[k]
+          for (let k = 0; k < memberSessions.length; k++) {
+            const singleSession = memberSessions[k]
             if (!dontUpdateSessions) {
               radiusPod.sendPod(singleSession)
             }
@@ -626,16 +627,16 @@ module.exports = function (Member) {
     RadiusResponse.addAllowedBulk(remainingBulk)
     RadiusResponse.addSessionTimeOut(remainingTimeInSeconds)
 
-    //Add speed limit
-    var uploadSpeed = utility.toKbps(internetPlan.speed.value, internetPlan.speed.type)
-    var downloadSpeed = utility.toKbps(internetPlan.speed.value, internetPlan.speed.type)
+    // Add speed limit
+    let uploadSpeed = utility.toKbps(internetPlan.speed.value, internetPlan.speed.type)
+    let downloadSpeed = utility.toKbps(internetPlan.speed.value, internetPlan.speed.type)
 
-    //Add burst
-    var burstTime = internetPlan.burstTime || config.DEFAULT_BURST_TIME_IN_SECONDS
-    var burstDownloadFactor = internetPlan.burstDownloadFactor || config.DEFAULT_DOWNLOAD_BURST_FACTOR
-    var burstUploadFactor = internetPlan.burstUploadFactor || config.DEFAULT_UPLOAD_BURST_FACTOR
+    // Add burst
+    const burstTime = internetPlan.burstTime || config.DEFAULT_BURST_TIME_IN_SECONDS
+    const burstDownloadFactor = internetPlan.burstDownloadFactor || config.DEFAULT_DOWNLOAD_BURST_FACTOR
+    const burstUploadFactor = internetPlan.burstUploadFactor || config.DEFAULT_UPLOAD_BURST_FACTOR
 
-    //Add valid ip pool name
+    // Add valid ip pool name
     if (internetPlan.ipPoolName) {
       RadiusResponse.addIpPool(internetPlan.ipPoolName)
     }
@@ -654,7 +655,6 @@ module.exports = function (Member) {
     }
     RadiusResponse.setCode(200)
     return RadiusResponse
-
   }
 
   Member.getInternetUsage = async function (
@@ -665,26 +665,29 @@ module.exports = function (Member) {
   ) {
     log.debug(`'GetInternetUsage businessId ${businessId} MemberId ${memberId} From:  ${fromDateInMs}  to ${toDateInMs}`)
     let usageList = await cacheManager.getMemberUsage(memberId)
+    log.debug({usageList})
     if (!usageList) {
       log.debug('loading usage from db')
       usageList = await db.getMemberUsage(fromDateInMs, toDateInMs, memberId, businessId)
-      for(const usage of usageList){
-        log.warn('refreshing cache from db ',usage)
-        await cacheManager.addMemberUsage(usage);
+      log.debug({usageList})
+      for (const usage of usageList) {
+        log.warn('refreshing cache from db ', usage)
+        usage.memberId = memberId
+        await cacheManager.addMemberUsage(usage)
       }
     }
 
-    let total = {
+    const total = {
       memberId,
       bulk: 0,
       download: 0,
       upload: 0,
-      sessionTime: 0
+      sessionTime: 0,
     }
     for (const usage of usageList) {
-      total.download = total.download + usage.download
-      total.upload = total.upload + usage.upload
-      total.sessionTime = total.sessionTime + usage.sessionTime
+      total.download = total.download + Number(usage.download)
+      total.upload = total.upload + Number(usage.upload)
+      total.sessionTime = total.sessionTime + Number(usage.sessionTime)
     }
     total.bulk = total.download + total.upload
 
@@ -692,10 +695,10 @@ module.exports = function (Member) {
   }
 
   Member.getSubscriptionDuration = function (member, internetPlan) {
-    var now = new Date()
-    var subscriptionDate = new Date(member.subscriptionDate)
+    const now = new Date()
+    const subscriptionDate = new Date(member.subscriptionDate)
     const planDuration = Number(internetPlan.duration)
-    var to = new Date(subscriptionDate)
+    const to = new Date(subscriptionDate)
     to.add({hours: 24 * planDuration})
     if (now.between(subscriptionDate, to)) {
       log.debug('It works and has a subscription')
@@ -710,7 +713,7 @@ module.exports = function (Member) {
     if (!usedBulk) {
       usedBulk = 0
     }
-    var allowedBulk = 0
+    let allowedBulk = 0
     if (internetPlan.bulk) {
       allowedBulk = utility.toByte(
         internetPlan.bulk.value,
@@ -725,7 +728,7 @@ module.exports = function (Member) {
     }
     log.debug('allowed bulk: ', allowedBulk)
     log.debug('usedBulk bulk: ', usedBulk)
-    var remainingBulk = allowedBulk - usedBulk
+    const remainingBulk = allowedBulk - usedBulk
     log.debug('remaining bulk: ', remainingBulk)
     return remainingBulk > 0 ? remainingBulk : 0
   }
@@ -733,11 +736,11 @@ module.exports = function (Member) {
   Member.hasEnoughTime = function (internetPlan, usedTimeInSeconds) {
     const maxAllowedTime = 86400 * 2
     var usedTimeInSeconds = Number(usedTimeInSeconds) || 0
-    var allowedTimeInMinutes = Number(internetPlan.timeDuration) || 0
+    const allowedTimeInMinutes = Number(internetPlan.timeDuration) || 0
     if (allowedTimeInMinutes === 0) {
       return maxAllowedTime
     }
-    var allowedTimeInSeconds = allowedTimeInMinutes * 60
+    const allowedTimeInSeconds = allowedTimeInMinutes * 60
     if (allowedTimeInSeconds > usedTimeInSeconds) {
       return allowedTimeInSeconds - usedTimeInSeconds
     } else {
@@ -756,8 +759,8 @@ module.exports = function (Member) {
       Member.findOne(
         {
           where: {
-            and: [{businessId: businessId}, {mac: mac}]
-          }
+            and: [{businessId: businessId}, {mac: mac}],
+          },
         },
         function (error, member) {
           if (error) {
@@ -765,17 +768,17 @@ module.exports = function (Member) {
             return reject(error)
           }
           if (member && member.active) {
-            //Fill in credentials
-            var clearTextPass = utility.decrypt(
+            // Fill in credentials
+            const clearTextPass = utility.decrypt(
               member.passwordText,
               config.ENCRYPTION_KEY
             )
             return resolve({
               username: member.username,
-              clearTextPassword: clearTextPass
+              clearTextPassword: clearTextPass,
             })
           } else {
-            //return empty credential
+            // return empty credential
             log.debug('member not found by mac')
             return resolve({})
           }
@@ -785,12 +788,12 @@ module.exports = function (Member) {
   }
 
   Member.getMemberCurrentSessions = async function (businessId, memberId) {
-    var ClientSession = app.models.ClientSession
+    const ClientSession = app.models.ClientSession
     return ClientSession.getActiveMemberSessions(memberId)
   }
 
   async function saveAccounting (RadiusAccountingMessage) {
-    var ClientSession = app.models.ClientSession
+    const ClientSession = app.models.ClientSession
     const nas = RadiusAccountingMessage.nas
     const businessId = nas.businessId.valueOf()
     const username = RadiusAccountingMessage.getAttribute('username')
@@ -798,25 +801,25 @@ module.exports = function (Member) {
     if (!member) {
       log.warn('accounting with unknown member, silently discarded')
     }
-    //await Usage.addUsageReport(usage)
+    // await Usage.addUsageReport(usage)
     await ClientSession.setSession({
       RadiusAccountingMessage,
       member,
-      nas
+      nas,
     })
 
-    /*if (nas.sessionStatus === 'multiSession' || nas.kickOnSingleSession) {
+    /* if (nas.sessionStatus === 'multiSession' || nas.kickOnSingleSession) {
       Member.evaluateMemberUsage(member, businessId)
-    }*/
+    } */
 
-    var mac = RadiusAccountingMessage.getAttribute('mac')
+    const mac = RadiusAccountingMessage.getAttribute('mac')
     const memberInstance = await Member.findById(member.id)
     await Member.setMemberMac(memberInstance, mac)
   }
 
   Member.radiusAccounting = async (RadiusAccountingMessage) => {
     try {
-      var RadiusResponse = new radiusAdaptor.RadiusResponse(
+      const RadiusResponse = new radiusAdaptor.RadiusResponse(
         RadiusAccountingMessage
       )
       saveAccounting(RadiusAccountingMessage)
@@ -847,7 +850,7 @@ module.exports = function (Member) {
     })
   }
 
-  /*Member.evaluateMemberUsage = function (member, businessId) {
+  /* Member.evaluateMemberUsage = function (member, businessId) {
     var InternetPlan = app.models.InternetPlan
     var internetPlanId = member.internetPlanId
     var memberId = member.id.toString()
@@ -910,13 +913,13 @@ module.exports = function (Member) {
 
       })
     })
-  }*/
+  } */
 
   Member.disconnectAllSessionOfMember = async function (businessId, memberId) {
     log.debug('dc for: ', businessId, ' memberId:', memberId)
     const sessions = Member.getMemberCurrentSessions(businessId, memberId)
     for (const session of sessions) {
-      radiusPod.sendPod(singleSession)
+      radiusPod.sendPod(session)
     }
   }
 
@@ -931,15 +934,15 @@ module.exports = function (Member) {
     if (!businessId || !nasId || !host || !verificationCode || !memberId) {
       return cb('invalid params to create verification url')
     }
-    var verificationUrl = config
+    const verificationUrl = config
       .HOTSPOT_VERIFICATION_URL()
       .replace('{businessId}', businessId)
       .replace('{nasId}', nasId)
       .replace('{host}', host)
       .replace('{verificationCode}', verificationCode)
       .replace('{memberId}', memberId)
-    var urlKey = utility.createRandomKeyword(6)
-    var shortUrl = config.SHORTNER_URL() + urlKey
+    const urlKey = utility.createRandomKeyword(6)
+    const shortUrl = config.SHORTNER_URL() + urlKey
     redisClient.set(
       urlKey,
       verificationUrl,
@@ -958,7 +961,7 @@ module.exports = function (Member) {
     memberId,
     cb
   ) {
-    var signInUrl = config
+    const signInUrl = config
       .HOTSPOT_SIGNIN_URL()
       .replace('{businessId}', businessId)
       .replace('{nasId}', nasId)
@@ -966,16 +969,16 @@ module.exports = function (Member) {
       .replace('{username}', username)
       .replace('{password}', password)
       .replace('{memberId}', memberId)
-    var urlKey = utility.createRandomKeyword(6)
-    var shortUrl = config.SHORTNER_URL() + urlKey
+    const urlKey = utility.createRandomKeyword(6)
+    const shortUrl = config.SHORTNER_URL() + urlKey
     redisClient.set(urlKey, signInUrl, 'EX', config.SHORT_LOGIN_URL_EXPIRES_AT)
     return cb(null, shortUrl)
   }
 
   Member.createNewMember = function (options, businessId, nasId, host) {
-    var Business = app.models.Business
+    const Business = app.models.Business
     return Q.Promise(function (resolve, reject) {
-      var member = {}
+      const member = {}
       member.businessId = businessId
       member.mobile = options.mobile
       member.email = options.email
@@ -995,7 +998,7 @@ module.exports = function (Member) {
         options.password || utility.createRandomNumericalPassword()
       member.verificationCode = utility.createVerificationCode()
       member.passportNumber = options.passportNumber
-      //member.active = true;
+      // member.active = true;
       if (options.active != null) {
         member.active = options.active
       }
@@ -1003,7 +1006,7 @@ module.exports = function (Member) {
       if (options.active != null) {
         member.active = options.active
       }
-      //Check if this is a hotel user
+      // Check if this is a hotel user
       if (member.passportNumber && !member.mobile) {
         member.username = member.passportNumber.trim()
         if (member.roomNumber) {
@@ -1034,21 +1037,21 @@ module.exports = function (Member) {
           return reject('business not found')
         }
 
-        var defaultInternetPlan = business.defaultInternetPlan || {}
+        const defaultInternetPlan = business.defaultInternetPlan || {}
         if (options.internetPlanId) {
           member.internetPlanId = options.internetPlanId
         } else if (defaultInternetPlan.id) {
           member.internetPlanId = business.defaultInternetPlan.id
           member.activateDefaultPlanCount = 1
         }
-        //todo check verification method and decide for 'active' attribute
+        // todo check verification method and decide for 'active' attribute
 
         Member.create(member, function (error, result) {
           if (error) {
             log.error(error)
             return reject(error)
           }
-          var memberId = result.id
+          const memberId = result.id
           if (options.sendVerificationSms) {
             Member.sendVerificationMessage(
               business,
@@ -1067,7 +1070,7 @@ module.exports = function (Member) {
                   verificationCode: verificationInfo.verificationCode,
                   password: member.passwordText,
                   businessId: member.businessId,
-                  memberId: memberId
+                  memberId: memberId,
                 })
               })
               .fail(function (error) {
@@ -1076,13 +1079,13 @@ module.exports = function (Member) {
                 return reject(error)
               })
           } else {
-            //log.debug ( "member created: ", member.username );
+            // log.debug ( "member created: ", member.username );
             return resolve({
               internetPlanId: member.internetPlanId,
               username: member.username,
               password: member.passwordText,
               businessId: member.businessId,
-              memberId: memberId
+              memberId: memberId,
             })
           }
         })
@@ -1095,23 +1098,23 @@ module.exports = function (Member) {
       {
         arg: 'options',
         type: 'object',
-        required: true
+        required: true,
       },
       {
         arg: 'businessId',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'nasId',
-        type: 'string'
+        type: 'string',
       },
       {
         arg: 'host',
-        type: 'string'
-      }
+        type: 'string',
+      },
     ],
-    returns: {root: true}
+    returns: {root: true},
   })
 
   Member.sendVerificationMessage = function (
@@ -1122,7 +1125,7 @@ module.exports = function (Member) {
     memberId,
     mobile
   ) {
-    var businessId = business.id
+    const businessId = business.id
     return Q.Promise(function (resolve, reject) {
       Member.createShortVerificationUrl(
         businessId,
@@ -1137,7 +1140,7 @@ module.exports = function (Member) {
           }
           shortUrl = shortUrl || ''
           log.debug('addHotSpotMember message added to queue')
-          var smsVerificationTemplate =
+          let smsVerificationTemplate =
             config.HOTSPOT_VERIFICATION_MESSAGE_TEMPLATE
           if (business.callBasedVerification === true) {
             smsVerificationTemplate =
@@ -1149,11 +1152,11 @@ module.exports = function (Member) {
             token1: verificationCode,
             token2: shortUrl,
             mobile: mobile,
-            template: smsVerificationTemplate
+            template: smsVerificationTemplate,
           })
           return resolve({
             shortUrl: shortUrl,
-            verificationCode: verificationCode
+            verificationCode: verificationCode,
           })
         }
       )
@@ -1196,13 +1199,13 @@ module.exports = function (Member) {
               or: [
                 {
                   username:
-                    utility.verifyAndTrimMobile(mobile) + '@' + businessId
+                    utility.verifyAndTrimMobile(mobile) + '@' + businessId,
                 },
-                {mobile: utility.verifyAndTrimMobile(mobile)}
-              ]
-            }
-          ]
-        }
+                {mobile: utility.verifyAndTrimMobile(mobile)},
+              ],
+            },
+          ],
+        },
       },
       function (error, previousMember) {
         if (error) {
@@ -1210,7 +1213,7 @@ module.exports = function (Member) {
           return cb(error)
         }
 
-        //Fix findOne bug;
+        // Fix findOne bug;
         if (
           previousMember &&
           previousMember.mobile !== utility.verifyAndTrimMobile(mobile)
@@ -1218,9 +1221,9 @@ module.exports = function (Member) {
           previousMember = null
         }
 
-        var sendVerificationSms = false
-        var isActive = false
-        var responseStatus = 0
+        let sendVerificationSms = false
+        let isActive = false
+        let responseStatus = 0
         verificationMethod = verificationMethod || 'mobile'
 
         if (verificationMethod === 'mobile') {
@@ -1243,7 +1246,7 @@ module.exports = function (Member) {
           isActive = false
         }
 
-        var Business = app.models.Business
+        const Business = app.models.Business
         if (!previousMember) {
           Member.createNewMember(
             {
@@ -1267,7 +1270,7 @@ module.exports = function (Member) {
               roomNumber: roomNumber,
               studentGrade: studentGrade,
               studentId: studentId,
-              age: age
+              age: age,
             },
             businessId,
             nasId,
@@ -1289,12 +1292,12 @@ module.exports = function (Member) {
           log.debug('Previous member exist', previousMember)
           Business.findById(businessId).then(function (business) {
             if (!business) {
-              var error = new Error()
+              const error = new Error()
               error.message = hotspotMessages.businessNotFound
               error.status = 404
               return cb(error)
             }
-            var verificationCodeMax =
+            const verificationCodeMax =
               business.MAX_VERIFICATION_COUNT || config.MAX_VERIFICATION_COUNT
             if (previousMember.active) {
               log.error(
@@ -1319,7 +1322,7 @@ module.exports = function (Member) {
                 'Member find but it is not active, username: ',
                 previousMember.username
               )
-              var count = previousMember.verificationCount + 1
+              const count = previousMember.verificationCount + 1
               previousMember.updateAttributes(
                 {verificationCount: count},
                 function (error, res) {
@@ -1365,102 +1368,102 @@ module.exports = function (Member) {
     accepts: [
       {
         arg: 'mobile',
-        type: 'string'
+        type: 'string',
       },
       {
         arg: 'firstName',
-        type: 'string'
+        type: 'string',
       },
       {
         arg: 'lastName',
-        type: 'string'
+        type: 'string',
       },
       {
         arg: 'fullName',
-        type: 'string'
+        type: 'string',
       },
       {
         arg: 'gender',
-        type: 'string'
+        type: 'string',
       },
       {
         arg: 'birthday',
-        type: 'number'
+        type: 'number',
       },
       {
         arg: 'birthDay',
-        type: 'number'
+        type: 'number',
       },
       {
         arg: 'birthMonth',
-        type: 'number'
+        type: 'number',
       },
       {
         arg: 'birthYear',
-        type: 'number'
+        type: 'number',
       },
       {
         arg: 'username',
-        type: 'string'
+        type: 'string',
       },
       {
         arg: 'password',
-        type: 'string'
+        type: 'string',
       },
       {
         arg: 'email',
-        type: 'string'
+        type: 'string',
       },
       {
         arg: 'nationalCode',
-        type: 'string'
+        type: 'string',
       },
       {
         arg: 'age',
-        type: 'number'
+        type: 'number',
       },
       {
         arg: 'id',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'host',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'nasId',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'language',
-        type: 'string'
+        type: 'string',
       },
       {
         arg: 'roomNumber',
-        type: 'string'
+        type: 'string',
       },
       {
         arg: 'passportNumber',
-        type: 'string'
+        type: 'string',
       },
       {
         arg: 'studentGrade',
-        type: 'string'
+        type: 'string',
       },
       {
         arg: 'studentId',
-        type: 'string'
+        type: 'string',
       },
       {
         arg: 'verificationMethod',
         type: 'string',
-        required: true
-      }
+        required: true,
+      },
     ],
-    returns: {root: true}
+    returns: {root: true},
   })
 
   /* return status of hotspot member or create one if it's not exist
@@ -1477,23 +1480,23 @@ module.exports = function (Member) {
     cb
   ) {
     log.debug('@verifyHotSpotMember')
-    var Member = app.models.Member
+    const Member = app.models.Member
     Member.findById(memberId).then(function (member) {
       log.debug(member)
       verificationCode = Number(verificationCode)
       if (member && member.verificationCode == verificationCode) {
-        var activatedPreviously = member.active
+        const activatedPreviously = member.active
         member.updateAttributes(
           {
             active: true,
-            verificationDate: new Date().getTime()
+            verificationDate: new Date().getTime(),
           },
           function (error, res) {
             if (error) {
               log.error(error)
               return cb(error)
             }
-            var password = utility.decrypt(
+            const password = utility.decrypt(
               member.passwordText,
               config.ENCRYPTION_KEY
             )
@@ -1503,7 +1506,7 @@ module.exports = function (Member) {
                 .then(function () {
                   return cb(null, {
                     username: member.username,
-                    password: password
+                    password: password,
                   })
                 })
                 .fail(function (error) {
@@ -1513,13 +1516,13 @@ module.exports = function (Member) {
               log.debug('member verified true')
               return cb(null, {
                 username: member.username,
-                password: password
+                password: password,
               })
             }
           }
         )
       } else {
-        var error = new Error()
+        const error = new Error()
         if (member) {
           error.message = hotspotMessages.invalidVerificationCode
           error.status = 403
@@ -1535,34 +1538,34 @@ module.exports = function (Member) {
   Member.remoteMethod('verifyHotSpot', {
     description: 'Verify mobile number',
     http: {
-      verb: 'post'
+      verb: 'post',
     },
     accepts: [
       {
         arg: 'id',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'memberId',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'verificationCode',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'host',
-        type: 'string'
+        type: 'string',
       },
       {
         arg: 'nasId',
-        type: 'string'
-      }
+        type: 'string',
+      },
     ],
-    returns: {root: true}
+    returns: {root: true},
   })
 
   Member.paySubscription = function (
@@ -1587,8 +1590,8 @@ module.exports = function (Member) {
       password
     )
     return Q.Promise(function (resolve, reject) {
-      var Business = app.models.Business
-      var InternetPlan = app.models.InternetPlan
+      const Business = app.models.Business
+      const InternetPlan = app.models.InternetPlan
       Business.findById(businessId).then(function (business) {
         if (!business) {
           var error = new Error()
@@ -1604,13 +1607,13 @@ module.exports = function (Member) {
         }
         InternetPlan.findById(internetPlanId).then(function (internetPlan) {
           if (!internetPlan) {
-            var error = new Error()
+            const error = new Error()
             error.message = hotspotMessages.internetPlanDoesNotExist
             error.status = 404
             return reject(error)
           }
-          var price = internetPlan.price
-          var desc =
+          const price = internetPlan.price
+          const desc =
             internetPlan.name +
             internetPlan.type +
             ', ' +
@@ -1619,8 +1622,8 @@ module.exports = function (Member) {
             ', ' +
             internetPlan.bulk.value +
             internetPlan.bulk.type
-          var issueDate = new Date().getTime()
-          var Invoice = app.models.Invoice
+          const issueDate = new Date().getTime()
+          const Invoice = app.models.Invoice
           Invoice.create(
             {
               price: price,
@@ -1629,7 +1632,7 @@ module.exports = function (Member) {
               description: desc,
               issueDate: issueDate,
               businessId: businessId,
-              memberId: memberId
+              memberId: memberId,
             },
             function (error, invoice) {
               if (error) {
@@ -1637,7 +1640,7 @@ module.exports = function (Member) {
                 return reject(error)
               }
 
-              var returnUrl = config
+              const returnUrl = config
                 .HOTSPOT_PAYMENT_RETURN_URL()
                 .replace('{0}', 'invoiceId')
                 .replace('{1}', invoice.id)
@@ -1656,10 +1659,10 @@ module.exports = function (Member) {
                 returnUrl
               )
                 .then(function (response) {
-                  var paymentId = response.paymentId
+                  const paymentId = response.paymentId
                   invoice.updateAttributes(
                     {
-                      paymentId: paymentId
+                      paymentId: paymentId,
                     },
                     function (error) {
                       if (error) {
@@ -1668,7 +1671,7 @@ module.exports = function (Member) {
                       }
                       return resolve({
                         code: 200,
-                        url: response.url
+                        url: response.url,
                       })
                     }
                   )
@@ -1686,47 +1689,47 @@ module.exports = function (Member) {
 
   Member.remoteMethod('paySubscription', {
     http: {
-      verb: 'post'
+      verb: 'post',
     },
     accepts: [
       {
         arg: 'businessId',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'memberId',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'packageId',
         type: 'string',
-        required: true
+        required: true,
       },
 
       {
         arg: 'nasId',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'host',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'username',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'password',
         type: 'string',
-        required: true
-      }
+        required: true,
+      },
     ],
-    returns: {root: true}
+    returns: {root: true},
   })
 
   Member.verifySubscriptionPayment = function (
@@ -1740,19 +1743,19 @@ module.exports = function (Member) {
     businessId
   ) {
     return Q.Promise(function (resolve, reject) {
-      var Invoice = app.models.Invoice
-      var InternetPlan = app.models.InternetPlan
-      var Business = app.models.Business
+      const Invoice = app.models.Invoice
+      const InternetPlan = app.models.InternetPlan
+      const Business = app.models.Business
 
       try {
         Invoice.findById(invoiceId, function (error, invoice) {
-          var params = {
+          const params = {
             host: host,
             businessId: businessId,
             nasId: nasId,
             memberIdId: memberId,
             username: username,
-            password: password
+            password: password,
           }
           if (error) {
             log.error('Error in return url finding invoice ' + error)
@@ -1762,7 +1765,7 @@ module.exports = function (Member) {
               code: 302,
               returnUrl: config
                 .HOTSPOT_PAYMENT_WEB_RETURN_URL()
-                .replace('{0}', querystring.stringify(params))
+                .replace('{0}', querystring.stringify(params)),
             })
           }
           if (!invoice) {
@@ -1772,12 +1775,12 @@ module.exports = function (Member) {
               code: 302,
               returnUrl: config
                 .HOTSPOT_PAYMENT_WEB_RETURN_URL()
-                .replace('{0}', querystring.stringify(params))
+                .replace('{0}', querystring.stringify(params)),
             })
           }
           var businessId = invoice.businessId
-          var paymentId = invoice.paymentId
-          var price = invoice.price
+          const paymentId = invoice.paymentId
+          const price = invoice.price
           Business.findById(businessId).then(function (business) {
             if (!business) {
               log.error('Invalid business id')
@@ -1786,7 +1789,7 @@ module.exports = function (Member) {
                 code: 302,
                 returnUrl: config
                   .HOTSPOT_PAYMENT_WEB_RETURN_URL()
-                  .replace('{0}', querystring.stringify(params))
+                  .replace('{0}', querystring.stringify(params)),
               })
             }
 
@@ -1796,7 +1799,7 @@ module.exports = function (Member) {
                 code: 500,
                 returnUrl: config
                   .HOTSPOT_PAYMENT_WEB_RETURN_URL()
-                  .replace('{0}', querystring.stringify(params))
+                  .replace('{0}', querystring.stringify(params)),
               })
             }
             Payment.verifyPayment(business.paymentApiKey, refId, price)
@@ -1804,12 +1807,12 @@ module.exports = function (Member) {
                 log.warn(verificationResult)
 
                 if (verificationResult.payed) {
-                  var refId = verificationResult.refId
+                  const refId = verificationResult.refId
                   invoice.updateAttributes(
                     {
                       payed: true,
                       paymentRefId: refId,
-                      paymentDate: new Date().getTime()
+                      paymentDate: new Date().getTime(),
                     },
                     function (error) {
                       if (error) {
@@ -1820,7 +1823,7 @@ module.exports = function (Member) {
                           code: 302,
                           returnUrl: config
                             .HOTSPOT_PAYMENT_WEB_RETURN_URL()
-                            .replace('{0}', querystring.stringify(params))
+                            .replace('{0}', querystring.stringify(params)),
                         })
                       }
                       log.debug(
@@ -1841,7 +1844,7 @@ module.exports = function (Member) {
                             code: 302,
                             returnUrl: config
                               .HOTSPOT_PAYMENT_WEB_RETURN_URL()
-                              .replace('{0}', querystring.stringify(params))
+                              .replace('{0}', querystring.stringify(params)),
                           })
                         })
                         .fail(function (error) {
@@ -1851,7 +1854,7 @@ module.exports = function (Member) {
                             code: 302,
                             returnUrl: config
                               .HOTSPOT_PAYMENT_WEB_RETURN_URL()
-                              .replace('{0}', querystring.stringify(params))
+                              .replace('{0}', querystring.stringify(params)),
                           })
                         })
                     }
@@ -1870,7 +1873,7 @@ module.exports = function (Member) {
                     code: 302,
                     returnUrl: config
                       .HOTSPOT_PAYMENT_WEB_RETURN_URL()
-                      .replace('{0}', querystring.stringify(params))
+                      .replace('{0}', querystring.stringify(params)),
                   })
                 }
               })
@@ -1882,7 +1885,7 @@ module.exports = function (Member) {
                   code: 302,
                   returnUrl: config
                     .HOTSPOT_PAYMENT_WEB_RETURN_URL()
-                    .replace('{0}', querystring.stringify(params))
+                    .replace('{0}', querystring.stringify(params)),
                 })
               })
           })
@@ -1894,7 +1897,7 @@ module.exports = function (Member) {
   }
 
   Member.autoReSubscribe = function (businessId, memberId, dateInMs) {
-    var InternetPlan = app.models.InternetPlan
+    const InternetPlan = app.models.InternetPlan
     return Q.Promise(function (resolve, reject) {
       if (!businessId || !memberId) {
         return reject('memid or biz id is empty')
@@ -1909,7 +1912,7 @@ module.exports = function (Member) {
         member.updateAttributes(
           {
             extraBulk: 0,
-            subscriptionDate: dateInMs
+            subscriptionDate: dateInMs,
           },
           function (error) {
             if (error) {
@@ -1953,14 +1956,14 @@ module.exports = function (Member) {
         {
           fields: {subscriptionDate: true, id: true},
           where: {id: memberId},
-          order: 'subscriptionDate DESC'
+          order: 'subscriptionDate DESC',
         },
         function (error, member) {
           if (error) {
             log.error(error)
             return reject(error)
           }
-          var subscriptionDate = null
+          let subscriptionDate = null
           if (member.length > 0) {
             subscriptionDate = member[0].subscriptionDate
           }
@@ -1974,8 +1977,8 @@ module.exports = function (Member) {
     if (receptorsLength == null || !messageText) {
       return 0
     }
-    var cost = 0
-    var standardPageLength
+    let cost = 0
+    let standardPageLength
     if (utility.isPersianSms(messageText)) {
       cost = config.PERSIAN_SMS_COST
       standardPageLength = 70
@@ -1983,7 +1986,7 @@ module.exports = function (Member) {
       standardPageLength = 60
       cost = config.ENGLISH_SMS_COST
     }
-    var numberOfSmsPage = Math.ceil(messageText.length / standardPageLength)
+    const numberOfSmsPage = Math.ceil(messageText.length / standardPageLength)
     return receptorsLength * numberOfSmsPage * cost
   }
 
@@ -2004,19 +2007,18 @@ module.exports = function (Member) {
           log.error('@getSmsCostForAllMembers', error)
           return reject(error)
         }
-        var totalCost = Member.calculateBulkSmsCost(
+        const totalCost = Member.calculateBulkSmsCost(
           receptorsLength,
           messageText
         )
-        aggregate
-          .getProfileBalance(businessId)
+        db.getProfileBalance(businessId)
           .then(function (balance) {
-            var result = {
+            const result = {
               totalCost: totalCost,
               receptorsLength: receptorsLength,
               messageText: messageText,
               balance: balance.balance,
-              balanceEnough: balance.balance > totalCost
+              balanceEnough: balance.balance > totalCost,
             }
             return resolve(result)
           })
@@ -2034,19 +2036,19 @@ module.exports = function (Member) {
       {
         arg: 'businessId',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'messageText',
         type: 'string',
-        required: true
-      }
+        required: true,
+      },
     ],
-    returns: {root: true}
+    returns: {root: true},
   })
 
   Member.sendMessageToAll = function (messageText, ctx) {
-    var businessId = ctx.currentUserId
+    const businessId = ctx.currentUserId
     return Q.Promise(function (resolve, reject) {
       Member.count({businessId: businessId, mobile: {gt: 0}}, function (
         error,
@@ -2056,11 +2058,11 @@ module.exports = function (Member) {
           log.error('@sendMessageToAll', error)
           return reject(error)
         }
-        var totalCost = Member.calculateBulkSmsCost(
+        const totalCost = Member.calculateBulkSmsCost(
           receptorsLength,
           messageText
         )
-        aggregate
+        db
           .getProfileBalance(businessId)
           .then(function (balance) {
             if (balance.balance > totalCost) {
@@ -2071,28 +2073,28 @@ module.exports = function (Member) {
                       {businessId: businessId},
                       {
                         mobile: {
-                          gt: 0
-                        }
-                      }
-                    ]
+                          gt: 0,
+                        },
+                      },
+                    ],
                   },
                   fields: {
-                    mobile: true
-                  }
+                    mobile: true,
+                  },
                 },
                 function (error, mobileList) {
                   if (error) {
                     log.error('@sendMessageToAll', error)
                     return reject(error)
                   }
-                  var mobiles = []
-                  for (var i = 0; i < mobileList.length; i++) {
+                  const mobiles = []
+                  for (let i = 0; i < mobileList.length; i++) {
                     mobiles.push(mobileList[i].mobile)
                   }
                   Member.sendSms(businessId, {
                     businessId: businessId,
                     mobiles: mobiles,
-                    message: messageText
+                    message: messageText,
                   })
                     .then(function () {
                       return resolve('sms added to Queue')
@@ -2103,7 +2105,7 @@ module.exports = function (Member) {
                 }
               )
             } else {
-              var error = 'balanceNotEnough'
+              const error = 'balanceNotEnough'
               log.error('@sendMessageToAll', error)
               return reject(error)
             }
@@ -2117,7 +2119,7 @@ module.exports = function (Member) {
   }
 
   Member.sendSms = function (businessId, smsData) {
-    var Business = app.models.Business
+    const Business = app.models.Business
     return Q.Promise(function (resolve, reject) {
       Business.findById(businessId).then(function (business) {
         if (business.modules && business.modules.sms) {
@@ -2154,16 +2156,15 @@ module.exports = function (Member) {
       {
         arg: 'messageText',
         type: 'string',
-        required: true
+        required: true,
       },
-      {arg: 'options', type: 'object', http: 'optionsFromRequest'}
+      {arg: 'options', type: 'object', http: 'optionsFromRequest'},
     ],
-    returns: {root: true}
+    returns: {root: true},
   })
 
   Member.loadMemberUsage = async (members) => {
-
-    var results = {}
+    const results = {}
     for (const member of members) {
       if (member.subscriptionDate) {
         const fromDate = member.subscriptionDate
@@ -2171,14 +2172,14 @@ module.exports = function (Member) {
         const memberId = member.id
         const businessId = member.businessId
 
-        const memberTraffic = await db.getMemberUsage(fromDate, toDate, memberId, businessId)
-        const {upload, download, sessionTime} = memberTraffic
+        const memberTraffic = await Member.getInternetUsage(businessId, memberId, fromDate, toDate)
+        const {bulk, upload, download, sessionTime} = memberTraffic
         results[memberId] = {
           upload,
           download,
-          bulk: upload + download,
+          bulk,
           sessionTime,
-          memberId
+          memberId,
         }
       }
     }
@@ -2191,10 +2192,10 @@ module.exports = function (Member) {
       {
         arg: 'members',
         type: 'array',
-        required: true
-      }
+        required: true,
+      },
     ],
-    returns: {root: true}
+    returns: {root: true},
   })
 
   /* return balance of hotspot member
@@ -2218,8 +2219,8 @@ module.exports = function (Member) {
     Member.findOne(
       {
         where: {
-          and: [{id: memberId}, {businessId: businessId}]
-        }
+          and: [{id: memberId}, {businessId: businessId}],
+        },
       },
       function (error, member) {
         if (error) {
@@ -2240,12 +2241,12 @@ module.exports = function (Member) {
           log.error('@getMemberBalance : member has no internet plan')
           return cb(error)
         }
-        var InternetPlan = app.models.InternetPlan
+        const InternetPlan = app.models.InternetPlan
         InternetPlan.findOne(
           {
             where: {
-              id: member.internetPlanId
-            }
+              id: member.internetPlanId,
+            },
           },
           function (error, internetPlan) {
             if (error) {
@@ -2259,13 +2260,13 @@ module.exports = function (Member) {
               log.error('@getMemberBalance : plan not found')
               return cb(error)
             }
-            var plan = {}
+            let plan = {}
             plan = internetPlan
             plan.originalBulk = plan.bulk.value
             plan.originalTimeDuration = plan.timeDuration
-            var extraBulk = 0
-            var toDateInMs = new Date().getTime()
-            var fromDateInMs = member.subscriptionDate
+            let extraBulk = 0
+            const toDateInMs = new Date().getTime()
+            const fromDateInMs = member.subscriptionDate
             if (member.extraBulk) {
               extraBulk = member.extraBulk
             }
@@ -2278,10 +2279,10 @@ module.exports = function (Member) {
             )
               .then(function (usage) {
                 if (plan.bulk.value == 0) {
-                  //means unlimited
+                  // means unlimited
                   plan.bulk.value = -1
                 } else {
-                  var currentBulk = Number.parseInt(plan.bulk.value)
+                  let currentBulk = Number.parseInt(plan.bulk.value)
                   switch (plan.bulk.type) {
                     case 'KB':
                       extraBulk = utility.convertGBtoKB(extraBulk)
@@ -2307,14 +2308,14 @@ module.exports = function (Member) {
                   plan.bulk.value = currentBulk
                 }
                 if (plan.timeDuration > 0) {
-                  var currentTime =
+                  let currentTime =
                     plan.timeDuration - (usage.sessionTime / 60).toFixed(0)
                   if (currentTime < 0) {
                     currentTime = 0
                   }
                   plan.timeDuration = currentTime
                 } else if (plan.timeDuration == 0) {
-                  //means unlimited
+                  // means unlimited
                   plan.timeDuration = -1
                 }
                 return cb(null, plan)
@@ -2335,15 +2336,15 @@ module.exports = function (Member) {
       {
         arg: 'businessId',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'memberId',
         type: 'string',
-        required: true
-      }
+        required: true,
+      },
     ],
-    returns: {root: true}
+    returns: {root: true},
   })
 
   /* logOut hotspot member
@@ -2367,15 +2368,15 @@ module.exports = function (Member) {
       {
         arg: 'businessId',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'memberId',
         type: 'string',
-        required: true
-      }
+        required: true,
+      },
     ],
-    returns: {root: true}
+    returns: {root: true},
   })
 
   /* Find Business Id from Member User Name And Business Url Prefix
@@ -2390,12 +2391,12 @@ module.exports = function (Member) {
     if (!username) {
       return cb('username not defined')
     }
-    var Business = app.models.Business
+    const Business = app.models.Business
     Business.find(
       {
         where: {
-          urlPrefix: businessUrl
-        }
+          urlPrefix: businessUrl,
+        },
       },
       function (error, business) {
         if (error) {
@@ -2407,8 +2408,8 @@ module.exports = function (Member) {
         if (!business[0].id) {
           return cb('id of business not found')
         }
-        var businessId = business[0].id
-        var uniqueUserId = Member.createUsername(businessId, username)
+        const businessId = business[0].id
+        const uniqueUserId = Member.createUsername(businessId, username)
         return cb(null, {username: uniqueUserId})
       }
     )
@@ -2439,15 +2440,15 @@ module.exports = function (Member) {
       {
         arg: 'businessUrl',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'username',
         type: 'string',
-        required: true
-      }
+        required: true,
+      },
     ],
-    returns: {root: true}
+    returns: {root: true},
   })
 
   /* Find Internet Usage of a Member Base on Daily Interval
@@ -2465,18 +2466,17 @@ module.exports = function (Member) {
     if (!startDate) {
       return cb('startDate not defined')
     }
-    aggregate
-      .getMemberDailyUsage(businessId, memberId, startDate)
+    db.getMemberDailyUsage(businessId, memberId, startDate)
       .then(function (memberUsage) {
-        var result = {}
+        const result = {}
         result.date = []
         result.download = []
         result.upload = []
         if (memberUsage.length > 0) {
-          var date = []
-          var download = []
-          var upload = []
-          for (var i = 0; i < memberUsage.length; i++) {
+          const date = []
+          const download = []
+          const upload = []
+          for (let i = 0; i < memberUsage.length; i++) {
             date.push(memberUsage[i].key)
             download.push(
               utility.toMByte(memberUsage[i].sum_download.value).toFixed(0)
@@ -2502,44 +2502,44 @@ module.exports = function (Member) {
       {
         arg: 'businessId',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'memberId',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'startDate',
         type: 'number',
-        required: true
-      }
+        required: true,
+      },
     ],
-    returns: {root: true}
+    returns: {root: true},
   })
 
   Member.buyPlan = function (businessId, memberId, internetPlanId) {
     return Q.Promise(function (resolve, reject) {
-      var Business = app.models.Business
-      var InternetPlan = app.models.InternetPlan
+      const Business = app.models.Business
+      const InternetPlan = app.models.InternetPlan
       Business.findById(businessId).then(function (business) {
         if (!business) {
           return reject('invalid business id')
         }
 
         if (!business.paymentApiKey) {
-          //return reject ( 'invalid business payment panel token' );
+          // return reject ( 'invalid business payment panel token' );
           return resolve({
             code: 500,
-            url: '/'
+            url: '/',
           })
         }
         InternetPlan.findById(internetPlanId).then(function (internetPlan) {
           if (!internetPlan) {
             return reject('invalid internet plan id')
           }
-          var price = internetPlan.price
-          var desc =
+          const price = internetPlan.price
+          const desc =
             internetPlan.name +
             internetPlan.type +
             ', ' +
@@ -2548,8 +2548,8 @@ module.exports = function (Member) {
             ', ' +
             internetPlan.bulk.value +
             internetPlan.bulk.type
-          var issueDate = new Date().getTime()
-          var Invoice = app.models.Invoice
+          const issueDate = new Date().getTime()
+          const Invoice = app.models.Invoice
           Invoice.create(
             {
               price: price,
@@ -2559,13 +2559,13 @@ module.exports = function (Member) {
               description: desc,
               issueDate: issueDate,
               businessId: businessId,
-              memberId: memberId
+              memberId: memberId,
             },
             function (error, invoice) {
               if (error) {
                 return reject('Error in create invoice ' + error)
               }
-              var returnUrl = config
+              const returnUrl = config
                 .MEMBER_PAYMENT_RETURN_URL()
                 .replace('{0}', 'invoiceId')
                 .replace('{1}', invoice.id)
@@ -2578,10 +2578,10 @@ module.exports = function (Member) {
                 returnUrl
               )
                 .then(function (response) {
-                  var paymentId = response.paymentId
+                  const paymentId = response.paymentId
                   invoice.updateAttributes(
                     {
-                      paymentId: paymentId
+                      paymentId: paymentId,
                     },
                     function (error) {
                       if (error) {
@@ -2589,7 +2589,7 @@ module.exports = function (Member) {
                       }
                       return resolve({
                         code: 200,
-                        url: response.url
+                        url: response.url,
                       })
                     }
                   )
@@ -2610,34 +2610,34 @@ module.exports = function (Member) {
       {
         arg: 'businessId',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'memberId',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'internetPlanId',
         type: 'string',
-        required: true
-      }
+        required: true,
+      },
     ],
-    returns: {root: true}
+    returns: {root: true},
   })
 
   Member.verifyPayment = function (invoiceId, refId) {
     return Q.Promise(function (resolve, reject) {
-      var Invoice = app.models.Invoice
-      var InternetPlan = app.models.InternetPlan
-      var Business = app.models.Business
-      var returnUrl = config.MEMBER_PAYMENT_RESULT_URL()
+      const Invoice = app.models.Invoice
+      const InternetPlan = app.models.InternetPlan
+      const Business = app.models.Business
+      const returnUrl = config.MEMBER_PAYMENT_RESULT_URL()
       if (!invoiceId) {
         return resolve({
           code: 302,
           returnUrl: returnUrl
             .replace('{0}', 'false')
-            .replace('{1}', '&error=No invoice id')
+            .replace('{1}', '&error=No invoice id'),
         })
       }
       Invoice.findById(invoiceId, function (error, invoice) {
@@ -2647,7 +2647,7 @@ module.exports = function (Member) {
             code: 302,
             returnUrl: returnUrl
               .replace('{0}', 'false')
-              .replace('{1}', '&error=Error in finding invoice')
+              .replace('{1}', '&error=Error in finding invoice'),
           })
         }
         if (!invoice) {
@@ -2655,19 +2655,19 @@ module.exports = function (Member) {
             code: 302,
             returnUrl: returnUrl
               .replace('{0}', 'false')
-              .replace('{1}', '&error=Invalid invoice id')
+              .replace('{1}', '&error=Invalid invoice id'),
           })
         }
-        var businessId = invoice.businessId
-        var price = invoice.price
-        var invoiceType = invoice.invoiceType
+        const businessId = invoice.businessId
+        const price = invoice.price
+        const invoiceType = invoice.invoiceType
         Business.findById(businessId).then(function (business) {
           if (!business) {
             return resolve({
               code: 302,
               returnUrl: returnUrl
                 .replace('{0}', 'false')
-                .replace('{1}', '&error=Invalid business id')
+                .replace('{1}', '&error=Invalid business id'),
             })
           }
 
@@ -2676,7 +2676,7 @@ module.exports = function (Member) {
               code: 302,
               returnUrl: returnUrl
                 .replace('{0}', 'false')
-                .replace('{1}', '&error=Invalid payment token id')
+                .replace('{1}', '&error=Invalid payment token id'),
             })
           }
           Payment.verifyPayment(business.paymentApiKey, refId, price)
@@ -2684,12 +2684,12 @@ module.exports = function (Member) {
               log.warn(verificationResult)
 
               if (verificationResult.payed) {
-                var refId = verificationResult.refId
+                const refId = verificationResult.refId
                 invoice.updateAttributes(
                   {
                     payed: true,
                     paymentRefId: refId,
-                    paymentDate: new Date().getTime()
+                    paymentDate: new Date().getTime(),
                   },
                   function (error) {
                     if (error) {
@@ -2702,7 +2702,7 @@ module.exports = function (Member) {
                           .replace(
                             '{1}',
                             '&error=Error in update invoice with payment reference Id'
-                          )
+                          ),
                       })
                     }
                     log.debug(
@@ -2724,7 +2724,7 @@ module.exports = function (Member) {
                               code: 302,
                               returnUrl: returnUrl
                                 .replace('{0}', 'true')
-                                .replace('{1}', '&desc=success')
+                                .replace('{1}', '&desc=success'),
                             })
                           })
                           .fail(function (error) {
@@ -2736,7 +2736,7 @@ module.exports = function (Member) {
                                 .replace(
                                   '{1}',
                                   '&error=Error in adding plan to member'
-                                )
+                                ),
                             })
                           })
                         break
@@ -2749,11 +2749,11 @@ module.exports = function (Member) {
                               code: 302,
                               returnUrl: returnUrl
                                 .replace('{0}', 'false')
-                                .replace('{1}', '&error=Invalid member id')
+                                .replace('{1}', '&error=Invalid member id'),
                             })
                           }
-                          var description = invoice.description
-                          var amount = Number.parseInt(
+                          const description = invoice.description
+                          let amount = Number.parseInt(
                             description.split(',')[0]
                           )
                           if (member.extraBulk) {
@@ -2761,7 +2761,7 @@ module.exports = function (Member) {
                           }
                           member.updateAttributes(
                             {
-                              extraBulk: amount
+                              extraBulk: amount,
                             },
                             function (error, response) {
                               if (error) {
@@ -2777,7 +2777,7 @@ module.exports = function (Member) {
                                     .replace(
                                       '{1}',
                                       '&error=Error in update invoice with payment reference Id'
-                                    )
+                                    ),
                                 })
                               }
                               if (response) {
@@ -2785,7 +2785,7 @@ module.exports = function (Member) {
                                   code: 302,
                                   returnUrl: returnUrl
                                     .replace('{0}', 'true')
-                                    .replace('{1}', '&desc=success')
+                                    .replace('{1}', '&desc=success'),
                                 })
                               }
                             }
@@ -2805,7 +2805,7 @@ module.exports = function (Member) {
                   code: 302,
                   returnUrl: returnUrl
                     .replace('{0}', 'false')
-                    .replace('{1}', '&error=Payment failed')
+                    .replace('{1}', '&error=Payment failed'),
                 })
               }
             })
@@ -2816,7 +2816,7 @@ module.exports = function (Member) {
                 code: 302,
                 returnUrl: returnUrl
                   .replace('{0}', 'false')
-                  .replace('{1}', '&error=Error in verifying payment')
+                  .replace('{1}', '&error=Error in verifying payment'),
               })
             })
         })
@@ -2829,17 +2829,17 @@ module.exports = function (Member) {
       if (!businessId || !nasId || !memberIp) {
         return reject('invalid parameters !businessId || !nasId || !memberIp')
       }
-      var memberSessionKey = businessId + ':' + nasId + ':' + memberIp
+      const memberSessionKey = businessId + ':' + nasId + ':' + memberIp
       redisClient.get(memberSessionKey, function (error, rawMemberSession) {
         if (error) {
           log.error(error)
           return
         }
         if (!rawMemberSession) {
-          //log.error ( "no rawMemberSession" );
+          // log.error ( "no rawMemberSession" );
           return reject('no rawMemberSession')
         }
-        var memberSession = {}
+        let memberSession = {}
         try {
           memberSession = JSON.parse(rawMemberSession)
           return resolve(memberSession)
@@ -2852,8 +2852,8 @@ module.exports = function (Member) {
 
   Member.buyBulk = function (businessId, memberId, internetPlanId, amount) {
     return Q.Promise(function (resolve, reject) {
-      var Business = app.models.Business
-      var InternetPlan = app.models.InternetPlan
+      const Business = app.models.Business
+      const InternetPlan = app.models.InternetPlan
       Business.findById(businessId).then(function (business) {
         if (!business) {
           return reject('invalid business id')
@@ -2866,12 +2866,12 @@ module.exports = function (Member) {
           if (!internetPlan) {
             return reject('invalid internet plan id')
           }
-          var price = Number.parseInt(internetPlan.extraBulkPrice)
+          const price = Number.parseInt(internetPlan.extraBulkPrice)
           amount = Number.parseInt(amount)
-          var totalPrice = amount * price
-          var desc = amount + ', ' + price + ', ' + totalPrice
-          var issueDate = new Date().getTime()
-          var Invoice = app.models.Invoice
+          const totalPrice = amount * price
+          const desc = amount + ', ' + price + ', ' + totalPrice
+          const issueDate = new Date().getTime()
+          const Invoice = app.models.Invoice
           Invoice.create(
             {
               price: totalPrice,
@@ -2881,14 +2881,14 @@ module.exports = function (Member) {
               description: desc,
               issueDate: issueDate,
               businessId: businessId,
-              memberId: memberId
+              memberId: memberId,
             },
             function (error, invoice) {
               if (error) {
                 return reject('Error in create invoice ' + error)
               }
 
-              var returnUrl = config
+              const returnUrl = config
                 .MEMBER_PAYMENT_RETURN_URL()
                 .replace('{0}', 'invoiceId')
                 .replace('{1}', invoice.id)
@@ -2901,10 +2901,10 @@ module.exports = function (Member) {
                 returnUrl
               )
                 .then(function (response) {
-                  var paymentId = response.paymentId
+                  const paymentId = response.paymentId
                   invoice.updateAttributes(
                     {
-                      paymentId: paymentId
+                      paymentId: paymentId,
                     },
                     function (error) {
                       if (error) {
@@ -2912,7 +2912,7 @@ module.exports = function (Member) {
                       }
                       return resolve({
                         code: 200,
-                        url: response.url
+                        url: response.url,
                       })
                     }
                   )
@@ -2932,25 +2932,25 @@ module.exports = function (Member) {
       {
         arg: 'businessId',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'memberId',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'internetPlanId',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'amount',
         type: 'number',
-        required: true
-      }
+        required: true,
+      },
     ],
-    returns: {root: true}
+    returns: {root: true},
   })
 
   Member.checkDefaultPlan = function (businessId, memberId, planId, cb) {
@@ -2967,7 +2967,7 @@ module.exports = function (Member) {
       error.status = 500
       return cb(error)
     }
-    var Business = app.models.Business
+    const Business = app.models.Business
     Business.findById(businessId).then(function (business) {
       if (!business) {
         var error = new Error()
@@ -2984,12 +2984,12 @@ module.exports = function (Member) {
       if (business.defaultInternetPlan.id != planId) {
         return cb(null, true)
       }
-      var defaultPlanPeriod = business.defaultInternetPlan.period
-      var defaultPlanCount = business.defaultInternetPlan.count
-      var Member = app.models.Member
+      const defaultPlanPeriod = business.defaultInternetPlan.period
+      const defaultPlanCount = business.defaultInternetPlan.count
+      const Member = app.models.Member
       Member.findById(memberId).then(function (member) {
         if (!business) {
-          var error = new Error()
+          const error = new Error()
           error.message = hotspotMessages.businessNotFound
           error.status = 404
           return cb(error)
@@ -2997,10 +2997,10 @@ module.exports = function (Member) {
         if (!member.activateDefaultPlanCount) {
           return cb(null, true)
         }
-        var memberDefaultPlanCount = member.activateDefaultPlanCount
-        var subscriptionDate = member.subscriptionDate
-        var now = new Date().getTime()
-        var defaultPlanTime =
+        const memberDefaultPlanCount = member.activateDefaultPlanCount
+        const subscriptionDate = member.subscriptionDate
+        const now = new Date().getTime()
+        const defaultPlanTime =
           subscriptionDate +
           defaultPlanPeriod * config.AGGREGATE.HOUR_MILLISECONDS
         if (
@@ -3020,27 +3020,26 @@ module.exports = function (Member) {
       {
         arg: 'businessId',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'memberId',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'planId',
         type: 'string',
-        required: true
-      }
+        required: true,
+      },
     ],
-    returns: {root: true}
+    returns: {root: true},
   })
   Member.getAllMembersCount = function (departmentId, fromDate, endDate, ctx) {
-
     return Q.Promise((resolve, reject) => {
-      var businessId = ctx.currentUserId
+      const businessId = ctx.currentUserId
       log.debug('@getAllMembersCount : ', businessId)
-      var Business = app.models.Business
+      const Business = app.models.Business
 
       if (!departmentId) {
         return resolve({allMembers: 0})
@@ -3053,7 +3052,7 @@ module.exports = function (Member) {
         }
         const query = {
           businessId: businessId,
-          creationDate: {gte: business.creationDate, lt: endDate}
+          creationDate: {gte: business.creationDate, lt: endDate},
         }
         if (departmentId && departmentId !== 'all') {
           query.departments = {eq: departmentId}
@@ -3066,7 +3065,7 @@ module.exports = function (Member) {
               log.error(error)
               return reject(error)
             }
-            var allMembers = 0
+            let allMembers = 0
             if (members) {
               allMembers = members
             }
@@ -3075,7 +3074,6 @@ module.exports = function (Member) {
         )
       })
     })
-
   }
 
   Member.remoteMethod('getAllMembersCount', {
@@ -3083,28 +3081,28 @@ module.exports = function (Member) {
     accepts: [
       {
         arg: 'departmentId',
-        type: 'string'
+        type: 'string',
       },
       {
         arg: 'fromDate',
-        type: 'number'
+        type: 'number',
       },
       {
         arg: 'endDate',
         type: 'number',
-        required: true
+        required: true,
       },
-      {arg: 'options', type: 'object', http: 'optionsFromRequest'}
+      {arg: 'options', type: 'object', http: 'optionsFromRequest'},
     ],
-    returns: {root: true}
+    returns: {root: true},
   })
 
   Member.importMemberFromCsv = function (csvString, internetPlanId, ctx) {
-    var Business = app.models.Business
-    var businessId = ctx.currentUserId
+    const Business = app.models.Business
+    const businessId = ctx.currentUserId
     return Q.Promise(function (resolve, reject) {
       if (!businessId || !csvString) {
-        var error = new Error()
+        const error = new Error()
         error.message = 'invalid parameters'
         error.status = 500
         return reject(error)
@@ -3114,12 +3112,12 @@ module.exports = function (Member) {
           log.error('biz not found')
           return reject('biz not found')
         }
-        var usersOptions = {}
-        //username/password/mobile/nationalId/family/name
+        const usersOptions = {}
+        // username/password/mobile/nationalId/family/name
         csvtojson({noheader: false})
           .fromString(csvString)
           .on('csv', function (csvRow) {
-            var user = {}
+            const user = {}
             user.username = csvRow[0]
             user.password = csvRow[1]
             if (csvRow[2]) {
@@ -3140,8 +3138,8 @@ module.exports = function (Member) {
             usersOptions[user.username] = user
           })
           .on('done', function () {
-            var addMemberTasks = []
-            for (var i in usersOptions) {
+            const addMemberTasks = []
+            for (const i in usersOptions) {
               addMemberTasks.push(
                 (function (option, businessId) {
                   return function () {
@@ -3150,7 +3148,7 @@ module.exports = function (Member) {
                 })(usersOptions[i], businessId)
               )
             }
-            var addMemberTaskResult = Q({})
+            let addMemberTaskResult = Q({})
             addMemberTasks.forEach(function (f) {
               addMemberTaskResult = addMemberTaskResult.then(f)
             })
@@ -3172,21 +3170,21 @@ module.exports = function (Member) {
       {
         arg: 'csvString',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'internetPlanId',
-        type: 'string'
+        type: 'string',
       },
-      {arg: 'options', type: 'object', http: 'optionsFromRequest'}
+      {arg: 'options', type: 'object', http: 'optionsFromRequest'},
     ],
-    returns: {root: true}
+    returns: {root: true},
   })
 
   Member.getNewMembersCount = function (departmentId, fromDate, endDate, ctx, cb) {
-    var businessId = ctx.currentUserId
+    const businessId = ctx.currentUserId
     log.debug('getNewMembersCount : ', businessId)
-    var Business = app.models.Business
+    const Business = app.models.Business
     if (!departmentId) {
       return {newMembers: 0}
     }
@@ -3198,7 +3196,7 @@ module.exports = function (Member) {
 
       const query = {
         businessId: businessId,
-        creationDate: {gte: fromDate, lt: endDate}
+        creationDate: {gte: fromDate, lt: endDate},
       }
       if (departmentId && departmentId !== 'all') {
         query.departments = {eq: departmentId}
@@ -3210,7 +3208,7 @@ module.exports = function (Member) {
             log.error(error)
             return cb(error)
           }
-          var newMembers = 0
+          let newMembers = 0
           if (members) {
             newMembers = members
           }
@@ -3226,31 +3224,31 @@ module.exports = function (Member) {
       {
         arg: 'departmentId',
         type: 'string',
-        required: true
+        required: true,
       }, {
         arg: 'fromDate',
         type: 'number',
-        required: true
+        required: true,
       },
       {
         arg: 'endDate',
         type: 'number',
-        required: true
+        required: true,
       },
-      {arg: 'options', type: 'object', http: 'optionsFromRequest'}
+      {arg: 'options', type: 'object', http: 'optionsFromRequest'},
     ],
-    returns: {root: true}
+    returns: {root: true},
   })
 
   Member.loadProfile = function (nasId, mac) {
-    var Nas = app.models.Nas
+    const Nas = app.models.Nas
     return Q.Promise(function (resolve, reject) {
       mac = utility.trimMac(mac)
       mac = mac.toLowerCase()
 
       Nas.findById(nasId).then(function (nas) {
         if (!nas) {
-          var error = new Error()
+          const error = new Error()
           error.message = 'nas not found'
           error.status = 401
           return reject(error)
@@ -3271,7 +3269,7 @@ module.exports = function (Member) {
             password: utility.decrypt(
               member.passwordText,
               config.ENCRYPTION_KEY
-            )
+            ),
           })
         })
       })
@@ -3284,15 +3282,15 @@ module.exports = function (Member) {
       {
         arg: 'nasId',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'mac',
         type: 'string',
-        required: true
-      }
+        required: true,
+      },
     ],
-    returns: {root: true}
+    returns: {root: true},
   })
 
   Member.renderMemberCredentials = function (membersList, helpText, direction) {
@@ -3300,9 +3298,9 @@ module.exports = function (Member) {
     log.debug(membersList)
     log.debug('#######')
     return Q.Promise(function (resolve, reject) {
-      var maxVouchersPerPage = 14
-      var pagesMembers = _.chunk(membersList, maxVouchersPerPage)
-      for (var i = 0; i < pagesMembers.length; i++) {
+      const maxVouchersPerPage = 14
+      const pagesMembers = _.chunk(membersList, maxVouchersPerPage)
+      for (let i = 0; i < pagesMembers.length; i++) {
         pagesMembers[i] = _.chunk(pagesMembers[i], 2)
       }
       fs.readFile(config.VOUCHER_TEMPLATE_PATH, {encoding: 'utf-8'}, function (
@@ -3316,10 +3314,10 @@ module.exports = function (Member) {
         dust.loadSource(
           dust.compile(voucherTemplates, 'memberPrintTemplate', false)
         )
-        var data = {
+        const data = {
           members: pagesMembers,
           help: helpText,
-          direction: direction || 'rtl'
+          direction: direction || 'rtl',
         }
         log.debug(data)
         dust.render('memberPrintTemplate', data, function (error, script) {
@@ -3347,9 +3345,9 @@ module.exports = function (Member) {
     cb
   ) {
     log.debug('@create group of member')
-    var Business = app.models.Business
-    var MemberGroup = app.models.MemberGroup
-    var businessId = ctx.currentUserId
+    const Business = app.models.Business
+    const MemberGroup = app.models.MemberGroup
+    const businessId = ctx.currentUserId
     Business.findById(businessId).then(function (business) {
       if (count > 30) {
         return cb('more than 30 member is not allowed')
@@ -3365,20 +3363,20 @@ module.exports = function (Member) {
         return cb('invalid parameters')
       }
 
-      var counterCurrentValue =
+      const counterCurrentValue =
         business.groupMemberCounter ||
         config.BUSINESS_GROUP_MEMBER_COUNTER_START
-      var counterNewValue = counterCurrentValue + count
+      const counterNewValue = counterCurrentValue + count
       business.updateAttributes(
         {
-          groupMemberCounter: counterNewValue
+          groupMemberCounter: counterNewValue,
         },
         function (error) {
           if (error) {
             log.error(error)
             return cb(error)
           }
-          var groupIdentityType
+          let groupIdentityType
           if (mobile) {
             groupIdentityType = 'Mobile'
           } else if (reserveCode) {
@@ -3392,7 +3390,7 @@ module.exports = function (Member) {
           } else {
             return cb('Group identity type is empty')
           }
-          var memberGroupData = {
+          const memberGroupData = {
             groupIdentity:
               mobile ||
               reserveCode ||
@@ -3406,7 +3404,7 @@ module.exports = function (Member) {
             nationalCode: nationalCode,
             passportNumber: passportNumber,
             businessId: businessId,
-            creationDate: new Date().getTime()
+            creationDate: new Date().getTime(),
           }
           MemberGroup.create(memberGroupData, function (error, memberGroup) {
             if (error) {
@@ -3415,15 +3413,15 @@ module.exports = function (Member) {
             }
             log.error('memberGroup')
             log.error(memberGroup)
-            var tasks = []
-            for (var i = counterCurrentValue; i < counterNewValue; i++) {
+            const tasks = []
+            for (let i = counterCurrentValue; i < counterNewValue; i++) {
               tasks.push(
                 (function (j) {
                   return function (memberList) {
-                    var expiresAt = new Date()
+                    const expiresAt = new Date()
                     expiresAt.add({days: duration + 1})
                     expiresAt.clearTime()
-                    var options = {
+                    const options = {
                       businessId: businessId,
                       active: true,
                       sendVerificationSms: false,
@@ -3433,7 +3431,7 @@ module.exports = function (Member) {
                       groupIdentityType: memberGroup.groupIdentityType,
                       expiresAt: expiresAt,
                       username: (business.groupMemberPrefix || 'b') + j,
-                      password: utility.createRandomHotspotPassword()
+                      password: utility.createRandomHotspotPassword(),
                     }
                     return Member.createNewMember(options, businessId).then(
                       function (theMember) {
@@ -3445,14 +3443,14 @@ module.exports = function (Member) {
                 })(i)
               )
             }
-            var result = Q([])
+            let result = Q([])
             tasks.forEach(function (f) {
               result = result.then(f)
             })
             result
               .then(function (result) {
-                var help = config.DEFAULT_HOTSPOT_HELP
-                var direction = 'rtl'
+                let help = config.DEFAULT_HOTSPOT_HELP
+                let direction = 'rtl'
                 if (helpLanguageCode === 'en') {
                   direction = 'ltr'
                 }
@@ -3487,44 +3485,44 @@ module.exports = function (Member) {
     accepts: [
       {
         arg: 'reserveCode',
-        type: 'string'
+        type: 'string',
       },
       {
         arg: 'tourCode',
-        type: 'string'
+        type: 'string',
       },
       {
         arg: 'mobile',
-        type: 'string'
+        type: 'string',
       },
       {
         arg: 'passportNumber',
-        type: 'string'
+        type: 'string',
       },
       {
         arg: 'nationalCode',
-        type: 'string'
+        type: 'string',
       },
       {
         arg: 'count',
         type: 'number',
-        required: true
+        required: true,
       },
       {
         arg: 'internetPlanId',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'duration',
-        type: 'number'
+        type: 'number',
       },
       {
         arg: 'helpLanguageCode',
-        type: 'string'
+        type: 'string',
       },
-      {arg: 'options', type: 'object', http: 'optionsFromRequest'}
-    ]
+      {arg: 'options', type: 'object', http: 'optionsFromRequest'},
+    ],
   })
 
   Member.loadById = async function (id) {

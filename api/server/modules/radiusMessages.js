@@ -25,5 +25,5 @@ module.exports = {
   usernameNotFound: 'این نام کاربری وجود ندارد.',
   invalidUsernameOrPassword: 'نام کاربری یا رمز عبور غلط است.',
   outOfBulk: 'حجم شما به اتمام رسیده است.',
-  outOfTime: 'زمان استفاده شما به اتمام رسیده است.'
+  outOfTime: 'زمان استفاده شما به اتمام رسیده است.',
 };

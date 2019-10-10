@@ -9,7 +9,7 @@ services:
     networks:
     - hotspotplusgate
   clickhouse-sinker-netflow:
-    image: 'registry.gitlab.com/parmenides/hotspotplus/clickhouse-sinker:latest'
+    image: 'registry.gitlab.com/parmenides/hotspotplus/clickhousesinker:latest'
     restart: always
     volumes:
       - ./sinker-netflow:/opt/config

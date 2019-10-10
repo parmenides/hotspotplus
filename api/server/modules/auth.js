@@ -2,18 +2,19 @@
  * Created by hamidehnouri on 9/21/2016 AD.
  */
 
-var Q = require('q');
-var needle = require('needle');
-var logger = require('./logger');
-var config = require('./config');
-var log = logger.createLogger();
-var utility = require('./utility');
+const Q = require('q');
+const needle = require('needle');
+const logger = require('./logger');
+const config = require('./config');
+const log = logger.createLogger();
+const utility = require('./utility');
 /*
 var API_ADDRESS = utility.getApiAddress();
 var LOGIN_REST_API = API_ADDRESS + '/api/Users/login';
 var LOGOUT_REST_API = API_ADDRESS + '/api/Users/logout?access_token={0}';
 */
 // login to the rest api to get the access token
+/*
 module.exports.serviceManLogin = function(ttlMs) {
   log.debug('service man logged in ', ttlMs);
   return login(
@@ -22,8 +23,9 @@ module.exports.serviceManLogin = function(ttlMs) {
     ttlMs
   );
 };
+*/
 
-var loginToConfigServer = (module.exports.loginToApi = module.exports.loginToConfigServer = function(
+const loginToConfigServer = (module.exports.loginToApi = module.exports.loginToConfigServer = function(
   configServerUrl,
   username,
   password
@@ -33,9 +35,9 @@ var loginToConfigServer = (module.exports.loginToApi = module.exports.loginToCon
       configServerUrl,
       {
         username: username,
-        password: password
+        password: password,
       },
-      { json: true },
+      {json: true},
       function(error, response, body) {
         if (error) {
           log.error('Error: ', error);
@@ -45,8 +47,8 @@ var loginToConfigServer = (module.exports.loginToApi = module.exports.loginToCon
         if (response.statusCode !== 200) {
           return reject(body);
         }
-        var accessToken = body.id;
-        return resolve({ token: accessToken, userId: body.userId });
+        const accessToken = body.id;
+        return resolve({token: accessToken, userId: body.userId});
       }
     );
   });
@@ -68,10 +70,10 @@ module.exports.loginToLicenseServer = function(CONFIG_SERVER_LOGIN_URL) {
           config.PASSWORD_PREFIX + utility.md5(systemUuid)
         )
           .then(function(authResult) {
-            var token = authResult.token;
-            var userId = authResult.userId;
+            const token = authResult.token;
+            const userId = authResult.userId;
             log.debug('@loginToLicenseServer', authResult);
-            return resolve({ token: token, userId: userId });
+            return resolve({token: token, userId: userId});
           })
           .fail(function(error) {
             log.error(error);

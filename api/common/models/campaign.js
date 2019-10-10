@@ -1,8 +1,8 @@
-var logger = require('../../server/modules/logger');
-var log = logger.createLogger();
+const logger = require('../../server/modules/logger');
+const log = logger.createLogger();
 
 module.exports = function(Campaign) {
-  /*Campaign.sendBulkMessages = function(campaignId) {
+  /* Campaign.sendBulkMessages = function(campaignId) {
     var Member = app.models.Member;
     var Business = app.models.Business;
     var Coupon = app.models.Coupon;
@@ -253,7 +253,7 @@ module.exports = function(Campaign) {
         });
       });
     });
-  };*/
+  }; */
 
   Campaign.remoteMethod('sendBulkMessages', {
     description: 'send message to all members with mobile number',
@@ -261,9 +261,9 @@ module.exports = function(Campaign) {
       {
         arg: 'campaignId',
         type: 'string',
-        required: true
-      }
+        required: true,
+      },
     ],
-    returns: { root: true }
+    returns: {root: true},
   });
 };

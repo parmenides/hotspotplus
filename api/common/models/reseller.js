@@ -1,26 +1,26 @@
 'use strict';
-var logger = require('../../server/modules/logger');
-var app = require('../../server/server');
-var config = require('../../server/modules/config');
-var utility = require('../../server/modules/utility');
-var smsModule = require('../../server/modules/sms');
-var Q = require('q');
-var db = require('../../server/modules/db.factory');
+const logger = require('../../server/modules/logger');
+const app = require('../../server/server');
+const config = require('../../server/modules/config');
+const utility = require('../../server/modules/utility');
+const smsModule = require('../../server/modules/sms');
+const Q = require('q');
+const db = require('../../server/modules/db.factory');
 
 module.exports = function(Reseller) {
-  var log = logger.createLogger();
+  const log = logger.createLogger();
 
   Reseller.addResellerCommission = function(resellerId, businessId, price) {
     return Q.Promise(function(resolve, reject) {
-      var Reseller = app.models.Reseller;
-      var Charge = app.models.Charge;
+      const Reseller = app.models.Reseller;
+      const Charge = app.models.Charge;
       Reseller.findById(resellerId, function(error, reseller) {
         if (error) {
           log.error(error);
           return reject(error);
         }
 
-        var commission =
+        const commission =
           price *
           (reseller.commissionRate ||
             config.SERVICES.RESELLERS_COMMISSION_RATE);
@@ -29,14 +29,14 @@ module.exports = function(Reseller) {
           type: config.RESELLER_COMMISSION_CHARGE,
           amount: commission,
           forThe: resellerId + ':' + businessId,
-          date: new Date().getTime()
+          date: new Date().getTime(),
         });
         Charge.addCharge({
           businessId: resellerId,
           type: config.RESELLER_COMMISSION_CHARGE,
           amount: commission,
           forThe: resellerId + ':' + businessId,
-          date: new Date().getTime()
+          date: new Date().getTime(),
         });
         return resolve();
       });
@@ -64,14 +64,14 @@ module.exports = function(Reseller) {
       {
         arg: 'resellerId',
         type: 'string',
-        required: true
-      }
+        required: true,
+      },
     ],
-    returns: { root: true }
+    returns: {root: true},
   });
 
   Reseller.loadBusiness = function(options) {
-    var Business = app.models.Business;
+    const Business = app.models.Business;
     return Q.Promise(function(resolve, reject) {
       if (!options.where || !options.where.resellerId) {
         log.error('invalid query: ', options);
@@ -82,7 +82,7 @@ module.exports = function(Reseller) {
           log.error(error);
           return reject(error);
         }
-        return resolve({ businesses: businesses, total: businesses.length });
+        return resolve({businesses: businesses, total: businesses.length});
       });
     });
   };
@@ -93,14 +93,14 @@ module.exports = function(Reseller) {
       {
         arg: 'options',
         type: 'object',
-        required: true
-      }
+        required: true,
+      },
     ],
-    returns: { root: true }
+    returns: {root: true},
   });
 
   Reseller.createBusiness = function(business) {
-    var Business = app.models.Business;
+    const Business = app.models.Business;
     return Q.Promise(function(resolve, reject) {
       if (!business) {
         return reject('invalid args');
@@ -109,12 +109,12 @@ module.exports = function(Reseller) {
         return reject('invalid resellerId');
       }
       business.password = String(business.password);
-      /*business.services = {
+      /* business.services = {
 				id:               "economic",
 				subscriptionDate: new Date ().getTime (),
 				expiresAt:        (new Date ().addDays ( config.TRIAL_DAYS )).getTime (),
 				duration:         1
-			};*/
+			}; */
       try {
         log.debug('BIZ:  ', business);
         Business.create(business, function(error) {
@@ -137,18 +137,18 @@ module.exports = function(Reseller) {
       {
         arg: 'business',
         type: 'object',
-        required: true
-      }
+        required: true,
+      },
     ],
-    returns: { root: true }
+    returns: {root: true},
   });
 
   Reseller.assignBusinessToReseller = function(businessId, resellerId) {
-    var Business = app.models.Business;
+    const Business = app.models.Business;
     return Q.Promise(function(resolve, reject) {
       Business.findById(businessId).then(function(business) {
-        var update = {
-          resellerId: resellerId
+        const update = {
+          resellerId: resellerId,
         };
         business.updateAttributes(update, function(error) {
           if (error) {
@@ -167,19 +167,19 @@ module.exports = function(Reseller) {
       {
         arg: 'businessId',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'resellerId',
         type: 'string',
-        required: true
-      }
+        required: true,
+      },
     ],
-    returns: { root: true }
+    returns: {root: true},
   });
 
   Reseller.findBusiness = function(resellerId, businessId, cb) {
-    var Business = app.models.Business;
+    const Business = app.models.Business;
     if (!resellerId) {
       return cb('invalid resellerId');
     }
@@ -187,7 +187,7 @@ module.exports = function(Reseller) {
       return cb('invalid businessId');
     }
     Business.findOne(
-      { where: { and: [{ resellerId: resellerId }, { id: businessId }] } },
+      {where: {and: [{resellerId: resellerId}, {id: businessId}]}},
       function(error, result) {
         if (error) {
           log.error(error);
@@ -204,19 +204,19 @@ module.exports = function(Reseller) {
       {
         arg: 'resellerId',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'businessId',
         type: 'string',
-        required: true
-      }
+        required: true,
+      },
     ],
-    returns: { root: true }
+    returns: {root: true},
   });
 
   Reseller.updateBusiness = function(businessAttributes, cb) {
-    var Business = app.models.Business;
+    const Business = app.models.Business;
     if (!businessAttributes) {
       return cb('invalid businessAttributes');
     }
@@ -228,10 +228,10 @@ module.exports = function(Reseller) {
       {
         where: {
           and: [
-            { resellerId: businessAttributes.resellerId },
-            { id: businessAttributes.id }
-          ]
-        }
+            {resellerId: businessAttributes.resellerId},
+            {id: businessAttributes.id},
+          ],
+        },
       },
       function(error, business) {
         if (error) {
@@ -255,14 +255,14 @@ module.exports = function(Reseller) {
       {
         arg: 'business',
         type: 'object',
-        required: true
-      }
+        required: true,
+      },
     ],
-    returns: { root: true }
+    returns: {root: true},
   });
 
   Reseller.removeBusiness = function(resellerId, businessId, cb) {
-    var Business = app.models.Business;
+    const Business = app.models.Business;
 
     if (!resellerId) {
       return cb('invalid resellerId');
@@ -271,13 +271,13 @@ module.exports = function(Reseller) {
       return cb('invalid businessId');
     }
     Business.findOne(
-      { where: { and: [{ resellerId: resellerId }, { id: businessId }] } },
+      {where: {and: [{resellerId: resellerId}, {id: businessId}]}},
       function(error, Business) {
         if (error) {
           log.error(error);
           return cb(error);
         }
-        Business.destroy({ id: businessId }, function(err, res) {
+        Business.destroy({id: businessId}, function(err, res) {
           if (err) {
             log.error(error);
             return cb(error);
@@ -295,15 +295,15 @@ module.exports = function(Reseller) {
       {
         arg: 'resellerId',
         type: 'string',
-        required: true
+        required: true,
       },
       {
         arg: 'businessId',
         type: 'string',
-        required: true
-      }
+        required: true,
+      },
     ],
-    returns: { root: true }
+    returns: {root: true},
   });
 
   Reseller.assignPackageToReseller = function(
@@ -327,7 +327,7 @@ module.exports = function(Reseller) {
           {
             subscriptionDate: new Date().getTime(),
             durationInMonths: durationInMonths,
-            allowedOnlineUsers: allowedOnlineUsers
+            allowedOnlineUsers: allowedOnlineUsers,
           },
           function(error) {
             if (error) {
@@ -339,7 +339,7 @@ module.exports = function(Reseller) {
               token2: reseller.fullName,
               token3: durationInMonths,
               mobile: reseller.mobile,
-              template: config.RESELLER_PURCHASE_PACKAGE_CONFIRMED
+              template: config.RESELLER_PURCHASE_PACKAGE_CONFIRMED,
             });
             return resolve();
           }
@@ -349,10 +349,10 @@ module.exports = function(Reseller) {
   };
 
   Reseller.observe('after save', function(ctx, next) {
-    var Role = app.models.Role;
+    const Role = app.models.Role;
     if (ctx.isNewInstance) {
-      var id = ctx.instance.id;
-      Role.findOne({ where: { name: config.ROLES.RESELLER } }, function(
+      const id = ctx.instance.id;
+      Role.findOne({where: {name: config.ROLES.RESELLER}}, function(
         error,
         role
       ) {
@@ -368,7 +368,7 @@ module.exports = function(Reseller) {
         if (!role) {
           return next('failed to load role');
         }
-        var roleMapping = { principalType: 'USER', principalId: id };
+        const roleMapping = {principalType: 'USER', principalId: id};
         role.principals.create(roleMapping, function(error, result) {
           if (error) {
             log.error('failed to assign role to business', error);
@@ -422,10 +422,10 @@ module.exports = function(Reseller) {
 
   Reseller.observe('before delete', function(ctx, next) {
     if (ctx.where && ctx.where.id && ctx.where.id.inq[0]) {
-      var resellerId = ctx.where.id.inq[0];
-      var Business = app.models.Business;
+      const resellerId = ctx.where.id.inq[0];
+      const Business = app.models.Business;
       log.debug('@Reseller before delete');
-      Business.destroyAll({ resellerId: resellerId }, function(error, res) {
+      Business.destroyAll({resellerId: resellerId}, function(error, res) {
         if (error) {
           log.error(error);
           return next(error);
@@ -437,13 +437,13 @@ module.exports = function(Reseller) {
   });
 
   Reseller.countResellersActiveUsers = function(resellerId) {
-    var Business = app.models.Business;
+    const Business = app.models.Business;
     return Q.Promise(function(resolve, reject) {
       Business.find(
         {
           where: {
-            resellerId: resellerId
-          }
+            resellerId: resellerId,
+          },
         },
         function(error, businesses) {
           if (error) {
@@ -451,19 +451,19 @@ module.exports = function(Reseller) {
             return reject(error);
           }
 
-          var numberOfActiveBusiness = 0;
-          for (var i in businesses) {
-            var biz = businesses[i];
-            var services = biz.services;
+          let numberOfActiveBusiness = 0;
+          for (const i in businesses) {
+            const biz = businesses[i];
+            const services = biz.services;
             if (services && services.id !== 'free') {
-              var expires = new Date(services.expiresAt);
-              var now = new Date();
+              const expires = new Date(services.expiresAt);
+              const now = new Date();
               if (now.isBefore(expires)) {
                 numberOfActiveBusiness++;
               }
             }
           }
-          return resolve({ count: numberOfActiveBusiness });
+          return resolve({count: numberOfActiveBusiness});
         }
       );
     });
@@ -473,9 +473,9 @@ module.exports = function(Reseller) {
       {
         arg: 'resellerId',
         type: 'string',
-        required: true
-      }
+        required: true,
+      },
     ],
-    returns: { root: true }
+    returns: {root: true},
   });
 };

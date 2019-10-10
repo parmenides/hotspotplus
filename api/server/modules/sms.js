@@ -3,36 +3,36 @@
  */
 
 require('date-utils');
-var Q = require('q');
-var app = require('../server');
-var redis = require('redis');
-const config=  require('./config');
-var REDIS_PORT = config.REDIS.PORT;
-var REDIS_HOST = config.REDIS.HOST;
-var redisClient = redis.createClient(REDIS_PORT, REDIS_HOST);
-var logger = require('./logger');
-var log = logger.createLogger();
-var utility = require('./utility');
-var auth = require('./auth');
-var db = require('./db.factory')
-var CONFIG_SERVER_URL = process.env.CONFIG_SERVER_URL;
-var LICENSE_SERVER_SMS_API_URL =
+const Q = require('q');
+const app = require('../server');
+const redis = require('redis');
+const config = require('./config');
+const REDIS_PORT = config.REDIS.PORT;
+const REDIS_HOST = config.REDIS.HOST;
+const redisClient = redis.createClient(REDIS_PORT, REDIS_HOST);
+const logger = require('./logger');
+const log = logger.createLogger();
+const utility = require('./utility');
+const auth = require('./auth');
+const db = require('./db.factory');
+const CONFIG_SERVER_URL = process.env.CONFIG_SERVER_URL;
+const LICENSE_SERVER_SMS_API_URL =
   CONFIG_SERVER_URL + '/Sms/sendMessages?access_token={token}';
-var LICENSE_SERVER_GROUP_SMS_API_URL =
+const LICENSE_SERVER_GROUP_SMS_API_URL =
   CONFIG_SERVER_URL + '/Sms/sendGroupMessage?access_token={token}';
-var LICENSE_SERVER_LOGIN_URL = CONFIG_SERVER_URL + '/Licenses/login';
-var kavehnegar = require('./kavehnegar');
+const LICENSE_SERVER_LOGIN_URL = CONFIG_SERVER_URL + '/Licenses/login';
+const kavehnegar = require('./kavehnegar');
 
-var needle = require('needle');
+const needle = require('needle');
 
 exports.send = function(data) {
   log.debug('Mobile data', data);
-  var SystemConfig = app.models.SystemConfig;
-  var Business = app.models.Business;
-  var Charge = app.models.Charge;
-  var businessId = data.businessId || 'service';
-  var mobilesList = data.mobiles;
-  var message = data.message;
+  const SystemConfig = app.models.SystemConfig;
+  const Business = app.models.Business;
+  const Charge = app.models.Charge;
+  const businessId = data.businessId || 'service';
+  const mobilesList = data.mobiles;
+  const message = data.message;
 
   return Q.Promise(function(resolve, reject) {
     if (mobilesList && message) {
@@ -54,12 +54,12 @@ exports.send = function(data) {
           return reject(error);
         });
     } else {
-      //Send service message by template
-      var mobile = data.mobile;
-      var token1 = data.token1;
-      var token2 = data.token2;
-      var token3 = data.token3;
-      var template = data.template;
+      // Send service message by template
+      const mobile = data.mobile;
+      let token1 = data.token1;
+      let token2 = data.token2;
+      let token3 = data.token3;
+      const template = data.template;
       if (token1) {
         token1 = utility.removeAllSpace(token1);
       }
@@ -72,7 +72,7 @@ exports.send = function(data) {
       if (businessId !== 'service') {
         Business.findById(businessId)
           .then(function(business) {
-            var token10 =
+            const token10 =
               business.smsSignature ||
               business.title ||
               process.env.SMS_SIGNATURE;
@@ -99,7 +99,7 @@ exports.send = function(data) {
                   db
                     .getProfileBalance(businessId)
                     .then(function(result) {
-                      var balance = result.balance;
+                      const balance = result.balance;
                       if (balance > config.MIN_REQUIRED_SMS_CREDIT) {
                         sendMessage(
                           mobile,
@@ -138,7 +138,7 @@ exports.send = function(data) {
             return reject(error);
           });
       } else {
-        var token10 = process.env.SMS_SIGNATURE;
+        const token10 = process.env.SMS_SIGNATURE;
         sendMessage(mobile, token1, token2, token3, token10, template)
           .then(function() {
             return resolve();
@@ -152,7 +152,7 @@ exports.send = function(data) {
   });
 };
 
-var getSmsApiKey = function() {
+const getSmsApiKey = function() {
   log.debug('@getSmsApiKey');
   return Q.Promise(function(resolve, reject) {
     redisClient.get('SMS_API_KEY', function(error, SMS_API_KEY) {
@@ -179,7 +179,7 @@ function sendMessage(
   businessId
 ) {
   log.debug('@sendMessage');
-  var Charge = app.models.Charge;
+  const Charge = app.models.Charge;
   return Q.Promise(function(resolve, reject) {
     getSmsApiKey()
       .then(function(SMS_API_KEY) {
@@ -209,7 +209,7 @@ function sendMessage(
                 type: 'smsCost',
                 amount: cost,
                 forThe: 'message',
-                date: new Date().getTime()
+                date: new Date().getTime(),
               })
                 .then(function() {
                   return resolve();
@@ -228,7 +228,7 @@ function sendMessage(
             .loginToLicenseServer(LICENSE_SERVER_LOGIN_URL)
             .then(function(authResult) {
               log.debug('authResult:', authResult);
-              var data = {};
+              const data = {};
               data.receptor = mobile;
               data.token = token1;
               data.token2 = token2;
@@ -276,7 +276,7 @@ function sendMessage(
 
 var sendGroupMessage = function(mobilesList, message, businessId) {
   log.debug('@sendGroupMessage');
-  var Charge = app.models.Charge;
+  const Charge = app.models.Charge;
   return Q.Promise(function(resolve, reject) {
     getSmsApiKey()
       .then(function(SMS_API_KEY) {
@@ -290,7 +290,7 @@ var sendGroupMessage = function(mobilesList, message, businessId) {
                 type: 'smsCost',
                 amount: cost,
                 forThe: 'bulkMessages:' + mobilesList.length,
-                date: new Date().getTime()
+                date: new Date().getTime(),
               });
               return resolve();
             })
@@ -301,7 +301,7 @@ var sendGroupMessage = function(mobilesList, message, businessId) {
           auth
             .loginToLicenseServer(LICENSE_SERVER_LOGIN_URL)
             .then(function(authResult) {
-              var data = {};
+              const data = {};
               data.receptor = mobilesList;
               data.message = message;
               needle.post(
@@ -310,7 +310,7 @@ var sendGroupMessage = function(mobilesList, message, businessId) {
                   authResult.token
                 ),
                 data,
-                { json: true },
+                {json: true},
                 function(error, result, body) {
                   if (error) {
                     log.error('Error in LICENSE_SERVER_GROUP_SMS_API:', error);
