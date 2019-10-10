@@ -1,6 +1,4 @@
 'use strict'
-var app = require('../../server/server')
-var Q = require('q')
 var kafka = require('kafka-node')
 var config = require('../../server/modules/config.js')
 var logger = require('../../server/modules/logger')
@@ -9,9 +7,8 @@ var kafkaClient = new kafka.KafkaClient({
   kafkaHost: process.env.KAFKA_IP + ':' + process.env.KAFKA_PORT
 })
 const db = require('../../server/modules/db.factory')
-
 var kafkaProducer = new kafka.Producer(kafkaClient, {partitionerType: 2})
-var redis = require('redis')
+var redis = require('promise-redis')()
 var redisClient = redis.createClient(config.REDIS.PORT, config.REDIS.HOST)
 
 kafkaProducer.on('ready', function () {
@@ -29,7 +26,7 @@ module.exports = function (Usage) {
 
   Usage.calculateUsage = async (sessionId, usage) => {
     let {upload, download, sessionTime} = usage
-    const previewsUsage = await Usage.getUsageFromCache(sessionId)
+    const previewsUsage = await Usage.getSessionUsageFromCache(sessionId)
     if (previewsUsage) {
       upload = upload - previewsUsage.upload
       download = download - previewsUsage.download
@@ -52,7 +49,7 @@ module.exports = function (Usage) {
       departmentId = null
     }
 
-    const result = await db.getBusinessUsage(businessId,departmentId, startDate, endDate)
+    const result = await db.getBusinessUsage(businessId, departmentId, startDate, endDate)
     return result
   }
 
@@ -170,37 +167,17 @@ module.exports = function (Usage) {
     returns: {root: true}
   })
 
-  Usage.cacheUsage = function (usage) {
-    return Q.promise((resolve, reject) => {
-      redisClient.set(
-        usage.sessionId,
-        JSON.stringify(usage),
-        'EX',
-        3600
-        , function (error) {
-          if (error) {
-            log.error('failed to cache usage', error)
-            return reject('failed to cache')
-          }
-          return resolve()
-        })
-    })
+  Usage.updateSessionUsageCache = async function (usage) {
+    await redisClient.set(usage.sessionId, JSON.stringify(usage), 'EX', 3600)
   }
 
-  Usage.getUsageFromCache = function (sessionId) {
-    return Q.promise((resolve, reject) => {
-      redisClient.get(sessionId, (error, usage) => {
-        if (error) {
-          log.error(`failed to get usage from cache by id: ${sessionId}`)
-          return reject(error)
-        }
-        if (!usage) {
-          log.warn('previews session is empty')
-          return resolve()
-        }
-        return resolve(JSON.parse(usage))
-      })
-    })
+  Usage.getSessionUsageFromCache = async function (sessionId) {
+    const usage = await redisClient.get(sessionId)
+    if (!usage) {
+      log.warn('previews session is empty')
+      return
+    }
+    return JSON.parse(usage)
   }
 
 }

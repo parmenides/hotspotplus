@@ -178,6 +178,9 @@ module.exports.RadiusMessage = async function (radiusRequestData) {
   var Nas = app.models.Nas
   var nasId = radiusMessage.getNasId()
   const nas = await Nas.loadById(nasId)
+  if(!nas){
+    throw new Error(`nas not found ${nasId}`)
+  }
   radiusMessage.nas = nas
   radiusMessage.message.nasType = nas.accessPointType.toLowerCase()
   return radiusMessage

@@ -21,15 +21,15 @@ from hotspotplus.Session
 --PARTITION BY toStartOfMonth( creationDate )
 --ORDER BY ( sessionId,businessId,memberId,username,toStartOfInterval( creationDate ,INTERVAL 60 minute ) )
 
---
---CREATE MATERIALIZED VIEW hotspotplus.UsageView ENGINE=MergeTree()
---PARTITION BY (toStartOfMonth( creationDate))
---ORDER BY (sessionId,businessId,memberId)
---POPULATE AS SELECT sessionId,any(businessId) as businessId,any(memberId) as memberId,any(nasId) as nasId,any(username) as username,MAX(creationDate) as creationDate,MAX(upload) as upload,MAX(download) as download,MAX(sessionTime) as sessionTime
---FROM hotspotplus.Usage
---group by sessionId
 
-select sum(a.download) from (select sessionId,max(download) download,max(upload),max(sessionTime) from hotspotplus.UsageView  where memberId='5d728a37a987c2013d392bf4' group by sessionId) a
+CREATE MATERIALIZED VIEW hotspotplus.UsageView ENGINE=MergeTree()
+PARTITION BY (toStartOfMonth( creationDate))
+ORDER BY (sessionId,businessId,memberId)
+POPULATE AS SELECT sessionId,any(businessId) as businessId,any(memberId) as memberId,any(nasId) as nasId,any(username) as username,MAX(creationDate) as creationDate,MAX(upload) as upload,MAX(download) as download,MAX(sessionTime) as sessionTime
+FROM hotspotplus.Usage
+group by sessionId
+
+select sum(a.download) from (select sessionId,max(download) download,max(upload),max(sessionTime) from hotspotplus.UsageView  group by sessionId)
 
 create database hotspotplusLicense
 create table IF NOT EXISTS hotspotplusLicense.Charge(_id UUID,licenseId String,type String,forThe String, amount UInt8,date DateTime)

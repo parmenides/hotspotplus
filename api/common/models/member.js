@@ -554,6 +554,7 @@ module.exports = function (Member) {
       throw createError(500, hotspotMessages.maxOnlineUsersReached)
     }
 
+    //has cache
     const member = await Member.getMemberByUserName(businessId, username)
     if (!member) {
       throw createError(401, hotspotMessages.invalidUsernameOrPassword)
@@ -577,6 +578,7 @@ module.exports = function (Member) {
       throw createError(401, Radius_Messages.noActiveSubscription)
     }
 
+    //todo add cache
     const usageReport = await Member.getInternetUsage(businessId.toString(), member.id.toString(), duration.from.getTime(), duration.to.getTime())
     log.error(usageReport)
     const remainingBulk = Member.hasEnoughBulk(internetPlan, usageReport.bulk, member.extraBulk)
@@ -655,22 +657,38 @@ module.exports = function (Member) {
 
   }
 
-  Member.getInternetUsage = function (
+  Member.getInternetUsage = async function (
     businessId,
     memberId,
     fromDateInMs,
     toDateInMs
   ) {
     log.debug(`'GetInternetUsage businessId ${businessId} MemberId ${memberId} From:  ${fromDateInMs}  to ${toDateInMs}`)
-    return Q.Promise(function (resolve, reject) {
-      db.getMemberUsage(fromDateInMs, toDateInMs, memberId, businessId)
-        .then(function (usage) {
-          return resolve(usage)
-        })
-        .fail(function (error) {
-          return reject(error)
-        })
-    })
+    let usageList = await cacheManager.getMemberUsage(memberId)
+    if (!usageList) {
+      log.debug('loading usage from db')
+      usageList = await db.getMemberUsage(fromDateInMs, toDateInMs, memberId, businessId)
+      for(const usage of usageList){
+        log.warn('refreshing cache from db ',usage)
+        await cacheManager.addMemberUsage(usage);
+      }
+    }
+
+    let total = {
+      memberId,
+      bulk: 0,
+      download: 0,
+      upload: 0,
+      sessionTime: 0
+    }
+    for (const usage of usageList) {
+      total.download = total.download + usage.download
+      total.upload = total.upload + usage.upload
+      total.sessionTime = total.sessionTime + usage.sessionTime
+    }
+    total.bulk = total.download + total.upload
+
+    return total
   }
 
   Member.getSubscriptionDuration = function (member, internetPlan) {
@@ -2150,11 +2168,11 @@ module.exports = function (Member) {
       if (member.subscriptionDate) {
         const fromDate = member.subscriptionDate
         const toDate = new Date().getTime()
-        const id = member.id
+        const memberId = member.id
         const businessId = member.businessId
 
-        const memberTraffic = await db.getMemberUsage(fromDate, toDate, id, businessId)
-        const {memberId, upload, download, sessionTime} = memberTraffic
+        const memberTraffic = await db.getMemberUsage(fromDate, toDate, memberId, businessId)
+        const {upload, download, sessionTime} = memberTraffic
         results[memberId] = {
           upload,
           download,

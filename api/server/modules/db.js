@@ -1,6 +1,7 @@
 const SESSION_TABLE = 'hotspotplus.Session'
 const USAGE_TABLE = 'hotspotplus.Usage'
 const CHARGE_TABLE = 'hotspotplus.Charge'
+const NETFLOW_REPORT_TABLE = 'hotspotplus.NetflowReport'
 const LICENSE_TABLE = 'license.Charge'
 
 module.exports = (insert, query, uuid, config, moment, log) => {
@@ -31,7 +32,8 @@ engine=SummingMergeTree((sessionTime,download,upload))
 PARTITION BY (toStartOfMonth( creationDate))
 ORDER BY (businessId,memberId,departmentId,sessionId)
 POPULATE AS SELECT *
-FROM hotspotplus.Session`)
+FROM hotspotplus.Session
+`)
 
       await query(`create table IF NOT EXISTS hotspotplus.WebProxy( memberIp String,nasIp String,protocol String,url String,method String,domain String,receivedAt DateTime )
 engine=MergeTree()
@@ -43,7 +45,16 @@ engine=AggregatingMergeTree()
 PARTITION BY toStartOfDay( receivedAt )
 ORDER BY (nasIp,memberIp,domain,toStartOfInterval( receivedAt , INTERVAL 1 day ))
 `)
+      await query(`CREATE MATERIALIZED VIEW IF NOT EXISTS hotspotplus.NetflowReport ENGINE=AggregatingMergeTree()
+PARTITION BY (toStartOfDay( timeRecvd))
+ORDER BY (dstIp,srcIp,routerAddr,dstPort,srcPort,username,toStartOfHour( timeRecvd ))
+Populate AS SELECT Session.businessId,Session.departmentId,Session.memberId,Session.nasIp,Session.username,Netflow.RouterAddr as routerAddr,Netflow.SrcIP as srcIp, Netflow.DstIP as dstIp, Netflow.SrcPort as srcPort, Netflow.DstPort as dstPort,Netflow.TimeRecvd as timeRecvd,Netflow.Proto as proto, NextHop as nextHop
+FROM hotspotplus.Session JOIN hotspotplus.Netflow ON Session.nasIp=Netflow.RouterAddr
+ AND toStartOfInterval(Session.creationDate, INTERVAL 5 minute)=toStartOfInterval(Netflow.TimeRecvd,INTERVAL 5 minute )
+WHERE Session.framedIpAddress=Netflow.DstIP OR Session.framedIpAddress=Netflow.SrcIP OR Session.framedIpAddress=Netflow.NextHop
+`)
     },
+
     getUsageByInterval: (businessId, departmentId, startDate, endDate) => {
       if (!businessId) {
         throw new Error('businessId is undefined')
@@ -85,19 +96,20 @@ SELECT arrayJoin(timeSlots(toDateTime('${from}'), toUInt32(${intervalInSeconds}*
 
       const from = moment.utc(startDate).format(config.DATABASE_DATE_FORMAT)
       const to = moment.utc(endDate).format(config.DATABASE_DATE_FORMAT)
-      const sqlQuery = `SELECT toInt64(SUM(upload)) as upload,toInt64(SUM(download)) download,toInt64(SUM(sessionTime)) as sessionTime FROM ${USAGE_TABLE}
-WHERE creationDate>=toDateTime('${from}') AND creationDate<=toDateTime('${to}') AND businessId='${businessId}' AND memberId='${memberId}' `
-      log.debug(sqlQuery);
+      const sqlQuery = `SELECT sessionId , toInt64(SUM(upload)) as upload,toInt64(SUM(download)) as download,toInt64(SUM(sessionTime)) as sessionTime FROM ${USAGE_TABLE}
+WHERE creationDate>=toDateTime('${from}') AND creationDate<=toDateTime('${to}') AND businessId='${businessId}' AND memberId='${memberId}' group by sessionId`
+      log.debug(sqlQuery)
       return query(sqlQuery).then((result) => {
-        const {upload, download, sessionTime} = result[0]
+        //const {upload, download, sessionTime} = result[0]
         log.debug({result})
-        return {
+        return result
+        /*return {
           memberId: memberId,
           bulk: Number(download) + Number(upload),
           download: Number(download),
           upload: Number(upload),
           sessionTime: Number(sessionTime)
-        }
+        }*/
       })
     },
     getBusinessUsage: (businessId, departmentId, startDate, endDate) => {
@@ -110,7 +122,7 @@ WHERE creationDate>=toDateTime('${from}') AND creationDate<=toDateTime('${to}') 
 
       const from = moment.utc(startDate).format(config.DATABASE_DATE_FORMAT)
       const to = moment.utc(endDate).format(config.DATABASE_DATE_FORMAT)
-      const sqlQuery = `SELECT toInt64(SUM(upload)) as upload,toInt64(SUM(download)) download,toInt64(SUM(sessionTime)) as sessionTime FROM ${USAGE_TABLE}
+      const sqlQuery = `SELECT toInt64(SUM(upload)) as upload,toInt64(SUM(download)) as download,toInt64(SUM(sessionTime)) as sessionTime FROM ${USAGE_TABLE}
 WHERE creationDate>=toDateTime('${from}') AND creationDate<=toDateTime('${to}') AND businessId='${businessId}' ${departmentId ? `AND departmentId='${departmentId}'` : ''}`
 
       return query(sqlQuery).then((result) => {
@@ -134,7 +146,7 @@ WHERE creationDate>=toDateTime('${from}') AND creationDate<=toDateTime('${to}') 
 
       const from = moment.utc(startDate).format(config.DATABASE_DATE_FORMAT)
       const to = moment.utc(endDate).format(config.DATABASE_DATE_FORMAT)
-      const sqlQuery = `SELECT memberId,any(username) as username,toInt64(SUM(upload)) as upload,toInt64(SUM(download)) download,toInt64(SUM(sessionTime)) as sessionTime FROM ${USAGE_TABLE}
+      const sqlQuery = `SELECT memberId,any(username) as username,toInt64(SUM(upload)) as upload,toInt64(SUM(download)) as download,toInt64(SUM(sessionTime)) as sessionTime FROM ${USAGE_TABLE}
 WHERE creationDate>=toDateTime('${from}') AND creationDate<=toDateTime('${to}') AND businessId='${businessId}' ${departmentId ? `AND departmentId='${departmentId}'` : ''} 
     GROUP BY memberId ORDER BY download DESC,upload DESC, sessionTime DESC LIMIT ${limit} OFFSET ${skip} 
 `

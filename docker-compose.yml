@@ -35,6 +35,8 @@ services:
       - ${PWD}/api/common:/usr/src/app/common/
       - ${PWD}/api/logs:/logs
       - ${PWD}/api/key:/key
+    ports:
+      - 3000:3000
     networks:
       - hotspotplusgate
 #  licensapi:
@@ -214,8 +216,9 @@ services:
     restart: always
     volumes:
       - ./radius.3.0.19/clients.conf:/etc/raddb/clients.conf
+#     - ./radius.3.0.19/clients.conf:/etc/raddb/radiusd.conf
       - ./radius.3.0.19/mods-enabled/rest:/etc/raddb/mods-enabled/rest
-      - ./radius.3.0.19/sites-enabled/dynamic-clients:/etc/raddb/sites-enabled/dynamic-clients
+#     - ./radius.3.0.19/sites-enabled/dynamic-clients:/etc/raddb/sites-enabled/dynamic-clients
       - ./radius.3.0.19/sites-enabled/default:/etc/raddb/sites-enabled/default
     networks:
       - hotspotplusgate

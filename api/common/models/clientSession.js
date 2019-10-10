@@ -8,6 +8,7 @@ var kafka = require('kafka-node')
 var config = require('../../server/modules/config')
 const db = require('../../server/modules/db.factory')
 const moment = require('moment')
+const cacheManager  = require('../../server/modules/cacheManager');
 var _ = require('underscore')
 
 const kafkaClient = new kafka.KafkaClient({
@@ -79,11 +80,10 @@ module.exports = function (ClientSession) {
       upload: session.upload,
       sessionTime: session.sessionTime
     })
-    await Usage.cacheUsage(session)
-    session.download = calculatedUsage.download
-    session.upload = calculatedUsage.upload
-    session.sessionTime = calculatedUsage.sessionTime
-    //session = {...session, ...calculatedUsage}
+
+    await Usage.updateSessionUsageCache(session)
+    await cacheManager.addMemberUsage({memberId:session.memberId,sessionId,...calculatedUsage})
+    session = {...session, ...calculatedUsage}
     log.debug(session)
     await ClientSession.sendToBroker(session)
   }

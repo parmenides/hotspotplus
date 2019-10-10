@@ -13,7 +13,13 @@ Netflow.TimeRecvd>=toDateTime('2019-08-29 03:45:05')
 AND Netflow.TimeRecvd<=toDateTime('2019-08-29 04:29:06')
 AND (SrcIP='192.168.2.1' OR DstIP='192.168.2.1' OR NextHop='192.168.2.1')
 
-
+CREATE MATERIALIZED VIEW hotspotplus.NetflowReport ENGINE=AggregatingMergeTree()
+PARTITION BY (toStartOfDay( timeRecvd))
+ORDER BY (dstIp,srcIp,routerAddr,dstPort,srcPort,username,toStartOfHour( timeRecvd ))
+Populate AS SELECT Session.businessId,Session.departmentId,Session.memberId,Session.nasIp,Session.username,Netflow.RouterAddr as routerAddr,Netflow.SrcIP as srcIp, Netflow.DstIP as dstIp, Netflow.SrcPort as srcPort, Netflow.DstPort as dstPort,Netflow.TimeRecvd as timeRecvd,Netflow.Proto as proto, NextHop as nextHop
+FROM hotspotplus.Session JOIN hotspotplus.Netflow ON Session.nasIp=Netflow.RouterAddr
+ AND toStartOfInterval(Session.creationDate, INTERVAL 5 minute)=toStartOfInterval(Netflow.TimeRecvd,INTERVAL 5 minute )
+WHERE Session.framedIpAddress=Netflow.DstIP OR Session.framedIpAddress=Netflow.SrcIP OR Session.framedIpAddress=Netflow.NextHop
 
 CREATE MATERIALIZED VIEW logs.UserNetflowReport ENGINE=AggregatingMergeTree()
 PARTITION BY (toStartOfDay( TimeRecvd))

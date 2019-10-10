@@ -27,178 +27,62 @@ module.exports = function (InternetPlan) {
     return plan
   }
 
-  InternetPlan.assignPlanToMember = function (memberId, planId, isFree) {
+  InternetPlan.assignPlanToMember = async function (memberId, planId, isFree) {
     log.debug('@assignPlanToMember')
-    var Member = app.models.Member
-    return Q.Promise(function (resolve, reject) {
-      InternetPlan.findById(planId).then(function (plan) {
-        if (!plan) {
-          log.error('no such plan')
-          return reject('plan not found ', planId)
-        }
+    const Member = app.models.Member
 
-        if (isFree && plan.price !== 0) {
-          return reject('not a free plan', planId)
-        }
-
-        Member.findById(memberId).then(function (member) {
-          if (!member) {
-            log.error('member not found')
-            return reject('member not found')
-          }
-          if (!member.businessId || !plan.businessId) {
-            return reject('invalid business id')
-          }
-
-          if (member.businessId.toString() !== plan.businessId.toString()) {
-            return reject('member and business plan mismatch')
-          }
-          var Business = app.models.Business
-          Business.findById(member.businessId).then(function (business) {
-            if (!business) {
-              log.error('business not found')
-              return reject('business not found')
-            }
-            var dateNow = new Date().getTime()
-            var subscriptionDate = dateNow
-            var activateDefaultPlanCount = 0
-            if (
-              isFree &&
-              (business.defaultInternetPlan &&
-                business.defaultInternetPlan.id) &&
-              plan.id == business.defaultInternetPlan.id
-            ) {
-              activateDefaultPlanCount = 1
-              if (member.activateDefaultPlanCount) {
-                activateDefaultPlanCount = member.activateDefaultPlanCount || 0
-                var period =
-                  business.defaultInternetPlan.period *
-                  config.AGGREGATE.HOUR_MILLISECONDS
-                if (member.subscriptionDate) {
-                  subscriptionDate = new Date(
-                    member.subscriptionDate
-                  ).getTime()
-                }
-                var expireTime = subscriptionDate + period
-                if (
-                  expireTime > dateNow &&
-                  member.activateDefaultPlanCount <
-                  business.defaultInternetPlan.count
-                ) {
-                  activateDefaultPlanCount =
-                    member.activateDefaultPlanCount + 1
-                } else if (expireTime < dateNow) {
-                  subscriptionDate = dateNow
-                } else {
-                  log.error('default plan activated too many times')
-                  return reject('default plan activated too many times')
-                }
-              }
-            }
-
-            /*var internetPlanHistory = member.internetPlanHistory || [];
-						var newPlan = plan;
-						newPlan.assignDate = new Date ().getTime ();
-						internetPlanHistory.push ( newPlan );
-*/
-            member.updateAttributes(
-              {
-                internetPlanId: plan.id,
-                internetPlanName: plan.name,
-                subscriptionDate: subscriptionDate,
-                activateDefaultPlanCount: activateDefaultPlanCount,
-                extraBulk: 0
-              },
-              function (error, result) {
-                if (error) {
-                  log.error(error)
-                  return reject(error)
-                }
-                InternetPlan.updateInternetPlanHistory(memberId, planId)
-                  .then(function () {
-                    log.debug('plan assigned')
-                    return resolve()
-                  })
-                  .fail(function (error) {
-                    log.error(error)
-                    return reject(error)
-                  })
-              }
-            )
-          })
-        })
-      })
+    const plan = await InternetPlan.findById(planId)
+    if (isFree && plan.price !== 0) {
+      throw new Error('not a free plan', planId)
+    }
+    const member = await Member.findById(memberId)
+    await member.updateAttributes({
+      internetPlanId: plan.id,
+      internetPlanName: plan.name,
+      subscriptionDate: Date.now(),
+      activateDefaultPlanCount: 0,
+      extraBulk: 0
     })
+    await InternetPlan.updateInternetPlanHistory(memberId, planId)
+    log.debug('plan assigned')
+    return {ok:true}
   }
 
-  InternetPlan.calculatePreviewsPlanUsage = (businessId, memberId, previousPlan) => {
-    var Member = app.models.Member
-    return Q.Promise((resolve, reject) => {
-      if (previousPlan) {
-        const to = (new Date()).getTime()
-        Member.getInternetUsage(businessId, memberId, previousPlan.assignDate, to).then((usageReport) => {
-          log.debug({usageReport})
-          previousPlan.totalUsage = usageReport.bulk || 0
-          return resolve(previousPlan)
-        }).fail((error) => {
-          log.error(error)
-          return reject('failed to load old plan usage ')
-        })
-      } else {
-        return resolve()
-      }
-    })
+  InternetPlan.calculatePreviewsPlanUsage = async (businessId, memberId, previousPlan) => {
+    const Member = app.models.Member
+    if (!previousPlan) {
+      return
+    }
+    const to = (new Date()).getTime()
+    const usageReport = await Member.getInternetUsage(businessId, memberId, previousPlan.assignDate, to)
+    log.debug({usageReport})
+    previousPlan.totalUsage = usageReport.bulk || 0
+    return previousPlan
   }
 
-  InternetPlan.updateInternetPlanHistory = function (memberId, planId) {
+  InternetPlan.updateInternetPlanHistory = async function (memberId, planId) {
     log.debug('@updateInternetPlanHistory')
-    var Member = app.models.Member
-    return Q.Promise(function (resolve, reject) {
-      InternetPlan.findById(planId).then(function (plan) {
-        if (!plan) {
-          log.error('no such plan')
-          return reject('plan not found ', planId)
-        }
-
-        Member.findById(memberId).then(function (member) {
-          if (!member) {
-            log.error('member not found')
-            return reject('member not found')
-          }
-
-          var internetPlanHistory = member.internetPlanHistory || []
-          InternetPlan.calculatePreviewsPlanUsage(member.businessId, memberId, internetPlanHistory.pop()).then((oldPlan) => {
-            if (oldPlan) {
-              internetPlanHistory.push(oldPlan)
-            }
-            var newPlan = plan
-            newPlan.assignDate = new Date().getTime()
-            internetPlanHistory.push(newPlan)
-            if (internetPlanHistory.length > 20) {
-              internetPlanHistory = internetPlanHistory.splice(
-                internetPlanHistory.length - 20
-              )
-            }
-            member.updateAttributes(
-              {
-                internetPlanHistory: internetPlanHistory
-              },
-              function (error, result) {
-                if (error) {
-                  log.error(error)
-                  return reject(error)
-                }
-                log.debug('internet plan history updated ')
-                return resolve()
-              }
-            )
-          }).fail((error) => {
-            log.error(error)
-            return reject('failed to add old plan usage')
-          })
-        })
-      })
-    })
+    const Member = app.models.Member
+    const plan = await InternetPlan.findById(planId);
+    if (!plan) {
+      log.error('no such plan')
+      throw new Error('plan not found ', planId)
+    }
+    const member = await Member.findById(memberId);
+    let internetPlanHistory = member.internetPlanHistory || []
+    const oldPlan = await InternetPlan.calculatePreviewsPlanUsage(member.businessId, memberId, internetPlanHistory.pop());
+    if (oldPlan) {
+      internetPlanHistory.push(oldPlan)
+    }
+    var newPlan = plan
+    newPlan.assignDate = new Date().getTime()
+    internetPlanHistory.push(newPlan)
+    if (internetPlanHistory.length > 20) {
+      internetPlanHistory = internetPlanHistory.splice(
+        internetPlanHistory.length - 20
+      )
+    }
+    await member.updateAttributes({internetPlanHistory: internetPlanHistory})
   }
 
   InternetPlan.remoteMethod('assignPlanToMember', {
@@ -225,16 +109,10 @@ module.exports = function (InternetPlan) {
     returns: {root: true}
   })
 
-  InternetPlan.assignFreePlanToMember = function (memberId, planId, clbk) {
+  InternetPlan.assignFreePlanToMember = async function (memberId, planId) {
     log.debug('@assignFreePlanToMember')
-    InternetPlan.assignPlanToMember(memberId, planId, true)
-      .then(function () {
-        return clbk(null, {ok: true})
-      })
-      .fail(function (error) {
-        log.error(error)
-        return clbk(error)
-      })
+    await InternetPlan.assignPlanToMember(memberId, planId, true)
+    return {ok:true}
   }
 
   InternetPlan.remoteMethod('assignFreePlanToMember', {
