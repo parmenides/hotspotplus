@@ -26,8 +26,11 @@ app.directive('sessionsCount', [
 
           var session = {};
           session.businessId = $scope.params.businessId;
+          var departmentId = $scope.params.departmentId || 'all';
+
           ClientSession.getOnlineSessionCount({
-            businessId: session.businessId
+            businessId: session.businessId,
+            departmentId: departmentId
           }).$promise.then(
             function(result) {
               $scope.count = result.count;

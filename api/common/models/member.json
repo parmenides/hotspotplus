@@ -420,6 +420,13 @@
     {
       "accessType": "EXECUTE",
       "principalType": "ROLE",
+      "principalId": "operator",
+      "permission": "ALLOW",
+      "property": "createMembersByGroup"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
       "principalId": "networkadmin",
       "permission": "ALLOW",
       "property": "importMemberFromCsv"

@@ -14,15 +14,12 @@ const createUsageCacheId = (memberId) => {
 
 const clearMemberUsage = async (id) => {
   if (id) {
-    log.debug('clear up member usage cache');
     await redisClient.del(createUsageCacheId(id.toString()));
   }
 };
 
 const cacheMemberUsage = async (options) => {
-  log.error('@cacheMemberUsage', options);
   if (options.memberId || options.sessionId) {
-    log.debug('going to add member usage to cache', options);
     const {memberId, sessionId, download, upload, sessionTime} = options;
     await redisClient.hincrby(createUsageCacheId(memberId), `${sessionId}:download`, download);
     await redisClient.hincrby(createUsageCacheId(memberId), `${sessionId}:upload`, upload);
@@ -56,19 +53,22 @@ const simpleCacheManagerFactory = (options) => {
   return {
     add: async (id, jsonData) => {
       if (jsonData && id) {
+        log.error(`${prefix} cached with ${id}`);
         const data = JSON.stringify(jsonData);
         id = id.toString();
-        const key = `${prefix}:${id}`;
+        const key = `${prefix}${id}`;
         await redisClient.set(key, data);
         await redisClient.expire(key, ttl);
       }
     },
     clear: async (id) => {
-      const key = `${prefix}:${id.toString()}`;
+      log.error(`${prefix} cached cleared ${id}`);
+      const key = `${prefix}${id.toString()}`;
       await redisClient.del(key);
     },
     get: async (id) => {
-      const key = `${prefix}:${id.toString()}`;
+      log.error(`${prefix} read from cache ${id}`);
+      const key = `${prefix}${id.toString()}`;
       const data = await redisClient.get(key);
       return data ? JSON.parse(data) : null;
     },
@@ -80,7 +80,7 @@ const listCacheManagerFactory = (options) => {
   return {
     add: async (parentId, childId, data) => {
       if (parentId && childId) {
-        log.error('parent id', parentId, ' child id: ', childId);
+        log.error(`Cache in ${parentId} for ${childId}`,data);
         await redisClient.set(childCacheIdCreator(childId), JSON.stringify(data));
         await redisClient.expire(childCacheIdCreator(childId), ttl);
         const key = parentCacheIdCreator(parentId);
@@ -119,7 +119,7 @@ const listCacheManagerFactory = (options) => {
 const memberSessionCacheManager = listCacheManagerFactory({
   ttl: Math.round((Number(config.DEFAULT_ACCOUNTING_UPDATE_INTERVAL_SECONDS)) + 60),
   parentCacheIdCreator: (memberId) => {
-    return `member:${memberId}`;
+    return `member:session:${memberId}`;
   },
   childCacheIdCreator: (sessionId) => {
     return `member:session:${sessionId}`;
@@ -130,7 +130,7 @@ const memberSessionCacheManager = listCacheManagerFactory({
 const businessSessionCacheManager = listCacheManagerFactory({
   ttl: Math.round((Number(config.DEFAULT_ACCOUNTING_UPDATE_INTERVAL_SECONDS)) + 60),
   parentCacheIdCreator: (businessId) => {
-    return `business:${businessId}`;
+    return `business:session:${businessId}`;
   },
   childCacheIdCreator: (sessionId) => {
     return `business:session:${sessionId}`;
@@ -173,8 +173,6 @@ const createMemberByUsernameCacheId = (businessId, username)=>{
 };
 
 module.exports = {
-  simpleCacheManagerFactory,
-  listCacheManagerFactory,
 
   getBusinessSessions: businessSessionCacheManager.load,
   cacheBusinessSession: businessSessionCacheManager.add,

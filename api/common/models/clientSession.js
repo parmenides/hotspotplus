@@ -196,7 +196,7 @@ module.exports = function(ClientSession) {
   ClientSession.getOnlineSessionCount = async (businessId, departmentId) => {
     log.debug('@getOnlineSessionCount : ', businessId);
     if (!departmentId) {
-      return {count: 0};
+      throw new Error('department id is empty');
     }
     let result;
     if (departmentId === 'all') {

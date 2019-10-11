@@ -24,14 +24,12 @@ const redis = require('promise-redis')();
 const redisClient = redis.createClient();
 
 const init = async ()=>{
-  const result = await redisClient.sadd('members', '287346872364', '283748237487', 'dddddd');
-  console.log(result);
+  //await redisClient.set('aaaaa','KKKKK')
+  //await redisClient.expire('aaaaa',3600)
+  const res = await redisClient.ttl('aaaaa')
+  console.log(typeof res)
+  console.log(res)
 
-  const members = await redisClient.smembers('members');
-  console.log(members);
-  await redisClient.set('287346872364', 'resulttttt');
-  const res = await redisClient.mget(members);
-  console.log(res);
 };
 init();
 /*
