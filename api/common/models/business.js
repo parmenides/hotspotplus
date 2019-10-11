@@ -28,13 +28,13 @@ module.exports = function(Business) {
   const log = logger.createLogger();
 
   Business.loadById = async function(id) {
-    const cachedBusiness = await cacheManager.readFromCache(id);
+    const cachedBusiness = await cacheManager.getBusiness(id);
     if (cachedBusiness) {
       return cachedBusiness;
     }
     const business = await Business.findById(id);
     log.warn('from db...', business);
-    cacheManager.cacheIt(id, business);
+    await cacheManager.cacheBusiness(id, business);
     return business;
   };
 
@@ -169,7 +169,7 @@ module.exports = function(Business) {
     const Role = app.models.Role;
     if (ctx.instance) {
       const entity = ctx.instance;
-      cacheManager.clearCache(entity.id);
+      cacheManager.clearBusiness(entity.id);
     }
     if (ctx.isNewInstance) {
       const business = ctx.instance;

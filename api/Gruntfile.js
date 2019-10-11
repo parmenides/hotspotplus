@@ -1,5 +1,4 @@
 module.exports = function(grunt) {
-
   // Project configuration.
   grunt.initConfig({
     obfuscator: {
@@ -64,8 +63,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-obfuscator');
   grunt.loadNpmTasks('grunt-contrib-copy');
 
-
   // Default task(s).
-  grunt.registerTask('default', [ 'copy:main', 'obfuscator' ]);
-
+  grunt.registerTask('default', ['copy:main', 'obfuscator']);
 };

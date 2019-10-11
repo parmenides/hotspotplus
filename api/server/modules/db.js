@@ -20,14 +20,14 @@ PARTITION BY toStartOfDay( TimeRecvd )
 ORDER BY (NextHop,DstPort,SrcPort,DstIP,SrcIP,RouterAddr,toStartOfInterval( TimeRecvd ,INTERVAL 30 minute ))
 `);
 
-      await query(`create table IF NOT EXISTS hotspotplus.Session(sessionId String,businessId String,memberId String,nasId String,departmentId String,groupIdentityId String,nasIp String,username String,framedIpAddress String,mac String,creationDate DateTime,download UInt32,upload UInt32,
+      await query(`create table IF NOT EXISTS ${SESSION_TABLE}(sessionId String,businessId String,memberId String,nasId String,departmentId String,groupIdentityId String,nasIp String,username String,framedIpAddress String,mac String,creationDate DateTime,download UInt32,upload UInt32,
 sessionTime UInt32,accStatusType UInt8 )
 engine=MergeTree()
 PARTITION BY toStartOfDay( creationDate )
 ORDER BY (businessId,memberId,sessionId,departmentId,nasIp,framedIpAddress,creationDate,username)
 `);
 
-      await query(`CREATE MATERIALIZED VIEW IF NOT EXISTS  hotspotplus.Usage
+      await query(`CREATE MATERIALIZED VIEW IF NOT EXISTS  ${USAGE_TABLE}
 engine=SummingMergeTree((sessionTime,download,upload))
 PARTITION BY (toStartOfMonth( creationDate))
 ORDER BY (businessId,memberId,departmentId,sessionId)
@@ -45,7 +45,7 @@ engine=AggregatingMergeTree()
 PARTITION BY toStartOfDay( receivedAt )
 ORDER BY (nasIp,memberIp,domain,toStartOfInterval( receivedAt , INTERVAL 1 day ))
 `);
-      await query(`CREATE MATERIALIZED VIEW IF NOT EXISTS hotspotplus.NetflowReport ENGINE=AggregatingMergeTree()
+      await query(`CREATE MATERIALIZED VIEW IF NOT EXISTS ${NETFLOW_REPORT_TABLE} ENGINE=AggregatingMergeTree()
 PARTITION BY (toStartOfDay( timeRecvd))
 ORDER BY (dstIp,srcIp,routerAddr,dstPort,srcPort,username,toStartOfHour( timeRecvd ))
 Populate AS SELECT Session.businessId,Session.departmentId,Session.memberId,Session.nasIp,Session.username,Netflow.RouterAddr as routerAddr,Netflow.SrcIP as srcIp, Netflow.DstIP as dstIp, Netflow.SrcPort as srcPort, Netflow.DstPort as dstPort,Netflow.TimeRecvd as timeRecvd,Netflow.Proto as proto, NextHop as nextHop

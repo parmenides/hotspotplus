@@ -11,19 +11,19 @@ module.exports = function(InternetPlan) {
   InternetPlan.observe('after save', function(ctx, next) {
     if (ctx.instance) {
       const entity = ctx.instance;
-      cacheManager.clearCache(entity.id);
+      cacheManager.clearInternetPlan(entity.id);
     }
     next();
   });
 
   InternetPlan.loadById = async function(id) {
-    const cachedInternetPlan = await cacheManager.readFromCache(id);
+    const cachedInternetPlan = await cacheManager.getInternetPlan(id);
     if (cachedInternetPlan) {
       return cachedInternetPlan;
     }
     const plan = await InternetPlan.findById(id);
     log.warn('from db...', plan);
-    cacheManager.cacheIt(id, plan);
+    cacheManager.cacheInternetPlan(id, plan);
     return plan;
   };
 

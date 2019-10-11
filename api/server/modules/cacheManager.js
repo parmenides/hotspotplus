@@ -8,71 +8,34 @@ const redisClient = redis.createClient(
   process.env.REDIS_IP
 );
 
-const cacheIt = async (id, jsonData) => {
-  try {
-    if (jsonData && id) {
-      const data = JSON.stringify(jsonData);
-      id = id.toString();
-      const result = await redisClient.set(id, data);
-      await redisClient.expire(id, config.APP_CACHE_TTL);
-      log.debug('cached in ', result);
-    }
-  } catch (e) {
-    log.error('failed to stringify json to cache');
-  }
+const createUsageCacheId = (memberId) => {
+  return `usage:${memberId}`;
 };
-const clearCache = async (id) => {
+
+const clearMemberUsage = async (id) => {
   if (id) {
-    log.debug(`going to clear up cache for id: ${id}`);
-    await redisClient.del(id.toString());
-  }
-};
-
-const readFromCache = async (id) => {
-  if (!id) {
-    return;
-  }
-  id = id.toString();
-  const data = await redisClient.get(id);
-  if (data) {
-    try {
-      log.debug('reading from cache:', id);
-      return JSON.parse(data);
-    } catch (e) {
-      log.error(`failed to parse data from cache id ${id}`);
-    }
-  }
-};
-
-const createUsageCacheId = (memberId)=>{
-  return `usage:${memberId}`
-}
-
-const clearMemberUsageCache = async (id) => {
-  if (id) {
-    log.debug(`clear up member usage cache`);
+    log.debug('clear up member usage cache');
     await redisClient.del(createUsageCacheId(id.toString()));
   }
 };
-const addMemberUsage = async (options) => {
-  log.error('@addMemberUsage', options);
+
+const cacheMemberUsage = async (options) => {
+  log.error('@cacheMemberUsage', options);
   if (options.memberId || options.sessionId) {
     log.debug('going to add member usage to cache', options);
     const {memberId, sessionId, download, upload, sessionTime} = options;
     await redisClient.hincrby(createUsageCacheId(memberId), `${sessionId}:download`, download);
     await redisClient.hincrby(createUsageCacheId(memberId), `${sessionId}:upload`, upload);
     await redisClient.hincrby(createUsageCacheId(memberId), `${sessionId}:sessionTime`, sessionTime);
-    await redisClient.expire(createUsageCacheId(memberId), 3600);
+    await redisClient.expire(createUsageCacheId(memberId), 3600 * 24);
   }
 };
 
 const getMemberUsage = async (memberId) => {
-  log.error('@getMemberUsage ', memberId);
   const result = await redisClient.hgetall(createUsageCacheId(memberId));
   if (!result) {
     return null;
   }
-  log.debug('loading usage from cache ', result);
   const keys = Object.keys(result);
   const allUsage = {};
   for (const key of keys) {
@@ -88,11 +51,161 @@ const getMemberUsage = async (memberId) => {
   });
 };
 
-module.exports = {
-  clearMemberUsageCache,
-  addMemberUsage,
-  getMemberUsage,
-  cacheIt,
-  clearCache,
-  readFromCache,
+const simpleCacheManagerFactory = (options) => {
+  const {redisClient, ttl, prefix} = options;
+  return {
+    add: async (id, jsonData) => {
+      if (jsonData && id) {
+        const data = JSON.stringify(jsonData);
+        id = id.toString();
+        const key = `${prefix}:${id}`;
+        await redisClient.set(key, data);
+        await redisClient.expire(key, ttl);
+      }
+    },
+    clear: async (id) => {
+      const key = `${prefix}:${id.toString()}`;
+      await redisClient.del(key);
+    },
+    get: async (id) => {
+      const key = `${prefix}:${id.toString()}`;
+      const data = await redisClient.get(key);
+      return data ? JSON.parse(data) : null;
+    },
+  };
 };
+
+const listCacheManagerFactory = (options) => {
+  const {ttl, parentCacheIdCreator, childCacheIdCreator, redisClient} = options;
+  return {
+    add: async (parentId, childId, data) => {
+      if (parentId && childId) {
+        log.error('parent id', parentId, ' child id: ', childId);
+        await redisClient.set(childCacheIdCreator(childId), JSON.stringify(data));
+        await redisClient.expire(childCacheIdCreator(childId), ttl);
+        const key = parentCacheIdCreator(parentId);
+        await redisClient.sadd(key, childCacheIdCreator(childId));
+      }
+    },
+    clear: async (id) => {
+      if (id) {
+        await redisClient.del(parentCacheIdCreator(id));
+      }
+    },
+    load: async (parentId, filter) => {
+      if (parentId) {
+        const key = parentCacheIdCreator(parentId);
+        const childIds = await redisClient.smembers(key);
+        if (childIds.length === 0) {
+          return [];
+        }
+        log.error({childIds});
+        const dataItems = await redisClient.mget(childIds);
+        return dataItems.map((value) => {
+          if (value) {
+            const data = JSON.parse(value);
+            if (filter) {
+              return filter(data);
+            } else {
+              return data;
+            }
+          }
+        });
+      }
+    },
+  };
+};
+
+const memberSessionCacheManager = listCacheManagerFactory({
+  ttl: Math.round((Number(config.DEFAULT_ACCOUNTING_UPDATE_INTERVAL_SECONDS)) + 60),
+  parentCacheIdCreator: (memberId) => {
+    return `member:${memberId}`;
+  },
+  childCacheIdCreator: (sessionId) => {
+    return `member:session:${sessionId}`;
+  },
+  redisClient,
+});
+
+const businessSessionCacheManager = listCacheManagerFactory({
+  ttl: Math.round((Number(config.DEFAULT_ACCOUNTING_UPDATE_INTERVAL_SECONDS)) + 60),
+  parentCacheIdCreator: (businessId) => {
+    return `business:${businessId}`;
+  },
+  childCacheIdCreator: (sessionId) => {
+    return `business:session:${sessionId}`;
+  },
+  redisClient,
+});
+
+const memberCacheManager = simpleCacheManagerFactory({
+  ttl: config.APP_CACHE_TTL,
+  prefix: 'member:',
+  redisClient,
+});
+
+const memberByUsernameCacheManager = simpleCacheManagerFactory({
+  ttl: config.APP_CACHE_TTL,
+  prefix: 'business:username:',
+  redisClient,
+});
+
+const nasCacheManager = simpleCacheManagerFactory({
+  ttl: config.APP_CACHE_TTL,
+  prefix: 'nas:',
+  redisClient,
+});
+
+const businessCacheManager = simpleCacheManagerFactory({
+  ttl: config.APP_CACHE_TTL,
+  prefix: 'business:',
+  redisClient,
+});
+
+const internetPlanCacheManager = simpleCacheManagerFactory({
+  ttl: config.APP_CACHE_TTL,
+  prefix: 'internetPlan:',
+  redisClient,
+});
+
+const createMemberByUsernameCacheId = (businessId, username)=>{
+  return `${businessId}:${username}`;
+};
+
+module.exports = {
+  simpleCacheManagerFactory,
+  listCacheManagerFactory,
+
+  getBusinessSessions: businessSessionCacheManager.load,
+  cacheBusinessSession: businessSessionCacheManager.add,
+
+  getMemberSessions: memberSessionCacheManager.load,
+  cacheMemberSession: memberSessionCacheManager.add,
+  clearMemberSession: memberSessionCacheManager.clear,
+
+  getMember: memberCacheManager.get,
+  cacheMember: memberCacheManager.add,
+  clearMember: memberCacheManager.clear,
+
+  getMemberByUsername: memberByUsernameCacheManager.get,
+  cacheMemberByUsername: memberByUsernameCacheManager.add,
+  clearMemberByUsername: memberByUsernameCacheManager.clear,
+
+  getNas: nasCacheManager.get,
+  cacheNas: nasCacheManager.add,
+  clearNas: nasCacheManager.clear,
+
+  getBusiness: businessCacheManager.get,
+  cacheBusiness: businessCacheManager.add,
+  clearBusiness: businessCacheManager.clear,
+
+  getInternetPlan: internetPlanCacheManager.get,
+  cacheInternetPlan: internetPlanCacheManager.add,
+  clearInternetPlan: internetPlanCacheManager.clear,
+
+  createMemberByUsernameCacheId,
+  clearMemberUsage,
+  addMemberUsage: cacheMemberUsage,
+  getMemberUsage,
+};
+

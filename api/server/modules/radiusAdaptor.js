@@ -10,7 +10,7 @@ const log = logger.createLogger();
 const config = require('./config');
 const utility = require('./utility');
 
-module.exports.RadiusResponse = function(RadiusMessage) {
+module.exports.RadiusResponseFactory = function(RadiusMessage) {
   const data = {
     message: {},
   };

@@ -70,7 +70,7 @@ module.exports = function(Nas) {
   Nas.observe('after save', function(ctx, next) {
     if (ctx.instance) {
       const entity = ctx.instance;
-      cacheManager.clearCache(entity.id);
+      cacheManager.clearNas(entity.id);
     }
     next();
   });
@@ -160,13 +160,13 @@ module.exports = function(Nas) {
   };
 
   Nas.loadById = async (id) => {
-    const cachedNas = await cacheManager.readFromCache(id);
+    const cachedNas = await cacheManager.getNas(id);
     if (cachedNas) {
       return cachedNas;
     }
     const nas = await Nas.findById(id);
     log.warn('from db...', nas);
-    cacheManager.cacheIt(id, nas);
+    cacheManager.cacheNas(id, nas);
     return nas;
   };
 };

@@ -13,15 +13,15 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
 (function(window, angular, undefined) {
   'use strict';
 
-  var urlBase = 'http://127.0.0.1:3000/api';
-  var authHeader = 'authorization';
+  let urlBase = 'http://127.0.0.1:3000/api';
+  let authHeader = 'authorization';
 
   function getHost(url) {
-    var m = url.match(/^(?:https?:)?\/\/([^\/]+)/);
+    const m = url.match(/^(?:https?:)?\/\/([^\/]+)/);
     return m ? m[1] : null;
   }
 
-  var urlBaseHost = getHost(urlBase) || location.host;
+  let urlBaseHost = getHost(urlBase) || location.host;
 
   /**
  * @ngdoc overview
@@ -33,7 +33,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
  * the models exposed by the LoopBack server via the REST API.
  *
  */
-  var module = angular.module('lbServices', ['ngResource']);
+  const module = angular.module('lbServices', ['ngResource']);
 
   /**
  * @ngdoc object
@@ -57,9 +57,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
-        var R = Resource(
+        const R = Resource(
           urlBase + '/Users/:id',
-          { id: '@id' },
+          {id: '@id'},
           {
 
             /**
@@ -944,9 +944,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
               },
               interceptor: {
                 response: function(response) {
-                  var accessToken = response.data;
+                  const accessToken = response.data;
                   LoopBackAuth.setUser(
-                    accessToken.id, accessToken.userId, accessToken.user);
+                    accessToken.id, accessToken.userId, accessToken.user
+                  );
                   LoopBackAuth.rememberMe =
                     response.config.params.rememberMe !== false;
                   LoopBackAuth.save();
@@ -1216,7 +1217,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
               method: 'GET',
               params: {
                 id: function() {
-                  var id = LoopBackAuth.currentUserId;
+                  let id = LoopBackAuth.currentUserId;
                   if (id == null) id = '__anonymous__';
                   return id;
                 },
@@ -1231,7 +1232,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
             },
           }
         );
-
 
         /**
              * @ngdoc method
@@ -1482,7 +1482,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
          * @returns {Object} A User instance.
          */
         R.getCachedCurrent = function() {
-          var data = LoopBackAuth.currentUserData;
+          const data = LoopBackAuth.currentUserData;
           return data ? new R(data) : null;
         };
 
@@ -1518,9 +1518,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         */
         R.modelName = 'User';
 
-
         return R;
-      }]);
+      }]
+  );
 
   /**
  * @ngdoc object
@@ -1548,9 +1548,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
-        var R = Resource(
+        const R = Resource(
           urlBase + '/RoleMappings/:id',
-          { id: '@id' },
+          {id: '@id'},
           {
 
             // INTERNAL. Use RoleMapping.role() instead.
@@ -2177,7 +2177,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
           }
         );
 
-
         /**
              * @ngdoc method
              * @name lbServices.RoleMapping#upsert
@@ -2411,7 +2410,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              */
         R['updateAttributes'] = R['prototype$patchAttributes'];
 
-
         /**
         * @ngdoc property
         * @name lbServices.RoleMapping#modelName
@@ -2421,7 +2419,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         * i.e. `RoleMapping`.
         */
         R.modelName = 'RoleMapping';
-
 
         /**
              * @ngdoc method
@@ -2458,14 +2455,14 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.role = function() {
-          var TargetResource = $injector.get('Role');
-          var action = TargetResource['::get::RoleMapping::role'];
+          const TargetResource = $injector.get('Role');
+          const action = TargetResource['::get::RoleMapping::role'];
           return action.apply(R, arguments);
         };
 
-
         return R;
-      }]);
+      }]
+  );
 
   /**
  * @ngdoc object
@@ -2489,9 +2486,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
-        var R = Resource(
+        const R = Resource(
           urlBase + '/Roles/:id',
-          { id: '@id' },
+          {id: '@id'},
           {
 
             // INTERNAL. Use Role.principals.findById() instead.
@@ -3111,7 +3108,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
           }
         );
 
-
         /**
              * @ngdoc method
              * @name lbServices.Role#upsert
@@ -3345,7 +3341,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              */
         R['updateAttributes'] = R['prototype$patchAttributes'];
 
-
         /**
         * @ngdoc property
         * @name lbServices.Role#modelName
@@ -3369,7 +3364,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
      * Call {@link lbServices.Role#principals Role.principals()}
      * to query all related instances.
      */
-
 
         /**
              * @ngdoc method
@@ -3406,8 +3400,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.principals = function() {
-          var TargetResource = $injector.get('RoleMapping');
-          var action = TargetResource['::get::Role::principals'];
+          const TargetResource = $injector.get('RoleMapping');
+          const action = TargetResource['::get::Role::principals'];
           return action.apply(R, arguments);
         };
 
@@ -3445,8 +3439,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *  - `count` – `{number=}` -
              */
         R.principals.count = function() {
-          var TargetResource = $injector.get('RoleMapping');
-          var action = TargetResource['::count::Role::principals'];
+          const TargetResource = $injector.get('RoleMapping');
+          const action = TargetResource['::count::Role::principals'];
           return action.apply(R, arguments);
         };
 
@@ -3487,8 +3481,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.principals.create = function() {
-          var TargetResource = $injector.get('RoleMapping');
-          var action = TargetResource['::create::Role::principals'];
+          const TargetResource = $injector.get('RoleMapping');
+          const action = TargetResource['::create::Role::principals'];
           return action.apply(R, arguments);
         };
 
@@ -3529,8 +3523,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.principals.createMany = function() {
-          var TargetResource = $injector.get('RoleMapping');
-          var action = TargetResource['::createMany::Role::principals'];
+          const TargetResource = $injector.get('RoleMapping');
+          const action = TargetResource['::createMany::Role::principals'];
           return action.apply(R, arguments);
         };
 
@@ -3566,8 +3560,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.principals.destroyAll = function() {
-          var TargetResource = $injector.get('RoleMapping');
-          var action = TargetResource['::delete::Role::principals'];
+          const TargetResource = $injector.get('RoleMapping');
+          const action = TargetResource['::delete::Role::principals'];
           return action.apply(R, arguments);
         };
 
@@ -3603,8 +3597,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.principals.destroyById = function() {
-          var TargetResource = $injector.get('RoleMapping');
-          var action = TargetResource['::destroyById::Role::principals'];
+          const TargetResource = $injector.get('RoleMapping');
+          const action = TargetResource['::destroyById::Role::principals'];
           return action.apply(R, arguments);
         };
 
@@ -3643,8 +3637,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.principals.findById = function() {
-          var TargetResource = $injector.get('RoleMapping');
-          var action = TargetResource['::findById::Role::principals'];
+          const TargetResource = $injector.get('RoleMapping');
+          const action = TargetResource['::findById::Role::principals'];
           return action.apply(R, arguments);
         };
 
@@ -3687,14 +3681,14 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.principals.updateById = function() {
-          var TargetResource = $injector.get('RoleMapping');
-          var action = TargetResource['::updateById::Role::principals'];
+          const TargetResource = $injector.get('RoleMapping');
+          const action = TargetResource['::updateById::Role::principals'];
           return action.apply(R, arguments);
         };
 
-
         return R;
-      }]);
+      }]
+  );
 
   /**
  * @ngdoc object
@@ -3718,9 +3712,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
-        var R = Resource(
+        const R = Resource(
           urlBase + '/Businesses/:id',
-          { id: '@id' },
+          {id: '@id'},
           {
 
             /**
@@ -5334,9 +5328,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
               },
               interceptor: {
                 response: function(response) {
-                  var accessToken = response.data;
+                  const accessToken = response.data;
                   LoopBackAuth.setUser(
-                    accessToken.id, accessToken.userId, accessToken.user);
+                    accessToken.id, accessToken.userId, accessToken.user
+                  );
                   LoopBackAuth.rememberMe =
                     response.config.params.rememberMe !== false;
                   LoopBackAuth.save();
@@ -6753,7 +6748,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
               method: 'GET',
               params: {
                 id: function() {
-                  var id = LoopBackAuth.currentUserId;
+                  let id = LoopBackAuth.currentUserId;
                   if (id == null) id = '__anonymous__';
                   return id;
                 },
@@ -6768,7 +6763,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
             },
           }
         );
-
 
         /**
              * @ngdoc method
@@ -7031,7 +7025,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
          * @returns {Object} A Business instance.
          */
         R.getCachedCurrent = function() {
-          var data = LoopBackAuth.currentUserData;
+          const data = LoopBackAuth.currentUserData;
           return data ? new R(data) : null;
         };
 
@@ -7081,7 +7075,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
      * to query all related instances.
      */
 
-
         /**
              * @ngdoc method
              * @name lbServices.Business#nas
@@ -7117,8 +7110,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.nas = function() {
-          var TargetResource = $injector.get('Nas');
-          var action = TargetResource['::get::Business::nas'];
+          const TargetResource = $injector.get('Nas');
+          const action = TargetResource['::get::Business::nas'];
           return action.apply(R, arguments);
         };
 
@@ -7156,8 +7149,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *  - `count` – `{number=}` -
              */
         R.nas.count = function() {
-          var TargetResource = $injector.get('Nas');
-          var action = TargetResource['::count::Business::nas'];
+          const TargetResource = $injector.get('Nas');
+          const action = TargetResource['::count::Business::nas'];
           return action.apply(R, arguments);
         };
 
@@ -7198,8 +7191,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.nas.create = function() {
-          var TargetResource = $injector.get('Nas');
-          var action = TargetResource['::create::Business::nas'];
+          const TargetResource = $injector.get('Nas');
+          const action = TargetResource['::create::Business::nas'];
           return action.apply(R, arguments);
         };
 
@@ -7240,8 +7233,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.nas.createMany = function() {
-          var TargetResource = $injector.get('Nas');
-          var action = TargetResource['::createMany::Business::nas'];
+          const TargetResource = $injector.get('Nas');
+          const action = TargetResource['::createMany::Business::nas'];
           return action.apply(R, arguments);
         };
 
@@ -7277,8 +7270,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.nas.destroyAll = function() {
-          var TargetResource = $injector.get('Nas');
-          var action = TargetResource['::delete::Business::nas'];
+          const TargetResource = $injector.get('Nas');
+          const action = TargetResource['::delete::Business::nas'];
           return action.apply(R, arguments);
         };
 
@@ -7314,8 +7307,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.nas.destroyById = function() {
-          var TargetResource = $injector.get('Nas');
-          var action = TargetResource['::destroyById::Business::nas'];
+          const TargetResource = $injector.get('Nas');
+          const action = TargetResource['::destroyById::Business::nas'];
           return action.apply(R, arguments);
         };
 
@@ -7354,8 +7347,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.nas.findById = function() {
-          var TargetResource = $injector.get('Nas');
-          var action = TargetResource['::findById::Business::nas'];
+          const TargetResource = $injector.get('Nas');
+          const action = TargetResource['::findById::Business::nas'];
           return action.apply(R, arguments);
         };
 
@@ -7398,8 +7391,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.nas.updateById = function() {
-          var TargetResource = $injector.get('Nas');
-          var action = TargetResource['::updateById::Business::nas'];
+          const TargetResource = $injector.get('Nas');
+          const action = TargetResource['::updateById::Business::nas'];
           return action.apply(R, arguments);
         };
         /**
@@ -7415,7 +7408,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
      * Call {@link lbServices.Business#members Business.members()}
      * to query all related instances.
      */
-
 
         /**
              * @ngdoc method
@@ -7452,8 +7444,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.members = function() {
-          var TargetResource = $injector.get('Member');
-          var action = TargetResource['::get::Business::members'];
+          const TargetResource = $injector.get('Member');
+          const action = TargetResource['::get::Business::members'];
           return action.apply(R, arguments);
         };
 
@@ -7491,8 +7483,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *  - `count` – `{number=}` -
              */
         R.members.count = function() {
-          var TargetResource = $injector.get('Member');
-          var action = TargetResource['::count::Business::members'];
+          const TargetResource = $injector.get('Member');
+          const action = TargetResource['::count::Business::members'];
           return action.apply(R, arguments);
         };
 
@@ -7533,8 +7525,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.members.create = function() {
-          var TargetResource = $injector.get('Member');
-          var action = TargetResource['::create::Business::members'];
+          const TargetResource = $injector.get('Member');
+          const action = TargetResource['::create::Business::members'];
           return action.apply(R, arguments);
         };
 
@@ -7575,8 +7567,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.members.createMany = function() {
-          var TargetResource = $injector.get('Member');
-          var action = TargetResource['::createMany::Business::members'];
+          const TargetResource = $injector.get('Member');
+          const action = TargetResource['::createMany::Business::members'];
           return action.apply(R, arguments);
         };
 
@@ -7612,8 +7604,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.members.destroyAll = function() {
-          var TargetResource = $injector.get('Member');
-          var action = TargetResource['::delete::Business::members'];
+          const TargetResource = $injector.get('Member');
+          const action = TargetResource['::delete::Business::members'];
           return action.apply(R, arguments);
         };
 
@@ -7649,8 +7641,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.members.destroyById = function() {
-          var TargetResource = $injector.get('Member');
-          var action = TargetResource['::destroyById::Business::members'];
+          const TargetResource = $injector.get('Member');
+          const action = TargetResource['::destroyById::Business::members'];
           return action.apply(R, arguments);
         };
 
@@ -7689,8 +7681,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.members.findById = function() {
-          var TargetResource = $injector.get('Member');
-          var action = TargetResource['::findById::Business::members'];
+          const TargetResource = $injector.get('Member');
+          const action = TargetResource['::findById::Business::members'];
           return action.apply(R, arguments);
         };
 
@@ -7733,8 +7725,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.members.updateById = function() {
-          var TargetResource = $injector.get('Member');
-          var action = TargetResource['::updateById::Business::members'];
+          const TargetResource = $injector.get('Member');
+          const action = TargetResource['::updateById::Business::members'];
           return action.apply(R, arguments);
         };
         /**
@@ -7750,7 +7742,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
      * Call {@link lbServices.Business#campaigns Business.campaigns()}
      * to query all related instances.
      */
-
 
         /**
              * @ngdoc method
@@ -7787,8 +7778,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.campaigns = function() {
-          var TargetResource = $injector.get('Campaign');
-          var action = TargetResource['::get::Business::campaigns'];
+          const TargetResource = $injector.get('Campaign');
+          const action = TargetResource['::get::Business::campaigns'];
           return action.apply(R, arguments);
         };
 
@@ -7826,8 +7817,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *  - `count` – `{number=}` -
              */
         R.campaigns.count = function() {
-          var TargetResource = $injector.get('Campaign');
-          var action = TargetResource['::count::Business::campaigns'];
+          const TargetResource = $injector.get('Campaign');
+          const action = TargetResource['::count::Business::campaigns'];
           return action.apply(R, arguments);
         };
 
@@ -7868,8 +7859,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.campaigns.create = function() {
-          var TargetResource = $injector.get('Campaign');
-          var action = TargetResource['::create::Business::campaigns'];
+          const TargetResource = $injector.get('Campaign');
+          const action = TargetResource['::create::Business::campaigns'];
           return action.apply(R, arguments);
         };
 
@@ -7910,8 +7901,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.campaigns.createMany = function() {
-          var TargetResource = $injector.get('Campaign');
-          var action = TargetResource['::createMany::Business::campaigns'];
+          const TargetResource = $injector.get('Campaign');
+          const action = TargetResource['::createMany::Business::campaigns'];
           return action.apply(R, arguments);
         };
 
@@ -7947,8 +7938,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.campaigns.destroyAll = function() {
-          var TargetResource = $injector.get('Campaign');
-          var action = TargetResource['::delete::Business::campaigns'];
+          const TargetResource = $injector.get('Campaign');
+          const action = TargetResource['::delete::Business::campaigns'];
           return action.apply(R, arguments);
         };
 
@@ -7984,8 +7975,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.campaigns.destroyById = function() {
-          var TargetResource = $injector.get('Campaign');
-          var action = TargetResource['::destroyById::Business::campaigns'];
+          const TargetResource = $injector.get('Campaign');
+          const action = TargetResource['::destroyById::Business::campaigns'];
           return action.apply(R, arguments);
         };
 
@@ -8024,8 +8015,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.campaigns.findById = function() {
-          var TargetResource = $injector.get('Campaign');
-          var action = TargetResource['::findById::Business::campaigns'];
+          const TargetResource = $injector.get('Campaign');
+          const action = TargetResource['::findById::Business::campaigns'];
           return action.apply(R, arguments);
         };
 
@@ -8068,8 +8059,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.campaigns.updateById = function() {
-          var TargetResource = $injector.get('Campaign');
-          var action = TargetResource['::updateById::Business::campaigns'];
+          const TargetResource = $injector.get('Campaign');
+          const action = TargetResource['::updateById::Business::campaigns'];
           return action.apply(R, arguments);
         };
         /**
@@ -8085,7 +8076,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
      * Call {@link lbServices.Business#internetPlans Business.internetPlans()}
      * to query all related instances.
      */
-
 
         /**
              * @ngdoc method
@@ -8122,8 +8112,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.internetPlans = function() {
-          var TargetResource = $injector.get('InternetPlan');
-          var action = TargetResource['::get::Business::internetPlans'];
+          const TargetResource = $injector.get('InternetPlan');
+          const action = TargetResource['::get::Business::internetPlans'];
           return action.apply(R, arguments);
         };
 
@@ -8161,8 +8151,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *  - `count` – `{number=}` -
              */
         R.internetPlans.count = function() {
-          var TargetResource = $injector.get('InternetPlan');
-          var action = TargetResource['::count::Business::internetPlans'];
+          const TargetResource = $injector.get('InternetPlan');
+          const action = TargetResource['::count::Business::internetPlans'];
           return action.apply(R, arguments);
         };
 
@@ -8203,8 +8193,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.internetPlans.create = function() {
-          var TargetResource = $injector.get('InternetPlan');
-          var action = TargetResource['::create::Business::internetPlans'];
+          const TargetResource = $injector.get('InternetPlan');
+          const action = TargetResource['::create::Business::internetPlans'];
           return action.apply(R, arguments);
         };
 
@@ -8245,8 +8235,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.internetPlans.createMany = function() {
-          var TargetResource = $injector.get('InternetPlan');
-          var action = TargetResource['::createMany::Business::internetPlans'];
+          const TargetResource = $injector.get('InternetPlan');
+          const action = TargetResource['::createMany::Business::internetPlans'];
           return action.apply(R, arguments);
         };
 
@@ -8282,8 +8272,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.internetPlans.destroyAll = function() {
-          var TargetResource = $injector.get('InternetPlan');
-          var action = TargetResource['::delete::Business::internetPlans'];
+          const TargetResource = $injector.get('InternetPlan');
+          const action = TargetResource['::delete::Business::internetPlans'];
           return action.apply(R, arguments);
         };
 
@@ -8319,8 +8309,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.internetPlans.destroyById = function() {
-          var TargetResource = $injector.get('InternetPlan');
-          var action = TargetResource['::destroyById::Business::internetPlans'];
+          const TargetResource = $injector.get('InternetPlan');
+          const action = TargetResource['::destroyById::Business::internetPlans'];
           return action.apply(R, arguments);
         };
 
@@ -8359,8 +8349,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.internetPlans.findById = function() {
-          var TargetResource = $injector.get('InternetPlan');
-          var action = TargetResource['::findById::Business::internetPlans'];
+          const TargetResource = $injector.get('InternetPlan');
+          const action = TargetResource['::findById::Business::internetPlans'];
           return action.apply(R, arguments);
         };
 
@@ -8403,8 +8393,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.internetPlans.updateById = function() {
-          var TargetResource = $injector.get('InternetPlan');
-          var action = TargetResource['::updateById::Business::internetPlans'];
+          const TargetResource = $injector.get('InternetPlan');
+          const action = TargetResource['::updateById::Business::internetPlans'];
           return action.apply(R, arguments);
         };
         /**
@@ -8420,7 +8410,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
      * Call {@link lbServices.Business#invoices Business.invoices()}
      * to query all related instances.
      */
-
 
         /**
              * @ngdoc method
@@ -8457,8 +8446,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.invoices = function() {
-          var TargetResource = $injector.get('Invoice');
-          var action = TargetResource['::get::Business::invoices'];
+          const TargetResource = $injector.get('Invoice');
+          const action = TargetResource['::get::Business::invoices'];
           return action.apply(R, arguments);
         };
 
@@ -8496,8 +8485,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *  - `count` – `{number=}` -
              */
         R.invoices.count = function() {
-          var TargetResource = $injector.get('Invoice');
-          var action = TargetResource['::count::Business::invoices'];
+          const TargetResource = $injector.get('Invoice');
+          const action = TargetResource['::count::Business::invoices'];
           return action.apply(R, arguments);
         };
 
@@ -8538,8 +8527,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.invoices.create = function() {
-          var TargetResource = $injector.get('Invoice');
-          var action = TargetResource['::create::Business::invoices'];
+          const TargetResource = $injector.get('Invoice');
+          const action = TargetResource['::create::Business::invoices'];
           return action.apply(R, arguments);
         };
 
@@ -8580,8 +8569,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.invoices.createMany = function() {
-          var TargetResource = $injector.get('Invoice');
-          var action = TargetResource['::createMany::Business::invoices'];
+          const TargetResource = $injector.get('Invoice');
+          const action = TargetResource['::createMany::Business::invoices'];
           return action.apply(R, arguments);
         };
 
@@ -8617,8 +8606,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.invoices.destroyAll = function() {
-          var TargetResource = $injector.get('Invoice');
-          var action = TargetResource['::delete::Business::invoices'];
+          const TargetResource = $injector.get('Invoice');
+          const action = TargetResource['::delete::Business::invoices'];
           return action.apply(R, arguments);
         };
 
@@ -8654,8 +8643,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.invoices.destroyById = function() {
-          var TargetResource = $injector.get('Invoice');
-          var action = TargetResource['::destroyById::Business::invoices'];
+          const TargetResource = $injector.get('Invoice');
+          const action = TargetResource['::destroyById::Business::invoices'];
           return action.apply(R, arguments);
         };
 
@@ -8694,8 +8683,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.invoices.findById = function() {
-          var TargetResource = $injector.get('Invoice');
-          var action = TargetResource['::findById::Business::invoices'];
+          const TargetResource = $injector.get('Invoice');
+          const action = TargetResource['::findById::Business::invoices'];
           return action.apply(R, arguments);
         };
 
@@ -8738,8 +8727,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.invoices.updateById = function() {
-          var TargetResource = $injector.get('Invoice');
-          var action = TargetResource['::updateById::Business::invoices'];
+          const TargetResource = $injector.get('Invoice');
+          const action = TargetResource['::updateById::Business::invoices'];
           return action.apply(R, arguments);
         };
         /**
@@ -8755,7 +8744,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
      * Call {@link lbServices.Business#resellers Business.resellers()}
      * to query all related instances.
      */
-
 
         /**
              * @ngdoc method
@@ -8792,8 +8780,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.resellers = function() {
-          var TargetResource = $injector.get('Reseller');
-          var action = TargetResource['::get::Business::resellers'];
+          const TargetResource = $injector.get('Reseller');
+          const action = TargetResource['::get::Business::resellers'];
           return action.apply(R, arguments);
         };
 
@@ -8834,8 +8822,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.resellers.create = function() {
-          var TargetResource = $injector.get('Reseller');
-          var action = TargetResource['::create::Business::resellers'];
+          const TargetResource = $injector.get('Reseller');
+          const action = TargetResource['::create::Business::resellers'];
           return action.apply(R, arguments);
         };
 
@@ -8876,8 +8864,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.resellers.createMany = function() {
-          var TargetResource = $injector.get('Reseller');
-          var action = TargetResource['::createMany::Business::resellers'];
+          const TargetResource = $injector.get('Reseller');
+          const action = TargetResource['::createMany::Business::resellers'];
           return action.apply(R, arguments);
         };
 
@@ -8911,8 +8899,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.resellers.destroy = function() {
-          var TargetResource = $injector.get('Reseller');
-          var action = TargetResource['::destroy::Business::resellers'];
+          const TargetResource = $injector.get('Reseller');
+          const action = TargetResource['::destroy::Business::resellers'];
           return action.apply(R, arguments);
         };
 
@@ -8953,8 +8941,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.resellers.update = function() {
-          var TargetResource = $injector.get('Reseller');
-          var action = TargetResource['::update::Business::resellers'];
+          const TargetResource = $injector.get('Reseller');
+          const action = TargetResource['::update::Business::resellers'];
           return action.apply(R, arguments);
         };
         /**
@@ -8970,7 +8958,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
      * Call {@link lbServices.Business#coupons Business.coupons()}
      * to query all related instances.
      */
-
 
         /**
              * @ngdoc method
@@ -9007,8 +8994,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.coupons = function() {
-          var TargetResource = $injector.get('Coupon');
-          var action = TargetResource['::get::Business::coupons'];
+          const TargetResource = $injector.get('Coupon');
+          const action = TargetResource['::get::Business::coupons'];
           return action.apply(R, arguments);
         };
 
@@ -9046,8 +9033,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *  - `count` – `{number=}` -
              */
         R.coupons.count = function() {
-          var TargetResource = $injector.get('Coupon');
-          var action = TargetResource['::count::Business::coupons'];
+          const TargetResource = $injector.get('Coupon');
+          const action = TargetResource['::count::Business::coupons'];
           return action.apply(R, arguments);
         };
 
@@ -9088,8 +9075,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.coupons.create = function() {
-          var TargetResource = $injector.get('Coupon');
-          var action = TargetResource['::create::Business::coupons'];
+          const TargetResource = $injector.get('Coupon');
+          const action = TargetResource['::create::Business::coupons'];
           return action.apply(R, arguments);
         };
 
@@ -9130,8 +9117,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.coupons.createMany = function() {
-          var TargetResource = $injector.get('Coupon');
-          var action = TargetResource['::createMany::Business::coupons'];
+          const TargetResource = $injector.get('Coupon');
+          const action = TargetResource['::createMany::Business::coupons'];
           return action.apply(R, arguments);
         };
 
@@ -9167,8 +9154,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.coupons.destroyAll = function() {
-          var TargetResource = $injector.get('Coupon');
-          var action = TargetResource['::delete::Business::coupons'];
+          const TargetResource = $injector.get('Coupon');
+          const action = TargetResource['::delete::Business::coupons'];
           return action.apply(R, arguments);
         };
 
@@ -9204,8 +9191,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.coupons.destroyById = function() {
-          var TargetResource = $injector.get('Coupon');
-          var action = TargetResource['::destroyById::Business::coupons'];
+          const TargetResource = $injector.get('Coupon');
+          const action = TargetResource['::destroyById::Business::coupons'];
           return action.apply(R, arguments);
         };
 
@@ -9244,8 +9231,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.coupons.findById = function() {
-          var TargetResource = $injector.get('Coupon');
-          var action = TargetResource['::findById::Business::coupons'];
+          const TargetResource = $injector.get('Coupon');
+          const action = TargetResource['::findById::Business::coupons'];
           return action.apply(R, arguments);
         };
 
@@ -9288,8 +9275,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.coupons.updateById = function() {
-          var TargetResource = $injector.get('Coupon');
-          var action = TargetResource['::updateById::Business::coupons'];
+          const TargetResource = $injector.get('Coupon');
+          const action = TargetResource['::updateById::Business::coupons'];
           return action.apply(R, arguments);
         };
         /**
@@ -9305,7 +9292,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
      * Call {@link lbServices.Business#tickets Business.tickets()}
      * to query all related instances.
      */
-
 
         /**
              * @ngdoc method
@@ -9342,8 +9328,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.tickets = function() {
-          var TargetResource = $injector.get('Ticket');
-          var action = TargetResource['::get::Business::tickets'];
+          const TargetResource = $injector.get('Ticket');
+          const action = TargetResource['::get::Business::tickets'];
           return action.apply(R, arguments);
         };
 
@@ -9381,8 +9367,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *  - `count` – `{number=}` -
              */
         R.tickets.count = function() {
-          var TargetResource = $injector.get('Ticket');
-          var action = TargetResource['::count::Business::tickets'];
+          const TargetResource = $injector.get('Ticket');
+          const action = TargetResource['::count::Business::tickets'];
           return action.apply(R, arguments);
         };
 
@@ -9423,8 +9409,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.tickets.create = function() {
-          var TargetResource = $injector.get('Ticket');
-          var action = TargetResource['::create::Business::tickets'];
+          const TargetResource = $injector.get('Ticket');
+          const action = TargetResource['::create::Business::tickets'];
           return action.apply(R, arguments);
         };
 
@@ -9465,8 +9451,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.tickets.createMany = function() {
-          var TargetResource = $injector.get('Ticket');
-          var action = TargetResource['::createMany::Business::tickets'];
+          const TargetResource = $injector.get('Ticket');
+          const action = TargetResource['::createMany::Business::tickets'];
           return action.apply(R, arguments);
         };
 
@@ -9502,8 +9488,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.tickets.destroyAll = function() {
-          var TargetResource = $injector.get('Ticket');
-          var action = TargetResource['::delete::Business::tickets'];
+          const TargetResource = $injector.get('Ticket');
+          const action = TargetResource['::delete::Business::tickets'];
           return action.apply(R, arguments);
         };
 
@@ -9539,8 +9525,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.tickets.destroyById = function() {
-          var TargetResource = $injector.get('Ticket');
-          var action = TargetResource['::destroyById::Business::tickets'];
+          const TargetResource = $injector.get('Ticket');
+          const action = TargetResource['::destroyById::Business::tickets'];
           return action.apply(R, arguments);
         };
 
@@ -9579,8 +9565,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.tickets.findById = function() {
-          var TargetResource = $injector.get('Ticket');
-          var action = TargetResource['::findById::Business::tickets'];
+          const TargetResource = $injector.get('Ticket');
+          const action = TargetResource['::findById::Business::tickets'];
           return action.apply(R, arguments);
         };
 
@@ -9623,8 +9609,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.tickets.updateById = function() {
-          var TargetResource = $injector.get('Ticket');
-          var action = TargetResource['::updateById::Business::tickets'];
+          const TargetResource = $injector.get('Ticket');
+          const action = TargetResource['::updateById::Business::tickets'];
           return action.apply(R, arguments);
         };
         /**
@@ -9640,7 +9626,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
      * Call {@link lbServices.Business#reports Business.reports()}
      * to query all related instances.
      */
-
 
         /**
              * @ngdoc method
@@ -9677,8 +9662,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.reports = function() {
-          var TargetResource = $injector.get('Report');
-          var action = TargetResource['::get::Business::reports'];
+          const TargetResource = $injector.get('Report');
+          const action = TargetResource['::get::Business::reports'];
           return action.apply(R, arguments);
         };
 
@@ -9716,8 +9701,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *  - `count` – `{number=}` -
              */
         R.reports.count = function() {
-          var TargetResource = $injector.get('Report');
-          var action = TargetResource['::count::Business::reports'];
+          const TargetResource = $injector.get('Report');
+          const action = TargetResource['::count::Business::reports'];
           return action.apply(R, arguments);
         };
 
@@ -9758,8 +9743,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.reports.create = function() {
-          var TargetResource = $injector.get('Report');
-          var action = TargetResource['::create::Business::reports'];
+          const TargetResource = $injector.get('Report');
+          const action = TargetResource['::create::Business::reports'];
           return action.apply(R, arguments);
         };
 
@@ -9800,8 +9785,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.reports.createMany = function() {
-          var TargetResource = $injector.get('Report');
-          var action = TargetResource['::createMany::Business::reports'];
+          const TargetResource = $injector.get('Report');
+          const action = TargetResource['::createMany::Business::reports'];
           return action.apply(R, arguments);
         };
 
@@ -9837,8 +9822,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.reports.destroyAll = function() {
-          var TargetResource = $injector.get('Report');
-          var action = TargetResource['::delete::Business::reports'];
+          const TargetResource = $injector.get('Report');
+          const action = TargetResource['::delete::Business::reports'];
           return action.apply(R, arguments);
         };
 
@@ -9874,8 +9859,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.reports.destroyById = function() {
-          var TargetResource = $injector.get('Report');
-          var action = TargetResource['::destroyById::Business::reports'];
+          const TargetResource = $injector.get('Report');
+          const action = TargetResource['::destroyById::Business::reports'];
           return action.apply(R, arguments);
         };
 
@@ -9914,8 +9899,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.reports.findById = function() {
-          var TargetResource = $injector.get('Report');
-          var action = TargetResource['::findById::Business::reports'];
+          const TargetResource = $injector.get('Report');
+          const action = TargetResource['::findById::Business::reports'];
           return action.apply(R, arguments);
         };
 
@@ -9958,14 +9943,14 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.reports.updateById = function() {
-          var TargetResource = $injector.get('Report');
-          var action = TargetResource['::updateById::Business::reports'];
+          const TargetResource = $injector.get('Report');
+          const action = TargetResource['::updateById::Business::reports'];
           return action.apply(R, arguments);
         };
 
-
         return R;
-      }]);
+      }]
+  );
 
   /**
  * @ngdoc object
@@ -9989,9 +9974,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
-        var R = Resource(
+        const R = Resource(
           urlBase + '/Nas/:id',
-          { id: '@id' },
+          {id: '@id'},
           {
 
             // INTERNAL. Use Nas.business() instead.
@@ -10860,7 +10845,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
           }
         );
 
-
         /**
              * @ngdoc method
              * @name lbServices.Nas#upsert
@@ -11106,7 +11090,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              */
         R['updateAttributes'] = R['prototype$patchAttributes'];
 
-
         /**
         * @ngdoc property
         * @name lbServices.Nas#modelName
@@ -11116,7 +11099,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         * i.e. `Nas`.
         */
         R.modelName = 'Nas';
-
 
         /**
              * @ngdoc method
@@ -11153,8 +11135,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.business = function() {
-          var TargetResource = $injector.get('Business');
-          var action = TargetResource['::get::Nas::business'];
+          const TargetResource = $injector.get('Business');
+          const action = TargetResource['::get::Nas::business'];
           return action.apply(R, arguments);
         };
         /**
@@ -11170,7 +11152,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
      * Call {@link lbServices.Nas#FootTraffics Nas.FootTraffics()}
      * to query all related instances.
      */
-
 
         /**
              * @ngdoc method
@@ -11207,8 +11188,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.FootTraffics = function() {
-          var TargetResource = $injector.get('FootTraffic');
-          var action = TargetResource['::get::Nas::FootTraffics'];
+          const TargetResource = $injector.get('FootTraffic');
+          const action = TargetResource['::get::Nas::FootTraffics'];
           return action.apply(R, arguments);
         };
 
@@ -11246,8 +11227,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *  - `count` – `{number=}` -
              */
         R.FootTraffics.count = function() {
-          var TargetResource = $injector.get('FootTraffic');
-          var action = TargetResource['::count::Nas::FootTraffics'];
+          const TargetResource = $injector.get('FootTraffic');
+          const action = TargetResource['::count::Nas::FootTraffics'];
           return action.apply(R, arguments);
         };
 
@@ -11288,8 +11269,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.FootTraffics.create = function() {
-          var TargetResource = $injector.get('FootTraffic');
-          var action = TargetResource['::create::Nas::FootTraffics'];
+          const TargetResource = $injector.get('FootTraffic');
+          const action = TargetResource['::create::Nas::FootTraffics'];
           return action.apply(R, arguments);
         };
 
@@ -11330,8 +11311,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.FootTraffics.createMany = function() {
-          var TargetResource = $injector.get('FootTraffic');
-          var action = TargetResource['::createMany::Nas::FootTraffics'];
+          const TargetResource = $injector.get('FootTraffic');
+          const action = TargetResource['::createMany::Nas::FootTraffics'];
           return action.apply(R, arguments);
         };
 
@@ -11367,8 +11348,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.FootTraffics.destroyAll = function() {
-          var TargetResource = $injector.get('FootTraffic');
-          var action = TargetResource['::delete::Nas::FootTraffics'];
+          const TargetResource = $injector.get('FootTraffic');
+          const action = TargetResource['::delete::Nas::FootTraffics'];
           return action.apply(R, arguments);
         };
 
@@ -11404,8 +11385,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.FootTraffics.destroyById = function() {
-          var TargetResource = $injector.get('FootTraffic');
-          var action = TargetResource['::destroyById::Nas::FootTraffics'];
+          const TargetResource = $injector.get('FootTraffic');
+          const action = TargetResource['::destroyById::Nas::FootTraffics'];
           return action.apply(R, arguments);
         };
 
@@ -11444,8 +11425,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.FootTraffics.findById = function() {
-          var TargetResource = $injector.get('FootTraffic');
-          var action = TargetResource['::findById::Nas::FootTraffics'];
+          const TargetResource = $injector.get('FootTraffic');
+          const action = TargetResource['::findById::Nas::FootTraffics'];
           return action.apply(R, arguments);
         };
 
@@ -11488,14 +11469,14 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.FootTraffics.updateById = function() {
-          var TargetResource = $injector.get('FootTraffic');
-          var action = TargetResource['::updateById::Nas::FootTraffics'];
+          const TargetResource = $injector.get('FootTraffic');
+          const action = TargetResource['::updateById::Nas::FootTraffics'];
           return action.apply(R, arguments);
         };
 
-
         return R;
-      }]);
+      }]
+  );
 
   /**
  * @ngdoc object
@@ -11519,9 +11500,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
-        var R = Resource(
+        const R = Resource(
           urlBase + '/FootTraffics/:id',
-          { id: '@id' },
+          {id: '@id'},
           {
 
             // INTERNAL. Use FootTraffic.nas() instead.
@@ -12203,7 +12184,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
           }
         );
 
-
         /**
              * @ngdoc method
              * @name lbServices.FootTraffic#upsert
@@ -12449,7 +12429,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              */
         R['updateAttributes'] = R['prototype$patchAttributes'];
 
-
         /**
         * @ngdoc property
         * @name lbServices.FootTraffic#modelName
@@ -12473,7 +12452,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
      * Call {@link lbServices.FootTraffic#nas FootTraffic.nas()}
      * to query all related instances.
      */
-
 
         /**
              * @ngdoc method
@@ -12510,8 +12488,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.nas = function() {
-          var TargetResource = $injector.get('Nas');
-          var action = TargetResource['::get::FootTraffic::nas'];
+          const TargetResource = $injector.get('Nas');
+          const action = TargetResource['::get::FootTraffic::nas'];
           return action.apply(R, arguments);
         };
 
@@ -12552,8 +12530,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.nas.create = function() {
-          var TargetResource = $injector.get('Nas');
-          var action = TargetResource['::create::FootTraffic::nas'];
+          const TargetResource = $injector.get('Nas');
+          const action = TargetResource['::create::FootTraffic::nas'];
           return action.apply(R, arguments);
         };
 
@@ -12594,8 +12572,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.nas.createMany = function() {
-          var TargetResource = $injector.get('Nas');
-          var action = TargetResource['::createMany::FootTraffic::nas'];
+          const TargetResource = $injector.get('Nas');
+          const action = TargetResource['::createMany::FootTraffic::nas'];
           return action.apply(R, arguments);
         };
 
@@ -12629,8 +12607,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.nas.destroy = function() {
-          var TargetResource = $injector.get('Nas');
-          var action = TargetResource['::destroy::FootTraffic::nas'];
+          const TargetResource = $injector.get('Nas');
+          const action = TargetResource['::destroy::FootTraffic::nas'];
           return action.apply(R, arguments);
         };
 
@@ -12671,8 +12649,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.nas.update = function() {
-          var TargetResource = $injector.get('Nas');
-          var action = TargetResource['::update::FootTraffic::nas'];
+          const TargetResource = $injector.get('Nas');
+          const action = TargetResource['::update::FootTraffic::nas'];
           return action.apply(R, arguments);
         };
         /**
@@ -12688,7 +12666,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
      * Call {@link lbServices.FootTraffic#business FootTraffic.business()}
      * to query all related instances.
      */
-
 
         /**
              * @ngdoc method
@@ -12725,8 +12702,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.business = function() {
-          var TargetResource = $injector.get('Business');
-          var action = TargetResource['::get::FootTraffic::business'];
+          const TargetResource = $injector.get('Business');
+          const action = TargetResource['::get::FootTraffic::business'];
           return action.apply(R, arguments);
         };
 
@@ -12767,8 +12744,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.business.create = function() {
-          var TargetResource = $injector.get('Business');
-          var action = TargetResource['::create::FootTraffic::business'];
+          const TargetResource = $injector.get('Business');
+          const action = TargetResource['::create::FootTraffic::business'];
           return action.apply(R, arguments);
         };
 
@@ -12809,8 +12786,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.business.createMany = function() {
-          var TargetResource = $injector.get('Business');
-          var action = TargetResource['::createMany::FootTraffic::business'];
+          const TargetResource = $injector.get('Business');
+          const action = TargetResource['::createMany::FootTraffic::business'];
           return action.apply(R, arguments);
         };
 
@@ -12844,8 +12821,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.business.destroy = function() {
-          var TargetResource = $injector.get('Business');
-          var action = TargetResource['::destroy::FootTraffic::business'];
+          const TargetResource = $injector.get('Business');
+          const action = TargetResource['::destroy::FootTraffic::business'];
           return action.apply(R, arguments);
         };
 
@@ -12886,8 +12863,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.business.update = function() {
-          var TargetResource = $injector.get('Business');
-          var action = TargetResource['::update::FootTraffic::business'];
+          const TargetResource = $injector.get('Business');
+          const action = TargetResource['::update::FootTraffic::business'];
           return action.apply(R, arguments);
         };
 
@@ -12926,14 +12903,14 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.device = function() {
-          var TargetResource = $injector.get('Device');
-          var action = TargetResource['::get::FootTraffic::device'];
+          const TargetResource = $injector.get('Device');
+          const action = TargetResource['::get::FootTraffic::device'];
           return action.apply(R, arguments);
         };
 
-
         return R;
-      }]);
+      }]
+  );
 
   /**
  * @ngdoc object
@@ -12957,9 +12934,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
-        var R = Resource(
+        const R = Resource(
           urlBase + '/Members/:id',
-          { id: '@id' },
+          {id: '@id'},
           {
 
             /**
@@ -13961,9 +13938,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
               },
               interceptor: {
                 response: function(response) {
-                  var accessToken = response.data;
+                  const accessToken = response.data;
                   LoopBackAuth.setUser(
-                    accessToken.id, accessToken.userId, accessToken.user);
+                    accessToken.id, accessToken.userId, accessToken.user
+                  );
                   LoopBackAuth.rememberMe =
                     response.config.params.rememberMe !== false;
                   LoopBackAuth.save();
@@ -15529,7 +15507,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
               method: 'GET',
               params: {
                 id: function() {
-                  var id = LoopBackAuth.currentUserId;
+                  let id = LoopBackAuth.currentUserId;
                   if (id == null) id = '__anonymous__';
                   return id;
                 },
@@ -15544,7 +15522,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
             },
           }
         );
-
 
         /**
              * @ngdoc method
@@ -15807,7 +15784,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
          * @returns {Object} A Member instance.
          */
         R.getCachedCurrent = function() {
-          var data = LoopBackAuth.currentUserData;
+          const data = LoopBackAuth.currentUserData;
           return data ? new R(data) : null;
         };
 
@@ -15842,7 +15819,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         * i.e. `Member`.
         */
         R.modelName = 'Member';
-
 
         /**
              * @ngdoc method
@@ -15879,8 +15855,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.business = function() {
-          var TargetResource = $injector.get('Business');
-          var action = TargetResource['::get::Member::business'];
+          const TargetResource = $injector.get('Business');
+          const action = TargetResource['::get::Member::business'];
           return action.apply(R, arguments);
         };
         /**
@@ -15896,7 +15872,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
      * Call {@link lbServices.Member#invoices Member.invoices()}
      * to query all related instances.
      */
-
 
         /**
              * @ngdoc method
@@ -15933,8 +15908,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.invoices = function() {
-          var TargetResource = $injector.get('Invoice');
-          var action = TargetResource['::get::Member::invoices'];
+          const TargetResource = $injector.get('Invoice');
+          const action = TargetResource['::get::Member::invoices'];
           return action.apply(R, arguments);
         };
 
@@ -15972,8 +15947,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *  - `count` – `{number=}` -
              */
         R.invoices.count = function() {
-          var TargetResource = $injector.get('Invoice');
-          var action = TargetResource['::count::Member::invoices'];
+          const TargetResource = $injector.get('Invoice');
+          const action = TargetResource['::count::Member::invoices'];
           return action.apply(R, arguments);
         };
 
@@ -16014,8 +15989,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.invoices.create = function() {
-          var TargetResource = $injector.get('Invoice');
-          var action = TargetResource['::create::Member::invoices'];
+          const TargetResource = $injector.get('Invoice');
+          const action = TargetResource['::create::Member::invoices'];
           return action.apply(R, arguments);
         };
 
@@ -16056,8 +16031,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.invoices.createMany = function() {
-          var TargetResource = $injector.get('Invoice');
-          var action = TargetResource['::createMany::Member::invoices'];
+          const TargetResource = $injector.get('Invoice');
+          const action = TargetResource['::createMany::Member::invoices'];
           return action.apply(R, arguments);
         };
 
@@ -16093,8 +16068,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.invoices.destroyAll = function() {
-          var TargetResource = $injector.get('Invoice');
-          var action = TargetResource['::delete::Member::invoices'];
+          const TargetResource = $injector.get('Invoice');
+          const action = TargetResource['::delete::Member::invoices'];
           return action.apply(R, arguments);
         };
 
@@ -16130,8 +16105,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.invoices.destroyById = function() {
-          var TargetResource = $injector.get('Invoice');
-          var action = TargetResource['::destroyById::Member::invoices'];
+          const TargetResource = $injector.get('Invoice');
+          const action = TargetResource['::destroyById::Member::invoices'];
           return action.apply(R, arguments);
         };
 
@@ -16170,8 +16145,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.invoices.findById = function() {
-          var TargetResource = $injector.get('Invoice');
-          var action = TargetResource['::findById::Member::invoices'];
+          const TargetResource = $injector.get('Invoice');
+          const action = TargetResource['::findById::Member::invoices'];
           return action.apply(R, arguments);
         };
 
@@ -16214,8 +16189,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.invoices.updateById = function() {
-          var TargetResource = $injector.get('Invoice');
-          var action = TargetResource['::updateById::Member::invoices'];
+          const TargetResource = $injector.get('Invoice');
+          const action = TargetResource['::updateById::Member::invoices'];
           return action.apply(R, arguments);
         };
         /**
@@ -16231,7 +16206,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
      * Call {@link lbServices.Member#reports Member.reports()}
      * to query all related instances.
      */
-
 
         /**
              * @ngdoc method
@@ -16268,8 +16242,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.reports = function() {
-          var TargetResource = $injector.get('Report');
-          var action = TargetResource['::get::Member::reports'];
+          const TargetResource = $injector.get('Report');
+          const action = TargetResource['::get::Member::reports'];
           return action.apply(R, arguments);
         };
 
@@ -16307,8 +16281,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *  - `count` – `{number=}` -
              */
         R.reports.count = function() {
-          var TargetResource = $injector.get('Report');
-          var action = TargetResource['::count::Member::reports'];
+          const TargetResource = $injector.get('Report');
+          const action = TargetResource['::count::Member::reports'];
           return action.apply(R, arguments);
         };
 
@@ -16349,8 +16323,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.reports.create = function() {
-          var TargetResource = $injector.get('Report');
-          var action = TargetResource['::create::Member::reports'];
+          const TargetResource = $injector.get('Report');
+          const action = TargetResource['::create::Member::reports'];
           return action.apply(R, arguments);
         };
 
@@ -16391,8 +16365,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.reports.createMany = function() {
-          var TargetResource = $injector.get('Report');
-          var action = TargetResource['::createMany::Member::reports'];
+          const TargetResource = $injector.get('Report');
+          const action = TargetResource['::createMany::Member::reports'];
           return action.apply(R, arguments);
         };
 
@@ -16428,8 +16402,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.reports.destroyAll = function() {
-          var TargetResource = $injector.get('Report');
-          var action = TargetResource['::delete::Member::reports'];
+          const TargetResource = $injector.get('Report');
+          const action = TargetResource['::delete::Member::reports'];
           return action.apply(R, arguments);
         };
 
@@ -16465,8 +16439,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.reports.destroyById = function() {
-          var TargetResource = $injector.get('Report');
-          var action = TargetResource['::destroyById::Member::reports'];
+          const TargetResource = $injector.get('Report');
+          const action = TargetResource['::destroyById::Member::reports'];
           return action.apply(R, arguments);
         };
 
@@ -16505,8 +16479,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.reports.findById = function() {
-          var TargetResource = $injector.get('Report');
-          var action = TargetResource['::findById::Member::reports'];
+          const TargetResource = $injector.get('Report');
+          const action = TargetResource['::findById::Member::reports'];
           return action.apply(R, arguments);
         };
 
@@ -16549,14 +16523,14 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.reports.updateById = function() {
-          var TargetResource = $injector.get('Report');
-          var action = TargetResource['::updateById::Member::reports'];
+          const TargetResource = $injector.get('Report');
+          const action = TargetResource['::updateById::Member::reports'];
           return action.apply(R, arguments);
         };
 
-
         return R;
-      }]);
+      }]
+  );
 
   /**
  * @ngdoc object
@@ -16580,9 +16554,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
-        var R = Resource(
+        const R = Resource(
           urlBase + '/Devices/:id',
-          { id: '@id' },
+          {id: '@id'},
           {
 
             /**
@@ -17157,7 +17131,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
           }
         );
 
-
         /**
              * @ngdoc method
              * @name lbServices.Device#upsert
@@ -17403,7 +17376,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              */
         R['updateAttributes'] = R['prototype$patchAttributes'];
 
-
         /**
         * @ngdoc property
         * @name lbServices.Device#modelName
@@ -17414,9 +17386,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         */
         R.modelName = 'Device';
 
-
         return R;
-      }]);
+      }]
+  );
 
   /**
  * @ngdoc object
@@ -17440,9 +17412,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
-        var R = Resource(
+        const R = Resource(
           urlBase + '/Campaigns/:id',
-          { id: '@id' },
+          {id: '@id'},
           {
 
             // INTERNAL. Use Campaign.business() instead.
@@ -18114,7 +18086,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
           }
         );
 
-
         /**
              * @ngdoc method
              * @name lbServices.Campaign#upsert
@@ -18360,7 +18331,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              */
         R['updateAttributes'] = R['prototype$patchAttributes'];
 
-
         /**
         * @ngdoc property
         * @name lbServices.Campaign#modelName
@@ -18370,7 +18340,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         * i.e. `Campaign`.
         */
         R.modelName = 'Campaign';
-
 
         /**
              * @ngdoc method
@@ -18407,14 +18376,14 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.business = function() {
-          var TargetResource = $injector.get('Business');
-          var action = TargetResource['::get::Campaign::business'];
+          const TargetResource = $injector.get('Business');
+          const action = TargetResource['::get::Campaign::business'];
           return action.apply(R, arguments);
         };
 
-
         return R;
-      }]);
+      }]
+  );
 
   /**
  * @ngdoc object
@@ -18438,9 +18407,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
-        var R = Resource(
+        const R = Resource(
           urlBase + '/InternetPlans/:id',
-          { id: '@id' },
+          {id: '@id'},
           {
 
             // INTERNAL. Use InternetPlan.business() instead.
@@ -19202,7 +19171,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
           }
         );
 
-
         /**
              * @ngdoc method
              * @name lbServices.InternetPlan#upsert
@@ -19448,7 +19416,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              */
         R['updateAttributes'] = R['prototype$patchAttributes'];
 
-
         /**
         * @ngdoc property
         * @name lbServices.InternetPlan#modelName
@@ -19458,7 +19425,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         * i.e. `InternetPlan`.
         */
         R.modelName = 'InternetPlan';
-
 
         /**
              * @ngdoc method
@@ -19495,14 +19461,14 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.business = function() {
-          var TargetResource = $injector.get('Business');
-          var action = TargetResource['::get::InternetPlan::business'];
+          const TargetResource = $injector.get('Business');
+          const action = TargetResource['::get::InternetPlan::business'];
           return action.apply(R, arguments);
         };
 
-
         return R;
-      }]);
+      }]
+  );
 
   /**
  * @ngdoc object
@@ -19526,9 +19492,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
-        var R = Resource(
+        const R = Resource(
           urlBase + '/Invoices/:id',
-          { id: '@id' },
+          {id: '@id'},
           {
 
             // INTERNAL. Use Invoice.business() instead.
@@ -20400,7 +20366,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
           }
         );
 
-
         /**
              * @ngdoc method
              * @name lbServices.Invoice#upsert
@@ -20646,7 +20611,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              */
         R['updateAttributes'] = R['prototype$patchAttributes'];
 
-
         /**
         * @ngdoc property
         * @name lbServices.Invoice#modelName
@@ -20656,7 +20620,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         * i.e. `Invoice`.
         */
         R.modelName = 'Invoice';
-
 
         /**
              * @ngdoc method
@@ -20693,8 +20656,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.business = function() {
-          var TargetResource = $injector.get('Business');
-          var action = TargetResource['::get::Invoice::business'];
+          const TargetResource = $injector.get('Business');
+          const action = TargetResource['::get::Invoice::business'];
           return action.apply(R, arguments);
         };
         /**
@@ -20710,7 +20673,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
      * Call {@link lbServices.Invoice#members Invoice.members()}
      * to query all related instances.
      */
-
 
         /**
              * @ngdoc method
@@ -20747,8 +20709,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.members = function() {
-          var TargetResource = $injector.get('Member');
-          var action = TargetResource['::get::Invoice::members'];
+          const TargetResource = $injector.get('Member');
+          const action = TargetResource['::get::Invoice::members'];
           return action.apply(R, arguments);
         };
 
@@ -20789,8 +20751,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.members.create = function() {
-          var TargetResource = $injector.get('Member');
-          var action = TargetResource['::create::Invoice::members'];
+          const TargetResource = $injector.get('Member');
+          const action = TargetResource['::create::Invoice::members'];
           return action.apply(R, arguments);
         };
 
@@ -20831,8 +20793,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.members.createMany = function() {
-          var TargetResource = $injector.get('Member');
-          var action = TargetResource['::createMany::Invoice::members'];
+          const TargetResource = $injector.get('Member');
+          const action = TargetResource['::createMany::Invoice::members'];
           return action.apply(R, arguments);
         };
 
@@ -20866,8 +20828,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.members.destroy = function() {
-          var TargetResource = $injector.get('Member');
-          var action = TargetResource['::destroy::Invoice::members'];
+          const TargetResource = $injector.get('Member');
+          const action = TargetResource['::destroy::Invoice::members'];
           return action.apply(R, arguments);
         };
 
@@ -20908,8 +20870,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.members.update = function() {
-          var TargetResource = $injector.get('Member');
-          var action = TargetResource['::update::Invoice::members'];
+          const TargetResource = $injector.get('Member');
+          const action = TargetResource['::update::Invoice::members'];
           return action.apply(R, arguments);
         };
 
@@ -20948,14 +20910,14 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.reseller = function() {
-          var TargetResource = $injector.get('Reseller');
-          var action = TargetResource['::get::Invoice::reseller'];
+          const TargetResource = $injector.get('Reseller');
+          const action = TargetResource['::get::Invoice::reseller'];
           return action.apply(R, arguments);
         };
 
-
         return R;
-      }]);
+      }]
+  );
 
   /**
  * @ngdoc object
@@ -20979,9 +20941,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
-        var R = Resource(
+        const R = Resource(
           urlBase + '/Charges/:id',
-          { id: '@id' },
+          {id: '@id'},
           {
 
             /**
@@ -21594,7 +21556,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
           }
         );
 
-
         /**
              * @ngdoc method
              * @name lbServices.Charge#upsert
@@ -21840,7 +21801,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              */
         R['updateAttributes'] = R['prototype$patchAttributes'];
 
-
         /**
         * @ngdoc property
         * @name lbServices.Charge#modelName
@@ -21851,9 +21811,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         */
         R.modelName = 'Charge';
 
-
         return R;
-      }]);
+      }]
+  );
 
   /**
  * @ngdoc object
@@ -21877,9 +21837,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
-        var R = Resource(
+        const R = Resource(
           urlBase + '/ClientSessions/:id',
-          { id: '@id' },
+          {id: '@id'},
           {
 
             // INTERNAL. Use ClientSession.business() instead.
@@ -22599,7 +22559,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
           }
         );
 
-
         /**
              * @ngdoc method
              * @name lbServices.ClientSession#upsert
@@ -22845,7 +22804,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              */
         R['updateAttributes'] = R['prototype$patchAttributes'];
 
-
         /**
         * @ngdoc property
         * @name lbServices.ClientSession#modelName
@@ -22855,7 +22813,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         * i.e. `ClientSession`.
         */
         R.modelName = 'ClientSession';
-
 
         /**
              * @ngdoc method
@@ -22892,8 +22849,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.business = function() {
-          var TargetResource = $injector.get('Business');
-          var action = TargetResource['::get::ClientSession::business'];
+          const TargetResource = $injector.get('Business');
+          const action = TargetResource['::get::ClientSession::business'];
           return action.apply(R, arguments);
         };
         /**
@@ -22909,7 +22866,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
      * Call {@link lbServices.ClientSession#members ClientSession.members()}
      * to query all related instances.
      */
-
 
         /**
              * @ngdoc method
@@ -22946,8 +22902,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.members = function() {
-          var TargetResource = $injector.get('Member');
-          var action = TargetResource['::get::ClientSession::members'];
+          const TargetResource = $injector.get('Member');
+          const action = TargetResource['::get::ClientSession::members'];
           return action.apply(R, arguments);
         };
 
@@ -22988,8 +22944,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.members.create = function() {
-          var TargetResource = $injector.get('Member');
-          var action = TargetResource['::create::ClientSession::members'];
+          const TargetResource = $injector.get('Member');
+          const action = TargetResource['::create::ClientSession::members'];
           return action.apply(R, arguments);
         };
 
@@ -23030,8 +22986,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.members.createMany = function() {
-          var TargetResource = $injector.get('Member');
-          var action = TargetResource['::createMany::ClientSession::members'];
+          const TargetResource = $injector.get('Member');
+          const action = TargetResource['::createMany::ClientSession::members'];
           return action.apply(R, arguments);
         };
 
@@ -23065,8 +23021,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.members.destroy = function() {
-          var TargetResource = $injector.get('Member');
-          var action = TargetResource['::destroy::ClientSession::members'];
+          const TargetResource = $injector.get('Member');
+          const action = TargetResource['::destroy::ClientSession::members'];
           return action.apply(R, arguments);
         };
 
@@ -23107,14 +23063,14 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.members.update = function() {
-          var TargetResource = $injector.get('Member');
-          var action = TargetResource['::update::ClientSession::members'];
+          const TargetResource = $injector.get('Member');
+          const action = TargetResource['::update::ClientSession::members'];
           return action.apply(R, arguments);
         };
 
-
         return R;
-      }]);
+      }]
+  );
 
   /**
  * @ngdoc object
@@ -23138,9 +23094,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
-        var R = Resource(
+        const R = Resource(
           urlBase + '/FileStorages/:id',
-          { id: '@id' },
+          {id: '@id'},
           {
 
             // INTERNAL. Use FileStorage.business() instead.
@@ -23778,7 +23734,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
           }
         );
 
-
         /**
              * @ngdoc method
              * @name lbServices.FileStorage#upsert
@@ -24012,7 +23967,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              */
         R['updateAttributes'] = R['prototype$patchAttributes'];
 
-
         /**
         * @ngdoc property
         * @name lbServices.FileStorage#modelName
@@ -24022,7 +23976,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         * i.e. `FileStorage`.
         */
         R.modelName = 'FileStorage';
-
 
         /**
              * @ngdoc method
@@ -24059,14 +24012,14 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.business = function() {
-          var TargetResource = $injector.get('Business');
-          var action = TargetResource['::get::FileStorage::business'];
+          const TargetResource = $injector.get('Business');
+          const action = TargetResource['::get::FileStorage::business'];
           return action.apply(R, arguments);
         };
 
-
         return R;
-      }]);
+      }]
+  );
 
   /**
  * @ngdoc object
@@ -24090,9 +24043,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
-        var R = Resource(
+        const R = Resource(
           urlBase + '/Themes/:id',
-          { id: '@id' },
+          {id: '@id'},
           {
 
             /**
@@ -24699,7 +24652,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
           }
         );
 
-
         /**
              * @ngdoc method
              * @name lbServices.Theme#upsert
@@ -24945,7 +24897,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              */
         R['updateAttributes'] = R['prototype$patchAttributes'];
 
-
         /**
         * @ngdoc property
         * @name lbServices.Theme#modelName
@@ -24956,9 +24907,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         */
         R.modelName = 'Theme';
 
-
         return R;
-      }]);
+      }]
+  );
 
   /**
  * @ngdoc object
@@ -24982,9 +24933,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
-        var R = Resource(
+        const R = Resource(
           urlBase + '/Resellers/:id',
-          { id: '@id' },
+          {id: '@id'},
           {
 
             /**
@@ -25980,9 +25931,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
               },
               interceptor: {
                 response: function(response) {
-                  var accessToken = response.data;
+                  const accessToken = response.data;
                   LoopBackAuth.setUser(
-                    accessToken.id, accessToken.userId, accessToken.user);
+                    accessToken.id, accessToken.userId, accessToken.user
+                  );
                   LoopBackAuth.rememberMe =
                     response.config.params.rememberMe !== false;
                   LoopBackAuth.save();
@@ -26601,7 +26553,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
               method: 'GET',
               params: {
                 id: function() {
-                  var id = LoopBackAuth.currentUserId;
+                  let id = LoopBackAuth.currentUserId;
                   if (id == null) id = '__anonymous__';
                   return id;
                 },
@@ -26616,7 +26568,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
             },
           }
         );
-
 
         /**
              * @ngdoc method
@@ -26879,7 +26830,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
          * @returns {Object} A Reseller instance.
          */
         R.getCachedCurrent = function() {
-          var data = LoopBackAuth.currentUserData;
+          const data = LoopBackAuth.currentUserData;
           return data ? new R(data) : null;
         };
 
@@ -26929,7 +26880,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
      * to query all related instances.
      */
 
-
         /**
              * @ngdoc method
              * @name lbServices.Reseller#businesses
@@ -26965,8 +26915,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.businesses = function() {
-          var TargetResource = $injector.get('Business');
-          var action = TargetResource['::get::Reseller::businesses'];
+          const TargetResource = $injector.get('Business');
+          const action = TargetResource['::get::Reseller::businesses'];
           return action.apply(R, arguments);
         };
 
@@ -27004,8 +26954,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *  - `count` – `{number=}` -
              */
         R.businesses.count = function() {
-          var TargetResource = $injector.get('Business');
-          var action = TargetResource['::count::Reseller::businesses'];
+          const TargetResource = $injector.get('Business');
+          const action = TargetResource['::count::Reseller::businesses'];
           return action.apply(R, arguments);
         };
 
@@ -27046,8 +26996,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.businesses.create = function() {
-          var TargetResource = $injector.get('Business');
-          var action = TargetResource['::create::Reseller::businesses'];
+          const TargetResource = $injector.get('Business');
+          const action = TargetResource['::create::Reseller::businesses'];
           return action.apply(R, arguments);
         };
 
@@ -27088,8 +27038,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.businesses.createMany = function() {
-          var TargetResource = $injector.get('Business');
-          var action = TargetResource['::createMany::Reseller::businesses'];
+          const TargetResource = $injector.get('Business');
+          const action = TargetResource['::createMany::Reseller::businesses'];
           return action.apply(R, arguments);
         };
 
@@ -27125,8 +27075,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.businesses.destroyAll = function() {
-          var TargetResource = $injector.get('Business');
-          var action = TargetResource['::delete::Reseller::businesses'];
+          const TargetResource = $injector.get('Business');
+          const action = TargetResource['::delete::Reseller::businesses'];
           return action.apply(R, arguments);
         };
 
@@ -27162,8 +27112,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.businesses.destroyById = function() {
-          var TargetResource = $injector.get('Business');
-          var action = TargetResource['::destroyById::Reseller::businesses'];
+          const TargetResource = $injector.get('Business');
+          const action = TargetResource['::destroyById::Reseller::businesses'];
           return action.apply(R, arguments);
         };
 
@@ -27202,8 +27152,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.businesses.findById = function() {
-          var TargetResource = $injector.get('Business');
-          var action = TargetResource['::findById::Reseller::businesses'];
+          const TargetResource = $injector.get('Business');
+          const action = TargetResource['::findById::Reseller::businesses'];
           return action.apply(R, arguments);
         };
 
@@ -27246,8 +27196,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.businesses.updateById = function() {
-          var TargetResource = $injector.get('Business');
-          var action = TargetResource['::updateById::Reseller::businesses'];
+          const TargetResource = $injector.get('Business');
+          const action = TargetResource['::updateById::Reseller::businesses'];
           return action.apply(R, arguments);
         };
         /**
@@ -27263,7 +27213,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
      * Call {@link lbServices.Reseller#invoices Reseller.invoices()}
      * to query all related instances.
      */
-
 
         /**
              * @ngdoc method
@@ -27300,8 +27249,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.invoices = function() {
-          var TargetResource = $injector.get('Invoice');
-          var action = TargetResource['::get::Reseller::invoices'];
+          const TargetResource = $injector.get('Invoice');
+          const action = TargetResource['::get::Reseller::invoices'];
           return action.apply(R, arguments);
         };
 
@@ -27339,8 +27288,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              *  - `count` – `{number=}` -
              */
         R.invoices.count = function() {
-          var TargetResource = $injector.get('Invoice');
-          var action = TargetResource['::count::Reseller::invoices'];
+          const TargetResource = $injector.get('Invoice');
+          const action = TargetResource['::count::Reseller::invoices'];
           return action.apply(R, arguments);
         };
 
@@ -27381,8 +27330,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.invoices.create = function() {
-          var TargetResource = $injector.get('Invoice');
-          var action = TargetResource['::create::Reseller::invoices'];
+          const TargetResource = $injector.get('Invoice');
+          const action = TargetResource['::create::Reseller::invoices'];
           return action.apply(R, arguments);
         };
 
@@ -27423,8 +27372,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.invoices.createMany = function() {
-          var TargetResource = $injector.get('Invoice');
-          var action = TargetResource['::createMany::Reseller::invoices'];
+          const TargetResource = $injector.get('Invoice');
+          const action = TargetResource['::createMany::Reseller::invoices'];
           return action.apply(R, arguments);
         };
 
@@ -27460,8 +27409,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.invoices.destroyAll = function() {
-          var TargetResource = $injector.get('Invoice');
-          var action = TargetResource['::delete::Reseller::invoices'];
+          const TargetResource = $injector.get('Invoice');
+          const action = TargetResource['::delete::Reseller::invoices'];
           return action.apply(R, arguments);
         };
 
@@ -27497,8 +27446,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.invoices.destroyById = function() {
-          var TargetResource = $injector.get('Invoice');
-          var action = TargetResource['::destroyById::Reseller::invoices'];
+          const TargetResource = $injector.get('Invoice');
+          const action = TargetResource['::destroyById::Reseller::invoices'];
           return action.apply(R, arguments);
         };
 
@@ -27537,8 +27486,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.invoices.findById = function() {
-          var TargetResource = $injector.get('Invoice');
-          var action = TargetResource['::findById::Reseller::invoices'];
+          const TargetResource = $injector.get('Invoice');
+          const action = TargetResource['::findById::Reseller::invoices'];
           return action.apply(R, arguments);
         };
 
@@ -27581,14 +27530,14 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.invoices.updateById = function() {
-          var TargetResource = $injector.get('Invoice');
-          var action = TargetResource['::updateById::Reseller::invoices'];
+          const TargetResource = $injector.get('Invoice');
+          const action = TargetResource['::updateById::Reseller::invoices'];
           return action.apply(R, arguments);
         };
 
-
         return R;
-      }]);
+      }]
+  );
 
   /**
  * @ngdoc object
@@ -27612,9 +27561,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
-        var R = Resource(
+        const R = Resource(
           urlBase + '/Coupons/:id',
-          { id: '@id' },
+          {id: '@id'},
           {
 
             // INTERNAL. Use Coupon.business() instead.
@@ -28288,7 +28237,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
           }
         );
 
-
         /**
              * @ngdoc method
              * @name lbServices.Coupon#upsert
@@ -28534,7 +28482,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              */
         R['updateAttributes'] = R['prototype$patchAttributes'];
 
-
         /**
         * @ngdoc property
         * @name lbServices.Coupon#modelName
@@ -28544,7 +28491,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         * i.e. `Coupon`.
         */
         R.modelName = 'Coupon';
-
 
         /**
              * @ngdoc method
@@ -28581,14 +28527,14 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.business = function() {
-          var TargetResource = $injector.get('Business');
-          var action = TargetResource['::get::Coupon::business'];
+          const TargetResource = $injector.get('Business');
+          const action = TargetResource['::get::Coupon::business'];
           return action.apply(R, arguments);
         };
 
-
         return R;
-      }]);
+      }]
+  );
 
   /**
  * @ngdoc object
@@ -28612,9 +28558,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
-        var R = Resource(
+        const R = Resource(
           urlBase + '/Tickets/:id',
-          { id: '@id' },
+          {id: '@id'},
           {
 
             // INTERNAL. Use Ticket.business() instead.
@@ -29290,7 +29236,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
           }
         );
 
-
         /**
              * @ngdoc method
              * @name lbServices.Ticket#upsert
@@ -29536,7 +29481,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              */
         R['updateAttributes'] = R['prototype$patchAttributes'];
 
-
         /**
         * @ngdoc property
         * @name lbServices.Ticket#modelName
@@ -29546,7 +29490,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         * i.e. `Ticket`.
         */
         R.modelName = 'Ticket';
-
 
         /**
              * @ngdoc method
@@ -29583,14 +29526,14 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.business = function() {
-          var TargetResource = $injector.get('Business');
-          var action = TargetResource['::get::Ticket::business'];
+          const TargetResource = $injector.get('Business');
+          const action = TargetResource['::get::Ticket::business'];
           return action.apply(R, arguments);
         };
 
-
         return R;
-      }]);
+      }]
+  );
 
   /**
  * @ngdoc object
@@ -29614,9 +29557,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
-        var R = Resource(
+        const R = Resource(
           urlBase + '/Usages/:id',
-          { id: '@id' },
+          {id: '@id'},
           {
 
             // INTERNAL. Use Usage.business() instead.
@@ -30191,7 +30134,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
           }
         );
 
-
         /**
              * @ngdoc method
              * @name lbServices.Usage#upsert
@@ -30437,7 +30379,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              */
         R['updateAttributes'] = R['prototype$patchAttributes'];
 
-
         /**
         * @ngdoc property
         * @name lbServices.Usage#modelName
@@ -30447,7 +30388,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         * i.e. `Usage`.
         */
         R.modelName = 'Usage';
-
 
         /**
              * @ngdoc method
@@ -30484,14 +30424,14 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.business = function() {
-          var TargetResource = $injector.get('Business');
-          var action = TargetResource['::get::Usage::business'];
+          const TargetResource = $injector.get('Business');
+          const action = TargetResource['::get::Usage::business'];
           return action.apply(R, arguments);
         };
 
-
         return R;
-      }]);
+      }]
+  );
 
   /**
  * @ngdoc object
@@ -30515,9 +30455,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
-        var R = Resource(
+        const R = Resource(
           urlBase + '/Netflows/:id',
-          { id: '@id' },
+          {id: '@id'},
           {
 
             /**
@@ -31086,7 +31026,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
           }
         );
 
-
         /**
              * @ngdoc method
              * @name lbServices.Netflow#upsert
@@ -31332,7 +31271,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              */
         R['updateAttributes'] = R['prototype$patchAttributes'];
 
-
         /**
         * @ngdoc property
         * @name lbServices.Netflow#modelName
@@ -31343,9 +31281,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         */
         R.modelName = 'Netflow';
 
-
         return R;
-      }]);
+      }]
+  );
 
   /**
  * @ngdoc object
@@ -31369,9 +31307,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
-        var R = Resource(
+        const R = Resource(
           urlBase + '/Syslogs/:id',
-          { id: '@id' },
+          {id: '@id'},
           {
 
             /**
@@ -31940,7 +31878,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
           }
         );
 
-
         /**
              * @ngdoc method
              * @name lbServices.Syslog#upsert
@@ -32186,7 +32123,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              */
         R['updateAttributes'] = R['prototype$patchAttributes'];
 
-
         /**
         * @ngdoc property
         * @name lbServices.Syslog#modelName
@@ -32197,9 +32133,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         */
         R.modelName = 'Syslog';
 
-
         return R;
-      }]);
+      }]
+  );
 
   /**
  * @ngdoc object
@@ -32223,9 +32159,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
-        var R = Resource(
+        const R = Resource(
           urlBase + '/MemberGroups/:id',
-          { id: '@id' },
+          {id: '@id'},
           {
 
             // INTERNAL. Use MemberGroup.business() instead.
@@ -32800,7 +32736,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
           }
         );
 
-
         /**
              * @ngdoc method
              * @name lbServices.MemberGroup#upsert
@@ -33046,7 +32981,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              */
         R['updateAttributes'] = R['prototype$patchAttributes'];
 
-
         /**
         * @ngdoc property
         * @name lbServices.MemberGroup#modelName
@@ -33056,7 +32990,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         * i.e. `MemberGroup`.
         */
         R.modelName = 'MemberGroup';
-
 
         /**
              * @ngdoc method
@@ -33093,14 +33026,14 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.business = function() {
-          var TargetResource = $injector.get('Business');
-          var action = TargetResource['::get::MemberGroup::business'];
+          const TargetResource = $injector.get('Business');
+          const action = TargetResource['::get::MemberGroup::business'];
           return action.apply(R, arguments);
         };
 
-
         return R;
-      }]);
+      }]
+  );
 
   /**
  * @ngdoc object
@@ -33124,9 +33057,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
     [
       'LoopBackResource', 'LoopBackAuth', '$injector',
       function(Resource, LoopBackAuth, $injector) {
-        var R = Resource(
+        const R = Resource(
           urlBase + '/Reports/:id',
-          { id: '@id' },
+          {id: '@id'},
           {
 
             // INTERNAL. Use Report.member() instead.
@@ -33880,7 +33813,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
           }
         );
 
-
         /**
              * @ngdoc method
              * @name lbServices.Report#upsert
@@ -34114,7 +34046,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              */
         R['updateAttributes'] = R['prototype$patchAttributes'];
 
-
         /**
         * @ngdoc property
         * @name lbServices.Report#modelName
@@ -34124,7 +34055,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         * i.e. `Report`.
         */
         R.modelName = 'Report';
-
 
         /**
              * @ngdoc method
@@ -34161,8 +34091,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.member = function() {
-          var TargetResource = $injector.get('Member');
-          var action = TargetResource['::get::Report::member'];
+          const TargetResource = $injector.get('Member');
+          const action = TargetResource['::get::Report::member'];
           return action.apply(R, arguments);
         };
 
@@ -34201,8 +34131,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.business = function() {
-          var TargetResource = $injector.get('Business');
-          var action = TargetResource['::get::Report::business'];
+          const TargetResource = $injector.get('Business');
+          const action = TargetResource['::get::Report::business'];
           return action.apply(R, arguments);
         };
         /**
@@ -34218,7 +34148,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
      * Call {@link lbServices.Report#fileStorage Report.fileStorage()}
      * to query all related instances.
      */
-
 
         /**
              * @ngdoc method
@@ -34255,8 +34184,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.fileStorage = function() {
-          var TargetResource = $injector.get('FileStorage');
-          var action = TargetResource['::get::Report::fileStorage'];
+          const TargetResource = $injector.get('FileStorage');
+          const action = TargetResource['::get::Report::fileStorage'];
           return action.apply(R, arguments);
         };
 
@@ -34297,8 +34226,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.fileStorage.create = function() {
-          var TargetResource = $injector.get('FileStorage');
-          var action = TargetResource['::create::Report::fileStorage'];
+          const TargetResource = $injector.get('FileStorage');
+          const action = TargetResource['::create::Report::fileStorage'];
           return action.apply(R, arguments);
         };
 
@@ -34339,8 +34268,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.fileStorage.createMany = function() {
-          var TargetResource = $injector.get('FileStorage');
-          var action = TargetResource['::createMany::Report::fileStorage'];
+          const TargetResource = $injector.get('FileStorage');
+          const action = TargetResource['::createMany::Report::fileStorage'];
           return action.apply(R, arguments);
         };
 
@@ -34374,8 +34303,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * This method returns no data.
              */
         R.fileStorage.destroy = function() {
-          var TargetResource = $injector.get('FileStorage');
-          var action = TargetResource['::destroy::Report::fileStorage'];
+          const TargetResource = $injector.get('FileStorage');
+          const action = TargetResource['::destroy::Report::fileStorage'];
           return action.apply(R, arguments);
         };
 
@@ -34416,23 +34345,22 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
              * </em>
              */
         R.fileStorage.update = function() {
-          var TargetResource = $injector.get('FileStorage');
-          var action = TargetResource['::update::Report::fileStorage'];
+          const TargetResource = $injector.get('FileStorage');
+          const action = TargetResource['::update::Report::fileStorage'];
           return action.apply(R, arguments);
         };
 
-
         return R;
-      }]);
-
+      }]
+  );
 
   module
     .factory('LoopBackAuth', function() {
-      var props = ['accessTokenId', 'currentUserId', 'rememberMe'];
-      var propsPrefix = '$LoopBack$';
+      const props = ['accessTokenId', 'currentUserId', 'rememberMe'];
+      const propsPrefix = '$LoopBack$';
 
       function LoopBackAuth() {
-        var self = this;
+        const self = this;
         props.forEach(function(name) {
           self[name] = load(name);
         });
@@ -34440,8 +34368,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
       }
 
       LoopBackAuth.prototype.save = function() {
-        var self = this;
-        var storage = this.rememberMe ? localStorage : sessionStorage;
+        const self = this;
+        const storage = this.rememberMe ? localStorage : sessionStorage;
         props.forEach(function(name) {
           save(storage, name, self[name]);
         });
@@ -34472,7 +34400,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
       // We are using empty string as a marker for null/undefined values.
       function save(storage, name, value) {
         try {
-          var key = propsPrefix + name;
+          const key = propsPrefix + name;
           if (value == null) value = '';
           storage[key] = value;
         } catch (err) {
@@ -34481,7 +34409,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
       }
 
       function load(name) {
-        var key = propsPrefix + name;
+        const key = propsPrefix + name;
         return localStorage[key] || sessionStorage[key] || null;
       }
     })
@@ -34493,7 +34421,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
         return {
           request: function(config) {
           // filter out external requests
-            var host = getHost(config.url);
+            const host = getHost(config.url);
             if (host && host !== urlBaseHost) {
               return config;
             }
@@ -34503,8 +34431,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
             } else if (config.__isGetCurrentUser__) {
             // Return a stub 401 error for User.getCurrent() when
             // there is no user logged in
-              var res = {
-                body: { error: { status: 401 }},
+              const res = {
+                body: {error: {status: 401}},
                 status: 401,
                 config: config,
                 headers: function() { return undefined; },
@@ -34589,8 +34517,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
       };
 
       this.$get = ['$resource', function($resource) {
-        var LoopBackResource = function(url, params, actions) {
-          var resource = $resource(url, params, actions);
+        const LoopBackResource = function(url, params, actions) {
+          const resource = $resource(url, params, actions);
 
           // Angular always calls POST on $save()
           // This hack is based on
@@ -34598,7 +34526,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' &&
           resource.prototype.$save = function(success, error) {
           // Fortunately, LoopBack provides a convenient `upsert` method
           // that exactly fits our needs.
-            var result = resource.upsert.call(this, {}, this, success, error);
+            const result = resource.upsert.call(this, {}, this, success, error);
             return result.$promise || result;
           };
           return resource;

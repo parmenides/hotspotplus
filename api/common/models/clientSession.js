@@ -83,7 +83,8 @@ module.exports = function(ClientSession) {
     await Usage.updateSessionUsageCache(session);
     await cacheManager.addMemberUsage({memberId: session.memberId, sessionId, ...calculatedUsage});
     session = {...session, ...calculatedUsage};
-    log.debug(session);
+    await cacheManager.cacheMemberSession(session.memberId, sessionId, session);
+    await cacheManager.cacheBusinessSession(session.businessId, sessionId, session);
     await ClientSession.sendToBroker(session);
   };
 
@@ -148,14 +149,14 @@ module.exports = function(ClientSession) {
     // return cb(null, {data: 'noReport'})
   };
 
-  ClientSession.getActiveMemberSessions = async (
-    memberId,
-    startDate,
-    endDate,
-  ) => {
-    startDate = startDate ? startDate : (new Date()).remove({minutes: 2});
-    endDate = endDate ? endDate : (new Date()).add({minutes: 2});
-    return db.getMemberSessions(memberId, startDate, endDate);
+  ClientSession.getActiveMemberSessions = async (memberId) => {
+    const sessions = await cacheManager.getMemberSessions(memberId);
+    log.error('return sessions from cache,', sessions);
+    return sessions;
+    /* const minutes = Math.round((Number(config.DEFAULT_ACCOUNTING_UPDATE_INTERVAL_SECONDS) / 60) + 1)
+    startDate = startDate ? startDate : (new Date()).remove({minutes})
+    endDate = endDate ? endDate : (new Date()).add({minutes})
+    return db.getMemberSessions(memberId, startDate, endDate) */
   };
 
   ClientSession.remoteMethod('getOnlineUsers', {
@@ -192,23 +193,22 @@ module.exports = function(ClientSession) {
     returns: {arg: 'result', type: 'Object'},
   });
 
-  ClientSession.getOnlineSessionCount = async (businessId, departmentId, startDate, endDate) => {
-    try {
-      log.debug('@getOnlineSessionCount : ', businessId);
-      if (!departmentId) {
-        return {count: 0};
-      }
-      if (departmentId === 'all') {
-        departmentId = null;
-      }
-      startDate = startDate ? startDate : (new Date()).remove({minutes: 2});
-      endDate = endDate ? endDate : (new Date()).add({minutes: 2});
-      const result = await db.countSessions(businessId, departmentId, startDate, endDate);
-      return {count: result.count};
-    } catch (error) {
-      log.error(error);
-      throw new Error('failed to get online session count');
+  ClientSession.getOnlineSessionCount = async (businessId, departmentId) => {
+    log.debug('@getOnlineSessionCount : ', businessId);
+    if (!departmentId) {
+      return {count: 0};
     }
+    let result;
+    if (departmentId === 'all') {
+      result = await cacheManager.getBusinessSessions(businessId);
+    } else {
+      result = await cacheManager.getBusinessSessions(businessId, (session) => {
+        if (session.departmentId === departmentId) {
+          return session;
+        }
+      });
+    }
+    return {count: result.length};
   };
 
   ClientSession.remoteMethod('getOnlineSessionCount', {
