@@ -172,6 +172,8 @@ app.filter('humanTime', [
       var timeScale = new humanFormat.Scale({
         'دقیقه': 60,
         'ساعت': 3600,
+        'روز': 86400,
+        'هفته': 604800
       })
       return humanFormat(size, {scale: timeScale, decimals: 0})
     }
