@@ -164,8 +164,10 @@ app.directive('serviceStatus', [
 
           var session = {};
           session.businessId = $scope.params.businessId;
+          var departmentId = $scope.params.departmentId;
           ClientSession.getOnlineSessionCount({
-            businessId: session.businessId
+            businessId: session.businessId,
+            departmentId:departmentId
           }).$promise.then(
             function(result) {
               $scope.currentOnlineUsers = result.count;

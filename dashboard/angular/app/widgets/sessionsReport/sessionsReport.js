@@ -194,7 +194,7 @@ app.directive('sessionsReport', [
             var query = {};
             //query.startDate = $scope.params.fromDate;
             //query.endDate = $scope.params.endDate;
-            query.departmentId = $scope.params.departmentId;
+            query.departmentId = $scope.params.departmentId || 'all';
             query.businessId = $scope.params.businessId;
             query.skip =
               ($scope.paginationOptions.pageNumber - 1) *
@@ -202,7 +202,8 @@ app.directive('sessionsReport', [
             query.limit = $scope.paginationOptions.itemPerPage;
 
             ClientSession.getOnlineSessionCount({
-              businessId: query.businessId
+              businessId: query.businessId,
+              departmentId: query.departmentId
             }).$promise.then(
               function(result) {
                 $scope.gridOptions.totalItems = result.count;
