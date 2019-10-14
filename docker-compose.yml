@@ -30,6 +30,7 @@ services:
     volumes:
       - ${PWD}/systemId:/app/machine-id
       - ${PWD}/api/server:/usr/src/app/server/
+      - ${PWD}/api/templates:/usr/src/app/templates/
       - ${PWD}/files:/files
       - ${PWD}/api/node_modules:/usr/src/app/node_modules
       - ${PWD}/api/common:/usr/src/app/common/

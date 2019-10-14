@@ -20,18 +20,28 @@ stream.on('data', (row) => {
 });
 */
 
-const redis = require('promise-redis')();
-const redisClient = redis.createClient();
+const redis = require('promise-redis')()
+const redisClient = redis.createClient()
 
-const init = async ()=>{
-  //await redisClient.set('aaaaa','KKKKK')
-  //await redisClient.expire('aaaaa',3600)
-  const res = await redisClient.ttl('aaaaa')
-  console.log(typeof res)
-  console.log(res)
+const init = async () => {
+  await redisClient.set('1a', '11')
+  await redisClient.set('2a', '13')
+  await redisClient.set('3a', '13')
+  await redisClient.sadd('session', '1a')
+  await redisClient.sadd('session', '2a')
+  await redisClient.sadd('session', '3a')
+  const session = await redisClient.smembers('session')
+  console.log(session)
+  console.log(Array.isArray(session))
+  const res1 = await redisClient.mget(session)
+  for (const r of res) {
+    if (r) {
+      console.log(r)
+    }
+  }
 
-};
-init();
+}
+init()
 /*
 
 redisClient.hmset('ali', 'downmoad', 500, 'sessionTime', 200000, (error, result) => {
@@ -47,7 +57,7 @@ redisClient.hmset('ali', 'downmoad', 500, 'sessionTime', 200000, (error, result)
 
     })
   })
-
 })
+
 */
 
