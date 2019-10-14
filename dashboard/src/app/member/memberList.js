@@ -605,6 +605,7 @@ app.controller('memberList', [
                       ) {
                         delete $scope.memberByGroup.internetPlan
                       }
+                      $scope.memberByGroup.businessId = businessId;
                       $scope.loading = true
                       Member.createMembersByGroup(
                         $scope.memberByGroup

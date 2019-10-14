@@ -3318,6 +3318,7 @@ module.exports = function(Member) {
   };
 
   Member.createMembersByGroup = function(
+    businessId,
     reserveCode,
     tourCode,
     mobile,
@@ -3333,7 +3334,6 @@ module.exports = function(Member) {
     log.debug('@create group of member');
     const Business = app.models.Business;
     const MemberGroup = app.models.MemberGroup;
-    const businessId = ctx.currentUserId;
     Business.findById(businessId).then(function(business) {
       if (count > 30) {
         return cb('more than 30 member is not allowed');
@@ -3470,6 +3470,10 @@ module.exports = function(Member) {
     returns: {root: true},
     accepts: [
       {
+        arg: 'businessId',
+        type: 'string',
+        required: true
+      },{
         arg: 'reserveCode',
         type: 'string',
       },
