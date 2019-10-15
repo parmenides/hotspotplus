@@ -39,17 +39,15 @@ const createNetflowQuery = (
   DstIP as dstIp, SrcPort as srcPort, DstPort as dstPort,TimeRecvd as timeRecvd,Proto as proto FROM hotspotplus.NetflowReport `;
   }
 
-  const whereParts: string[] = [
-    ` (Session.framedIpAddress=Netflow.DstIP OR Session.framedIpAddress=Netflow.SrcIP OR Session.framedIpAddress=Netflow.NextHop) `,
-  ];
+  const whereParts: string[] = [];
   if (fromDate) {
     whereParts.push(
-      ` TimeRecvd>=toDateTime('${fromDate.format(DATABASE_DATE_FORMAT)}') `,
+      ` timeRecvd>=toDateTime('${fromDate.format(DATABASE_DATE_FORMAT)}') `,
     );
   }
   if (toDate) {
     whereParts.push(
-      ` TimeRecvd<=toDateTime('${toDate.format(DATABASE_DATE_FORMAT)}') `,
+      ` timeRecvd<=toDateTime('${toDate.format(DATABASE_DATE_FORMAT)}') `,
     );
   }
 
@@ -58,11 +56,11 @@ const createNetflowQuery = (
   }
 
   if (dstPort) {
-    whereParts.push(` DstPort='${dstPort}' `);
+    whereParts.push(` dstPort='${dstPort}' `);
   }
 
   if (srcPort) {
-    whereParts.push(` SrcPort='${srcPort}' `);
+    whereParts.push(` srcPort='${srcPort}' `);
   }
 
   if (businessId) {
@@ -76,10 +74,10 @@ const createNetflowQuery = (
     whereParts.push(` (${departmentQueries.join(' OR ')}) `);
   }
   if (srcAddress) {
-    whereParts.push(` ( SrcIP='${srcAddress}' OR NextHop='${srcAddress}' ) `);
+    whereParts.push(` ( srcIP='${srcAddress}' OR nextHop='${srcAddress}' ) `);
   }
   if (dstAddress) {
-    whereParts.push(` ( DstIP='${dstAddress}' OR NextHop='${dstAddress}' ) `);
+    whereParts.push(` ( dstIP='${dstAddress}' OR nextHop='${dstAddress}' ) `);
   }
   if (whereParts.length > 0) {
     mainQuery = `${mainQuery} WHERE  ${whereParts.join(' AND ')}`;
