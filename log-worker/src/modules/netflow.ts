@@ -74,10 +74,10 @@ const createNetflowQuery = (
     whereParts.push(` (${departmentQueries.join(' OR ')}) `);
   }
   if (srcAddress) {
-    whereParts.push(` ( srcIP='${srcAddress}' OR nextHop='${srcAddress}' ) `);
+    whereParts.push(` ( srcIp='${srcAddress}' OR nextHop='${srcAddress}' ) `);
   }
   if (dstAddress) {
-    whereParts.push(` ( dstIP='${dstAddress}' OR nextHop='${dstAddress}' ) `);
+    whereParts.push(` ( dstIp='${dstAddress}' OR nextHop='${dstAddress}' ) `);
   }
   if (whereParts.length > 0) {
     mainQuery = `${mainQuery} WHERE  ${whereParts.join(' AND ')}`;
