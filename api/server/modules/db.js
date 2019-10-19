@@ -2,6 +2,7 @@ const SESSION_TABLE = 'hotspotplus.Session';
 const USAGE_TABLE = 'hotspotplus.Usage';
 const CHARGE_TABLE = 'hotspotplus.Charge';
 const NETFLOW_REPORT_TABLE = 'hotspotplus.NetflowReport';
+const DNS_REPORT_TABLE = 'hotspotplus.DnsReport';
 const LICENSE_TABLE = 'license.Charge';
 
 module.exports = (insert, query, uuid, config, moment, log) => {
@@ -52,6 +53,14 @@ Populate AS SELECT Session.businessId,Session.departmentId,Session.memberId,Sess
 FROM hotspotplus.Session JOIN hotspotplus.Netflow ON Session.nasIp=Netflow.RouterAddr
  AND toStartOfInterval(Session.creationDate, INTERVAL 5 minute)=toStartOfInterval(Netflow.TimeRecvd,INTERVAL 5 minute )
 WHERE Session.framedIpAddress=Netflow.DstIP OR Session.framedIpAddress=Netflow.SrcIP OR Session.framedIpAddress=Netflow.NextHop
+`);
+      await query(`CREATE MATERIALIZED VIEW IF NOT EXISTS ${DNS_REPORT_TABLE} ENGINE=AggregatingMergeTree()
+PARTITION BY (toStartOfDay( receivedAt))
+ORDER BY (memberId,nasIp,memberIp,domain,username,toStartOfHour( receivedAt ))
+Populate AS SELECT Session.businessId,Session.departmentId,Session.memberId,Session.nasIp,Session.memberIp as memberIp, Session.username,Dns.receivedAt as receivedAt,Dns.domain as domain
+FROM hotspotplus.Session JOIN hotspotplus.Dns ON Session.nasIp=Dns.nasIp
+ AND toStartOfInterval(Session.creationDate, INTERVAL 5 minute)=toStartOfInterval(Dns.receivedAt,INTERVAL 5 minute )
+WHERE Session.framedIpAddress=Dns.memberIp
 `);
     },
 

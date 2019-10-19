@@ -88,14 +88,12 @@ const createDnsQuery = (
   let mainQuery: string;
 
   if (count) {
-    mainQuery = `SELECT toInt32(count (*)) FROM hotspotplus.Session JOIN hotspotplus.Dns  ON Session.nasIp=Dns.nasIp 
-  AND toStartOfInterval(Session.creationDate, INTERVAL 5 minute)=toStartOfInterval(Dns.receivedAt, INTERVAL 5 minute )`;
+    mainQuery = `SELECT toInt32(count (*)) FROM hotspotplus.DnsReport`;
   } else {
-    mainQuery = `SELECT businessId,departmentId, memberId, nasIp, username, domain, receivedAt FROM hotspotplus.Session JOIN hotspotplus.Dns  ON Session.nasIp=Dns.nasIp 
-  AND toStartOfInterval(Session.creationDate, INTERVAL 5 minute)=toStartOfInterval(Dns.receivedAt, INTERVAL 5 minute )`;
+    mainQuery = `SELECT businessId,departmentId, memberId, nasIp, username, domain, receivedAt FROM hotspotplus.DnsReport`;
   }
 
-  const whereParts: string[] = [' Session.framedIpAddress=Dns.memberIp '];
+  const whereParts: string[] = [];
 
   if (fromDate) {
     whereParts.push(
