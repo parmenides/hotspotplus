@@ -40,7 +40,6 @@
 <script src="../libs/jquery/jquery/dist/jquery.js"></script>
 <!-- Bootstrap -->
 <script src="../libs/jquery/bootstrap/dist/js/bootstrap.js"></script>
-<script src="../libs/raven-js/dist/raven.min.js"></script>
 
 <script src="../libs/angular/angular/angular.min.js"></script>
 <!-- endbuild -->
@@ -79,7 +78,6 @@
 <script src="../libs/assets/persian-date/persiandate.js"></script>
 <script src="../libs/assets/numeral/min/numeral.min.js"></script>
 <script src="../libs/assets/human-format/index.js"></script>
-<script src="../libs/raven-js/dist/plugins/angular.js"></script>
 <script src="js/app.js"></script>
 <script src="js/config.js"></script>
 <script src="js/config.router.js"></script>
@@ -136,23 +134,8 @@
   }
   angular.element(document).ready(function () {
 
-    Window.enableSentry = false
-    Window.sentryUrl = ''
-    Window.sentryReleaseToken = ''
-    setupRaven();
-    function setupRaven (id, username) {
-      var userInfo = {}
-      if (id) {
-        userInfo.id = id
-        userInfo.email = username
-      }
-      Raven.config(Window.sentryUrl, {
-        release: Window.sentryReleaseToken,
-        shouldSendCallback: function () {
-          return Window.enableSentry
-        }
-      }).addPlugin(Raven.Plugins.Angular).install()
-    }
+    angular.bootstrap(document, ['app'])
+
 
   })
 </script>

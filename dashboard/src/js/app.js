@@ -20,7 +20,6 @@ angular.module('app', [
   'oc.lazyLoad',
   'pascalprecht.translate',
   'angularFileUpload',
-  'ngRaven',
   'ngRoute',
   'ngFileSaver'
 ]);

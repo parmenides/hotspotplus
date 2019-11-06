@@ -624,7 +624,6 @@ app
             tags.adminId = sessionData.id;
             tags = sessionData;
         }
-        Raven.captureException(errorName, { tags: tags });
       };
     }
   ]);

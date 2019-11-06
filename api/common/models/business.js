@@ -87,9 +87,9 @@ module.exports = function (Business) {
         hotspotTemplates[config.DEFAULT_THEME_ID].styles[0].id
       ctx.instance.themeConfig[config.DEFAULT_THEME_ID].formConfig =
         hotspotTemplates[config.DEFAULT_THEME_ID].formConfig
-    } else {
-      next()
     }
+    next()
+
   })
 
   Business.observe('before delete', function (ctx, next) {

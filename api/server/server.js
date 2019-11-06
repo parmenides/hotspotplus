@@ -7,7 +7,7 @@ const mongoConnector = require('loopback-connector-mongodb');
 const app = (module.exports = loopback());
 const Sentry = require('@sentry/node');
 
-if (process.env.ENABLE_SENTRY) {
+if (process.env.ENABLE_SENTRY==='true') {
   Sentry.init({dsn: process.env.SENTRY_URL});
   app.use(Sentry.Handlers.requestHandler());
 }
@@ -15,9 +15,6 @@ if (process.env.ENABLE_SENTRY) {
 const logger = require('./modules/logger');
 const log = logger.createLogger();
 require('date-utils');
-const cors = require('cors');
-// var redis = require('redis');
-// var redisClient = redis.createClient(config.REDIS.PORT, config.REDIS.HOST);
 
 app.dataSource('mongo', {
   connector: mongoConnector,
@@ -33,13 +30,7 @@ app.dataSource('mongo', {
 app.use(loopback.token());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true})); // support encoded bodies
-app.use(cors());
 
-// Prevent Wapelizer from exposing our server side technologies.
-app.use(function(req, res, next) {
-  res.setHeader('X-Powered-By', 'PHP 4.2.0');
-  next();
-});
 
 app.use(function(req, res, next) {
   if (req.path.indexOf('/api') !== -1) {
@@ -64,7 +55,6 @@ app.start = function() {
     if (app.get('loopback-component-explorer')) {
       const explorerPath = app.get('loopback-component-explorer').mountPath;
       console.log('Browse your REST API at %s%s', baseUrl, explorerPath);
-      console.log('Browse your REST API at %s%s', baseUrl, explorerPath);
     }
   });
 };
@@ -76,7 +66,7 @@ boot(app, __dirname, function(err) {
     app.start();
   }
 });
-if (process.env.ENABLE_SENTRY) {
+if (process.env.ENABLE_SENTRY==='true') {
   app.use(Sentry.Handlers.errorHandler());
 }
 

@@ -167,10 +167,7 @@ app
         } else {
           theUser = this.user;
         }
-        Raven.setUserContext({
-          id: theUser.id,
-          email: theUser.username + '@hotspotplus.ir'
-        });
+
         this.save();
       };
 
