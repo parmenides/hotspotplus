@@ -10,9 +10,6 @@
     "releaseLocalProduction": "git commit -a -m 'production:latest';git tag -f release ;git push -u origin master --tags --force"
   },
   "keywords": [],
-  "repository": "https://gitlab.com/parmenides/HotspotplusDashboard.git",
-  "author": "Flatfull",
-  "license": "Envato REGULAR LICENSE",
   "dependencies": {
     "grunt-contrib-cssmin": "^0.14.0",
     "grunt-contrib-watch": "^0.6.1",
