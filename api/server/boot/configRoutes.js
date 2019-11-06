@@ -10,7 +10,7 @@ const config = require('../modules/config');
 module.exports = function(app) {
   const router = app.loopback.Router();
 
-  router.post('/api/config/systemConfig', function(req, res) {
+  /*router.post('/api/config/systemConfig', function(req, res) {
     const SystemConfig = app.models.SystemConfig;
     SystemConfig.getConfig()
       .then(function(systemConfig) {
@@ -27,7 +27,7 @@ module.exports = function(app) {
         log.error(error);
         return res.status(500).json({error: 'failed to load config'});
       });
-  });
+  });*/
 
   router.post('/api/radius/loadThemeConfig', function(req, res) {
     const Nas = app.models.Nas;

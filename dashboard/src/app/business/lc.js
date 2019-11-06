@@ -21,10 +21,6 @@ app.controller('LcSignUpController', [
   ) {
     $scope.lc = {};
     $scope.authError = null;
-    if (!Window.isDefault) {
-      $state.go('access.signUp');
-      return;
-    }
     $scope.loading = false;
     $scope.signUp = function() {
       $scope.lc.mobile = englishNumberFilter($scope.lc.mobile);

@@ -12,10 +12,7 @@ app.controller('BusinessSignUpController', [
   function($scope, $log, Business, $state, appMessenger, englishNumberFilter) {
     $scope.business = {};
     $scope.authError = null;
-    if (Window.isDefault) {
-      $state.go('access.createLocalLicense');
-      return;
-    }
+
     $scope.signUp = function() {
       $scope.business.mobile = englishNumberFilter($scope.business.mobile);
       Business.create($scope.business).$promise.then(

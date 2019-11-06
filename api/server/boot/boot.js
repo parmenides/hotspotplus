@@ -13,10 +13,8 @@ const redisLicenseReload = redis.createClient(
 module.exports = async function(app) {
   const User = app.models.User;
   const Role = app.models.Role;
-  const SystemConfig = app.models.SystemConfig;
   const log = logger.createLogger();
 
-  SystemConfig.getConfig();
   addDefaultRolesAndUsers();
   await db.init();
 
@@ -26,7 +24,6 @@ module.exports = async function(app) {
     Q.all([
       addOrLoadRole(config.ROLES.OPERATOR),
       addOrLoadRole(config.ROLES.ADMIN),
-      addOrLoadRole(config.ROLES.SERVICEMAN),
       addOrLoadRole(config.ROLES.RESELLER),
       addOrLoadRole(config.ROLES.NETWORKADMIN),
       addOrLoadRole(config.ROLES.NAS),
@@ -35,11 +32,6 @@ module.exports = async function(app) {
       addOrLoadRole(config.ROLES.CUSTOMER),
     ]).then(function(result) {
       log.debug('all roles added');
-      addOrLoadUser(
-        config.DEFAULTS.SERVICE_MAN_USERNAME,
-        config.DEFAULTS.SERVICE_MAN_PASSWORD,
-        config.DEFAULTS.SERVICE_MAN_ROLES
-      );
       addOrLoadUser(
         config.DEFAULTS.ADMIN_USERNAME,
         config.DEFAULTS.ADMIN_PASS,

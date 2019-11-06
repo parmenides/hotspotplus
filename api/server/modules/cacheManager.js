@@ -53,7 +53,6 @@ const simpleCacheManagerFactory = (options) => {
   return {
     add: async (id, jsonData) => {
       if (jsonData && id) {
-        log.error(`${prefix} cached with ${id}`)
         const data = JSON.stringify(jsonData)
         id = id.toString()
         const key = `${prefix}${id}`
@@ -62,12 +61,10 @@ const simpleCacheManagerFactory = (options) => {
       }
     },
     clear: async (id) => {
-      log.error(`${prefix} cached cleared ${id}`)
       const key = `${prefix}${id.toString()}`
       await redisClient.del(key)
     },
     get: async (id) => {
-      log.error(`${prefix} read from cache ${id}`)
       const key = `${prefix}${id.toString()}`
       const data = await redisClient.get(key)
       return data ? JSON.parse(data) : null
@@ -80,7 +77,6 @@ const listCacheManagerFactory = (options) => {
   return {
     add: async (parentId, childId, data) => {
       if (parentId && childId) {
-        log.error(`Cache in ${parentId} for ${childId}`, data)
         await redisClient.set(childCacheIdCreator(childId), JSON.stringify(data))
         await redisClient.expire(childCacheIdCreator(childId), ttl)
         const key = parentCacheIdCreator(parentId)
@@ -99,7 +95,6 @@ const listCacheManagerFactory = (options) => {
         if (childIds.length === 0) {
           return []
         }
-        log.error({childIds})
         const dataItems = await redisClient.mget(childIds)
 
         const notNullItems = dataItems.filter((item) => {

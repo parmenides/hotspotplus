@@ -22,7 +22,6 @@ const hotspotTemplates = require('./hotspotTemplates');
 const DEFAULT_ACCOUNTING_UPDATE_INTERVAL_SECONDS =
   process.env.DEFAULT_ACCOUNTING_UPDATE_INTERVAL_SECONDS || 60;
 
-const CONFIG_SERVER_URL = process.env.CONFIG_SERVER_URL;
 module.exports = {
   VERSION: '1.3',
   APP_CACHE_TTL: 60 * 60,
@@ -88,9 +87,6 @@ module.exports = {
     ADMIN_USERNAME: process.env.DEFAULT_ADMIN_USERNAME,
     ADMIN_PASS: process.env.DEFAULT_ADMIN_PASSWORD,
     ADMIN_ROLES: ['admin'],
-    SERVICE_MAN_ROLES: ['serviceMan'],
-    SERVICE_MAN_USERNAME: process.env.SERVICE_MAN_USERNAME,
-    SERVICE_MAN_PASSWORD: process.env.SERVICE_MAN_PASSWORD,
   },
   ROLES: {
     BUSINESS: 'business',
@@ -105,16 +101,6 @@ module.exports = {
     HOTSPOTMEMBER: 'member',
   },
   LC_PATH: '/key',
-  CONFIG_SERVER_LOGIN: CONFIG_SERVER_URL + '/Licenses/login',
-  CONFIG_SERVER_CHARGE_SMS:
-    CONFIG_SERVER_URL + '/Sms/buySmsCredit?access_token={token}',
-  CONFIG_SERVER_BUY_PACKAGE:
-    CONFIG_SERVER_URL + '/Licenses/buyLocalPackage?access_token={token}',
-  CONFIG_SERVER_LOCAL_MODULES: CONFIG_SERVER_URL + '/Licenses/getPackages',
-  CONFIG_SERVER_LOCAL_CHARGE:
-    CONFIG_SERVER_URL + '/Sms/getLicenseBalance?access_token={token}',
-  CONFIG_SERVER_NEW_LICENSE:
-    CONFIG_SERVER_URL + '/Licenses/registerPublicLicense',
   DEFAULT_SYSTEM_CONFIG: {
     appTitle: 'هات اسپات پلاس',
     isDefault: true,

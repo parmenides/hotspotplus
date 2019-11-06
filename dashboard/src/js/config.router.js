@@ -10,9 +10,6 @@ angular.module('app').run([
   function($rootScope, $state, $stateParams) {
     $rootScope.$state = $state;
     $rootScope.$stateParams = $stateParams;
-    $rootScope.dontShowBuyPackages = Window.systemConfig.dontShowBuyPackages;
-    $rootScope.oneTimeLicense = Window.systemConfig.oneTimeLicense;
-    $rootScope.disableSignup = Window.systemConfig.disableSignup;
   },
 ]);
 

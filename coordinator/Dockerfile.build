@@ -1,8 +1,0 @@
-FROM ubuntu:xenial
-
-RUN mkdir /log
-RUN mkdir /key
-RUN mkdir /app
-COPY ./hotspotplus-coordinator /app
-RUN chmod a+x /app/hotspotplus-coordinator
-CMD /app/hotspotplus-coordinator

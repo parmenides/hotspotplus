@@ -80,7 +80,6 @@ if (process.env.ENABLE_SENTRY) {
   app.use(Sentry.Handlers.errorHandler());
 }
 
-/*
 process.on('uncaughtException', function (error) {
   console.error('Something bad happened here....')
   console.error(error)
@@ -90,4 +89,3 @@ process.on('uncaughtException', function (error) {
   process.exit(1)
   //utility.sendMessage ( error, { fileName: 'server.js', source: 'boot' } );
 })
-*/

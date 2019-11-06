@@ -57,11 +57,7 @@ app.directive('serviceStatus', [
               } else {
                 $scope.accountingServiceStatus = 'disabled';
               }
-              if ($rootScope.oneTimeLicense) {
-                $scope.accountingChartOptions.options.elements.center.text =
-                  '    فعال    ';
-                $scope.accountingChartOptions.data = [100];
-              } else {
+
                 $scope.accountingRemainingDays = Math.round(
                   (currentService.expiresAt - now.getTime()) / 86400000
                 );
@@ -78,14 +74,10 @@ app.directive('serviceStatus', [
                 if ($scope.accountingRemainingDays <= 5) {
                   $scope.accountingChartOptions.colors = ['#f1c40f', '#ecf0f1'];
                 }
-              }
+
 
               if (modules.sms) {
-                if ($rootScope.oneTimeLicense) {
-                  $scope.smsModuleChartOptions.options.elements.center.text =
-                    '    فعال    ';
-                  $scope.smsModuleChartOptions.data = [100];
-                } else {
+
                   $scope.smsRemainingDays = Math.round(
                     (modules.sms.expiresAt - now.getTime()) / 86400000
                   );
@@ -112,15 +104,11 @@ app.directive('serviceStatus', [
                     $scope.smsModuleChartOptions.options.elements.center.text =
                       'به اتمام رسیده';
                   }
-                }
+
               }
 
               if (modules.log) {
-                if ($rootScope.oneTimeLicense) {
-                  $scope.logModuleChartOptions.options.elements.center.text =
-                    '    فعال    ';
-                  $scope.logModuleChartOptions.data = [100];
-                } else {
+
                   $scope.logRemainingDays = Math.round(
                     (modules.log.expiresAt - now.getTime()) / 86400000
                   );
@@ -147,7 +135,7 @@ app.directive('serviceStatus', [
                     $scope.logModuleChartOptions.options.elements.center.text =
                       'به اتمام رسیده';
                   }
-                }
+
               }
               $scope.loading = true;
               getSessionsCount();

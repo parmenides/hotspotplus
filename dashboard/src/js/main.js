@@ -38,9 +38,9 @@ angular.module('app').controller('AppCtrl', [
 			 } );*/
     // config
     $scope.app = {
-      name: Window.appTitle || 'Hsp',
-      domain: Window.appDomain || 'Hsp',
-      version: Window.systemConfig.version || '-',
+      name: 'Hotspotplus',
+      domain: 'https://hotspotplus.ir',
+      version: '5.0',
       // for chart colors
       color: {
         primary: '#7266ba',

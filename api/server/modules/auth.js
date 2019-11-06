@@ -8,22 +8,6 @@ const logger = require('./logger');
 const config = require('./config');
 const log = logger.createLogger();
 const utility = require('./utility');
-/*
-var API_ADDRESS = utility.getApiAddress();
-var LOGIN_REST_API = API_ADDRESS + '/api/Users/login';
-var LOGOUT_REST_API = API_ADDRESS + '/api/Users/logout?access_token={0}';
-*/
-// login to the rest api to get the access token
-/*
-module.exports.serviceManLogin = function(ttlMs) {
-  log.debug('service man logged in ', ttlMs);
-  return login(
-    config.SERVICE_MAN_USERNAME,
-    config.SERVICE_MAN_PASSWORD,
-    ttlMs
-  );
-};
-*/
 
 const loginToConfigServer = (module.exports.loginToApi = module.exports.loginToConfigServer = function(
   configServerUrl,

@@ -121,30 +121,6 @@ services:
 #      - ${PWD}/license-dashboard:/app
 #    networks:
 #      - hotspotplusgate
-  coordinator:
-    build:
-      context: ${PWD}/coordinator
-    user: '${UID:-1000}:${GID:-1000}'
-    command: npm start
-    restart: always
-    env_file:
-      - ${PWD}/coordinator/.env
-    depends_on:
-      - redis
-#      - hotspotpluslicensapi
-    environment:
-      - LOG_LEVEL=debug
-      - REDIS_PORT=6379
-      - REDIS_HOST=hsp_redis
-      - REDIS_IP=hsp_redis
-    volumes:
-      - ${PWD}/coordinator/src/:/usr/src/app/src/
-      - ${PWD}/coordinator/node_modules/:/usr/src/app/node_modules/
-      - ${PWD}/systemId:/app/machine-id
-      - ${PWD}/coordinator/key:/key
-      - ${PWD}/coordinator/logs:/logs
-    networks:
-      - hotspotplusgate
   mongodb:
     container_name: hsp_mongodb
     image: bitnami/mongodb:3.6.8-ol-7-r100
