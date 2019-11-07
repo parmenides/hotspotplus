@@ -264,7 +264,7 @@ module.exports = {
         oneTime: false,
         packageDesc: 'اشتراک رایگان',
         title: 'نامحدود رایگان',
-        price: 0 ,
+        price: 0,
         discount: 0,
         duration: 100,
         buyMethod: 'pay',

@@ -3472,8 +3472,8 @@ module.exports = function(Member) {
       {
         arg: 'businessId',
         type: 'string',
-        required: true
-      },{
+        required: true,
+      }, {
         arg: 'reserveCode',
         type: 'string',
       },

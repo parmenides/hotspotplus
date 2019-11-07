@@ -2,68 +2,68 @@
  * Created by payamyousefi on 10/17/16.
  */
 
-require('date-utils')
-const Q = require('q')
-const app = require('../server')
-const config = require('./config')
-const logger = require('./logger')
-const log = logger.createLogger()
-const utility = require('./utility')
-const db = require('./db.factory')
-const kavehnegar = require('./kavehnegar')
+require('date-utils');
+const Q = require('q');
+const app = require('../server');
+const config = require('./config');
+const logger = require('./logger');
+const log = logger.createLogger();
+const utility = require('./utility');
+const db = require('./db.factory');
+const kavehnegar = require('./kavehnegar');
 
-exports.send = function (data) {
-  log.debug('Mobile data', data)
-  const Business = app.models.Business
-  const businessId = data.businessId || 'service'
-  const mobilesList = data.mobiles
-  const message = data.message
+exports.send = function(data) {
+  log.debug('Mobile data', data);
+  const Business = app.models.Business;
+  const businessId = data.businessId || 'service';
+  const mobilesList = data.mobiles;
+  const message = data.message;
 
-  return Q.Promise(function (resolve, reject) {
+  return Q.Promise(function(resolve, reject) {
     if (mobilesList && message) {
-      log.debug('mobiles: ', mobilesList)
-      log.debug('message: ', message)
-      log.debug('businessId: ', businessId)
+      log.debug('mobiles: ', mobilesList);
+      log.debug('message: ', message);
+      log.debug('businessId: ', businessId);
       if (!mobilesList.length || mobilesList.length === 0) {
         log.error(
           '@send message dismissed, empty message or mobile ',
           mobilesList
-        )
-        return resolve()
+        );
+        return resolve();
       }
       sendGroupMessage(mobilesList, message, businessId)
-        .then(function () {
-          return resolve()
+        .then(function() {
+          return resolve();
         })
-        .fail(function (error) {
-          return reject(error)
-        })
+        .fail(function(error) {
+          return reject(error);
+        });
     } else {
       // Send service message by template
-      const mobile = data.mobile
-      let token1 = data.token1
-      let token2 = data.token2
-      let token3 = data.token3
-      const template = data.template
+      const mobile = data.mobile;
+      let token1 = data.token1;
+      let token2 = data.token2;
+      let token3 = data.token3;
+      const template = data.template;
       if (token1) {
-        token1 = utility.removeAllSpace(token1)
+        token1 = utility.removeAllSpace(token1);
       }
       if (token2) {
-        token2 = utility.removeAllSpace(token2)
+        token2 = utility.removeAllSpace(token2);
       }
       if (token3) {
-        token3 = utility.removeAllSpace(token3)
+        token3 = utility.removeAllSpace(token3);
       }
       if (businessId !== 'service') {
         Business.findById(businessId)
-          .then(function (business) {
+          .then(function(business) {
             const token10 =
               business.smsSignature ||
               business.title ||
-              process.env.SMS_SIGNATURE
+              process.env.SMS_SIGNATURE;
             db.getProfileBalance(businessId)
-              .then(function (result) {
-                const balance = result.balance
+              .then(function(result) {
+                const balance = result.balance;
                 if (balance > config.MIN_REQUIRED_SMS_CREDIT) {
                   sendMessage(
                     mobile,
@@ -74,43 +74,43 @@ exports.send = function (data) {
                     template,
                     businessId
                   )
-                    .then(function () {
-                      return resolve()
+                    .then(function() {
+                      return resolve();
                     })
-                    .fail(function (error) {
-                      log.error(error)
-                      return reject(error)
-                    })
+                    .fail(function(error) {
+                      log.error(error);
+                      return reject(error);
+                    });
                 } else {
-                  log.warn('business has not enough credit:', businessId)
-                  return resolve()
+                  log.warn('business has not enough credit:', businessId);
+                  return resolve();
                 }
               })
-              .fail(function (error) {
-                log.error(error)
-                return reject(error)
-              })
+              .fail(function(error) {
+                log.error(error);
+                return reject(error);
+              });
           })
-          .catch(function (error) {
-            log.error(error)
-            return reject(error)
-          })
+          .catch(function(error) {
+            log.error(error);
+            return reject(error);
+          });
       } else {
-        const token10 = process.env.SMS_SIGNATURE
+        const token10 = process.env.SMS_SIGNATURE;
         sendMessage(mobile, token1, token2, token3, token10, template)
-          .then(function () {
-            return resolve()
+          .then(function() {
+            return resolve();
           })
-          .fail(function (error) {
-            log.error(error)
-            return reject(error)
-          })
+          .fail(function(error) {
+            log.error(error);
+            return reject(error);
+          });
       }
     }
-  })
-}
+  });
+};
 
-function sendMessage (
+function sendMessage(
   mobile,
   token1,
   token2,
@@ -119,15 +119,16 @@ function sendMessage (
   template,
   businessId
 ) {
-  log.debug('#sendMessage')
-  const Charge = app.models.Charge
-  return Q.Promise(function (resolve, reject) {
+  log.debug('#sendMessage');
+  const Charge = app.models.Charge;
+  return Q.Promise(function(resolve, reject) {
     if (!mobile) {
       log.error(
-        'message dismissed, empty message or mobile ', mobile)
-      return resolve()
+        'message dismissed, empty message or mobile ', mobile
+      );
+      return resolve();
     }
-    const SMS_API_KEY = process.env.SMS_API_KEY
+    const SMS_API_KEY = process.env.SMS_API_KEY;
     if (SMS_API_KEY) {
       kavehnegar
         .sendMessageToKavehnegar(
@@ -139,8 +140,8 @@ function sendMessage (
           token10,
           template
         )
-        .then(function (cost) {
-          log.debug('message cost in Toman:', cost)
+        .then(function(cost) {
+          log.debug('message cost in Toman:', cost);
           Charge.addCharge({
             businessId: businessId,
             type: 'smsCost',
@@ -148,50 +149,48 @@ function sendMessage (
             forThe: 'message',
             date: new Date().getTime(),
           })
-            .then(function () {
-              return resolve()
+            .then(function() {
+              return resolve();
             })
-            .fail(function (error) {
-              log.error(error)
-              return reject(error)
-            })
+            .fail(function(error) {
+              log.error(error);
+              return reject(error);
+            });
         })
-        .catch(function (error) {
-          log.error(error)
-          return reject(error)
-        })
+        .catch(function(error) {
+          log.error(error);
+          return reject(error);
+        });
     } else {
-      return reject(new Error('invalid sms api key'))
+      return reject(new Error('invalid sms api key'));
     }
-  })
+  });
 }
 
-var sendGroupMessage = function (mobilesList, message, businessId) {
-  log.debug('@sendGroupMessage')
-  const Charge = app.models.Charge
-  return Q.Promise(function (resolve, reject) {
-
-    const SMS_API_KEY = process.env.SMS_API_KEY
+const sendGroupMessage = function(mobilesList, message, businessId) {
+  log.debug('@sendGroupMessage');
+  const Charge = app.models.Charge;
+  return Q.Promise(function(resolve, reject) {
+    const SMS_API_KEY = process.env.SMS_API_KEY;
     if (SMS_API_KEY) {
-
       kavehnegar
         .sendGroupMessageToKavehnegar(SMS_API_KEY, mobilesList, message)
-        .then(function (cost) {
-          log.debug('message cost in Toman:', cost)
+        .then(function(cost) {
+          log.debug('message cost in Toman:', cost);
           Charge.addCharge({
             businessId: businessId,
             type: 'smsCost',
             amount: cost,
             forThe: 'bulkMessages:' + mobilesList.length,
             date: new Date().getTime(),
-          })
-          return resolve()
+          });
+          return resolve();
         })
-        .catch(function (error) {
-          return reject(error)
-        })
+        .catch(function(error) {
+          return reject(error);
+        });
     } else {
-      return reject('sms api key is empty')
+      return reject('sms api key is empty');
     }
-  })
-}
+  });
+};

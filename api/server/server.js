@@ -7,7 +7,7 @@ const mongoConnector = require('loopback-connector-mongodb');
 const app = (module.exports = loopback());
 const Sentry = require('@sentry/node');
 
-if (process.env.ENABLE_SENTRY==='true') {
+if (process.env.ENABLE_SENTRY === 'true') {
   Sentry.init({dsn: process.env.SENTRY_URL});
   app.use(Sentry.Handlers.requestHandler());
 }
@@ -30,7 +30,6 @@ app.dataSource('mongo', {
 app.use(loopback.token());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true})); // support encoded bodies
-
 
 app.use(function(req, res, next) {
   if (req.path.indexOf('/api') !== -1) {
@@ -66,16 +65,16 @@ boot(app, __dirname, function(err) {
     app.start();
   }
 });
-if (process.env.ENABLE_SENTRY==='true') {
+if (process.env.ENABLE_SENTRY === 'true') {
   app.use(Sentry.Handlers.errorHandler());
 }
 
-process.on('uncaughtException', function (error) {
-  console.error('Something bad happened here....')
-  console.error(error)
-  error ? console.error(error.stack) : null
-  log.error(error)
-  error ? log.error(error && error.stack) : null
-  process.exit(1)
-  //utility.sendMessage ( error, { fileName: 'server.js', source: 'boot' } );
-})
+process.on('uncaughtException', function(error) {
+  console.error('Something bad happened here....');
+  console.error(error);
+  error ? console.error(error.stack) : null;
+  log.error(error);
+  error ? log.error(error && error.stack) : null;
+  process.exit(1);
+  // utility.sendMessage ( error, { fileName: 'server.js', source: 'boot' } );
+});
