@@ -359,32 +359,29 @@ module.exports = function (Business) {
   })
 
   Business.getPackageById = function (packageId) {
-    return Q.Promise(function (resolve, reject) {
-      if (
-        !packageId ||
-        packageId === 'premium' ||
-        packageId === 'silver' ||
-        packageId === 'gold' ||
-        packageId === 'bronze' ||
-        packageId === 'free'
-      ) {
-        packageId = 'economic'
+    if (
+      !packageId ||
+      packageId === 'demo' ||
+      packageId === 'premium' ||
+      packageId === 'silver' ||
+      packageId === 'gold' ||
+      packageId === 'bronze' ||
+      packageId === 'free'
+    ) {
+      packageId = 'economic'
+    }
+    const pkgList = Business.getPackages()
+    for (const pkg of pkgList) {
+      if (pkg.id === packageId) {
+        return pkg
       }
-      Business.getPackages().then(function (pkgList) {
-        for (const j in pkgList) {
-          const pkg = pkgList[j]
-          if (pkg.id === packageId) {
-            return resolve(pkg)
-          }
-        }
-        return reject()
-      })
-    })
+    }
   }
 
   Business.assignDefaultPlanToBusiness = function (businessId) {
-    return Business.assignPackageToBusiness(businessId, 'demo')
+    return Business.assignPackageToBusiness(businessId, 'economic')
   }
+
   Business.getCurrentService = function (business) {
     return Q.Promise(function (resolve, reject) {
       let currentService = business.services
@@ -436,151 +433,146 @@ module.exports = function (Business) {
     const issueDate = new Date().getTime()
     const businessId = ctx.currentUserId
     return Q.Promise(function (resolve, reject) {
-      Business.getPackageById(packageId)
-        .then(function (selectedPackage) {
-          if (!selectedPackage) {
-            return reject('package not found')
-          }
-          let price =
-            selectedPackage.price -
-            selectedPackage.price * selectedPackage.discount
-          if (discountCoupon && discountCoupon.code) {
-            const Coupon = app.models.Coupon
-            Coupon.findOne(
-              {
-                where: {
-                  and: [
-                    {code: discountCoupon.code},
-                    {ownerId: config.ADMIN_OWNER_ID},
-                  ],
+      const selectedPackage = Business.getPackageById(packageId)
+      if (!selectedPackage) {
+        return reject('package not found')
+      }
+      let price =
+        selectedPackage.price -
+        selectedPackage.price * selectedPackage.discount
+      if (discountCoupon && discountCoupon.code) {
+        const Coupon = app.models.Coupon
+        Coupon.findOne(
+          {
+            where: {
+              and: [
+                {code: discountCoupon.code},
+                {ownerId: config.ADMIN_OWNER_ID},
+              ],
+            },
+          },
+          function (error, coupon) {
+            if (error) {
+              log.error(error)
+              return reject(error)
+            }
+            if (!coupon) {
+              log.error('coupon not found')
+              return reject('coupon not found')
+            }
+            const unit = coupon.value.unit
+            const amount = coupon.value.amount
+            if (unit === config.PERCENT_UNIT) {
+              const discountAmount = (price * amount) / 100
+              price = price - discountAmount
+            }
+            if (unit === config.TOMAN_UNIT) {
+              price = price - amount
+            }
+            coupon
+              .updateAttributes({
+                used: coupon.used + 1,
+                redeemDate: new Date().getTime(),
+              })
+              .then(
+                function () {
+                  createInvoiceAndPay(price)
                 },
-              },
-              function (error, coupon) {
-                if (error) {
+                function (error) {
+                  log.error('coupon update error:', error)
                   log.error(error)
                   return reject(error)
-                }
-                if (!coupon) {
-                  log.error('coupon not found')
-                  return reject('coupon not found')
-                }
-                const unit = coupon.value.unit
-                const amount = coupon.value.amount
-                if (unit === config.PERCENT_UNIT) {
-                  const discountAmount = (price * amount) / 100
-                  price = price - discountAmount
-                }
-                if (unit === config.TOMAN_UNIT) {
-                  price = price - amount
-                }
-                coupon
-                  .updateAttributes({
-                    used: coupon.used + 1,
-                    redeemDate: new Date().getTime(),
-                  })
-                  .then(
-                    function () {
-                      createInvoiceAndPay(price)
-                    },
-                    function (error) {
-                      log.error('coupon update error:', error)
-                      log.error(error)
-                      return reject(error)
-                    },
-                  )
-              },
-            )
-          } else {
-            createInvoiceAndPay(price)
-          }
-
-          function createInvoiceAndPay (price) {
-            if (price === 0) {
-              Business.assignPackageToBusiness(businessId, packageId)
-                .then(function () {
-                  const returnUrl = config.BUSINESS_PAYMENT_RESULT_URL()
-                  return resolve({
-                    url: returnUrl
-                      .replace('{0}', 'true')
-                      .replace('{1}', '&desc=success'),
-                  })
-                })
-                .fail(function (error) {
-                  log.error(
-                    'failed to assign zero price pkg to business',
-                    error,
-                  )
-                  return reject(error)
-                })
-            } else {
-              log.debug('createInvoiceAndPay price:', price)
-              Invoice.create(
-                {
-                  price: price,
-                  payed: false,
-                  packageId: packageId,
-                  invoiceType: config.BUY_SERVICE_CHARGE,
-                  issueDate: issueDate,
-                  businessId: businessId,
-                },
-                function (error, invoice) {
-                  if (error) {
-                    log.error('failed to create invoice', error)
-                    return reject(error)
-                  }
-                  const invoiceId = invoice.id
-                  const returnUrl = config
-                    .BUSINESS_PAYMENT_RETURN_URL()
-                    .replace('{0}', 'invoiceId')
-                    .replace('{1}', invoiceId)
-                  log.debug(
-                    'config.BUSINESS_PAYMENT_RETURN_URL (): ',
-                    config.BUSINESS_PAYMENT_RETURN_URL(),
-                  )
-                  log.debug('returnUrl: ', returnUrl)
-                  log.debug(
-                    'EXTRACTED_EXTERNAL_API_ADDRESS: ',
-                    process.env.EXTRACTED_EXTERNAL_API_ADDRESS,
-                  )
-                  Payment.openPaymentGateway(
-                    config.PAYMENT_API_KEY,
-                    price,
-                    config.PAYMENT_GATEWAY_DEFAULT_DESC,
-                    config.PAYMENT_SUPPORT_EMAIL,
-                    config.PAYMENT_SUPPORT_MOBILE,
-                    returnUrl,
-                  )
-                    .then(function (response) {
-                      const url = response.url
-                      const paymentId = response.paymentId
-                      invoice
-                        .updateAttributes({
-                          paymentId: paymentId,
-                        })
-                        .then(
-                          function () {
-                            return resolve({url: url})
-                          },
-                          function (error) {
-                            log.error('invoice update error:', error)
-                            return reject(error)
-                          },
-                        )
-                    })
-                    .fail(function (error) {
-                      log.error('failed to open payment gateway')
-                      log.error(error)
-                      return reject(error)
-                    })
                 },
               )
-            }
-          }
-        })
-        .fail(function (error) {
-          log.error(error)
-          return reject(error)
-        })
+          },
+        )
+      } else {
+        createInvoiceAndPay(price)
+      }
+
+      function createInvoiceAndPay (price) {
+        if (price === 0) {
+          Business.assignPackageToBusiness(businessId, packageId)
+            .then(function () {
+              const returnUrl = config.BUSINESS_PAYMENT_RESULT_URL()
+              return resolve({
+                url: returnUrl
+                  .replace('{0}', 'true')
+                  .replace('{1}', '&desc=success'),
+              })
+            })
+            .fail(function (error) {
+              log.error(
+                'failed to assign zero price pkg to business',
+                error,
+              )
+              return reject(error)
+            })
+        } else {
+          log.debug('createInvoiceAndPay price:', price)
+          Invoice.create(
+            {
+              price: price,
+              payed: false,
+              packageId: packageId,
+              invoiceType: config.BUY_SERVICE_CHARGE,
+              issueDate: issueDate,
+              businessId: businessId,
+            },
+            function (error, invoice) {
+              if (error) {
+                log.error('failed to create invoice', error)
+                return reject(error)
+              }
+              const invoiceId = invoice.id
+              const returnUrl = config
+                .BUSINESS_PAYMENT_RETURN_URL()
+                .replace('{0}', 'invoiceId')
+                .replace('{1}', invoiceId)
+              log.debug(
+                'config.BUSINESS_PAYMENT_RETURN_URL (): ',
+                config.BUSINESS_PAYMENT_RETURN_URL(),
+              )
+              log.debug('returnUrl: ', returnUrl)
+              log.debug(
+                'EXTRACTED_EXTERNAL_API_ADDRESS: ',
+                process.env.EXTRACTED_EXTERNAL_API_ADDRESS,
+              )
+              Payment.openPaymentGateway(
+                config.PAYMENT_API_KEY,
+                price,
+                config.PAYMENT_GATEWAY_DEFAULT_DESC,
+                config.PAYMENT_SUPPORT_EMAIL,
+                config.PAYMENT_SUPPORT_MOBILE,
+                returnUrl,
+              )
+                .then(function (response) {
+                  const url = response.url
+                  const paymentId = response.paymentId
+                  invoice
+                    .updateAttributes({
+                      paymentId: paymentId,
+                    })
+                    .then(
+                      function () {
+                        return resolve({url: url})
+                      },
+                      function (error) {
+                        log.error('invoice update error:', error)
+                        return reject(error)
+                      },
+                    )
+                })
+                .fail(function (error) {
+                  log.error('failed to open payment gateway')
+                  log.error(error)
+                  return reject(error)
+                })
+            },
+          )
+        }
+      }
+
     })
   }
 
@@ -604,87 +596,81 @@ module.exports = function (Business) {
   Business.assignPackageToBusiness = function (businessId, packageId, options) {
     return Q.Promise(function (resolve, reject) {
       options = options || {}
-      Business.getPackageById(packageId)
-        .then(function (selectedPkg) {
-          if (!selectedPkg) {
-            return reject('pkg not found:' + packageId)
+      const selectedPkg = Business.getPackageById(packageId)
+      if (!selectedPkg) {
+        return reject('pkg not found:' + packageId)
+      }
+      Business.findById(businessId).then(function (business) {
+        if (!business) {
+          return reject('invalid biz id')
+        }
+        const update = {}
+        let duration = options.duration || selectedPkg.duration
+        duration = Number(duration)
+        let durationInDays =
+          options.durationInDays || selectedPkg.durationInDays
+        durationInDays = Number(durationInDays)
+        const selectedService = selectedPkg.service
+        if (selectedService) {
+          const serviceSubscriptionDate =
+            options.subscriptionDate || new Date().getTime()
+          log.debug('service duration:', duration)
+          let expiresAt
+          if (duration) {
+            expiresAt = new Date(serviceSubscriptionDate)
+              .add({months: duration})
+              .getTime()
+          } else if (durationInDays) {
+            expiresAt = new Date(serviceSubscriptionDate)
+              .add({days: durationInDays})
+              .getTime()
           }
-          Business.findById(businessId).then(function (business) {
-            if (!business) {
-              return reject('invalid biz id')
+          log.debug('service expires at:', expiresAt)
+          update.services = {
+            allowedOnlineUsers:
+              options.allowedOnlineUsers ||
+              selectedService.allowedOnlineUsers,
+            subscriptionDate: serviceSubscriptionDate,
+            expiresAt: expiresAt,
+            duration: duration,
+            durationInDays: durationInDays,
+          }
+        }
+        const selectedModules = selectedPkg.modules
+        if (selectedModules) {
+          const modules = business.modules
+          underscore.each(selectedModules, function (module, moduleId) {
+            const modSubscriptionDate =
+              options.subscriptionDate || new Date().getTime()
+            let modExpiresAt
+            log.debug('module duration ', duration)
+            if (duration) {
+              modExpiresAt = new Date(modSubscriptionDate)
+                .add({months: duration})
+                .getTime()
+            } else if (durationInDays) {
+              modExpiresAt = new Date(modSubscriptionDate)
+                .add({days: durationInDays})
+                .getTime()
             }
-            const update = {}
-            let duration = options.duration || selectedPkg.duration
-            duration = Number(duration)
-            let durationInDays =
-              options.durationInDays || selectedPkg.durationInDays
-            durationInDays = Number(durationInDays)
-            const selectedService = selectedPkg.service
-            if (selectedService) {
-              const serviceSubscriptionDate =
-                options.subscriptionDate || new Date().getTime()
-              log.debug('service duration:', duration)
-              let expiresAt
-              if (duration) {
-                expiresAt = new Date(serviceSubscriptionDate)
-                  .add({months: duration})
-                  .getTime()
-              } else if (durationInDays) {
-                expiresAt = new Date(serviceSubscriptionDate)
-                  .add({days: durationInDays})
-                  .getTime()
-              }
-              log.debug('service expires at:', expiresAt)
-              update.services = {
-                allowedOnlineUsers:
-                  options.allowedOnlineUsers ||
-                  selectedService.allowedOnlineUsers,
-                subscriptionDate: serviceSubscriptionDate,
-                expiresAt: expiresAt,
-                duration: duration,
-                durationInDays: durationInDays,
-              }
+            log.debug('module expires at:', modExpiresAt)
+            modules[moduleId] = {
+              subscriptionDate: modSubscriptionDate,
+              expiresAt: modExpiresAt,
+              duration: duration,
             }
-            const selectedModules = selectedPkg.modules
-            if (selectedModules) {
-              const modules = business.modules
-              underscore.each(selectedModules, function (module, moduleId) {
-                const modSubscriptionDate =
-                  options.subscriptionDate || new Date().getTime()
-                let modExpiresAt
-                log.debug('module duration ', duration)
-                if (duration) {
-                  modExpiresAt = new Date(modSubscriptionDate)
-                    .add({months: duration})
-                    .getTime()
-                } else if (durationInDays) {
-                  modExpiresAt = new Date(modSubscriptionDate)
-                    .add({days: durationInDays})
-                    .getTime()
-                }
-                log.debug('module expires at:', modExpiresAt)
-                modules[moduleId] = {
-                  subscriptionDate: modSubscriptionDate,
-                  expiresAt: modExpiresAt,
-                  duration: duration,
-                }
-              })
-              update.modules = modules
-            }
-
-            business.updateAttributes(update, function (error, updatedBiz) {
-              if (error) {
-                log.error(error)
-                return reject(error)
-              }
-              return resolve()
-            })
           })
+          update.modules = modules
+        }
+
+        business.updateAttributes(update, function (error, updatedBiz) {
+          if (error) {
+            log.error(error)
+            return reject(error)
+          }
+          return resolve()
         })
-        .fail(function (error) {
-          log.error(error)
-          return reject(error)
-        })
+      })
     })
   }
 
@@ -952,49 +938,35 @@ module.exports = function (Business) {
                   // assign service to business
                   Business.assignPackageToBusiness(businessId, packageId)
                     .then(function () {
-                      Business.getPackageById(packageId)
-                        .then(function (selectedPackage) {
-                          Charge.addCharge({
-                            businessId: businessId,
-                            type: config.BUY_SERVICE_CHARGE,
-                            amount: price * -1,
-                            forThe: selectedPackage.title,
-                            date: new Date().getTime(),
-                          })
 
-                          // add credit for business reseller
-                          if (business.resellerId) {
-                            Reseller.addResellerCommission(
-                              business.resellerId,
-                              businessId,
-                              invoice.price,
-                            )
-                              .then(function () {
-                                log.debug('Reseller commission added ')
-                              })
-                              .fail(function (error) {
-                                log.error(error)
-                              })
-                          }
-                          return resolve({
-                            code: 302,
-                            returnUrl: returnUrl
-                              .replace('{0}', 'true')
-                              .replace('{1}', '&desc=success'),
+                      Charge.addCharge({
+                        businessId: businessId,
+                        type: config.BUY_SERVICE_CHARGE,
+                        amount: price * -1,
+                        forThe: selectedPackage.title,
+                        date: new Date().getTime(),
+                      })
+
+                      // add credit for business reseller
+                      if (business.resellerId) {
+                        Reseller.addResellerCommission(
+                          business.resellerId,
+                          businessId,
+                          invoice.price,
+                        )
+                          .then(function () {
+                            log.debug('Reseller commission added ')
                           })
-                        })
-                        .fail(function (error) {
-                          log.error(error)
-                          return resolve({
-                            code: 302,
-                            returnUrl: returnUrl
-                              .replace('{0}', 'false')
-                              .replace(
-                                '{1}',
-                                '&error=Error in update business with packageId',
-                              ),
+                          .fail(function (error) {
+                            log.error(error)
                           })
-                        })
+                      }
+                      return resolve({
+                        code: 302,
+                        returnUrl: returnUrl
+                          .replace('{0}', 'true')
+                          .replace('{1}', '&desc=success'),
+                      })
                     })
                     .fail(function (error) {
                       log.error(error)
@@ -1378,20 +1350,12 @@ if ( totalDurationInMonths <= 0 || !totalDurationInMonths ) {
   })
 
   Business.getPackages = function () {
-    return Q.Promise(function (resolve, reject) {
-      return resolve(config.SERVICES.packages)
-    })
+    return config.SERVICES.packages
   }
 
-  Business.loadServices = function (cb) {
-    Business.getPackages()
-      .then(function (pkgs) {
-        return cb(null, {packages: pkgs})
-      })
-      .fail(function (error) {
-        log.error(error)
-        return cb(error)
-      })
+  Business.loadServices = async function () {
+    const pkgs = Business.getPackages()
+    return {packages: pkgs}
   }
 
   Business.remoteMethod('loadServices', {

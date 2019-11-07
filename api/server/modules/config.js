@@ -258,86 +258,20 @@ module.exports = {
     RESELLERS_COMMISSION_RATE: 30 / 100,
     packages: [
       {
-        id: 'demo',
-        active: false,
-        packageDesc: 'بسته آزمایشی',
-        title: '۱ ماهه',
-        price: 0,
-        discount: 0,
-        durationInDays: 15,
-        service: {
-          allowedOnlineUsers: 120,
-        },
-        modules: {
-          sms: {
-            id: 'sms',
-            title: 'ماژول پیامک',
-          },
-          log: {
-            id: 'log',
-            title: 'ثبت لاگ وب سایت و آی پی',
-          },
-        },
-      },
-      {
         id: 'economic',
         active: true,
         buyDisabled: false,
         oneTime: false,
-        packageDesc: 'اشتراک ۳ ماهه',
-        title: '۳ ماهه',
-        price: 75000 * 3,
+        packageDesc: 'اشتراک رایگان',
+        title: 'نامحدود رایگان',
+        price: 0 ,
         discount: 0,
-        duration: 3,
+        duration: 100,
         buyMethod: 'pay',
-        durationTitle: 'تومان/ ۳ ماهه',
+        durationTitle: 'رایگان',
         discountDesc: '۲۰٪ تخفیف',
         service: {
-          allowedOnlineUsers: 120,
-          features: [
-            {title: 'قابلیت ثبت نامحدود کاربر'},
-            {title: ' کابر آنلاین همزمان، ۱۲۰ کلاینت'},
-            {title: 'اتصال به درگاه پرداخت مستقل'},
-            {title: 'پنل مستقل کاربران'},
-            {title: 'پشتیبانی از طریق تیکت'},
-          ],
-        },
-        modules: {
-          sms: {
-            title: 'ارسال پیامک',
-            features: [
-              {title: 'ارسال پیامک تایید هویت'},
-              {title: 'ارسال پیامک انبوه به کاربران'},
-              {title: 'هزینه هر یک پیامک ۱۳ تومان'},
-            ],
-          },
-          log: {
-            title: 'ثبت لاگ وب سایت و آی پی',
-            features: [
-              {title: 'ثبت لاگ بر اساس آی پی و پورت'},
-              {title: 'ثبت لاگ بازدید وب سایت'},
-            ],
-          },
-          support: {
-            title: 'پشتیبانی',
-            features: [{title: 'پشتیبانی از طریق تیکت'}],
-          },
-        },
-      },
-      {
-        id: 'economic12',
-        active: false,
-        buyDisabled: false,
-        oneTime: false,
-        buyMethod: 'pay',
-        durationTitle: 'تومان/ سالیانه',
-        packageDesc: 'اشتراک سالیانه',
-        title: '۱۲ ماهه',
-        price: 75000 * 12,
-        discount: 0,
-        duration: 12,
-        service: {
-          allowedOnlineUsers: 120,
+          allowedOnlineUsers: 60,
           features: [
             {title: 'قابلیت ثبت نامحدود کاربر'},
             {title: ' کابر آنلاین همزمان، ۱۲۰ کلاینت'},
@@ -508,7 +442,7 @@ module.exports = {
    */
   BUSINESS_PAYMENT_RETURN_URL: function() {
     return (
-      process.env.CALCULATED_EXTERNAL_API_ADDRESS +
+      process.env.PANEL_ADDRESS +
       '/api/payment/business/return?{0}={1}'
     );
   },
@@ -517,7 +451,7 @@ module.exports = {
    */
   EXTERNAL_PAYMENT_RETURN_URL: function() {
     return (
-      process.env.CALCULATED_EXTERNAL_API_ADDRESS +
+      process.env.PANEL_ADDRESS +
       '/api/payment/external/return?{0}={1}'
     );
   },
@@ -526,7 +460,7 @@ module.exports = {
    */
   CHARGE_PAYMENT_RETURN_URL: function() {
     return (
-      process.env.CALCULATED_EXTERNAL_API_ADDRESS +
+      process.env.PANEL_ADDRESS +
       '/api/payment/charge/return?{0}={1}'
     );
   },
@@ -535,7 +469,7 @@ module.exports = {
    */
   LOCAL_PAYMENT_RETURN_URL: function() {
     return (
-      process.env.CALCULATED_EXTERNAL_API_ADDRESS +
+      process.env.PANEL_ADDRESS +
       '/api/payment/local/return?{0}={1}'
     );
   },
@@ -544,7 +478,7 @@ module.exports = {
    */
   MEMBER_PAYMENT_RETURN_URL: function() {
     return (
-      process.env.CALCULATED_EXTERNAL_API_ADDRESS +
+      process.env.PANEL_ADDRESS +
       '/api/payment/member/return?{0}={1}'
     );
   },
@@ -552,35 +486,15 @@ module.exports = {
    * @return {string}
    */
   DROPBOX_REST_API: function() {
-    return process.env.CALCULATED_EXTERNAL_API_ADDRESS + '/api/dropBox';
+    return process.env.PANEL_ADDRESS + '/api/dropBox';
   },
 
   /**
    * @return {string}
    */
-  BUY_LOCAL_SMS_CHARGE_RETURN: function() {
-    return (
-      process.env.CALCULATED_WEB_APP_ADDRESS +
-      mainPath +
-      '#/app/loading?payed={0}&desc={1}&license_updated=true'
-    );
-  },
-  /**
-   * @return {string}
-   */
-  BUY_LOCAL_PACKAGE_RETURN: function() {
-    return (
-      process.env.CALCULATED_WEB_APP_ADDRESS +
-      mainPath +
-      '#/app/loading?payed={0}&desc={1}&license_updated=true'
-    );
-  },
-  /**
-   * @return {string}
-   */
   BUSINESS_PAYMENT_RESULT_URL: function() {
     return (
-      process.env.CALCULATED_WEB_APP_ADDRESS +
+      process.env.PANEL_ADDRESS +
       mainPath +
       '#/app/loading?payed={0}{1}'
     );
@@ -588,19 +502,9 @@ module.exports = {
   /**
    * @return {string}
    */
-  LOCAL_PAYMENT_RESULT_URL: function() {
-    return (
-      process.env.CALCULATED_WEB_APP_ADDRESS +
-      mainPath +
-      '#/access/public/local'
-    );
-  },
-  /**
-   * @return {string}
-   */
   MEMBER_PAYMENT_RESULT_URL: function() {
     return (
-      process.env.CALCULATED_WEB_APP_ADDRESS +
+      process.env.PANEL_ADDRESS +
       mainPath +
       '#/app/loading?payed={0}{1}'
     );
@@ -610,7 +514,7 @@ module.exports = {
    */
   PAYPING_AUTHORISE_RESULT_URL: function() {
     return (
-      process.env.CALCULATED_WEB_APP_ADDRESS +
+      process.env.PANEL_ADDRESS +
       mainPath +
       '#/app/loading?dropbox={0}{1}'
     );
@@ -619,7 +523,7 @@ module.exports = {
    */
   DROPBOX_AUTHORISE_RESULT_URL: function() {
     return (
-      process.env.CALCULATED_WEB_APP_ADDRESS +
+      process.env.PANEL_ADDRESS +
       mainPath +
       '#/app/loading?dropbox={0}{1}'
     );
@@ -629,7 +533,7 @@ module.exports = {
    */
   HOTSPOT_PAYMENT_RETURN_URL: function() {
     return (
-      process.env.CALCULATED_HOTSPOT_ADDRESS +
+      process.env.CAPTIVEPORTAL_ADDRESS +
       '/api/payment/hotspot/return?{0}={1}&password={password}&username={username}&businessId={businessId}&nasId={nasId}&host={host}&memberId={memberId}'
     );
   },
@@ -637,14 +541,14 @@ module.exports = {
    * @return {string}
    */
   HOTSPOT_PAYMENT_WEB_RETURN_URL: function() {
-    return process.env.CALCULATED_HOTSPOT_ADDRESS + '/#!/home.html?{0}';
+    return process.env.CAPTIVEPORTAL_ADDRESS + '/#!/home.html?{0}';
   },
   /**
    * @return {string}
    */
   HOTSPOT_VERIFICATION_URL: function() {
     return (
-      process.env.CALCULATED_HOTSPOT_ADDRESS +
+      process.env.CAPTIVEPORTAL_ADDRESS +
       '/#!/home.html?businessId={businessId}&nasId={nasId}&host={host}&verificationCode={verificationCode}&memberId={memberId}'
     );
   },
@@ -653,7 +557,7 @@ module.exports = {
    */
   HOTSPOT_SIGNIN_URL: function() {
     return (
-      process.env.CALCULATED_HOTSPOT_ADDRESS +
+      process.env.CAPTIVEPORTAL_ADDRESS +
       '/#!/home.html?businessId={businessId}&nasId={nasId}&host={host}&username={username}&password={password}&memberId={memberId}'
     );
   },
@@ -661,7 +565,7 @@ module.exports = {
    * @return {string}
    */
   SHORTNER_URL: function() {
-    return process.env.CALCULATED_HOTSPOT_ADDRESS + '/a/';
+    return process.env.CAPTIVEPORTAL_ADDRESS + '/a/';
   },
   /**
    * @return {string}
