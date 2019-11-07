@@ -6,6 +6,7 @@ app.controller('dnsReport', [
   '$scope',
   '$log',
   '$rootScope',
+  'Session',
   'ClientSession',
   'Business',
   'Report',
@@ -20,6 +21,7 @@ app.controller('dnsReport', [
     $scope,
     $log,
     $rootScope,
+    Session,
     ClientSession,
     Business,
     Report,
@@ -33,6 +35,7 @@ app.controller('dnsReport', [
     $scope.loading = true
     $scope.waitingForDwl = false
     $scope.waitingForResponse = false
+    const businessId = Session.business.id
 
     $scope.localLang = $rootScope.localLang
     $scope.direction = $rootScope.direction

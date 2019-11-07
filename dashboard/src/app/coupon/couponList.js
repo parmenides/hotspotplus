@@ -7,7 +7,6 @@ app.controller('couponList', [
   '$state',
   '$log',
   'translateFilter',
-  'Campaign',
   'Coupon',
   'uiGridConstants',
   '$http',
@@ -21,7 +20,6 @@ app.controller('couponList', [
     $state,
     $log,
     translateFilter,
-    Campaign,
     Coupon,
     uiGridConstants,
     $http,
@@ -31,9 +29,9 @@ app.controller('couponList', [
     PREFIX,
     appMessenger
   ) {
-    if (Session.userType == 'Admin') {
+    if (Session.userType === 'Admin') {
       $scope.ownerId = 'Admin';
-    } else if (Session.userType == 'Business') {
+    } else if (Session.userType === 'Business') {
       $scope.ownerId = Session.business.id;
     }
 
@@ -125,14 +123,6 @@ app.controller('couponList', [
             '</span>' +
             '<span ng-if="!row.entity.redeemDate">-</span>' +
             '</div>'
-        },
-        {
-          displayName: 'coupon.campaignName',
-          field: 'campaignName',
-          enableHiding: false,
-          enableSorting: false,
-          enableColumnMenu: false,
-          headerCellFilter: 'translate'
         }
       ],
       onRegisterApi: function(gridApi) {
@@ -409,21 +399,6 @@ app.controller('couponList', [
       Coupon.find(options).$promise.then(
         function(coupons) {
           $scope.gridOptions.data = coupons;
-          angular.forEach(coupons, function(coupon, index) {
-            if (coupon.campaignId) {
-              Campaign.findById({ id: coupon.campaignId }).$promise.then(
-                function(campaign) {
-                  $scope.gridOptions.data[index].campaignName = campaign.title;
-                },
-                function(error) {
-                  $log.error(error);
-                  appMessenger.showError('error.generalError');
-                }
-              );
-            } else {
-              $scope.gridOptions.data[index].campaignName = '-';
-            }
-          });
         },
         function(error) {
           $log.error(error);

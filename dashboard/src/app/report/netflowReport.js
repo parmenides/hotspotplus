@@ -1,11 +1,10 @@
-/**
- * Created by rezanazari on 03/04/17.
- */
+
 app.controller('netflowReport', [
   'PREFIX',
   '$scope',
   '$log',
   '$rootScope',
+  'Session',
   'ClientSession',
   'Business',
   'Report',
@@ -20,6 +19,7 @@ app.controller('netflowReport', [
     $scope,
     $log,
     $rootScope,
+    Session,
     ClientSession,
     Business,
     Report,
@@ -33,6 +33,7 @@ app.controller('netflowReport', [
     $scope.loading = true
     $scope.waitingForDwl = false;
     $scope.waitingForResponse = false;
+    const businessId = Session.business.id
 
     $scope.localLang = $rootScope.localLang
     $scope.direction = $rootScope.direction

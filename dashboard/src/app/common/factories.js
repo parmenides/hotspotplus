@@ -96,14 +96,13 @@ app
         });
         this.rememberMe = undefined;
         this.currentUserData = null;
+        let businessId;
         if (self.business && self.business.id) {
           businessId = self.business.id;
-        } else {
-          businessId = '73465736564751';
         }
         if (
           window.location.href &&
-          window.location.href.indexOf('public') == -1
+          window.location.href.indexOf('public') === -1
         ) {
           switch (self.userType) {
             case 'Business':
@@ -119,7 +118,6 @@ app
               Operator.findById({ id: self.operator.id });
               break;
             default:
-              Business.findById({ id: businessId });
               break;
           }
         }
