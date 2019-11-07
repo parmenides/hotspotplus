@@ -3,11 +3,13 @@ services:
   traefik:
     image: traefik:v2.0
     container_name: traefik
-    command: --providers.docker=true --entryPoints.web.address=:80  --providers.docker.endpoint="unix:///var/run/docker.sock"
+    command: --providers.docker=true --entryPoints.web.address=:80  --providers.docker.endpoint="unix:///var/run/docker.sock" --providers.docker.network=hotspotplusgate
     ports:
     - '80:80'
     volumes:
     - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+    - hotspotplusgate
   api:
     build:
       context: ${PWD}/api
@@ -34,6 +36,8 @@ services:
       - ${PWD}/api/logs:/logs
     ports:
       - 3000:3000
+    networks:
+      - hotspotplusgate
 #  licensapi:
 #    build:
 #      context: ${PWD}/api-license
@@ -75,6 +79,8 @@ services:
 #      - ${PWD}/log-worker/node_modules:/usr/src/app/node_modules
 #      - ${PWD}/log-worker/report-templates:/report-templates
 #      - ${PWD}/log-worker/logs:/logs
+#    networks:
+#    - hotspotplusgate
   dashboard:
     image: 'bitnami/nginx:latest'
     restart: always
@@ -84,6 +90,8 @@ services:
       - traefik.http.routers.dashboard.rule=Host(`my.localhotspot.ir`)
     expose:
       - '8080'
+    networks:
+      - hotspotplusgate
   hotspot:
     build:
       context: ${PWD}/hotspot
@@ -96,6 +104,8 @@ services:
     - '8080'
     volumes:
     - ${PWD}/hotspot/:/usr/src/app/
+    networks:
+    - hotspotplusgate
 #  licensedashboard:
 #    image: 'bitnami/nginx:latest'
 #    restart: always
@@ -115,6 +125,8 @@ services:
       - hsp_mongodb:/bitnami
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
+    networks:
+      - hotspotplusgate
   redis:
     image: bitnami/redis:4.0.12-debian-9-r11
     container_name: hsp_redis
@@ -123,6 +135,8 @@ services:
 #      - hsp_redis:/bitnami/redis/data
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
+    networks:
+      - hotspotplusgate
     ports:
       - 6379:6379
   clickhouse:
@@ -142,6 +156,9 @@ services:
       nofile:
         soft: 262144
         hard: 262144
+    networks:
+      hotspotplusgate:
+        ipv4_address: 172.20.0.85
   zookeeper:
     image: 'bitnami/zookeeper:latest'
     restart: always
@@ -150,6 +167,8 @@ services:
       - ALLOW_ANONYMOUS_LOGIN=yes
     expose:
       - '2181'
+    networks:
+      - hotspotplusgate
   kafka:
     image: 'bitnami/kafka:2.3.0-debian-9-r96'
     restart: always
@@ -164,6 +183,9 @@ services:
       - KAFKA_ZOOKEEPER_CONNECT=hsp_zookeeper:2181
     expose:
       - '9092'
+    networks:
+      hotspotplusgate:
+        ipv4_address: 172.20.0.80
   radius:
     image: 'freeradius/freeradius-server:3.0.19-alpine'
     restart: always
