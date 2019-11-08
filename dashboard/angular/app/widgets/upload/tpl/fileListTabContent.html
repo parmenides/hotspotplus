@@ -1,0 +1,17 @@
+<div class="container-fluid margin-t-30">
+    <div class="row">
+        <div class="thumbnails">
+            <div class="col-md-4" ng-repeat="file in fileList">
+                <label class="thumbnail upload-modal" ng-class="{'selected': file.id === image.id}">
+                    <input type="radio" name="option" id="{{file.id}}" ng-checked="file.id === image.id"
+                           ng-click="check(file)">
+                    <button class="btn btn-link pull-right"><i class="fa fa-trash" ng-click="removeImage(file.id)"></i></button>
+                    <img ng-src="{{DownloadUrlPrefix}}/api/file/download/{{file.id}}" class="img-fluid" alt="{{file.name}}">
+                    <div class="caption">
+                        <p>{{file.name}}</p>
+                    </div>
+                </label>
+            </div>
+        </div>
+    </div>
+</div>

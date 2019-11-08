@@ -1,0 +1,110 @@
+<div class="">
+    <div class="modal-header">
+        <h3 class="modal-title">{{ options.title |translate }}</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal">
+            <div class="form-group" ng-if="nas.id">
+                <label class="col-sm-3 control-label">{{ "nas.id" | translate }}</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" readonly ng-model="nas.id">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">{{ "nas.title" | translate }}</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" required ng-model="nas.title" autofocus>
+                </div>
+            </div>
+            <div class="form-group" >
+                <label class="col-sm-3 control-label">{{ "nas.type" | translate }}</label>
+                <div class="col-sm-8">
+                    <div class="btn-group btn-group-justified">
+                        <a href class="btn btn-default"
+                           ng-model="nas.accessPointType" uib-btn-radio="'mikrotik'"
+                           uib-uncheckable="false">{{"Mikrotik"}}</a>
+                        <a href class="btn btn-default"
+                           ng-model="nas.accessPointType" uib-btn-radio="'engenius'"
+                           uib-uncheckable="false">{{"EnGenius"}}</a>
+                        <a href class="btn btn-default"
+                           ng-model="nas.accessPointType" uib-btn-radio="'coovachilli'"
+                           uib-uncheckable="false">{{"Coova Chilli"}}</a>
+                    </div>
+                </div>
+            </div>
+            <!--<div class="form-group">
+                <label class="col-sm-3 control-label"></label>
+                <div class="col-sm-8 alert alert-info">
+                    <span ng-if="nas.accessPointType == 'Mikrotik'">{{"help.nasMikrotik"|translate}}</span>
+                    <span ng-if="nas.accessPointType == 'EnGenius'">{{"help.nasEAP"|translate}}</span>
+                </div>
+            </div>-->
+            <div class="form-group" ng-if="nas.accessPointType!=='mikrotik' && !nas.id">
+                <label class="col-sm-3 control-label">{{ "nas.mac" | translate }}</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" required ng-model="nas.mac"
+                           style="direction: ltr;text-align: center">
+                </div>
+            </div>
+            <div class="form-group" >
+                <label class="col-sm-3 control-label">{{ "nas.sessionHandling" | translate }}</label>
+                <div class="col-sm-8">
+                    <div class="btn-group btn-group-justified">
+                        <a href class="btn btn-default"
+                           ng-model="nas.sessionStatus" uib-btn-radio="'singleSession'"
+                           uib-uncheckable="false">{{"nas.singleSessionDesc"|translate}}</a>
+                        <a href class="btn btn-default"
+                           ng-model="nas.sessionStatus" uib-btn-radio="'multiSession'"
+                           uib-uncheckable="false">{{"nas.multiSessionDesc"|translate}}</a>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label"></label>
+                <div class="col-sm-8 alert alert-info">
+                    <span ng-if="nas.sessionStatus == 'singleSession'">{{"help.nasSingleSession"|translate}}</span>
+                    <span ng-if="nas.sessionStatus == 'multiSession'">{{"help.nasMultiSession"|translate}}</span>
+                </div>
+            </div>
+            <div class="form-group" ng-if="nas.sessionStatus == 'singleSession' ">
+                <div class="col-sm-offset-3 col-sm-8">
+                    <div class="checkbox">
+                        <label class="col-sm-12 i-checks">
+                            <input   type="checkbox" ng-model="nas.kickOnSingleSession"><i></i>{{"nas.kickOnSingleSession"|
+                            translate}}
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <!--<div class="form-group">
+                <label class="col-sm-3 control-label">{{ "nas.ipUpdateStatus" | translate }} <span ng-if="nas.setByRemoteIp">(R)</span> </label>
+
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" required ng-model="nas.ip" disabled
+                           style="direction: ltr;text-align: center">
+                </div>
+            </div>-->
+            <div class="form-group">
+                <label class="col-sm-3 control-label">{{ "nas.port" | translate }}</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" required ng-model="nas.port"
+                           uib-popover="{{'help.nasPort'| translate}}" popover-trigger="focus"
+                           style="direction: ltr;text-align: center">
+                </div>
+            </div>
+            <div class="form-group ">
+                <label class="col-sm-3 control-label">{{ "department.department" | translate }}</label>
+                <div class="col-sm-8">
+                    <oi-select oi-options="department.title for department in departments"
+                               ng-model="nas.department"></oi-select>
+                </div>
+            </div>
+
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button ng-click="cancel()" class="btn btn-sm btn-default">{{ options.cancelBtnLabel | translate }}</button>
+        <button type="submit" ng-click="save()" class="btn btn-sm btn-primary">{{ options.saveBtnLabel | translate }}
+        </button>
+    </div>
+</div>

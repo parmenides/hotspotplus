@@ -1,0 +1,40 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="row no-padder-v text-gray">
+            <h3 class="col-xs-10 panel-title">{{"business.serviceStatus" | translate}}</h3>
+            <loading></loading>
+        </div>
+    </div>
+    <div class="panel-body text-center font-bold">
+        <div class="row ">
+            <div class="col-md-3 col-xs-3 col-sm-3">
+                <canvas class="chart chart-doughnut" chart-options="onlineUsersChartOptions.options"
+                        chart-colors="onlineUsersChartOptions.colors"
+                        chart-data="onlineUsersChartOptions.data" chart-labels="onlineUsersChartOptions.labels">
+                </canvas>
+                <div class="dashboard-chart-label">کاربران آنلاین</div>
+            </div>
+            <div class="col-md-3 col-xs-3 col-sm-3">
+                <canvas class="chart chart-doughnut" chart-options="accountingChartOptions.options"
+                        chart-colors="accountingChartOptions.colors"
+                        chart-data="accountingChartOptions.data" chart-labels="accountingChartOptions.labels">
+                </canvas>
+                <div class="dashboard-chart-label">سرویس اکانتینگ</div>
+            </div>
+            <div class="col-md-3 col-xs-3 col-sm-3">
+                <canvas class="chart chart-doughnut" chart-options="smsModuleChartOptions.options"
+                        chart-colors="smsModuleChartOptions.colors"
+                        chart-data="smsModuleChartOptions.data" chart-labels="smsModuleChartOptions.labels">
+                </canvas>
+                <div class="dashboard-chart-label">ماژول پیامک</div>
+            </div>
+            <div class="col-md-3 col-xs-3 col-sm-3">
+                <canvas class="chart chart-doughnut" chart-options="logModuleChartOptions.options"
+                        chart-colors="logModuleChartOptions.colors"
+                        chart-data="logModuleChartOptions.data" chart-labels="logModuleChartOptions.labels">
+                </canvas>
+                <div class="dashboard-chart-label">ماژول ثبت لاگ</div>
+            </div>
+        </div>
+    </div>
+</div>

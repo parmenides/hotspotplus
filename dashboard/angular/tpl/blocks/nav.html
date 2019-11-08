@@ -1,0 +1,173 @@
+<!-- list -->
+<ul class="nav">
+    <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+        <span translate=""></span>
+    </li>
+    <!--admin access-->
+    <li ui-sref-active="active" access="admin" access-permission-type="one">
+        <a ui-sref="app.businesses">
+            <i class="fa fa-users"></i>
+            <span class="" translate="aside.nav.businessesList">Businesses</span>
+        </a>
+    </li>
+    <li ui-sref-active="active" access="admin" access-permission-type="one">
+        <a ui-sref="app.resellers">
+            <i class="fa fa-diamond"></i>
+            <span class="" translate="aside.nav.resellers">Resellers</span>
+        </a>
+    </li>
+    <li ui-sref-active="active" access="admin" access-permission-type="one">
+        <a ui-sref="app.coupons">
+            <i class="fa fa-ticket"></i>
+            <span class="" translate="aside.nav.coupons">Coupons</span>
+        </a>
+    </li>
+    <!--business access-->
+    <!--todo:set access to this dashboard and uncomment-->
+    <li ui-sref-active="active" access="business" access-permission-type="one">
+        <a ui-sref="app.dashboard">
+            <i class="fa fa-dashboard"></i>
+            <span class="" translate="aside.nav.dashboard">Dashboard</span>
+        </a>
+    </li>
+    <li ui-sref-active="active" access="networkadmin" access-permission-type="one">
+        <a ui-sref="app.networkAdminDashboard">
+            <i class="fa fa-dashboard"></i>
+            <span class="" translate="aside.nav.dashboard">Dashboard</span>
+        </a>
+    </li>
+    <li ui-sref-active="active" access="networkadmin,operator" access-permission-type="one">
+        <a ui-sref="app.members">
+            <i class="fa fa-users"></i>
+            <span class="" translate="aside.nav.membersList">Members</span>
+        </a>
+    </li>
+
+    <li ui-sref-active="active" access="networkadmin " access-permission-type="one">
+        <a ui-sref="app.internetPlans">
+            <i class="fa fa-rocket"></i>
+            <span class="" translate="aside.nav.internetPlans">InternetPlans</span>
+        </a>
+    </li>
+    <li ui-sref-active="active" access="networkadmin" access-permission-type="one">
+        <a ui-sref="app.hotspotThemes">
+            <i class="fa fa-diamond"></i>
+            <span class="" translate="aside.nav.hotspotThemes">hotspotThemes</span>
+        </a>
+    </li>
+
+    <!--<li ui-sref-active="active" access="networkadmin" access-permission-type="one">
+        <a ui-sref="app.campaigns">
+            <i class="fa fa-puzzle-piece"></i>
+            <span class="" translate="aside.nav.campaigns">Campaigns</span>
+        </a>
+    </li>-->
+<!--
+    <li ui-sref-active="active" access="networkadmin" access-permission-type="one">
+        <a ui-sref="app.coupons">
+            <i class="fa fa-ticket"></i>
+            <span class="" translate="aside.nav.coupons">Coupons</span>
+        </a>
+    </li>
+-->
+
+    <!--<li ui-sref-active="active" access="networkadmin" access-permission-type="one">
+        <a ui-sref="app.ips">
+            <i class="fa fa-laptop"></i>
+            <span class="" translate="aside.nav.ipsList">Ips</span>
+        </a>
+    </li>
+    -->
+
+    <li ui-sref-active="active" access="reseller" access-permission-type="one">
+        <a ui-sref="app.resellerBusinessList">
+            <i class="fa fa-users"></i>
+            <span class="" translate="aside.nav.profilesList">Reseller</span>
+        </a>
+    </li>
+
+    <!--<li ui-sref-active="active" access="networkadmin" access-permission-type="one">
+        <a ui-sref="app.netflowReport">
+            <i class="fa fa-list"></i>
+            <span class="" translate="aside.nav.netflow">IpReport</span>
+        </a>
+    </li>
+    <li ui-sref-active="active" access="networkadmin" access-permission-type="one">
+        <a ui-sref="app.syslogReport">
+            <i class="fa fa-sitemap"></i>
+            <span class="" translate="aside.nav.syslog">siteReport</span>
+        </a>
+    </li>
+-->
+    <li access-permission-type="one" access="networkadmin">
+        <a href class="auto">
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+        <i class="fa fa-file"></i>
+        <span translate="aside.nav.reportsList" >Reports</span>
+        </a>
+        <ul class="nav nav-sub dk">
+            <li ui-sref-active="active">
+                <a ui-sref="app.netflowReports">
+                    <span>Netflow</span>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="app.dnsReports">
+                    <span>Dns</span>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="app.webproxyReports">
+                    <span>Web Proxy</span>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li ui-sref-active="active" access="networkadmin " access-permission-type="one">
+        <a ui-sref="app.nases">
+            <i class="fa fa-cube"></i>
+            <span class="" translate="aside.nav.nasesList">Nases</span>
+        </a>
+    </li>
+    <li ui-sref-active="active" access="networkadmin " access-permission-type="one">
+        <a ui-sref="app.departments">
+            <i class="fa fa-flag-o"></i>
+            <span class="" translate="aside.nav.departmentsList">Departments</span>
+        </a>
+    </li>
+    <li ui-sref-active="active" access="networkadmin " access-permission-type="one">
+        <a ui-sref="app.operators">
+            <i class="fa fa-user"></i>
+            <span class="" translate="aside.nav.operatorsList">Operators</span>
+        </a>
+    </li>
+    <li ui-sref-active="active" access="networkadmin,admin" access-permission-type="one">
+        <a ui-sref="app.tickets">
+            <i class="fa fa-support"></i>
+            <span class="" translate="aside.nav.support">Support</span>
+        </a>
+    </li>
+    <li ui-sref-active="active" access="networkadmin" access-permission-type="one">
+        <a ui-sref="app.businessSettings">
+            <i class="fa fa-gears"></i>
+            <span class="" translate="aside.nav.settings">Settings</span>
+        </a>
+    </li>
+    <li ui-sref-active="active" access="member" access-permission-type="one">
+        <a ui-sref="app.memberDashboard">
+            <i class="fa fa-dashboard"></i>
+            <span class="" translate="aside.nav.dashboard">Dashboard</span>
+        </a>
+    </li>
+    <!--<li ui-sref-active="active" access="networkadmin" access-permission-type="one">
+        <a ui-sref="app.reports">
+            <i class="fa fa-file"></i>
+            <span class="" translate="aside.nav.reportsList">Reports</span>
+        </a>
+    </li>
+    -->
+
+</ul>

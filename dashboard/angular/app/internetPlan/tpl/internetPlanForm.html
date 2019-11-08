@@ -1,0 +1,226 @@
+<div class="">
+    <div class="modal-header">
+        <h3 class="modal-title">{{ options.title |translate }}</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal" name="internetPlanForm">
+            <fieldset ng-disabled="internetPlan.type != 'dynamic'">
+                <div class="wrapper b-b">
+                    <div class="form-group" ng-class="{'has-error' : !internetPlan.name}">
+                        <label class="col-sm-3 control-label">
+                            <span ng-show="!internetPlan.name">*</span>
+                            {{ "internetPlan.name" | translate }}
+                        </label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" ng-model="internetPlan.name" autofocus required>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-if="internetPlan.type === 'monthly'"
+                         ng-class="{'has-error' : !internetPlan.duration}">
+                        <label class="col-sm-3 control-label">
+                            <span ng-show="!internetPlan.duration">*</span>
+                            {{ "internetPlan.numOfMonths" | translate }}
+                        </label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <input type="text" class="form-control" ng-model="internetPlan.duration" required>
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-default" disabled="disabled">
+                                        {{"internetPlan.month" | translate}}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-if="internetPlan.type !== 'monthly'"
+                         ng-class="{'has-error' : !internetPlan.duration}">
+                        <label class="col-sm-3 control-label">
+                            <span ng-show="!internetPlan.duration">*</span>
+                            {{ "internetPlan.numOfDays" | translate }}
+                        </label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <input type="text" class="form-control" ng-model="internetPlan.duration" required>
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-default" disabled="disabled">
+                                        {{"internetPlan.day" | translate}}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{'has-error' : !internetPlan.speed.value}">
+                        <label class="col-sm-3 control-label">
+                            <span ng-show="!internetPlan.speed.value">*</span>
+                            {{ "internetPlan.speed" | translate }}
+                        </label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <input type="text" class="form-control" ng-model="internetPlan.speed.value" required>
+                                <div class="input-group-btn" uib-dropdown>
+                                    <button type="button" class="btn btn-primary" uib-dropdown-toggle>
+                                        {{"internetPlan."+internetPlan.speed.type | translate}}&nbsp;&nbsp;
+                                        <i class="fa fa-caret-down"></i>
+                                    </button>
+                                    <ul class="dropdown-menu" uib-dropdown-menu role="menu"
+                                        aria-labelledby="split-button">
+                                        <li role="menuitem" type="checkbox" ng-repeat="speedType in speedTypes"
+                                            ng-model="internetPlan.speed.type">
+                                            <a ng-click="internetPlan.speed.type = speedType">
+                                                {{"internetPlan."+speedType | translate}}
+                                                <i class="fa fa-check text-primary"
+                                                   ng-if="internetPlan.speed.type == speedType"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{'has-error' : !internetPlan.bulk.value}">
+                        <label class="col-sm-3 control-label">
+                            <span ng-show="!internetPlan.bulk.value">*</span>
+                            {{ "internetPlan.bulk" | translate }}
+                        </label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <input type="text" class="form-control" ng-model="internetPlan.bulk.value" required>
+                                <div class="input-group-btn" uib-dropdown>
+                                    <button type="button" class="btn btn-primary" uib-dropdown-toggle>
+                                        {{"internetPlan."+internetPlan.bulk.type | translate}}&nbsp;&nbsp;
+                                        <i class="fa fa-caret-down"></i>
+                                    </button>
+                                    <ul class="dropdown-menu" uib-dropdown-menu role="menu"
+                                        aria-labelledby="split-button">
+                                        <li role="menuitem" ng-repeat="bulkType in bulkTypes"
+                                            ng-model="internetPlan.bulk.type">
+                                            <a ng-click="internetPlan.bulk.type = bulkType">
+                                                {{"internetPlan."+bulkType | translate}}
+                                                <i class="fa fa-check text-primary"
+                                                   ng-if="internetPlan.bulk.type == bulkType"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-8 text-info-dker text-sm">
+                            <i class="fa fa-info-circle"></i>&nbsp;{{"internetPlan.zeroMeansUnlimited" | translate}}
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{'has-error' : !internetPlan.timeDuration}">
+                        <label class="col-sm-3 control-label">
+                            <span ng-show="!internetPlan.timeDuration">*</span>
+                            {{ "internetPlan.timeDuration" | translate }}</label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <input type="text" class="form-control"
+                                       ng-model="internetPlan.timeDuration">
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-default" disabled="disabled">
+                                        {{"internetPlan.minute" | translate}}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-8 text-info-dker text-sm">
+                            <i class="fa fa-info-circle"></i>&nbsp;{{"internetPlan.zeroMeansUnlimited" | translate}}
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{'has-error' : !internetPlan.accessType}"
+                         uib-popover="{{'help.internetPlanAccessType'| translate}}" popover-trigger="mouseenter">
+                        <label class="col-sm-3 control-label">
+                            <span ng-show="!internetPlan.accessType">*</span>
+                            {{ "internetPlan.accessType" | translate }}
+                        </label>
+                        <div class="col-sm-8">
+                            <select ng-model="internetPlan.accessType" class="form-control">
+                                <option value="private">{{'private' | translate}}</option>
+                                <option value="public">{{'public' | translate}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="wrapper b-b">
+                    <div class="form-group">
+                        <div class="col-sm-offset-1 checkbox">
+                            <label class="i-checks">
+                                <input type="checkbox" ng-model="internetPlan.autoResubscribe"><i></i>{{"internetPlan.autoResubscribe"
+                                | translate}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="wrapper b-b">
+                    <div class="form-group">
+                        <div class="col-sm-offset-1 checkbox">
+                            <label class="i-checks">
+                                <input type="checkbox" ng-model="internetPlan.bindMemberSigninToMac"><i></i>{{"business.bindMemberSigninToMac"
+                                | translate}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="wrapper b-b">
+                    <div class="form-group">
+                        <div class="col-sm-offset-1 font-bold">
+                            {{"internetPlan.sellPackageSetting" | translate}}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            {{ "internetPlan.extraBulkPrice" | translate }}</label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <input type="text" class="form-control" ng-model="internetPlan.extraBulkPrice">
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-default" disabled="disabled">
+                                        {{"general.toman" | translate}}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group"
+                         ng-class="{'has-error' : !internetPlan.price}">
+                        <label class="col-sm-3 control-label">
+                            <span ng-show="!internetPlan.price">*</span>
+                            {{ "internetPlan.price" | translate }}</label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <input type="text" class="form-control" ng-model="internetPlan.price">
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-default" disabled="disabled">
+                                        {{"general.toman" | translate}}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="wrapper">
+                    <div class="form-group">
+                        <div class="col-sm-offset-1 ">
+                            {{"internetPlan.ipPoolSettings" | translate}}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            {{ "internetPlan.ipPoolName" | translate }}
+                        </label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control ltr-text center"
+                                   ng-model="internetPlan.ipPoolName">
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button ng-click="cancel()" class="btn btn-sm btn-default">{{ options.cancelBtnLabel | translate }}</button>
+        <button ng-click="save()" class="btn btn-sm btn-primary" ng-disabled="internetPlan.type != 'dynamic'">{{ options.saveBtnLabel | translate }}</button>
+    </div>
+</div>

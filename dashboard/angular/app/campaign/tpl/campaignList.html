@@ -1,0 +1,116 @@
+<!--shows list of created campaigns , edit, add, change status of the campaign-->
+<div ng-controller="campaignList">
+    <div class="wrapper-md bg-light b-b">
+        <h1 class="m-n font-thin h3">{{"campaign.listTitle"|translate}}</h1>
+    </div>
+    <div class="hbox hbox-auto-xs hbox-auto-sm">
+        <div class="col wrapper-md">
+            <div class="clearfix m-b">
+                <button type="button" class="btn btn-sm btn-primary btn-addon" ng-click="addOrEditCampaign()">
+                    <i class="fa fa-plus"></i>{{"campaign.addCampaign"|translate}}
+                </button>
+                <div class="btn-group pull-right" role="group">
+                    <button class="btn btn-primary btn-sm" uib-popover="{{'help.numOfRunningCampaigns' | translate}}"
+                            popover-trigger="mouseenter" popover-placement="bottom-left">
+                        {{"campaign.running"|translate}}
+                        <span class="badge"> {{runningCampaigns | translateNumber}}</span>
+                    </button>
+                    <button class="btn btn-default btn-sm" uib-popover="{{'help.numOfPausedCampaigns' | translate}}"
+                            popover-trigger="mouseenter" popover-placement="bottom-left">
+                        {{"campaign.paused"|translate}}
+                        <span class="badge"> {{pausedCampaigns | translateNumber}}</span>
+                    </button>
+                    <button class="btn btn-default btn-sm" uib-popover="{{'help.numOfUpcomingCampaigns' | translate}}"
+                            popover-trigger="mouseenter" popover-placement="bottom-left">
+                        {{"campaign.upcoming"|translate}}
+                        <span class="badge"> {{scheduledCampaigns | translateNumber}}</span>
+                    </button>
+                    <button class="btn btn-default btn-sm" uib-popover="{{'help.numOfDoneCampaigns' | translate}}"
+                            popover-trigger="mouseenter" popover-placement="bottom-left">
+                        {{"campaign.done"|translate}}
+                        <span class="badge"> {{doneCampaigns | translateNumber}}</span>
+                    </button>
+                </div>
+            </div>
+            <div class="m-b-lg wrapper">
+                <div class="col-md-4" ng-repeat="c in campaigns">
+                    <div class="panel b-a">
+                        <div class="panel-heading b-b" ng-class="{'bg-primary': c.status == 'running' }">
+                            {{c.title}}
+                        </div>
+                        <div class="panel-body b-b b-ligth min-height-310">
+                            <div class="list-group no-radius alt">
+                                <a class="list-group-item" href="">
+                                    <span class="badge bg-light pull-right">{{"campaign."+c.type | translate}}</span>
+                                    <i class="fa fa-gift fa-fw text-muted"></i>
+                                    {{"campaign.type" | translate}}
+                                </a>
+                                <a class="list-group-item" href="">
+                                    <span class="badge bg-light pull-right" ng-if="c.log[0].pushedMessages">{{c.log[0].pushedMessages | translateNumber}}</span>
+                                    <span class="badge bg-light pull-right" ng-if="!c.log[0].pushedMessages">{{0 | translateNumber}}</span>
+                                    <i class="fa fa-envelope fa-fw text-muted"></i>
+                                    {{"campaign.pushedMessages" | translate}}
+                                </a>
+                                <a class="list-group-item" href="">
+                                    <span class="badge bg-light pull-right" ng-if="c.sendCoupon">{{"campaign.hasCoupon" | translate}}</span>
+                                    <span class="badge bg-light pull-right" ng-if="!c.sendCoupon">{{"campaign.noCoupon" | translate}}</span>
+                                    <i class="fa fa-ticket fa-fw text-muted"></i>
+                                    {{"campaign.coupon" | translate}}
+                                </a>
+                                <a class="list-group-item" href="" ng-if="c.sendCoupon">
+                                    <span class="badge bg-light pull-right">{{c.discount.amount | translateNumber}} {{'general.'+c.discount.unit | translate}} </span>
+                                    <i class="fa fa-percent fa-fw text-muted"></i>
+                                    {{"campaign.discountPercentage" | translate}}
+                                </a>
+                                <a class="list-group-item" href="">
+                                    <span class="badge bg-light pull-right" ng-if="c.limitedTime">
+                                        {{c.start | persianDate : 'fullDate' | translateNumber}}
+                                        &nbsp;
+                                        {{c.start | date: 'HH:mm' | translateNumber}}</span>
+                                    <span class="badge bg-light pull-right" ng-if="!c.limitedTime">{{"campaign.unlimited" | translate}}</span>
+                                    <i class="fa fa-hourglass-start fa-fw text-muted"></i>
+                                    {{"campaign.startDate" | translate}}
+                                </a>
+                                <a class="list-group-item" href="">
+                                    <span class="badge bg-light pull-right" ng-if="c.limitedTime">
+                                        {{c.end | persianDate : 'fullDate' | translateNumber}}
+                                        &nbsp;
+                                        {{c.end | date: 'HH:mm' | translateNumber}}
+                                    </span>
+                                    <span class="badge bg-light pull-right" ng-if="!c.limitedTime">{{"campaign.unlimited" | translate}}</span>
+                                    <i class="fa fa-hourglass-end fa-fw text-muted"></i>
+                                    {{"campaign.endDate" | translate}}
+                                </a>
+                            </div>
+                        </div>
+                        <div class="hbox text-center text-sm">
+                            <a href="" class="col padder-v text-muted b-r b-light"
+                               ng-class="{'disabled': c.status == 'done'}"
+                               ng-click="changeCampaignStatus(c)">
+                             <span ng-if="c.status != 'running'">
+                                 <i class="fa fa-circle-o block m-b-xs fa-2x"></i>
+                                 <span>{{"campaign.active" | translate}}</span>
+                             </span>
+                                <span ng-if="c.status == 'running'">
+                                 <i class="fa fa-check-circle text-primary block m-b-xs fa-2x"></i>
+                                 <span class="text-primary">{{"campaign.active" | translate}}</span>
+                             </span>
+                            </a>
+                            <a href="" class="col padder-v text-muted b-r b-light"
+                               ng-click="showCampaignDetails(c)">
+                                <i class="fa fa-th-list block m-b-xs fa-2x"></i>
+                                <span>{{"general.details" | translate}}</span>
+                            </a>
+                            <a href="" class="col padder-v text-muted b-r b-light"
+                               ng-class="{'disabled': c.status == 'running'}"
+                               ng-click="removeCampaign(c)">
+                                <i class="fa fa-trash block m-b-xs fa-2x"></i>
+                                <span>{{"general.remove" | translate}}</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

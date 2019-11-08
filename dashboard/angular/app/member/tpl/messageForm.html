@@ -1,0 +1,22 @@
+
+<div class="">
+    <div class="modal-header">
+        <h3 class="modal-title">{{ options.title |translate }}</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal" name="messageForm">
+            <div class="form-group" ng-class="{'has-error' : !options.message.body}">
+                <label class="col-sm-3 control-label">
+                    <span ng-show="!options.message.body">*</span>
+                    {{ "message.body" | translate }}</label>
+                <div class="col-sm-8">
+                    <textarea class="form-control" ng-model="options.message.body" style="min-height:100px;" required></textarea>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button ng-click="cancel()" class="btn btn-sm btn-default">{{ options.cancelBtnLabel | translate }}</button>
+        <button ng-click="send(options.message)" class="btn btn-sm btn-primary">{{ options.saveBtnLabel | translate }}</button>
+    </div>
+</div>

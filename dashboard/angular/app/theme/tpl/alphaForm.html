@@ -1,0 +1,426 @@
+<div class="">
+    <div class="modal-header">
+        <h3 class="modal-title">{{ options.title |translate }} {{options.themeTitle}}</h3>
+    </div>
+    <div class="modal-body">
+        <uib-tabset active="active" justified="true" class="wrapper-md">
+            <uib-tab index="0">
+                <uib-tab-heading ng-class="{'text-primary': active==0}">
+                    <h1 class="m-n font-normal h5"><i class="fa fa-paint-brush"></i>&nbsp;&nbsp;{{'theme.styleAndMore'
+                        | translate}}</h1>
+                </uib-tab-heading>
+                <div class="wrapper-md">
+                    <form name="form" class="form-validation">
+                        <fieldset class="wrapper row">
+                            <div class="col-md-6 col-md-offset-3 col-sm-12">
+                                <img ng-src="img/hotspotTheme/{{options.themeId}}/{{themeConfig.style}}.jpg"
+                                     style="height: 500px; display: block;">
+                            </div>
+                        </fieldset>
+                        <fieldset class="wrapper row">
+                            <div class="col-sm-12">
+                                <label class="control-label">{{"theme.chooseStyle" | translate }}</label>
+                                <select ng-model="themeConfig.style" class="form-control m-b"
+                                        ng-options="o.id as o.title for o in styles"
+                                        selected="themeConfig.style">
+                                </select>
+                            </div>
+                        </fieldset>
+                        <div class="line line-dashed b-b line-lg pull-in"></div>
+                        <fieldset class="wrapper row">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <div class="checkbox">
+                                        <label class="control-label i-checks">
+                                            <input check-action access-action="uploadLogo" type="checkbox"
+                                                   ng-model="themeConfig.showLogo"><i></i>{{"theme.showLogo"
+                                            | translate}}
+                                        </label>
+                                    </div>
+                                    <div class="input-group">
+                                        <div class="input-group-btn">
+                                            <button type="button" class="btn btn-primary"
+                                                    check-action access-action="uploadLogo"
+                                                    ng-click="upload(themeConfig[ 'logo' ],'logo')">
+                                                <i class="fa fa-upload"></i>&nbsp;
+                                                {{"theme.chooseLogo" | translate }}
+                                            </button>
+                                        </div>
+                                        <input type="text" class="form-control"
+                                               value="{{themeConfig[ 'logo' ].name}}"
+                                               readonly>
+                                        <div class="input-group-btn">
+                                            <button type="button" class="btn btn-default"
+                                                    ng-click="deleteFile('logo')">
+                                                <i class="fa fa-trash"></i>&nbsp;
+                                                {{"general.remove" | translate }}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset class="wrapper row">
+                            <div class="col-sm-12">
+                                <div class="input-group">
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-primary"
+                                                check-action access-action="uploadLogo"
+                                                ng-click="upload(themeConfig[ 'background' ],'background')">
+                                            <i class="fa fa-upload"></i>&nbsp;
+                                            {{"theme.chooseBackground" | translate }}
+                                        </button>
+                                    </div>
+                                    <input type="text" class="form-control"
+                                           value="{{themeConfig[ 'background' ].name}}"
+                                           readonly>
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-default"
+                                                ng-click="deleteFile('background')">
+                                            <i class="fa fa-trash"></i>&nbsp;
+                                            {{"general.remove" | translate }}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <div class="line line-dashed b-b line-lg pull-in"></div>
+                        <fieldset class="wrapper row">
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <div class="checkbox">
+                                        <label class="control-label i-checks">
+                                            <input check-action access-action="customizeHotspotForm" type="checkbox"
+                                                   ng-model="themeConfig.showInstagram"><i></i>{{"business.instagram"
+                                            |translate}}
+                                        </label>
+                                    </div>
+                                    <input class="form-control ltr-text" ng-model="themeConfig.instagram"
+                                           value="{{themeConfig.instagram}}"
+                                           uib-popover="{{'help.instagramLink' | translate}}"
+                                           popover-trigger="mouseenter"
+                                           placeholder="{{'theme.example' | translate}}: {{'theme.InstagramExample' | translate}}"
+                                           ng-disabled='!themeConfig.showInstagram'>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="checkbox">
+                                        <label class="control-label i-checks">
+                                            <input check-action access-action="customizeHotspotForm" type="checkbox"
+                                                   ng-model="themeConfig.showTelegram"><i></i>{{"business.telegram"
+                                            | translate}}
+                                        </label>
+                                    </div>
+                                    <input class="form-control ltr-text" ng-model="themeConfig.telegram"
+                                           check-action access-action="customizeHotspotForm"
+                                           value="{{themeConfig.telegram}}"
+                                           uib-popover="{{'help.telegramLink' | translate}}"
+                                           popover-trigger="mouseenter"
+                                           placeholder="{{'theme.example' | translate}}: {{'theme.telegramExample' | translate}}"
+                                           ng-disabled='!themeConfig.showTelegram'>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <div class="line line-dashed b-b line-lg pull-in"></div>
+                        <fieldset class="wrapper row">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <label class="control-label">{{'theme.afterLoginAddress'| translate}}</label>
+                                    <input check-action access-action="customizeHotspotForm" class="form-control ltr-text"
+                                           ng-model="themeConfig.afterLoginAddress"
+                                           placeholder="{{'theme.example' | translate}}: {{'theme.googleExample' | translate}}"
+                                           value="{{themeConfig.afterLoginAddress}}">
+                                </div>
+                            </div>
+                        </fieldset>
+                        <div class="line line-dashed b-b line-lg pull-in"></div>
+                        <fieldset class="wrapper row">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <div class="checkbox">
+                                        <label class=" i-checks control-label">
+                                            <input check-action access-action="customizeHotspotForm" type="checkbox"
+                                                   ng-model="themeConfig.showPinCode"><i></i>{{"theme.showPinCode"
+                                            | translate}}
+                                        </label>
+                                    </div>
+                                    <input class="form-control " ng-model="hotSpotPinCode"
+                                           value="{{hotSpotPinCode}}" disabled>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </uib-tab>
+            <uib-tab index="1">
+                <uib-tab-heading ng-class="{'text-primary': active==1}">
+                    <h1 class="m-n font-normal h5"><i class="fa fa-th-list"></i>&nbsp;&nbsp;{{'theme.formConfigurationFa'|translate}}
+                    </h1>
+                </uib-tab-heading>
+                <form name="form" class="form-validation">
+                    <fieldset class="wrapper row">
+                        <div class="form-group">
+                            <div class="col-sm-6">
+                                <label class="control-label">{{'theme.signInTitlePersian'| translate}}</label>
+                                <input class="form-control " ng-model="themeConfig.signInTitle"
+                                       check-action access-action="customizeHotspotForm"
+                                       value="{{themeConfig.signInTitle}}"
+                                       placeholder="{{'theme.example' | translate}}: {{'theme.signIn' | translate}}">
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="control-label">{{'theme.logoFooterPersian'| translate}}</label>
+                                <input class="form-control " ng-model="themeConfig.logoFooter"
+                                       check-action access-action="customizeHotspotForm"
+                                       value="{{themeConfig.logoFooter}}"
+                                       placeholder="{{'theme.example' | translate}}: {{'theme.logoFooterExample' | translate}}">
+                            </div>
+                        </div>
+                    </fieldset>
+                    <div class="line line-dashed b-b line-lg pull-in"></div>
+                    <fieldset class="wrapper row">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <div class="checkbox">
+                                    <label class=" i-checks control-label">
+                                        <input type="checkbox"
+                                               check-action access-action="customizeHotspotForm"
+                                               ng-model="themeConfig.signUpDisabled"><i></i>{{"theme.signUpDisabled"
+                                        | translate}}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset class="wrapper row" ng-disabled="themeConfig.signUpDisabled">
+                        <div class="form-group">
+                            <div class="col-sm-6">
+                                <label class="control-label ">{{'theme.signUpTitlePersian'| translate}}</label>
+                                <input class="form-control " ng-model="themeConfig.signUpTitle"
+                                       check-action access-action="customizeHotspotForm"
+                                       value="{{themeConfig.signUpTitle}}"
+                                       placeholder="{{'theme.example' | translate}}: {{'theme.signUp' | translate}}"
+                                       autofocus>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <div class="line line-dashed b-b line-lg pull-in"></div>
+                    <fieldset class="wrapper row" ng-disabled="themeConfig.signUpDisabled">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <label class="control-label">{{"theme.verificationMethodFa" | translate }}</label>
+                                <select ng-model="themeConfig.verificationMethodFa" class="form-control m-b"
+                                        ng-options="o.v as o.n | translate for o in
+                                        [{ n: 'theme.mobileVerification', v: 'mobile' }, { n: 'theme.manualVerification', v: 'manual' }, { n: 'theme.userSelectVerification', v: 'user' }, { n: 'theme.autoVerification', v: 'auto' }]">
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <div class="line line-dashed b-b line-lg pull-in"></div>
+                    <fieldset class="wrapper row" ng-disabled="themeConfig.signUpDisabled">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <label class="control-label ">{{'theme.requiredUserInfo'| translate}}</label>
+                            </div>
+                            <div ng-repeat="formConfig in themeConfig.formConfig">
+                                <div class="col-sm-4">
+                                    <div ng-switch="formConfig.label">
+                                        <div ng-switch-when="mobile" class="checkbox">
+                                            <label class="col-sm-7 i-checks">
+                                                <input type="checkbox" ng-model="formConfig.active"
+                                                       ng-disabled="mobileDisabled"
+                                                       checked><i></i>{{"member."+formConfig.label | translate}}
+                                            </label>
+                                            <select ng-model="formConfig.required" class="form-control col-sm-5 m-b"
+                                                    ng-disabled="mobileDisabled"
+                                                    ng-options="o.v as o.n | translate for o in [{ n: 'general.required', v: true }, { n: 'general.optional', v: false }]">
+                                            </select>
+                                        </div>
+                                        <div ng-switch-when="password" class="checkbox">
+                                            <label class="col-sm-7 i-checks">
+                                                <input type="checkbox"
+                                                       check-action access-action="customizeHotspotForm"
+                                                       ng-model="formConfig.active"
+                                                       ng-click="setPasswordState(formConfig.active, 'fa')"
+                                                       checked><i></i>{{"member."+formConfig.label|translate}}
+                                            </label>
+                                            <select ng-model="formConfig.required" class="form-control col-sm-5 m-b"
+                                                    ng-options="o.v as o.n | translate for o in [{ n: 'general.required', v: true }, { n: 'general.optional', v: false }]">
+                                            </select>
+                                        </div>
+                                        <div ng-switch-when="confirmPassword" class="checkbox">
+                                            <label class="col-sm-7 i-checks">
+                                                <input type="checkbox"
+                                                       check-action access-action="customizeHotspotForm"
+                                                       ng-model="formConfig.active"
+                                                       ng-disabled="!confirmPasswordEnabled"
+                                                       checked><i></i>{{"member."+formConfig.label|translate}}
+                                            </label>
+                                            <select ng-model="formConfig.required" class="form-control col-sm-5 m-b"
+                                                    ng-disabled="!confirmPasswordEnabled"
+                                                    ng-options="o.v as o.n | translate for o in [{ n: 'general.required', v: true }, { n: 'general.optional', v: false }]">
+                                            </select>
+                                        </div>
+                                        <div ng-switch-default class="checkbox">
+                                            <label class="col-sm-7 i-checks">
+                                                <input type="checkbox"
+                                                       check-action access-action="customizeHotspotForm"
+                                                       ng-model="formConfig.active" checked><i></i>{{"member."+formConfig.label
+                                                | translate}}
+                                            </label>
+                                            <select ng-model="formConfig.required" class="form-control col-sm-5 m-b"
+                                                    ng-options="o.v as o.n | translate for o in [{ n: 'general.required', v: true }, { n: 'general.optional', v: false }]">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </uib-tab>
+            <uib-tab index="2">
+                <uib-tab-heading ng-class="{'text-primary': active==2}">
+                    <h1 class="m-n font-normal h5"><i class="fa fa-th-list"></i>&nbsp;&nbsp;{{'theme.formConfigurationEn'|translate}}
+                    </h1>
+                </uib-tab-heading>
+                <form name="form" class="form-validation">
+                    <fieldset class="wrapper row">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <div class="checkbox">
+                                    <label class=" i-checks control-label">
+                                        <input type="checkbox"
+                                               check-action access-action="customizeHotspotForm"
+                                               ng-model="themeConfig.isMultiLanguage"><i></i>{{"theme.showEnLanguage"
+                                        | translate}}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset class="wrapper row" ng-disabled="!themeConfig.isMultiLanguage">
+                        <div class="form-group">
+                            <div class="col-sm-6">
+                                <label class="control-label">{{'theme.signInTitleEnglish'| translate}}</label>
+                                <input class="form-control ltr-text" ng-model="themeConfig.signInTitleEn"
+                                       check-action access-action="customizeHotspotForm"
+                                       value="{{themeConfig.signInTitleEn}}"
+                                       placeholder="{{'theme.example' | translate}}: {{'theme.signInEn' | translate}}">
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="control-label">{{'theme.logoFooterEnglish'| translate}}</label>
+                                <input class="form-control ltr-text" ng-model="themeConfig.logoFooterEn"
+                                       check-action access-action="customizeHotspotForm"
+                                       value="{{themeConfig.logoFooterEn}}"
+                                       placeholder="{{'theme.example' | translate}}: {{'theme.logoFooterExampleEn' | translate}}">
+                            </div>
+                        </div>
+                    </fieldset>
+                    <div class="line line-dashed b-b line-lg pull-in"></div>
+                    <fieldset class="wrapper row" ng-disabled="!themeConfig.isMultiLanguage">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <div class="checkbox">
+                                    <label class=" i-checks control-label">
+                                        <input type="checkbox"
+                                               check-action access-action="customizeHotspotForm"
+                                               ng-model="themeConfig.signUpDisabledEn"><i></i>{{"theme.signUpDisabled"
+                                        | translate}}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset class="wrapper row" ng-disabled="!themeConfig.isMultiLanguage || themeConfig.signUpDisabledEn">
+                        <div class="form-group">
+                            <div class="col-sm-6">
+                                <label class="control-label ">{{'theme.signUpTitleEnglish'| translate}}</label>
+                                <input class="form-control ltr-text" ng-model="themeConfig.signUpTitleEn"
+                                       check-action access-action="customizeHotspotForm"
+                                       value="{{themeConfig.signUpTitle}}"
+                                       placeholder="{{'theme.example' | translate}}: {{'theme.signUpEn' | translate}}"
+                                       autofocus>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <div class="line line-dashed b-b line-lg pull-in"></div>
+                    <fieldset class="wrapper row" ng-disabled="!themeConfig.isMultiLanguage || themeConfig.signUpDisabledEn">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <label class="control-label">{{"theme.verificationMethodEn" | translate }}</label>
+                                <select ng-model="themeConfig.verificationMethodEn" class="form-control m-b"
+                                        ng-options="o.v as o.n | translate for o in
+                                        [{ n: 'theme.mobileVerification', v: 'mobile' }, { n: 'theme.manualVerification', v: 'manual' }, { n: 'theme.userSelectVerification', v: 'user' }, { n: 'theme.autoVerification', v: 'auto' }]">
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <div class="line line-dashed b-b line-lg pull-in"></div>
+                    <fieldset class="wrapper row" ng-disabled="!themeConfig.isMultiLanguage || themeConfig.signUpDisabledEn">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <label class="control-label ">{{'theme.requiredUserInfoEn'| translate}}</label>
+                            </div>
+                            <div ng-repeat="formConfigEn in themeConfig.formConfigEn">
+                                <div class="col-sm-4">
+                                    <div ng-switch="formConfigEn.label">
+                                        <div ng-switch-when="mobile" class="checkbox">
+                                            <label class="col-sm-7 i-checks">
+                                                <input type="checkbox" ng-model="formConfigEn.active"
+                                                       ng-disabled="mobileEnDisabled"
+                                                       checked><i></i>{{"member."+formConfigEn.label | translate}}
+                                            </label>
+                                            <select ng-model="formConfigEn.required" class="form-control col-sm-5 m-b"
+                                                    ng-disabled="mobileEnDisabled"
+                                                    ng-options="o.v as o.n | translate for o in [{ n: 'general.required', v: true }, { n: 'general.optional', v: false }]">
+                                            </select>
+                                        </div>
+                                        <div ng-switch-when="password" class="checkbox">
+                                            <label class="col-sm-7 i-checks">
+                                                <input type="checkbox"
+                                                       check-action access-action="customizeHotspotForm"
+                                                       ng-model="formConfigEn.active"
+                                                       ng-click="setPasswordState(formConfigEn.active, 'en')"
+                                                       checked><i></i>{{"member."+formConfigEn.label|translate}}
+                                            </label>
+                                            <select ng-model="formConfigEn.required" class="form-control col-sm-5 m-b"
+                                                    ng-options="o.v as o.n | translate for o in [{ n: 'general.required', v: true }, { n: 'general.optional', v: false }]">
+                                            </select>
+                                        </div>
+                                        <div ng-switch-when="confirmPassword" class="checkbox">
+                                            <label class="col-sm-7 i-checks">
+                                                <input type="checkbox"
+                                                       check-action access-action="customizeHotspotForm"
+                                                       ng-model="formConfigEn.active"
+                                                       ng-disabled="!confirmPasswordEnabledEn"
+                                                       checked><i></i>{{"member."+formConfigEn.label|translate}}
+                                            </label>
+                                            <select ng-model="formConfigEn.required" class="form-control col-sm-5 m-b"
+                                                    ng-disabled="!confirmPasswordEnabledEn"
+                                                    ng-options="o.v as o.n | translate for o in [{ n: 'general.required', v: true }, { n: 'general.optional', v: false }]">
+                                            </select>
+                                        </div>
+                                        <div ng-switch-default class="checkbox">
+                                            <label class="col-sm-7 i-checks">
+                                                <input type="checkbox"
+                                                       check-action access-action="customizeHotspotForm"
+                                                       ng-model="formConfigEn.active" checked><i></i>{{"member."+formConfigEn.label
+                                                | translate}}
+                                            </label>
+                                            <select ng-model="formConfigEn.required" class="form-control col-sm-5 m-b"
+                                                    ng-options="o.v as o.n | translate for o in [{ n: 'general.required', v: true }, { n: 'general.optional', v: false }]">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </uib-tab>
+        </uib-tabset>
+    </div>
+    <div class="modal-footer">
+        <button ng-click="cancel()" class="btn btn-sm btn-default">{{ options.cancelBtnLabel | translate }}</button>
+        <button ng-click="save()" class="btn btn-sm btn-primary">{{ options.saveBtnLabel | translate }}</button>
+    </div>
+</div>

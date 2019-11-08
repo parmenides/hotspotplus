@@ -1,0 +1,118 @@
+<div class="">
+    <div class="">
+        <div class="modal-header">
+            <h3 class="modal-title">{{ 'business.info' |translate }}</h3>
+        </div>
+        <div class="modal-body">
+            <div class="wrapper">
+                <div class="row">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            {{"general.title" |translate}}:
+                        </div>
+                        <div class="col-sm-6">
+                            {{ business.title}}
+                        </div>
+                    </div>
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-sm-4">
+                            {{"general.name" |translate}}:
+                        </div>
+                        <div class="col-sm-6">
+                            {{ business.fullName}}
+                        </div>
+                    </div>
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-sm-4">
+                            {{"general.mobile" |translate}}:
+                        </div>
+                        <div class="col-sm-6">
+                            {{ business.mobile}}
+                        </div>
+                    </div>
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-sm-4">
+                            {{"general.username" |translate}}:
+                        </div>
+                        <div class="col-sm-6">
+                            {{ business.username}}
+                        </div>
+                    </div>
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-sm-4">
+                            {{"general.email" |translate}}:
+                        </div>
+                        <div class="col-sm-6">
+                            {{ business.email}}
+                        </div>
+                    </div>
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-sm-4">
+                            {{"general.lastPing" |translate}}:
+                        </div>
+                        <div class="col-sm-6">
+                            {{ business.lastPingAt|persianDate:'fullDate'|translateNumber }}
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-sm-4">
+                            {{"business.allowedOnlineUsers" |translate}}:
+                        </div>
+                        <div class="col-sm-8">
+                            {{ business.services.allowedOnlineUsers}}
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            {{"general.package" |translate}}:{{ business.services.id}}
+                        </div>
+                        <div class="col-sm-4">
+                            {{"business.subscriptionDate" |translate}}:{{ business.services.subscriptionDate |
+                            persianDate:'fullDate'|translateNumber }}
+                        </div>
+                        <div class="col-sm-4">
+                            {{"business.expiresAt" |translate}}:{{ business.services.expiresAt |
+                            persianDate:'fullDate'|translateNumber }}
+                        </div>
+                    </div>
+                    <hr>
+
+                    <div ng-repeat="module in business.modules">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                {{"business.module" |translate}}:{{ module.id}}
+                            </div>
+                            <div class="col-sm-4">
+                                {{"business.subscriptionDate" |translate}}: {{ module.subscriptionDate |
+                                persianDate:'fullDate'|translateNumber }}
+                            </div>
+                            <div class="col-sm-4">
+                                <span>
+                                    {{"business.expiresAt" |translate}}: {{ module.expiresAt | persianDate:'fullDate'|translateNumber }}
+                                </span>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button ng-click="cancel()" class="btn btn-sm btn-default">{{ "general.close" | translate }}</button>
+    </div>
+</div>

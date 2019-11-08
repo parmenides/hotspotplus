@@ -1,0 +1,24 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="row no-padder-v text-gray">
+            <h3 class="col-xs-10 panel-title">{{"dashboard.credit" | translate}}</h3>
+            <loading></loading>
+        </div>
+    </div>
+    <div class="panel-body text-center widget-router">
+
+        <div class="col-sm-12 hidden-xs text-primary">
+            <div class="row">
+                <span>
+                    <span>{{ balance | currency : "" : 0 |translateNumber }}&nbsp;{{"general.toman" | translate}}</span>
+                </span>
+            </div>
+            <div class="row">
+                <span>
+                    <i class="text-md">{{"business.remainingSmsCredit" | translate}}</i>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+

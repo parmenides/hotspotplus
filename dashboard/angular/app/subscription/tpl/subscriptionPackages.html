@@ -1,0 +1,54 @@
+<div class="bg-light lter b-b wrapper-md hidden-print">
+    <h1 class="m-n font-thin h3">خرید یا تمدید</h1>
+</div>
+<div class="wrapper-md">
+    <div class="row row-sm">
+        <div class="col-lg-4 col-md-4 col-sm-12" ng-repeat="pkg in packages" ng-if="pkg.active">
+            <div class="panel b-a">
+                <div ng-if="pkg.oneTime" class="panel-heading text-center bg-info no-border">
+                    <span ng-if="pkg.packageDesc" class="text-u-c m-b-none font-bold">{{pkg.packageDesc}}</span>
+                </div>
+                <div ng-if="!pkg.oneTime" class="panel-heading text-center bg-warning no-border">
+                    <span ng-if="pkg.packageDesc" class="text-u-c m-b-none font-bold">{{pkg.packageDesc}}</span>
+                </div>
+                <div class="wrapper text-center">
+                    <h4 class="text-u-c m-b-none">{{pkg.title}}</h4>
+
+                    <h2 class="m-t-md" ng-if="!pkg.discount">
+                        <span class="text-1-5 text-lt">{{pkg.price|currency : "" : 0 |translateNumber}}</span>
+                    </h2>
+                    <h2 ng-if="pkg.discount" class="m-t-md">
+                        <span style="font-style: normal!important;text-decoration: line-through"
+                              class="text-1-5 text-lt">{{pkg.price|currency : "" : 0 |translateNumber}}</span>
+                        <span class="text-1-5 "> {{(pkg.price - ( pkg.price * pkg.discount ))|currency : "" : 0 |translateNumber}} </span>
+                    </h2>
+                    <span class="text-xs font-bold">{{pkg.durationTitle}}</span>
+                </div>
+                <ul class="list-group">
+                    <li class="list-group-item"  ng-class="feature.class" ng-repeat="feature in pkg.service.features">
+                        <i class="icon-check text-primary m-r-xs"></i>{{feature.title}}
+                    </li>
+                    <li class="list-group-item"  ng-class="feature.class" ng-repeat="feature in pkg.modules.sms.features">
+                        <i class="icon-check text-success m-r-xs"></i>{{feature.title}}
+                    </li>
+                    <li class="list-group-item"  ng-class="feature.class" ng-repeat="feature in pkg.modules.log.features">
+                        <i class="icon-check text-info m-r-xs"></i>{{feature.title}}
+                    </li>
+                    <li class="list-group-item "  ng-class="feature.class" ng-repeat="feature in pkg.modules.support.features">
+                        <i class="icon-check text-primary m-r-xs"></i>{{feature.title}}
+                    </li>
+                </ul>
+                <div class="panel-footer text-center">
+                    <button ng-disabled="pkg.buyDisabled" class="btn btn-default font-bold btn-block"
+                            ng-class="{'btn-primary':false,'btn-default':!pkg.discount}" ng-click="buyPackage(pkg)"
+                            ng-if="pkg.buyMethod=='pay'">خرید
+                    </button>
+                    <a href="https://bit.ly/2OqTxf9" class="btn btn-default font-bold btn-block"
+                       ng-class="{'btn-primary':false,'btn-default':!pkg.discount}"
+                       ng-if="pkg.buyMethod=='contact'">تماس بگیرید</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

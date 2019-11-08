@@ -1,0 +1,40 @@
+<div class="">
+    <div class="modal-header">
+        <h3 class="modal-title">{{ options.title |translate }}</h3>
+    </div>
+    <div class="modal-body">
+        <div class="row wrapper-md">
+            <form class="form-horizontal" name="operatorForm1">
+                <div class="form-group col-sm-12" ng-class="{'has-error' : !operator.username}">
+                    <label class="control-label">
+                        <span ng-show="!operator.username">*</span>
+                        {{ "operator.username" | translate }}</label>
+                    <input type="text" class="form-control" ng-model="operator.username"
+                           ng-pattern="/^[a-zA-Z0-9._-]+$/" ng-trim="false" autofocus required>
+                </div>
+                <div class="col-sm-12 text-info-dker text-sm">
+                    <i class="fa fa-info-circle"></i>&nbsp;{{"operator.englishLettersOnly" | translate}}
+                </div>
+                <div class="form-group col-sm-12" ng-class="{'has-error' : !operator.firstName}">
+                    <label class="control-label">{{ "operator.firstName" | translate }}</label>
+                    <input type="text" class="form-control" ng-model="operator.firstName" required>
+                </div>
+                <div class="form-group col-sm-12" ng-class="{'has-error' : !operator.lastName}">
+                    <label class="control-label">{{ "operator.lastName" | translate }}</label>
+                    <input type="text" class="form-control" ng-model="operator.lastName" required>
+                </div>
+
+                <div class="form-group col-sm-12">
+                    <label class="control-label">{{ "department.departments" | translate }}</label>
+                    <oi-select oi-options="department.title for department in departments"
+                               ng-model="selectedDepartments"
+                               multiple></oi-select>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button ng-click="cancel()" class="btn btn-sm btn-default">{{ options.cancelBtnLabel | translate }}</button>
+        <button ng-click="save()" class="btn btn-sm btn-primary">{{ options.saveBtnLabel | translate }}</button>
+    </div>
+</div>

@@ -1,0 +1,41 @@
+<div class="">
+    <div class="modal-header">
+        <h3 class="modal-title">{{ "member.bulkImport" |translate }}</h3>
+    </div>
+    <div class="modal-body">
+        <div class="wrapper">
+            <form class="form-horizontal" name="memberForm">
+                <div class="alert alert-info">{{"member.csvStringHelp"|translate}}
+                    <a href="https://docs.google.com/spreadsheets/d/12LeEstMVBYkMJSUJcuOhHNlyLRKk4h8c_VxpxHKJvic/edit?usp=sharing"><i class="fa fa-fw fa-external-link-square"></i> {{"general.sampleFile"|translate}}</a>
+                </div>
+                <div class="form-group" >
+                    <label class="col-sm-3 control-label">
+                        {{ "member.csvString" | translate }}</label>
+                    <div class="col-sm-9">
+                        <textarea class="form-control ltr dir-ltr" name="" id="" cols="50" rows="10" ng-model="csvString" >
+
+                        </textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">
+                        {{ "member.internetPlanName" | translate }}
+                    </label>
+                    <div class="col-sm-8">
+                        <select ng-model="selectedInternetPlan" class="form-control"
+                                ng-options="internetPlan.name  for internetPlan in internetPlans">
+                            <option ng-value="null">-</option>
+                        </select>
+                    </div>
+                </div>
+
+
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button ng-click="cancel()" class="btn btn-sm btn-default">{{ "general.cancel"| translate }}</button>
+        <button ng-click="uploadCsv()" class="btn btn-sm btn-primary">{{ "member.createBulkMember"| translate }}
+        </button>
+    </div>
+</div>

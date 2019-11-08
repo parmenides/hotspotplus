@@ -1,0 +1,390 @@
+<div ng-controller='businessSettings'>
+    <uib-tabset active="active" justified="true" class="wrapper-md">
+        <uib-tab index="0">
+            <uib-tab-heading class="" ng-class="{'text-primary': active==0}">
+                <h1 class="m-n font-normal h5"><i class="fa fa-user"></i>&nbsp;&nbsp;{{'business.profile' | translate}}
+                </h1>
+            </uib-tab-heading>
+            <div class="hbox hbox-auto-xs hbox-auto-sm">
+                <div class="col wrapper-md">
+                    <form name="form" class="form-validation">
+                        <fieldset class="wrapper">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <label class="control-label text-sm">{{'business.title'| translate}}</label>
+                                    <input class="form-control"
+                                           ng-model="business.title" value="{{business.title}}" required autofocus>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset class="wrapper">
+                            <div class="form-group">
+                                <div class="col-sm-4">
+                                    <label class="control-label text-sm">{{'general.fullName'| translate}}</label>
+                                    <input class="form-control"
+                                           ng-model="business.fullName" value="{{business.fullName}}" required>
+                                </div>
+                                <div class="col-sm-4">
+                                    <label class="control-label text-sm">{{'general.mobile'| translate}}</label>
+                                    <input class="form-control" ng-model="business.mobile"
+                                           value="{{business.mobile}}" required>
+                                </div>
+                                <div class="col-sm-4">
+                                    <label class="control-label text-sm">{{'general.email'| translate}}</label>
+                                    <input class="form-control" ng-model="business.email"
+                                           value="{{business.email}}" required>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset class="wrapper">
+                            <div class="form-group">
+                                <div class="col-sm-4">
+                                    <label class="control-label text-sm">{{'general.username'| translate}}</label>
+                                    <input class="form-control" ng-model="business.username"
+                                           value="{{business.username}}" required>
+                                </div>
+                                <div class="wrapper-lg col-sm-4">
+                                    <a class="text-info" ng-click="changePassword()">
+                                        <i class="fa fa-key"></i>
+                                        {{'general.changePassword' | translate}}
+                                    </a>
+                                </div>
+                                <div class="col-sm-4">
+                                    <label class="control-label text-sm">{{'business.smsSignature'| translate}}</label>
+                                    <input class="form-control" ng-model="business.smsSignature"
+                                           check-action access-action="addMessageSignature"
+                                           value="{{business.smsSignature}}"
+                                           maxlength="29"
+                                           placeholder="{{'business.example' | translate}}: {{'business.homaHotel' | translate}}"
+                                           uib-popover="{{'help.signature'| translate}}" popover-trigger="focus">
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset class="wrapper">
+                            <div class="form-group">
+                                <div class="col-sm-4">
+                                    <label class="control-label text-sm">{{'business.hotSpotPinCode'|
+                                        translate}}</label>
+                                    <input class="form-control" ng-model="business.hotSpotPinCode"
+                                           check-action access-action="enableSecondPassword"
+                                           value="{{business.hotSpotPinCode}}"
+                                           uib-popover="{{'help.hotSpotPinCode'| translate}}" popover-trigger="focus">
+                                </div>
+                                <div class="col-sm-8">
+                                    <label class="control-label text-sm">{{'business.urlPrefix'| translate}}</label>
+                                    <div class="input-group">
+                                        <input class="form-control" dir="ltr" ng-model="business.urlPrefix"
+                                               value="{{business.urlPrefix}}"
+                                               check-action access-action="enablePanel"
+                                               placeholder="{{'business.example' | translate}}: hotel_homa"
+                                               uib-popover="{{'help.urlPrefix'| translate}}" popover-trigger="focus">
+                                        <div class="input-group-btn">
+                                            <button type="button" class="btn btn-default" dir="ltr" readonly>
+                                                {{"http://"+urlHost}}{{urlPath}}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-4 text-info text-sm">
+                                    <i class="fa fa-info-circle"></i>&nbsp;{{"business.urlPrefixDesc" | translate}}
+                                </div>
+                            </div>
+                        </fieldset>
+                        <!--<fieldset class="wrapper">
+                            <div class="form-group">
+                                <div class="col-sm-10">
+                                    <label class="control-label text-sm">{{'business.paymentApiKey' |
+                                        translate}}</label>
+                                    <input class="form-control" ng-model="business.paymentApiKey" type="password"
+                                           check-action
+                                           access-action="enablePayment"
+                                           value="{{business.paymentApiKey}}">
+                                </div>
+                            </div>
+                        </fieldset>-->
+                        <!--<fieldset class="wrapper">
+                            <div class="form-group">
+                                <div class="col-sm-10">
+                                    <label class="control-label text-sm">{{'business.paymentPanelApiKey' |
+                                        translate}}</label>
+                                    <input class="form-control" ng-model="business.paymentPanelApiKey" type="password"
+                                           check-action
+                                           access-action="enablePayment"
+                                           value="{{business.paymentPanelApiKey}}">
+                                </div>
+                            </div>
+                        </fieldset>-->
+                        <fieldset class="wrapper">
+                            <div class="form-group">
+                                <div class="col-sm-5">
+                                    <label class="control-label text-sm">{{'business.groupMemberPrefix' |
+                                        translate}}</label>
+                                    <input class="form-control" ng-model="business.groupMemberPrefix" type="text"
+                                           value="{{business.groupMemberPrefix}}">
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset class="wrapper">
+                            <div class="form-group">
+                                <div class="col-sm-10">
+                                    <label class="control-label text-sm">{{'business.groupMemberHelpsFa' |
+                                        translate}}</label>
+                                    <textarea rows="3" class="form-control" maxlength="163"
+                                              ng-model="business.groupMemberHelps.fa"
+                                              value="{{business.groupMemberHelps.fa}}"></textarea>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset class="wrapper">
+                            <div class="form-group">
+                                <div class="col-sm-10">
+                                    <label class="control-label text-sm">{{'business.groupMemberHelpsEn' |
+                                        translate}}</label>
+                                    <textarea style="direction: ltr;text-align: left" maxlength="163" rows="3"
+                                              class="form-control" ng-model="business.groupMemberHelps.en"
+                                              value="{{business.groupMemberHelps.en}}"></textarea>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset class="wrapper">
+                            <div class="form-group">
+                                <div class="col-sm-10">
+                                    <label class="control-label text-sm">{{'business.groupMemberHelpsAr' |
+                                        translate}}</label>
+                                    <textarea rows="3" class="form-control" maxlength="163"
+                                              ng-model="business.groupMemberHelps.ar"
+                                              value="{{business.groupMemberHelps.ar}}"></textarea>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset class="wrapper">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <div class="checkbox">
+                                        <label class="col-sm-12 i-checks text-sm">
+                                            <input type="checkbox" ng-model="business.enableMemberAutoLogin"
+                                                   check-action
+                                                   access-action="enableMemberAutoLogin"><i></i>&nbsp;{{"business.enableMemberAutoLogin"|
+                                            translate}}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="checkbox">
+                                        <label class="col-sm-12 i-checks text-sm">
+                                            <input type="checkbox" ng-model="business.callBasedVerification"
+                                                   check-action
+                                                   access-action="enableVerificationByCall"><i></i>&nbsp;{{"business.sendVerificationByCall"|
+                                            translate}}
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12">
+                                    <div class="checkbox">
+                                        <label class="col-sm-12 i-checks text-sm">
+                                            <input type="checkbox" ng-model="business.keepLogs"><i></i>&nbsp;{{"Keep Logs"|
+                                            translate}}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset class="wrapper">
+                            <div class="col-sm-12">
+                                <div class="input-group">
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-default"
+                                                ng-click="dropboxAccess()" uib-popover="{{'help.dropbox'| translate}}"
+                                                popover-trigger="mouseenter" check-action access-action="enableDropbox">
+                                            <i class="fa fa-upload"></i>&nbsp;
+                                            {{"general.dropbox" | translate }}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset class="wrapper">
+                            <div class="col-sm-12">
+                                <div class="input-group">
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-default"
+                                                ng-click="paypingAccess()" uib-popover="{{'help.payping'| translate}}"
+                                                popover-trigger="mouseenter" >
+                                            <i class="fa fa-paypal"></i>&nbsp;
+                                            {{"general.payping" | translate }}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                    <div class="wrapper-lg">
+                        <button type="submit" class="btn btn-md btn-primary" ng-click="save()">
+                            {{"general.saveChanges"|translate}}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </uib-tab>
+        <uib-tab index="1">
+            <uib-tab-heading class="" ng-class="{'text-primary': active==1}">
+                <h1 class="m-n font-normal h5"><i class="fa fa-bars"></i>&nbsp;&nbsp;{{'business.radiusInfo' |
+                    translate}}</h1>
+            </uib-tab-heading>
+            <div class="hbox hbox-auto-xs hbox-auto-sm">
+                <div class="col wrapper-md">
+                    <form name="form" class="form-validation">
+                        <fieldset class="wrapper">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <label class="control-label pull-right text-sm">{{'business.sharedSecret' |
+                                        translate}}</label>
+                                    <input style="direction: ltr!important;" class="form-control text-center"
+                                           ng-model="business.newNasSharedSecret" readonly
+                                           value="{{business.newNasSharedSecret}}">
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset class="wrapper">
+                            <div class="form-group">
+                                <div class="col-sm-12 ">
+                                    <label class="control-label pull-right text-sm">{{ "nas.radiusIp" | translate
+                                        }}</label>
+                                    <input type="text" class="form-control text-center" readonly
+                                           ng-model="RADIUS_CONFIG.radiusIp">
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset class="wrapper">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <label class="control-label pull-right text-sm">{{ "nas.secondRadiusIp" | translate
+                                        }}</label>
+                                    <input type="text" class="form-control text-center" readonly
+                                           ng-model="RADIUS_CONFIG.secondRadiusIp">
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset class="wrapper">
+                            <div class="form-group">
+                                <div class="col-sm-12 ">
+                                    <label class="control-label pull-right text-sm">{{ "nas.authenticationPort" |
+                                        translate }}</label>
+                                    <input type="text" class="form-control text-center" readonly
+                                           ng-model="RADIUS_CONFIG.authenticationPort">
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset class="wrapper">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <label class="control-label pull-right text-sm">{{ "nas.accountingPort" | translate
+                                        }}</label>
+                                    <input type="text" class="form-control text-center" readonly
+                                           ng-model="RADIUS_CONFIG.accountingPort">
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </uib-tab>
+        <uib-tab index="2">
+            <uib-tab-heading class="" ng-class="{'text-primary': active==2}">
+                <h1 class="m-n font-normal h5"><i class="fa fa-bars"></i>&nbsp;&nbsp;{{'nas.logInfo' |
+                    translate}}</h1>
+            </uib-tab-heading>
+            <div class="hbox hbox-auto-xs hbox-auto-sm">
+                <div class="col wrapper-md">
+                    <form name="form" class="form-validation">
+                        <fieldset class="wrapper">
+                            <div class="col-sm-12">
+                                <div class="input-group">
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-default"
+                                                ng-click="dropboxAccess()" uib-popover="{{'help.dropbox'| translate}}"
+                                                popover-trigger="mouseenter" check-action access-action="enableDropbox">
+                                            <i class="fa fa-upload"></i>&nbsp;
+                                            {{"general.dropbox" | translate }}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset class="wrapper">
+                            <div class="form-group">
+                                <div class="col-sm-12 ">
+                                    <label class="control-label pull-right text-sm">{{ "nas.logServerIp" | translate
+                                        }}</label>
+                                    <input type="text" class="form-control text-center" readonly
+                                           ng-model="RADIUS_CONFIG.radiusIp">
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <fieldset class="wrapper">
+                            <div class="form-group">
+                                <div class="col-sm-12 ">
+                                    <label class="control-label pull-right text-sm">{{ "nas.logServerPort" | translate
+                                        }}</label>
+                                    <input type="text" class="form-control text-center" readonly
+                                                          value="4055">
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </uib-tab>
+        <uib-tab index="3">
+            <uib-tab-heading class="" ng-class="{'text-primary': active==3}">
+                <h1 class="m-n font-normal h5"><i class="fa fa-history"></i>&nbsp;&nbsp;{{'business.paymentsReceives' |
+                    translate}}</h1>
+            </uib-tab-heading>
+            <div class="hbox hbox-auto-xs hbox-auto-sm">
+                <div class="col wrapper-lg" ng-if="!activities || activities.length == 0">
+                    <div uib-alert class="alert-danger">{{"business.noItemToShow" | translate}}</div>
+                </div>
+                <div class="col wrapper-lg" ng-if="activities">
+                    <table class="table table-hover table-responsive" ng-if="activities && activities.length != 0">
+                        <thead>
+                        <tr>
+                            <th>{{"general.row" | translate}}</th>
+                            <th>{{"activities.type" | translate}}</th>
+                            <th>{{"activities.details" | translate}}</th>
+                            <th>{{"activities.amount" | translate}}</th>
+                            <th>{{"activities.date" | translate}}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="activity in activities | orderBy: '-date'" ng-class="activity.class">
+                            <td>{{$index + 1 | translateNumber}}</td>
+                            <td>{{"activities."+activity.type | translate}}</td>
+                            <td>
+                    <span>
+                        {{"activities."+activity.forThe | translate}}
+                    </span>
+                                <!--<span>
+                                    {{"activities."+activity.forThe[0] | translate}}
+                                </span>
+                                <span ng-if="activity.forThe[1]">
+                                    {{"general.:" | translate}}&nbsp;{{activity.forThe[1]}}
+                                </span>-->
+                            </td>
+                            <td><i ng-class="activity.icon"></i></span>&nbsp;<span style="direction: ltr">{{activity.amount | translateNumber}}</span>&nbsp;{{"general.toman"
+                                | translate}}
+                            </td>
+                            <td>{{activity.date | persianDate : 'fullDate' | translateNumber}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </uib-tab>
+    </uib-tabset>
+</div>
+
+

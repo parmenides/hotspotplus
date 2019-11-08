@@ -1,0 +1,38 @@
+<div class="wrapper-md min-height-600">
+    <form class="form-horizontal" name="campaignName" novalidate>
+        <div class="form-group has-feedback">
+            <label class="col-md-2 text-md font-bold control-label">{{"campaign.name" | translate}} </label>
+            <div class="col-md-8"
+                 ng-class="{ 'has-error' : campaignName.$error.required }">
+                <input type="text" class="form-control" ng-model="campaign.title"
+                       placeholder="{{'campaign.sampleTitle' | translate}}" autofocus required/>
+                <div class="wrapper-sm text-sm text-muted" ng-if="campaignName.$error.required">
+                    <i class="fa fa-warning"></i> {{"campaign.requiredName" | translate}}
+                </div>
+            </div>
+        </div>
+    </form>
+    <h1 class="wrapper-sm m-n h5">{{"campaign.chooseCampaignType" | translate}}</h1>
+    <ul class="list-group list-group-sm">
+        <li class="list-group-item" ng-repeat="(campaignKey ,campaignValue) in campaignTypes">
+            <div class="row" ng-class="{'text-muted' : campaignValue.disabled}">
+                <div class="col-sm-6 radio">
+                    <label class="i-checks">
+                    <input type="radio" name="typesRadios" ng-model="campaign.type" value="{{campaignKey}}" ng-disabled="campaignValue.disabled">
+                        <i></i>
+                        {{campaignValue.title | translate}}
+                    </label>
+                </div>
+                <!--<div class="col-sm-6"
+                     ng-class="{'text-sm' : campaign.type != campaignKey , 'text-info' : campaign.type == campaignKey}">
+                    <i class="fa" ng-class="{'fa-check' : campaign.type == campaignKey}"></i>
+                    {{campaignValue.price | translate}}
+                </div>-->
+            </div>
+        </li>
+    </ul>
+    <div class="alert alert-info">
+        <i class="fa fa-info-circle"></i>
+        &nbsp;<span>{{campaignTypes[campaign.type].description | translate}}</span>
+    </div>
+</div>
