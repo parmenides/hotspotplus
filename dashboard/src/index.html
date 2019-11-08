@@ -126,17 +126,14 @@
 <!-- endbuild -->
 <script>
 
-  Window.appStatus = 'test'
+  Window.appStatus = 'production'
   Window.appDomain = location.host
   Window.API_URL = ''
   if (Window.appStatus === 'test') {
     Window.API_URL = 'http://my.localhotspot.ir'
   }
   angular.element(document).ready(function () {
-
     angular.bootstrap(document, ['app'])
-
-
   })
 </script>
 </body>
