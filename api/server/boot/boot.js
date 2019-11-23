@@ -2,13 +2,13 @@ const config = require('../modules/config');
 const Q = require('q');
 const logger = require('../modules/logger');
 const utility = require('../modules/utility');
-const redis = require('redis');
+//const redis = require('redis');
 const db = require('../modules/db.factory');
-
+/*
 const redisLicenseReload = redis.createClient(
   process.env.REDIS_PORT,
   process.env.REDIS_IP
-);
+);*/
 
 module.exports = async function(app) {
   const User = app.models.User;
@@ -121,8 +121,8 @@ module.exports = async function(app) {
   }
 
   // radius.startRadius ();
-  redisLicenseReload.on('message', function() {
+  /*redisLicenseReload.on('message', function() {
     process.exit(1);
   });
-  redisLicenseReload.subscribe('LICENSE_RELOAD');
+  redisLicenseReload.subscribe('LICENSE_RELOAD');*/
 };
