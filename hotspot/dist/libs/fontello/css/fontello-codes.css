@@ -1,9 +1,0 @@
-@charset "UTF-8";
-
- 
-.icon-spinner:before { content: '\f110'; } /* '' */
-.icon-instagram:before { content: '\f16d'; } /* '' */
-.icon-user-o:before { content: '\f2c0'; } /* '' */
-.icon-telegram:before { content: '\f2c6'; } /* '' */
-.icon-key:before { content: '🔑'; } /* '\1f511' */
-.icon-lock:before { content: '🔒'; } /* '\1f512' */

@@ -282,14 +282,14 @@ module.exports = function(Member) {
     );
     const plainUsername = member.username.split('@')[0];
 
-    Member.sendSms(businessId, {
+    return Member.sendSms(businessId, {
       businessId: businessId,
       token1: plainUsername,
       token2: plainPassword,
       mobile: member.mobile,
       template: config.HOTSPOT_CREDENTIALS_MESSAGE_TEMPLATE,
     });
-    return 'sms added to Queue';
+    //return 'sms added to Queue';
   };
 
   Member.remoteMethod('sendPassword', {
@@ -2113,21 +2113,21 @@ module.exports = function(Member) {
             smsModule
               .send(smsData)
               .then(function() {
-                return resolve();
+                return resolve("message sent");
               })
               .fail(function(error) {
                 return reject(error);
               });
           } else {
             log.error('you need valid sms subscription');
-            var error = new Error();
+            const error = new Error();
             error.message = hotspotMessages.smsSubscriptionExpired;
             error.status = 500;
             return reject(error);
           }
         } else {
           log.error('you need valid sms module');
-          var error = new Error();
+          const error = new Error();
           error.message = hotspotMessages.smsModulesNeeded;
           error.status = 500;
           return reject('you need valid sms module');

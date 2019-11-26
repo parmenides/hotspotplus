@@ -166,11 +166,8 @@ WHERE creationDate>=toDateTime('${from}') AND creationDate<=toDateTime('${to}') 
       });
     },
     addCharge: (chargeData) => {
-      if (chargeData.amount <= 0) {
-        throw new Error(`invalid amount charge amount ${chargeData.amount}`);
-      }
       const now = moment.utc();
-      log.debug(chargeData);
+      log.debug('add charge: ',{chargeData});
       const charge = [
         uuid(),
         chargeData.businessId,
