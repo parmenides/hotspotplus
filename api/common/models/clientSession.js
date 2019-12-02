@@ -89,7 +89,7 @@ module.exports = function(ClientSession) {
   };
 
   ClientSession.sendToBroker = async (session) => {
-    return Q.promise((resolve, reject) => {
+    return Q.Promise((resolve, reject) => {
       kafkaProducer.send(
         [
           {
@@ -100,7 +100,7 @@ module.exports = function(ClientSession) {
         function(error, data) {
           if (error) {
             log.error('Failed to add session to kafka: ', error);
-            throw error;
+            return reject(error);
           }
           log.debug('session added:', JSON.stringify(session), data);
           return resolve();

@@ -1,26 +1,12 @@
 'use strict';
-const kafka = require('kafka-node');
 const config = require('../../server/modules/config.js');
 const logger = require('../../server/modules/logger');
 const log = logger.createLogger();
-const kafkaClient = new kafka.KafkaClient({
-  kafkaHost: process.env.KAFKA_IP + ':' + process.env.KAFKA_PORT,
-});
+
 const db = require('../../server/modules/db.factory');
-const kafkaProducer = new kafka.Producer(kafkaClient, {partitionerType: 2});
 const redis = require('promise-redis')();
 const redisClient = redis.createClient(config.REDIS.PORT, config.REDIS.HOST);
 
-kafkaProducer.on('ready', function() {
-  log.warn('Producer ready...');
-  kafkaClient.refreshMetadata([config.ACCOUNTING_TOPIC], function(error) {
-    log.debug('@refreshMetadata Error:', error);
-  });
-});
-
-kafkaProducer.on('error', function(error) {
-  log.error('Producer preparation failed:', error);
-});
 
 module.exports = function(Usage) {
   Usage.calculateUsage = async (sessionId, usage) => {
