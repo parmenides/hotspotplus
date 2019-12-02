@@ -8,7 +8,6 @@ const db = require('../../server/modules/db.factory');
 
 module.exports = function(Charge) {
   const log = logger.createLogger();
-
   Charge.loadCharges = function(businessId, startDate, skip, limit) {
     return Q.Promise(function(resolve, reject) {
       db.getCharges(businessId, startDate, skip, limit)
