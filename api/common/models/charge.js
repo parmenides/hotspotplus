@@ -1,5 +1,4 @@
 const app = require('../../server/server');
-const utility = require('../../server/modules/utility');
 const Q = require('q');
 const config = require('../../server/modules/config.js');
 const smsModule = require('../../server/modules/sms');
