@@ -785,6 +785,7 @@ module.exports = function(Member) {
     const member = await Member.getMemberByUserName(businessId, username);
     if (!member) {
       log.warn('accounting with unknown member, silently discarded');
+      return;
     }
     // await Usage.addUsageReport(usage)
     await ClientSession.setSession({

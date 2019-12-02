@@ -82,6 +82,8 @@ services:
 #    networks:
 #    - hotspotplusgate
   dashboard:
+    logging:
+      driver: none
     image: 'bitnami/nginx:latest'
     restart: always
     volumes:
