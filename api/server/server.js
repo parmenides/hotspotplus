@@ -75,6 +75,6 @@ process.on('uncaughtException', function(error) {
   error ? console.error(error.stack) : null;
   log.error(error);
   error ? log.error(error && error.stack) : null;
-  //process.exit(0);
+  process.exit(0);
   // utility.sendMessage ( error, { fileName: 'server.js', source: 'boot' } );
 });
