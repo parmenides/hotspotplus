@@ -13,6 +13,13 @@ const _ = require('underscore');
 
 const kafkaClient = new kafka.KafkaClient({
   kafkaHost: process.env.KAFKA_IP + ':' + process.env.KAFKA_PORT,
+  autoConnect:true,
+  reconnectOnIdle:true,
+  connectRetryOptions:{
+    retries: 20,
+    factor: 3,
+    randomize: true,
+  }
 });
 
 const kafkaProducer = new kafka.Producer(kafkaClient, {partitionerType: 2});
