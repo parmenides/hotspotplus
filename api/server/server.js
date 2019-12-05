@@ -69,11 +69,12 @@ if (process.env.ENABLE_SENTRY === 'true') {
   app.use(Sentry.Handlers.errorHandler());
 }
 
+process.on('unhandledRejection', (reason, promise) => {
+  log.warn('Unhandled Rejection at:', promise, 'reason:', reason);
+});
+
 process.on('uncaughtException', function(error) {
   console.error('Something bad happened here....',Date());
   console.error(error);
-  error ? console.error(error.stack) : null;
-  log.error(error);
-  error ? log.error(error && error.stack) : null;
-  process.exit(1);
+  process.exit(0);
 });
