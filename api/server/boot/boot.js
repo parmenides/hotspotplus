@@ -18,10 +18,9 @@ module.exports = async function (app) {
   addDefaultRolesAndUsers()
 
   try {
-    await db.init()
+    await db.init();
   } catch (error) {
-    log.error('falied to init database', error);
-    process.exit(0);
+    log.error('failed to init database', error);
   }
 
   log.debug('App started')
