@@ -20,8 +20,8 @@ module.exports = async function (app) {
   try {
     await db.init()
   } catch (error) {
-    log.error('falied to init database', error)
-    throw error
+    log.error('falied to init database', error);
+    process.exit(0);
   }
 
   log.debug('App started')
