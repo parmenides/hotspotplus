@@ -76,5 +76,8 @@ process.on('unhandledRejection', (reason, promise) => {
 process.on('uncaughtException', function(error) {
   console.error('Something bad happened here....',Date());
   console.error(error);
-  process.exit(0);
+  error ? console.error(error.stack) : null;
+  log.error('Something bad happened here',error);
+  error ? log.error(error && error.stack) : null;
+  process.exit(1);
 });
