@@ -12,7 +12,7 @@ const cacheManager = require('../../server/modules/cacheManager');
 const _ = require('underscore');
 
 const kafkaClient = new kafka.KafkaClient({
-  kafkaHost: process.env.KAFKA_IP + ':' + process.env.KAFKA_PORT,
+  kafkaHost: process.env.KAFKA_CONNECTION,
   autoConnect:true,
   reconnectOnIdle:true,
   connectRetryOptions:{
