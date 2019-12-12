@@ -9,6 +9,7 @@ module.exports = (insert, query, uuid, config, moment, log) => {
   return Object.freeze({
 
     init: async () => {
+      log.debug('Going to init database')
       try {
 
         await query('create database IF NOT EXISTS  hotspotplus')
@@ -64,6 +65,7 @@ FROM hotspotplus.Session JOIN hotspotplus.Dns ON Session.nasIp=Dns.nasIp
  AND toStartOfInterval(Session.creationDate, INTERVAL 5 minute)=toStartOfInterval(Dns.receivedAt,INTERVAL 5 minute )
 WHERE Session.framedIpAddress=Dns.memberIp
 `)
+        log.debug('database init is done!');
       } catch (error) {
         log.error('failed to init clickhouse ', error)
         throw error
