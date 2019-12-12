@@ -90,7 +90,7 @@ WHERE creationDate>=toDateTime('${from}') AND creationDate<=toDateTime('${to}') 
 GROUP BY toStartOfInterval(creationDate,INTERVAL ${intervalInSeconds} second) order by date
 ) ANY RIGHT JOIN (
 SELECT arrayJoin(timeSlots(toDateTime('${from}'), toUInt32(${intervalInSeconds}*${durationInDays}),${intervalInSeconds})) AS date
-) USING (date) order by date
+) USING (date) order by date settings any_join_distinct_right_table_keys=1
  `
       log.warn(sqlQuery)
       return query(sqlQuery).then((result) => {
