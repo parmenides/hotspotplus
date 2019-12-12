@@ -59,7 +59,7 @@ WHERE Session.framedIpAddress=Netflow.DstIP OR Session.framedIpAddress=Netflow.S
         await query(`CREATE MATERIALIZED VIEW IF NOT EXISTS ${DNS_REPORT_TABLE} ENGINE=AggregatingMergeTree()
 PARTITION BY (toStartOfDay( receivedAt))
 ORDER BY (memberId,nasIp,memberIp,domain,username,toStartOfHour( receivedAt ))
-Populate AS SELECT Session.businessId,Session.departmentId,Session.memberId,Session.nasIp,Session.memberIp as memberIp, Session.username,Dns.receivedAt as receivedAt,Dns.domain as domain
+Populate AS SELECT Session.businessId,Session.departmentId,Session.memberId,Session.nasIp,Session.framedIpAddress as memberIp, Session.username,Dns.receivedAt as receivedAt,Dns.domain as domain
 FROM hotspotplus.Session JOIN hotspotplus.Dns ON Session.nasIp=Dns.nasIp
  AND toStartOfInterval(Session.creationDate, INTERVAL 5 minute)=toStartOfInterval(Dns.receivedAt,INTERVAL 5 minute )
 WHERE Session.framedIpAddress=Dns.memberIp
@@ -91,7 +91,7 @@ GROUP BY toStartOfInterval(creationDate,INTERVAL ${intervalInSeconds} second) or
 ) ANY RIGHT JOIN (
 SELECT arrayJoin(timeSlots(toDateTime('${from}'), toUInt32(${intervalInSeconds}*${durationInDays}),${intervalInSeconds})) AS date
 ) USING (date) order by date settings any_join_distinct_right_table_keys=1
- `
+`
       log.warn(sqlQuery)
       return query(sqlQuery).then((result) => {
         log.debug({result})
