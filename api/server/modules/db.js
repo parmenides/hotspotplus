@@ -1,8 +1,6 @@
 const SESSION_TABLE = 'hotspotplus.Session'
 const USAGE_TABLE = 'hotspotplus.Usage'
 const CHARGE_TABLE = 'hotspotplus.Charge'
-const NETFLOW_REPORT_TABLE = 'hotspotplus.NetflowReport'
-const DNS_REPORT_TABLE = 'hotspotplus.DnsReport'
 const LICENSE_TABLE = 'license.Charge'
 
 module.exports = (insert, query, uuid, config, moment, log) => {
@@ -17,12 +15,12 @@ module.exports = (insert, query, uuid, config, moment, log) => {
 PARTITION BY toStartOfMonth( date )
 ORDER BY (businessId)
 `)
-
+/*
         await query(`create table IF NOT EXISTS hotspotplus.Netflow(RouterAddr String,SrcIP String,DstIP String, SrcPort String,DstPort String,NextHop String, TimeRecvd DateTime,Proto UInt8)
 engine=AggregatingMergeTree()
 PARTITION BY toStartOfDay( TimeRecvd )
 ORDER BY (NextHop,DstPort,SrcPort,DstIP,SrcIP,RouterAddr,toStartOfInterval( TimeRecvd ,INTERVAL 30 minute ))
-`)
+`)*/
 
         await query(`create table IF NOT EXISTS ${SESSION_TABLE}(sessionId String,businessId String,memberId String,nasId String,departmentId String,groupIdentityId String,nasIp String,username String,framedIpAddress String,mac String,creationDate DateTime,download UInt32,upload UInt32,
 sessionTime UInt32,accStatusType UInt8 )
@@ -39,31 +37,25 @@ POPULATE AS SELECT *
 FROM hotspotplus.Session
 `)
 
-        await query(`create table IF NOT EXISTS hotspotplus.WebProxy( memberIp String,nasIp String,protocol String,url String,method String,domain String,receivedAt DateTime )
+        await query(`CREATE TABLE IF NOT EXISTS hotspotplus.WebProxy( memberIp String,nasIp String,protocol String,url String,method String,domain String,receivedAt DateTime )
 engine=MergeTree()
 PARTITION BY toStartOfDay( receivedAt )
 ORDER BY (nasIp,memberIp,receivedAt)
 `)
-        await query(`create table IF NOT EXISTS hotspotplus.Dns(memberIp String,nasIp String,domain String,receivedAt DateTime )
+/*        await query(`CREATE TABLE IF NOT EXISTS hotspotplus.Dns(memberIp String,nasIp String,domain String,receivedAt DateTime )
 engine=AggregatingMergeTree()
 PARTITION BY toStartOfDay( receivedAt )
 ORDER BY (nasIp,memberIp,domain,toStartOfInterval( receivedAt , INTERVAL 1 day ))
-`)
-        await query(`CREATE MATERIALIZED VIEW IF NOT EXISTS ${NETFLOW_REPORT_TABLE} ENGINE=AggregatingMergeTree()
+`)*/
+        await query(`CREATE TABLE IF NOT EXISTS hotspotplus.NetflowReport(businessId String,departmentId String,memberId String, nasIp String,username String, routerAddr String,
+srcIp String, dstIp String, srcPort String, dstPort String,timeRecvd DateTime,proto UInt8, nextHop String)  
+ENGINE=AggregatingMergeTree()
 PARTITION BY (toStartOfDay( timeRecvd))
 ORDER BY (dstIp,srcIp,routerAddr,dstPort,srcPort,username,toStartOfHour( timeRecvd ))
-Populate AS SELECT Session.businessId,Session.departmentId,Session.memberId,Session.nasIp,Session.username,Netflow.RouterAddr as routerAddr,Netflow.SrcIP as srcIp, Netflow.DstIP as dstIp, Netflow.SrcPort as srcPort, Netflow.DstPort as dstPort,Netflow.TimeRecvd as timeRecvd,Netflow.Proto as proto, NextHop as nextHop
-FROM hotspotplus.Session JOIN hotspotplus.Netflow ON Session.nasIp=Netflow.RouterAddr
- AND toStartOfInterval(Session.creationDate, INTERVAL 5 minute)=toStartOfInterval(Netflow.TimeRecvd,INTERVAL 5 minute )
-WHERE Session.framedIpAddress=Netflow.DstIP OR Session.framedIpAddress=Netflow.SrcIP OR Session.framedIpAddress=Netflow.NextHop
 `)
-        await query(`CREATE MATERIALIZED VIEW IF NOT EXISTS ${DNS_REPORT_TABLE} ENGINE=AggregatingMergeTree()
+        await query(`CREATE TABLE IF NOT EXISTS hotspotplus.DnsReport(businessId String,departmentId String,memberId String,nasIp String,memberIp String, username String,receivedAt DateTime,domain String) ENGINE=AggregatingMergeTree()
 PARTITION BY (toStartOfDay( receivedAt))
 ORDER BY (memberId,nasIp,memberIp,domain,username,toStartOfHour( receivedAt ))
-Populate AS SELECT Session.businessId,Session.departmentId,Session.memberId,Session.nasIp,Session.framedIpAddress as memberIp, Session.username,Dns.receivedAt as receivedAt,Dns.domain as domain
-FROM hotspotplus.Session JOIN hotspotplus.Dns ON Session.nasIp=Dns.nasIp
- AND toStartOfInterval(Session.creationDate, INTERVAL 5 minute)=toStartOfInterval(Dns.receivedAt,INTERVAL 5 minute )
-WHERE Session.framedIpAddress=Dns.memberIp
 `)
         log.debug('database init is done!');
       } catch (error) {
