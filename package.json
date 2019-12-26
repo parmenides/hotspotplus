@@ -1,6 +1,6 @@
 {
   "name": "hotspotplus",
-  "version": "7.0.14",
+  "version": "7.0.15",
   "description": "hotspotplus",
   "scripts": {
     "start": "docker-compose down; docker-compose up",
