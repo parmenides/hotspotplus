@@ -17,6 +17,13 @@ const kafka = new Kafka({
 })
 
 const kafkaProducer = kafka.producer()
+kafkaProducer.connect();
+
+kafkaProducer.on(kafkaProducer.events.REQUEST_TIMEOUT,async ()=>{
+  log.debug('Kafka connection timeout, retry...');
+  await kafkaProducer.connect();
+  log.debug('connected after timeout');
+});
 
 module.exports = function (ClientSession) {
   ClientSession.setSession = async (options) => {
@@ -59,7 +66,6 @@ module.exports = function (ClientSession) {
 
   ClientSession.sendToBroker = async (session) => {
     try {
-      await kafkaProducer.connect();
       await kafkaProducer.send({
         topic: config.SESSION_TOPIC,
         messages: [
@@ -68,10 +74,9 @@ module.exports = function (ClientSession) {
           }
         ]
       });
-      await kafkaProducer.disconnect();
-      log.debug('session added:', JSON.stringify(session))
+      log.debug('session added by KafkaJs:', JSON.stringify(session))
     } catch (error) {
-      log.error('failed to send message to kafka', error);
+      log.error('failed to send message to kafka (by KafkaJs)', error);
     }
   }
 
