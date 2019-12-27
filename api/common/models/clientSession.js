@@ -55,7 +55,7 @@ module.exports = function(ClientSession) {
     return Q.promise((resolve, reject) => {
 
       const kafkaClient = new kafka.KafkaClient({
-        kafkaHost: process.env.KAFKA_IP + ':' + process.env.KAFKA_PORT,
+        kafkaHost: process.env.KAFKA_CONNECTION,
         autoConnect:true,
         reconnectOnIdle:true,
         connectRetryOptions:{
