@@ -1,6 +1,6 @@
 {
   "name": "hotspotplus-api",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "main": "server/server.js",
   "bin": "server/server.js",
   "scripts": {
@@ -40,6 +40,7 @@
     "http-errors": "^1.7.3",
     "jsonwebtoken": "^8.5.1",
     "jssha": "^2.2.0",
+    "kafka-node": "^5.0.0",
     "keygenerator": "^1.0.4",
     "line-by-line": "^0.1.5",
     "loopback": "^3.20.0",
