@@ -40,7 +40,6 @@
     "http-errors": "^1.7.3",
     "jsonwebtoken": "^8.5.1",
     "jssha": "^2.2.0",
-    "kafkajs": "^1.11.0",
     "keygenerator": "^1.0.4",
     "line-by-line": "^0.1.5",
     "loopback": "^3.20.0",
