@@ -68,26 +68,31 @@ module.exports = function(ClientSession) {
 
       kafkaProducer.on('ready', function() {
         log.warn('Producer ready...');
-        kafkaClient.refreshMetadata([config.SESSION_TOPIC], function(error) {
-          log.debug('@refreshMetadata Error:', error);
-        });
 
-        kafkaProducer.send(
-          [
-            {
-              topic: config.SESSION_TOPIC,
-              messages: JSON.stringify(session),
-            },
-          ],
-          function(error, data) {
-            if (error) {
-              log.error('Failed to add session to kafka: ', error);
-              throw error;
-            }
-            log.debug('session added:', JSON.stringify(session), data);
-            return resolve();
+        kafkaClient.refreshMetadata([config.SESSION_TOPIC], function(error) {
+          if(error){
+            log.error('@refreshMetadata Error:', error);
+            return reject(error);
           }
-        );
+
+          kafkaProducer.send(
+            [
+              {
+                topic: config.SESSION_TOPIC,
+                messages: JSON.stringify(session),
+              },
+            ],
+            function(error, data) {
+              if (error) {
+                log.error('Failed to add session to kafka: ', error);
+                return reject(error);
+              }
+              log.debug('session sent to kafka ', JSON.stringify(session), data);
+              return resolve();
+            }
+          );
+
+        });
       });
 
       kafkaProducer.on('error', function(error) {
