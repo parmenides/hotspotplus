@@ -53,7 +53,6 @@ module.exports = function(ClientSession) {
 
   ClientSession.sendToBroker = async (session) => {
     return Q.promise((resolve, reject) => {
-
       const kafkaClient = new kafka.KafkaClient({
         kafkaHost: process.env.KAFKA_CONNECTION,
         autoConnect:true,
