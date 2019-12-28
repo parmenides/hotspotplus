@@ -1,6 +1,6 @@
 {
   "name": "hotspotplus",
-  "version": "7.0.8",
+  "version": "7.0.19",
   "description": "hotspotplus",
   "scripts": {
     "start": "docker-compose down; docker-compose up",
@@ -40,6 +40,7 @@
     "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
-    "@hapi/sntp": "^3.1.2"
+    "@hapi/sntp": "^3.1.2",
+    "kafka-node": "^5.0.0"
   }
 }

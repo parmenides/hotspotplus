@@ -190,6 +190,7 @@ services:
         ipv4_address: 172.20.0.80
   radius:
     image: 'freeradius/freeradius-server:3.0.19-alpine'
+    command: -X
     restart: always
     volumes:
       - ./radius.3.0.19/clients.conf:/etc/raddb/clients.conf

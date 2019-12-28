@@ -48,7 +48,8 @@ module.exports = async function (app) {
   }
 
   function addOrLoadUser (username, password, roles) {
-    User.findOne({where: {username: username}}, function (error, user) {
+
+    User.findOne({where: {email: `${username}@${config.DEFAULTS.USERS_DOMAIN}`}}, function (error, user) {
       if (error) {
         log.error(error)
         return
@@ -58,16 +59,17 @@ module.exports = async function (app) {
         username: username,
         active: true,
         password: password,
-        email: username + '@' + config.DEFAULTS.USERS_DOMAIN,
+        email: `${username}@${config.DEFAULTS.USERS_DOMAIN}`,
       }
       if (!user) {
+        log.debug('user does not exist: ',user);
         User.create(superuser, function (error, user) {
           if (error) {
             log.error(error)
             return
           }
           for (let i = 0; i < roles.length; i++) {
-            var roleName = roles[i]
+            const roleName = roles[i]
             Role.findOne({where: {name: roleName}}, function (error, role) {
               if (error) {
                 log.error(error)

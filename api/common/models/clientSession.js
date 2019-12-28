@@ -11,50 +11,6 @@ const moment = require('moment');
 const cacheManager = require('../../server/modules/cacheManager');
 const _ = require('underscore');
 
-const kafkaClient = new kafka.KafkaClient({
-  kafkaHost: process.env.KAFKA_IP + ':' + process.env.KAFKA_PORT,
-  autoConnect:true,
-  reconnectOnIdle:true,
-  connectRetryOptions:{
-    retries: 20,
-    factor: 3,
-    randomize: true,
-  }
-});
-
-const kafkaProducer = new kafka.Producer(kafkaClient, {partitionerType: 2});
-
-kafkaProducer.on('ready', function() {
-  log.warn('Producer ready...');
-  kafkaClient.refreshMetadata([config.SESSION_TOPIC], function(error) {
-    log.debug('@refreshMetadata Error:', error);
-  });
-  /*
-    kafkaProducer.send(
-      [
-        {
-          topic: config.SESSION_TOPIC,
-          messages: JSON.stringify({ message: 'sample' })
-        }
-      ],
-      function(error, data) {
-        if (error) {
-          log.error(
-            `failed to send sample message to kafka topic: ${
-              config.SESSION_TOPIC
-            }`,
-            error
-          );
-          return;
-        }
-        log.debug('sample message sent', data);
-      }
-    ); */
-});
-
-kafkaProducer.on('error', function(error) {
-  log.error('Producer preparation failed:', error);
-});
 
 module.exports = function(ClientSession) {
   ClientSession.setSession = async (options) => {
@@ -96,23 +52,52 @@ module.exports = function(ClientSession) {
   };
 
   ClientSession.sendToBroker = async (session) => {
-    return Q.Promise((resolve, reject) => {
-      kafkaProducer.send(
-        [
-          {
-            topic: config.SESSION_TOPIC,
-            messages: JSON.stringify(session),
-          },
-        ],
-        function(error, data) {
-          if (error) {
-            log.error('Failed to add session to kafka: ', error);
+    return Q.promise((resolve, reject) => {
+      const kafkaClient = new kafka.KafkaClient({
+        kafkaHost: process.env.KAFKA_CONNECTION,
+        autoConnect:true,
+        reconnectOnIdle:true,
+        connectRetryOptions:{
+          retries: 200,
+          factor: 3,
+          randomize: true,
+        }
+      });
+      const kafkaProducer = new kafka.Producer(kafkaClient, {partitionerType: 2});
+
+      kafkaProducer.on('ready', function() {
+        log.warn('Producer ready...');
+
+        kafkaClient.refreshMetadata([config.SESSION_TOPIC], function(error) {
+          if(error){
+            log.error('@refreshMetadata Error:', error);
             return reject(error);
           }
-          log.debug('session added:', JSON.stringify(session), data);
-          return resolve();
-        }
-      );
+
+          kafkaProducer.send(
+            [
+              {
+                topic: config.SESSION_TOPIC,
+                messages: JSON.stringify(session),
+              },
+            ],
+            function(error, data) {
+              if (error) {
+                log.error('Failed to add session to kafka: ', error);
+                return reject(error);
+              }
+              log.debug('session sent to kafka ', JSON.stringify(session), data);
+              return resolve();
+            }
+          );
+
+        });
+      });
+
+      kafkaProducer.on('error', function(error) {
+        log.error('Producer preparation failed:', error);
+        return reject();
+      });
     });
   };
 
