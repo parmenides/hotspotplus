@@ -20,7 +20,7 @@
     "express-promise-router": "^3.0.3",
     "handlebars": "^4.2.0",
     "http-errors": "^1.7.1",
-    "json2csv": "^4.4.1",
+    "json2csv": "^4.5.4",
     "jsreport-core": "^2.6.1",
     "jsreport-handlebars": "^2.1.0",
     "jsreport-jsrender": "^2.1.0",
@@ -90,7 +90,6 @@
     "start": "docker-compose up",
     "log": "tail -f logs/log-worker.log | ./node_modules/.bin/bunyan",
     "test": "mocha -r ts-node/register test/**/*.ts  ",
-
     "start:dev": "supervisor ./log.worker.js",
     "start:node": "node ./log.worker.js",
     "watch:build": "webpack --watch",

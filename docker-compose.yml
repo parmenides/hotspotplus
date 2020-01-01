@@ -61,26 +61,26 @@ services:
 #      - ${PWD}/api-license/common:/usr/src/app/common/
 #      - ${PWD}/api-license/logs:/logs
 #      - ${PWD}/api-license/key:/key
-#  logworker:
-#    build:
-#      context: ./log-worker
-#    user: '${UID:-1000}:${GID:-1000}'
-#    container_name: logworker
-#    command: npm run start:dev
-#    environment:
-#      - REPORT_TEMPLATES_PAHT=/report-templates
-#      - CLICK_HOST=clickhouse
-#      - CLICK_USER=admin
-#      - CLICK_PASSWORD=123
-#      - API_ADDRESS=http://apihotspotplus:3000
-#      - LOG_LEVEL=debug
-#    volumes:
-#      - ${PWD}/log-worker/dist/log.worker.js:/usr/src/app/log.worker.js
-#      - ${PWD}/log-worker/node_modules:/usr/src/app/node_modules
-#      - ${PWD}/log-worker/report-templates:/report-templates
-#      - ${PWD}/log-worker/logs:/logs
-#    networks:
-#    - hotspotplusgate
+  logworker:
+    build:
+      context: ./log-worker
+    user: '${UID:-1000}:${GID:-1000}'
+    container_name: logworker
+    command: npm run start:dev
+    environment:
+      - REPORT_TEMPLATES_PAHT=/report-templates
+      - CLICK_HOST=clickhouse
+      - CLICK_USER=admin
+      - CLICK_PASSWORD=123
+      - API_ADDRESS=http://apihotspotplus:3000
+      - LOG_LEVEL=debug
+    volumes:
+      - ${PWD}/log-worker/dist/log.worker.js:/usr/src/app/log.worker.js
+      - ${PWD}/log-worker/node_modules:/usr/src/app/node_modules
+      - ${PWD}/log-worker/report-templates:/report-templates
+      - ${PWD}/log-worker/logs:/logs
+    networks:
+    - hotspotplusgate
   dashboard:
     logging:
       driver: none

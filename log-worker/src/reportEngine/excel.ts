@@ -3,7 +3,7 @@ import * as fs from 'fs';
 const jsreport = require('jsreport-core')();
 import { createLogger } from '../utils/logger';
 import util from 'util';
-import { ReportConfig } from './reportTypes';
+import { ExcelReportConfig, ReportConfig } from './reportTypes';
 
 const log = createLogger();
 jsreport.use(require('jsreport-xlsx')());
@@ -15,8 +15,8 @@ const readFile = util.promisify(fs.readFile);
 const closeFile = util.promisify(fs.close);
 const unlink = util.promisify(fs.unlink);
 
-const render = async (reportConfig: ReportConfig, data1: any) => {
-  const { templateName, helperName } = reportConfig;
+const render = async (reportConfig: ReportConfig, data: any) => {
+  const { templateName, helperName } = reportConfig as ExcelReportConfig;
 
   const template = await readFile(
     `${process.env.REPORT_TEMPLATES_PAHT}/${templateName}`,
@@ -38,7 +38,7 @@ const render = async (reportConfig: ReportConfig, data1: any) => {
     templatingEngines: {
       timeout: 80000,
     },
-    data: data1,
+    data,
   });
   return report;
 };

@@ -184,7 +184,7 @@ app.controller('webproxyReport', [
             $log.error(error)
           }
         )
-      } else if (type === 'excel') {
+      } else {
         $scope.waitingForDwl = true
         Report.searchWebProxy(query).$promise.then(
           function (report) {
@@ -202,9 +202,9 @@ app.controller('webproxyReport', [
             }
           },
           function (error) {
-            $scope.waitingForDwl = false
-            $log.error(error)
-          }
+            $scope.waitingForDwl = false;
+            appMessenger.showError ( 'error.generalError' )
+            $log.error(error.data)          }
         )
       }
     }

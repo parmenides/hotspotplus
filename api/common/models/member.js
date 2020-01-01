@@ -700,10 +700,10 @@ module.exports = function (Member) {
           await Member.resetMemberSubscription(member.id)
           const resubscribedMember = await Member.findById(member.id)
           if (resubscribedMember.subscriptionDate === member.subscriptionDate) {
-            log.error('member auto resubscribe failed to apply');
-            log.error({resubscribedMember});
-            log.error({member});
-            return Promise.reject('member auto resubscribe failed to apply');
+            log.error('member auto resubscribe failed to apply')
+            log.error({resubscribedMember})
+            log.error({member})
+            return Promise.reject('member auto resubscribe failed to apply')
           }
           const result = await Member.getSubscriptionDuration(resubscribedMember, internetPlan)
           log.debug(`member status after auto resubscribe ${result}`)
@@ -1919,6 +1919,42 @@ module.exports = function (Member) {
       throw error
     }
   }
+
+  Member.resetAllMembers = async function (departmentIds, ctx) {
+    const businessId = ctx.currentUserId
+    try {
+      if (!departmentIds || departmentIds.length === 0) {
+        throw new Error('depratmentsId is required')
+      }
+      await Member.updateAll({
+        businessId,
+        departments: departmentIds
+      }, {
+        extraBulk: 0,
+        subscriptionDate: Date.now(),
+      })
+
+      const InternetPlan = app.models.InternetPlan
+      await InternetPlan.updateInternetPlanHistory(member.id, member.internetPlanId)
+      log.debug(`reset all members subscription`)
+    } catch (error) {
+      log.error('reset all member subscription failed', error)
+      throw error
+    }
+  }
+/*
+  Member.remoteMethod('loadMemberPassword', {
+    description: 'load member\'s password',
+    accepts: [
+      {
+        arg: 'departments',
+        type: 'array',
+        required: true,
+      },
+      {arg: 'options', type: 'object', http: 'optionsFromRequest'},
+    ],
+    returns: {root: true},
+  })*/
 
   /* return subscriptionDate of member
    memberId: String

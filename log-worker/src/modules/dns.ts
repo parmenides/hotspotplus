@@ -87,11 +87,9 @@ const createDnsQuery = (
   } = dnsReportRequestTask;
   let mainQuery: string;
 
-  if (count) {
-    mainQuery = `SELECT toInt32(count (*)) FROM hotspotplus.DnsReport`;
-  } else {
-    mainQuery = `SELECT businessId,departmentId, memberId, nasIp, username, domain, receivedAt FROM hotspotplus.DnsReport`;
-  }
+  mainQuery = count
+    ? `SELECT toInt32(count (*)) FROM hotspotplus.DnsReport`
+    : `SELECT businessId,departmentId, memberId, nasIp, username, domain, receivedAt FROM hotspotplus.DnsReport`;
 
   const whereParts: string[] = [];
 

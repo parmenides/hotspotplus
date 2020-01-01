@@ -225,6 +225,7 @@ app.controller('memberList', [
           if (internetPlans.length != 0) {
             $scope.internetPlans = internetPlans
             $scope.member.selectedInternetPlan = $scope.internetPlans[0]
+            $scope.member.departments = [$scope.permittedDepartments[0]]
             $uibModal.open({
               backdrop: true,
               animation: true,

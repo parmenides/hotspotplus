@@ -8,14 +8,16 @@ import {
   WebproxyReportRequestTask,
 } from '../typings';
 import netflow from '../modules/netflow';
-const log = logger.createLogger();
-import momentTz = require('moment-timezone');
 import { getReportConfig } from '../reportEngine/reportTypes';
 import * as fs from 'fs';
-import render from '../reportEngine';
+import render, { OutputFormat } from '../reportEngine';
 import { file as tmpFile } from 'tmp-promise';
 import dns from '../modules/dns';
 import webproxy from '../modules/webproxy';
+
+const log = logger.createLogger();
+import momentTz = require('moment-timezone');
+import { Response } from 'jsreport-core';
 
 const controller: { [key: string]: RequestHandler } = {
   health: (request, response) => {
@@ -87,19 +89,46 @@ const controller: { [key: string]: RequestHandler } = {
         const result = await netflow.query('json', netflowReportRequestTask);
         result.data = netflow.formatJson(result.data);
         response.send(result);
+      } else if (type === 'csv') {
+        const result = await netflow.query('json', netflowReportRequestTask);
+        result.data = netflow.formatJson(result.data);
+        const reportConfig = getReportConfig(
+          OutputFormat.CSV,
+          REPORT_TYPE.NETFLOW,
+        );
+        const report = await render(reportConfig, result.data);
+        log.debug('rendered', report);
+        const reportFile = await tmpFile();
+        const writable = fs.createWriteStream(reportFile.path);
+        writable.write(report, 'utf8');
+        writable.close();
+        writable.on('finish', () => {
+          log.debug('reportFile.path', reportFile.path);
+          response.sendFile(reportFile.path);
+        });
+        writable.on('error', (error) => {
+          log.error(error);
+          response.status(500).send('Something broke!');
+        });
       } else if (type === 'excel') {
         const result = await netflow.query('json', netflowReportRequestTask);
         result.data = netflow.formatJson(result.data);
-        const reportConfig = getReportConfig(REPORT_TYPE.NETFLOW);
+        const reportConfig = getReportConfig(
+          OutputFormat.EXCEL,
+          REPORT_TYPE.NETFLOW,
+        );
         const report = await render(reportConfig, { netflow: result.data });
+        const reportStream = report as Response;
         const reportFile = await tmpFile();
         const writable = fs.createWriteStream(reportFile.path);
-        await report.stream.pipe(writable);
+        await reportStream.stream.pipe(writable);
         writable.on('finish', () => {
+          log.debug(`report file is ready ${reportFile.path}`);
           response.sendFile(reportFile.path);
         });
-        writable.on('error', (e) => {
-          log.error(e);
+        writable.on('error', (error) => {
+          log.error(error);
+          response.status(500).send('Something broke!');
         });
       } else {
         throw new Error('unknown report type');
@@ -166,19 +195,42 @@ const controller: { [key: string]: RequestHandler } = {
         const result = await dns.query('json', dnsReportRequestTask);
         result.data = dns.formatJson(result.data);
         response.send(result);
+      } else if (type === 'csv') {
+        const result = await dns.query('json', dnsReportRequestTask);
+        result.data = dns.formatJson(result.data);
+        const reportConfig = getReportConfig(OutputFormat.CSV, REPORT_TYPE.DNS);
+        const report = await render(reportConfig, result.data);
+        const reportFile = await tmpFile();
+        const writable = fs.createWriteStream(reportFile.path);
+        writable.write(report, 'utf8');
+        writable.close();
+        writable.on('finish', () => {
+          log.debug(`report file is ready ${reportFile.path}`);
+          response.sendFile(reportFile.path);
+        });
+        writable.on('error', (error) => {
+          log.error(error);
+          response.status(500).send('Something broke!');
+        });
       } else if (type === 'excel') {
         const result = await dns.query('json', dnsReportRequestTask);
         result.data = dns.formatJson(result.data);
-        const reportConfig = getReportConfig(REPORT_TYPE.DNS);
+        const reportConfig = getReportConfig(
+          OutputFormat.EXCEL,
+          REPORT_TYPE.DNS,
+        );
         const report = await render(reportConfig, { dns: result.data });
+        const reportStream = report as Response;
         const reportFile = await tmpFile();
         const writable = fs.createWriteStream(reportFile.path);
-        await report.stream.pipe(writable);
+        await reportStream.stream.pipe(writable);
         writable.on('finish', () => {
+          log.debug(`report file is ready ${reportFile.path}`);
           response.sendFile(reportFile.path);
         });
-        writable.on('error', (e) => {
-          log.error(e);
+        writable.on('error', (error) => {
+          log.error(error);
+          response.status(500).send('Something broke!');
         });
       } else {
         throw new Error('unknown report type');
@@ -248,19 +300,45 @@ const controller: { [key: string]: RequestHandler } = {
         const result = await webproxy.query('json', webproxyReportRequestTask);
         result.data = webproxy.formatJson(result.data);
         response.send(result);
+      } else if (type === 'csv') {
+        const result = await webproxy.query('json', webproxyReportRequestTask);
+        result.data = webproxy.formatJson(result.data);
+        const reportConfig = getReportConfig(
+          OutputFormat.CSV,
+          REPORT_TYPE.WEBPROXY,
+        );
+        const report = await render(reportConfig, result.data);
+        const reportFile = await tmpFile();
+        const writable = fs.createWriteStream(reportFile.path);
+        writable.write(report, 'utf8');
+        writable.close();
+        writable.on('finish', () => {
+          log.debug(`report file is ready ${reportFile.path}`);
+          response.sendFile(reportFile.path);
+        });
+        writable.on('error', (error) => {
+          log.error(error);
+          response.status(500).send('Something broke!');
+        });
       } else if (type === 'excel') {
         const result = await webproxy.query('json', webproxyReportRequestTask);
         result.data = webproxy.formatJson(result.data);
-        const reportConfig = getReportConfig(REPORT_TYPE.WEBPROXY);
+        const reportConfig = getReportConfig(
+          OutputFormat.EXCEL,
+          REPORT_TYPE.WEBPROXY,
+        );
         const report = await render(reportConfig, { webproxy: result.data });
+        const reportStream = report as Response;
         const reportFile = await tmpFile();
         const writable = fs.createWriteStream(reportFile.path);
-        await report.stream.pipe(writable);
+        await reportStream.stream.pipe(writable);
         writable.on('finish', () => {
+          log.debug(`report file is ready ${reportFile.path}`);
           response.sendFile(reportFile.path);
         });
-        writable.on('error', (e) => {
-          log.error(e);
+        writable.on('error', (error) => {
+          log.error(error);
+          response.status(500).send('Something broke!');
         });
       } else {
         throw new Error('unknown report type');

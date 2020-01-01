@@ -3,8 +3,6 @@ import router from '../src/routes';
 import errorHandler from './utils/errorHandler';
 import logger from './utils/logger';
 
-import { testRunner } from './test';
-
 const log = logger.createLogger();
 const app = express();
 

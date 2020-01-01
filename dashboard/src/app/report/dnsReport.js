@@ -184,7 +184,7 @@ app.controller('dnsReport', [
             $log.error(error)
           }
         )
-      } else if (type === 'excel') {
+      } else {
         $scope.waitingForDwl = true
         Report.searchDns(query).$promise.then(
           function (report) {
@@ -202,7 +202,10 @@ app.controller('dnsReport', [
             }
           },
           function (error) {
-            $log.error(error)
+
+            $scope.waitingForDwl = false
+            appMessenger.showError('error.generalError')
+            $log.error(error.data)
           }
         )
       }

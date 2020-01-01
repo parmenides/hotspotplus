@@ -1,17 +1,24 @@
 import renderExcel from './excel';
+import renderCsv from './csv';
 import { ReportConfig } from './reportTypes';
+import { Response } from 'jsreport-core';
 
 const enum OutputFormat {
   EXCEL = 'excel',
+  CSV = 'csv',
 }
 
 export { OutputFormat };
 
-const render = async (reportConfig: ReportConfig, data: any) => {
-  switch (reportConfig.type) {
+const render = async (
+  reportConfig: ReportConfig,
+  data: any,
+): Promise<string | Response> => {
+  switch (reportConfig.output) {
     case OutputFormat.EXCEL:
-      const report = await renderExcel(reportConfig, data);
-      return report;
+      return renderExcel(reportConfig, data);
+    case OutputFormat.CSV:
+      return renderCsv(reportConfig, data);
     default:
       throw new Error('unknown report type');
   }
