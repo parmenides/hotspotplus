@@ -1051,7 +1051,7 @@
     "defaultPlanSchedule": "امکان استفادن از بسته پیش فرض",
     "defaultPlanScheduleExample": "مثال: هر ۲۴ ساعت ۱ بار",
     "choosePlan": " -- انتخاب بسته --",
-    "freePlansAreListed": "شما می‌توانید بسته‌ی پیش فرض را فقط از بین بسته‌های رایگان انتخاب کنید.",
+    "freePlansAreListed": "بسته پیش فرض، پس از ثبت نام به صورت خودکار به کاربر تخصیص داده خواهد شد.",
     "onlyFreePlansAreAvailable": "فقط امکان انتخاب بسته‌های رایگان وجود دارد.",
     "extraBulk": "افزودن حجم",
     "extraBulkPrice": "قیمت هر گیگابایت اضافه",

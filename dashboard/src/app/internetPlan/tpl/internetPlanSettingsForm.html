@@ -15,12 +15,12 @@
                         <label class="control-label">
                             {{ "internetPlan.chooseDefaultPlan" | translate }}</label>
                         <select ng-model="defaultInternetPlan.plan"
-                                ng-options="internetPlan.name disable when internetPlan.price for internetPlan in options.internetPlans"
+                                ng-options="internetPlan.name for internetPlan in options.internetPlans"
                                 class="form-control m-b">
                             <option value="">{{'internetPlan.choosePlan' | translate}}</option>
                         </select>
                     </div>
-                    <div class="col-sm-11">
+                    <!--<div class="col-sm-11">
                         <label class="control-label">
                             {{ "internetPlan.defaultPlanSchedule" | translate }}</label>
                         <div class="input-group">
@@ -45,9 +45,9 @@
                         <div class="col-sm-8 text-info-dker">
                             {{"internetPlan.defaultPlanScheduleExample" | translate}}
                         </div>
-                    </div>
+                    </div>-->
                 </div>
-                <div class="wrapper">
+                <!--<div class="wrapper">
                     <div class="form-group">
                         <div class="checkbox">
                             <label class="i-checks">
@@ -56,7 +56,7 @@
                             </label>
                         </div>
                     </div>
-                </div>
+                </div>-->
             </div>
         </form>
     </div>

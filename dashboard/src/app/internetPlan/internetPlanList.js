@@ -18,7 +18,7 @@ app.controller('internetPlanList', [
   'appMessenger',
   'translateNumberFilter',
   'englishNumberFilter',
-  function(
+  function (
     $scope,
     $state,
     $log,
@@ -35,13 +35,13 @@ app.controller('internetPlanList', [
     translateNumberFilter,
     englishNumberFilter
   ) {
-    var businessId = Session.business.id;
+    var businessId = Session.business.id
 
     $scope.paginationOptions = {
       pageNumber: 1,
       itemPerPage: 10,
       sort: null
-    };
+    }
     $scope.gridOptions = {
       enableSorting: true,
       enablePaginationControls: false,
@@ -123,50 +123,50 @@ app.controller('internetPlanList', [
             '<a class="btn btn-link" ng-click="grid.appScope.removePlan(row)"><i class="fa fa-fw fa-trash"></i></a>'
         }
       ],
-      onRegisterApi: function(gridApi) {
-        $scope.gridApi = gridApi;
-        $scope.gridApi.core.on.sortChanged($scope, function(grid, sortColumns) {
+      onRegisterApi: function (gridApi) {
+        $scope.gridApi = gridApi
+        $scope.gridApi.core.on.sortChanged($scope, function (grid, sortColumns) {
           if (sortColumns.length == 0) {
-            $scope.paginationOptions.sort = null;
+            $scope.paginationOptions.sort = null
           } else {
             $scope.paginationOptions.sort =
               sortColumns[0].name +
               ' ' +
-              sortColumns[0].sort.direction.toUpperCase();
+              sortColumns[0].sort.direction.toUpperCase()
           }
-          getPage();
-        });
+          getPage()
+        })
       }
-    };
+    }
 
     $scope.selectDefaultPlanSettingsText = translateFilter(
       'help.selectDefaultPlanSettings'
-    );
-    $scope.removePlan = function(row) {
+    )
+    $scope.removePlan = function (row) {
       genericService.showConfirmDialog({
         title: 'general.warning',
         message: 'general.areYouSure',
         noBtnLabel: 'general.no',
         yesBtnLabel: 'general.yes',
-        yesCallback: function() {
-          var internetPlanId = row.entity.id;
-          var index = $scope.gridOptions.data.indexOf(row.entity);
+        yesCallback: function () {
+          var internetPlanId = row.entity.id
+          var index = $scope.gridOptions.data.indexOf(row.entity)
           Business.internetPlans
-            .destroyById({ id: businessId }, { fk: internetPlanId })
+            .destroyById({id: businessId}, {fk: internetPlanId})
             .$promise.then(
-              function(res) {
-                $scope.gridOptions.data.splice(index, 1);
-              },
-              function(err) {
-                appMessenger.showError('internetPlan.removeUnSuccessFull');
-              }
-            );
+            function (res) {
+              $scope.gridOptions.data.splice(index, 1)
+            },
+            function (err) {
+              appMessenger.showError('internetPlan.removeUnSuccessFull')
+            }
+          )
         },
-        NoCallback: function() {}
-      });
-    };
+        NoCallback: function () {}
+      })
+    }
 
-    $scope.addPlan = function(planType) {
+    $scope.addPlan = function (planType) {
       $uibModal.open({
         backdrop: true,
         size: 'lg',
@@ -177,10 +177,10 @@ app.controller('internetPlanList', [
         controller: [
           '$scope',
           '$uibModalInstance',
-          function($scope, $uibModalInstance) {
+          function ($scope, $uibModalInstance) {
             var defaultPlan = {
-              speed: { value: 128, type: 'Kbps' },
-              bulk: { value: 0, type: 'MB' },
+              speed: {value: 128, type: 'Kbps'},
+              bulk: {value: 0, type: 'MB'},
               timeDuration: 0,
               price: 0,
               fromToCheck: false,
@@ -191,45 +191,45 @@ app.controller('internetPlanList', [
               extraBulkPrice: 0,
               autoResubscribe: false,
               accessType: 'private'
-            };
+            }
             $scope.options = {
               title: 'internetPlan.' + 'addPlan',
               cancelBtnLabel: 'general.cancel',
               saveBtnLabel: 'general.save'
-            };
-            $scope.speedTypes = ['Kbps', 'Mbps', 'Gbps'];
-            $scope.bulkTypes = ['KB', 'MB', 'GB'];
-            $scope.internetPlan = defaultPlan;
-            $scope.internetPlan.type = planType;
-            $scope.internetPlan.duration = 3;
-            $scope.internetPlan = translateInternetPlan($scope.internetPlan);
-            $scope.cancel = function() {
-              $uibModalInstance.close();
-            };
-            $scope.save = function() {
-              $scope.internetPlan = englishInternetPlan($scope.internetPlan);
+            }
+            $scope.speedTypes = ['Kbps', 'Mbps', 'Gbps']
+            $scope.bulkTypes = ['KB', 'MB', 'GB']
+            $scope.internetPlan = defaultPlan
+            $scope.internetPlan.type = planType
+            $scope.internetPlan.duration = 3
+            $scope.internetPlan = translateInternetPlan($scope.internetPlan)
+            $scope.cancel = function () {
+              $uibModalInstance.close()
+            }
+            $scope.save = function () {
+              $scope.internetPlan = englishInternetPlan($scope.internetPlan)
               Business.internetPlans
-                .create({ id: businessId }, $scope.internetPlan)
+                .create({id: businessId}, $scope.internetPlan)
                 .$promise.then(
-                  function(res) {
-                    appMessenger.showSuccess('internetPlan.createSuccessFull');
-                    getPage();
-                    $uibModalInstance.close();
-                  },
-                  function(err) {
-                    appMessenger.showError('internetPlan.createUnSuccessFull');
-                    if (err.status == 422) {
-                      appMessenger.showError('general.invalidInput');
-                    }
+                function (res) {
+                  appMessenger.showSuccess('internetPlan.createSuccessFull')
+                  getPage()
+                  $uibModalInstance.close()
+                },
+                function (err) {
+                  appMessenger.showError('internetPlan.createUnSuccessFull')
+                  if (err.status == 422) {
+                    appMessenger.showError('general.invalidInput')
                   }
-                );
-            };
+                }
+              )
+            }
           }
         ]
-      });
-    };
+      })
+    }
 
-    $scope.editPlan = function(row) {
+    $scope.editPlan = function (row) {
       $uibModal.open({
         backdrop: true,
         animation: true,
@@ -240,36 +240,36 @@ app.controller('internetPlanList', [
         controller: [
           '$scope',
           '$uibModalInstance',
-          function($scope, $uibModalInstance) {
-            $scope.speedTypes = ['Kbps', 'Mbps', 'Gbps'];
-            $scope.bulkTypes = ['KB', 'MB', 'GB'];
+          function ($scope, $uibModalInstance) {
+            $scope.speedTypes = ['Kbps', 'Mbps', 'Gbps']
+            $scope.bulkTypes = ['KB', 'MB', 'GB']
             $scope.options = {
               title: 'internetPlan.editPlan',
               cancelBtnLabel: 'general.cancel',
               saveBtnLabel: 'general.save'
-            };
-            var internetPlanId = row.entity.id;
+            }
+            var internetPlanId = row.entity.id
             Business.internetPlans
               .findById({
                 id: businessId,
                 fk: internetPlanId
               })
               .$promise.then(
-                function(internetPlan) {
-                  $scope.internetPlan = translateInternetPlan(internetPlan);
-                  if (internetPlan.type != 'dynamic') {
-                    appMessenger.showInfo('internetPlan.unableToEdit');
-                  }
-                },
-                function(error) {
-                  $log.error(error);
+              function (internetPlan) {
+                $scope.internetPlan = translateInternetPlan(internetPlan)
+                if (internetPlan.type != 'dynamic') {
+                  appMessenger.showInfo('internetPlan.unableToEdit')
                 }
-              );
-            $scope.cancel = function() {
-              $uibModalInstance.close();
-            };
-            $scope.save = function() {
-              $scope.internetPlan = englishInternetPlan($scope.internetPlan);
+              },
+              function (error) {
+                $log.error(error)
+              }
+            )
+            $scope.cancel = function () {
+              $uibModalInstance.close()
+            }
+            $scope.save = function () {
+              $scope.internetPlan = englishInternetPlan($scope.internetPlan)
               Business.internetPlans
                 .updateById(
                   {
@@ -279,25 +279,25 @@ app.controller('internetPlanList', [
                   $scope.internetPlan
                 )
                 .$promise.then(
-                  function(res) {
-                    appMessenger.showSuccess('internetPlan.updateSuccessFull');
-                    getPage();
-                    $uibModalInstance.close();
-                  },
-                  function(err) {
-                    appMessenger.showError('internetPlan.updateUnSuccessFull');
-                    if (err.status == 422) {
-                      appMessenger.showError('general.invalidInput');
-                    }
+                function (res) {
+                  appMessenger.showSuccess('internetPlan.updateSuccessFull')
+                  getPage()
+                  $uibModalInstance.close()
+                },
+                function (err) {
+                  appMessenger.showError('internetPlan.updateUnSuccessFull')
+                  if (err.status == 422) {
+                    appMessenger.showError('general.invalidInput')
                   }
-                );
-            };
+                }
+              )
+            }
           }
         ]
-      });
-    };
+      })
+    }
 
-    $scope.editDefaultPlanSettings = function() {
+    $scope.editDefaultPlanSettings = function () {
       $uibModal.open({
         backdrop: true,
         animation: true,
@@ -309,35 +309,35 @@ app.controller('internetPlanList', [
         controller: [
           '$scope',
           '$uibModalInstance',
-          function($scope, $uibModalInstance) {
+          function ($scope, $uibModalInstance) {
             $scope.options = {
               title: 'internetPlan.defaultPlanSettings',
               cancelBtnLabel: 'general.cancel',
               saveBtnLabel: 'general.save'
-            };
-            Business.internetPlans({ id: businessId }).$promise.then(
-              function(internetPlans) {
-                $scope.options.internetPlans = internetPlans;
-                angular.forEach(internetPlans, function(internetPlan) {
+            }
+            Business.internetPlans({id: businessId}).$promise.then(
+              function (internetPlans) {
+                $scope.options.internetPlans = internetPlans
+                angular.forEach(internetPlans, function (internetPlan) {
                   if (
                     $scope.defaultInternetPlan &&
                     $scope.defaultInternetPlan.id &&
                     $scope.defaultInternetPlan.id == internetPlan.id
                   ) {
-                    $scope.defaultInternetPlan.plan = internetPlan;
+                    $scope.defaultInternetPlan.plan = internetPlan
                   }
-                });
+                })
                 if (
                   $scope.defaultInternetPlan &&
                   $scope.defaultInternetPlan.count == 'undefined'
                 ) {
-                  $scope.defaultInternetPlan.count = translateNumberFilter(0);
+                  $scope.defaultInternetPlan.count = translateNumberFilter(0)
                 }
                 if (
                   $scope.defaultInternetPlan &&
                   $scope.defaultInternetPlan.period == 'undefined'
                 ) {
-                  $scope.defaultInternetPlan.period = translateNumberFilter(0);
+                  $scope.defaultInternetPlan.period = translateNumberFilter(0)
                 }
                 if (
                   $scope.defaultInternetPlan &&
@@ -345,7 +345,7 @@ app.controller('internetPlanList', [
                 ) {
                   $scope.defaultInternetPlan.count = translateNumberFilter(
                     $scope.defaultInternetPlan.count
-                  );
+                  )
                 }
                 if (
                   $scope.defaultInternetPlan &&
@@ -353,18 +353,18 @@ app.controller('internetPlanList', [
                 ) {
                   $scope.defaultInternetPlan.period = translateNumberFilter(
                     $scope.defaultInternetPlan.period
-                  );
+                  )
                 }
               },
-              function(error) {
-                $log.error(error);
+              function (error) {
+                $log.error(error)
               }
-            );
-            $scope.cancel = function() {
-              $uibModalInstance.close();
-            };
-            $scope.save = function() {
-              var defaultInternetPlan = {};
+            )
+            $scope.cancel = function () {
+              $uibModalInstance.close()
+            }
+            $scope.save = function () {
+              var defaultInternetPlan = {}
               if (
                 $scope.defaultInternetPlan &&
                 $scope.defaultInternetPlan.plan
@@ -376,100 +376,100 @@ app.controller('internetPlanList', [
                   period:
                     englishNumberFilter($scope.defaultInternetPlan.period) || 0,
                   autoAssign: $scope.defaultInternetPlan.autoAssign
-                };
+                }
               }
               Business.prototype$patchAttributes(
-                { id: businessId },
-                { defaultInternetPlan: defaultInternetPlan }
+                {id: businessId},
+                {defaultInternetPlan: defaultInternetPlan}
               ).$promise.then(
-                function(res) {
-                  appMessenger.showSuccess('business.settingsUpdateSuccessful');
+                function (res) {
+                  appMessenger.showSuccess('business.settingsUpdateSuccessful')
                 },
-                function(err) {
-                  appMessenger.showError('business.settingsUpdateUnSuccessful');
+                function (err) {
+                  appMessenger.showError('business.settingsUpdateUnSuccessful')
                 }
-              );
-              $uibModalInstance.close();
-              getPage();
-            };
+              )
+              $uibModalInstance.close()
+              getPage()
+            }
           }
         ]
-      });
-    };
+      })
+    }
 
-    $scope.$watch('paginationOptions.itemPerPage', function(
+    $scope.$watch('paginationOptions.itemPerPage', function (
       oldValue,
       newValue
     ) {
-      getPage();
-    });
+      getPage()
+    })
 
-    $scope.pageChanges = function() {
-      getPage();
-    };
+    $scope.pageChanges = function () {
+      getPage()
+    }
 
-    var getPage = function() {
+    var getPage = function () {
       switch ($scope.paginationOptions.sort) {
         case uiGridConstants.ASC:
-          break;
+          break
         case uiGridConstants.DESC:
-          break;
+          break
         default:
-          break;
+          break
       }
-      var options = { filter: {} };
-      options.id = businessId;
-      options.filter.sort = $scope.paginationOptions.sort;
+      var options = {filter: {}}
+      options.id = businessId
+      options.filter.sort = $scope.paginationOptions.sort
       options.filter.skip =
         ($scope.paginationOptions.pageNumber - 1) *
-        $scope.paginationOptions.itemPerPage;
-      options.filter.limit = $scope.paginationOptions.itemPerPage;
+        $scope.paginationOptions.itemPerPage
+      options.filter.limit = $scope.paginationOptions.itemPerPage
 
-      Business.internetPlans.count({ id: businessId }).$promise.then(
-        function(result) {
-          $scope.gridOptions.totalItems = result.count;
-          $scope.paginationOptions.totalItems = result.count;
+      Business.internetPlans.count({id: businessId}).$promise.then(
+        function (result) {
+          $scope.gridOptions.totalItems = result.count
+          $scope.paginationOptions.totalItems = result.count
         },
-        function(error) {
-          $log.error(error);
+        function (error) {
+          $log.error(error)
         }
-      );
+      )
       Business.internetPlans(options).$promise.then(
-        function(internetPlans) {
-          $scope.gridOptions.data = internetPlans;
-          Business.findById({ id: businessId }).$promise.then(
-            function(business) {
+        function (internetPlans) {
+          $scope.gridOptions.data = internetPlans
+          Business.findById({id: businessId}).$promise.then(
+            function (business) {
               if (
                 business.defaultInternetPlan &&
                 business.defaultInternetPlan.id
               ) {
-                $scope.defaultInternetPlan = business.defaultInternetPlan;
-                angular.forEach($scope.gridOptions.data, function(
+                $scope.defaultInternetPlan = business.defaultInternetPlan
+                angular.forEach($scope.gridOptions.data, function (
                   internetPlan
                 ) {
-                  internetPlan.selected = false;
+                  internetPlan.selected = false
                   if (internetPlan.id == $scope.defaultInternetPlan.id) {
-                    internetPlan.selected = true;
+                    internetPlan.selected = true
                   }
-                });
+                })
               } else {
-                $scope.defaultInternetPlan = {};
+                $scope.defaultInternetPlan = {}
               }
             },
-            function(err) {
-              appMessenger.showError('business.settingsLoadUnSuccessful');
+            function (err) {
+              appMessenger.showError('business.settingsLoadUnSuccessful')
             }
-          );
+          )
         },
-        function(error) {
-          $log.error(error);
+        function (error) {
+          $log.error(error)
         }
-      );
-    };
+      )
+    }
 
-    var translateInternetPlan = function(plan) {
+    var translateInternetPlan = function (plan) {
       if (!plan.extraBulkPrice) {
-        plan.extraBulkPrice = 0;
+        plan.extraBulkPrice = 0
       }
       angular.extend(plan, {
         speed: {
@@ -488,10 +488,10 @@ app.controller('internetPlanList', [
         toMinute: translateNumberFilter(plan.toMinute),
         duration: translateNumberFilter(plan.duration),
         extraBulkPrice: translateNumberFilter(plan.extraBulkPrice)
-      });
-      return plan;
-    };
-    var englishInternetPlan = function(plan) {
+      })
+      return plan
+    }
+    var englishInternetPlan = function (plan) {
       angular.extend(plan, {
         speed: {
           value: englishNumberFilter(plan.speed.value),
@@ -509,16 +509,16 @@ app.controller('internetPlanList', [
         toMinute: englishNumberFilter(plan.toMinute),
         duration: englishNumberFilter(plan.duration),
         extraBulkPrice: englishNumberFilter(plan.extraBulkPrice)
-      });
-      return plan;
-    };
+      })
+      return plan
+    }
 
-    function verifyIp(ip) {
+    function verifyIp (ip) {
       if (typeof ip !== 'string') {
-        throw new TypeError('Expected a string');
+        throw new TypeError('Expected a string')
       }
-      var matcher = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)$/;
-      return matcher.test(ip);
+      var matcher = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)$/
+      return matcher.test(ip)
     }
   }
-]);
+])
