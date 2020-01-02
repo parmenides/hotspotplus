@@ -89,7 +89,7 @@ SELECT arrayJoin(timeSlots(toDateTime('${from}'), toUInt32(${intervalInSeconds}*
 `
       log.debug('getUsageByInterval query', sqlQuery)
       return query(sqlQuery).then((result) => {
-        log.debug({result})
+        log.debug(`first item of result set `,result[0])
         return result
       })
     },
@@ -111,7 +111,7 @@ WHERE creationDate>=toDateTime('${from}') AND creationDate<=toDateTime('${to}') 
       log.debug('getMemberUsage query', sqlQuery)
       return query(sqlQuery).then((result) => {
         // const {upload, download, sessionTime} = result[0]
-        log.debug({result})
+        log.debug(`first item of result set `,result[0])
         return result
         /* return {
           memberId: memberId,
@@ -165,7 +165,7 @@ ${departments && departments.length > 0 ? ` AND (${departments.map((dep) => {ret
 `
       log.debug('getTopMembersByUsage query ', sqlQuery)
       return query(sqlQuery).then((result) => {
-        log.debug({result})
+        log.debug(`first item of result set `,result[0])
         return result
       })
     },
@@ -206,7 +206,7 @@ ${departments && departments.length > 0 ? ` AND (${departments.map((dep) => {ret
        GROUP BY sessionId LIMIT ${limit} OFFSET ${skip} `
         log.debug('getActiveSessionIds query ', sqlQuery)
         return query(sqlQuery).then((result) => {
-          log.warn({result})
+          log.debug(`first item of result set `,result[0])
           return result
         })
       } catch (error) {
@@ -232,7 +232,7 @@ any(username),any(framedIpAddress),any(mac),any(creationDate),any(download),any(
        GROUP BY sessionId  `
         log.debug('getMemberSessions query ', sqlQuery)
         return query(sqlQuery).then((result) => {
-          log.warn({result})
+          log.debug(`first item of result set `,result[0])
           return result
         })
       } catch (error) {
@@ -253,7 +253,7 @@ any(username) as username,any(memberId) as memberId,toInt64(sum(download)) as do
 
         log.debug('getSessionUsage query ', sqlQuery)
         return query(sqlQuery).then((result) => {
-          log.warn({result})
+          log.debug(`first item of result set `,result[0])
           return result[0]
         })
       } catch (error) {
@@ -276,7 +276,7 @@ any(username) as username,any(memberId) as memberId,toInt64(sum(download)) as do
       AND creationDate>=toDateTime('${startDate}') AND creationDate<=toDateTime('${endDate}') AND (accStatusType=3 OR accStatusType=1) group by sessionId`
         log.debug('countSessions query ', sqlQuery)
         return query(sqlQuery).then(function (result) {
-          log.debug({result})
+          log.debug(`first item of result set `,result[0])
           return {
             count: result.length,
           }
@@ -305,7 +305,7 @@ any(username) as username,any(memberId) as memberId,toInt64(sum(download)) as do
 `
         log.debug('getDatabaseInfo query ', sqlQuery)
         return query(sqlQuery).then(function (result) {
-          log.debug({result})
+          log.debug(`first item of result set `,result[0])
           return result
         })
       } catch (error) {
@@ -321,7 +321,7 @@ any(username) as username,any(memberId) as memberId,toInt64(sum(download)) as do
         const sqlQuery = `SELECT  * FROM ${SESSION_TABLE} WHERE sessionId='${sessionId}'`
         log.debug('getSessionsById query ', sqlQuery)
         return query(sqlQuery).then(function (result) {
-          log.debug({result})
+          log.debug(`first item of result set `,result[0])
           return result[0]
         })
       } catch (error) {
@@ -347,7 +347,7 @@ any(username) as username,any(memberId) as memberId,toInt64(sum(download)) as do
         const sqlQuery = `SELECT * FROM ${CHARGE_TABLE} WHERE businessId='${businessId}' AND date>=toDateTime('${fromDate}') ORDER BY date LIMIT ${limit} OFFSET ${skip}`
         log.debug('getCharges query ', sqlQuery)
         return query(sqlQuery).then(function (result) {
-          log.debug({result})
+          log.debug(`first item of result set `,result[0])
           return {
             charges: result,
           }
