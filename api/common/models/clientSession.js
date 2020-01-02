@@ -77,8 +77,8 @@ module.exports = function (ClientSession) {
 
       kafkaClient.refreshMetadata([config.SESSION_TOPIC], function (error) {
         if (error) {
-          log.error('@refreshMetadata Error:', error);
-          kafkaClient.connect();
+          log.error('@refreshMetadata Error:', error)
+          kafkaClient.connect()
           return reject(error)
         }
 
@@ -91,8 +91,8 @@ module.exports = function (ClientSession) {
           ],
           function (error, data) {
             if (error) {
-              log.error('Failed to add session to kafka: ', error);
-              kafkaClient.connect();
+              log.error('Failed to add session to kafka: ', error)
+              kafkaClient.connect()
               return reject(error)
             }
             log.debug('session sent to kafka ', JSON.stringify(session), data)
@@ -107,7 +107,7 @@ module.exports = function (ClientSession) {
     startDate,
     endDate,
     businessId,
-    departmentId,
+    departments,
     skip,
     limit,
     cb
@@ -122,14 +122,7 @@ module.exports = function (ClientSession) {
     endDate = endDate ? endDate : (new Date()).add({minutes: 2})
     const sessions = []
 
-    if (!departmentId) {
-      return sessions
-    }
-    if (departmentId === 'all') {
-      departmentId = null
-    }
-
-    const activeSessions = await db.getActiveSessionIds(businessId, departmentId, startDate, endDate, skip, limit)
+    const activeSessions = await db.getActiveSessionIds(businessId, departments, startDate, endDate, skip, limit)
     for (const session of activeSessions) {
       const sessionData = await db.getSessionUsage(session.sessionId)
       if (sessionData && sessionData.memberId) {
@@ -170,8 +163,9 @@ module.exports = function (ClientSession) {
         required: true,
       },
       {
-        arg: 'departmentId',
-        type: 'string',
+        arg: 'departments',
+        type: 'array',
+        required: true
       },
       {
         arg: 'skip',
@@ -187,21 +181,14 @@ module.exports = function (ClientSession) {
     returns: {arg: 'result', type: 'Object'},
   })
 
-  ClientSession.getOnlineSessionCount = async (businessId, departmentId) => {
-    log.debug('@getOnlineSessionCount : ', businessId)
-    if (!departmentId) {
-      throw new Error('department id is empty')
-    }
+  ClientSession.getOnlineSessionCount = async (businessId, departments) => {
+    log.debug('@getOnlineSessionCount : ', businessId);
     let result
-    if (departmentId === 'all') {
-      result = await cacheManager.getBusinessSessions(businessId)
-    } else {
-      result = await cacheManager.getBusinessSessions(businessId, (session) => {
-        if (session.departmentId === departmentId) {
-          return session
-        }
-      })
-    }
+    result = await cacheManager.getBusinessSessions(businessId, (session) => {
+      if (departments.includes(session.departmentId)) {
+        return session
+      }
+    })
     return {count: result.length}
   }
 
@@ -214,8 +201,9 @@ module.exports = function (ClientSession) {
         required: true,
       },
       {
-        arg: 'departmentId',
-        type: 'string',
+        arg: 'departments',
+        type: 'array',
+        required: true,
       },
       {
         arg: 'startDate',

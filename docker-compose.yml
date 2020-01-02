@@ -142,7 +142,7 @@ services:
     ports:
       - 6379:6379
   clickhouse:
-    image: yandex/clickhouse-server:19.13.5.44
+    image: yandex/clickhouse-server:19.17.5.18
     hostname: clickhouse
     container_name: clickhouse
     ports:

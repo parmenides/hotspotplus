@@ -3,6 +3,7 @@
  */
 app.directive('topMembers', [
   'PREFIX',
+  'Session',
   '$log',
   'Usage',
   'translateFilter',
@@ -11,6 +12,7 @@ app.directive('topMembers', [
   'humanSizeFilter',
   function (
     PREFIX,
+    Session,
     $log,
     Usage,
     translateFilter,
@@ -39,7 +41,8 @@ app.directive('topMembers', [
           query.startDate = $scope.params.fromDate
           query.endDate = $scope.params.endDate
           query.businessId = $scope.params.businessId
-          query.departmentId = $scope.params.departmentId
+          query.departments = $scope.params.departmentId?[$scope.params.departmentId]: Session.permittedDepartments;
+
           query.offset = 0
           $scope.loading = true
           Usage.getTopMembers(query).$promise.then(function (

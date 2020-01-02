@@ -80,6 +80,7 @@ app
     'Reseller',
     function(Business, Member,Operator, Reseller) {
       var props = [
+        'permittedDepartments',
         'business',
         'operator',
         'roles',

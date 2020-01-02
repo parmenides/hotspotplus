@@ -1181,7 +1181,7 @@ module.exports = function (Business) {
     returns: {root: true},
   })
 
-  Business.getTrafficUsage = async (startDate, endDate, departmentId, ctx) => {
+  Business.getTrafficUsage = async (startDate, endDate, departments, ctx) => {
     const businessId = ctx.currentUserId
     const fromDate = Number.parseInt(startDate)
     const toDate = Number.parseInt(endDate)
@@ -1190,20 +1190,20 @@ module.exports = function (Business) {
     const upload = []
     const download = []
     const sessionTime = []
-    if (!departmentId) {
+    /*if (!departments) {
       return {
         date,
         upload,
         download,
         sessionTime,
       }
-    }
-    if (departmentId === 'all') {
-      departmentId = null
-    }
+    }*/
+    /*if (departments === 'all') {
+      departments = null
+    }*/
     const result = await db.getUsageByInterval(
       businessId,
-      departmentId,
+      departments,
       fromDate,
       toDate,
     )
@@ -1237,8 +1237,9 @@ module.exports = function (Business) {
         description: 'End Date',
       },
       {
-        arg: 'departmentId',
-        type: 'string',
+        arg: 'departments',
+        required: true,
+        type: 'array',
         description: 'Department',
       },
       {arg: 'options', type: 'object', http: 'optionsFromRequest'},

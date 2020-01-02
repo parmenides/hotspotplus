@@ -5,6 +5,7 @@ app.directive('sessionsReport', [
   'PREFIX',
   '$log',
   '$rootScope',
+  'Session',
   'ClientSession',
   'uiGridConstants',
   'translateFilter',
@@ -16,6 +17,7 @@ app.directive('sessionsReport', [
     PREFIX,
     $log,
     $rootScope,
+    Session,
     ClientSession,
     uiGridConstants,
     translateFilter,
@@ -194,7 +196,7 @@ app.directive('sessionsReport', [
             var query = {};
             //query.startDate = $scope.params.fromDate;
             //query.endDate = $scope.params.endDate;
-            query.departmentId = $scope.params.departmentId || 'all';
+            query.departments = $scope.params.departmentId ? [$scope.params.departmentId] : Session.permittedDepartments
             query.businessId = $scope.params.businessId;
             query.skip =
               ($scope.paginationOptions.pageNumber - 1) *
@@ -203,7 +205,7 @@ app.directive('sessionsReport', [
 
             ClientSession.getOnlineSessionCount({
               businessId: query.businessId,
-              departmentId: query.departmentId
+              departments: query.departments
             }).$promise.then(
               function(result) {
                 $scope.gridOptions.totalItems = result.count;

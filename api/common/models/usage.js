@@ -20,21 +20,9 @@ module.exports = function(Usage) {
     return {upload, download, sessionTime};
   };
 
-  Usage.getUsage = async (departmentId, startDate, endDate, ctx) => {
+  Usage.getUsage = async (departments, startDate, endDate, ctx) => {
     const businessId = ctx.currentUserId;
-    if (!departmentId) {
-      return {
-        bulk: 0,
-        download: 0,
-        upload: 0,
-        sessionTime: 0,
-      };
-    }
-    if (departmentId === 'all') {
-      departmentId = null;
-    }
-
-    const result = await db.getBusinessUsage(businessId, departmentId, startDate, endDate);
+    const result = await db.getBusinessUsage(businessId, departments, startDate, endDate);
     return result;
   };
 
@@ -42,8 +30,9 @@ module.exports = function(Usage) {
     description: 'Get usage report.',
     accepts: [
       {
-        arg: 'departmentId',
-        type: 'string',
+        arg: 'departments',
+        type: 'array',
+        required:true,
         description: 'departmentId',
       },
       {
@@ -80,7 +69,7 @@ module.exports = function(Usage) {
     returns: {root: true},
   });
 
-  Usage.getTopMembers = async (departmentId, startDate, endDate, ctx) => {
+  Usage.getTopMembers = async (departments, startDate, endDate, ctx) => {
     const businessId = ctx.currentUserId;
     const fromDate = Number.parseInt(startDate);
     const toDate = Number.parseInt(endDate);
@@ -92,21 +81,10 @@ module.exports = function(Usage) {
     const download = [];
     const sessionTime = [];
 
-    if (!departmentId) {
-      return {
-        username,
-        upload,
-        download,
-        sessionTime,
-      };
-    }
-    if (departmentId === 'all') {
-      departmentId = null;
-    }
 
     const result = await db.getTopMembersByUsage(
       businessId,
-      departmentId,
+      departments,
       fromDate,
       toDate,
       limit,
@@ -130,9 +108,9 @@ module.exports = function(Usage) {
     description: 'Get Top Members.',
     accepts: [
       {
-        arg: 'departmentId',
-        type: 'string',
-        description: 'departmentId',
+        arg: 'departments',
+        type: 'array',
+        description: 'departments',
       },
       {
         arg: 'startDate',

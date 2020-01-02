@@ -39,7 +39,7 @@ app.directive('datePickerAdvance', [
           $scope.permittedDepartments = response.departments
           $scope.limited = response.limited
           if (!$scope.limited) {
-            $scope.permittedDepartments = [{id: 'all', title: translateFilter('department.allDepartment')},...$scope.permittedDepartments]
+            $scope.permittedDepartments = [{id: null, title: translateFilter('department.allDepartment')},...$scope.permittedDepartments]
           }
           $scope.selectedDepartment = $scope.permittedDepartments[0]
           $scope.search()

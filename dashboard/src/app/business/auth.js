@@ -72,9 +72,14 @@ app.controller('BusinessSignInController', [
               SessionData.userType = 'Business';
               SessionData.business = LoopBackAuth.currentUserData;
               SessionData.roles = roles;
-              Session.setSession(SessionData);
-              $state.go('app.loadDashboard');
-              appMessenger.showSuccess('user.signInSuccessful');
+              Business.getMyDepartments().$promise.then(function (response) {
+                SessionData.permittedDepartments = response.departments.map(function(dep){
+                  return dep.id
+                });
+                Session.setSession(SessionData);
+                $state.go('app.loadDashboard');
+                appMessenger.showSuccess('user.signInSuccessful');})
+
             },
             function() {
               appMessenger.showError('auth.loadingRoleFailed');

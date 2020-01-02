@@ -15,12 +15,12 @@ module.exports = (insert, query, uuid, config, moment, log) => {
 PARTITION BY toStartOfMonth( date )
 ORDER BY (businessId)
 `)
-/*
-        await query(`create table IF NOT EXISTS hotspotplus.Netflow(RouterAddr String,SrcIP String,DstIP String, SrcPort String,DstPort String,NextHop String, TimeRecvd DateTime,Proto UInt8)
-engine=AggregatingMergeTree()
-PARTITION BY toStartOfDay( TimeRecvd )
-ORDER BY (NextHop,DstPort,SrcPort,DstIP,SrcIP,RouterAddr,toStartOfInterval( TimeRecvd ,INTERVAL 30 minute ))
-`)*/
+        /*
+                await query(`create table IF NOT EXISTS hotspotplus.Netflow(RouterAddr String,SrcIP String,DstIP String, SrcPort String,DstPort String,NextHop String, TimeRecvd DateTime,Proto UInt8)
+        engine=AggregatingMergeTree()
+        PARTITION BY toStartOfDay( TimeRecvd )
+        ORDER BY (NextHop,DstPort,SrcPort,DstIP,SrcIP,RouterAddr,toStartOfInterval( TimeRecvd ,INTERVAL 30 minute ))
+        `)*/
 
         await query(`create table IF NOT EXISTS ${SESSION_TABLE}(sessionId String,businessId String,memberId String,nasId String,departmentId String,groupIdentityId String,nasIp String,username String,framedIpAddress String,mac String,creationDate DateTime,download UInt32,upload UInt32,
 sessionTime UInt32,accStatusType UInt8 )
@@ -42,11 +42,11 @@ engine=MergeTree()
 PARTITION BY toStartOfDay( receivedAt )
 ORDER BY (nasIp,memberIp,receivedAt)
 `)
-/*        await query(`CREATE TABLE IF NOT EXISTS hotspotplus.Dns(memberIp String,nasIp String,domain String,receivedAt DateTime )
-engine=AggregatingMergeTree()
-PARTITION BY toStartOfDay( receivedAt )
-ORDER BY (nasIp,memberIp,domain,toStartOfInterval( receivedAt , INTERVAL 1 day ))
-`)*/
+        /*        await query(`CREATE TABLE IF NOT EXISTS hotspotplus.Dns(memberIp String,nasIp String,domain String,receivedAt DateTime )
+        engine=AggregatingMergeTree()
+        PARTITION BY toStartOfDay( receivedAt )
+        ORDER BY (nasIp,memberIp,domain,toStartOfInterval( receivedAt , INTERVAL 1 day ))
+        `)*/
         await query(`CREATE TABLE IF NOT EXISTS hotspotplus.NetflowReport(businessId String,departmentId String,memberId String, nasIp String,username String, routerAddr String,
 srcIp String, dstIp String, srcPort String, dstPort String,timeRecvd DateTime,proto UInt8, nextHop String)  
 ENGINE=AggregatingMergeTree()
@@ -57,14 +57,14 @@ ORDER BY (dstIp,srcIp,routerAddr,dstPort,srcPort,username,toStartOfHour( timeRec
 PARTITION BY (toStartOfDay( receivedAt))
 ORDER BY (memberId,nasIp,memberIp,domain,username,toStartOfHour( receivedAt ))
 `)
-        log.debug('database init is done!');
+        log.debug('database init is done!')
       } catch (error) {
         log.error('failed to init clickhouse ', error)
         throw error
       }
     },
 
-    getUsageByInterval: (businessId, departmentId, startDate, endDate) => {
+    getUsageByInterval: (businessId, departments, startDate, endDate) => {
       if (!businessId) {
         throw new Error('businessId is undefined')
       }
@@ -80,13 +80,14 @@ ORDER BY (memberId,nasIp,memberIp,domain,username,toStartOfHour( receivedAt ))
 SELECT * FROM (
 SELECT any(toStartOfInterval(creationDate,INTERVAL ${intervalInSeconds} second)) as date ,toInt64(SUM(upload)) as upload,toInt64(SUM(download)) download,toInt64(SUM(sessionTime)) as sessionTime
 FROM ${USAGE_TABLE}
-WHERE creationDate>=toDateTime('${from}') AND creationDate<=toDateTime('${to}') AND businessId='${businessId}' ${departmentId ? ` AND departmentId='${departmentId}'` : ''}
+WHERE creationDate>=toDateTime('${from}') AND creationDate<=toDateTime('${to}') AND businessId='${businessId}'
+${departments && departments.length > 0 ? ` AND (${departments.map((dep) => {return ` departmentId='${dep}' `}).join(' OR ')})` : ''}
 GROUP BY toStartOfInterval(creationDate,INTERVAL ${intervalInSeconds} second) order by date
 ) ANY RIGHT JOIN (
 SELECT arrayJoin(timeSlots(toDateTime('${from}'), toUInt32(${intervalInSeconds}*${durationInDays}),${intervalInSeconds})) AS date
 ) USING (date) order by date settings any_join_distinct_right_table_keys=1
 `
-      log.warn(sqlQuery)
+      log.debug('getUsageByInterval query', sqlQuery)
       return query(sqlQuery).then((result) => {
         log.debug({result})
         return result
@@ -107,7 +108,7 @@ SELECT arrayJoin(timeSlots(toDateTime('${from}'), toUInt32(${intervalInSeconds}*
       const to = moment.utc(endDate).format(config.DATABASE_DATE_FORMAT)
       const sqlQuery = `SELECT sessionId , toInt64(SUM(upload)) as upload,toInt64(SUM(download)) as download,toInt64(SUM(sessionTime)) as sessionTime FROM ${USAGE_TABLE}
 WHERE creationDate>=toDateTime('${from}') AND creationDate<=toDateTime('${to}') AND businessId='${businessId}' AND memberId='${memberId}' group by sessionId`
-      log.debug(sqlQuery)
+      log.debug('getMemberUsage query', sqlQuery)
       return query(sqlQuery).then((result) => {
         // const {upload, download, sessionTime} = result[0]
         log.debug({result})
@@ -121,19 +122,21 @@ WHERE creationDate>=toDateTime('${from}') AND creationDate<=toDateTime('${to}') 
         } */
       })
     },
-    getBusinessUsage: (businessId, departmentId, startDate, endDate) => {
+    getBusinessUsage: (businessId, departments, startDate, endDate) => {
       if (!businessId) {
         throw new Error('businessId is undefined')
       }
       if (!startDate || !endDate) {
         throw new Error('startDate or endDate is undefined', startDate, endDate)
       }
-
       const from = moment.utc(startDate).format(config.DATABASE_DATE_FORMAT)
       const to = moment.utc(endDate).format(config.DATABASE_DATE_FORMAT)
       const sqlQuery = `SELECT toInt64(SUM(upload)) as upload,toInt64(SUM(download)) as download,toInt64(SUM(sessionTime)) as sessionTime FROM ${USAGE_TABLE}
-WHERE creationDate>=toDateTime('${from}') AND creationDate<=toDateTime('${to}') AND businessId='${businessId}' ${departmentId ? `AND departmentId='${departmentId}'` : ''}`
+WHERE creationDate>=toDateTime('${from}') AND creationDate<=toDateTime('${to}') AND businessId='${businessId}'
+      ${departments && departments.length > 0 ? ` AND (${departments.map((dep) => {return ` departmentId='${dep}' `}).join(' OR ')})` : ''}
+`
 
+      log.debug('getBusinessUsage query ', sqlQuery)
       return query(sqlQuery).then((result) => {
         const {upload, download, sessionTime, bulk} = result[0]
         log.debug({result})
@@ -145,7 +148,7 @@ WHERE creationDate>=toDateTime('${from}') AND creationDate<=toDateTime('${to}') 
         }
       })
     },
-    getTopMembersByUsage: (businessId, departmentId, startDate, endDate, limit, skip) => {
+    getTopMembersByUsage: (businessId, departments, startDate, endDate, limit, skip) => {
       if (!businessId) {
         throw new Error('businessId is undefined')
       }
@@ -154,12 +157,13 @@ WHERE creationDate>=toDateTime('${from}') AND creationDate<=toDateTime('${to}') 
       }
 
       const from = moment.utc(startDate).format(config.DATABASE_DATE_FORMAT)
-      const to = moment.utc(endDate).format(config.DATABASE_DATE_FORMAT)
+      const to = moment.utc(endDate).format(config.DATABASE_DATE_FORMAT) //${departments.map((dep) => {return `departmentId=${dep}`})}
       const sqlQuery = `SELECT memberId,any(username) as username,toInt64(SUM(upload)) as upload,toInt64(SUM(download)) as download,toInt64(SUM(sessionTime)) as sessionTime FROM ${USAGE_TABLE}
-WHERE creationDate>=toDateTime('${from}') AND creationDate<=toDateTime('${to}') AND businessId='${businessId}' ${departmentId ? `AND departmentId='${departmentId}'` : ''} 
+WHERE creationDate>=toDateTime('${from}') AND creationDate<=toDateTime('${to}') AND businessId='${businessId}'  
+${departments && departments.length > 0 ? ` AND (${departments.map((dep) => {return ` departmentId='${dep}' `}).join(' OR ')})` : ''}
     GROUP BY memberId ORDER BY download DESC,upload DESC, sessionTime DESC LIMIT ${limit} OFFSET ${skip} 
 `
-      log.debug(sqlQuery)
+      log.debug('getTopMembersByUsage query ', sqlQuery)
       return query(sqlQuery).then((result) => {
         log.debug({result})
         return result
@@ -178,7 +182,7 @@ WHERE creationDate>=toDateTime('${from}') AND creationDate<=toDateTime('${to}') 
       ]
       return insert(CHARGE_TABLE, charge)
     },
-    getActiveSessionIds: (businessId, departmentId, fromDate, toDate, skip, limit) => {
+    getActiveSessionIds: (businessId, departments, fromDate, toDate, skip, limit) => {
       if (!businessId) {
         throw new Error('business ID is undefined')
       }
@@ -196,10 +200,11 @@ WHERE creationDate>=toDateTime('${from}') AND creationDate<=toDateTime('${to}') 
         const startDate = moment.utc(fromDate).format(config.DATABASE_DATE_FORMAT)
         const endDate = toDate ? moment.utc(toDate).format(config.DATABASE_DATE_FORMAT) : moment.utc().format(config.DATABASE_DATE_FORMAT)
         const sqlQuery = `SELECT sessionId
- FROM ${SESSION_TABLE} WHERE businessId='${businessId}' AND creationDate>=toDateTime('${startDate}') AND creationDate<=toDateTime('${endDate}') ${departmentId ? ` AND departmentId='${departmentId}'` : ''}
+ FROM ${SESSION_TABLE} WHERE businessId='${businessId}' AND creationDate>=toDateTime('${startDate}') AND creationDate<=toDateTime('${endDate}') 
+      ${departments && departments.length > 0 ? ` AND (${departments.map((dep) => {return ` departmentId='${dep}' `}).join(' OR ')})` : ''}
        AND (accStatusType=3 OR accStatusType=1) 
        GROUP BY sessionId LIMIT ${limit} OFFSET ${skip} `
-        log.warn({sqlQuery})
+        log.debug('getActiveSessionIds query ', sqlQuery)
         return query(sqlQuery).then((result) => {
           log.warn({result})
           return result
@@ -225,7 +230,7 @@ any(username),any(framedIpAddress),any(mac),any(creationDate),any(download),any(
  FROM ${SESSION_TABLE} WHERE memberId='${memberId}' AND creationDate>=toDateTime('${startDate}') AND creationDate<=toDateTime('${endDate}') 
        AND (accStatusType=3 OR accStatusType=1) 
        GROUP BY sessionId  `
-        log.warn({sqlQuery})
+        log.debug('getMemberSessions query ', sqlQuery)
         return query(sqlQuery).then((result) => {
           log.warn({result})
           return result
@@ -246,7 +251,7 @@ any(username) as username,any(memberId) as memberId,toInt64(sum(download)) as do
  FROM ${USAGE_TABLE} WHERE sessionId='${sessionId}'
  GROUP BY sessionId `
 
-        log.warn({sqlQuery})
+        log.debug('getSessionUsage query ', sqlQuery)
         return query(sqlQuery).then((result) => {
           log.warn({result})
           return result[0]
@@ -256,20 +261,20 @@ any(username) as username,any(memberId) as memberId,toInt64(sum(download)) as do
         throw error
       }
     },
-    countSessions: (businessId, departmentId, fromDate, toDate) => {
+    countSessions: (businessId, departments, fromDate, toDate) => {
       if (!businessId) {
         throw new Error('business ID is undefined')
       }
       if (!fromDate) {
         throw new Error('startDate is undefined')
       }
-
       try {
         const startDate = moment.utc(fromDate).format(config.DATABASE_DATE_FORMAT)
         const endDate = toDate ? moment.utc(toDate).format(config.DATABASE_DATE_FORMAT) : moment.utc().format(config.DATABASE_DATE_FORMAT)
-        const sqlQuery = `SELECT  sessionId,count() as count FROM ${SESSION_TABLE} WHERE businessId='${businessId}'  ${departmentId ? `AND departmentId='${departmentId}'` : ''} 
+        const sqlQuery = `SELECT  sessionId,count() as count FROM ${SESSION_TABLE} WHERE businessId='${businessId}'  
+      ${departments && departments.length > 0 ? ` AND (${departments.map((dep) => {return ` departmentId='${dep}' `}).join(' OR ')})` : ''}
       AND creationDate>=toDateTime('${startDate}') AND creationDate<=toDateTime('${endDate}') AND (accStatusType=3 OR accStatusType=1) group by sessionId`
-        log.debug({sqlQuery})
+        log.debug('countSessions query ', sqlQuery)
         return query(sqlQuery).then(function (result) {
           log.debug({result})
           return {
@@ -298,7 +303,7 @@ any(username) as username,any(memberId) as memberId,toInt64(sum(download)) as do
     ORDER BY rows DESC
 )
 `
-        log.debug({sqlQuery})
+        log.debug('getDatabaseInfo query ', sqlQuery)
         return query(sqlQuery).then(function (result) {
           log.debug({result})
           return result
@@ -314,7 +319,7 @@ any(username) as username,any(memberId) as memberId,toInt64(sum(download)) as do
       }
       try {
         const sqlQuery = `SELECT  * FROM ${SESSION_TABLE} WHERE sessionId='${sessionId}'`
-        log.debug({sqlQuery})
+        log.debug('getSessionsById query ', sqlQuery)
         return query(sqlQuery).then(function (result) {
           log.debug({result})
           return result[0]
@@ -340,7 +345,7 @@ any(username) as username,any(memberId) as memberId,toInt64(sum(download)) as do
       try {
         const fromDate = moment.utc(startDate).format(config.DATABASE_DATE_FORMAT)
         const sqlQuery = `SELECT * FROM ${CHARGE_TABLE} WHERE businessId='${businessId}' AND date>=toDateTime('${fromDate}') ORDER BY date LIMIT ${limit} OFFSET ${skip}`
-        log.debug({sqlQuery})
+        log.debug('getCharges query ', sqlQuery)
         return query(sqlQuery).then(function (result) {
           log.debug({result})
           return {
@@ -358,6 +363,7 @@ any(username) as username,any(memberId) as memberId,toInt64(sum(download)) as do
       }
       try {
         const sqlQuery = `SELECT sum(amount) as balance FROM ${CHARGE_TABLE} WHERE businessId='${businessId}' `
+        log.debug('getProfileBalance query ', sqlQuery)
         return query(sqlQuery).then((result) => {
           log.debug(result)
           return {
@@ -375,6 +381,7 @@ any(username) as username,any(memberId) as memberId,toInt64(sum(download)) as do
       }
       try {
         const sqlQuery = `SELECT sum(amount) as balance FROM ${LICENSE_TABLE} WHERE licenseId='${licenseId}' `
+        log.debug('getLicenseBalance query ', sqlQuery)
         return query(sqlQuery).then((result) => {
           return {
             balance: result[0].balance,

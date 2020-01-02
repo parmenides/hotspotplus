@@ -5,7 +5,7 @@
   "bin": "server/server.js",
   "scripts": {
     "lint": "eslint --fix --ignore-path ../.gitignore .",
-    "start": "node server/server.js",
+    "start": "pm2-runtime --watch server/server.js",
     "start:dev": "supervisor -w server,common ./server/server.js",
     "pretest": "eslint .",
     "format": "standard .",

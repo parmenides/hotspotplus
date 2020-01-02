@@ -17,39 +17,7 @@ module.exports = function(GenericUser) {
     base.currentUserId = base.accessToken && base.accessToken.userId;
     return base;
   };
-  /*
 
-  GenericUser.addRole = function(userId, roleName) {
-    return Q.Promise(function(resolve, reject) {
-      if (_.isUndefined(userId)) {
-        return reject('userId is empty');
-      }
-      app.models.Role.findOne({where: {name: roleName}}, function(
-        error,
-        role
-      ) {
-        if (error) {
-          return reject(error);
-        }
-        if (!role) {
-          return reject(
-            roleName + ' role not found, delete user and add it again'
-          );
-        }
-        const roleMapping = {
-          principalType: app.models.RoleMapping.USER,
-          principalId: userId,
-        };
-        role.principals.create(roleMapping, function(error, result) {
-          if (error) {
-            return reject(error);
-          }
-          return resolve(result);
-        });
-      });
-    });
-  };
-*/
 
   // todo change password does not work for user/returns 401
   /* Remote method to change user credential or generate random password */

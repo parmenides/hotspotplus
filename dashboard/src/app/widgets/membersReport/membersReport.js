@@ -51,11 +51,11 @@ app.directive('membersReport', [
           options.filter.skip = 0
           options.filter.limit = 8
           options.filter.fields = {internetPlanHistory: false}
-          if ($scope.params.departmentId && $scope.params.departmentId !=='all') {
+          if ($scope.params.departmentId) {
             options.filter.where.departments = {eq: $scope.params.departmentId}
-          } else if(!$scope.params.departmentId){
+          } /*else if(!$scope.params.departmentId){
             options.filter.where.departments = {eq: '--'}
-          }
+          }*/
           Business.members(options).$promise.then(
             function (members) {
               $scope.members = members

@@ -1923,9 +1923,7 @@ module.exports = function (Member) {
   Member.resetAllMembers = async function (departmentIds, ctx) {
     const businessId = ctx.currentUserId
     try {
-      if (!departmentIds || departmentIds.length === 0) {
-        throw new Error('depratmentsId is required')
-      }
+
       await Member.updateAll({
         businessId,
         departments: departmentIds
@@ -1942,19 +1940,6 @@ module.exports = function (Member) {
       throw error
     }
   }
-/*
-  Member.remoteMethod('loadMemberPassword', {
-    description: 'load member\'s password',
-    accepts: [
-      {
-        arg: 'departments',
-        type: 'array',
-        required: true,
-      },
-      {arg: 'options', type: 'object', http: 'optionsFromRequest'},
-    ],
-    returns: {root: true},
-  })*/
 
   /* return subscriptionDate of member
    memberId: String
@@ -3044,15 +3029,16 @@ module.exports = function (Member) {
     ],
     returns: {root: true},
   })
-  Member.getAllMembersCount = function (departmentId, fromDate, endDate, ctx) {
+
+  Member.hasAccessTo = (scopes) => {
+
+  }
+
+  Member.getAllMembersCount = function (departments, fromDate, endDate, ctx) {
     return Q.Promise((resolve, reject) => {
       const businessId = ctx.currentUserId
       log.debug('@getAllMembersCount : ', businessId)
       const Business = app.models.Business
-
-      if (!departmentId) {
-        return resolve({allMembers: 0})
-      }
 
       Business.findById(businessId).then(function (business) {
         if (!business) {
@@ -3062,11 +3048,11 @@ module.exports = function (Member) {
         const query = {
           businessId: businessId,
           creationDate: {gte: business.creationDate, lt: endDate},
+          or:[],
         }
-        if (departmentId && departmentId !== 'all') {
-          query.departments = {eq: departmentId}
+        for(const dep of departments){
+          query.or.push({departments: {eq: dep}})
         }
-
         Member.count(
           query,
           function (error, members) {
@@ -3089,8 +3075,9 @@ module.exports = function (Member) {
     description: 'Get All Member Count of Business.',
     accepts: [
       {
-        arg: 'departmentId',
-        type: 'string',
+        arg: 'departments',
+        type: 'array',
+        required: true
       },
       {
         arg: 'fromDate',
@@ -3190,13 +3177,11 @@ module.exports = function (Member) {
     returns: {root: true},
   })
 
-  Member.getNewMembersCount = function (departmentId, fromDate, endDate, ctx, cb) {
+  Member.getNewMembersCount = function (departments, fromDate, endDate, ctx, cb) {
     const businessId = ctx.currentUserId
     log.debug('getNewMembersCount : ', businessId)
     const Business = app.models.Business
-    if (!departmentId) {
-      return {newMembers: 0}
-    }
+
     Business.findById(businessId).then(function (business) {
       if (!business) {
         log.error('business not found')
@@ -3206,9 +3191,10 @@ module.exports = function (Member) {
       const query = {
         businessId: businessId,
         creationDate: {gte: fromDate, lt: endDate},
+        or:[]
       }
-      if (departmentId && departmentId !== 'all') {
-        query.departments = {eq: departmentId}
+      for(const dep of departments){
+        query.or.push({departments: {eq: dep}})
       }
       Member.count(
         query,
@@ -3231,10 +3217,11 @@ module.exports = function (Member) {
     description: 'Get New Member Count of Business.',
     accepts: [
       {
-        arg: 'departmentId',
-        type: 'string',
+        arg: 'departments',
+        type: 'array',
         required: true,
-      }, {
+      },
+      {
         arg: 'fromDate',
         type: 'number',
         required: true,
