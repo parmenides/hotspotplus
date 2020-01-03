@@ -51,7 +51,7 @@ module.exports = function (Report) {
     return result
   }
 
-  Report.searchDns = async (report, type,aggregate, businessId, departments, from, to, username, domain, limit, skip, sort) => {
+  Report.searchDns = async (report, type, aggregate, businessId, departments, from, to, username, domain, limit, skip, sort) => {
     const result = await Report.search({
       report,
       type,
@@ -154,9 +154,9 @@ module.exports = function (Report) {
         params: options,
       })
 
-      log.debug(`Report status ${result.status}`);
+      log.debug(`Report status ${result.status}`)
       let current_datetime = new Date()
-      let fileName = `${current_datetime.getFullYear()}-${current_datetime.getMonth() + 1}-${current_datetime.getDate()} ${current_datetime.getHours()}:${current_datetime.getMinutes()}:${current_datetime.getSeconds()}-${type}`;
+      let fileName = `${current_datetime.getFullYear()}-${current_datetime.getMonth() + 1}-${current_datetime.getDate()}-${current_datetime.getHours()}-${current_datetime.getMinutes()}-${current_datetime.getSeconds()}-${type}`
       if (type === 'excel') {
         fileName = `${fileName}.xlsx`
       } else if (type === 'csv') {

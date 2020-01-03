@@ -38,9 +38,8 @@ const render = async (
       });
 
     const dataList = data as any[];
-
     for (const row of dataList) {
-      asyncParser.input.push(row);
+      asyncParser.input.push(JSON.stringify(row));
     }
     log.debug('all rows send to csv parser');
     asyncParser.input.push(null); // Sending `null` to a stream signal that no more data is expected and ends it.
