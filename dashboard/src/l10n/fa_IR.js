@@ -1367,6 +1367,8 @@
 },
   "report": {
   "webproxyReportTitle": "WebProxy Report",
+  "aggregate": "خلاصه سازی",
+  "visit": "تعداد بازدید",
   "dnsReportTitle": "DNS Report",
   "createReport": "ساخت گزارش",
   "domain": "دامین",

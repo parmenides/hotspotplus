@@ -65,7 +65,7 @@ app.directive('trafficUsage', [
               translateFilter('dashboard.upload')
             ]
             $scope.data = [res.result.download, res.result.upload]
-            $scope.type = 'line'
+            $scope.type = 'bar'
             if (interval > DAY_MILLISECONDS) {
               $scope.type = 'bar'
               xAxesLabel = 'dashboard.xAxesLabelMonthly'

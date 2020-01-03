@@ -156,12 +156,14 @@ const controller: { [key: string]: RequestHandler } = {
       businessId,
       username,
       domain,
+      aggregate,
     }: {
       type: string;
       departments: string[];
       businessId: string;
       username: string;
       domain: string;
+      aggregate: boolean;
     } = request.query;
 
     from = Number(from);
@@ -179,6 +181,7 @@ const controller: { [key: string]: RequestHandler } = {
       username,
       domain,
       businessId,
+      aggregate,
       limit,
       skip,
     };

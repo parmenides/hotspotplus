@@ -63,6 +63,7 @@ app.controller('dnsReport', [
     $scope.searchFilter.from = Date.now()
     $scope.searchFilter.to = Date.now()
     $scope.searchFilter.departments = []
+    $scope.searchFilter.aggregate = true
 
     $scope.members = []
     Business.loadMembersUsernames({businessId: businessId}).$promise.then(function (result) {
@@ -138,6 +139,17 @@ app.controller('dnsReport', [
           headerCellFilter: 'translate',
           cellTemplate: '<div class="ui-grid-cell-contents ltr-text">{{row.entity.jalaliDate}}</div>'
         },
+        {
+          displayName: 'report.visit',
+          field: 'visit',
+          enableColumnMenu: false,
+          enableHiding: false,
+          enableSorting: false,
+          cellClass: 'center',
+          headerCellClass: 'headerCenter',
+          headerCellFilter: 'translate',
+          cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.visit || 1}}</div>'
+        },
       ],
       onRegisterApi: function (gridApi) {
         $log.debug(gridApi.grid.isScrollingVertically)
@@ -159,6 +171,7 @@ app.controller('dnsReport', [
         from: new Date($scope.searchFilter.from).getTime(),
         to: new Date($scope.searchFilter.to).getTime(),
         domain: $scope.searchFilter.domain,
+        aggregate: $scope.searchFilter.aggregate,
         departments: $scope.searchFilter.departments.map(function (dep) {
           return dep.id
         }),
@@ -181,6 +194,7 @@ app.controller('dnsReport', [
             })
           },
           function (error) {
+            $scope.waitingForResponse = false
             $log.error(error)
           }
         )
@@ -198,11 +212,11 @@ app.controller('dnsReport', [
                   .replace('{0}', container)
                   .replace('{1}', fileName)
             } else {
+              $scope.waitingForResponse = false
               appMessenger.showError('report.noReportsToDownload')
             }
           },
           function (error) {
-
             $scope.waitingForDwl = false
             appMessenger.showError('error.generalError')
             $log.error(error.data)

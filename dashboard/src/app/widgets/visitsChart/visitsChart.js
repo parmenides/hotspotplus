@@ -8,49 +8,50 @@ app.directive('visitsChart', [
   '$log',
   'translateNumberFilter',
   'translateFilter',
-  function(PREFIX, FootTraffic, $log, translateNumberFilter, translateFilter) {
+  function (PREFIX, FootTraffic, $log, translateNumberFilter, translateFilter) {
     return {
       scope: {
         params: '=options'
       },
-      controller: function($scope) {
-        $scope.loading = false;
-        showChart();
-        $scope.$on($scope.params.reloadEvent, function(event, data) {
-          $scope.params.fromDate = data.params.fromDate;
-          $scope.params.endDate = data.params.endDate;
-          $scope.params.offset = data.params.offset;
-          showChart();
-        });
-        function showChart() {
-          var visitsChart = {};
-          visitsChart.startDate = $scope.params.fromDate;
-          visitsChart.endDate = $scope.params.endDate;
-          visitsChart.businessId = $scope.params.businessId;
+      controller: function ($scope) {
+        $scope.loading = false
+        showChart()
+        $scope.$on($scope.params.reloadEvent, function (event, data) {
+          $scope.params.fromDate = data.params.fromDate
+          $scope.params.endDate = data.params.endDate
+          $scope.params.offset = data.params.offset
+          showChart()
+        })
+
+        function showChart () {
+          var visitsChart = {}
+          visitsChart.startDate = $scope.params.fromDate
+          visitsChart.endDate = $scope.params.endDate
+          visitsChart.businessId = $scope.params.businessId
           // time interval for one hour
-          visitsChart.timeInterval = 3600000;
+          visitsChart.timeInterval = 3600000
           // offset for start date
-          visitsChart.offset = $scope.params.offset;
+          visitsChart.offset = $scope.params.offset
           /*
 					 Returns daily visits and walkBys per hour.
 					 If the selected time period on the dashboard is more than one day,
 					 returns the average number .
 					 */
-          $scope.loading = true;
-          FootTraffic.getDailyVisitsChart(visitsChart).$promise.then(function(
+          $scope.loading = true
+          FootTraffic.getDailyVisitsChart(visitsChart).$promise.then(function (
             res
           ) {
-            $scope.loading = false;
-            $scope.labels = [];
+            $scope.loading = false
+            $scope.labels = []
             for (var i = 0; i < res.visits.length; i++) {
-              $scope.labels[i] = translateNumberFilter(i);
+              $scope.labels[i] = translateNumberFilter(i)
             }
             $scope.series = [
               translateFilter('dashboard.visits'),
               translateFilter('dashboard.walkBys')
-            ];
-            $scope.data = [res.visits, res.walkBys];
-            $scope.colors = ['#7266ba', '#DDDDDD', '#3a3f51'];
+            ]
+            $scope.data = [res.visits, res.walkBys]
+            $scope.colors = ['#7266ba', '#DDDDDD', '#3a3f51']
             $scope.options = {
               legend: {
                 display: true,
@@ -66,12 +67,12 @@ app.directive('visitsChart', [
                 bodyFontSize: 16,
                 mode: 'x-axis',
                 callbacks: {
-                  label: function(tooltipItems, data) {
+                  label: function (tooltipItems, data) {
                     return (
                       data.datasets[tooltipItems.datasetIndex].label +
                       ' : ' +
                       translateNumberFilter(tooltipItems.yLabel)
-                    );
+                    )
                   }
                 }
               },
@@ -100,23 +101,23 @@ app.directive('visitsChart', [
                     },
                     ticks: {
                       beginAtZero: true,
-                      callback: function(value) {
-                        return translateNumberFilter(Number(value));
+                      callback: function (value) {
+                        return translateNumberFilter(Number(value))
                       }
                     }
                   }
                 ]
               }
-            };
+            }
           }),
-            function(error) {
+            function (error) {
               $log.error(
                 'can not get visits chart info from data source: ' + error
-              );
-            };
+              )
+            }
         }
       },
       templateUrl: PREFIX + 'app/widgets/visitsChart/tpl/visitsChart.html'
-    };
+    }
   }
-]);
+])
