@@ -1,6 +1,6 @@
 {
   "name": "BootstrapAngularAdminWebApp",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "Admin web application template with Bootstrap 3 and AngularJS.",
   "scripts": {
     "build": "grunt build:angular && git add .",
