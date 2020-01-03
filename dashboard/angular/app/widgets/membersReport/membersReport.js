@@ -4,25 +4,15 @@
 app.directive('membersReport', [
   'PREFIX',
   '$log',
+  'Session',
   '$rootScope',
   'Business',
-  'uiGridConstants',
-  'translateFilter',
-  'persianDateFilter',
-  'translateNumberFilter',
-  'appMessenger',
-  'trimUsernameFilter',
   function (
     PREFIX,
     $log,
+    Session,
     $rootScope,
     Business,
-    uiGridConstants,
-    translateFilter,
-    persianDateFilter,
-    translateNumberFilter,
-    appMessenger,
-    trimUsernameFilter
   ) {
     return {
       scope: {
@@ -45,16 +35,19 @@ app.directive('membersReport', [
           var options = {}
           options.id = $scope.params.businessId
           options.filter = {
-            where:{}
+            where: {}
           }
           options.filter.sort = 'creationDate DESC'
           options.filter.skip = 0
           options.filter.limit = 8
           options.filter.fields = {internetPlanHistory: false}
-          if ($scope.params.departmentId && $scope.params.departmentId !=='all') {
+          if ($scope.params.departmentId) {
             options.filter.where.departments = {eq: $scope.params.departmentId}
-          } else if(!$scope.params.departmentId){
-            options.filter.where.departments = {eq: '--'}
+          } else {
+            options.filter.where.or = []
+            for (const dep of Session.permittedDepartments) {
+              options.filter.where.or.push({departments: {eq: dep}})
+            }
           }
           Business.members(options).$promise.then(
             function (members) {

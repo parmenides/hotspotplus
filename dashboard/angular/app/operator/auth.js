@@ -82,9 +82,15 @@ app.controller('OperatorSignInController', [
               SessionData.operator = LoopBackAuth.currentUserData;
               SessionData.operator.urlPrefix = loginData.urlPrefix;
               SessionData.roles = roles;
-              Session.setSession(SessionData);
-              $state.go('app.loadDashboard');
-              appMessenger.showSuccess('user.signInSuccessful');
+              Business.getMyDepartments().$promise.then(function (response) {
+                SessionData.permittedDepartments = response.departments.map(function(dep){
+                  return dep.id
+                });
+                Session.setSession(SessionData);
+                $state.go('app.loadDashboard');
+                appMessenger.showSuccess('user.signInSuccessful');
+              })
+
             },
             function() {
               appMessenger.showError('auth.loadingRoleFailed');

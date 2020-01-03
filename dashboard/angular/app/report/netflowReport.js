@@ -208,7 +208,7 @@ app.controller('netflowReport', [
             $log.error(error)
           }
         )
-      } else if (type === 'excel') {
+      } else {
         $scope.waitingForDwl = true;
         Report.searchNetflow(query).$promise.then(
           function (report) {
@@ -226,7 +226,9 @@ app.controller('netflowReport', [
             }
           },
           function (error) {
-            $log.error(error)
+            $scope.waitingForDwl = false;
+            appMessenger.showError ( 'error.generalError' )
+            $log.error(error.data)
           }
         )
       }

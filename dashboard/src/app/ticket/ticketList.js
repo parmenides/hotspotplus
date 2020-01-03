@@ -31,7 +31,7 @@ app.controller('ticketListController', [
     appMessenger,
     Business
   ) {
-  let businessId;
+  var businessId;
     if (Session.business) {
       businessId = Session.business.id;
     }

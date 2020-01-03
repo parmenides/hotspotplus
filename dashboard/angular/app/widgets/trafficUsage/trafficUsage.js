@@ -3,6 +3,7 @@
  */
 app.directive('trafficUsage', [
   'PREFIX',
+  'Session',
   '$log',
   'Business',
   'translateFilter',
@@ -11,6 +12,7 @@ app.directive('trafficUsage', [
   'humanSizeFilter',
   function (
     PREFIX,
+    Session,
     $log,
     Business,
     translateFilter,
@@ -40,9 +42,8 @@ app.directive('trafficUsage', [
           trafficUsageChart.startDate = $scope.params.fromDate
           trafficUsageChart.endDate = $scope.params.endDate
           trafficUsageChart.businessId = $scope.params.businessId
-          if ($scope.params.departmentId) {
-            trafficUsageChart.departmentId = $scope.params.departmentId
-          }
+          trafficUsageChart.departments = $scope.params.departmentId?[$scope.params.departmentId]: Session.permittedDepartments;
+
           trafficUsageChart.offset = $scope.params.offset
           trafficUsageChart.monthDays = $scope.params.monthDays
           $scope.loading = true
@@ -64,7 +65,7 @@ app.directive('trafficUsage', [
               translateFilter('dashboard.upload')
             ]
             $scope.data = [res.result.download, res.result.upload]
-            $scope.type = 'line'
+            $scope.type = 'bar'
             if (interval > DAY_MILLISECONDS) {
               $scope.type = 'bar'
               xAxesLabel = 'dashboard.xAxesLabelMonthly'

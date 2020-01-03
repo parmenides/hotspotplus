@@ -80,6 +80,7 @@ app
     'Reseller',
     function(Business, Member,Operator, Reseller) {
       var props = [
+        'permittedDepartments',
         'business',
         'operator',
         'roles',
@@ -96,7 +97,7 @@ app
         });
         this.rememberMe = undefined;
         this.currentUserData = null;
-        let businessId;
+        var businessId;
         if (self.business && self.business.id) {
           businessId = self.business.id;
         }

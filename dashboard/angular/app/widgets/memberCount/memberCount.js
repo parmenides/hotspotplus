@@ -3,9 +3,10 @@
  */
 app.directive('memberCount', [
   'PREFIX',
+  'Session',
   'Member',
   '$log',
-  function(PREFIX, Member, $log) {
+  function(PREFIX,Session, Member, $log) {
     return {
       scope: {
         params: '=options'
@@ -31,7 +32,8 @@ app.directive('memberCount', [
           options.businessId = $scope.params.businessId;
           options.fromDate = $scope.params.fromDate;
           options.endDate = $scope.params.endDate;
-          options.departmentId = $scope.params.departmentId || 'all';
+          options.departments = $scope.params.departmentId?[$scope.params.departmentId]: Session.permittedDepartments;
+
           Member.getAllMembersCount(options).$promise.then(
             function(result) {
               $scope.allMembers = result.allMembers;

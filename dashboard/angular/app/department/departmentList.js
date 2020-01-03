@@ -117,6 +117,10 @@ app.controller('departmentList', [
               $scope.gridOptions.data.splice(index, 1)
             },
             function (err) {
+              if (err.status === 400) {
+                appMessenger.showError('department.hasRelatedMembers')
+                return
+              }
               appMessenger.showError('department.removeUnSuccessFull')
             }
           )
