@@ -2196,132 +2196,118 @@ module.exports = function (Member) {
    businessId: String
    memberId: String
    */
-  Member.getMemberBalance = function (businessId, memberId, cb) {
+  Member.getMemberBalance = async function (businessId, memberId, cb) {
     log.debug('@getMemberBalance')
-    if (!businessId) {
-      var error = new Error()
-      error.message = hotspotMessages.invalidBusinessId
-      error.status = 500
-      return cb(error)
-    }
-    if (!memberId) {
-      var error = new Error()
-      error.message = hotspotMessages.invalidMemberId
-      error.status = 500
-      return cb(error)
-    }
-    Member.findOne(
-      {
+    try {
+      if (!businessId) {
+        var error = new Error()
+        error.message = hotspotMessages.invalidBusinessId
+        error.status = 500
+        return cb(error)
+      }
+      if (!memberId) {
+        var error = new Error()
+        error.message = hotspotMessages.invalidMemberId
+        error.status = 500
+        return cb(error)
+      }
+      const member = await Member.findOne({
         where: {
           and: [{id: memberId}, {businessId: businessId}],
         },
-      },
-      function (error, member) {
-        if (error) {
-          log.error(error)
-          return cb(error)
-        }
-        if (!member) {
-          var error = new Error()
-          error.message = hotspotMessages.memberNotFound
-          error.status = 404
-          log.error('@getMemberBalance : member not found')
-          return cb(error)
-        }
-        if (!member.internetPlanId) {
-          var error = new Error()
-          error.message = hotspotMessages.invalidInternetPlanId
-          error.status = 500
-          log.error('@getMemberBalance : member has no internet plan')
-          return cb(error)
-        }
-        const InternetPlan = app.models.InternetPlan
-        InternetPlan.findOne(
-          {
-            where: {
-              id: member.internetPlanId,
-            },
-          },
-          function (error, internetPlan) {
-            if (error) {
-              log.error(error)
-              return cb(error)
-            }
-            if (!internetPlan) {
-              var error = new Error()
-              error.message = hotspotMessages.internetPlanDoesNotExist
-              error.status = 500
-              log.error('@getMemberBalance : plan not found')
-              return cb(error)
-            }
-            let plan = {}
-            plan = internetPlan
-            plan.originalBulk = plan.bulk.value
-            plan.originalTimeDuration = plan.timeDuration
-            let extraBulk = 0
-            const toDateInMs = new Date().getTime()
-            const fromDateInMs = member.subscriptionDate
-            if (member.extraBulk) {
-              extraBulk = member.extraBulk
-            }
-            plan.extraBulk = extraBulk
-            Member.getInternetUsage(
-              businessId,
-              memberId,
-              fromDateInMs,
-              toDateInMs
-            )
-              .then(function (usage) {
-                if (plan.bulk.value == 0) {
-                  // means unlimited
-                  plan.bulk.value = -1
-                } else {
-                  let currentBulk = Number.parseInt(plan.bulk.value)
-                  switch (plan.bulk.type) {
-                    case 'KB':
-                      extraBulk = utility.convertGBtoKB(extraBulk)
-                      currentBulk += extraBulk
-                      currentBulk -= utility.toKByte(usage.bulk).toFixed(0)
-                      break
-                    case 'MB':
-                      extraBulk = utility.convertGBtoMB(extraBulk)
-                      currentBulk += extraBulk
-                      currentBulk -= utility.toMByte(usage.bulk).toFixed(0)
-                      break
-                    case 'GB':
-                      currentBulk += extraBulk
-                      currentBulk -= utility.toGByte(usage.bulk).toFixed(2)
-                      break
-                    default:
-                      extraBulk = utility.convertGBtoByte(extraBulk)
-                      currentBulk -= usage.bulk
-                  }
-                  if (currentBulk < 0) {
-                    currentBulk = 0
-                  }
-                  plan.bulk.value = currentBulk
-                }
-                if (plan.timeDuration > 0) {
-                  let currentTime =
-                    plan.timeDuration - (usage.sessionTime / 60).toFixed(0)
-                  if (currentTime < 0) {
-                    currentTime = 0
-                  }
-                  plan.timeDuration = currentTime
-                } else if (plan.timeDuration == 0) {
-                  // means unlimited
-                  plan.timeDuration = -1
-                }
-                return cb(null, plan)
-              })
-              .fail(function (error) {
-                log.error(error)
-                return cb(error)
-              })
-          }
-        )
+      })
+      if (!member) {
+        var error = new Error()
+        error.message = hotspotMessages.memberNotFound
+        error.status = 404
+        log.error('@getMemberBalance : member not found')
+        throw error
       }
-    )
+
+      if (!member.internetPlanId) {
+        var error = new Error()
+        error.message = hotspotMessages.invalidInternetPlanId
+        error.status = 500
+        log.error('@getMemberBalance : member has no internet plan')
+        throw error
+      }
+
+      const internetPlan = await InternetPlan.findOne({
+        where: {
+          id: member.internetPlanId,
+        },
+      })
+
+      if (!internetPlan) {
+        var error = new Error()
+        error.message = hotspotMessages.internetPlanDoesNotExist
+        error.status = 500
+        log.error('@getMemberBalance : plan not found')
+        throw error
+      }
+      let plan = {}
+      plan = internetPlan
+      plan.originalBulk = plan.bulk.value
+      plan.originalTimeDuration = plan.timeDuration
+      let extraBulk = 0
+      const toDateInMs = new Date().getTime()
+      const fromDateInMs = member.subscriptionDate
+      if (member.extraBulk) {
+        extraBulk = member.extraBulk
+      }
+      plan.extraBulk = extraBulk
+      const usage = await Member.getInternetUsage(
+        businessId,
+        memberId,
+        fromDateInMs,
+        toDateInMs
+      )
+
+      if (plan.bulk.value === 0) {
+        // means unlimited
+        plan.bulk.value = -1
+      } else {
+        let currentBulk = Number.parseInt(plan.bulk.value)
+        switch (plan.bulk.type) {
+          case 'KB':
+            extraBulk = utility.convertGBtoKB(extraBulk)
+            currentBulk += extraBulk
+            currentBulk -= utility.toKByte(usage.bulk).toFixed(0)
+            break
+          case 'MB':
+            extraBulk = utility.convertGBtoMB(extraBulk)
+            currentBulk += extraBulk
+            currentBulk -= utility.toMByte(usage.bulk).toFixed(0)
+            break
+          case 'GB':
+            currentBulk += extraBulk
+            currentBulk -= utility.toGByte(usage.bulk).toFixed(2)
+            break
+          default:
+            extraBulk = utility.convertGBtoByte(extraBulk)
+            currentBulk -= usage.bulk
+        }
+        if (currentBulk < 0) {
+          currentBulk = 0
+        }
+        plan.bulk.value = currentBulk
+      }
+      if (plan.timeDuration > 0) {
+        let currentTime =
+          plan.timeDuration - (usage.sessionTime / 60).toFixed(0)
+        if (currentTime < 0) {
+          currentTime = 0
+        }
+        plan.timeDuration = currentTime
+      } else if (plan.timeDuration === 0) {
+        // means unlimited
+        plan.timeDuration = -1
+      }
+      return plan
+    } catch (error) {
+      log.error('failed to get usage', error)
+      throw error
+    }
   }
 
   Member.remoteMethod('getMemberBalance', {
@@ -2460,6 +2446,9 @@ module.exports = function (Member) {
     if (!startDate) {
       return cb('startDate not defined')
     }
+
+    throw new error('not implemented');
+    //todo fix this method
     db.getMemberDailyUsage(businessId, memberId, startDate)
       .then(function (memberUsage) {
         const result = {}
@@ -3048,9 +3037,9 @@ module.exports = function (Member) {
         const query = {
           businessId: businessId,
           creationDate: {gte: business.creationDate, lt: endDate},
-          or:[],
+          or: [],
         }
-        for(const dep of departments){
+        for (const dep of departments) {
           query.or.push({departments: {eq: dep}})
         }
         Member.count(
@@ -3191,9 +3180,9 @@ module.exports = function (Member) {
       const query = {
         businessId: businessId,
         creationDate: {gte: fromDate, lt: endDate},
-        or:[]
+        or: []
       }
-      for(const dep of departments){
+      for (const dep of departments) {
         query.or.push({departments: {eq: dep}})
       }
       Member.count(

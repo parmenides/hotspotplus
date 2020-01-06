@@ -163,7 +163,7 @@ const controller: { [key: string]: RequestHandler } = {
       businessId: string;
       username: string;
       domain: string;
-      aggregate: boolean;
+      aggregate: string;
     } = request.query;
 
     from = Number(from);
@@ -181,7 +181,7 @@ const controller: { [key: string]: RequestHandler } = {
       username,
       domain,
       businessId,
-      aggregate,
+      aggregate: aggregate === 'true',
       limit,
       skip,
     };
