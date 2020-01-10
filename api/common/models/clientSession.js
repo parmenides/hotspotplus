@@ -138,7 +138,7 @@ module.exports = function (ClientSession) {
 
   ClientSession.getActiveMemberSessions = async (memberId) => {
     const sessions = await cacheManager.getMemberSessions(memberId)
-    log.error('return sessions from cache,', sessions)
+    log.debug('return sessions from cache,', sessions);
     return sessions
     /* const minutes = Math.round((Number(config.DEFAULT_ACCOUNTING_UPDATE_INTERVAL_SECONDS) / 60) + 1)
     startDate = startDate ? startDate : (new Date()).remove({minutes})

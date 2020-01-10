@@ -536,7 +536,6 @@ module.exports = function (Member) {
     const nas = AccessRequest.nas
 
     const member = await Member.getMemberByUserName(nas.businessId, username)
-    // const {member} = await Member.checkAuthorization(businessId, nas.id, username)
     const clearTextPass = utility.decrypt(member.passwordText, config.ENCRYPTION_KEY)
     RadiusResponse.addControl('clearTextPass', clearTextPass)
     RadiusResponse.setCode(200)
