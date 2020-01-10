@@ -50,5 +50,5 @@ export interface WebproxyReportRequestTask extends GeneralReportRequestTask {
 export interface DnsReportRequestTask extends GeneralReportRequestTask {
   username?: string;
   domain?: string;
-  aggregate?: boolean;
+  groupBy?: string;
 }

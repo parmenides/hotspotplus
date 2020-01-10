@@ -51,11 +51,11 @@ module.exports = function (Report) {
     return result
   }
 
-  Report.searchDns = async (report, type, aggregate, businessId, departments, from, to, username, domain, limit, skip, sort) => {
+  Report.searchDns = async (report, type, groupBy, businessId, departments, from, to, username, domain, limit, skip, sort) => {
     const result = await Report.search({
       report,
       type,
-      aggregate,
+      groupBy,
       businessId,
       departments,
       from,
@@ -74,7 +74,7 @@ module.exports = function (Report) {
     accepts: [
       {arg: 'report', type: 'string', required: true},
       {arg: 'type', type: 'string'},
-      {arg: 'aggregate', type: 'boolean'},
+      {arg: 'groupBy', type: 'string'},
       {arg: 'businessId', type: 'string'},
       {arg: 'departments', type: ['string']},
       {arg: 'from', type: 'number'},

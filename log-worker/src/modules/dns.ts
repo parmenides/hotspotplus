@@ -19,9 +19,9 @@ const query = async (
 ) => {
   let mainQuery;
   let countQuery;
-  if (dnsReportRequestTask.aggregate) {
-    mainQuery = await createAggregatedDnsQuery(dnsReportRequestTask, false);
-    countQuery = await createAggregatedDnsQuery(dnsReportRequestTask, true);
+  if (dnsReportRequestTask.groupBy) {
+    mainQuery = await createGroupByDnsQuery(dnsReportRequestTask);
+    countQuery = await createGroupByCountDnsQuery(dnsReportRequestTask);
   } else {
     mainQuery = await createDnsQuery(dnsReportRequestTask, false);
     countQuery = await createDnsQuery(dnsReportRequestTask, true);
@@ -84,11 +84,70 @@ const formatJson = (data: any[]) => {
 //group by username,domain and filter by date
 // SELECT any(departmentId) as departmentId,any(memberId) as memberId,any(nasIp) as nasIp,username,domain,count(domain) as visit FROM hotspotplus.DnsReport GROUP BY username,domain
 
-const createAggregatedDnsQuery = (
+const createGroupByCountDnsQuery = (
   dnsReportRequestTask: DnsReportRequestTask,
-  count: boolean,
 ) => {
   const {
+    groupBy,
+    departments,
+    domain,
+    fromDate,
+    toDate,
+    businessId,
+    username,
+  } = dnsReportRequestTask;
+  const whereParts: string[] = [];
+
+  if (fromDate) {
+    whereParts.push(
+      ` receivedAt>=toDateTime('${fromDate.format(DATABASE_DATE_FORMAT)}') `,
+    );
+  }
+
+  if (toDate) {
+    whereParts.push(
+      ` receivedAt<=toDateTime('${toDate.format(DATABASE_DATE_FORMAT)}') `,
+    );
+  }
+
+  if (username) {
+    whereParts.push(` username='${username}' `);
+  }
+
+  if (domain) {
+    whereParts.push(` domain like '%${domain}%' `);
+  }
+
+  if (businessId) {
+    whereParts.push(` businessId='${businessId}' `);
+  }
+
+  if (departments && departments.length > 0) {
+    const departmentsIdQueries: string[] = [];
+    for (const department of departments) {
+      departmentsIdQueries.push(` departmentId='${department}' `);
+    }
+    whereParts.push(` (${departmentsIdQueries.join(' OR ')}) `);
+  }
+
+  const whereQuery =
+    whereParts.length > 0 ? ` WHERE ${whereParts.join(' AND ')} ` : '';
+
+  let selectQuery;
+  if (groupBy === 'domain') {
+    selectQuery = `SELECT count(*) FROM hotspotplus.DnsReport ${whereQuery} GROUP BY domain `;
+  } else if (groupBy === 'username') {
+    selectQuery = `SELECT count(*) FROM hotspotplus.DnsReport ${whereQuery} GROUP BY username,domain `;
+  } else if (groupBy === 'department') {
+    selectQuery = `SELECT count(*) FROM hotspotplus.DnsReport ${whereQuery} GROUP BY departmentId,domain `;
+  }
+
+  return `SELECT count(*) FROM ( ${selectQuery} )`;
+};
+
+const createGroupByDnsQuery = (dnsReportRequestTask: DnsReportRequestTask) => {
+  const {
+    groupBy,
     departments,
     domain,
     fromDate,
@@ -100,17 +159,20 @@ const createAggregatedDnsQuery = (
   } = dnsReportRequestTask;
   const whereParts: string[] = [];
 
-  let groupBy;
   let selectQuery;
-  if (count) {
-    selectQuery = `SELECT toInt32(count (*)) FROM hotspotplus.DnsReport  `;
-    groupBy = `GROUP BY domain`;
-  } else if (username) {
-    selectQuery = `SELECT any(departmentId) as departmentId,any(memberId) as memberId,any(nasIp) as nasIp,domain,count(domain) as visit FROM hotspotplus.DnsReport`;
-    groupBy = `GROUP BY username,domain ORDER BY visit DESC`;
+  let groupByQuery;
+
+  if (groupBy === 'domain') {
+    selectQuery = `SELECT domain, count(domain) as visit , any(username) as Username ,any(departmentId) as DepartmentId,any(memberId) as MemberId,any(nasIp) as NasIp  FROM hotspotplus.DnsReport`;
+    groupByQuery = `group by domain`;
+  } else if (groupBy === 'username') {
+    selectQuery = `SELECT domain, username, count(domain) as visit,any(departmentId) as DepartmentId,any(memberId) as MemberId,any(nasIp) as NasIp  FROM hotspotplus.DnsReport`;
+    groupByQuery = `group by username,domain`;
+  } else if (groupBy === 'department') {
+    selectQuery = `SELECT domain, departmentId, count(domain) as visit,any(username) as Username,any(memberId) as MemberId,any(nasIp) as NasIp FROM hotspotplus.DnsReport`;
+    groupByQuery = `group by departmentId,domain`;
   } else {
-    selectQuery = `SELECT any(departmentId) as departmentId,any(memberId) as memberId,any(nasIp) as nasIp,any(username) as username,domain,count(domain) as visit FROM hotspotplus.DnsReport`;
-    groupBy = `GROUP BY domain ORDER BY visit DESC`;
+    throw new Error(`invalid group by filter ${groupBy}`);
   }
 
   if (fromDate) {
@@ -128,33 +190,32 @@ const createAggregatedDnsQuery = (
   if (username) {
     whereParts.push(` username='${username}' `);
   }
-  /*
 
   if (domain) {
     whereParts.push(` domain like '%${domain}%' `);
   }
-*/
 
   if (businessId) {
     whereParts.push(` businessId='${businessId}' `);
   }
 
-  /*if (departments && departments.length > 0) {
+  if (departments && departments.length > 0) {
     const departmentsIdQueries: string[] = [];
     for (const department of departments) {
       departmentsIdQueries.push(` departmentId='${department}' `);
     }
     whereParts.push(` (${departmentsIdQueries.join(' OR ')}) `);
-  }*/
+  }
 
   let mainQuery =
     whereParts.length > 0
-      ? `${selectQuery} WHERE ${whereParts.join(' AND ')} ${groupBy} `
-      : `${selectQuery} ${groupBy}`;
+      ? `${selectQuery} WHERE ${whereParts.join(' AND ')} ${groupByQuery}`
+      : `${selectQuery} ${groupByQuery} `;
 
-  if (!count && limit >= 0 && skip >= 0) {
+  if (limit >= 0 && skip >= 0) {
     mainQuery = `${mainQuery} LIMIT ${limit}  OFFSET ${skip} `;
   }
+
   return mainQuery;
 };
 

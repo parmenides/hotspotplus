@@ -154,16 +154,16 @@ const controller: { [key: string]: RequestHandler } = {
       type,
       departments,
       businessId,
+      groupBy,
       username,
       domain,
-      aggregate,
     }: {
       type: string;
       departments: string[];
       businessId: string;
       username: string;
       domain: string;
-      aggregate: string;
+      groupBy: string;
     } = request.query;
 
     from = Number(from);
@@ -181,7 +181,7 @@ const controller: { [key: string]: RequestHandler } = {
       username,
       domain,
       businessId,
-      aggregate: aggregate === 'true',
+      groupBy,
       limit,
       skip,
     };

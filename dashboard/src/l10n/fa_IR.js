@@ -1367,7 +1367,11 @@
 },
   "report": {
   "webproxyReportTitle": "WebProxy Report",
-  "aggregate": "خلاصه سازی",
+  "groupBy": "دسته بندی",
+  "doNotGroupBy": "بدون دسته بندی",
+  "groupByDomain": "دسته بندی نتایج بر اساس دامین",
+  "groupByUsername": "دسته بندی نتایج بر اساس کاربر",
+  "groupByDepartment": "دسته بندی نتایج بر اساس شعبه",
   "visit": "تعداد بازدید",
   "dnsReportTitle": "DNS Report",
   "createReport": "ساخت گزارش",

@@ -63,7 +63,7 @@ app.controller('dnsReport', [
     $scope.searchFilter.from = Date.now()
     $scope.searchFilter.to = Date.now()
     $scope.searchFilter.departments = []
-    $scope.searchFilter.aggregate = true
+    ///$scope.searchFilter.groupBy =
 
     $scope.members = []
     Business.loadMembersUsernames({businessId: businessId}).$promise.then(function (result) {
@@ -171,7 +171,7 @@ app.controller('dnsReport', [
         from: new Date($scope.searchFilter.from).getTime(),
         to: new Date($scope.searchFilter.to).getTime(),
         domain: $scope.searchFilter.domain,
-        aggregate: $scope.searchFilter.aggregate,
+        groupBy: $scope.searchFilter.groupBy,
         departments: $scope.searchFilter.departments.map(function (dep) {
           return dep.id
         }),
