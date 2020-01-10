@@ -75,6 +75,23 @@ const formatJson = (data: any[]) => {
       row.jalaliDate = toJalaliDate(row.timeRecvd);
       row.gregorianDate = toGregorianDate(row.timeRecvd);
     }
+    if (row.DepartmentId) {
+      row.departmentId = row.DepartmentId;
+      delete row.DepartmentId;
+    }
+    if (row.Username) {
+      row.username = row.Username;
+      delete row.Username;
+    }
+    if (row.NasIp) {
+      row.nasIp = row.NasIp;
+      delete row.NasIp;
+    }
+    if (row.MemberId) {
+      row.memberId = row.MemberId;
+      delete row.MemberId;
+    }
+
     return row;
   });
 };
