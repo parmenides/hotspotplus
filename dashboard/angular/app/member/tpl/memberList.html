@@ -72,7 +72,7 @@
                 </div>
                 <div class="clearfix m-b col-sm-3">
                     <select ng-change="search()" ng-model="searchFilter.department" class="form-control input-sm"
-                            ng-options="department.title  for department in permittedDepartments">
+                            ng-options="department.title  for department in searchDepartmentFilter">
                         <option value="">{{"department.selectDepartment"|translate}}</option>
                     </select>
                 </div>
