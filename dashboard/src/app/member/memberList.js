@@ -284,11 +284,11 @@ app.controller('memberList', [
                     $scope.member.departments = $scope.member.departments.map((department) => {
                       return department.id
                     })
-                    if($scope.member.departments.length ===0){
+                    if ($scope.member.departments.length === 0) {
                       appMessenger.showError(
                         'member.departmentIsRequired'
                       )
-                      return;
+                      return
                     }
                     if ($scope.member.birthday) {
                       var birthday = new Date($scope.member.birthday)
@@ -463,6 +463,12 @@ app.controller('memberList', [
                   $scope.member.departments = $scope.member.departments.map((department) => {
                     return department.id
                   })
+                  if ($scope.member.departments.length === 0) {
+                    appMessenger.showError(
+                      'member.departmentIsRequired'
+                    )
+                    return
+                  }
                   if ($scope.member.birthday) {
                     $scope.member.birthday = $scope.member.birthday.getTime()
                   }

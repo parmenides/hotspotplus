@@ -982,122 +982,106 @@ module.exports = function (Member) {
     return cb(null, shortUrl)
   }
 
-  Member.createNewMember = function (options, businessId, nasId, host) {
+  Member.createNewMember = async function (options, businessId, nasId, host) {
     const Business = app.models.Business
-    return Q.Promise(function (resolve, reject) {
-      const member = {}
-      member.businessId = businessId
-      member.mobile = options.mobile
-      member.email = options.email
-      member.groupIdentity = options.groupIdentity
-      if (options.expiresAt) {
-        member.expiresAt = options.expiresAt
+    const member = {}
+    member.businessId = businessId
+    member.mobile = options.mobile
+    member.email = options.email
+    member.groupIdentity = options.groupIdentity
+    if (options.expiresAt) {
+      member.expiresAt = options.expiresAt
+    }
+    member.groupIdentityId = options.groupIdentityId
+    member.groupIdentityType = options.groupIdentityType
+    member.passportNumber = options.passportNumber
+    member.roomNumber = options.roomNumber
+    member.studentGrade = options.studentGrade
+    member.studentId = options.studentId
+    member.username =
+      options.username || utility.verifyAndTrimMobile(member.mobile)
+    member.passwordText =
+      options.password || utility.createRandomNumericalPassword()
+    member.verificationCode = utility.createVerificationCode()
+    member.passportNumber = options.passportNumber
+    // member.active = true;
+    if (options.active != null) {
+      member.active = options.active
+    }
+    member.active = false
+    if (options.active != null) {
+      member.active = options.active
+    }
+    // Check if this is a hotel user
+    if (member.passportNumber && !member.mobile) {
+      member.username = member.passportNumber.trim()
+      if (member.roomNumber) {
+        member.passwordText = member.roomNumber.trim()
       }
-      member.groupIdentityId = options.groupIdentityId
-      member.groupIdentityType = options.groupIdentityType
-      member.passportNumber = options.passportNumber
-      member.roomNumber = options.roomNumber
-      member.studentGrade = options.studentGrade
-      member.studentId = options.studentId
-      member.username =
-        options.username || utility.verifyAndTrimMobile(member.mobile)
-      member.passwordText =
-        options.password || utility.createRandomNumericalPassword()
-      member.verificationCode = utility.createVerificationCode()
-      member.passportNumber = options.passportNumber
-      // member.active = true;
-      if (options.active != null) {
-        member.active = options.active
-      }
-      member.active = false
-      if (options.active != null) {
-        member.active = options.active
-      }
-      // Check if this is a hotel user
-      if (member.passportNumber && !member.mobile) {
-        member.username = member.passportNumber.trim()
-        if (member.roomNumber) {
-          member.passwordText = member.roomNumber.trim()
-        }
-      }
-      member.language = options.language
-      member.firstName = options.firstName
-      member.lastName = options.lastName
-      member.fullName = options.fullName
-      member.gender = options.gender
-      member.birthday = options.birthday
-      member.birthDay = options.birthDay
-      member.birthMonth = options.birthMonth
-      member.birthYear = options.birthYear
-      member.nationalCode = options.nationalCode
-      member.age = options.age
-      member.creationDate = options.creationDate || new Date().getTime()
-      member.subscriptionDate =
-        options.subscriptionDate || new Date().getTime()
-      if (options.sendVerificationSms) {
-        member.verificationCount = 1
-      }
+    }
+    member.language = options.language
+    member.firstName = options.firstName
+    member.lastName = options.lastName
+    member.fullName = options.fullName
+    member.gender = options.gender
+    member.birthday = options.birthday
+    member.birthDay = options.birthDay
+    member.birthMonth = options.birthMonth
+    member.birthYear = options.birthYear
+    member.nationalCode = options.nationalCode
+    member.age = options.age
+    member.creationDate = options.creationDate || new Date().getTime()
+    member.subscriptionDate = options.subscriptionDate || new Date().getTime()
+    if (options.sendVerificationSms) {
+      member.verificationCount = 1
+    }
 
-      Business.findById(businessId).then(function (business) {
-        if (!business) {
-          log.error('business not found')
-          return reject('business not found')
-        }
+    if (nasId) {
+      const nas = await Nas.findById(nasId)
+      member.departments = nas && nas.department ? [nas.department] : []
+    }
 
-        const defaultInternetPlan = business.defaultInternetPlan || {}
-        if (options.internetPlanId) {
-          member.internetPlanId = options.internetPlanId
-        } else if (defaultInternetPlan.id) {
-          member.internetPlanId = business.defaultInternetPlan.id
-          member.activateDefaultPlanCount = 1
-        }
-        // todo check verification method and decide for 'active' attribute
+    const business = Business.findById(businessId)
+    const defaultInternetPlan = business.defaultInternetPlan || {}
 
-        Member.create(member, function (error, result) {
-          if (error) {
-            log.error(error)
-            return reject(error)
-          }
-          const memberId = result.id
-          if (options.sendVerificationSms) {
-            Member.sendVerificationMessage(
-              business,
-              nasId,
-              host,
-              member.verificationCode,
-              memberId,
-              member.mobile
-            )
-              .then(function (verificationInfo) {
-                log.debug('verification code sent')
-                return resolve({
-                  internetPlanId: member.internetPlanId,
-                  username: member.username,
-                  shortUrl: verificationInfo.shortUrl,
-                  verificationCode: verificationInfo.verificationCode,
-                  password: member.passwordText,
-                  businessId: member.businessId,
-                  memberId: memberId,
-                })
-              })
-              .fail(function (error) {
-                log.error('failed to send verification code')
-                log.error(error)
-                return reject(error)
-              })
-          } else {
-            // log.debug ( "member created: ", member.username );
-            return resolve({
-              internetPlanId: member.internetPlanId,
-              username: member.username,
-              password: member.passwordText,
-              businessId: member.businessId,
-              memberId: memberId,
-            })
-          }
-        })
-      })
-    })
+    if (options.internetPlanId) {
+      member.internetPlanId = options.internetPlanId
+    } else if (defaultInternetPlan.id) {
+      member.internetPlanId = business.defaultInternetPlan.id
+      member.activateDefaultPlanCount = 1
+    }
+
+    const result = await Member.create(member)
+    const memberId = result.id
+
+    if (options.sendVerificationSms) {
+      const verificationInfo = await Member.sendVerificationMessage(
+        business,
+        nasId,
+        host,
+        member.verificationCode,
+        memberId,
+        member.mobile
+      )
+      return {
+        internetPlanId: member.internetPlanId,
+        username: member.username,
+        shortUrl: verificationInfo.shortUrl,
+        verificationCode: verificationInfo.verificationCode,
+        password: member.passwordText,
+        businessId: member.businessId,
+        memberId: memberId,
+      }
+    } else {
+      return {
+        internetPlanId: member.internetPlanId,
+        username: member.username,
+        password: member.passwordText,
+        businessId: member.businessId,
+        memberId: memberId,
+      }
+    }
+
   }
 
   Member.remoteMethod('createNewMember', {
@@ -2446,7 +2430,7 @@ module.exports = function (Member) {
       return cb('startDate not defined')
     }
 
-    throw new error('not implemented');
+    throw new error('not implemented')
     //todo fix this method
     db.getMemberDailyUsage(businessId, memberId, startDate)
       .then(function (memberUsage) {
