@@ -53,7 +53,7 @@ app.controller('memberList', [
     Business.getMyDepartments().$promise.then(function (response) {
       allDepartments = response.departments
       $scope.permittedDepartments = allDepartments
-      $scope.searchDepartmentFilter = angular.copy(allDepartments);
+      $scope.searchDepartmentFilter = angular.copy(allDepartments)
       $scope.searchDepartmentFilter.push({id: 'noDepartment', 'title': 'بدون شعبه'})
     })
     Business.internetPlans({id: businessId}).$promise.then(
@@ -1100,10 +1100,13 @@ app.controller('memberList', [
 
     }
     $scope.clearSearch = function () {
-      if ($scope.searchFilter.username) {
-        $scope.searchFilter.username = ''
-        getPage()
+      $scope.searchFilter = {
+        status: null,
+        department: null,
+        username: '',
+        internetPlan: null
       }
+      $scope.search()
     }
     $scope.showPlanHistory = function (row) {
       $scope.businessId = businessId
@@ -1142,11 +1145,11 @@ app.controller('memberList', [
       newValue,
       oldValue
     ) {
-      getPage()
+      $scope.search()
     })
 
     $scope.pageChanges = function () {
-      getPage()
+      $scope.search()
     }
 
     var getPage = function (inputFilter) {
