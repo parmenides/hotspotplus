@@ -2976,6 +2976,9 @@ module.exports = function (Member) {
         for (const dep of departments) {
           query.or.push({departments: {eq: dep}})
         }
+        /*if(query.or && query.or.length===0){
+          delete query.or;
+        }*/
         Member.count(
           query,
           function (error, members) {
