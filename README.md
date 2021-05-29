@@ -38,12 +38,12 @@ $docker run -d -p 8001:8000 -p 9001:9000 --name=portainer --restart=always -v /v
 
 #### Required DNS A record
 
-|Description|Example|
+|Description| Domain | IPv4 address
   |---|---|
-|Main domain| http://your_domain.com |
-|Hotspot domain| http://wifi.your_domain.com |
-|Dashboard domain| http://my.your_domain.com |
-|API domain| http://api.your_domain.com |
+|Main domain| http://your_domain.com | your_server_ip |
+|Hotspot domain| http://wifi.your_domain.com | your_server_ip |
+|Dashboard domain| http://my.your_domain.com | your_server_ip |
+|API domain| http://api.your_domain.com | your_server_ip |
 
 #### Go to http://your_server_ip:9001 and follow these steps:
 1. Create a new user 
