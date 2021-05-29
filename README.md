@@ -35,10 +35,16 @@ $git clone https://github.com/parmenides/hotspotplus.git
 $docker volume create portainer_data
 $docker run -d -p 8001:8000 -p 9001:9000 --name=portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce
 ```
-Go to http://YourServerIP:9001 and create a new user then select 'Docker' box.
 
-
-
+#### Go to http://YourServerIP:9001 and follow these steps:
+1. Create a new user 
+2. Select **Docker** box.
+3. Go to **Stacks** click **Add Stack**
+4. Select **git Repository**
+Repository URL: https://github.com/parmenides/hotspotplus
+Repository reference: master
+Compose path: config/docker-compose-swarm.yml
+   
 
 
 #### Start development
