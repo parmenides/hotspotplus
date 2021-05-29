@@ -61,8 +61,8 @@ services:
     expose:
     - '3000'
     volumes:
-    - ${log_dir}/api/:/logs
-    - ${report_dir}:/files
+    - ${project_dir}/logs/api/:/logs
+    - ${project_dir}/files:/files
     container_name: apihotspotplus
     deploy:
       replicas: 1
@@ -78,7 +78,7 @@ services:
     - CLICK_PASSWORD=123
     - LOG_LEVEL=debug
     volumes:
-    - ${log_dir}/log-worker/:/logs
+    - ${project_dir}/logs/log-worker/:/logs
     networks:
     - hotspotplusgate
   clickhouse:
@@ -93,9 +93,9 @@ services:
     - 9009
     - 8123
     volumes:
-    - ${config_dir}/clickhouse/clickhouse_config.xml:/etc/clickhouse-server/config.xml
-    - ${config_dir}/clickhouse/clickhouse_metrika.xml:/etc/clickhouse-server/metrika.xml
-    - ${config_dir}/clickhouse/users.xml:/etc/clickhouse-server/users.xml
+    - ${project_dir}/config/clickhouse/clickhouse_config.xml:/etc/clickhouse-server/config.xml
+    - ${project_dir}/config/clickhouse/clickhouse_metrika.xml:/etc/clickhouse-server/metrika.xml
+    - ${project_dir}/config/clickhouse/users.xml:/etc/clickhouse-server/users.xml
     -  clickhouse:/var/lib/clickhouse
     networks:
     - hotspotplusgate
@@ -125,140 +125,7 @@ services:
     - kafka1:/bitnami/kafka
     environment:
     - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka1:9092
-    - KAFKA_DELETE_TOPIC_ENABLE=true
-    - KAFKA_LOG_RETENTION_HOURS=72
-    - ALLOW_ANONYMOUS_LOGIN=yes
-    - ALLOW_PLAINTEXT_LISTENER=yes
-    - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
-    - KAFKA_ZOOKEEPER_CONNECT_TIMEOUT_MS=60000
-    expose:
-    - 9092
-    networks:
-    - hotspotplusgate
-  radius:
-    image: 'freeradius/freeradius-server:3.0.19-alpine'
-    volumes:
-    - ${config_dir}/radius/clients.conf:/etc/raddb/clients.conf
-    - ${config_dir}/radius/mods-enabled/rest:/etc/raddb/mods-enabled/rest
-    - ${config_dir}/radius/sites-enabled/dynamic-clients:/etc/raddb/sites-enabled/dynamic-clients
-    - ${config_dir}/radius/sites-enabled/default:/etc/raddb/sites-enabled/default
-    expose:
-    - 1812
-    - 1813
-    ports:
-    - "1812:1812/udp"
-    - "1813:1813/udp"
-    networks:
-    - hotspotplusgate
-  mongodb:
-    image: bitnami/mongodb:3.6
-    networks:
-    - hotspotplusgate
-    expose:
-    - 27017
-    volumes:
-    - hsp_mongodb:/bitnami/mongodb
-  dashboard:
-    image: 'parmenides/hotspotplus-dashboard:latest'
-    networks:
-    - hotspotplusgate
-    deploy:
-      labels:
-      - traefik.http.routers.dashboard.rule=Host(`my.prohotspotplus.com`)
-      - traefik.http.services.dashboard.loadbalancer.server.port=80
-    expose:
-    - 80
-  hotspot:
-    image: 'parmenides/hotspotplus-hotspot:latest'
-    networks:
-    - hotspotplusgate
-    deploy:
-      labels:
-      - traefik.http.routers.hotspot.rule=Host(`go.hotspotplus.ir`)
-      - traefik.http.services.hotspot.loadbalancer.server.port=80
-    expose:
-    - 80
-  dnssyslog:
-    image: 'docker.elastic.co/logstash/logstash:7.1.1'
-    environment:
-    - XPACK_MONITORING_ENABLED=false
-    logging:
-      driver: none
-    volumes:
-    - ${config_dir}/log-services/dns/dns/jvm.options:/usr/share/logstash/config/jvm.options
-    - ${config_dir}/log-services/dns/dns/logstash.yml:/usr/share/logstash/config/logstash.yml
-    - ${config_dir}/log-services/dns/dns/dns.conf:/usr/share/logstash/pipeline/dns.conf
-    deploy:
-      resources:
-        limits:
-          memory: 512M
-    ports:
-    - 9003:9003/tcp
-    - 9003:9003/udp
-    networks:
-    - hotspotplusgate
-  clickhouse-sinker-dns:
-    image: 'parmenides/hotspotplus-clickhousesinker:latest'
-    logging:
-      driver: none
-    volumes:
-    - ${config_dir}/log-services/dns/sinker-dns:/opt/config
-    command: --conf /opt/config
-    networks:
-    - hotspotplusgate
-  goflow:
-    image: 'parmenides/hotspotplus-goflow:latest'
-    logging:
-      driver: none
-    ports:
-    - 2055:2055/udp
-    command: -kafka.out.brokers kafka1:9092 -kafka.out.topic flows
-    networks:
-    - hotspotplusgate
-  clickhouse-sinker-netflow:
-    image: 'parmenides/hotspotplus-clickhousesinker:latest'
-    restart: always
-    logging:
-      driver: none
-    volumes:
-    - ${config_dir}/log-services/netflow/sinker-netflow:/opt/config
-    command: --conf /opt/config
-    networks:
-    - hotspotplusgate
-  clickhouse-sinker-session:
-    image: 'parmenides/hotspotplus-clickhousesinker:latest'
-    logging:
-      driver: none
-    volumes:
-    - ${config_dir}/log-services/sessions/sinker-session:/opt/config
-    command: --conf /opt/config
-    networks:
-    - hotspotplusgate
-  webproxysyslog:
-    image: 'docker.elastic.co/logstash/logstash:7.1.1'
-    logging:
-      driver: none
-    environment:
-    - XPACK_MONITORING_ENABLED=false
-    deploy:
-      resources:
-        limits:
-          memory: 512M
-    volumes:
-    - ${config_dir}/log-services/webproxy/webproxy/jvm.options:/usr/share/logstash/config/jvm.options
-    - ${config_dir}/log-services/webproxy/webproxy/logstash.yml:/usr/share/logstash/config/logstash.yml
-    - ${config_dir}/log-services/webproxy/webproxy/webproxy.conf:/usr/share/logstash/pipeline/webproxy.conf
-    ports:
-    - 9002:9002/tcp
-    - 9002:9002/udp
-    networks:
-    - hotspotplusgate
-  clickhouse-sinker-webproxy:
-    image: 'parmenides/hotspotplus-clickhousesinker:latest'
-    logging:
-      driver: none
-    volumes:
-    - ${config_dir}/log-services/webproxy/sinker-webproxy:/opt/config
+    - KAFKA_DELE3072 E400 60AC C29E B29F 47E5 BFEB A3AD 403A 37AArvices/webproxy/sinker-webproxy:/opt/config
     command: --conf /opt/config
     networks:
     - hotspotplusgate
