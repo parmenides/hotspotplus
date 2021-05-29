@@ -49,7 +49,7 @@ $docker run -d -p 8001:8000 -p 9001:9000 --name=portainer --restart=always -v /v
 2. Select **Docker** box.
 3. Go to **Stacks** click **Add Stack**
 4. Select **Web Editor**
-- Download and open [docker_compose](https://github.com/parmenides/hotspotplus/config/docker-compose-swarm.yml) file
+- Download and open [docker-compose-swarm.yml](https://github.com/parmenides/hotspotplus/config/docker-compose-swarm.yml) file with a simple text editor
 - Open file and replace your_domain with your real domain (example: **hotspotplus.ir**)  
 - copy docker-compose-swarm.yml content into the web editor
 - Add the following Environment Variables:
