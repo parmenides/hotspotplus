@@ -1,0 +1,27 @@
+{
+  "clickhouse": {
+    "ch1": {
+      "db": "hotspotplus",
+      "host": "clickhouse",
+      "dnsLoop" : true,
+      "maxLifeTime": 300,
+      "password": "123",
+      "port": 9000,
+      "username": "admin"
+    }
+  },
+  "kafka": {
+    "kfk1": {
+      "brokers": "kafka1:9092",
+      "sasl": {
+        "password": "",
+        "username": ""
+      }
+    }
+  },
+  "common": {
+    "bufferSize": 90000,
+    "flushInterval": 5,
+    "logLevel": "info"
+  }
+}

@@ -1,0 +1,26 @@
+{
+	"name" : "dns",
+	"kafka": "kfk1",
+	"topic": "DNS_REPORT_STREAM",
+	"earliest" : true,
+	"consumerGroup" : "dns_consumer",
+	"parser" : "json",
+	"clickhouse" : "ch1",
+	"tableName" : "DnsReport",
+	"dims" : [
+		{"name" : "businessId" , "type" : "String"},
+		{"name" : "departmentId" , "type" : "String"},
+		{"name" : "memberId" , "type" : "String"},
+		{"name" : "nasIp" , "type" : "String"},
+		{"name" : "memberIp" , "type" : "String"},
+		{"name" : "username" , "type" : "String"},
+		{"name" : "receivedAt" , "type" : "UInt32"},
+		{"name" : "domain" , "type" : "String"}
+	],
+
+	"@desc_of_autoSchema" : "auto schema will auto fetch the schema from clickhouse",
+	"autoSchema" : false,
+	"@desc_of_exclude_columns" : "this columns will be excluded by insert SQL ",
+	"excludeColumns" : [],
+	"bufferSize" : 90000
+}
