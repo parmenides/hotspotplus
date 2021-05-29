@@ -49,11 +49,11 @@ $docker run -d -p 8001:8000 -p 9001:9000 --name=portainer --restart=always -v /v
   |---|---|---|
   | config_dir | /home/hotspotplus/hotspotplus/config | config folder path (Required) |
   | admin_password | 123 | Administrator password (Required) | 
-  | admin_username | admin | Admin username (Required) |
-  | encryption_key | 123 | Strong Encryption key (Required) |
-  | payment_api_key | 123 | Payping Oauth2.0 API_KEY | 
-  | payping_client_id | http://localhost | Payping Oauth2.0 CLIENT_ID (Optional) | 
-  | payping_app_token | http://localhost | Payping Oauth2.0 APP_TOKEN (Optional) | 
+  | admin_username | admin | Administrator username (Required) |
+  | encryption_key | 123 | Strong encryption key (Required) |
+  | payment_api_key | 123 | PayPing OAuth2.0 API_KEY | 
+  | payping_client_id | http://localhost | PayPing OAuth2.0 CLIENT_ID (Optional) | 
+  | payping_app_token | http://localhost | PayPing OAuth2.0 APP_TOKEN (Optional) | 
   | panel_address | http://your_domain | Your domain address (Required)|
   | radius_shred_secret | 3ymUG6JVK | Radius secret (Required)| 
   | radius_ip | your_server_ip | Radius server IP address (Required)|  
