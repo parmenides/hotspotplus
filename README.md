@@ -39,7 +39,7 @@ $docker run -d -p 8001:8000 -p 9001:9000 --name=portainer --restart=always -v /v
 #### Required DNS A record
 
 |Description| Domain | IPv4 address
-  |---|---|
+  |---|---|---|
 |Main domain| http://your_domain.com | your_server_ip |
 |Hotspot domain| http://wifi.your_domain.com | your_server_ip |
 |Dashboard domain| http://my.your_domain.com | your_server_ip |
