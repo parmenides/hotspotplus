@@ -15,7 +15,7 @@ fs.file-max = 70000
 #### Connect to the server via terminal and run these commands
 ```bash
 #Connect via terminal
-$ssh  root@YourServerIP
+$ssh  root@your_server_ip
 # Create a new user
 $adduser hotspotplus
 # Add sudo permission
@@ -41,10 +41,10 @@ $docker run -d -p 8001:8000 -p 9001:9000 --name=portainer --restart=always -v /v
 
 |Description| Domain | IPv4 address
   |---|---|---|
-|Main domain| http://your_domain.com | your_server_ip |
-|Hotspot domain| http://wifi.your_domain.com | your_server_ip |
-|Dashboard domain| http://my.your_domain.com | your_server_ip |
-|API domain| http://api.your_domain.com | your_server_ip |
+|Main domain| http://your_domain | your_server_ip |
+|Hotspot domain| http://wifi.your_domain | your_server_ip |
+|Dashboard domain| http://my.your_domain | your_server_ip |
+|API domain| http://api.your_domain | your_server_ip |
 
 #### Go to http://your_server_ip:9001 and follow these steps:
 1. Create a new user 
