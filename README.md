@@ -40,6 +40,7 @@ $docker run -d -p 8001:8000 -p 9001:9000 --name=portainer --restart=always -v /v
 
 |Description|Example|
   |---|---|
+|Main domain| http://your_domain.com |
 |Hotspot domain| http://wifi.your_domain.com |
 |Dashboard domain| http://my.your_domain.com |
 |API domain| http://api.your_domain.com |
@@ -63,8 +64,8 @@ $docker run -d -p 8001:8000 -p 9001:9000 --name=portainer --restart=always -v /v
   | payment_api_key | 123 | PayPing OAuth2.0 API_KEY | 
   | payping_client_id | Hotspotplus | PayPing OAuth2.0 CLIENT_ID (Optional) | 
   | payping_app_token | 123 | PayPing OAuth2.0 APP_TOKEN (Optional) | 
-  | panel_address | http://your_domain | Your domain address (Required)|
-  | your_domain | http://your_domain | Your domain address (Required)|
+  | panel_address | http://my.your_domain | Your dashboard domain address (Required)|
+  | your_domain | http://your_main_domain | Your main domain address (Required)|
   | radius_shred_secret | 3ymUG6JVK | Radius secret (Required)| 
   | radius_ip | your_server_ip | Radius server IP address (Required)|  
   | sms_api_token |  | Kavehnegar api token|
