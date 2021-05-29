@@ -48,9 +48,15 @@ $docker run -d -p 8001:8000 -p 9001:9000 --name=portainer --restart=always -v /v
   | Variable   | Value | Description | example |
   |---|---|---|---| 
   | config_dir  | /home/hotspotplus/hotspotplus/config  | config folder path  | |
-  |   |   |   |
-  |   |   |   |
-   
+  | admin_password  |     | Administrator password | yF9Jn1vEG2u7BpaLzCgn | 
+  | admin_username  |     | Admin username  | admin |
+  | encryption_key  |     | Strong Encryption key username  | yF9Jn1vEG2u7BpaLzCgn |
+  | payment_api_key  |    | Payping Oauth2.0 API_KEY https://www.payping.ir/ |  |
+  | payping_client_id  |    | Payping Oauth2.0 CLIENT_ID https://www.payping.ir/ |  |
+  | payping_app_token  |    | Payping Oauth2.0 APP_TOKEN https://www.payping.ir/ |  |
+  | panel_address  | #4%^GdVb3&!fgKaP#   | Your domain address | https://my.prohotspotplus.com |
+
+
 
 
 #### Start development

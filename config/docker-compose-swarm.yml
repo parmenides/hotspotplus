@@ -30,7 +30,7 @@ services:
     - PAYMENT_API_KEY=${payment_api_key}
     - PAYPING_APP_CLIENT_ID=${payping_client_id}
     - PAYPING_APP_TOKEN=${payping_app_token}
-    - PANEL_ADDRESS=https://my.prohotspotplus.com
+    - PANEL_ADDRESS=${panel_address}
     - PAYPING_AUTH_RETURN_URL=https://my.prohotspotplus.com/api/payping
     - PAYMENT_SUPPORT_EMAIL=payam.yousefii@gmail.com
     - PAYMENT_SUPPORT_MOBILE=09120243628
