@@ -11,7 +11,7 @@ https://docs.docker.com/compose/install/
 vm.max_map_count = 300000
 fs.file-max = 70000
 ```
-##### Connect to the server via terminal and run these commands
+#### Connect to the server via terminal and run these commands
 ```bash
 #Connect via terminal
 $ssh  root@YourServerIP
