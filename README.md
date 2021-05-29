@@ -57,7 +57,7 @@ $docker run -d -p 8001:8000 -p 9001:9000 --name=portainer --restart=always -v /v
   
   | Name | Value | Description |
   |---|---|---|
-  | project_dir | /home/hotspotplus/hotspotplus | config folder path (Required) |
+  | project_dir | /home/hotspotplus/hotspotplus | project folder path on the server(Required) |
   | admin_password | 123 | Administrator password (Required) | 
   | admin_username | admin | Administrator username (Required) |
   | encryption_key | 123 | Strong encryption key (Required) |
