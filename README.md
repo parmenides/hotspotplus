@@ -54,9 +54,9 @@ $docker run -d -p 8001:8000 -p 9001:9000 --name=portainer --restart=always -v /v
   | payment_api_key | 123 | Payping Oauth2.0 API_KEY | 
   | payping_client_id | http://localhost | Payping Oauth2.0 CLIENT_ID (Optional) | 
   | payping_app_token | http://localhost | Payping Oauth2.0 APP_TOKEN (Optional) | 
-  | panel_address | http://YourDomain | Your domain address (Required)|
+  | panel_address | http://your_domain | Your domain address (Required)|
   | radius_shred_secret | 3ymUG6JVK | Radius secret (Required)| 
-  | radius_ip | YourServerIP | Radius server IP address (Required)|  
+  | radius_ip | your_server_ip | Radius server IP address (Required)|  
   | sentry_dashboard_url | http://localhost | Sentry server Url address (Optional) |  
 
 
