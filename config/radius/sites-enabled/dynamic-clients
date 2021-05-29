@@ -114,7 +114,7 @@ server dynamic_clients {
 			&FreeRADIUS-Client-Require-MA = no
 
 			# secret escape darsad char with darsad
-			&FreeRADIUS-Client-Secret = "#4%%^GdVb3&!fgKaP#"
+			&FreeRADIUS-Client-Secret = "3ymUG6JVK"
 
 			# shortname
 			&FreeRADIUS-Client-Shortname = "%{Packet-Src-IP-Address}"

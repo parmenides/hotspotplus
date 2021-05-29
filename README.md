@@ -45,18 +45,19 @@ $docker run -d -p 8001:8000 -p 9001:9000 --name=portainer --restart=always -v /v
 - Repository reference: master
 - Compose path: config/docker-compose-swarm.yml
 - Add Environment Variables:
-  | Variable   | Value | Description | example |
+  | Variable   | Value | Description |
   |---|---|---|---| 
-  | config_dir  | /home/hotspotplus/hotspotplus/config  | config folder path  | |
-  | admin_password  |     | Administrator password | yF9Jn1vEG2u7BpaLzCgn | 
-  | admin_username  |     | Admin username  | admin |
-  | encryption_key  |     | Strong Encryption key username  | yF9Jn1vEG2u7BpaLzCgn |
-  | payment_api_key  |    | Payping Oauth2.0 API_KEY https://www.payping.ir/ |  |
-  | payping_client_id  |    | Payping Oauth2.0 CLIENT_ID https://www.payping.ir/ |  |
-  | payping_app_token  |    | Payping Oauth2.0 APP_TOKEN https://www.payping.ir/ |  |
-  | panel_address  | #4%^GdVb3&!fgKaP#   | Your domain address | https://my.prohotspotplus.com |
-
-
+  | config_dir | /home/hotspotplus/hotspotplus/config | config folder path (Required) |
+  | admin_password | 123 | Administrator password (Required) | 
+  | admin_username | admin | Admin username (Required) |
+  | encryption_key | 123 | Strong Encryption key username (Required) |
+  | payment_api_key | 123 | Payping Oauth2.0 API_KEY | 
+  | payping_client_id | http://localhost (Required) | Payping Oauth2.0 CLIENT_ID | 
+  | payping_app_token | http://localhost (Required) | Payping Oauth2.0 APP_TOKEN | 
+  | panel_address | http://YourDomain | Your domain address (Required)|
+  | radius_shred_secret | 3ymUG6JVK | Radius secret | 
+  | radius_ip | YourServerIP | Radius server IP address (Required)|  
+  | sentry_dashboard_url | http://localhost | Sentry server Url address (Optional) |  
 
 
 #### Start development
