@@ -52,8 +52,8 @@ $docker run -d -p 8001:8000 -p 9001:9000 --name=portainer --restart=always -v /v
   | admin_username | admin | Administrator username (Required) |
   | encryption_key | 123 | Strong encryption key (Required) |
   | payment_api_key | 123 | PayPing OAuth2.0 API_KEY | 
-  | payping_client_id | http://localhost | PayPing OAuth2.0 CLIENT_ID (Optional) | 
-  | payping_app_token | http://localhost | PayPing OAuth2.0 APP_TOKEN (Optional) | 
+  | payping_client_id | 123 | PayPing OAuth2.0 CLIENT_ID (Optional) | 
+  | payping_app_token | 123 | PayPing OAuth2.0 APP_TOKEN (Optional) | 
   | panel_address | http://your_domain | Your domain address (Required)|
   | radius_shred_secret | 3ymUG6JVK | Radius secret (Required)| 
   | radius_ip | your_server_ip | Radius server IP address (Required)|  
