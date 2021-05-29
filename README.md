@@ -6,9 +6,9 @@ https://docs.docker.com/engine/install/linux-postinstall/
 
 #### Install Docker Compose
 https://docs.docker.com/compose/install/
-#### Connect to the server and edit sysctl.conf file and add these to line to the end of file and save.
-/etc/sysctl.conf
-```config
+#### Connect to the server and edit sysctl.conf file and add the following line to the end of sysctl.conf file and save.
+Path: /etc/sysctl.conf
+```text
 vm.max_map_count = 300000
 fs.file-max = 70000
 ```
