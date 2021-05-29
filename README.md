@@ -45,6 +45,7 @@ $docker run -d -p 8001:8000 -p 9001:9000 --name=portainer --restart=always -v /v
 - Repository reference: master
 - Compose path: config/docker-compose-swarm.yml
 - Add Environment Variables:
+  
   | Variable   | Value | Description |
   |---|---|---|
   | project_dir | /home/hotspotplus/hotspotplus | config folder path (Required) |
@@ -52,13 +53,13 @@ $docker run -d -p 8001:8000 -p 9001:9000 --name=portainer --restart=always -v /v
   | admin_username | admin | Administrator username (Required) |
   | encryption_key | 123 | Strong encryption key (Required) |
   | payment_api_key | 123 | PayPing OAuth2.0 API_KEY | 
-  | payping_client_id | hotspotplus | PayPing OAuth2.0 CLIENT_ID (Optional) | 
+  | payping_client_id | Hotspotplus | PayPing OAuth2.0 CLIENT_ID (Optional) | 
   | payping_app_token | 123 | PayPing OAuth2.0 APP_TOKEN (Optional) | 
   | panel_address | http://your_domain | Your domain address (Required)|
   | radius_shred_secret | 3ymUG6JVK | Radius secret (Required)| 
   | radius_ip | your_server_ip | Radius server IP address (Required)|  
   | sms_api_token |  | Kavehnegar api token|
-  | sms_signature |  | Sms signitaura |
+  | sms_signature |  | Sms signature |
 
 
 #### Start development
