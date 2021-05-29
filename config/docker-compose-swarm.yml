@@ -66,7 +66,7 @@ services:
     deploy:
       replicas: 1
       labels:
-      - traefik.http.routers.apihotspotplus.rule=(Host(`my.your_domain.com`) ||Host(`api.your_domain.com`) || Host(`wifi.your_domain.com`) ) && PathPrefix(`/api`,`/explorer`)
+      - traefik.http.routers.apihotspotplus.rule=(Host(`my.your_domain`) ||Host(`api.your_domain`) || Host(`wifi.your_domain`) ) && PathPrefix(`/api`,`/explorer`)
       - traefik.http.services.apihotspotplus.loadbalancer.server.port=3000
   logworker:
     image: 'parmenides/hotspotplus-logworker:latest'

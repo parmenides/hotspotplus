@@ -36,14 +36,21 @@ $docker volume create portainer_data
 $docker run -d -p 8001:8000 -p 9001:9000 --name=portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce
 ```
 
+#### Required DNS A record
+
+|Description|Example|
+  |---|---|
+|Hotspot domain| http://wifi.your_domain.com |
+|Dashboard domain| http://my.your_domain.com |
+|API domain| http://api.your_domain.com |
+
 #### Go to http://YourServerIP:9001 and follow these steps:
 1. Create a new user 
 2. Select **Docker** box.
 3. Go to **Stacks** click **Add Stack**
-4. Select **git Repository**
-- Repository URL: https://github.com/parmenides/hotspotplus
-- Repository reference: master
-- Compose path: config/docker-compose-swarm.yml
+4. Select **Web Editor**
+- Download and open [docker_compose](https://github.com/parmenides/hotspotplus/config/docker-compose-swarm.yml) file
+- Open file and replace your_domain with your real domain (example: **hotspotplus.ir**)  
 - Add Environment Variables:
   
   | Name | Value | Description |
@@ -61,14 +68,6 @@ $docker run -d -p 8001:8000 -p 9001:9000 --name=portainer --restart=always -v /v
   | radius_ip | your_server_ip | Radius server IP address (Required)|  
   | sms_api_token |  | Kavehnegar api token|
   | sms_signature |  | Sms signature |
-
-#### Required DNS A record
-
-  |Description|Example|
-  |---|---|
-  |Hotspot domain| http://wifi.your_domain.com |
-  |Dashboard domain| http://my.your_domain.com |
-  |API domain| http://api.your_domain.com |
 
 #### Start development
 ```bash
