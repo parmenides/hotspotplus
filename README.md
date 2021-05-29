@@ -1,11 +1,10 @@
 ### Hotspotplus Installation
 
-#### Install Docker
-https://docs.docker.com/docker-for-mac/install/
-https://docs.docker.com/engine/install/linux-postinstall/
+#### Install docker and docker compose
+[Docker installation guid](https://docs.docker.com/docker-for-mac/install/)
+[Docker post installation guid](https://docs.docker.com/engine/install/linux-postinstall/)
+[Docker compose installation guid](https://docs.docker.com/compose/install/)
 
-#### Install Docker Compose
-https://docs.docker.com/compose/install/
 #### Connect to the server and edit sysctl.conf file and add the following line to the end of sysctl.conf file and save.
 Path: /etc/sysctl.conf
 ```text
