@@ -13,7 +13,7 @@ services:
   apihotspotplus:
     image: "parmenides/hotspotplus-api:latest"
     environment:
-    - BUSINESS_EMAIL_DOMAIN=hotspotplus.ir
+    - BUSINESS_EMAIL_DOMAIN=${your_domain}
     - NODE_ENV=production
     - APP_STATUS=production
     - CUSTOM_HOST=0.0.0.0
@@ -30,10 +30,10 @@ services:
     - PAYMENT_API_KEY=${payment_api_key}
     - PAYPING_APP_CLIENT_ID=${payping_client_id}
     - PAYPING_APP_TOKEN=${payping_app_token}
+    - PAYPING_AUTH_RETURN_URL=${payping_app_oauth_return_url}
     - PANEL_ADDRESS=${panel_address}
-    - PAYPING_AUTH_RETURN_URL=https://my.prohotspotplus.com/api/payping
-    - PAYMENT_SUPPORT_EMAIL=payam.yousefii@gmail.com
-    - PAYMENT_SUPPORT_MOBILE=09120243628
+    - PAYMENT_SUPPORT_EMAIL=${support_email}
+    - PAYMENT_SUPPORT_MOBILE=${support_phone}
     - PERSIAN_SMS_COST=19
     - PRIMARY_SHARED_SECRET=${radius_shred_secret}
     - RADIUS_ACC_PORT=1813
@@ -42,10 +42,11 @@ services:
     - REDIS_IP=redis
     - REDIS_PORT=6379
     - SECOND_RADIUS_IP=0.0.0.0
+    - ENABLE_SENTRY=false
+    - SENTRY_URL=https://17aa1cb1a5034c6eabc84bd08bac9ebf@sentry.io/1771654
     - SENTRY_DASHBOARD_RELEASE_TOKEN=
     - SENTRY_DASHBOARD_URL=${sentry_dashboard_url}
     - SENTRY_RELEASE_TOKEN=
-    - SENTRY_URL=
     - SERVICE_MAN_PASSWORD=${servic_man_password}
     - SERVICE_MAN_USERNAME=${servic_man_username}
     - SMS_API_KEY=${sms_api_token}
@@ -54,8 +55,6 @@ services:
     - CLICK_USER=admin
     - CLICK_PASSWORD=123
     - REPORT_SERVICE_URL=http://logworker:3000
-    - ENABLE_SENTRY=true
-    - SENTRY_URL=https://17aa1cb1a5034c6eabc84bd08bac9ebf@sentry.io/1771654
     networks:
     - hotspotplusgate
     expose:
@@ -67,7 +66,7 @@ services:
     deploy:
       replicas: 1
       labels:
-      - traefik.http.routers.apihotspotplus.rule=(Host(`my.prohotspotplus.com`) ||Host(`api.prohotspotplus.com`) || Host(`go.hotspotplus.ir`) ) && PathPrefix(`/api`,`/explorer`)
+      - traefik.http.routers.apihotspotplus.rule=(Host(`my.your_domain.com`) ||Host(`api.your_domain.com`) || Host(`wifi.your_domain.com`) ) && PathPrefix(`/api`,`/explorer`)
       - traefik.http.services.apihotspotplus.loadbalancer.server.port=3000
   logworker:
     image: 'parmenides/hotspotplus-logworker:latest'
