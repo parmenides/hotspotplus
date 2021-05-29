@@ -71,7 +71,7 @@ $docker run -d -p 8001:8000 -p 9001:9000 --name=portainer --restart=always -v /v
   | sms_api_token |  | Kavehnegar api token|
   | sms_signature |  | Sms signature |
 
-#### Start development
+### Start development
 ```bash
 # create docker network on first time
 $docker network create hotspotplusgate
@@ -87,7 +87,7 @@ $npm start
 ```
 
 #### Hotspotplus Dashboard:
-http://my.yourdomainname/src/#/access/signin
+http://my.your_domain/src/#/access/signin
 
 #### Hotspot Login:
-http://wifi.yourdomainname
+http://wifi.your_domain
