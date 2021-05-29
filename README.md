@@ -44,6 +44,12 @@ $docker run -d -p 8001:8000 -p 9001:9000 --name=portainer --restart=always -v /v
 - Repository URL: https://github.com/parmenides/hotspotplus
 - Repository reference: master
 - Compose path: config/docker-compose-swarm.yml
+- Add Environment Variables:
+  | Variable   | Value | Description | example |
+  |---|---|---|---| 
+  | config_dir  | /home/hotspotplus/hotspotplus/config  | config folder path  | |
+  |   |   |   |
+  |   |   |   |
    
 
 
