@@ -46,7 +46,7 @@ $docker run -d -p 8001:8000 -p 9001:9000 --name=portainer --restart=always -v /v
 - Compose path: config/docker-compose-swarm.yml
 - Add Environment Variables:
   | Variable   | Value | Description |
-  |---|---|---|---| 
+  |---|---|---|
   | config_dir | /home/hotspotplus/hotspotplus/config | config folder path (Required) |
   | admin_password | 123 | Administrator password (Required) | 
   | admin_username | admin | Admin username (Required) |
