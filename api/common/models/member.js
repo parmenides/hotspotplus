@@ -982,122 +982,106 @@ module.exports = function (Member) {
     return cb(null, shortUrl)
   }
 
-  Member.createNewMember = function (options, businessId, nasId, host) {
+  Member.createNewMember = async function (options, businessId, nasId, host) {
     const Business = app.models.Business
-    return Q.Promise(function (resolve, reject) {
-      const member = {}
-      member.businessId = businessId
-      member.mobile = options.mobile
-      member.email = options.email
-      member.groupIdentity = options.groupIdentity
-      if (options.expiresAt) {
-        member.expiresAt = options.expiresAt
+    const member = {}
+    member.businessId = businessId
+    member.mobile = options.mobile
+    member.email = options.email
+    member.groupIdentity = options.groupIdentity
+    if (options.expiresAt) {
+      member.expiresAt = options.expiresAt
+    }
+    member.groupIdentityId = options.groupIdentityId
+    member.groupIdentityType = options.groupIdentityType
+    member.passportNumber = options.passportNumber
+    member.roomNumber = options.roomNumber
+    member.studentGrade = options.studentGrade
+    member.studentId = options.studentId
+    member.username =
+      options.username || utility.verifyAndTrimMobile(member.mobile)
+    member.passwordText =
+      options.password || utility.createRandomNumericalPassword()
+    member.verificationCode = utility.createVerificationCode()
+    member.passportNumber = options.passportNumber
+    // member.active = true;
+    if (options.active != null) {
+      member.active = options.active
+    }
+    member.active = false
+    if (options.active != null) {
+      member.active = options.active
+    }
+    // Check if this is a hotel user
+    if (member.passportNumber && !member.mobile) {
+      member.username = member.passportNumber.trim()
+      if (member.roomNumber) {
+        member.passwordText = member.roomNumber.trim()
       }
-      member.groupIdentityId = options.groupIdentityId
-      member.groupIdentityType = options.groupIdentityType
-      member.passportNumber = options.passportNumber
-      member.roomNumber = options.roomNumber
-      member.studentGrade = options.studentGrade
-      member.studentId = options.studentId
-      member.username =
-        options.username || utility.verifyAndTrimMobile(member.mobile)
-      member.passwordText =
-        options.password || utility.createRandomNumericalPassword()
-      member.verificationCode = utility.createVerificationCode()
-      member.passportNumber = options.passportNumber
-      // member.active = true;
-      if (options.active != null) {
-        member.active = options.active
-      }
-      member.active = false
-      if (options.active != null) {
-        member.active = options.active
-      }
-      // Check if this is a hotel user
-      if (member.passportNumber && !member.mobile) {
-        member.username = member.passportNumber.trim()
-        if (member.roomNumber) {
-          member.passwordText = member.roomNumber.trim()
-        }
-      }
-      member.language = options.language
-      member.firstName = options.firstName
-      member.lastName = options.lastName
-      member.fullName = options.fullName
-      member.gender = options.gender
-      member.birthday = options.birthday
-      member.birthDay = options.birthDay
-      member.birthMonth = options.birthMonth
-      member.birthYear = options.birthYear
-      member.nationalCode = options.nationalCode
-      member.age = options.age
-      member.creationDate = options.creationDate || new Date().getTime()
-      member.subscriptionDate =
-        options.subscriptionDate || new Date().getTime()
-      if (options.sendVerificationSms) {
-        member.verificationCount = 1
-      }
+    }
+    member.language = options.language
+    member.firstName = options.firstName
+    member.lastName = options.lastName
+    member.fullName = options.fullName
+    member.gender = options.gender
+    member.birthday = options.birthday
+    member.birthDay = options.birthDay
+    member.birthMonth = options.birthMonth
+    member.birthYear = options.birthYear
+    member.nationalCode = options.nationalCode
+    member.age = options.age
+    member.creationDate = options.creationDate || new Date().getTime()
+    member.subscriptionDate = options.subscriptionDate || new Date().getTime()
+    if (options.sendVerificationSms) {
+      member.verificationCount = 1
+    }
 
-      Business.findById(businessId).then(function (business) {
-        if (!business) {
-          log.error('business not found')
-          return reject('business not found')
-        }
+    if (nasId) {
+      const nas = await Nas.findById(nasId)
+      member.departments = nas && nas.department ? [nas.department] : []
+    }
 
-        const defaultInternetPlan = business.defaultInternetPlan || {}
-        if (options.internetPlanId) {
-          member.internetPlanId = options.internetPlanId
-        } else if (defaultInternetPlan.id) {
-          member.internetPlanId = business.defaultInternetPlan.id
-          member.activateDefaultPlanCount = 1
-        }
-        // todo check verification method and decide for 'active' attribute
+    const business = Business.findById(businessId)
+    const defaultInternetPlan = business.defaultInternetPlan || {}
 
-        Member.create(member, function (error, result) {
-          if (error) {
-            log.error(error)
-            return reject(error)
-          }
-          const memberId = result.id
-          if (options.sendVerificationSms) {
-            Member.sendVerificationMessage(
-              business,
-              nasId,
-              host,
-              member.verificationCode,
-              memberId,
-              member.mobile
-            )
-              .then(function (verificationInfo) {
-                log.debug('verification code sent')
-                return resolve({
-                  internetPlanId: member.internetPlanId,
-                  username: member.username,
-                  shortUrl: verificationInfo.shortUrl,
-                  verificationCode: verificationInfo.verificationCode,
-                  password: member.passwordText,
-                  businessId: member.businessId,
-                  memberId: memberId,
-                })
-              })
-              .fail(function (error) {
-                log.error('failed to send verification code')
-                log.error(error)
-                return reject(error)
-              })
-          } else {
-            // log.debug ( "member created: ", member.username );
-            return resolve({
-              internetPlanId: member.internetPlanId,
-              username: member.username,
-              password: member.passwordText,
-              businessId: member.businessId,
-              memberId: memberId,
-            })
-          }
-        })
-      })
-    })
+    if (options.internetPlanId) {
+      member.internetPlanId = options.internetPlanId
+    } else if (defaultInternetPlan.id) {
+      member.internetPlanId = business.defaultInternetPlan.id
+      member.activateDefaultPlanCount = 1
+    }
+
+    const result = await Member.create(member)
+    const memberId = result.id
+
+    if (options.sendVerificationSms) {
+      const verificationInfo = await Member.sendVerificationMessage(
+        business,
+        nasId,
+        host,
+        member.verificationCode,
+        memberId,
+        member.mobile
+      )
+      return {
+        internetPlanId: member.internetPlanId,
+        username: member.username,
+        shortUrl: verificationInfo.shortUrl,
+        verificationCode: verificationInfo.verificationCode,
+        password: member.passwordText,
+        businessId: member.businessId,
+        memberId: memberId,
+      }
+    } else {
+      return {
+        internetPlanId: member.internetPlanId,
+        username: member.username,
+        password: member.passwordText,
+        businessId: member.businessId,
+        memberId: memberId,
+      }
+    }
+
   }
 
   Member.remoteMethod('createNewMember', {
@@ -1170,7 +1154,7 @@ module.exports = function (Member) {
     })
   }
 
-  Member.createHotSpotMember = function (
+  Member.createHotSpotMember = async function (
     mobile,
     firstName,
     lastName,
@@ -1193,182 +1177,133 @@ module.exports = function (Member) {
     passportNumber,
     studentGrade,
     studentId,
-    verificationMethod,
-    cb
+    verificationMethod
   ) {
     log.debug('@createHotSpotMember')
-    Member.findOne(
-      {
-        where: {
-          and: [
-            {businessId: businessId},
-            {
-              or: [
-                {
-                  username:
-                    utility.verifyAndTrimMobile(mobile) + '@' + businessId,
-                },
-                {mobile: utility.verifyAndTrimMobile(mobile)},
-              ],
-            },
-          ],
-        },
+    let previousMember = await Member.findOne({
+      where: {
+        and: [
+          {businessId: businessId},
+          {
+            or: [
+              {
+                username:
+                  utility.verifyAndTrimMobile(mobile) + '@' + businessId,
+              },
+              {mobile: utility.verifyAndTrimMobile(mobile)},
+            ],
+          },
+        ],
       },
-      function (error, previousMember) {
-        if (error) {
-          log.error(error)
-          return cb(error)
-        }
+    })
 
-        // Fix findOne bug;
-        if (
-          previousMember &&
-          previousMember.mobile !== utility.verifyAndTrimMobile(mobile)
-        ) {
-          previousMember = null
-        }
+    // Fix findOne bug;
+    if (
+      previousMember &&
+      previousMember.mobile !== utility.verifyAndTrimMobile(mobile)
+    ) {
+      previousMember = null
+    }
 
-        let sendVerificationSms = false
-        let isActive = false
-        let responseStatus = 0
-        verificationMethod = verificationMethod || 'mobile'
+    let sendVerificationSms = false
+    let isActive = false
+    let responseStatus = 0
+    verificationMethod = verificationMethod || 'mobile'
 
-        if (verificationMethod === 'mobile') {
-          sendVerificationSms = true
-          isActive = false
-          if (!mobile) {
-            var error = new Error()
-            error.message = hotspotMessages.mobileIsRequired
-            error.status = 403
-            return cb(error)
-          }
-          responseStatus = 0
-        } else if (verificationMethod === 'manual') {
-          responseStatus = 5
-          sendVerificationSms = false
-          isActive = false
-        } else if (verificationMethod === 'auto') {
-          responseStatus = 6
-          sendVerificationSms = true
-          isActive = false
-        }
-
-        const Business = app.models.Business
-        if (!previousMember) {
-          Member.createNewMember(
-            {
-              mobile: mobile,
-              gender: gender,
-              firstName: firstName,
-              lastName: lastName,
-              fullName: fullName,
-              birthday: birthday,
-              birthDay: birthDay,
-              birthYear: birthYear,
-              birthMonth: birthMonth,
-              active: isActive,
-              sendVerificationSms: sendVerificationSms,
-              username: username,
-              password: password,
-              email: email,
-              nationalCode: nationalCode,
-              language: language,
-              passportNumber: passportNumber,
-              roomNumber: roomNumber,
-              studentGrade: studentGrade,
-              studentId: studentId,
-              age: age,
-            },
-            businessId,
-            nasId,
-            host
-          )
-            .then(function (credential) {
-              credential.status = responseStatus
-              if (verificationMethod !== 'auto') {
-                delete credential.shortUrl
-                delete credential.verificationCode
-              }
-              return cb(null, credential)
-            })
-            .fail(function (error) {
-              log.error(error)
-              return cb(error)
-            })
-        } else {
-          log.debug('Previous member exist', previousMember)
-          Business.findById(businessId).then(function (business) {
-            if (!business) {
-              const error = new Error()
-              error.message = hotspotMessages.businessNotFound
-              error.status = 404
-              return cb(error)
-            }
-            const verificationCodeMax =
-              business.MAX_VERIFICATION_COUNT || config.MAX_VERIFICATION_COUNT
-            if (previousMember.active) {
-              log.error(
-                'Member Exist with username: ',
-                previousMember.username
-              )
-              return cb(null, {status: -1})
-            }
-            if (!previousMember.mobile) {
-              log.debug(
-                'Member find but needs manual verification ',
-                previousMember.username
-              )
-              return cb(null, {status: 3})
-            }
-            if (
-              (!previousMember.active &&
-                previousMember.verificationCount <= verificationCodeMax) ||
-              !previousMember.verificationCount
-            ) {
-              log.debug(
-                'Member find but it is not active, username: ',
-                previousMember.username
-              )
-              const count = previousMember.verificationCount + 1
-              previousMember.updateAttributes(
-                {verificationCount: count},
-                function (error, res) {
-                  if (error) {
-                    log.error(error)
-                    return cb(error)
-                  }
-                  Member.sendVerificationMessage(
-                    business,
-                    nasId,
-                    host,
-                    previousMember.verificationCode,
-                    previousMember.id,
-                    previousMember.mobile
-                  )
-                    .then(function () {
-                      log.debug('verification code sent to: ', mobile)
-                    })
-                    .fail(function (error) {
-                      log.error('failed to send verification code')
-                      log.error(error)
-                    })
-                }
-              )
-              return cb(null, {status: 0, memberId: previousMember.id})
-            } else if (
-              !previousMember.active &&
-              previousMember.verificationCount > verificationCodeMax
-            ) {
-              log.debug(
-                'Member exist but verification message limit reached: ',
-                previousMember.username
-              )
-              return cb(null, {status: 2})
-            }
-          })
-        }
+    if (verificationMethod === 'mobile') {
+      sendVerificationSms = true
+      isActive = false
+      if (!mobile) {
+        const error = new Error()
+        error.message = hotspotMessages.mobileIsRequired
+        error.status = 403
+        throw error
       }
-    )
+      responseStatus = 0
+    } else if (verificationMethod === 'manual') {
+      responseStatus = 5
+      sendVerificationSms = false
+      isActive = false
+    } else if (verificationMethod === 'auto') {
+      responseStatus = 6
+      sendVerificationSms = true
+      isActive = false
+    }
+
+    if (!previousMember) {
+      const credential = await Member.createNewMember(
+        {
+          mobile: mobile,
+          gender: gender,
+          firstName: firstName,
+          lastName: lastName,
+          fullName: fullName,
+          birthday: birthday,
+          birthDay: birthDay,
+          birthYear: birthYear,
+          birthMonth: birthMonth,
+          active: isActive,
+          sendVerificationSms: sendVerificationSms,
+          username: username,
+          password: password,
+          email: email,
+          nationalCode: nationalCode,
+          language: language,
+          passportNumber: passportNumber,
+          roomNumber: roomNumber,
+          studentGrade: studentGrade,
+          studentId: studentId,
+          age: age,
+        },
+        businessId,
+        nasId,
+        host
+      )
+      credential.status = responseStatus
+      if (verificationMethod !== 'auto') {
+        delete credential.shortUrl
+        delete credential.verificationCode
+      }
+      return credential
+    } else {
+      log.debug('Previous member exist', previousMember)
+      const Business = app.models.Business
+      const business = await Business.findById(businessId)
+      const verificationCodeMax = business.MAX_VERIFICATION_COUNT || config.MAX_VERIFICATION_COUNT
+
+      if (previousMember.active) {
+        return {status: -1}
+      }
+
+      if (!previousMember.mobile) {
+        return {status: 3}
+      }
+
+      if ((!previousMember.active && previousMember.verificationCount <= verificationCodeMax) ||
+        !previousMember.verificationCount) {
+
+        const count = previousMember.verificationCount + 1
+        await previousMember.updateAttributes({verificationCount: count})
+
+        await Member.sendVerificationMessage(
+          business,
+          nasId,
+          host,
+          previousMember.verificationCode,
+          previousMember.id,
+          previousMember.mobile
+        )
+
+        return {status: 0, memberId: previousMember.id}
+      } else if (!previousMember.active && previousMember.verificationCount > verificationCodeMax) {
+        log.debug(
+          'Member exist but verification message limit reached: ',
+          previousMember.username
+        )
+        return {status: 2}
+      }
+    }
+
   }
 
   Member.remoteMethod('createHotSpotMember', {
@@ -2446,7 +2381,7 @@ module.exports = function (Member) {
       return cb('startDate not defined')
     }
 
-    throw new error('not implemented');
+    throw new error('not implemented')
     //todo fix this method
     db.getMemberDailyUsage(businessId, memberId, startDate)
       .then(function (memberUsage) {
@@ -3041,6 +2976,9 @@ module.exports = function (Member) {
         for (const dep of departments) {
           query.or.push({departments: {eq: dep}})
         }
+        /*if(query.or && query.or.length===0){
+          delete query.or;
+        }*/
         Member.count(
           query,
           function (error, members) {
@@ -3121,29 +3059,12 @@ module.exports = function (Member) {
             user.subscriptionDate = new Date().getTime()
             usersOptions[user.username] = user
           })
-          .on('done', function () {
-            const addMemberTasks = []
-            for (const i in usersOptions) {
-              addMemberTasks.push(
-                (function (option, businessId) {
-                  return function () {
-                    return Member.createNewMember(option, businessId)
-                  }
-                })(usersOptions[i], businessId)
-              )
+          .on('done', async function () {
+            //const addMemberTasks = []
+            for (const username of Object.keys(usersOptions)) {
+              await Member.createNewMember(usersOptions[username], businessId)
             }
-            let addMemberTaskResult = Q({})
-            addMemberTasks.forEach(function (f) {
-              addMemberTaskResult = addMemberTaskResult.then(f)
-            })
-            addMemberTaskResult
-              .then(function () {
-                return resolve({ok: true})
-              })
-              .fail(function (error) {
-                log.error(error)
-                return reject(error)
-              })
+            return resolve({ok: true})
           })
       })
     })
@@ -3315,7 +3236,7 @@ module.exports = function (Member) {
     })
   }
 
-  Member.createMembersByGroup = function (
+  Member.createMembersByGroup = async function (
     businessId,
     reserveCode,
     tourCode,
@@ -3327,141 +3248,103 @@ module.exports = function (Member) {
     duration,
     helpLanguageCode,
     ctx,
-    cb
   ) {
     log.debug('@create group of member')
     const Business = app.models.Business
     const MemberGroup = app.models.MemberGroup
-    Business.findById(businessId).then(function (business) {
-      if (count > 30) {
-        return cb('more than 30 member is not allowed')
-      }
+    const business = await Business.findById(businessId)
 
-      if (
-        !mobile &&
-        !reserveCode &&
-        !tourCode &&
-        !nationalCode &&
-        !passportNumber
-      ) {
-        return cb('invalid parameters')
-      }
+    if (count > 30) {
+      throw new Error('more than 30 member is not allowed')
+    }
 
-      const counterCurrentValue =
-        business.groupMemberCounter ||
-        config.BUSINESS_GROUP_MEMBER_COUNTER_START
-      const counterNewValue = counterCurrentValue + count
-      business.updateAttributes(
-        {
-          groupMemberCounter: counterNewValue,
-        },
-        function (error) {
-          if (error) {
-            log.error(error)
-            return cb(error)
-          }
-          let groupIdentityType
-          if (mobile) {
-            groupIdentityType = 'Mobile'
-          } else if (reserveCode) {
-            groupIdentityType = 'Reserve Code'
-          } else if (tourCode) {
-            groupIdentityType = 'Tour Code'
-          } else if (nationalCode) {
-            groupIdentityType = 'National Code'
-          } else if (passportNumber) {
-            groupIdentityType = 'Passport Number'
-          } else {
-            return cb('Group identity type is empty')
-          }
-          const memberGroupData = {
-            groupIdentity:
-              mobile ||
-              reserveCode ||
-              tourCode ||
-              nationalCode ||
-              passportNumber,
-            mobile: mobile,
-            tourCode: tourCode,
-            groupIdentityType: groupIdentityType,
-            reserveCode: reserveCode,
-            nationalCode: nationalCode,
-            passportNumber: passportNumber,
-            businessId: businessId,
-            creationDate: new Date().getTime(),
-          }
-          MemberGroup.create(memberGroupData, function (error, memberGroup) {
-            if (error) {
-              log.error(error)
-              return cb(error)
-            }
-            log.error('memberGroup')
-            log.error(memberGroup)
-            const tasks = []
-            for (let i = counterCurrentValue; i < counterNewValue; i++) {
-              tasks.push(
-                (function (j) {
-                  return function (memberList) {
-                    const expiresAt = new Date()
-                    expiresAt.add({days: duration + 1})
-                    expiresAt.clearTime()
-                    const options = {
-                      businessId: businessId,
-                      active: true,
-                      sendVerificationSms: false,
-                      internetPlanId: internetPlanId,
-                      groupIdentity: memberGroup.groupIdentity,
-                      groupIdentityId: memberGroup.id,
-                      groupIdentityType: memberGroup.groupIdentityType,
-                      expiresAt: expiresAt,
-                      username: (business.groupMemberPrefix || 'b') + j,
-                      password: utility.createRandomHotspotPassword(),
-                    }
-                    return Member.createNewMember(options, businessId).then(
-                      function (theMember) {
-                        memberList.push(theMember)
-                        return memberList
-                      }
-                    )
-                  }
-                })(i)
-              )
-            }
-            let result = Q([])
-            tasks.forEach(function (f) {
-              result = result.then(f)
-            })
-            result
-              .then(function (result) {
-                let help = config.DEFAULT_HOTSPOT_HELP
-                let direction = 'rtl'
-                if (helpLanguageCode === 'en') {
-                  direction = 'ltr'
-                }
-                if (
-                  business.groupMemberHelps &&
-                  helpLanguageCode &&
-                  business.groupMemberHelps[helpLanguageCode]
-                ) {
-                  help = business.groupMemberHelps[helpLanguageCode]
-                }
-                Member.renderMemberCredentials(result, help, direction)
-                  .then(function (renderedHtmlAsString) {
-                    return cb(null, {html: renderedHtmlAsString})
-                  })
-                  .fail(function (error) {
-                    log.error(error)
-                    return cb(error)
-                  })
-              })
-              .fail(function (error) {
-                log.error(error)
-                return cb(error)
-              })
-          })
-        }
-      )
-    })
+    if (
+      !mobile &&
+      !reserveCode &&
+      !tourCode &&
+      !nationalCode &&
+      !passportNumber
+    ) {
+      throw new Error('invalid parameters')
+    }
+
+    let counterCurrentValue =
+      business.groupMemberCounter ||
+      config.BUSINESS_GROUP_MEMBER_COUNTER_START
+    const counterNewValue = counterCurrentValue + count
+    await business.updateAttributes({groupMemberCounter: counterNewValue})
+
+    let groupIdentityType
+    if (mobile) {
+      groupIdentityType = 'Mobile'
+    } else if (reserveCode) {
+      groupIdentityType = 'Reserve Code'
+    } else if (tourCode) {
+      groupIdentityType = 'Tour Code'
+    } else if (nationalCode) {
+      groupIdentityType = 'National Code'
+    } else if (passportNumber) {
+      groupIdentityType = 'Passport Number'
+    } else {
+      throw new Error('Group identity type is empty')
+    }
+    const memberGroupData = {
+      groupIdentity:
+        mobile ||
+        reserveCode ||
+        tourCode ||
+        nationalCode ||
+        passportNumber,
+      mobile: mobile,
+      tourCode: tourCode,
+      groupIdentityType: groupIdentityType,
+      reserveCode: reserveCode,
+      nationalCode: nationalCode,
+      passportNumber: passportNumber,
+      businessId: businessId,
+      creationDate: new Date().getTime(),
+    }
+    const memberGroup = await MemberGroup.create(memberGroupData)
+    log.debug({memberGroup});
+
+    const arrayCounter = new Array(count)
+    const memberList = []
+    for (const aCounter of arrayCounter) {
+      counterCurrentValue = counterCurrentValue + 1
+      const expiresAt = new Date()
+      expiresAt.add({days: duration + 1})
+      expiresAt.clearTime()
+      const options = {
+        businessId: businessId,
+        active: true,
+        sendVerificationSms: false,
+        internetPlanId: internetPlanId,
+        groupIdentity: memberGroup.groupIdentity,
+        groupIdentityId: memberGroup.id,
+        groupIdentityType: memberGroup.groupIdentityType,
+        expiresAt: expiresAt,
+        username: `${(business.groupMemberPrefix || 'wifi')}${counterCurrentValue}`,
+        password: utility.createRandomHotspotPassword(),
+      }
+      const theMember = await Member.createNewMember(options, businessId)
+      memberList.push(theMember)
+    }
+
+    let help = config.DEFAULT_HOTSPOT_HELP
+    let direction = 'rtl'
+    if (helpLanguageCode === 'en') {
+      direction = 'ltr'
+    }
+    if (
+      business.groupMemberHelps &&
+      helpLanguageCode &&
+      business.groupMemberHelps[helpLanguageCode]
+    ) {
+      help = business.groupMemberHelps[helpLanguageCode]
+    }
+    const renderedHtmlAsString = await Member.renderMemberCredentials(memberList, help, direction);
+    return {html: renderedHtmlAsString};
+
   }
 
   Member.remoteMethod('createMembersByGroup', {

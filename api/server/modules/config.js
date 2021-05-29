@@ -25,7 +25,6 @@ const DEFAULT_ACCOUNTING_UPDATE_INTERVAL_SECONDS =
 module.exports = {
   VERSION: '1.3',
   APP_CACHE_TTL: 60 * 60,
-  DATABASE_DATE_FORMAT: 'YYYY-MM-DD HH:mm:ss',
   PAYPING_APP_CLIENT_ID: process.env.PAYPING_APP_CLIENT_ID,
   PAYPING_APP_TOKEN: process.env.PAYPING_APP_TOKEN,
   PAYPING_AUTH_RETURN_URL: process.env.PAYPING_AUTH_RETURN_URL,
@@ -266,18 +265,17 @@ module.exports = {
         title: 'نامحدود رایگان',
         price: 0,
         discount: 0,
-        duration: 100,
+        duration: 120,
         buyMethod: 'pay',
         durationTitle: 'رایگان',
-        discountDesc: '۲۰٪ تخفیف',
+        discountDesc: 'رایگان',
         service: {
           allowedOnlineUsers: 60,
           features: [
             {title: 'قابلیت ثبت نامحدود کاربر'},
-            {title: ' کابر آنلاین همزمان، ۱۲۰ کلاینت'},
+            {title: ' کابر آنلاین همزمان، ۶۰ کلاینت'},
             {title: 'اتصال به درگاه پرداخت مستقل'},
-            {title: 'پنل مستقل کاربران'},
-            {title: 'پشتیبانی از طریق تیکت'},
+            {title: 'پنل مستقل کاربران'}
           ],
         },
         modules: {

@@ -1,6 +1,6 @@
 {
   "name": "hotspotplus-api",
-  "version": "4.0.3",
+  "version": "4.0.4",
   "main": "server/server.js",
   "bin": "server/server.js",
   "scripts": {

@@ -48,10 +48,13 @@ app.controller('memberList', [
     $scope.allInternetPlans = []
     var allDepartments = []
     $scope.permittedDepartments = []
+    $scope.searchBranchFilter = []
 
     Business.getMyDepartments().$promise.then(function (response) {
       allDepartments = response.departments
       $scope.permittedDepartments = allDepartments
+      $scope.searchDepartmentFilter = angular.copy(allDepartments)
+      $scope.searchDepartmentFilter.push({id: 'noDepartment', 'title': 'بدون شعبه'})
     })
     Business.internetPlans({id: businessId}).$promise.then(
       function (internetPlans) {
@@ -284,11 +287,11 @@ app.controller('memberList', [
                     $scope.member.departments = $scope.member.departments.map((department) => {
                       return department.id
                     })
-                    if($scope.member.departments.length ===0){
+                    if ($scope.member.departments.length === 0) {
                       appMessenger.showError(
                         'member.departmentIsRequired'
                       )
-                      return;
+                      return
                     }
                     if ($scope.member.birthday) {
                       var birthday = new Date($scope.member.birthday)
@@ -463,6 +466,12 @@ app.controller('memberList', [
                   $scope.member.departments = $scope.member.departments.map((department) => {
                     return department.id
                   })
+                  if ($scope.member.departments.length === 0) {
+                    appMessenger.showError(
+                      'member.departmentIsRequired'
+                    )
+                    return
+                  }
                   if ($scope.member.birthday) {
                     $scope.member.birthday = $scope.member.birthday.getTime()
                   }
@@ -1069,8 +1078,14 @@ app.controller('memberList', [
       if ($scope.searchFilter.department) {
         const department = $scope.searchFilter.department
         $scope.isSearching = true
-        filter.departments = {eq: department.id}
+        if (department.id === 'noDepartment') {
+          filter.departments = {eq: []}
+        } else {
+          filter.departments = {eq: department.id}
+        }
       }
+      //
+      //options.filter.where.departments = {eq: []}
       if ($scope.searchFilter.internetPlan) {
         const internetPlan = $scope.searchFilter.internetPlan
         $scope.isSearching = true
@@ -1085,10 +1100,13 @@ app.controller('memberList', [
 
     }
     $scope.clearSearch = function () {
-      if ($scope.searchFilter.username) {
-        $scope.searchFilter.username = ''
-        getPage()
+      $scope.searchFilter = {
+        status: null,
+        department: null,
+        username: '',
+        internetPlan: null
       }
+      $scope.search()
     }
     $scope.showPlanHistory = function (row) {
       $scope.businessId = businessId
@@ -1127,11 +1145,11 @@ app.controller('memberList', [
       newValue,
       oldValue
     ) {
-      getPage()
+      $scope.search()
     })
 
     $scope.pageChanges = function () {
-      getPage()
+      $scope.search()
     }
 
     var getPage = function (inputFilter) {
@@ -1154,7 +1172,7 @@ app.controller('memberList', [
       }
       options.id = businessId
       options.filter.sort = $scope.paginationOptions.sort
-      if (!options.filter.departments) {
+      if (options.filter.where && !options.filter.where.departments) {
         options.filter.where.or = []
         for (const dep of Session.permittedDepartments) {
           options.filter.where.or.push({departments: {eq: dep}})

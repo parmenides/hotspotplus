@@ -1064,7 +1064,7 @@ module.exports = function (Business) {
                       })
                     }
                     Charge.addCharge({
-                      businessId: businessId,
+                      businessId: business.id,
                       type: config.BUY_CHARGE,
                       notifyOwner: business.mobile,
                       amount: price,
