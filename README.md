@@ -6,6 +6,15 @@
 - [Docker post installation guid](https://docs.docker.com/engine/install/linux-postinstall/)
 - [Docker compose installation guid](https://docs.docker.com/compose/install/)
 
+#### Required DNS A record
+
+|Description| Domain | IPv4 address
+  |---|---|---|
+|Main domain| http://your_domain | your_server_ip |
+|Hotspot domain| http://wifi.your_domain | your_server_ip |
+|Dashboard domain| http://my.your_domain | your_server_ip |
+|API domain| http://api.your_domain | your_server_ip |
+
 #### Connect to the server and edit sysctl.conf file and add the following line to the end of sysctl.conf file and save.
 Path: /etc/sysctl.conf
 ```text
@@ -36,15 +45,6 @@ $git clone https://github.com/parmenides/hotspotplus.git
 $docker volume create portainer_data
 $docker run -d -p 8001:8000 -p 9001:9000 --name=portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce
 ```
-
-#### Required DNS A record
-
-|Description| Domain | IPv4 address
-  |---|---|---|
-|Main domain| http://your_domain | your_server_ip |
-|Hotspot domain| http://wifi.your_domain | your_server_ip |
-|Dashboard domain| http://my.your_domain | your_server_ip |
-|API domain| http://api.your_domain | your_server_ip |
 
 #### Go to http://your_server_ip:9001 and follow these steps:
 1. Create a new user 
