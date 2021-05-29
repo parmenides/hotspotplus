@@ -45,7 +45,7 @@ $docker run -d -p 8001:8000 -p 9001:9000 --name=portainer --restart=always -v /v
 |Dashboard domain| http://my.your_domain.com |
 |API domain| http://api.your_domain.com |
 
-#### Go to http://YourServerIP:9001 and follow these steps:
+#### Go to http://your_server_ip:9001 and follow these steps:
 1. Create a new user 
 2. Select **Docker** box.
 3. Go to **Stacks** click **Add Stack**
