@@ -82,7 +82,7 @@ Then create the following [Verification Pattern](https://panel.kavenegar.com/cli
 |[passwordReset](https://github.com/parmenides/hotspotplus/blob/master/config/smsTemplates) |
 |[sendVerificationCodeCallOnly](https://github.com/parmenides/hotspotplus/blob/master/config/smsTemplates) |
 |[sendVerificationCodeThenCall](https://github.com/parmenides/hotspotplus/blob/master/config/smsTemplates) |
-- 
+
 ### Start development
 ```bash
 # create docker network on first time
