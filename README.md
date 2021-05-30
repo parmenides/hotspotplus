@@ -10,10 +10,10 @@
 
 |Description| Domain | IPv4 address
   |---|---|---|
-|Main domain| http://your_domain | your_server_ip |
-|Hotspot domain| http://wifi.your_domain | your_server_ip |
-|Dashboard domain| http://my.your_domain | your_server_ip |
-|API domain| http://api.your_domain | your_server_ip |
+|Main domain| your_domain | your_server_ip |
+|Hotspot domain| wifi.your_domain | your_server_ip |
+|Dashboard domain| my.your_domain | your_server_ip |
+|API domain| api.your_domain | your_server_ip |
 
 #### Connect to the server and edit sysctl.conf file and add the following line to the end of sysctl.conf file and save.
 Path: /etc/sysctl.conf
