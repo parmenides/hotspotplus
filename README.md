@@ -71,7 +71,18 @@ $docker run -d -p 8001:8000 -p 9001:9000 --name=portainer --restart=always -v /v
   | radius_ip | your_server_ip | Radius server IP address (Required)|  
   | sms_api_token |  | Kavehnegar api token|
   | sms_signature |  | Sms signature |
-
+### Add SMS Templates
+To activate SMS service you need a [Kavehnegar](https://kavenegar.com/) subscription.
+Then create the following [Verification Pattern](https://panel.kavenegar.com/client/Verification) from [config/smsTemplates](https://github.com/parmenides/hotspotplus/blob/master/config/smsTemplates) in Kavehnegar panel.  
+| Pattern Name | 
+|---|
+|[businessSmsChargePurchaseConfirmed](https://github.com/parmenides/hotspotplus/blob/master/config/smsTemplates) |
+|[hotspotPlusHotspotCredentials](https://github.com/parmenides/hotspotplus/blob/master/config/smsTemplates) |
+|[hotspotPlusRegistrationSMS](https://github.com/parmenides/hotspotplus/blob/master/config/smsTemplates) |
+|[passwordReset](https://github.com/parmenides/hotspotplus/blob/master/config/smsTemplates) |
+|[sendVerificationCodeCallOnly](https://github.com/parmenides/hotspotplus/blob/master/config/smsTemplates) |
+|[sendVerificationCodeThenCall](https://github.com/parmenides/hotspotplus/blob/master/config/smsTemplates) |
+- 
 ### Start development
 ```bash
 # create docker network on first time
