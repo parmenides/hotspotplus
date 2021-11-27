@@ -24,22 +24,23 @@ fs.file-max = 70000
 #### Connect to the server via terminal and run these commands
 ```bash
 #Connect via terminal
-$ssh  root@your_server_ip
+ssh  root@your_server_ip
 # Create a new user
-$adduser hotspotplus
+adduser hotspotplus
 # Add sudo permission
-$usermod -aG sudo hotspotplus
+usermod -aG sudo hotspotplus
+sudo usermod -aG docker hotspotplus
 # Switch to hotspotplus user
-$su hotspotplus
+su hotspotplus
 # Disable UFW firewall
-$sudo ufw disable
+sudo ufw disable
 # Enable docker swarm
-$docker swarm init
+docker swarm init
 
 # Move to home 
-$cd ~
+cd ~
 # Pull source code
-$git clone https://github.com/parmenides/hotspotplus.git
+git clone https://github.com/parmenides/hotspotplus.git
 
 # Prepare portainer
 $docker volume create portainer_data
@@ -86,16 +87,16 @@ Then create the following [Verification Pattern](https://panel.kavenegar.com/cli
 ### Start development
 ```bash
 # create docker network on first time
-$docker network create hotspotplusgate
+docker network create hotspotplusgate
 
 # cd to project directory
-$cd project_directory
+cd project_directory
 
 # to install dependencies
-$npm install
+npm install
 
 # to run project
-$npm start
+npm start
 ```
 
 #### Hotspotplus Dashboard:
