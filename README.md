@@ -86,6 +86,9 @@ Then create the following [Verification Pattern](https://panel.kavenegar.com/cli
 |[sendVerificationCodeCallOnly](https://github.com/parmenides/hotspotplus/blob/master/config/smsTemplates) |
 |[sendVerificationCodeThenCall](https://github.com/parmenides/hotspotplus/blob/master/config/smsTemplates) |
 
+### Urls:
+- Profile SignIn: http://your_domain/#/access/signin
+- Admin Panel: http://your_domain/#/access/public/admin/signin
 ### Start development
 ```bash
 # create docker network on first time
