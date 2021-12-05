@@ -189,6 +189,15 @@ services:
       - "1813:1813/udp"
     networks:
       - hotspotplusgate
+  clickhouse-sinker-session:
+    image: 'parmenides/hotspotplus-clickhousesinker:latest'
+    logging:
+      driver: none
+    volumes:
+      - ${project_dir}/config/log-services/sessions/sinker-session:/opt/config
+    command: --conf /opt/config
+    networks:
+      - hotspotplusgate
 
 
 volumes:
