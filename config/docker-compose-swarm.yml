@@ -175,11 +175,12 @@ services:
     - KSQL_KSQL_SERVICE_ID=ksql_service_1
   radius:
     image: 'freeradius/freeradius-server:3.0.19-alpine'
+    #command: -X
     volumes:
-      - ${project_dir}/radius/clients.conf:/etc/raddb/clients.conf
-      - ${project_dir}/radius/mods-enabled/rest:/etc/raddb/mods-enabled/rest
-      - ${project_dir}/radius/sites-enabled/dynamic-clients:/etc/raddb/sites-enabled/dynamic-clients
-      - ${project_dir}/radius/sites-enabled/default:/etc/raddb/sites-enabled/default
+      - ${project_dir}/config/radius/clients.conf:/etc/raddb/clients.conf
+      - ${project_dir}/config/radius/mods-enabled/rest:/etc/raddb/mods-enabled/rest
+      - ${project_dir}/config/radius/sites-enabled/dynamic-clients:/etc/raddb/sites-enabled/dynamic-clients
+      - ${project_dir}/config/radius/sites-enabled/default:/etc/raddb/sites-enabled/default
     expose:
       - 1812
       - 1813
